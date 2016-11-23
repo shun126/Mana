@@ -13,7 +13,7 @@
 #endif
 
 #if !defined(___MANA_MALLOC_H___)
-#include "../library/mana_malloc.h"
+#include "mana_malloc.h"
 #endif
 #if !defined(___MANA_INFO_H___)
 #include "mana_info.h"
@@ -230,7 +230,7 @@ int mana_read(void** buffer, size_t* size, const char* filename)
 				else
 				{
 					mana_free(buffer);
-					buffer = NULL;
+					*buffer = NULL;
 				}
 			}
 		}

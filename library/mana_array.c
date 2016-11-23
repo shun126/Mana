@@ -120,7 +120,7 @@ void mana_array_clear(mana_array* self)
 void* mana_array_get(const mana_array* self, const size_t index)
 {
 	assert(self);
-	assert(index >= 0 && index < self->used_size);
+	assert(index < self->used_size);
 	return self->handle[index];
 }
 

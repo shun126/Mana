@@ -1,13 +1,9 @@
 # Mana
 Actor-oriented scripting language Mana 
-<https://github.com/shun126/Mana>
-
-Documentation is available online at
-<https://github.com/shun126/Mana/wiki>
 
 # License
 The zlib/libpng License
-Copyright (c) 2002 Shun Moriya <shun@mnu.sakura.ne.jp>
+Copyright (c) 2002 Shun Moriya
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from

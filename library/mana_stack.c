@@ -30,12 +30,14 @@
 
 #define MANA_STACK_ALLOCATE_END(s)																							\
 	self->used_size += (s / sizeof(self->buffer));																			\
-	assert(self->used_size >= 0 && self->used_size < self->allocated_size);													\
+	assert(s % sizeof(self->buffer) == 0);																					\
+	assert(self->used_size < self->allocated_size);																			\
 }
 
 #define MANA_STACK_RELEASE(s) {																								\
 	self->used_size -= (s / sizeof(self->buffer));																			\
-	assert(self->used_size >= 0 && self->used_size < self->allocated_size);													\
+	assert(s % sizeof(self->buffer) == 0);																					\
+	assert(self->used_size < self->allocated_size);																			\
 }
 
 /*!
@@ -170,7 +172,7 @@ void mana_stack_remove(mana_stack* self, const size_t size)
 	if(self)
 	{
 		self->used_size -= size;
-		assert(self->allocated_size <= 0 || (self->used_size >= 0 && self->used_size < self->allocated_size));
+		assert(self->allocated_size == 0 || self->used_size < self->allocated_size);
 	}
 }
 
