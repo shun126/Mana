@@ -1424,10 +1424,10 @@ mana_actor* mana_actor_clone(mana_actor* actor)
  */
 void mana_actor_destroy(mana_actor* self)
 {
-	int i;
-
 	if(self)
 	{
+		int i;
+
 		/* ì«Ç›çûÇ›íÜÇ…deleteÇ≥ÇÍÇΩÅH */
 		for(i = 0 ; i < MANA_ACTOR_MAX_INTERRUPT_LEVEL; i++)
 		{

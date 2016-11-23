@@ -30,6 +30,7 @@
 #define FREE_LIBRARY(M)		FreeLibrary(M);
 /*! ダイナミックライブラリ内の関数を取得 */
 #define GET_PROC_ADR(M, N)	GetProcAddress(M, N);
+#elif defined(NN_PLATFORM_CTR)
 #else
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -45,6 +46,7 @@
 #define GET_PROC_ADR(M, N)	dlsym(M, N);
 #endif
 
+#if !defined(NN_PLATFORM_CTR)
 static MODULE* mana_plugins = NULL;
 static unsigned int mana_plugin_count = 0;
 
@@ -64,14 +66,14 @@ void mana_plugin_initialize(void)
  */
 void mana_plugin_finalize(void)
 {
-	MODULE module;
-
 	if(mana_plugins)
 	{
 		unsigned int i;
 
 		for(i = 0; i < mana_plugin_count; i++)
 		{
+			MODULE module;
+
 			module = mana_plugins[i];
 			if(module)
 			{
@@ -200,3 +202,4 @@ mana_bool mana_plugin_regist(const char* directory_name)
 
 	return MANA_TRUE;
 }
+#endif

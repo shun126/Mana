@@ -521,11 +521,11 @@ float mana_stream_get_float(const mana_stream* self)
  */
 void mana_stream_get_string(const mana_stream* self, char* pointer, const size_t size)
 {
-	size_t length, copy_length;
+	size_t copy_length;
 
 	assert(self && self->used_size >= self->pointer);
 
-	length = copy_length = strlen(&self->buffer[self->pointer]) + 1;
+	copy_length = strlen(&self->buffer[self->pointer]) + 1;
 
 	if(copy_length > size)
 		copy_length = size;
