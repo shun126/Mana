@@ -1,6 +1,11 @@
 # Mana
 Actor-oriented scripting language Mana 
+<https://github.com/shun126/Mana>
 
+Documentation is available online at
+<https://github.com/shun126/Mana/wiki>
+
+# License
 The zlib/libpng License
 Copyright (c) 2002 Shun Moriya <shun@mnu.sakura.ne.jp>
 
@@ -22,34 +27,5 @@ subject to the following restrictions:
 
 3. This notice may not be removed or altered from any source distribution.
 
-
-
-
-
-Actor-oriented scripting language Mana
-https://sourceforge.net/projects/mana-lang/
-
---------------------------------------------------------------------------------
-Documentation is available online at
-https://sourceforge.net/p/mana-lang/wiki/Home/
-
---------------------------------------------------------------------------------
-Questions, bug reports and feature requests should go to our Sourceforge project
-https://sourceforge.net/p/mana-lang/tickets/
-
---------------------------------------------------------------------------------
-Special thanks to the following people for their contributions:
-Luyue Xin
-
-TinyXML
-Lee Thomason, Yves Berquin, Andrew Ellerton
-http://www.sourceforge.net/projects/tinyxml
-
-babel
-Doukesi
-http://tricklib.com/cxx/ex/babel/
-
---------------------------------------------------------------------------------
-Shun Moriya
-mailto:shun@mnu.sakura.ne.jp
-http://mnu.sakura.ne.jp
+---
+Shun Moriya http://mnu.sakura.ne.jp
