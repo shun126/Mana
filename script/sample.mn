@@ -1,0 +1,155 @@
+/*
+ * mana (script)
+ * Copyright (c) 2003 Shun Moriya <shun@mnu.sakura.ne.jp>
+ */
+
+include "sample.mh";
+
+////////////////////////////////////////////////////////////////////////////////
+// declarations
+
+struct Quest
+{
+	int level;
+}
+
+int testFuntionWithParameter(int argument);
+void testFuntion();
+
+////////////////////////////////////////////////////////////////////////////////
+// definations
+static allocate 1024
+{
+	int aaa;
+}
+
+int arrayTest[10];
+Actor actors[10];
+
+define SIZE_OF_TREASURE_WORK	256;
+char treasureWork[SIZE_OF_TREASURE_WORK];
+
+Quest questWork;
+Quest questArrayWork[100];
+
+////////////////////////////////////////////////////////////////////////////////
+int testFuntionWithParameter(int argument)
+{
+	return argument + 1;
+}
+
+void testFuntion()
+{
+	int angle;
+	angle = 0;
+
+	float var = 123;
+
+//	CreateChr(chr_sugi_aerith_hi);
+
+	angle = priority;
+
+	actors[0] = Kid;
+	actors[1] = Mom;
+
+	do{
+		var++;
+	}while(!(var >0));
+
+	for(int angle=0; angle<10; angle++)
+	{
+		print("うんち!¥n");
+	}
+	while(angle < 0)
+	{
+		angle--;
+	}
+
+	switch(angle)
+	{
+	case 10:
+		print("うんち!¥n");
+		break;
+	default:
+		print("うんち!¥n");
+	}
+
+	request(1, Kid::init);
+	join(1, Kid);
+
+	if(
+		( ( angle <   82 ) && ( angle >   52 ) ) ||
+		( ( angle <   37 ) && ( angle >    7 ) ) ||
+		( ( angle <  -22 ) && ( angle >  -52 ) ) ||
+		( ( angle < -112 ) && ( angle > -142 ) ) ||
+		( ( angle <  173 ) && ( angle >  143 ) )
+	){
+		float unko;
+		print("うんち!¥n");
+	}
+	else
+	{
+		print("うんち¥n");
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
+action Mom::init
+{
+	int re = testFuntionWithParameter(5);
+
+	if(re == 0 && re == 1)
+	{
+		return;
+	}
+
+	goto ABORT;
+
+	request(5, Kid::talk);
+
+	arrayTest[re] = 2;
+	arrayTest[0] = 2;
+	arrayTest[re] = arrayTest[re];
+
+	questWork.level = 1;
+	questArrayWork[10].level = 3;
+
+	return;
+
+ABORT:
+	rollback(0);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+action Kid::init
+{
+}
+
+action Kid::main
+{
+	openWindow();
+	setMessage("こんにちは", true);
+	setMessage("ぼくの名前は澄空", true);
+	setMessage("すみちゃんって呼んでね", true);
+//	waitFrame(30 * 10);
+	closeWindow();
+}
+
+action Kid::touch
+{
+}
+
+action Kid::talk
+{
+}
+
+action Kid::dead
+{
+//	goto ABORT;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+action Ghost::init
+{
+}
+

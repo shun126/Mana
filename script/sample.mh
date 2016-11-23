@@ -1,0 +1,28 @@
+/*
+ * mana (script)
+ * Copyright (c) 2003 Shun Moriya <shun@mnu.sakura.ne.jp>
+ */
+
+include "function.mh";
+
+actor Kid
+{
+	action init;
+	action main;
+	action touch;
+	action talk;
+	action dead;
+}
+
+actor Mom
+{
+	Actor actors[10];
+	
+	action init;
+}
+
+phantom Ghost
+{
+	action init;
+}
+

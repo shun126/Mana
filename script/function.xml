@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="shift_jis" ?>
+
+<mana name="基本" filename="basic">
+	<group name="未分類">
+	</group>
+	<group name="メッセージ">
+		<func>
+			<name>void openWindow()</name>
+			<brief>メッセージウィンドウを開きます</brief>
+			<date>2009/02/05</date>
+		</func>
+		<func>
+			<name>void closeWindow()</name>
+			<brief>メッセージウィンドウを閉じます</brief>
+			<date>2009/02/05</date>
+		</func>
+	</group>
+</mana>
+

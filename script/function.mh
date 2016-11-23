@@ -1,0 +1,11 @@
+
+
+
+native void waitFrame(int frame);
+
+native void openWindow();
+native void closeWindow();
+
+native void setMessage(string message, int click);
+native void setImage(int layer, string filename);
+
