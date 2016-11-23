@@ -1,0 +1,319 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0C6D11D70FD6D20F0008261F /* libmana.c in Sources */ = {isa = PBXBuildFile; fileRef = 0C6D11D50FD6D20F0008261F /* libmana.c */; };
+		0C6D11D80FD6D20F0008261F /* libmana.h in Headers */ = {isa = PBXBuildFile; fileRef = 0C6D11D60FD6D20F0008261F /* libmana.h */; };
+		0C6D11F30FD6D2220008261F /* mana.c in Sources */ = {isa = PBXBuildFile; fileRef = 0C6D11DB0FD6D2220008261F /* mana.c */; };
+		0C6D11F40FD6D2220008261F /* mana.h in Headers */ = {isa = PBXBuildFile; fileRef = 0C6D11DC0FD6D2220008261F /* mana.h */; };
+		0C6D11F50FD6D2220008261F /* mana_actor.c in Sources */ = {isa = PBXBuildFile; fileRef = 0C6D11DD0FD6D2220008261F /* mana_actor.c */; };
+		0C6D11F60FD6D2220008261F /* mana_actor.h in Headers */ = {isa = PBXBuildFile; fileRef = 0C6D11DE0FD6D2220008261F /* mana_actor.h */; };
+		0C6D11F70FD6D2220008261F /* mana_datalink.c in Sources */ = {isa = PBXBuildFile; fileRef = 0C6D11DF0FD6D2220008261F /* mana_datalink.c */; };
+		0C6D11F80FD6D2220008261F /* mana_datalink.h in Headers */ = {isa = PBXBuildFile; fileRef = 0C6D11E00FD6D2220008261F /* mana_datalink.h */; };
+		0C6D11F90FD6D2220008261F /* mana_define.c in Sources */ = {isa = PBXBuildFile; fileRef = 0C6D11E10FD6D2220008261F /* mana_define.c */; };
+		0C6D11FA0FD6D2220008261F /* mana_define.h in Headers */ = {isa = PBXBuildFile; fileRef = 0C6D11E20FD6D2220008261F /* mana_define.h */; };
+		0C6D11FB0FD6D2220008261F /* mana_frame.c in Sources */ = {isa = PBXBuildFile; fileRef = 0C6D11E30FD6D2220008261F /* mana_frame.c */; };
+		0C6D11FC0FD6D2220008261F /* mana_frame.h in Headers */ = {isa = PBXBuildFile; fileRef = 0C6D11E40FD6D2220008261F /* mana_frame.h */; };
+		0C6D11FD0FD6D2220008261F /* mana_function.c in Sources */ = {isa = PBXBuildFile; fileRef = 0C6D11E50FD6D2220008261F /* mana_function.c */; };
+		0C6D11FE0FD6D2220008261F /* mana_function.h in Headers */ = {isa = PBXBuildFile; fileRef = 0C6D11E60FD6D2220008261F /* mana_function.h */; };
+		0C6D11FF0FD6D2220008261F /* mana_hash.c in Sources */ = {isa = PBXBuildFile; fileRef = 0C6D11E70FD6D2220008261F /* mana_hash.c */; };
+		0C6D12000FD6D2220008261F /* mana_hash.h in Headers */ = {isa = PBXBuildFile; fileRef = 0C6D11E80FD6D2220008261F /* mana_hash.h */; };
+		0C6D12010FD6D2220008261F /* mana_info.c in Sources */ = {isa = PBXBuildFile; fileRef = 0C6D11E90FD6D2220008261F /* mana_info.c */; };
+		0C6D12020FD6D2220008261F /* mana_info.h in Headers */ = {isa = PBXBuildFile; fileRef = 0C6D11EA0FD6D2220008261F /* mana_info.h */; };
+		0C6D12030FD6D2220008261F /* mana_malloc.c in Sources */ = {isa = PBXBuildFile; fileRef = 0C6D11EB0FD6D2220008261F /* mana_malloc.c */; };
+		0C6D12040FD6D2220008261F /* mana_malloc.h in Headers */ = {isa = PBXBuildFile; fileRef = 0C6D11EC0FD6D2220008261F /* mana_malloc.h */; };
+		0C6D12050FD6D2220008261F /* mana_plugin.c in Sources */ = {isa = PBXBuildFile; fileRef = 0C6D11ED0FD6D2220008261F /* mana_plugin.c */; };
+		0C6D12060FD6D2220008261F /* mana_plugin.h in Headers */ = {isa = PBXBuildFile; fileRef = 0C6D11EE0FD6D2220008261F /* mana_plugin.h */; };
+		0C6D12070FD6D2220008261F /* mana_stack.c in Sources */ = {isa = PBXBuildFile; fileRef = 0C6D11EF0FD6D2220008261F /* mana_stack.c */; };
+		0C6D12080FD6D2220008261F /* mana_stack.h in Headers */ = {isa = PBXBuildFile; fileRef = 0C6D11F00FD6D2220008261F /* mana_stack.h */; };
+		0C6D12090FD6D2220008261F /* mana_stream.c in Sources */ = {isa = PBXBuildFile; fileRef = 0C6D11F10FD6D2220008261F /* mana_stream.c */; };
+		0C6D120A0FD6D2220008261F /* mana_stream.h in Headers */ = {isa = PBXBuildFile; fileRef = 0C6D11F20FD6D2220008261F /* mana_stream.h */; };
+		0CB01A701109746600DFE7F2 /* mana_array.c in Sources */ = {isa = PBXBuildFile; fileRef = 0CB01A6E1109746600DFE7F2 /* mana_array.c */; };
+		0CB01A711109746600DFE7F2 /* mana_array.h in Headers */ = {isa = PBXBuildFile; fileRef = 0CB01A6F1109746600DFE7F2 /* mana_array.h */; };
+		0CFF1A451882EC8C0072F47D /* mana_lzss.c in Sources */ = {isa = PBXBuildFile; fileRef = 0CFF1A431882EC8C0072F47D /* mana_lzss.c */; };
+		0CFF1A461882EC8C0072F47D /* mana_lzss.h in Headers */ = {isa = PBXBuildFile; fileRef = 0CFF1A441882EC8C0072F47D /* mana_lzss.h */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0C6D11D50FD6D20F0008261F /* libmana.c */ = {isa = PBXFileReference; fileEncoding = 8; lastKnownFileType = sourcecode.c.c; lineEnding = 2; path = libmana.c; sourceTree = "<group>"; };
+		0C6D11D60FD6D20F0008261F /* libmana.h */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.h; lineEnding = 2; path = libmana.h; sourceTree = "<group>"; };
+		0C6D11DB0FD6D2220008261F /* mana.c */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.c; lineEnding = 2; path = mana.c; sourceTree = "<group>"; };
+		0C6D11DC0FD6D2220008261F /* mana.h */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.h; lineEnding = 2; path = mana.h; sourceTree = "<group>"; };
+		0C6D11DD0FD6D2220008261F /* mana_actor.c */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.c; lineEnding = 2; path = mana_actor.c; sourceTree = "<group>"; };
+		0C6D11DE0FD6D2220008261F /* mana_actor.h */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.h; lineEnding = 2; path = mana_actor.h; sourceTree = "<group>"; };
+		0C6D11DF0FD6D2220008261F /* mana_datalink.c */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.c; lineEnding = 2; path = mana_datalink.c; sourceTree = "<group>"; };
+		0C6D11E00FD6D2220008261F /* mana_datalink.h */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.h; lineEnding = 2; path = mana_datalink.h; sourceTree = "<group>"; };
+		0C6D11E10FD6D2220008261F /* mana_define.c */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.c; lineEnding = 2; path = mana_define.c; sourceTree = "<group>"; };
+		0C6D11E20FD6D2220008261F /* mana_define.h */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.h; lineEnding = 2; path = mana_define.h; sourceTree = "<group>"; };
+		0C6D11E30FD6D2220008261F /* mana_frame.c */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.c; lineEnding = 2; path = mana_frame.c; sourceTree = "<group>"; };
+		0C6D11E40FD6D2220008261F /* mana_frame.h */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.h; lineEnding = 2; path = mana_frame.h; sourceTree = "<group>"; };
+		0C6D11E50FD6D2220008261F /* mana_function.c */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.c; lineEnding = 2; path = mana_function.c; sourceTree = "<group>"; };
+		0C6D11E60FD6D2220008261F /* mana_function.h */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.h; lineEnding = 2; path = mana_function.h; sourceTree = "<group>"; };
+		0C6D11E70FD6D2220008261F /* mana_hash.c */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.c; lineEnding = 2; path = mana_hash.c; sourceTree = "<group>"; };
+		0C6D11E80FD6D2220008261F /* mana_hash.h */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.h; lineEnding = 2; path = mana_hash.h; sourceTree = "<group>"; };
+		0C6D11E90FD6D2220008261F /* mana_info.c */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.c; lineEnding = 2; path = mana_info.c; sourceTree = "<group>"; };
+		0C6D11EA0FD6D2220008261F /* mana_info.h */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.h; lineEnding = 2; path = mana_info.h; sourceTree = "<group>"; };
+		0C6D11EB0FD6D2220008261F /* mana_malloc.c */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.c; lineEnding = 2; path = mana_malloc.c; sourceTree = "<group>"; };
+		0C6D11EC0FD6D2220008261F /* mana_malloc.h */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.h; lineEnding = 2; path = mana_malloc.h; sourceTree = "<group>"; };
+		0C6D11ED0FD6D2220008261F /* mana_plugin.c */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.c; lineEnding = 2; path = mana_plugin.c; sourceTree = "<group>"; };
+		0C6D11EE0FD6D2220008261F /* mana_plugin.h */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.h; lineEnding = 2; path = mana_plugin.h; sourceTree = "<group>"; };
+		0C6D11EF0FD6D2220008261F /* mana_stack.c */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.c; lineEnding = 2; path = mana_stack.c; sourceTree = "<group>"; };
+		0C6D11F00FD6D2220008261F /* mana_stack.h */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.h; lineEnding = 2; path = mana_stack.h; sourceTree = "<group>"; };
+		0C6D11F10FD6D2220008261F /* mana_stream.c */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.c; lineEnding = 2; path = mana_stream.c; sourceTree = "<group>"; };
+		0C6D11F20FD6D2220008261F /* mana_stream.h */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.h; lineEnding = 2; path = mana_stream.h; sourceTree = "<group>"; };
+		0CB01A6E1109746600DFE7F2 /* mana_array.c */ = {isa = PBXFileReference; fileEncoding = 8; lastKnownFileType = sourcecode.c.c; lineEnding = 2; path = mana_array.c; sourceTree = "<group>"; };
+		0CB01A6F1109746600DFE7F2 /* mana_array.h */ = {isa = PBXFileReference; fileEncoding = 8; lastKnownFileType = sourcecode.c.h; lineEnding = 2; path = mana_array.h; sourceTree = "<group>"; };
+		0CF3EED21101DDE500DF9535 /* COPYRIGHT.txt */ = {isa = PBXFileReference; fileEncoding = 8; lastKnownFileType = text; name = COPYRIGHT.txt; path = ../COPYRIGHT.txt; sourceTree = SOURCE_ROOT; };
+		0CF3EED41101DDE500DF9535 /* MEMO.txt */ = {isa = PBXFileReference; fileEncoding = 8; lastKnownFileType = text; name = MEMO.txt; path = ../MEMO.txt; sourceTree = SOURCE_ROOT; };
+		0CF3EED51101DDE500DF9535 /* README.txt */ = {isa = PBXFileReference; fileEncoding = 8; lastKnownFileType = text; name = README.txt; path = ../README.txt; sourceTree = SOURCE_ROOT; };
+		0CFF1A431882EC8C0072F47D /* mana_lzss.c */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.c; lineEnding = 2; path = mana_lzss.c; sourceTree = "<group>"; };
+		0CFF1A441882EC8C0072F47D /* mana_lzss.h */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.h; lineEnding = 2; path = mana_lzss.h; sourceTree = "<group>"; };
+		D2AAC046055464E500DB518D /* libmana.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libmana.a; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D289987405E68DCB004EDB86 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		08FB7794FE84155DC02AAC07 /* mana */ = {
+			isa = PBXGroup;
+			children = (
+				08FB7795FE84155DC02AAC07 /* Source */,
+				C6A0FF2B0290797F04C91782 /* Documentation */,
+				1AB674ADFE9D54B511CA2CBB /* Products */,
+			);
+			name = mana;
+			sourceTree = "<group>";
+		};
+		08FB7795FE84155DC02AAC07 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				0C6D11D50FD6D20F0008261F /* libmana.c */,
+				0C6D11D60FD6D20F0008261F /* libmana.h */,
+				0C6D11DB0FD6D2220008261F /* mana.c */,
+				0C6D11DC0FD6D2220008261F /* mana.h */,
+				0C6D11DD0FD6D2220008261F /* mana_actor.c */,
+				0C6D11DE0FD6D2220008261F /* mana_actor.h */,
+				0CB01A6E1109746600DFE7F2 /* mana_array.c */,
+				0CB01A6F1109746600DFE7F2 /* mana_array.h */,
+				0C6D11DF0FD6D2220008261F /* mana_datalink.c */,
+				0C6D11E00FD6D2220008261F /* mana_datalink.h */,
+				0C6D11E10FD6D2220008261F /* mana_define.c */,
+				0C6D11E20FD6D2220008261F /* mana_define.h */,
+				0C6D11E30FD6D2220008261F /* mana_frame.c */,
+				0C6D11E40FD6D2220008261F /* mana_frame.h */,
+				0C6D11E50FD6D2220008261F /* mana_function.c */,
+				0C6D11E60FD6D2220008261F /* mana_function.h */,
+				0C6D11E70FD6D2220008261F /* mana_hash.c */,
+				0C6D11E80FD6D2220008261F /* mana_hash.h */,
+				0C6D11E90FD6D2220008261F /* mana_info.c */,
+				0C6D11EA0FD6D2220008261F /* mana_info.h */,
+				0CFF1A431882EC8C0072F47D /* mana_lzss.c */,
+				0CFF1A441882EC8C0072F47D /* mana_lzss.h */,
+				0C6D11EB0FD6D2220008261F /* mana_malloc.c */,
+				0C6D11EC0FD6D2220008261F /* mana_malloc.h */,
+				0C6D11ED0FD6D2220008261F /* mana_plugin.c */,
+				0C6D11EE0FD6D2220008261F /* mana_plugin.h */,
+				0C6D11EF0FD6D2220008261F /* mana_stack.c */,
+				0C6D11F00FD6D2220008261F /* mana_stack.h */,
+				0C6D11F10FD6D2220008261F /* mana_stream.c */,
+				0C6D11F20FD6D2220008261F /* mana_stream.h */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		1AB674ADFE9D54B511CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D2AAC046055464E500DB518D /* libmana.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C6A0FF2B0290797F04C91782 /* Documentation */ = {
+			isa = PBXGroup;
+			children = (
+				0CF3EED21101DDE500DF9535 /* COPYRIGHT.txt */,
+				0CF3EED41101DDE500DF9535 /* MEMO.txt */,
+				0CF3EED51101DDE500DF9535 /* README.txt */,
+			);
+			name = Documentation;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		D2AAC043055464E500DB518D /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0C6D11D80FD6D20F0008261F /* libmana.h in Headers */,
+				0C6D11F40FD6D2220008261F /* mana.h in Headers */,
+				0C6D11F60FD6D2220008261F /* mana_actor.h in Headers */,
+				0C6D11F80FD6D2220008261F /* mana_datalink.h in Headers */,
+				0C6D11FA0FD6D2220008261F /* mana_define.h in Headers */,
+				0C6D11FC0FD6D2220008261F /* mana_frame.h in Headers */,
+				0C6D11FE0FD6D2220008261F /* mana_function.h in Headers */,
+				0C6D12000FD6D2220008261F /* mana_hash.h in Headers */,
+				0C6D12020FD6D2220008261F /* mana_info.h in Headers */,
+				0C6D12040FD6D2220008261F /* mana_malloc.h in Headers */,
+				0C6D12060FD6D2220008261F /* mana_plugin.h in Headers */,
+				0CFF1A461882EC8C0072F47D /* mana_lzss.h in Headers */,
+				0C6D12080FD6D2220008261F /* mana_stack.h in Headers */,
+				0C6D120A0FD6D2220008261F /* mana_stream.h in Headers */,
+				0CB01A711109746600DFE7F2 /* mana_array.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		D2AAC045055464E500DB518D /* mana */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1DEB91EB08733DB70010E9CD /* Build configuration list for PBXNativeTarget "mana" */;
+			buildPhases = (
+				D2AAC043055464E500DB518D /* Headers */,
+				D2AAC044055464E500DB518D /* Sources */,
+				D289987405E68DCB004EDB86 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = mana;
+			productName = mana;
+			productReference = D2AAC046055464E500DB518D /* libmana.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		08FB7793FE84155DC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0510;
+			};
+			buildConfigurationList = 1DEB91EF08733DB70010E9CD /* Build configuration list for PBXProject "libmana" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 08FB7794FE84155DC02AAC07 /* mana */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D2AAC045055464E500DB518D /* mana */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D2AAC044055464E500DB518D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0C6D11D70FD6D20F0008261F /* libmana.c in Sources */,
+				0C6D11F30FD6D2220008261F /* mana.c in Sources */,
+				0C6D11F50FD6D2220008261F /* mana_actor.c in Sources */,
+				0C6D11F70FD6D2220008261F /* mana_datalink.c in Sources */,
+				0C6D11F90FD6D2220008261F /* mana_define.c in Sources */,
+				0C6D11FB0FD6D2220008261F /* mana_frame.c in Sources */,
+				0C6D11FD0FD6D2220008261F /* mana_function.c in Sources */,
+				0C6D11FF0FD6D2220008261F /* mana_hash.c in Sources */,
+				0C6D12010FD6D2220008261F /* mana_info.c in Sources */,
+				0C6D12030FD6D2220008261F /* mana_malloc.c in Sources */,
+				0C6D12050FD6D2220008261F /* mana_plugin.c in Sources */,
+				0CFF1A451882EC8C0072F47D /* mana_lzss.c in Sources */,
+				0C6D12070FD6D2220008261F /* mana_stack.c in Sources */,
+				0C6D12090FD6D2220008261F /* mana_stream.c in Sources */,
+				0CB01A701109746600DFE7F2 /* mana_array.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		1DEB91EC08733DB70010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = /usr/local/lib;
+				PRODUCT_NAME = mana;
+			};
+			name = Debug;
+		};
+		1DEB91ED08733DB70010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/lib;
+				PRODUCT_NAME = mana;
+			};
+			name = Release;
+		};
+		1DEB91F008733DB70010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				ONLY_ACTIVE_ARCH = YES;
+			};
+			name = Debug;
+		};
+		1DEB91F108733DB70010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1DEB91EB08733DB70010E9CD /* Build configuration list for PBXNativeTarget "mana" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB91EC08733DB70010E9CD /* Debug */,
+				1DEB91ED08733DB70010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1DEB91EF08733DB70010E9CD /* Build configuration list for PBXProject "libmana" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB91F008733DB70010E9CD /* Debug */,
+				1DEB91F108733DB70010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 08FB7793FE84155DC02AAC07 /* Project object */;
+}

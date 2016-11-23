@@ -1,0 +1,165 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{B50EF429-D756-4CAC-8B79-9757BDAF66D3}</ProjectGuid>
+    <RootNamespace>mana</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>14.0.23107.0</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PrecompiledHeader />
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>Full</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader />
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <PreBuildEvent>
+      <Command>"C:\Ruby22\bin\ruby" "$(ProjectDir)mana_version.rb"</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>ビルド情報を生成しています</Message>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\library\mana_datalink.c" />
+    <ClCompile Include="..\library\mana_hash.c" />
+    <ClCompile Include="..\library\mana_info.c" />
+    <ClCompile Include="..\library\mana_malloc.c" />
+    <ClCompile Include="mana_code.c" />
+    <ClCompile Include="mana_data.c" />
+    <ClCompile Include="mana_datalink_generator.c" />
+    <ClCompile Include="mana_jump.c" />
+    <ClCompile Include="mana_lexer.c" />
+    <ClCompile Include="mana_linker.c" />
+    <ClCompile Include="mana_main.c" />
+    <ClCompile Include="mana_node.c" />
+    <ClCompile Include="mana_parser.c" />
+    <ClCompile Include="mana_pool.c" />
+    <ClCompile Include="mana_register.c" />
+    <ClCompile Include="mana_symbol.c" />
+    <ClCompile Include="mana_type.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="mana_lexer.l">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">lexファイルを変換しています ...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">c:\bin\flex -8 -o"%(RootDir)%(Directory)\%(Filename).c" "%(FullPath)"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RootDir)%(Directory)\%(Filename).c;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">lexファイルを変換しています ...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">c:\bin\flex -8 -o"%(RootDir)%(Directory)\%(Filename).c" "%(FullPath)"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RootDir)%(Directory)\%(Filename).c;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="mana_parser.y">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yaccファイルを変換しています ...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">c:\bin\bison -d -o "%(RootDir)%(Directory)\%(Filename).c" "%(FullPath)"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RootDir)%(Directory)\%(Filename).c;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yaccファイルを変換しています ...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">c:\bin\bison -d -o "%(RootDir)%(Directory)\%(Filename).c" "%(FullPath)"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RootDir)%(Directory)\%(Filename).c;%(Outputs)</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\library\mana_datalink.h" />
+    <ClInclude Include="..\library\mana_hash.h" />
+    <ClInclude Include="..\library\mana_info.h" />
+    <ClInclude Include="..\library\mana_malloc.h" />
+    <ClInclude Include="mana_code.h" />
+    <ClInclude Include="mana_data.h" />
+    <ClInclude Include="mana_datalink_generator.h" />
+    <ClInclude Include="mana_jump.h" />
+    <ClInclude Include="mana_linker.h" />
+    <ClInclude Include="mana_main.h" />
+    <ClInclude Include="mana_node.h" />
+    <ClInclude Include="mana_parser.h" />
+    <ClInclude Include="mana_pool.h" />
+    <ClInclude Include="mana_register.h" />
+    <ClInclude Include="mana_symbol.h" />
+    <ClInclude Include="mana_type.h" />
+    <ClInclude Include="mana_version.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\script\mana_debug.log" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="mana_version.json" />
+    <None Include="mana_version.rb" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
