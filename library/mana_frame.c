@@ -155,8 +155,6 @@ void mana_frame_release(mana_frame* self, const size_t size)
 	if(self)
 	{
 		self->used_size -= size;
-
-		assert(self->used_size >= 0);
 	}
 }
 
@@ -189,7 +187,7 @@ void mana_frame_set_size(mana_frame* self, const size_t size)
 	{
 		self->used_size = size;
 
-		assert(self->used_size >= 0 && self->allocated_size > 0 ? self->used_size < self->allocated_size : self->used_size <= self->allocated_size);
+		assert(self->used_size <= self->allocated_size);
 	}
 }
 
