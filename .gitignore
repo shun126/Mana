@@ -9,3 +9,8 @@
 /library/.vs/
 /library/Debug/
 /library/Release
+/test/manarunner.VC.VC.opendb
+/test/manarunner.VC.db
+/test/.vs/
+/test/Debug/
+/test/Release
