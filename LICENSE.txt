@@ -1,7 +1,3 @@
-# Mana
-Actor-oriented scripting language Mana 
-
-# License
 The zlib/libpng License
 Copyright (c) 2002 Shun Moriya
 
@@ -22,6 +18,3 @@ subject to the following restrictions:
    and must not be misrepresented as being the original software.
 
 3. This notice may not be removed or altered from any source distribution.
-
----
-Shun Moriya
