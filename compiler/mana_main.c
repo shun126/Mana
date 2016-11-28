@@ -32,6 +32,7 @@
 #if !defined(___MANA_VERSION_H___)
 #include "mana_version.h"
 #endif
+#include <libmana.h>
 #if defined(_MSC_VER)
 #include <windows.h>
 #include <crtdbg.h>
@@ -243,6 +244,41 @@ void mana_fatal_no_memory(void)
 	mana_fatal("no memory error");
 }
 
+static mana_bool mana_test_execute(void* program)
+{
+	mana_bool result = MANA_FALSE;
+	mana_initialize();
+
+	mana_plugin_regist(".");
+
+	{
+		mana* mana_instance = mana_create();
+		if(mana_instance)
+		{
+			if(mana_load_program(mana_instance, program, TRUE))
+			{
+				/* TODO:Œo‰ßŽžŠÔ‚ðŒv‘ª‚µ‚Ä‚­‚¾‚³‚¢ */
+				while(mana_run(mana_instance, 1.0f / 60.0f))
+				{
+				}
+			}
+			else
+			{
+				result = 1;
+			}
+			mana_destroy(mana_instance);
+		}
+		else
+		{
+			result = 1;
+		}
+	}
+
+	mana_finalize();
+
+	return result;
+}
+
 int mana_compile(char* pszInfileName, char* pszOutfileName)
 {
 	int result = 0;
@@ -395,6 +431,54 @@ int mana_compile(char* pszInfileName, char* pszOutfileName)
 			}
 		}
 		fclose(yyout);
+
+#if defined(_DEBUG)
+		{
+			FILE* file;
+#if defined(__STDC_WANT_SECURE_LIB__)
+			if(fopen_s(&file, pszOutfileName, "rb") != 0)
+#else
+			if((file = fopen(pszOutfileName, "rb")) == NULL)
+#endif
+			{
+				printf("file open failed: %s\n", pszOutfileName);
+				return 1;
+			}
+
+			if(fseek(file, 0L, SEEK_END) != 0)
+			{
+				fclose(file);
+				printf("file open failed: %s\n", pszOutfileName);
+				return 1;
+			}
+
+			const long size = ftell(file);
+
+			void* program = malloc(size);
+			if(program == NULL)
+			{
+				fclose(file);
+				printf("memory allocation failed\n");
+				return 1;
+			}
+
+			rewind(file);
+
+			if(fread(program, 1, size, file) != size)
+			{
+				fclose(file);
+				free(program);
+				printf("file read failed: %s\n", pszOutfileName);
+				return 1;
+			}
+
+			fclose(file);
+
+			mana_test_execute(program);
+
+			free(program);
+		}
+#endif
 	}
 ESCAPE:
 	if(result != 0)
