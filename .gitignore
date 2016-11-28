@@ -1,4 +1,5 @@
-﻿*.mx
+﻿#
+*.mx
 *.opendb
 *.user
 *.VC.db
