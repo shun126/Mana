@@ -257,10 +257,13 @@ static mana_bool mana_test_execute(void* program)
 		{
 			if(mana_load_program(mana_instance, program, TRUE))
 			{
-				/* TODO:Œo‰ßŽžŠÔ‚ðŒv‘ª‚µ‚Ä‚­‚¾‚³‚¢ */
-				while(mana_run(mana_instance, 1.0f / 60.0f))
-				{
-				}
+				unsigned long long update_time = mana_get_micro_secound();
+				double update_secound;
+				do{
+					unsigned long long current_update_time = mana_get_micro_secound();
+					update_secound = (double)(current_update_time - update_time) / 1000000.f;
+					update_time = current_update_time;
+				} while (mana_run(mana_instance, (float)update_secound));
 			}
 			else
 			{
@@ -320,6 +323,7 @@ int mana_compile(char* pszInfileName, char* pszOutfileName)
 	}
 	if(result == 0)
 	{
+		mana_stream* stream;
 		mana_file_header header;
 
 		if(mana_debug)
@@ -377,6 +381,9 @@ int mana_compile(char* pszInfileName, char* pszOutfileName)
 
 		mana_symbol_check_undefine();
 
+		stream = mana_stream_create();
+
+
 		memset(&header, 0, sizeof(mana_file_header));
 		memcpy(&header.header, MANA_SIGNATURE, sizeof(header.header));
 		header.major_version = MANA_MAJOR_VERSION;
@@ -391,6 +398,9 @@ int mana_compile(char* pszInfileName, char* pszOutfileName)
 		header.size_of_static_memory = mana_symbol_get_static_memory_address();
 		header.size_of_global_memory = mana_symbol_get_global_memory_address();
 		header.random_seed_number = (unsigned int)time(NULL);
+
+		mana_stream_push_data(stream, &header, sizeof(header));
+
 
 		if(fwrite(&header, sizeof(mana_file_header), 1, yyout) != 1)
 		{
@@ -431,54 +441,6 @@ int mana_compile(char* pszInfileName, char* pszOutfileName)
 			}
 		}
 		fclose(yyout);
-
-#if defined(_DEBUG)
-		{
-			FILE* file;
-#if defined(__STDC_WANT_SECURE_LIB__)
-			if(fopen_s(&file, pszOutfileName, "rb") != 0)
-#else
-			if((file = fopen(pszOutfileName, "rb")) == NULL)
-#endif
-			{
-				printf("file open failed: %s\n", pszOutfileName);
-				return 1;
-			}
-
-			if(fseek(file, 0L, SEEK_END) != 0)
-			{
-				fclose(file);
-				printf("file open failed: %s\n", pszOutfileName);
-				return 1;
-			}
-
-			const long size = ftell(file);
-
-			void* program = malloc(size);
-			if(program == NULL)
-			{
-				fclose(file);
-				printf("memory allocation failed\n");
-				return 1;
-			}
-
-			rewind(file);
-
-			if(fread(program, 1, size, file) != size)
-			{
-				fclose(file);
-				free(program);
-				printf("file read failed: %s\n", pszOutfileName);
-				return 1;
-			}
-
-			fclose(file);
-
-			mana_test_execute(program);
-
-			free(program);
-		}
-#endif
 	}
 ESCAPE:
 	if(result != 0)
@@ -494,6 +456,56 @@ ESCAPE:
 	mana_symbol_finalize();
 	mana_type_finalize();
 	mana_lexer_finalize();
+
+#if defined(_DEBUG)
+	if(result == 0)
+	{
+		FILE* file;
+#if defined(__STDC_WANT_SECURE_LIB__)
+		if(fopen_s(&file, pszOutfileName, "rb") != 0)
+#else
+		if((file = fopen(pszOutfileName, "rb")) == NULL)
+#endif
+		{
+			printf("file open failed: %s\n", pszOutfileName);
+			return 1;
+		}
+
+		if(fseek(file, 0L, SEEK_END) != 0)
+		{
+			fclose(file);
+			printf("file open failed: %s\n", pszOutfileName);
+			return 1;
+		}
+
+		const long size = ftell(file);
+
+		void* program = malloc(size);
+		if(program == NULL)
+		{
+			fclose(file);
+			printf("memory allocation failed\n");
+			return 1;
+		}
+
+		rewind(file);
+
+		if(fread(program, 1, size, file) != size)
+		{
+			fclose(file);
+			free(program);
+			printf("file read failed: %s\n", pszOutfileName);
+			return 1;
+		}
+
+		fclose(file);
+
+		mana_test_execute(program);
+
+		free(program);
+	}
+#endif
+
 	return result;
 }
 

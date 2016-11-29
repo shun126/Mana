@@ -267,6 +267,9 @@ extern void mana_print_debug(const char* format, ...);
 /*! 文字列の中から文字列を検索 */
 extern int mana_string_find(const char text[], const char pattern[]);
 
+/*! パフォーマンス情報をマイクロ秒で取得します */
+unsigned long long mana_get_micro_secound();
+
 /*! ファイルサイズを取得 */
 extern long mana_get_file_size(const char* filename);
 
