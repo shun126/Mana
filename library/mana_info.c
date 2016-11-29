@@ -28,7 +28,7 @@
 #include "platform/cocoa/mana_cocoa.h"
 #endif
 
-static unsigned int mana_random_seed = (unsigned int)(19720126 + 19800722 + 20081209);
+static unsigned int mana_random_seed = (unsigned int)(19720126);
 
 /*!
  * @param[in]	seed	—”‚Ìí
@@ -170,6 +170,24 @@ int mana_string_find(const char text[], const char pattern[])
 	}
 
 	return -1;
+}
+
+/*!
+ * @return	ƒ}ƒCƒNƒ•b
+ */
+unsigned long long mana_get_micro_secound()
+{
+#if defined(WIN32)
+	LARGE_INTEGER frequency, counter;
+
+	if (!QueryPerformanceFrequency(&frequency) || !QueryPerformanceCounter(&counter))
+		return 0;
+
+	return (unsigned long long)(counter.QuadPart * 1000000 / frequency.QuadPart);
+#else
+	struct timeval current;
+	return (gettimeofday(&current, NULL) == 0) ? static_cast<u64>(current.tv_usec) : 0;
+#endif
 }
 
 /*!
