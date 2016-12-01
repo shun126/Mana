@@ -12,6 +12,8 @@
 /library/.vs/
 /library/Debug/
 /library/Release
+/document/doxygen/compiler
+/document/doxygen/library
 /test/.vs/
 /test/Debug/
 /test/Release
