@@ -81,7 +81,7 @@
       <AdditionalIncludeDirectories>../library</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -95,10 +95,6 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\library\mana_datalink.c" />
-    <ClCompile Include="..\library\mana_hash.c" />
-    <ClCompile Include="..\library\mana_info.c" />
-    <ClCompile Include="..\library\mana_malloc.c" />
     <ClCompile Include="mana_code.c" />
     <ClCompile Include="mana_data.c" />
     <ClCompile Include="mana_datalink_generator.c" />
@@ -136,10 +132,6 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\library\mana_datalink.h" />
-    <ClInclude Include="..\library\mana_hash.h" />
-    <ClInclude Include="..\library\mana_info.h" />
-    <ClInclude Include="..\library\mana_malloc.h" />
     <ClInclude Include="mana_code.h" />
     <ClInclude Include="mana_data.h" />
     <ClInclude Include="mana_datalink_generator.h" />
