@@ -26,7 +26,7 @@ INCLUDE	= ../../../library/trunk
 CC	= g++
 CFLAGS	= -c -O3 -I $(INCLUDE)
 
-LK	= g++
+LK	= gcc
 #LFLAGS	= -ldl
 LFLAGS	= -ldl -framework OpenGL -framework GLUT
 
@@ -37,7 +37,7 @@ TARGET	= manarunner
 OBJECTS = manarunner.o
 LIBRARY	= $(INCLUDE)/libmana.a
 
-.SUFFIXES: .cpp .o
+.SUFFIXES: .c .o
 
 $(TARGET): $(OBJECTS)
 	make -C $(INCLUDE)
