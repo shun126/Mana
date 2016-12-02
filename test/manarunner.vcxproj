@@ -91,7 +91,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="manarunner.cpp" />
+    <ClCompile Include="manarunner.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="manarunner.h" />
