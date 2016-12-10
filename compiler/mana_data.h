@@ -16,6 +16,7 @@ extern "C" {
 #endif
 
 #include <stdio.h>
+#include <libmana.h>
 
 /*! データセクション管理関数を初期化 */
 extern void mana_data_initialzie(void);
@@ -36,10 +37,7 @@ extern unsigned int mana_data_get(char* text);
 extern unsigned int mana_data_set(char* text);
 
 /*! データセクションをファイルへ出力 */
-extern unsigned int mana_data_write(FILE* file);
-
-/*! データセクションを簡単な暗号化してファイルへ出力 */
-extern unsigned int mana_data_write_encription(FILE* file, unsigned int seed);
+extern unsigned int mana_data_write(mana_stream* stream);
 
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)
 }

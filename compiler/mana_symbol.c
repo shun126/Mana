@@ -1275,8 +1275,7 @@ static int mana_symbol_get_number_of_actions(mana_type_description* type)
 
 /*****************************************************************************/
 /* output */
-static int mana_symbol_write_actor_infomation_data(
-	FILE* out, mana_symbol_entry* symbol, mana_type_description* type, int number_of_elements)
+static int mana_symbol_write_actor_infomation_data(mana_stream* stream, mana_symbol_entry* symbol, mana_type_description* type, int number_of_elements)
 {
 	mana_actor_info_header actor_info;
 	int number_of_actions;
@@ -1285,10 +1284,10 @@ static int mana_symbol_write_actor_infomation_data(
 	if(number_of_actions > (1 << (8 * sizeof(actor_info.number_of_actions))))
 	{
 		mana_linker_error("Too much actions in %s.\n", symbol->name);
-		return MANA_FALSE;
+		return false;
 	}
 
-	memset(&actor_info, 0, sizeof(mana_actor_info_header));
+	memset(&actor_info, 0, sizeof(actor_info));
 	actor_info.name = mana_data_get(symbol->name);
 	actor_info.number_of_actions = (unsigned short)number_of_actions;
 	actor_info.number_of_instances = (unsigned char)number_of_elements;
@@ -1297,7 +1296,7 @@ static int mana_symbol_write_actor_infomation_data(
 	if(actor_info.name == (unsigned int)-1)
 	{
 		mana_linker_error("Can't find actor '%s'.\n", symbol->name);
-		return MANA_FALSE;
+		return false;
 	}
 
 	if(type->share.actor.phantom)
@@ -1305,11 +1304,7 @@ static int mana_symbol_write_actor_infomation_data(
 		actor_info.flag |= MANA_ACTOR_INFO_HEADER_FLAG_PHANTOM;
 	}
 
-	if(fwrite(&actor_info, sizeof(mana_actor_info_header), 1, out) != 1)
-	{
-		mana_linker_error("File write failed.\n");
-		return MANA_FALSE;
-	}
+	mana_stream_push_data(stream, &actor_info, sizeof(actor_info));
 
 	{
 		mana_symbol_entry* component_symbol;
@@ -1319,28 +1314,24 @@ static int mana_symbol_write_actor_infomation_data(
 			{
 				mana_action_info_header action_info;
 
-				memset(&action_info, 0, sizeof(mana_action_info_header));
+				memset(&action_info, 0, sizeof(action_info));
 				action_info.name = mana_data_get(component_symbol->name);
 				action_info.address = component_symbol->address;
 
 				if(action_info.name == (unsigned int)-1)
 				{
 					mana_linker_error("Can't find action '%s'.\n", component_symbol->name);
-					return MANA_FALSE;
+					return false;
 				}
 
-				if(fwrite(&action_info, sizeof(mana_action_info_header), 1, out) != 1)
-				{
-					mana_linker_error("File write failed.\n");
-					return MANA_FALSE;
-				}
+				mana_stream_push_data(stream, &action_info, sizeof(action_info));
 			}
 		}
 	}
-	return MANA_TRUE;
+	return true;
 }
 
-int mana_symbol_write_actor_infomation(FILE* out)
+bool mana_symbol_write_actor_infomation(mana_stream* stream)
 {
 	mana_symbol_entry* symbol;
 
@@ -1352,8 +1343,8 @@ int mana_symbol_write_actor_infomation(FILE* out)
 		case MANA_DATA_TYPE_ACTOR:
 			if(symbol->class_type == MANA_CLASS_TYPE_TYPEDEF && symbol->type->tcons == MANA_DATA_TYPE_ACTOR)
 			{
-				if(!mana_symbol_write_actor_infomation_data(out, symbol, symbol->type, 1))
-					return MANA_FALSE;
+				if(!mana_symbol_write_actor_infomation_data(stream, symbol, symbol->type, 1))
+					return false;
 			}
 			break;
 
@@ -1367,8 +1358,8 @@ int mana_symbol_write_actor_infomation(FILE* out)
 					{
 					case MANA_DATA_TYPE_ACTOR:
 						if(symbol->class_type == MANA_CLASS_TYPE_TYPEDEF && nested_type->tcons == MANA_DATA_TYPE_ACTOR)
-							if(!mana_symbol_write_actor_infomation_data(out, symbol, nested_type, number_of_elements))
-								return MANA_FALSE;
+							if(!mana_symbol_write_actor_infomation_data(stream, symbol, nested_type, number_of_elements))
+								return false;
 						goto ESCAPE;
 
 					case MANA_DATA_TYPE_ARRAY:
@@ -1386,7 +1377,7 @@ ESCAPE:
 			break;
 		}
 	}
-	return MANA_TRUE;
+	return true;
 }
 
 /*****************************************************************************/
