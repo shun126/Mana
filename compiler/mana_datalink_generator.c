@@ -160,7 +160,7 @@ int mana_datalink_generator_append(const char* file_name)
  * @retval		TRUE	success
  * @retval		FALSE	write failed
  */
-int mana_datalink_generator_write_data(FILE* file)
+int mana_datalink_generator_write_data(mana_stream* stream)
 {
 	mana_datalink_generator_file_entry* entry;
 	mana_datalink_file_header header;
@@ -171,11 +171,13 @@ int mana_datalink_generator_write_data(FILE* file)
 
 	header.total_data_size = mana_datalink_generator_get_number_of_files();
 	header.number_of_datas = mana_datalink_generator_get_number_of_files();
-	if(fwrite(&header, sizeof(header), 1, file) != 1)
+	mana_stream_push_data(stream, &header, sizeof(header));
+	/*
 	{
 		mana_compile_error("file write failed");
 		return MANA_FALSE;
 	}
+	*/
 
 	file_size = 0;
 	for(entry = mana_datalink_generator_file_entry_root; entry != NULL; entry = entry->next)
@@ -185,11 +187,14 @@ int mana_datalink_generator_write_data(FILE* file)
 		entry_header.offset = file_size;
 		entry_header.size = entry->file_size;
 
+		mana_stream_push_data(stream, &entry_header, sizeof(entry_header));
+		/*
 		if(fwrite(&entry_header, sizeof(entry_header), 1, file) != 1)
 		{
 			mana_compile_error("file write failed");
 			return MANA_FALSE;
 		}
+		*/
 
 		file_size += entry->file_size + entry->padding_size;
 	}
@@ -202,7 +207,7 @@ int mana_datalink_generator_write_data(FILE* file)
 
 		header_size = MANA_DATALINK_ALIGNMENT_SIZE - header_size;
 		for(i = 0; i < header_size; i++)
-			fputc(rand(), file);
+			mana_stream_push_unsigned_char(stream, rand());
 	}
 
 	for(entry = mana_datalink_generator_file_entry_root; entry != NULL; entry = entry->next)
@@ -220,26 +225,30 @@ int mana_datalink_generator_write_data(FILE* file)
 			return MANA_FALSE;
 		}
 
-		for(;;)
+		void* program = malloc(entry->padding_size);
+		if(program == NULL)
 		{
-			size_t in_size;
-			size_t out_size;
-			char cBuffer[2048];
-
-			in_size = fread(cBuffer, sizeof(char), 2048, in);
-			if(in_size == 0)
-				break;
-			out_size = fwrite(cBuffer, sizeof(char), in_size, file);
-			if(in_size != out_size)
-			{
-				fclose(in);
-				mana_compile_error("unable to copy '%s'", entry->file_name);
-				return MANA_FALSE;
-			}
+			fclose(in);
+			printf("memory allocation failed\n");
+			return 1;
 		}
 
+		if(fread(program, 1, entry->padding_size, in) != entry->padding_size)
+		{
+			fclose(in);
+			free(program);
+			printf("file read failed: %s\n", entry->file_name);
+			return 1;
+		}
+
+		fclose(in);
+
+		mana_stream_push_data(stream, program, entry->padding_size);
+
+		free(program);
+
 		for(i = 0; i < entry->padding_size; i ++)
-			fputc(rand(), file);
+			mana_stream_push_unsigned_char(stream, rand());
 
 		fclose(in);
 	}

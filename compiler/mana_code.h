@@ -15,6 +15,7 @@
 extern "C" {
 #endif
 
+#include <libmana.h>
 #include <stdio.h>
 
 /*! 命令セクション管理関数を初期化 */
@@ -66,7 +67,7 @@ extern void mana_code_replace_address(int address, int new_address);
 extern void mana_code_replace_all(int address, int new_address);
 
 /*! 命令セクションをファイルへ出力 */
-extern int mana_code_write(FILE* file);
+extern int mana_code_write(mana_stream* stream);
 
 /*! 命令セクションをメモリへ出力 */
 extern int mana_code_copy(void*);

@@ -294,15 +294,6 @@ int mana_compile(char* pszInfileName, char* pszOutfileName)
 	mana_symbol_initialize();
 	mana_type_initialize();
 
-#if defined(__STDC_WANT_SECURE_LIB__)
-	if(fopen_s(&yyout, pszOutfileName, "wb") != 0)
-#else
-	if((yyout = fopen(pszOutfileName, "wb")) == NULL)
-#endif
-	{
-		mana_fatal("%s open failed.", pszOutfileName);
-		return MANA_FALSE;
-	}
 	if(mana_variable_header_file)
 	{
 		fprintf(mana_variable_header_file, "#if !defined(___MANA_GLOBAL_H___)\n");
@@ -321,9 +312,11 @@ int mana_compile(char* pszInfileName, char* pszOutfileName)
 		fclose(mana_variable_header_file);
 		mana_variable_header_file = NULL;
 	}
+
+	mana_stream* stream = mana_stream_create();
+
 	if(result == 0)
 	{
-		mana_stream* stream;
 		mana_file_header header;
 
 		if(mana_debug)
@@ -381,8 +374,6 @@ int mana_compile(char* pszInfileName, char* pszOutfileName)
 
 		mana_symbol_check_undefine();
 
-		stream = mana_stream_create();
-
 
 		memset(&header, 0, sizeof(mana_file_header));
 		memcpy(&header.header, MANA_SIGNATURE, sizeof(header.header));
@@ -401,53 +392,56 @@ int mana_compile(char* pszInfileName, char* pszOutfileName)
 
 		mana_stream_push_data(stream, &header, sizeof(header));
 
+		if(! mana_symbol_write_actor_infomation(stream))
+		{
+			result = 1;
+			goto ESCAPE;
+		}
+		
+		mana_data_write(stream);
 
-		if(fwrite(&header, sizeof(mana_file_header), 1, yyout) != 1)
-		{
-			result = 1;
-			goto ESCAPE;
-		}
-		if(! mana_symbol_write_actor_infomation(yyout))
-		{
-			result = 1;
-			goto ESCAPE;
-		}
-#if 0
-		mana_data_write(yyout);
-#else
-		mana_data_write_encription(yyout, header.random_seed_number);
-#endif
-		mana_code_write(yyout);
+		mana_code_write(stream);
+
 		if(mana_datalink_generator_get_number_of_files() > 0)
 		{
-			long position;
-
-			position = ftell(yyout) % MANA_DATALINK_ALIGNMENT_SIZE;
+			size_t position = mana_stream_get_used_size(stream) % MANA_DATALINK_ALIGNMENT_SIZE;
 			if(position > 0)
 			{
-				long i;
-
 				srand((unsigned)time(NULL));
 				position = MANA_DATALINK_ALIGNMENT_SIZE - position;
-				for(i = 0; i < position; i ++)
+				for(size_t i = 0; i < position; i ++)
 				{
-					fputc(rand(), yyout);
+					mana_stream_push_unsigned_char(stream, rand());
 				}
 			}
-			if(! mana_datalink_generator_write_data(yyout))
+			if(! mana_datalink_generator_write_data(stream))
 			{
 				result = 1;
 				goto ESCAPE;
 			}
 		}
-		fclose(yyout);
+
+#if defined(_DEBUG)
+		if(result == 0)
+		{
+			mana_test_execute(mana_stream_get_buffer(stream));
+		}
+#endif
+
+		if(!mana_stream_save(stream, pszOutfileName))
+		{
+			mana_fatal("%s open failed.", pszOutfileName);
+			result = 1;
+		}
 	}
 ESCAPE:
 	if(result != 0)
 	{
-		fclose(yyout);
 		remove(pszOutfileName);
 	}
+
+	mana_stream_destroy(stream);
+
 	mana_datalink_generator_finalize();
 	mana_code_finalize();
 	mana_data_finalize();
@@ -456,55 +450,6 @@ ESCAPE:
 	mana_symbol_finalize();
 	mana_type_finalize();
 	mana_lexer_finalize();
-
-#if defined(_DEBUG)
-	if(result == 0)
-	{
-		FILE* file;
-#if defined(__STDC_WANT_SECURE_LIB__)
-		if(fopen_s(&file, pszOutfileName, "rb") != 0)
-#else
-		if((file = fopen(pszOutfileName, "rb")) == NULL)
-#endif
-		{
-			printf("file open failed: %s\n", pszOutfileName);
-			return 1;
-		}
-
-		if(fseek(file, 0L, SEEK_END) != 0)
-		{
-			fclose(file);
-			printf("file open failed: %s\n", pszOutfileName);
-			return 1;
-		}
-
-		const long size = ftell(file);
-
-		void* program = malloc(size);
-		if(program == NULL)
-		{
-			fclose(file);
-			printf("memory allocation failed\n");
-			return 1;
-		}
-
-		rewind(file);
-
-		if(fread(program, 1, size, file) != size)
-		{
-			fclose(file);
-			free(program);
-			printf("file read failed: %s\n", pszOutfileName);
-			return 1;
-		}
-
-		fclose(file);
-
-		mana_test_execute(program);
-
-		free(program);
-	}
-#endif
 
 	return result;
 }
@@ -710,19 +655,19 @@ static int parse_arguments(int argc, char *argv[])
 int main(int argc, char *argv[])
 {
 	int result = 1;
-/*
+
 #if defined(_DEBUG) && defined(_MSC_VER)
 	_CrtMemState stOldMemState;
 	_CrtMemState stNewMemState;
 	_CrtMemState stDiffMemState;
 	_CrtMemCheckpoint(&stOldMemState);
 #endif
-*/
+
 	if(parse_arguments(argc, argv))
 	{
 		result = mana_compile(mana_input_filename, mana_output_filename);
 	}
-/*
+
 #if defined(_DEBUG) && defined(_MSC_VER)
 	_CrtMemCheckpoint(&stNewMemState);
 	if(_CrtMemDifference(&stDiffMemState, &stOldMemState, &stNewMemState))
@@ -732,6 +677,6 @@ int main(int argc, char *argv[])
 		_CrtDumpMemoryLeaks();
 	}
 #endif
-*/
+
 	return result;
 }
