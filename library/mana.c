@@ -226,12 +226,6 @@ mana_bool mana_load_program(mana* self, void* program, int auto_release)
 
 		constant_pool = (unsigned char*)self->constant_pool;
 
-		mana_srand(self->file_header->random_seed_number);
-		for(i = 0; i < self->file_header->size_of_constant_pool; i++)
-		{
-			*constant_pool++ ^= mana_rand();
-		}
-
 		program_counter = 0;
 		while(program_counter < self->file_header->size_of_instruction_pool)
 		{
