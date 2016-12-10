@@ -15,7 +15,9 @@
 extern "C" {
 #endif
 
+#include <libmana.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 typedef enum mana_symbol_memory_type_id
 {
@@ -245,7 +247,7 @@ extern void mana_symbol_print_footer(char*, mana_type_description*);
 extern void mana_symbol_print_entry(mana_symbol_entry*, mana_type_description*);
 extern void mana_symbol_print_dummy_global_variable(size_t size);
 
-extern int mana_symbol_write_actor_infomation(FILE*);
+extern bool mana_symbol_write_actor_infomation(mana_stream* stream);
 
 extern void mana_symbol_dump(FILE*);
 

@@ -275,15 +275,12 @@ void mana_code_replace_all(int address, int new_address)
  * @retval		MANA_TRUE	o—Í¬Œ÷
  * @retval		MANA_FALSE	o—Í¸”s
  */
-int mana_code_write(FILE* file)
+int mana_code_write(mana_stream* stream)
 {
 	int i;
 	for(i = 0; i < mana_code_get_size(); i ++)
 	{
-		if(fputc(mana_code_buffer.buffer[i].code, file) == EOF)
-		{
-			return MANA_FALSE;
-		}
+		mana_stream_push_unsigned_char(stream, mana_code_buffer.buffer[i].code);
 	}
 	return MANA_TRUE;
 }

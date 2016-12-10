@@ -156,42 +156,8 @@ unsigned int mana_data_set(char* text)
  * @retval		MANA_TRUE	出力成功
  * @retval		MANA_FALSE	出力失敗
  */
-unsigned int mana_data_write(FILE* file)
+unsigned int mana_data_write(mana_stream* stream)
 {
-	return (fwrite(mana_data_buffer.buffer, sizeof(char), mana_data_buffer.used_size, file) == (unsigned int)mana_data_buffer.used_size);
-}
-
-/*!
- * @param[out]	file		ファイル識別子
- * @param[out]	seed		乱数の種
- * @retval		MANA_TRUE	出力成功
- * @retval		MANA_FALSE	出力失敗
- */
-unsigned int mana_data_write_encription(FILE* file, unsigned int seed)
-{
-	unsigned char* buffer;
-
-	buffer = (unsigned char*)mana_malloc(mana_data_buffer.used_size);
-	if(buffer)
-	{
-		unsigned char* pd = buffer;
-		unsigned char* ps = (unsigned char*)mana_data_buffer.buffer;
-		int result;
-		unsigned int i;
-
-		mana_srand(seed);
-		for(i = 0; i < mana_data_buffer.used_size; i++)
-		{
-			*pd = *ps ^ (unsigned char)mana_rand();
-			pd++;
-			ps++;
-		}
-		result = (fwrite(buffer, sizeof(char), mana_data_buffer.used_size, file) == (unsigned int)mana_data_buffer.used_size);
-		mana_free(buffer);
-		return result;
-	}
-	else
-	{
-		return 0;
-	}
+	mana_stream_push_data(stream, mana_data_buffer.buffer, mana_data_buffer.used_size);
+	return 0;
 }
