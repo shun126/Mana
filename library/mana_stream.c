@@ -390,7 +390,7 @@ float mana_stream_pop_float(mana_stream* self)
  * @param[out]	size	ポップ先のバッファのサイズ
  * @return		文字列
  */
-void mana_stream_pop_string(mana_stream* self, char* pointer, size_t size)
+void mana_stream_pop_string(mana_stream* self, char* pointer, const size_t size)
 {
 	size_t length, copy_length;
 
@@ -412,7 +412,7 @@ void mana_stream_pop_string(mana_stream* self, char* pointer, size_t size)
  * @param[out]	size	ポップするデータのサイズ
  * @return		文字列
  */
-void mana_stream_pop_data(mana_stream* self, void* pointer, size_t size)
+void mana_stream_pop_data(mana_stream* self, void* pointer, const size_t size)
 {
 	assert(self && self->used_size >= self->pointer);
 	assert(pointer);
