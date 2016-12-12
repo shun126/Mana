@@ -222,7 +222,6 @@ mana_bool mana_load_program(mana* self, void* program, int auto_release)
 	{
 		unsigned char* constant_pool;
 		unsigned int program_counter;
-		unsigned int i;
 
 		constant_pool = (unsigned char*)self->constant_pool;
 

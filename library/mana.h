@@ -120,7 +120,7 @@ extern void* mana_get_program_buffer(mana* self);
 extern void mana_restart(mana* self);
 
 /*! 同期更新 */
-extern mana_bool mana_run(mana* self, float second);
+extern mana_bool mana_run(mana* self, const float second);
 
 /*! 非同期更新 */
 extern void mana_execute(mana* self);
