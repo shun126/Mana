@@ -411,7 +411,7 @@ int mana_compile(char* pszInfileName, char* pszOutfileName)
 				position = MANA_DATALINK_ALIGNMENT_SIZE - position;
 				for(size_t i = 0; i < position; i ++)
 				{
-					mana_stream_push_unsigned_char(stream, rand());
+					mana_stream_push_unsigned_char(stream, (unsigned char)rand());
 				}
 			}
 			if(! mana_datalink_generator_write_data(stream))
@@ -421,21 +421,24 @@ int mana_compile(char* pszInfileName, char* pszOutfileName)
 			}
 		}
 
-#if defined(_DEBUG)
 		if(result == 0)
 		{
-			mana_test_execute(mana_stream_get_buffer(stream));
-		}
-#endif
-
-		if(!mana_stream_save(stream, pszOutfileName))
-		{
-			mana_fatal("%s open failed.", pszOutfileName);
-			result = 1;
+			if(pszOutfileName[0] != '\0')
+			{
+				if(!mana_stream_save(stream, pszOutfileName))
+				{
+					mana_fatal("%s open failed.", pszOutfileName);
+					result = 1;
+				}
+			}
+			else
+			{
+				mana_test_execute(mana_stream_get_buffer(stream));
+			}
 		}
 	}
 ESCAPE:
-	if(result != 0)
+	if(pszOutfileName[0] != '\0' && result != 0)
 	{
 		remove(pszOutfileName);
 	}
@@ -479,7 +482,7 @@ static void print_usage()
 {
 	mana_print("usage:mana [switch] infile\n");
 	mana_print("            -o filename     specify output file name\n");
-	mana_print("            -h dirname      specify program header directory name\n");
+	mana_print("            -i dirname      specify program header directory name\n");
 	mana_print("            --help          print this message\n");
 	mana_print("            --copyright     print copyright holder\n");
 	mana_print("            --version       print the version\n");
@@ -533,7 +536,7 @@ static int parse_arguments(int argc, char *argv[])
 					}
 					break;
 
-				case 'h':
+				case 'i':
 					{
 						int length;
 						char filename[_MAX_PATH];
@@ -624,8 +627,13 @@ static int parse_arguments(int argc, char *argv[])
 				strcpy(mana_input_filename, cmdptr);
 #endif
 			}
+			else
+			{
+				mana_print("unrecognized option\n");
+				return MANA_FALSE;
+			}
 		}
-
+#if 0
 		if(mana_output_filename[0] == '\0')
 		{
 			char drive[_MAX_DRIVE];
@@ -641,7 +649,7 @@ static int parse_arguments(int argc, char *argv[])
 			_makepath(mana_output_filename, drive, dir, fname, ".mx");
 #endif
 		}
-
+#endif
 		return MANA_TRUE;
 	}
 }
