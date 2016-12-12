@@ -1375,7 +1375,7 @@ static void mana_actor_initialize(mana_actor* self)
  * @param[in]	variable_size	アクター変数のサイズ
  * @return		mana_actor オブジェクト
  */
-mana_actor* mana_actor_create(mana* parent, size_t variable_size)
+mana_actor* mana_actor_create(mana* parent, const size_t variable_size)
 {
 	mana_actor* self = mana_malloc(sizeof(mana_actor));
 
@@ -1973,11 +1973,11 @@ unsigned int mana_actor_get_action(mana_actor* self, const char* action)
 	MANA_ASSERT(self);
 
 	if(!mana_hash_test(&self->actions, action))
-		return ~0;
+		return (unsigned int)(~0);
 
 	address = mana_hash_get(&self->actions, action);
 	if(address == NULL)
-		return ~0;
+		return (unsigned int)(~0);
 
 	return (unsigned int)(address);
 }
@@ -2580,7 +2580,7 @@ unsigned int mana_actor_get_user_data(const mana_actor* self)
  * @param[in]	self		mana_actor オブジェクト
  * @param[in]	user_data	ユーザーデーター
  */
-void mana_actor_set_user_data(mana_actor* self, const unsigned int user_data)
+void mana_actor_set_user_data(mana_actor* self, unsigned int user_data)
 {
 	MANA_ASSERT(self);
 
