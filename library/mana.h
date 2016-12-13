@@ -40,7 +40,10 @@ extern "C" {
 #if !defined(___MANA_STREAM_H___)
 #include "mana_stream.h"
 #endif
+
+#include <stdbool.h>
 #include <stddef.h>
+#include <stdint.h>
 
 /*!
  * @brief	manaクラス
@@ -58,18 +61,18 @@ typedef struct mana
 	mana_hash actor_hash;				/*!< mana_actor オブジェクトへの連想配列 */
 	mana_hash phantom_hash;				/*!< phantomを表すmana_actor オブジェクトへの連想配列 */
 	mana_datalink datalink;				/*!< mana_datalink オブジェクト */
-	unsigned char* global_memory;		/*!< グローバル変数格納エリア */
+	uint8_t* global_memory;		/*!< グローバル変数格納エリア */
 	mana_file_header* file_header;		/*!< ロードされたファイルへのポインタ */
-	unsigned char* instruction_pool;	/*!< ロードされたプログラムへのポインタ */
+	uint8_t* instruction_pool;	/*!< ロードされたプログラムへのポインタ */
 	char* constant_pool;				/*!< ロードされたデータへのポインタ */
-	unsigned int frame_counter;			/*!< フレームカウンタ */
+	uint32_t frame_counter;			/*!< フレームカウンタ */
 
 /*
 	CManaIntersectionManager m_IntersectionManager;
 	CManaResource m_Resource;
 */
 
-	unsigned char flag;					/*!< フラグ */
+	uint8_t flag;					/*!< フラグ */
 	/*
 	 * mana :: flags
 	 *
@@ -108,7 +111,7 @@ extern void mana_serialize(mana* self, mana_stream* stream);
 extern void mana_deserialize(mana* self, mana_stream* stream);
 
 /*! manaプログラムの読み込み */
-extern mana_bool mana_load_program(mana* self, void* program, int auto_release);
+extern bool mana_load_program(mana* self, void* program, int32_t auto_release);
 
 /*! manaプログラムの開放 */
 extern void mana_unload_program(mana* self);
@@ -120,32 +123,32 @@ extern void* mana_get_program_buffer(mana* self);
 extern void mana_restart(mana* self);
 
 /*! 同期更新 */
-extern mana_bool mana_run(mana* self, const float second);
+extern bool mana_run(mana* self, const float second);
 
 /*! 非同期更新 */
 extern void mana_execute(mana* self);
 
 /*! 実行中か調べる */
-extern mana_bool mana_is_running(mana* self);
+extern bool mana_is_running(mana* self);
 
 /*! 全アクターにリクエストを要求 */
-extern void mana_request_all(mana* self, int level, const char* action_name, mana_actor* sender);
+extern void mana_request_all(mana* self, int32_t level, const char* action_name, mana_actor* sender);
 
 /*! アクターにリクエストを要求 */
-extern mana_bool mana_request(mana* self, int level, const char* actor_name, const char* action_name, mana_actor* sender);
+extern bool mana_request(mana* self, int32_t level, const char* actor_name, const char* action_name, mana_actor* sender);
 
 /*! 処理を譲る */
 extern void mana_yield(mana* self);
 
-extern char mana_get_char(const mana* self, const unsigned char* address);
-extern short mana_get_short(const mana* self, const unsigned char* address);
-extern int mana_get_integer(const mana* self, const unsigned char* address);
-extern unsigned char mana_get_unsigned_char(const mana* self, const unsigned char* address);
-extern unsigned short mana_get_unsigned_short(const mana* self, const unsigned char* address);
-extern unsigned int mana_get_unsigned_integer(const mana* self, const unsigned char* address);
-extern float mana_get_float(const mana* self, const unsigned char* address);
-extern const char* mana_get_string(const mana* self, const unsigned char* address);
-extern unsigned char* mana_get_address(const mana* self, const unsigned char* address);
+extern int8_t mana_get_char(const mana* self, const uint8_t* address);
+extern int16_t mana_get_short(const mana* self, const uint8_t* address);
+extern int32_t mana_get_integer(const mana* self, const uint8_t* address);
+extern uint8_t mana_get_unsigned_char(const mana* self, const uint8_t* address);
+extern uint16_t mana_get_unsigned_short(const mana* self, const uint8_t* address);
+extern uint32_t mana_get_unsigned_integer(const mana* self, const uint8_t* address);
+extern float mana_get_float(const mana* self, const uint8_t* address);
+extern const char* mana_get_string(const mana* self, const uint8_t* address);
+extern uint8_t* mana_get_address(const mana* self, const uint8_t* address);
 
 /*! アクターオブジェクトを取得 */
 extern struct mana_actor* mana_get_actor(mana* self, const char* name);
@@ -163,25 +166,25 @@ extern struct mana_actor* mana_create_actor_name(mana* self, const char* name, c
 extern struct mana_actor* mana_create_actor_from_phantom(mana* self, const char* name, const char* new_name);
 
 /*! initアクション実行中か取得 */
-extern mana_bool mana_is_in_init_action(mana* self);
+extern bool mana_is_in_init_action(mana* self);
 
 /*! initアクション終了か取得 */
-extern mana_bool mana_is_finish_init_action(mana* self);
+extern bool mana_is_finish_init_action(mana* self);
 
 /*! システムリクエストの許可フラグを設定 */
-extern void mana_enable_system_request(mana* self, const mana_bool enable);
+extern void mana_enable_system_request(mana* self, const bool enable);
 
 /*! システムリクエストの許可フラグを取得 */
-extern mana_bool mana_is_system_request_enabled(mana* self);
+extern bool mana_is_system_request_enabled(mana* self);
 
 /*! フレームカウンターを取得 */
-extern unsigned int mana_get_frame_counter(mana* self);
+extern uint32_t mana_get_frame_counter(mana* self);
 
 /*! フレームが変更されたか取得 */
-extern mana_bool mana_is_frame_changed(mana* self);
+extern bool mana_is_frame_changed(mana* self);
 
 /*! リソースデータを取得 */
-extern void mana_get_data(const mana* self, const int resouce_id, const void** buffer, size_t* size);
+extern void mana_get_data(const mana* self, const int32_t resouce_id, const void** buffer, size_t* size);
 
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)
 }

@@ -34,7 +34,6 @@ extern "C" {
 #if !defined(___MANA_STREAM_H___)
 #include "mana_stream.h"
 #endif
-#include <stddef.h>
 
 #define MANA_RETURN_VALUE_TYPE_INVALID	( 0)	/*!< 戻り値：無効 */
 #define MANA_RETURN_VALUE_TYPE_ACTOR	(-1)	/*!< 戻り値：アクターへの参照 */
@@ -56,16 +55,16 @@ typedef void (mana_actor_file_callback)(mana_file_callback_command, void* parame
 typedef struct mana_interrupt
 {
 	struct mana_actor* sender;				/*!< 要求したmana_actor オブジェクト */
-	unsigned int address;						/*!< 割り込み先アドレス */
-	unsigned int return_address;				/*!< リターンアドレス */
-	int counter;								/*!< 汎用カウンタ */
-	int frame_pointer;							/*!< フレームポインタ */
-	int stack_pointer;							/*!< スタックポインタ */
+	uint32_t address;						/*!< 割り込み先アドレス */
+	uint32_t return_address;				/*!< リターンアドレス */
+	int32_t counter;								/*!< 汎用カウンタ */
+	int32_t frame_pointer;							/*!< フレームポインタ */
+	int32_t stack_pointer;							/*!< スタックポインタ */
 	void* file_callback_parameter;			/*!< ファイル終了コールバックパラメータ */
 #if !defined(NDEBUG)
 	const char* action_name;					/*!< 実行中のアクション名 */
 #endif
-	unsigned char flag;
+	uint8_t flag;
 	/*
 	 * mana_actor :: flags
 	 *
@@ -93,13 +92,13 @@ typedef struct mana_return_value
 {
 	union
 	{
-		int integer_value;						/*!< 整数値 */
+		int32_t integer_value;						/*!< 整数値 */
 		float float_value;						/*!< 実数値 */
 		const char* string_value;				/*!< 文字列 */
 		void* pointer_value;					/*!< 構造体 */
 		struct mana_actor* actor_value;		/*!< アクター */
 	} values;
-	int size;									/*!< サイズ(pointer_value) */
+	int32_t size;									/*!< サイズ(pointer_value) */
 }mana_return_value;
 
 /*!
@@ -123,9 +122,9 @@ typedef struct mana_actor
 	void* rollback_callback_parameter;							/*!< ロールバックコールバック */
 	void* variable;												/*!< インスタンス変数 */
 	size_t variable_size;										/*!< インスタンス変数のサイズ */
-	unsigned int pc;											/*!< プログラムカウンタ */
-	unsigned char interrupt_level;								/*!< 割り込みレベル */
-	unsigned char flag;
+	uint32_t pc;											/*!< プログラムカウンタ */
+	uint8_t interrupt_level;								/*!< 割り込みレベル */
+	uint8_t flag;
 	/*
 	 * mana_actor :: flags
 	 *
@@ -140,8 +139,8 @@ typedef struct mana_actor
 	 *	|	+-------------------------- MANA_ACTOR_FLAG_REQUESTED
 	 *	+------------------------------ MANA_ACTOR_FLAG_REFUSED
 	 */
-	unsigned short padding;
-	unsigned int user_data;										/*!< ユーザーデータ */
+	uint16_t padding;
+	uint32_t user_data;										/*!< ユーザーデータ */
 	void* user_pointer;											/*!< ユーザーポインター */
 }mana_actor;
 
@@ -155,7 +154,7 @@ typedef struct mana_actor
 #define MANA_ACTOR_FLAG_REFUSED		(0x80)		/*!< リクエスト禁止フラグ */
 
 /*! request / rollbackコールバック */
-typedef int (mana_actor_callback)(mana_actor* actor, void* parameter);
+typedef int32_t (mana_actor_callback)(mana_actor* actor, void* parameter);
 
 /*! 外部関数宣言用型 */
 typedef void (mana_external_funtion_type)(mana_actor* actor);
@@ -182,19 +181,19 @@ extern float mana_actor_get_delta_time(void);
 extern void mana_actor_set_delta_time(float second);
 
 /*! 更新 */
-extern int mana_actor_run(mana_actor* self);
+extern int32_t mana_actor_run(mana_actor* self);
 
 /*! 同期実行 */
-extern mana_bool mana_sync_call(mana_actor* self, const int level, const char* action, mana_actor* sender);
+extern bool mana_sync_call(mana_actor* self, const int32_t level, const char* action, mana_actor* sender);
 
 /*! 非同期実行 */
-extern mana_bool mana_async_call(mana_actor* self, const int level, const char* action, mana_actor* sender);
+extern bool mana_async_call(mana_actor* self, const int32_t level, const char* action, mana_actor* sender);
 
 /*! リクエスト */
-extern mana_bool mana_actor_request(mana_actor* self, const int level, const char* name, mana_actor* sender);
+extern bool mana_actor_request(mana_actor* self, const int32_t level, const char* name, mana_actor* sender);
 
 /*! ロールバック */
-extern void mana_actor_rollback(mana_actor* self, int level);
+extern void mana_actor_rollback(mana_actor* self, int32_t level);
 
 /*! 再起動 */
 extern void mana_actor_restart(mana_actor* self);
@@ -203,46 +202,46 @@ extern void mana_actor_restart(mana_actor* self);
 extern const char* mana_actor_get_name(mana_actor* self);
 
 /*! アクションのプログラム開始アドレスを取得 */
-extern unsigned int mana_actor_get_action(mana_actor* self, const char* name);
+extern uint32_t mana_actor_get_action(mana_actor* self, const char* name);
 
 /*! 汎用カウンターを取得 */
-extern int mana_actor_get_counter(mana_actor* self);
+extern int32_t mana_actor_get_counter(mana_actor* self);
 
 /*! 汎用カウンターを設定 */
-extern void mana_actor_set_counter(mana_actor* self, const int counter);
+extern void mana_actor_set_counter(mana_actor* self, const int32_t counter);
 
 /*! 引数の数を取得 */
-extern int mana_actor_get_argument_count(mana_actor* self);
+extern int32_t mana_actor_get_argument_count(mana_actor* self);
 
 /*! 引数の数を取得 */
-extern int mana_actor_get_argument_count_by_address(mana_actor* self, const unsigned int address);
+extern int32_t mana_actor_get_argument_count_by_address(mana_actor* self, const uint32_t address);
 
 /*! 引数のサイズを取得 */
-extern int mana_actor_get_argument_size(mana_actor* self, const unsigned int address);
+extern int32_t mana_actor_get_argument_size(mana_actor* self, const uint32_t address);
 
 /*! 戻り値が存在するか調べる */
-extern mana_bool mana_actor_has_return_value(mana_actor* self, const unsigned int address);
+extern bool mana_actor_has_return_value(mana_actor* self, const uint32_t address);
 
 /*! 整数型の引数を取得 */
-extern int mana_actor_get_parameter_integer(mana_actor* self, const int value);
+extern int32_t mana_actor_get_parameter_integer(mana_actor* self, const int32_t value);
 
 /*! 実数型の引数を取得 */
-extern float mana_actor_get_parameter_float(mana_actor* self, const int value);
+extern float mana_actor_get_parameter_float(mana_actor* self, const int32_t value);
 
 /*! 文字列型の引数を取得 */
-extern const char* mana_actor_get_parameter_string(mana_actor* self, const int value);
+extern const char* mana_actor_get_parameter_string(mana_actor* self, const int32_t value);
 
 /*! アクター型の引数を取得 */
-extern mana_actor* mana_actor_get_parameter_actor(mana_actor* self, const int value);
+extern mana_actor* mana_actor_get_parameter_actor(mana_actor* self, const int32_t value);
 
 /*! ポインター型の引数を取得 */
-extern void* mana_actor_get_parameter_pointer(mana_actor* self, const int value);
+extern void* mana_actor_get_parameter_pointer(mana_actor* self, const int32_t value);
 
 /*! ポインター型の引数を取得 */
-extern void* mana_actor_get_parameter_address(mana_actor* self, const int value);
+extern void* mana_actor_get_parameter_address(mana_actor* self, const int32_t value);
 
 /*! 整数型の戻り値を設定 */
-extern void mana_actor_set_return_integer(mana_actor* self, const int value);
+extern void mana_actor_set_return_integer(mana_actor* self, const int32_t value);
 
 /*! 実数型の戻り値を設定 */
 extern void mana_actor_set_return_float(mana_actor* self, const float value);
@@ -257,7 +256,7 @@ extern void mana_actor_set_return_actor(mana_actor* self, mana_actor* actor);
 extern void mana_actor_set_return_pointer(mana_actor* self, void* pointer);
 
 /*! データの戻り値を設定 */
-extern void mana_actor_set_return_data(mana_actor* self, const void* pointer, const int size);
+extern void mana_actor_set_return_data(mana_actor* self, const void* pointer, const int32_t size);
 
 #if !defined(NDEBUG)
 /*! 実行中のアクション名を取得 */
@@ -268,22 +267,22 @@ const char* mana_actor_get_function_name(const mana_actor* self);
 #endif
 
 /*! mana_actor オブジェクトにアクションを登録(protected) */
-extern void mana_actor_set_action(mana_actor* self, const char* name, unsigned char* address);
+extern void mana_actor_set_action(mana_actor* self, const char* name, uint8_t* address);
 
 /*! mana オブジェクトを取得します */
 extern struct mana* mana_actor_get_parent(const mana_actor* self);
 
 /*! 初期化フラグを取得 */
-extern mana_bool mana_actor_is_init(const mana_actor* self);
+extern bool mana_actor_is_init(const mana_actor* self);
 
 /*! リピートフラグを取得 */
-extern mana_bool mana_actor_is_repeat(const mana_actor* self);
+extern bool mana_actor_is_repeat(const mana_actor* self);
 
 /*! 実行フラグを取得 */
-extern mana_bool mana_actor_is_running(const mana_actor* self);
+extern bool mana_actor_is_running(const mana_actor* self);
 
 /*! 実行中の命令を中断して次のフレームに再実行します */
-extern void mana_actor_repeat(mana_actor* self, const mana_bool initial_complete);
+extern void mana_actor_repeat(mana_actor* self, const bool initial_complete);
 
 /*! 実行中の命令を中断して同じフレーム中に再実行します */
 extern void mana_actor_again(mana_actor* self);
@@ -304,19 +303,19 @@ extern void mana_actor_comply(mana_actor* self);
 extern void mana_actor_refuse(mana_actor* self);
 
 /*! 優先度を取得 */
-extern int mana_actor_get_interrupt_level(mana_actor* self);
+extern int32_t mana_actor_get_interrupt_level(mana_actor* self);
 
 /*! 同期フラグを取得 */
-extern mana_bool mana_actor_is_synchronized(mana_actor* self);
+extern bool mana_actor_is_synchronized(mana_actor* self);
 
 /*! 同期フラグを設定 */
-extern void mana_actor_set_synchronized(mana_actor* self, mana_bool synchronized);
+extern void mana_actor_set_synchronized(mana_actor* self, bool synchronized);
 
 /*! 優先度付き同期フラグの設定 */
-extern void mana_actor_set_synchronized_with_level(mana_actor* self, int level, mana_bool synchronized);
+extern void mana_actor_set_synchronized_with_level(mana_actor* self, int32_t level, bool synchronized);
 
 /*! リソースデータの取得 */
-extern void mana_actor_get_data(const mana_actor* self, const int resouce_id, const void** buffer, size_t* size);
+extern void mana_actor_get_data(const mana_actor* self, const int32_t resouce_id, const void** buffer, size_t* size);
 
 /*! ファイル読み込みコールバックの取得 */
 extern mana_actor_file_callback* mana_actor_get_file_callback(void);
@@ -325,10 +324,10 @@ extern mana_actor_file_callback* mana_actor_get_file_callback(void);
 extern void mana_actor_set_file_callback(mana_actor_file_callback* function);
 
 /*! ファイル読み込みコールバックパラメーターの取得 */
-extern void* mana_actor_get_file_callback_parameter(mana_actor* self, int level);
+extern void* mana_actor_get_file_callback_parameter(mana_actor* self, int32_t level);
 
 /*! ファイル読み込みコールバックパラメーターの設定 */
-extern void mana_actor_set_file_callback_parameter(mana_actor* self, int level, void* parameter);
+extern void mana_actor_set_file_callback_parameter(mana_actor* self, int32_t level, void* parameter);
 
 /*! リクエストコールバックの設定 */
 extern void mana_actor_set_request_callback(mana_actor_callback* function);
@@ -343,10 +342,10 @@ extern void mana_actor_set_rollback_callback(mana_actor_callback* function);
 extern void mana_actor_set_rollback_callback_parameter(mana_actor* self, void* parameter);
 
 /*!< ユーザーデータの取得 */
-extern unsigned int mana_actor_get_user_data(const mana_actor* self);
+extern uint32_t mana_actor_get_user_data(const mana_actor* self);
 
 /*!< ユーザーデータの設定 */
-extern void mana_actor_set_user_data(mana_actor* self, unsigned int user_data);
+extern void mana_actor_set_user_data(mana_actor* self, uint32_t user_data);
 
 /*!< ユーザーポインターの取得 */
 extern void* mana_actor_get_user_pointer(const mana_actor* self);

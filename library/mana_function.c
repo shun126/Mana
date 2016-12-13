@@ -50,13 +50,13 @@ static void mana_function_debug(mana_actor* actor)
 
 static void mana_function_rand(mana_actor* actor)
 {
-	int max, min;
+	int32_t max, min;
 
 	MANA_ASSERT_PARAMETER(actor, 2);
 
 	min = mana_actor_get_parameter_integer(actor, 0);
 	max = mana_actor_get_parameter_integer(actor, 1);
-	mana_actor_set_return_integer(actor, (min + (((unsigned int)(rand() & 32767) * (max - min)) >> 15)));
+	mana_actor_set_return_integer(actor, (min + (((uint32_t)(rand() & 32767) * (max - min)) >> 15)));
 }
 
 static void mana_function_rand_float(mana_actor* actor)
@@ -75,13 +75,13 @@ static void mana_function_wait(mana_actor* actor)
 		second	= mana_actor_get_parameter_float(actor, 0);
 		if(second > 0.0f)
 		{
-			mana_actor_repeat(actor, MANA_TRUE);
+			mana_actor_repeat(actor, true);
 		}
 		mana_stack_set_real(&actor->stack, 0, second - mana_actor_get_delta_time());
 	}
 	else
 	{
-		mana_actor_repeat(actor, MANA_TRUE);
+		mana_actor_repeat(actor, true);
 	}
 }
 

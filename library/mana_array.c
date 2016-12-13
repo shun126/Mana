@@ -198,7 +198,7 @@ void mana_array_resize(mana_array* self, const size_t size)
  * @retval		== 0	“¯ˆê‚Ì“à—e
  * @retval		!= 0	ˆÙ‚È‚é“à—e
  */
-int mana_array_compare(const mana_array* self, const mana_array* other)
+int32_t mana_array_compare(const mana_array* self, const mana_array* other)
 {
 	assert(self && other);
 

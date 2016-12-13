@@ -49,15 +49,15 @@
 
 #define MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE	(2048)
 
-static char mana_input_filename[_MAX_PATH];
-static char mana_output_filename[_MAX_PATH];
-int mana_debug;
-int mana_release;
+static int8_t mana_input_filename[_MAX_PATH];
+static int8_t mana_output_filename[_MAX_PATH];
+int32_t mana_debug;
+int32_t mana_release;
 FILE* mana_variable_header_file;
 
 #if !defined(_MSC_VER)
 /* range copy */
-static void rcopy(char *dp, char *sp, char *ep)
+static void rcopy(int8_t *dp, int8_t *sp, int8_t *ep)
 {
 	while(sp < ep)
 		*dp ++ = *sp ++;
@@ -65,9 +65,9 @@ static void rcopy(char *dp, char *sp, char *ep)
 }
 
 /* reverse find */
-static char* rfind(char *sp, char *ep, int c)
+static char* rfind(int8_t *sp, int8_t *ep, int32_t c)
 {
-	while(*ep != (char)c)
+	while(*ep != (int8_t)c)
 	{
 		if(sp == ep)
 			return NULL;
@@ -76,7 +76,7 @@ static char* rfind(char *sp, char *ep, int c)
 	return ep;
 }
 
-void _makepath(char *path, char *drive, char *dir, char *file, char *ext)
+void _makepath(int8_t *path, int8_t *drive, int8_t *dir, int8_t *file, int8_t *ext)
 {
 	strcpy(path, drive);
 	strcat(path, dir);
@@ -84,11 +84,11 @@ void _makepath(char *path, char *drive, char *dir, char *file, char *ext)
 	strcat(path, ext);
 }
 
-void _splitpath(char *sptr, char *drive, char *dir, char *file, char *ext)
+void _splitpath(int8_t *sptr, int8_t *drive, int8_t *dir, int8_t *file, int8_t *ext)
 {
-	char *tptr;
-	char *aptr;
-	char *bptr;
+	int8_t *tptr;
+	int8_t *aptr;
+	int8_t *bptr;
 
 	*drive = *dir = *file = *ext = '\0';
 	tptr = sptr;
@@ -133,7 +133,7 @@ void _splitpath(char *sptr, char *drive, char *dir, char *file, char *ext)
 	}
 }
 
-char* _fullpath(char* out, char* in, int size)
+char* _fullpath(char* out, char* in, int32_t size)
 {
 	realpath(in, out);
 	return out;
@@ -141,9 +141,9 @@ char* _fullpath(char* out, char* in, int size)
 
 #endif
 
-void mana_error(char* filename, int line, char* format, ...)
+void mana_error(char* filename, int32_t line, char* format, ...)
 {
-	char string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
+	int8_t string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
 
 	va_list argptr;
 	va_start(argptr, format);
@@ -161,7 +161,7 @@ void mana_error(char* filename, int line, char* format, ...)
 
 void mana_compile_error(char* format, ...)
 {
-	char string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
+	int8_t string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
 
 	va_list argptr;
 	va_start(argptr, format);
@@ -176,7 +176,7 @@ void mana_compile_error(char* format, ...)
 
 void mana_compile_warning(char* format, ...)
 {
-	char string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
+	int8_t string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
 
 	va_list argptr;
 	va_start(argptr, format);
@@ -195,7 +195,7 @@ void mana_compile_warning(char* format, ...)
 
 void mana_linker_error(char* format, ...)
 {
-	char string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
+	int8_t string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
 
 	va_list argptr;
 	va_start(argptr, format);
@@ -210,7 +210,7 @@ void mana_linker_error(char* format, ...)
 
 void mana_linker_warning(char* format, ...)
 {
-	char string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
+	int8_t string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
 
 	va_list argptr;
 	va_start(argptr, format);
@@ -225,7 +225,7 @@ void mana_linker_warning(char* format, ...)
 
 void mana_fatal(char* format, ...)
 {
-	char string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
+	int8_t string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
 
 	va_list argptr;
 	va_start(argptr, format);
@@ -244,9 +244,9 @@ void mana_fatal_no_memory(void)
 	mana_fatal("no memory error");
 }
 
-static mana_bool mana_test_execute(void* program)
+static bool mana_test_execute(void* program)
 {
-	mana_bool result = MANA_FALSE;
+	bool result = false;
 	mana_initialize();
 
 	mana_plugin_regist(".");
@@ -282,9 +282,9 @@ static mana_bool mana_test_execute(void* program)
 	return result;
 }
 
-int mana_compile(char* pszInfileName, char* pszOutfileName)
+int32_t mana_compile(void)
 {
-	int result = 0;
+	int32_t result = 0;
 
 	mana_datalink_generator_initialize();
 	mana_code_initialize();
@@ -300,7 +300,7 @@ int mana_compile(char* pszInfileName, char* pszOutfileName)
 		fprintf(mana_variable_header_file, "#define ___MANA_GLOBAL_H___\n");
 		fprintf(mana_variable_header_file, "typedef struct mana_global\n{\n");
 	}
-	result = mana_lexer_initialize(pszInfileName);
+	result = mana_lexer_initialize(mana_input_filename);
 	if(result)
 	{
 		result = (yyparse() != 0 || yynerrs != 0);
@@ -322,17 +322,17 @@ int mana_compile(char* pszInfileName, char* pszOutfileName)
 		if(mana_debug)
 		{
 			FILE* log;
-			char filename[_MAX_PATH];
-			char drive[_MAX_DRIVE];
-			char dir[_MAX_DIR];
-			char fname[_MAX_FNAME];
-			char ext[_MAX_EXT];
+			int8_t filename[_MAX_PATH];
+			int8_t drive[_MAX_DRIVE];
+			int8_t dir[_MAX_DIR];
+			int8_t fname[_MAX_FNAME];
+			int8_t ext[_MAX_EXT];
 
 #if defined(__STDC_WANT_SECURE_LIB__)
-			_splitpath_s(mana_output_filename, drive, sizeof(drive), dir, sizeof(dir), fname, sizeof(fname), ext, sizeof(ext));
+			_splitpath_s(mana_input_filename, drive, sizeof(drive), dir, sizeof(dir), fname, sizeof(fname), ext, sizeof(ext));
 			_makepath_s(filename, sizeof(filename), drive, dir, fname, ".log");
 #else
-			_splitpath(mana_output_filename, drive, dir, fname, ext);
+			_splitpath(mana_input_filename, drive, dir, fname, ext);
 			_makepath(filename, drive, dir, fname, ".log");
 #endif
 
@@ -348,19 +348,19 @@ int mana_compile(char* pszInfileName, char* pszOutfileName)
 					fprintf(log, "\n\n");
 				}
 				{
-					int size = mana_code_get_size();
+					int32_t size = mana_code_get_size();
 					void* buffer = mana_malloc(size);
 					if(buffer)
 					{
 						char* data = mana_data_get_buffer();
-						int i = 0;
+						int32_t i = 0;
 
 						mana_code_copy(buffer);
 						while(i < size)
 						{
 							const char* text = mana_get_instruction_text(data, buffer, i);
 							fprintf(log, "%s\n", text);
-							i += mana_get_instruction_size(&((unsigned char*)buffer)[i]);
+							i += mana_get_instruction_size(&((uint8_t*)buffer)[i]);
 #if defined(_DEBUG)
 							fflush(log);
 #endif
@@ -388,7 +388,7 @@ int mana_compile(char* pszInfileName, char* pszOutfileName)
 		header.size_of_instruction_pool = mana_code_get_size();
 		header.size_of_static_memory = mana_symbol_get_static_memory_address();
 		header.size_of_global_memory = mana_symbol_get_global_memory_address();
-		header.random_seed_number = (unsigned int)time(NULL);
+		header.random_seed_number = (uint32_t)time(NULL);
 
 		mana_stream_push_data(stream, &header, sizeof(header));
 
@@ -411,7 +411,7 @@ int mana_compile(char* pszInfileName, char* pszOutfileName)
 				position = MANA_DATALINK_ALIGNMENT_SIZE - position;
 				for(size_t i = 0; i < position; i ++)
 				{
-					mana_stream_push_unsigned_char(stream, (unsigned char)rand());
+					mana_stream_push_unsigned_char(stream, (uint8_t)rand());
 				}
 			}
 			if(! mana_datalink_generator_write_data(stream))
@@ -423,11 +423,11 @@ int mana_compile(char* pszInfileName, char* pszOutfileName)
 
 		if(result == 0)
 		{
-			if(pszOutfileName[0] != '\0')
+			if(mana_output_filename[0] != '\0')
 			{
-				if(!mana_stream_save(stream, pszOutfileName))
+				if(!mana_stream_save(stream, mana_output_filename))
 				{
-					mana_fatal("%s open failed.", pszOutfileName);
+					mana_fatal("%s open failed.", mana_output_filename);
 					result = 1;
 				}
 			}
@@ -438,9 +438,9 @@ int mana_compile(char* pszInfileName, char* pszOutfileName)
 		}
 	}
 ESCAPE:
-	if(pszOutfileName[0] != '\0' && result != 0)
+	if(mana_output_filename[0] != '\0' && result != 0)
 	{
-		remove(pszOutfileName);
+		remove(mana_output_filename);
 	}
 
 	mana_stream_destroy(stream);
@@ -495,21 +495,21 @@ static void print_usage()
  * @param	argv	argument
  * @return	error code.
  */
-static int parse_arguments(int argc, char *argv[])
+static int32_t parse_arguments(int32_t argc, int8_t *argv[])
 {
-	char *cmdptr;
-	int cmdcnt;
+	int8_t *cmdptr;
+	int32_t cmdcnt;
 
 	if(argc < 2)
 	{
 		mana_print("No input files\n");
-		return MANA_FALSE;
+		return false;
 	}else{
 		mana_input_filename[0] = '\0';
 		mana_output_filename[0] = '\0';
 		mana_variable_header_file = NULL;
-		mana_debug = MANA_FALSE;
-		mana_release = MANA_FALSE;
+		mana_debug = false;
+		mana_release = false;
 
 		for(cmdcnt = 1; cmdcnt < argc; cmdcnt ++)
 		{
@@ -524,7 +524,7 @@ static int parse_arguments(int argc, char *argv[])
 					if(cmdcnt >= argc)
 					{
 						mana_print("no output file name\n");
-						return MANA_FALSE;
+						return false;
 					}
 					else
 					{
@@ -538,8 +538,8 @@ static int parse_arguments(int argc, char *argv[])
 
 				case 'i':
 					{
-						int length;
-						char filename[_MAX_PATH];
+						int32_t length;
+						int8_t filename[_MAX_PATH];
 
 						if(cmdcnt+1 < argc && *argv[cmdcnt+1] != '-')
 						{
@@ -581,7 +581,7 @@ static int parse_arguments(int argc, char *argv[])
 #endif
 						{
 							mana_print("'%s' open failed.\n", filename);
-							return MANA_FALSE;
+							return false;
 						}
 					}
 					break;
@@ -591,32 +591,32 @@ static int parse_arguments(int argc, char *argv[])
 					if(strcmp(cmdptr, "copyright") == 0)
 					{
 						print_copyright();
-						return MANA_FALSE;
+						return false;
 					}
 					else if(strcmp(cmdptr, "version") == 0)
 					{
 						print_title();
-						return MANA_FALSE;
+						return false;
 					}
 					else if(strcmp(cmdptr, "help") == 0)
 					{
 						print_usage();
-						return MANA_FALSE;
+						return false;
 					}
 					else if(strcmp(cmdptr, "debug") == 0)
 					{
-						mana_debug = MANA_TRUE;
+						mana_debug = true;
 						break;
 					}
 					else if(strcmp(cmdptr, "release") == 0)
 					{
-						mana_release = MANA_TRUE;
+						mana_release = true;
 						break;
 					}
 
 				default:
 					mana_print("unrecognized option\n");
-					return MANA_FALSE;
+					return false;
 				}
 			}
 			else if(mana_input_filename[0] == '\0')
@@ -630,16 +630,16 @@ static int parse_arguments(int argc, char *argv[])
 			else
 			{
 				mana_print("unrecognized option\n");
-				return MANA_FALSE;
+				return false;
 			}
 		}
 #if 0
 		if(mana_output_filename[0] == '\0')
 		{
-			char drive[_MAX_DRIVE];
-			char dir[_MAX_DIR];
-			char fname[_MAX_FNAME];
-			char ext[_MAX_EXT];
+			int8_t drive[_MAX_DRIVE];
+			int8_t dir[_MAX_DIR];
+			int8_t fname[_MAX_FNAME];
+			int8_t ext[_MAX_EXT];
 
 #if defined(__STDC_WANT_SECURE_LIB__)
 			_splitpath_s(mana_input_filename, drive, sizeof(drive), dir, sizeof(dir), fname, sizeof(fname), ext, sizeof(ext));
@@ -650,7 +650,7 @@ static int parse_arguments(int argc, char *argv[])
 #endif
 		}
 #endif
-		return MANA_TRUE;
+		return true;
 	}
 }
 
@@ -658,11 +658,11 @@ static int parse_arguments(int argc, char *argv[])
  * main
  * @param	argc	number of argument
  * @param	argv	argument
- * @return	if return value is MANA_TRUE, compile was complete.
+ * @return	if return value is true, compile was complete.
  */
-int main(int argc, char *argv[])
+int32_t main(int32_t argc, int8_t *argv[])
 {
-	int result = 1;
+	int32_t result = 1;
 
 #if defined(_DEBUG) && defined(_MSC_VER)
 	_CrtMemState stOldMemState;
@@ -673,7 +673,7 @@ int main(int argc, char *argv[])
 
 	if(parse_arguments(argc, argv))
 	{
-		result = mana_compile(mana_input_filename, mana_output_filename);
+		result = mana_compile();
 	}
 
 #if defined(_DEBUG) && defined(_MSC_VER)

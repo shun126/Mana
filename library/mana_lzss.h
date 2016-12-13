@@ -22,9 +22,9 @@ extern size_t mana_lzss_get_magic_word_size();
 extern unsigned char mana_lzss_get_version();
 extern unsigned char mana_lzss_get_dictonary();
 
-extern mana_bool mana_lzss_is_valid(const void* compressed_data_pointer);
+extern bool mana_lzss_is_valid(const void* compressed_data_pointer);
 
-extern mana_bool mana_lzss_is_compressed(const void* compressed_data_pointer);
+extern bool mana_lzss_is_compressed(const void* compressed_data_pointer);
 
 extern size_t mana_lzss_get_extract_data_size(const void* compressed_data_pointer);
 

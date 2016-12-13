@@ -12,36 +12,6 @@
  * @date	2003-
  */
 
-/*
- * mana (library)
- * Copyright (c) 2003 Shun Moriya <shun@mnu.sakura.ne.jp>
- *
- * The MIT License
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
- * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
- * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
- * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR
- * THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
-/*!
- * @file
- *
- * @author	Shun Moriya <shun@mnu.sakura.ne.jp>
- */
-
 #if !defined(___MANA_DEFINE_H___)
 #include "mana_define.h"
 #endif
@@ -62,10 +32,14 @@
 #include <stdio.h>
 #include <string.h>
 
+#if defined(_WIN32) || defined(_WIN64)
+#include <windows.h>
+#endif
+
 extern mana_hash mana_external_function_hash;
 extern size_t mana_static_memory_size;
-extern unsigned char* mana_static_memory;
-extern mana_bool mana_big_endian;
+extern uint8_t* mana_static_memory;
+extern bool mana_big_endian;
 
 static mana_actor_file_callback* mana_async_file_callback = NULL;
 static mana_actor_callback* mana_actor_request_callback = NULL;
@@ -77,7 +51,7 @@ static float mana_actor_delta_time = FLT_MAX;
  * @param[in]	プログラムアドレス
  * @return		プログラム領域上の１バイト分の数値
  */
-static char mana_actor_get_char_from_memory(const mana_actor* self, const unsigned int address)
+static int8_t mana_actor_get_char_from_memory(const mana_actor* self, const uint32_t address)
 {
 	MANA_ASSERT(self);
 	MANA_ASSERT(address < self->parent->file_header->size_of_instruction_pool);
@@ -90,9 +64,9 @@ static char mana_actor_get_char_from_memory(const mana_actor* self, const unsign
  * @param[in]	プログラムアドレス
  * @return		プログラム領域上の１バイト分の数値
  */
-static unsigned char mana_actor_get_unsigned_char_from_memory(const mana_actor* self, const unsigned int address)
+static uint8_t mana_actor_get_unsigned_char_from_memory(const mana_actor* self, const uint32_t address)
 {
-	return (unsigned char )mana_actor_get_char_from_memory(self, address);
+	return (uint8_t )mana_actor_get_char_from_memory(self, address);
 }
 
 /*!
@@ -100,15 +74,15 @@ static unsigned char mana_actor_get_unsigned_char_from_memory(const mana_actor* 
  * @param[in]	プログラムアドレス
  * @return		プログラム領域上の２バイト分の数値
  */
-static unsigned short mana_actor_get_unsigned_short_from_memory(const mana_actor* self, const unsigned int address)
+static uint16_t mana_actor_get_unsigned_short_from_memory(const mana_actor* self, const uint32_t address)
 {
-	unsigned char* pointer;
-	unsigned short value;
+	uint8_t* pointer;
+	uint16_t value;
 
 	MANA_ASSERT(self);
 	MANA_ASSERT(address < self->parent->file_header->size_of_instruction_pool);
 
-	pointer = (unsigned char*)&value;
+	pointer = (uint8_t*)&value;
 
 	if(mana_big_endian)
 	{
@@ -129,9 +103,9 @@ static unsigned short mana_actor_get_unsigned_short_from_memory(const mana_actor
  * @param[in]	プログラムアドレス
  * @return		プログラム領域上の２バイト分の数値
  */
-static short mana_actor_get_short_from_memory(const mana_actor* self, const unsigned int address)
+static int16_t mana_actor_get_short_from_memory(const mana_actor* self, const uint32_t address)
 {
-	return (short)mana_actor_get_unsigned_short_from_memory(self, address);
+	return (int16_t)mana_actor_get_unsigned_short_from_memory(self, address);
 }
 
 /*!
@@ -139,15 +113,15 @@ static short mana_actor_get_short_from_memory(const mana_actor* self, const unsi
  * @param[in]	プログラムアドレス
  * @return		プログラム領域上の４バイト分の数値
  */
-static unsigned int mana_actor_get_unsigned_integer_from_memory(const mana_actor* self, const unsigned int address)
+static uint32_t mana_actor_get_unsigned_integer_from_memory(const mana_actor* self, const uint32_t address)
 {
-	unsigned char* pointer;
-	unsigned int value;
+	uint8_t* pointer;
+	uint32_t value;
 
 	MANA_ASSERT(self);
 	MANA_ASSERT(address < self->parent->file_header->size_of_instruction_pool);
 
-	pointer = (unsigned char*)&value;
+	pointer = (uint8_t*)&value;
 
 	if(mana_big_endian)
 	{
@@ -172,9 +146,9 @@ static unsigned int mana_actor_get_unsigned_integer_from_memory(const mana_actor
  * @param[in]	プログラムアドレス
  * @return		プログラム領域上の４バイト分の数値
  */
-static int mana_actor_get_integer_from_memory(const mana_actor* self, const unsigned int address)
+static int32_t mana_actor_get_integer_from_memory(const mana_actor* self, const uint32_t address)
 {
-	return (int)mana_actor_get_unsigned_integer_from_memory(self, address);
+	return (int32_t)mana_actor_get_unsigned_integer_from_memory(self, address);
 }
 
 /*!
@@ -182,15 +156,15 @@ static int mana_actor_get_integer_from_memory(const mana_actor* self, const unsi
  * @param[in]	プログラムアドレス
  * @return		プログラム領域上の単制度浮動小数
  */
-static float mana_actor_get_float_from_memory(const mana_actor* self, const unsigned int address)
+static float mana_actor_get_float_from_memory(const mana_actor* self, const uint32_t address)
 {
-	unsigned char* pointer;
+	uint8_t* pointer;
 	float value;
 
 	MANA_ASSERT(self);
 	MANA_ASSERT(address < self->parent->file_header->size_of_instruction_pool);
 
-	pointer = (unsigned char*)&value;
+	pointer = (uint8_t*)&value;
 
 	if(mana_big_endian)
 	{
@@ -216,9 +190,9 @@ static float mana_actor_get_float_from_memory(const mana_actor* self, const unsi
  * @param[in]	プログラムアドレス
  * @return	文字列へのポインタ
  */
-static char* mana_actor_get_string_from_memory(const mana_actor* self, const unsigned int address)
+static char* mana_actor_get_string_from_memory(const mana_actor* self, const uint32_t address)
 {
-	unsigned int offset;
+	uint32_t offset;
 
 	MANA_ASSERT(self);
 	MANA_ASSERT(address < self->parent->file_header->size_of_instruction_pool);
@@ -237,7 +211,7 @@ static char* mana_actor_get_string_from_memory(const mana_actor* self, const uns
  * @param[in]	プログラムアドレス
  * @return	文字列へのポインタ
  */
-static char* mana_actor_get_string_from_data(const mana_actor* self, const unsigned int address)
+static char* mana_actor_get_string_from_data(const mana_actor* self, const uint32_t address)
 {
 	MANA_ASSERT(self);
 	MANA_ASSERT(address < self->parent->file_header->size_of_constant_pool);
@@ -251,9 +225,9 @@ static char* mana_actor_get_string_from_data(const mana_actor* self, const unsig
  * @param	address		プログラムアドレス
  * @return	オペコード
  */
-static int mana_actor_get_opecode(const mana_actor* self, const unsigned int address)
+static int32_t mana_actor_get_opecode(const mana_actor* self, const uint32_t address)
 {
-	int opecode = self->parent->instruction_pool[address];
+	int32_t opecode = self->parent->instruction_pool[address];
 
 	MANA_ASSERT(self);
 	MANA_ASSERT(address < self->parent->file_header->size_of_instruction_pool);
@@ -279,12 +253,12 @@ static void mana_actor_cmd_yield(mana_actor* actor)
 
 static void mana_actor_cmd_set_non_preemptive(mana_actor* actor)
 {
-	mana_actor_set_synchronized(actor, MANA_TRUE);
+	mana_actor_set_synchronized(actor, true);
 }
 
 static void mana_actor_cmd_set_preemptive(mana_actor* actor)
 {
-	mana_actor_set_synchronized(actor, MANA_FALSE);
+	mana_actor_set_synchronized(actor, false);
 }
 
 static void mana_actor_cmd_push_zero_integer(mana_actor* actor)
@@ -373,14 +347,14 @@ static void mana_actor_cmd_load_global_address(mana_actor* actor)
 
 static void mana_actor_cmd_load_frame_address(mana_actor* actor)
 {
-	int offset = mana_actor_get_integer_from_memory(actor, actor->pc + 1);
+	int32_t offset = mana_actor_get_integer_from_memory(actor, actor->pc + 1);
 	void* address = mana_frame_get_address(&actor->frame, offset);
 	mana_stack_push_pointer(&actor->stack, address);
 }
 
 static void mana_actor_cmd_load_self_address(mana_actor* actor)
 {
-	int offset = mana_actor_get_integer_from_memory(actor, actor->pc + 1);
+	int32_t offset = mana_actor_get_integer_from_memory(actor, actor->pc + 1);
 	mana_stack_push_pointer(&actor->stack, &((char*)actor->variable)[offset]);
 }
 
@@ -392,13 +366,13 @@ static void mana_actor_cmd_load_char(mana_actor* actor)
 
 static void mana_actor_cmd_load_short(mana_actor* actor)
 {
-	const short* pointer = mana_stack_get_pointer(&actor->stack, 0);
+	const int16_t* pointer = mana_stack_get_pointer(&actor->stack, 0);
 	mana_stack_set_integer(&actor->stack, 0, *pointer);
 }
 
 static void mana_actor_cmd_load_integer(mana_actor* actor)
 {
-	const int* pointer = mana_stack_get_pointer(&actor->stack, 0);
+	const int32_t* pointer = mana_stack_get_pointer(&actor->stack, 0);
 	mana_stack_set_integer(&actor->stack, 0, *pointer);
 }
 
@@ -416,23 +390,23 @@ static void mana_actor_cmd_load_reffrence(mana_actor* actor)
 static void mana_actor_cmd_store_char(mana_actor* actor)
 {
 	char* pointer = (char*)mana_stack_get_pointer(&actor->stack, 0);
-	int value = mana_stack_get_integer(&actor->stack, 1);
-	*pointer = (char)value;
+	int32_t value = mana_stack_get_integer(&actor->stack, 1);
+	*pointer = (int8_t)value;
 	mana_stack_remove(&actor->stack, 2);
 }
 
 static void mana_actor_cmd_store_short(mana_actor* actor)
 {
-	short* pointer = (short*)mana_stack_get_pointer(&actor->stack, 0);
-	int value = mana_stack_get_integer(&actor->stack, 1);
-	*pointer = (short)value;
+	int16_t* pointer = (int16_t*)mana_stack_get_pointer(&actor->stack, 0);
+	int32_t value = mana_stack_get_integer(&actor->stack, 1);
+	*pointer = (int16_t)value;
 	mana_stack_remove(&actor->stack, 2);
 }
 
 static void mana_actor_cmd_store_integer(mana_actor* actor)
 {
-	int* pointer = (int*)mana_stack_get_pointer(&actor->stack, 0);
-	int value = mana_stack_get_integer(&actor->stack, 1);
+	int32_t* pointer = (int32_t*)mana_stack_get_pointer(&actor->stack, 0);
+	int32_t value = mana_stack_get_integer(&actor->stack, 1);
 	*pointer = value;
 	mana_stack_remove(&actor->stack, 2);
 }
@@ -491,17 +465,17 @@ static void mana_actor_cmd_branch_sub_routine(mana_actor* actor)
 
 static void mana_actor_cmd_call(mana_actor* actor)
 {
-	unsigned int last_pc = actor->pc;
-	int last_interrupt_level = actor->interrupt_level;
+	uint32_t last_pc = actor->pc;
+	int32_t last_interrupt_level = actor->interrupt_level;
 
 	/* 外部関数の実行 */
 	mana_external_funtion_type* function;
 
 #if defined(NDEBUG)
-	function = (mana_external_funtion_type*)mana_get_unsigned_integer(actor->parent, (const unsigned char*)(actor->pc + 1));
+	function = (mana_external_funtion_type*)mana_get_unsigned_integer(actor->parent, (const uint8_t*)(actor->pc + 1));
 #else
 	char* name = mana_actor_get_string_from_memory(actor, actor->pc + 1);
-	function = (mana_external_funtion_type*)mana_hash_get(&mana_external_function_hash, name);
+	function = mana_hash_get(&mana_external_function_hash, name);
 	if(!function)
 	{
 		MANA_ERROR("An external function called %s was not found.\n", name);
@@ -516,9 +490,9 @@ static void mana_actor_cmd_call(mana_actor* actor)
 	{
 		if(!mana_actor_is_repeat(actor))
 		{
-			mana_bool bHasReturnValue = mana_actor_has_return_value(actor, last_pc);
-			int nNumberOfArguments = mana_actor_get_argument_count_by_address(actor, last_pc);
-			int nSizeOfArguments   = mana_actor_get_argument_size(actor, last_pc);
+			bool bHasReturnValue = mana_actor_has_return_value(actor, last_pc);
+			int32_t nNumberOfArguments = mana_actor_get_argument_count_by_address(actor, last_pc);
+			int32_t nSizeOfArguments   = mana_actor_get_argument_size(actor, last_pc);
 
 			/* スタックに入っているパラメータをpopする */
 			mana_stack_remove(&actor->stack, nSizeOfArguments);
@@ -559,7 +533,7 @@ static void mana_actor_cmd_call(mana_actor* actor)
 			/* 外部関数内でreq系の命令が実行された場合、スタックの状態を修正する */
 			if(actor->interrupt_level > last_interrupt_level)
 			{
-				actor->interrupt[last_interrupt_level].address = last_pc + 4 + 2 + 2 + 1 + (nNumberOfArguments * sizeof(short));
+				actor->interrupt[last_interrupt_level].address = last_pc + 4 + 2 + 2 + 1 + (nNumberOfArguments * sizeof(int16_t));
 				actor->interrupt[actor->interrupt_level].stack_pointer = mana_stack_get_size(&actor->stack);
 				actor->interrupt[actor->interrupt_level].flag |= MANA_INTERRUPT_FLAG_REPEAT;
 			}
@@ -570,13 +544,13 @@ static void mana_actor_cmd_call(mana_actor* actor)
 static void mana_actor_cmd_request(mana_actor* actor)
 {
 	mana_actor* target_actor = (mana_actor*)mana_stack_pop_pointer(&actor->stack);
-	int level = mana_stack_pop_integer(&actor->stack);
+	int32_t level = mana_stack_pop_integer(&actor->stack);
 	char* action = mana_actor_get_string_from_memory(actor, actor->pc + 1);
 
 	if(target_actor)
 	{
 		actor->interrupt[actor->interrupt_level].flag |= MANA_INTERRUPT_FLAG_REPEAT;
-		actor->pc += sizeof(int) + 1;
+		actor->pc += sizeof(int32_t) + 1;
 		mana_actor_request(target_actor, level, action, actor);
 	}
 }
@@ -584,7 +558,7 @@ static void mana_actor_cmd_request(mana_actor* actor)
 static void mana_actor_cmd_request_wait_starting(mana_actor* actor)
 {
 	mana_actor* target_actor = (mana_actor*)mana_stack_get_pointer(&actor->stack, 0);
-	int level = mana_stack_get_integer(&actor->stack, 1);
+	int32_t level = mana_stack_get_integer(&actor->stack, 1);
 	char* action = mana_actor_get_string_from_memory(actor, actor->pc + 1);
 
 	if(target_actor == 0)
@@ -611,14 +585,14 @@ static void mana_actor_cmd_request_wait_starting(mana_actor* actor)
 	}
 	else
 	{
-		mana_actor_repeat(actor, MANA_TRUE);
+		mana_actor_repeat(actor, true);
 	}
 }
 
 static void mana_actor_cmd_request_wait_ending(mana_actor* actor)
 {
 	mana_actor* target_actor = (mana_actor*)mana_stack_get_pointer(&actor->stack, 0);
-	int level = mana_stack_get_integer(&actor->stack, 1);
+	int32_t level = mana_stack_get_integer(&actor->stack, 1);
 	char* action = mana_actor_get_string_from_memory(actor, actor->pc + 1);
 
 	if(target_actor == 0)
@@ -645,7 +619,7 @@ static void mana_actor_cmd_request_wait_ending(mana_actor* actor)
 	}
 	else
 	{
-		mana_actor_repeat(actor, MANA_TRUE);
+		mana_actor_repeat(actor, true);
 	}
 }
 
@@ -655,11 +629,11 @@ static void mana_actor_cmd_dynamic_request(mana_actor* actor)
 /*
 	CManaStack& Stack = actor->stack;
 	const char* pszTargetActor = Stack.PopString();
-	const int level = Stack.PopInteger();
+	const int32_t level = Stack.PopInteger();
 	const char* action = actor->GetStringFromMemory(1);
 
-	actor->interrupt[actor->GetInterruptLevel()].repeat = MANA_TRUE;
-	actor->pc += sizeof(int) + 1;
+	actor->interrupt[actor->GetInterruptLevel()].repeat = true;
+	actor->pc += sizeof(int32_t) + 1;
 
 	mana_actor* target_actor = actor->GetParent().GetActor(pszTargetActor);
 	if(target_actor)
@@ -673,7 +647,7 @@ static void mana_actor_cmd_DynamicRequestWaitStarting(mana_actor* actor)
 /*
 	CManaStack& Stack = actor->stack;
 	const char* pszTargetActor = Stack.GetString(0);
-	int level = Stack.GetInteger(1);
+	int32_t level = Stack.GetInteger(1);
 	const char* action = actor->GetStringFromMemory(1);
 
 	mana_actor* target_actor = actor->GetParent().GetActor(pszTargetActor);
@@ -707,7 +681,7 @@ static void mana_actor_cmd_dynamic_request_wait_ending(mana_actor* actor)
 /*
 	CManaStack& Stack = actor->stack;
 	const char* pszTargetActor = Stack.GetString(0);
-	int level = Stack.GetInteger(1);
+	int32_t level = Stack.GetInteger(1);
 	const char* action = actor->GetStringFromMemory(1);
 
 	mana_actor* target_actor = actor->GetParent().GetActor(pszTargetActor);
@@ -750,7 +724,7 @@ static void mana_actor_cmd_join(mana_actor* actor)
 	}
 	else
 	{
-		mana_actor_repeat(actor, MANA_TRUE);
+		mana_actor_repeat(actor, true);
 	}
 }
 
@@ -766,13 +740,13 @@ static void mana_actor_cmd_refuse(mana_actor* actor)
 
 static void mana_actor_cmd_load_return_address(mana_actor* actor)
 {
-	unsigned int* pointer = (unsigned int*)mana_frame_get_address(&actor->frame, sizeof(int));
+	uint32_t* pointer = (uint32_t*)mana_frame_get_address(&actor->frame, sizeof(int32_t));
 	actor->interrupt[actor->interrupt_level].return_address = *pointer;
 }
 
 static void mana_actor_cmd_store_return_address(mana_actor* actor)
 {
-	unsigned int* pointer = (unsigned int*)mana_frame_get_address(&actor->frame, sizeof(int));
+	uint32_t* pointer = (uint32_t*)mana_frame_get_address(&actor->frame, sizeof(int32_t));
 	*pointer = actor->interrupt[actor->interrupt_level].return_address;
 }
 
@@ -794,8 +768,8 @@ static void mana_actor_cmd_rollback(mana_actor* actor)
 
 static void mana_actor_cmd_add_integer(mana_actor* actor)
 {
-	int left  = mana_stack_get_integer(&actor->stack, 1);
-	int right = mana_stack_get_integer(&actor->stack, 0);
+	int32_t left  = mana_stack_get_integer(&actor->stack, 1);
+	int32_t right = mana_stack_get_integer(&actor->stack, 0);
 	mana_stack_remove(&actor->stack, 1);
 	mana_stack_set_integer(&actor->stack, 0, left + right);
 }
@@ -810,8 +784,8 @@ static void mana_actor_cmd_add_float(mana_actor* actor)
 
 static void mana_actor_cmd_divide_integer(mana_actor* actor)
 {
-	int left  = mana_stack_get_integer(&actor->stack, 1);
-	int right = mana_stack_get_integer(&actor->stack, 0);
+	int32_t left  = mana_stack_get_integer(&actor->stack, 1);
+	int32_t right = mana_stack_get_integer(&actor->stack, 0);
 	mana_stack_remove(&actor->stack, 1);
 	mana_stack_set_integer(&actor->stack, 0, left / right);
 }
@@ -836,8 +810,8 @@ static void mana_actor_cmd_minus_float(mana_actor* actor)
 
 static void mana_actor_cmd_MOD_integer(mana_actor* actor)
 {
-	int left  = mana_stack_get_integer(&actor->stack, 1);
-	int right = mana_stack_get_integer(&actor->stack, 0);
+	int32_t left  = mana_stack_get_integer(&actor->stack, 1);
+	int32_t right = mana_stack_get_integer(&actor->stack, 0);
 	mana_stack_remove(&actor->stack, 1);
 	mana_stack_set_integer(&actor->stack, 0, left % right);
 }
@@ -852,8 +826,8 @@ static void mana_actor_cmd_MOD_float(mana_actor* actor)
 
 static void mana_actor_cmd_multiply_integer(mana_actor* actor)
 {
-	int left  = mana_stack_get_integer(&actor->stack, 1);
-	int right = mana_stack_get_integer(&actor->stack, 0);
+	int32_t left  = mana_stack_get_integer(&actor->stack, 1);
+	int32_t right = mana_stack_get_integer(&actor->stack, 0);
 	mana_stack_remove(&actor->stack, 1);
 	mana_stack_set_integer(&actor->stack, 0, left * right);
 }
@@ -868,8 +842,8 @@ static void mana_actor_cmd_multiply_float(mana_actor* actor)
 
 static void mana_actor_cmd_subtract_integer(mana_actor* actor)
 {
-	int left  = mana_stack_get_integer(&actor->stack, 1);
-	int right = mana_stack_get_integer(&actor->stack, 0);
+	int32_t left  = mana_stack_get_integer(&actor->stack, 1);
+	int32_t right = mana_stack_get_integer(&actor->stack, 0);
 	mana_stack_remove(&actor->stack, 1);
 	mana_stack_set_integer(&actor->stack, 0, left - right);
 }
@@ -884,32 +858,32 @@ static void mana_actor_cmd_subtract_float(mana_actor* actor)
 
 static void mana_actor_cmd_and(mana_actor* actor)
 {
-	int left  = mana_stack_get_integer(&actor->stack, 1);
-	int right = mana_stack_get_integer(&actor->stack, 0);
+	int32_t left  = mana_stack_get_integer(&actor->stack, 1);
+	int32_t right = mana_stack_get_integer(&actor->stack, 0);
 	mana_stack_remove(&actor->stack, 1);
 	mana_stack_set_integer(&actor->stack, 0, left & right);
 }
 
 static void mana_actor_cmd_exclusive_or(mana_actor* actor)
 {
-	int left  = mana_stack_get_integer(&actor->stack, 1);
-	int right = mana_stack_get_integer(&actor->stack, 0);
+	int32_t left  = mana_stack_get_integer(&actor->stack, 1);
+	int32_t right = mana_stack_get_integer(&actor->stack, 0);
 	mana_stack_remove(&actor->stack, 1);
 	mana_stack_set_integer(&actor->stack, 0, left ^ right);
 }
 
 static void mana_actor_cmd_logical_and(mana_actor* actor)
 {
-	int left  = mana_stack_get_integer(&actor->stack, 1);
-	int right = mana_stack_get_integer(&actor->stack, 0);
+	int32_t left  = mana_stack_get_integer(&actor->stack, 1);
+	int32_t right = mana_stack_get_integer(&actor->stack, 0);
 	mana_stack_remove(&actor->stack, 1);
 	mana_stack_set_integer(&actor->stack, 0, left && right);
 }
 
 static void mana_actor_cmd_logical_or(mana_actor* actor)
 {
-	int left  = mana_stack_get_integer(&actor->stack, 1);
-	int right = mana_stack_get_integer(&actor->stack, 0);
+	int32_t left  = mana_stack_get_integer(&actor->stack, 1);
+	int32_t right = mana_stack_get_integer(&actor->stack, 0);
 	mana_stack_remove(&actor->stack, 1);
 	mana_stack_set_integer(&actor->stack, 0, left || right);
 }
@@ -926,32 +900,32 @@ static void mana_actor_cmd_logical_not(mana_actor* actor)
 
 static void mana_actor_cmd_or(mana_actor* actor)
 {
-	int left  = mana_stack_get_integer(&actor->stack, 1);
-	int right = mana_stack_get_integer(&actor->stack, 0);
+	int32_t left  = mana_stack_get_integer(&actor->stack, 1);
+	int32_t right = mana_stack_get_integer(&actor->stack, 0);
 	mana_stack_remove(&actor->stack, 1);
 	mana_stack_set_integer(&actor->stack, 0, left | right);
 }
 
 static void mana_actor_cmd_shift_left(mana_actor* actor)
 {
-	int left  = mana_stack_get_integer(&actor->stack, 1);
-	int right = mana_stack_get_integer(&actor->stack, 0);
+	int32_t left  = mana_stack_get_integer(&actor->stack, 1);
+	int32_t right = mana_stack_get_integer(&actor->stack, 0);
 	mana_stack_remove(&actor->stack, 1);
 	mana_stack_set_integer(&actor->stack, 0, left << right);
 }
 
 static void mana_actor_cmd_shift_right(mana_actor* actor)
 {
-	int left  = mana_stack_get_integer(&actor->stack, 1);
-	int right = mana_stack_get_integer(&actor->stack, 0);
+	int32_t left  = mana_stack_get_integer(&actor->stack, 1);
+	int32_t right = mana_stack_get_integer(&actor->stack, 0);
 	mana_stack_remove(&actor->stack, 1);
 	mana_stack_set_integer(&actor->stack, 0, left >> right);
 }
 
 static void mana_actor_cmd_compare_equal_integer(mana_actor* actor)
 {
-	int left  = mana_stack_get_integer(&actor->stack, 1);
-	int right = mana_stack_get_integer(&actor->stack, 0);
+	int32_t left  = mana_stack_get_integer(&actor->stack, 1);
+	int32_t right = mana_stack_get_integer(&actor->stack, 0);
 	mana_stack_remove(&actor->stack, 1);
 	mana_stack_set_integer(&actor->stack, 0, left == right);
 }
@@ -966,8 +940,8 @@ static void mana_actor_cmd_compare_equal_float(mana_actor* actor)
 
 static void mana_actor_cmd_compare_greater_equal_integer(mana_actor* actor)
 {
-	int left  = mana_stack_get_integer(&actor->stack, 1);
-	int right = mana_stack_get_integer(&actor->stack, 0);
+	int32_t left  = mana_stack_get_integer(&actor->stack, 1);
+	int32_t right = mana_stack_get_integer(&actor->stack, 0);
 	mana_stack_remove(&actor->stack, 1);
 	mana_stack_set_integer(&actor->stack, 0, left >= right);
 }
@@ -982,8 +956,8 @@ static void mana_actor_cmd_compare_greater_equal_float(mana_actor* actor)
 
 static void mana_actor_cmd_compare_greater_integer(mana_actor* actor)
 {
-	int left  = mana_stack_get_integer(&actor->stack, 1);
-	int right = mana_stack_get_integer(&actor->stack, 0);
+	int32_t left  = mana_stack_get_integer(&actor->stack, 1);
+	int32_t right = mana_stack_get_integer(&actor->stack, 0);
 	mana_stack_remove(&actor->stack, 1);
 	mana_stack_set_integer(&actor->stack, 0, left > right);
 }
@@ -998,8 +972,8 @@ static void mana_actor_cmd_compare_greater_float(mana_actor* actor)
 
 static void mana_actor_cmd_compare_not_equal_integer(mana_actor* actor)
 {
-	int left  = mana_stack_get_integer(&actor->stack, 1);
-	int right = mana_stack_get_integer(&actor->stack, 0);
+	int32_t left  = mana_stack_get_integer(&actor->stack, 1);
+	int32_t right = mana_stack_get_integer(&actor->stack, 0);
 	mana_stack_remove(&actor->stack, 1);
 	mana_stack_set_integer(&actor->stack, 0, left != right);
 }
@@ -1014,8 +988,8 @@ static void mana_actor_cmd_compare_not_equal_float(mana_actor* actor)
 
 static void mana_actor_cmd_compare_less_equal_integer(mana_actor* actor)
 {
-	int left  = mana_stack_get_integer(&actor->stack, 1);
-	int right = mana_stack_get_integer(&actor->stack, 0);
+	int32_t left  = mana_stack_get_integer(&actor->stack, 1);
+	int32_t right = mana_stack_get_integer(&actor->stack, 0);
 	mana_stack_remove(&actor->stack, 1);
 	mana_stack_set_integer(&actor->stack, 0, left <= right);
 }
@@ -1030,8 +1004,8 @@ static void mana_actor_cmd_compare_less_equal_float(mana_actor* actor)
 
 static void mana_actor_cmd_compare_less_integer(mana_actor* actor)
 {
-	int left  = mana_stack_get_integer(&actor->stack, 1);
-	int right = mana_stack_get_integer(&actor->stack, 0);
+	int32_t left  = mana_stack_get_integer(&actor->stack, 1);
+	int32_t right = mana_stack_get_integer(&actor->stack, 0);
 	mana_stack_remove(&actor->stack, 1);
 	mana_stack_set_integer(&actor->stack, 0, left < right);
 }
@@ -1051,7 +1025,7 @@ static void mana_actor_cmd_integer_to_float(mana_actor* actor)
 
 static void mana_actor_cmd_float_to_integer(mana_actor* actor)
 {
-	mana_stack_set_integer(&actor->stack, 0, (int)mana_stack_get_real(&actor->stack, 0));
+	mana_stack_set_integer(&actor->stack, 0, (int32_t)mana_stack_get_real(&actor->stack, 0));
 }
 
 static void mana_actor_cmd_push_actor(mana_actor* actor)
@@ -1070,21 +1044,21 @@ static void mana_actor_cmd_push_actor(mana_actor* actor)
 
 static void mana_actor_cmd_load_data(mana_actor* actor)
 {
-	const int size = mana_actor_get_integer_from_memory(actor, actor->pc + 1);
+	const int32_t size = mana_actor_get_integer_from_memory(actor, actor->pc + 1);
 	const void* pointer = mana_stack_pop_pointer(&actor->stack);
 	mana_stack_push_data(&actor->stack, pointer, size);
 }
 
 static void mana_actor_cmd_store_data(mana_actor* actor)
 {
-	const int size = mana_actor_get_integer_from_memory(actor, actor->pc + 1);
+	const int32_t size = mana_actor_get_integer_from_memory(actor, actor->pc + 1);
 	void* pointer = (void*)mana_stack_pop_pointer(&actor->stack);
 	mana_stack_pop_data(&actor->stack, pointer, size);
 }
 
 static void mana_actor_cmd_duplicate_data(mana_actor* actor)
 {
-	int size = mana_actor_get_integer_from_memory(actor, actor->pc + 1);
+	int32_t size = mana_actor_get_integer_from_memory(actor, actor->pc + 1);
 	void* pointer = (void*)mana_stack_get_address(&actor->stack, size / sizeof(void*));
 	mana_stack_push_data(&actor->stack, pointer, size);
 }
@@ -1096,7 +1070,7 @@ static void mana_actor_cmd_remove_data(mana_actor* actor)
 
 static void mana_actor_cmd_compare_equal_data(mana_actor* actor)
 {
-	int size = mana_actor_get_integer_from_memory(actor, actor->pc + 1 + sizeof(int));
+	int32_t size = mana_actor_get_integer_from_memory(actor, actor->pc + 1 + sizeof(int32_t));
 	const void* buf1 = mana_stack_get_address(&actor->stack, size * 1 / sizeof(void*));
 	const void* buf2 = mana_stack_get_address(&actor->stack, size * 2 / sizeof(void*));
 	mana_stack_remove(&actor->stack, size * 2 / sizeof(void*));
@@ -1105,7 +1079,7 @@ static void mana_actor_cmd_compare_equal_data(mana_actor* actor)
 
 static void mana_actor_cmd_compare_greater_equal_data(mana_actor* actor)
 {
-	int size = mana_actor_get_integer_from_memory(actor, actor->pc + 1 + sizeof(int));
+	int32_t size = mana_actor_get_integer_from_memory(actor, actor->pc + 1 + sizeof(int32_t));
 	const void* buf1 = mana_stack_get_address(&actor->stack, size * 1 / sizeof(void*));
 	const void* buf2 = mana_stack_get_address(&actor->stack, size * 2 / sizeof(void*));
 	mana_stack_remove(&actor->stack, size * 2 / sizeof(void*));
@@ -1114,7 +1088,7 @@ static void mana_actor_cmd_compare_greater_equal_data(mana_actor* actor)
 
 static void mana_actor_cmd_compare_greater_data(mana_actor* actor)
 {
-	int size = mana_actor_get_integer_from_memory(actor, actor->pc + 1 + sizeof(int));
+	int32_t size = mana_actor_get_integer_from_memory(actor, actor->pc + 1 + sizeof(int32_t));
 	const void* buf1 = mana_stack_get_address(&actor->stack, size * 1 / sizeof(void*));
 	const void* buf2 = mana_stack_get_address(&actor->stack, size * 2 / sizeof(void*));
 	mana_stack_remove(&actor->stack, size * 2 / sizeof(void*));
@@ -1123,7 +1097,7 @@ static void mana_actor_cmd_compare_greater_data(mana_actor* actor)
 
 static void mana_actor_cmd_compare_not_equal_data(mana_actor* actor)
 {
-	int size = mana_actor_get_integer_from_memory(actor, actor->pc + 1 + sizeof(int));
+	int32_t size = mana_actor_get_integer_from_memory(actor, actor->pc + 1 + sizeof(int32_t));
 	const void* buf1 = mana_stack_get_address(&actor->stack, size * 1 / sizeof(void*));
 	const void* buf2 = mana_stack_get_address(&actor->stack, size * 2 / sizeof(void*));
 	mana_stack_remove(&actor->stack, size * 2 / sizeof(void*));
@@ -1132,7 +1106,7 @@ static void mana_actor_cmd_compare_not_equal_data(mana_actor* actor)
 
 static void mana_actor_cmd_compare_less_equal_data(mana_actor* actor)
 {
-	int size = mana_actor_get_integer_from_memory(actor, actor->pc + 1 + sizeof(int));
+	int32_t size = mana_actor_get_integer_from_memory(actor, actor->pc + 1 + sizeof(int32_t));
 	const void* buf1 = mana_stack_get_address(&actor->stack, size * 1 / sizeof(void*));
 	const void* buf2 = mana_stack_get_address(&actor->stack, size * 2 / sizeof(void*));
 	mana_stack_remove(&actor->stack, size * 2 / sizeof(void*));
@@ -1141,7 +1115,7 @@ static void mana_actor_cmd_compare_less_equal_data(mana_actor* actor)
 
 static void mana_actor_cmd_compare_less_data(mana_actor* actor)
 {
-	int size = mana_actor_get_integer_from_memory(actor, actor->pc + 1 + sizeof(int));
+	int32_t size = mana_actor_get_integer_from_memory(actor, actor->pc + 1 + sizeof(int32_t));
 	const void* buf1 = mana_stack_get_address(&actor->stack, size * 1 / sizeof(void*));
 	const void* buf2 = mana_stack_get_address(&actor->stack, size * 2 / sizeof(void*));
 	mana_stack_remove(&actor->stack, size * 2 / sizeof(void*));
@@ -1150,16 +1124,16 @@ static void mana_actor_cmd_compare_less_data(mana_actor* actor)
 
 static void mana_actor_cmd_print(mana_actor* actor)
 {
-	int number_of_arguments;
-	int message_pointer;
-	char message[1024];
+	int32_t number_of_arguments;
+	int32_t message_pointer;
+	int8_t message[1024];
 
 	message_pointer = 0;
 	number_of_arguments = mana_actor_get_integer_from_memory(actor, actor->pc + 1);
 
 	if(number_of_arguments > 0)
 	{
-		int counter = 1;
+		int32_t counter = 1;
 		const char* format;
 
 		for(format = mana_stack_get_pointer(&actor->stack, 0); *format; format++)
@@ -1223,8 +1197,12 @@ static void mana_actor_cmd_print(mana_actor* actor)
 	}
 	message[message_pointer] = '\0';
 
-#if defined(DEBUG) || defined(_DEBUG) || defined(_DEBUG_) || !defined(NDEBUG)
-	printf("%s", message);
+#if !defined(NDEBUG) && (defined(DEBUG) || defined(_DEBUG) || defined(_DEBUG_))
+#if defined(_WIN32) || defined(_WIN64)
+	OutputDebugStringA(message);
+#else
+	fprintf(stdout, "%s", message);
+#endif
 #endif
 
 	mana_stack_remove(&actor->stack, number_of_arguments);
@@ -1426,7 +1404,7 @@ void mana_actor_destroy(mana_actor* self)
 {
 	if(self)
 	{
-		int i;
+		int32_t i;
 
 		/* 読み込み中にdeleteされた？ */
 		for(i = 0 ; i < MANA_ACTOR_MAX_INTERRUPT_LEVEL; i++)
@@ -1456,7 +1434,7 @@ void mana_actor_destroy(mana_actor* self)
  */
 void mana_actor_serialize(mana_actor* self, mana_stream* stream)
 {
-	int i;
+	int32_t i;
 
 	MANA_ASSERT(self && stream);
 
@@ -1504,7 +1482,7 @@ void mana_actor_serialize(mana_actor* self, mana_stream* stream)
  */
 void mana_actor_deserialize(mana_actor* self, mana_stream* stream)
 {
-	int i;
+	int32_t i;
 
 	MANA_ASSERT(self && stream);
 
@@ -1547,7 +1525,7 @@ void mana_actor_deserialize(mana_actor* self, mana_stream* stream)
 
 /*!
  * 外部関数内から呼ばれる事を想定しています。
- * mana_bool mana_run(mana* self, float second)のsecondの値が取得できるので、
+ * bool mana_run(mana* self, float second)のsecondの値が取得できるので、
  * 各外部関数で経過した時間が必要な時に使ってください。
  *
  * @return		経過時間
@@ -1558,7 +1536,7 @@ float mana_actor_get_delta_time(void)
 }
 
 /*!
- * mana_bool mana_run(mana* self, float second)のsecondを設定しています。
+ * bool mana_run(mana* self, float second)のsecondを設定しています。
  * @param[in]	second	経過時間(秒)
  */
 void mana_actor_set_delta_time(float second)
@@ -1568,22 +1546,22 @@ void mana_actor_set_delta_time(float second)
 
 /*!
  * @param[in]	self	mana_actor オブジェクト
- * @retval		MANA_TRUE	実行中
- * @retval		MANA_FALSE	停止
+ * @retval		true	実行中
+ * @retval		false	停止
  */
-int mana_actor_run(mana_actor* self)
+int32_t mana_actor_run(mana_actor* self)
 {
-	int timer = 0;
+	int32_t timer = 0;
 
 	MANA_ASSERT(self && self->parent);
 
 	do{
-		int opecode;
+		int32_t opecode;
 
 		self->flag &= ~MANA_ACTOR_FLAG_REQUESTED;
 
 		if(!mana_actor_is_running(self))
-			return MANA_FALSE;
+			return false;
 
 		MANA_ASSERT(self->pc != ~0);
 
@@ -1591,7 +1569,7 @@ int mana_actor_run(mana_actor* self)
 		(*m_afnIntermediateLanguage[opecode])(self);
 
 		if(!mana_actor_is_running(self))
-			return MANA_FALSE;
+			return false;
 
 		if(mana_actor_is_repeat(self))
 		{
@@ -1610,12 +1588,12 @@ int mana_actor_run(mana_actor* self)
 		}
 	}while(++timer < 500 || mana_actor_is_synchronized(self));
 
-	return (self->flag & MANA_ACTOR_FLAG_RUNNING) ? MANA_TRUE : MANA_FALSE;
+	return (self->flag & MANA_ACTOR_FLAG_RUNNING) ? true : false;
 }
 
 /*!
  * アクション終了まで実行します。
- * mana_bool mana_async_call(mana_actor* self, int level, char* action, mana_actor* sender)
+ * bool mana_async_call(mana_actor* self, int32_t level, char* action, mana_actor* sender)
  * と違い他のアクターも並列動作します。
  * アクションが終了しないとdead lockするので注意してください。
  *
@@ -1623,10 +1601,10 @@ int mana_actor_run(mana_actor* self)
  * @param[in]	level	優先度(高いほど優先)
  * @param[in]	action	アクション名
  * @param[in]	sender	リクエスト元アクター
- * @retval		MANA_TRUE	実行成功
- * @retval		MANA_FALSE	実行失敗
+ * @retval		true	実行成功
+ * @retval		false	実行失敗
  */
-mana_bool mana_sync_call(mana_actor* self, const int level, const char* action, mana_actor* sender)
+bool mana_sync_call(mana_actor* self, const int32_t level, const char* action, mana_actor* sender)
 {
 	MANA_ASSERT(self);
 
@@ -1639,16 +1617,16 @@ mana_bool mana_sync_call(mana_actor* self, const int level, const char* action, 
 			mana_run(self->parent, mana_actor_get_delta_time());
 
 			if(self->interrupt_level < level)
-				return MANA_TRUE;
+				return true;
 		}
 	}
 
-	return MANA_FALSE;
+	return false;
 }
 
 /*!
  * アクション終了まで実行します。
- * mana_bool mana_sync_call(mana_actor* self, int level, char* action, mana_actor* sender)
+ * bool mana_sync_call(mana_actor* self, int32_t level, char* action, mana_actor* sender)
  * と違い他のアクターは停止します。
  * アクションが終了しないとdead lockするので注意してください。
  * また、他のアクターに処理が移らないのでreqwsなどの命令はdead lockするので注意してください。
@@ -1657,10 +1635,10 @@ mana_bool mana_sync_call(mana_actor* self, const int level, const char* action, 
  * @param[in]	level	優先度(高いほど優先)
  * @param[in]	action	アクション名
  * @param[in]	sender	リクエスト元アクター
- * @retval		MANA_TRUE	実行成功
- * @retval		MANA_FALSE	実行失敗
+ * @retval		true	実行成功
+ * @retval		false	実行失敗
  */
-mana_bool mana_async_call(mana_actor* self, const int level, const char* action, mana_actor* sender)
+bool mana_async_call(mana_actor* self, const int32_t level, const char* action, mana_actor* sender)
 {
 	MANA_ASSERT(self);
 
@@ -1673,11 +1651,11 @@ mana_bool mana_async_call(mana_actor* self, const int level, const char* action,
 			mana_actor_run(self);
 
 			if(self->interrupt_level < level)
-				return MANA_TRUE;
+				return true;
 		}
 	}
 
-	return MANA_FALSE;
+	return false;
 }
 
 /*!
@@ -1685,12 +1663,12 @@ mana_bool mana_async_call(mana_actor* self, const int level, const char* action,
  * @param[in]	level	優先度(高いほど優先)
  * @param[in]	action	アクション名
  * @param[in]	sender	リクエスト元アクター
- * @retval		MANA_TRUE	リクエスト成功
- * @retval		MANA_FALSE	リクエスト失敗
+ * @retval		true	リクエスト成功
+ * @retval		false	リクエスト失敗
  */
-mana_bool mana_actor_request(mana_actor* self, const int level, const char* action, mana_actor* sender)
+bool mana_actor_request(mana_actor* self, const int32_t level, const char* action, mana_actor* sender)
 {
-	unsigned int address;
+	uint32_t address;
 
 	MANA_ASSERT(self);
 
@@ -1698,21 +1676,21 @@ mana_bool mana_actor_request(mana_actor* self, const int level, const char* acti
 	{
 		MANA_TRACE("MANA: %s::%s request failed. reason: level %d range over\n",
 			mana_actor_get_name(self), action, level);
-		return MANA_FALSE;
+		return false;
 	}
 
 	if(self->flag & MANA_ACTOR_FLAG_HALT)
 	{
 		MANA_TRACE("MANA: level %d, %s::%s request failed. reason: halt\n",
 			level, mana_actor_get_name(self), action);
-		return MANA_FALSE;
+		return false;
 	}
 
 	if(self->flag & MANA_ACTOR_FLAG_REFUSED)
 	{
 		MANA_TRACE("MANA: level %d, %s::%s request failed. reason: refuse\n",
 			level, mana_actor_get_name(self), action);
-		return MANA_FALSE;
+		return false;
 	}
 
 	if(self->interrupt[level].address != ~0)
@@ -1724,7 +1702,7 @@ mana_bool mana_actor_request(mana_actor* self, const int level, const char* acti
 		MANA_TRACE("MANA: level %d, %s::%s request failed. reason: %s running\n",
 			level, mana_actor_get_name(self), action, self->interrupt[level].action_name);
 #endif
-		return MANA_FALSE;
+		return false;
 	}
 
 	address = mana_actor_get_action(self, action);
@@ -1732,7 +1710,7 @@ mana_bool mana_actor_request(mana_actor* self, const int level, const char* acti
 	{
 		MANA_TRACE("MANA: level %d, %s::%s request failed. reason: not found\n",
 			level, mana_actor_get_name(self), action);
-		return MANA_FALSE;
+		return false;
 	}
 
 	self->flag |= MANA_ACTOR_FLAG_RUNNING;
@@ -1771,7 +1749,7 @@ mana_bool mana_actor_request(mana_actor* self, const int level, const char* acti
 		self->interrupt[self->interrupt_level].address = self->pc;
 
 		/* 新しい優先度(高いほど優先)とプログラムカウンタを設定します */
-		self->interrupt_level = (unsigned char)level;
+		self->interrupt_level = (uint8_t)level;
 		self->pc = address;
 
 		/* 次のTickでプログラムカウンタを進めない処理 */
@@ -1791,7 +1769,7 @@ mana_bool mana_actor_request(mana_actor* self, const int level, const char* acti
 
 	MANA_ASSERT(self->pc != ~0);
 
-	return MANA_TRUE;
+	return true;
 }
 
 /*!
@@ -1799,16 +1777,16 @@ mana_bool mana_actor_request(mana_actor* self, const int level, const char* acti
  * @param[in]	self	mana_actor オブジェクト
  * @param[in]	level	還元する優先度
  */
-void mana_actor_rollback(mana_actor* self, int level)
+void mana_actor_rollback(mana_actor* self, int32_t level)
 {
 	size_t frame_pointer, stack_pointer;
-	int current_level;
-	mana_bool in_sync_call;
+	int32_t current_level;
+	bool in_sync_call;
 
 	MANA_ASSERT(self);
 
 	/* 非同期モードに変更 */
-	mana_actor_set_synchronized(self, MANA_FALSE);
+	mana_actor_set_synchronized(self, false);
 
 	/* リクエストが終了したことをsenderに通知する */
 	if(self->interrupt[self->interrupt_level].sender)
@@ -1825,7 +1803,7 @@ void mana_actor_rollback(mana_actor* self, int level)
 	}
 
 	/* 優先度開放 */
-	self->interrupt[self->interrupt_level].address = (unsigned int)~0;
+	self->interrupt[self->interrupt_level].address = (uint32_t)~0;
 
 #if !defined(NDEBUG)
 	/* 実行中のアクション名を消去 */
@@ -1857,7 +1835,7 @@ void mana_actor_rollback(mana_actor* self, int level)
 			mana_interrupt* interrupt = &self->interrupt[current_level];
 
 			/* 優先度開放 */
-			interrupt->address = (unsigned int)~0;
+			interrupt->address = (uint32_t)~0;
 
 			/* ファイルエントリの削除 */
 			if(mana_async_file_callback && interrupt->file_callback_parameter)
@@ -1898,7 +1876,7 @@ void mana_actor_rollback(mana_actor* self, int level)
 				mana_actor_rollback_callback(self, self->rollback_callback_parameter);
 
 			/* 優先度(高いほど優先)変更 */
-			self->interrupt_level = (unsigned char)current_level;
+			self->interrupt_level = (uint8_t)current_level;
 
 			/* 次回のTickでプログラムカウンターを加算しない */
 			self->interrupt[self->interrupt_level].flag |= MANA_INTERRUPT_FLAG_REPEAT;
@@ -1928,19 +1906,19 @@ void mana_actor_rollback(mana_actor* self, int level)
  */
 void mana_actor_restart(mana_actor* self)
 {
-	int i;
+	int32_t i;
 
 	MANA_ASSERT(self);
 
-	self->pc = (unsigned int)~0;
+	self->pc = (uint32_t)~0;
 	self->interrupt_level = 0;
 	self->flag &= ~(MANA_ACTOR_FLAG_HALT|MANA_ACTOR_FLAG_RUNNING|MANA_ACTOR_FLAG_REFUSED);
 
 	memset(&self->interrupt, 0, sizeof(self->interrupt));
 	for(i = 0; i < MANA_ACTOR_MAX_INTERRUPT_LEVEL; i++)
 	{
-		self->interrupt[i].address = (unsigned int)~0;
-		self->interrupt[i].return_address = (unsigned int)~0;
+		self->interrupt[i].address = (uint32_t)~0;
+		self->interrupt[i].return_address = (uint32_t)~0;
 	}
 
 	mana_frame_clear(&self->frame);
@@ -1966,20 +1944,20 @@ const char* mana_actor_get_name(mana_actor* self)
  * @param[in]	action	アクションの名前
  * @return		アクションのプログラムアドレス。0なら失敗
  */
-unsigned int mana_actor_get_action(mana_actor* self, const char* action)
+uint32_t mana_actor_get_action(mana_actor* self, const char* action)
 {
 	const void* address;
 
 	MANA_ASSERT(self);
 
 	if(!mana_hash_test(&self->actions, action))
-		return (unsigned int)(~0);
+		return (uint32_t)(~0);
 
 	address = mana_hash_get(&self->actions, action);
 	if(address == NULL)
-		return (unsigned int)(~0);
+		return (uint32_t)(~0);
 
-	return (unsigned int)(address);
+	return (uint32_t)(address);
 }
 
 /*!
@@ -1987,7 +1965,7 @@ unsigned int mana_actor_get_action(mana_actor* self, const char* action)
  * @param[in]	self	mana_actor オブジェクト
  * @return		汎用カウンター
  */
-int mana_actor_get_counter(mana_actor* self)
+int32_t mana_actor_get_counter(mana_actor* self)
 {
 	MANA_ASSERT(self);
 
@@ -1999,7 +1977,7 @@ int mana_actor_get_counter(mana_actor* self)
  * @param[in]	self	mana_actor オブジェクト
  * @param[in]	counter	汎用カウンター
  */
-void mana_actor_set_counter(mana_actor* self, const int counter)
+void mana_actor_set_counter(mana_actor* self, const int32_t counter)
 {
 	MANA_ASSERT(self);
 
@@ -2012,7 +1990,7 @@ void mana_actor_set_counter(mana_actor* self, const int counter)
  * @param[in]	self	mana_actor オブジェクト
  * @return		引数の数
  */
-int mana_actor_get_argument_count(mana_actor* self)
+int32_t mana_actor_get_argument_count(mana_actor* self)
 {
 	MANA_ASSERT(self);
 
@@ -2025,9 +2003,9 @@ int mana_actor_get_argument_count(mana_actor* self)
  * @param[in]	address	プログラムアドレス
  * @return		引数の数
  */
-int mana_actor_get_argument_count_by_address(mana_actor* self, const unsigned int address)
+int32_t mana_actor_get_argument_count_by_address(mana_actor* self, const uint32_t address)
 {
-	return (int)mana_actor_get_unsigned_char_from_memory(self, address + 1 + sizeof(int) + sizeof(unsigned char));
+	return (int32_t)mana_actor_get_unsigned_char_from_memory(self, address + 1 + sizeof(int32_t) + sizeof(uint8_t));
 }
 
 /*!
@@ -2036,21 +2014,21 @@ int mana_actor_get_argument_count_by_address(mana_actor* self, const unsigned in
  * @param[in]	address	プログラムアドレス
  * @return		外部関数に積まれた引数のワードサイズ
  */
-int mana_actor_get_argument_size(mana_actor* self, const unsigned int address)
+int32_t mana_actor_get_argument_size(mana_actor* self, const uint32_t address)
 {
-	return (int)mana_actor_get_unsigned_short_from_memory(self, address + 1 + sizeof(int) + sizeof(unsigned char) + sizeof(unsigned char));
+	return (int32_t)mana_actor_get_unsigned_short_from_memory(self, address + 1 + sizeof(int32_t) + sizeof(uint8_t) + sizeof(uint8_t));
 }
 
 /*!
  * @warning 	外部関数以外から呼び出し禁止
  * @param[in]	self	mana_actor オブジェクト
  * @param[in]	address	プログラムアドレス
- * @retval		MANA_TRUE	戻り値あり
- * @retval		MANA_FALSE	戻り値なし
+ * @retval		true	戻り値あり
+ * @retval		false	戻り値なし
  */
-mana_bool mana_actor_has_return_value(mana_actor* self, const unsigned int address)
+bool mana_actor_has_return_value(mana_actor* self, const uint32_t address)
 {
-	return (mana_bool)mana_actor_get_unsigned_char_from_memory(self, address + 1 + sizeof(int));
+	return (bool)mana_actor_get_unsigned_char_from_memory(self, address + 1 + sizeof(int32_t));
 }
 
 /*!
@@ -2059,9 +2037,9 @@ mana_bool mana_actor_has_return_value(mana_actor* self, const unsigned int addre
  * @param[in]	value	引数の番号
  * @return		引数の値
  */
-int mana_actor_get_parameter_integer(mana_actor* self, const int value)
+int32_t mana_actor_get_parameter_integer(mana_actor* self, const int32_t value)
 {
-	unsigned int address = self->pc + 5 + sizeof(short) + sizeof(short) + (value * sizeof(short));
+	uint32_t address = self->pc + 5 + sizeof(int16_t) + sizeof(int16_t) + (value * sizeof(int16_t));
 	size_t offset;
 
 	MANA_ASSERT(self && mana_actor_get_argument_count(self) > value);
@@ -2076,13 +2054,13 @@ int mana_actor_get_parameter_integer(mana_actor* self, const int value)
  * @param[in]	value	引数の番号
  * @return		引数の値
  */
-float mana_actor_get_parameter_float(mana_actor* self, const int value)
+float mana_actor_get_parameter_float(mana_actor* self, const int32_t value)
 {
 	MANA_ASSERT(self && mana_actor_get_argument_count(self) > value);
 
 	return mana_stack_get_real(
 		&self->stack,
-		mana_actor_get_short_from_memory(self, self->pc + 5 + sizeof(short) + sizeof(short) + (value * sizeof(short)))
+		mana_actor_get_short_from_memory(self, self->pc + 5 + sizeof(int16_t) + sizeof(int16_t) + (value * sizeof(int16_t)))
 	);
 }
 
@@ -2092,13 +2070,13 @@ float mana_actor_get_parameter_float(mana_actor* self, const int value)
  * @param[in]	value	引数の番号
  * @return		引数の値
  */
-const char* mana_actor_get_parameter_string(mana_actor* self, const int value)
+const char* mana_actor_get_parameter_string(mana_actor* self, const int32_t value)
 {
 	MANA_ASSERT(self && mana_actor_get_argument_count(self) > value);
 
 	return mana_stack_get_string(
 		&self->stack,
-		mana_actor_get_short_from_memory(self, self->pc + 5 + sizeof(short) + sizeof(short) + (value * sizeof(short)))
+		mana_actor_get_short_from_memory(self, self->pc + 5 + sizeof(int16_t) + sizeof(int16_t) + (value * sizeof(int16_t)))
 	);
 }
 
@@ -2108,7 +2086,7 @@ const char* mana_actor_get_parameter_string(mana_actor* self, const int value)
  * @param[in]	value	引数の番号
  * @return		引数の値
  */
-mana_actor* mana_actor_get_parameter_actor(mana_actor* self, const int value)
+mana_actor* mana_actor_get_parameter_actor(mana_actor* self, const int32_t value)
 {
 	return mana_actor_get_parameter_pointer(self, value);
 }
@@ -2119,13 +2097,13 @@ mana_actor* mana_actor_get_parameter_actor(mana_actor* self, const int value)
  * @param[in]	value	引数の番号
  * @return		引数の値
  */
-void* mana_actor_get_parameter_pointer(mana_actor* self, const int value)
+void* mana_actor_get_parameter_pointer(mana_actor* self, const int32_t value)
 {
 	MANA_ASSERT(self && mana_actor_get_argument_count(self) > value);
 
 	return mana_stack_get_pointer(
 		&self->stack,
-		mana_actor_get_short_from_memory(self, self->pc + 5 + sizeof(short) + sizeof(short) + (value * sizeof(short)))
+		mana_actor_get_short_from_memory(self, self->pc + 5 + sizeof(int16_t) + sizeof(int16_t) + (value * sizeof(int16_t)))
 	);
 }
 
@@ -2135,13 +2113,13 @@ void* mana_actor_get_parameter_pointer(mana_actor* self, const int value)
  * @param[in]	value	引数の番号
  * @return		引数の値
  */
-void* mana_actor_get_parameter_address(mana_actor* self, const int value)
+void* mana_actor_get_parameter_address(mana_actor* self, const int32_t value)
 {
 	MANA_ASSERT(self && mana_actor_get_argument_count(self) > value);
 
 	return mana_stack_get_address(
 		&self->stack,
-		mana_actor_get_short_from_memory(self, self->pc + 5 + sizeof(short) + sizeof(short) + (value * sizeof(short))) + 1
+		mana_actor_get_short_from_memory(self, self->pc + 5 + sizeof(int16_t) + sizeof(int16_t) + (value * sizeof(int16_t))) + 1
 	);
 }
 
@@ -2150,7 +2128,7 @@ void* mana_actor_get_parameter_address(mana_actor* self, const int value)
  * @param[in]	self	mana_actor オブジェクト
  * @param[in]	value	戻り値
  */
-void mana_actor_set_return_integer(mana_actor* self, const int value)
+void mana_actor_set_return_integer(mana_actor* self, const int32_t value)
 {
 	MANA_ASSERT(self);
 
@@ -2216,7 +2194,7 @@ void mana_actor_set_return_pointer(mana_actor* self, void* pointer)
  * @param[in]	value	戻り値
  * @param[in]	size	戻り値のサイズ
  */
-void mana_actor_set_return_data(mana_actor* self, const void* pointer, const int size)
+void mana_actor_set_return_data(mana_actor* self, const void* pointer, const int32_t size)
 {
 	MANA_ASSERT(self);
 
@@ -2266,7 +2244,7 @@ const char* mana_actor_get_function_name(const mana_actor* self)
  * @param[in]	action	アクション名
  * @param[in]	address	プログラムアドレス
  */
-void mana_actor_set_action(mana_actor* self, const char* action, unsigned char* address)
+void mana_actor_set_action(mana_actor* self, const char* action, uint8_t* address)
 {
 	MANA_ASSERT(self);
 
@@ -2286,41 +2264,41 @@ mana* mana_actor_get_parent(const mana_actor* self)
 
 /*!
  * @param[in]	self	mana_actor オブジェクト
- * @retval		MANA_FALSE	初期化完了
- * @retval		MANA_TRUE	初期化中
+ * @retval		false	初期化完了
+ * @retval		true	初期化中
  */
-mana_bool mana_actor_is_init(const mana_actor* self)
+bool mana_actor_is_init(const mana_actor* self)
 {
 	MANA_ASSERT(self);
 
-	return (self->interrupt[self->interrupt_level].flag & MANA_INTERRUPT_FLAG_INITIALIZED) ? MANA_FALSE : MANA_TRUE;
+	return (self->interrupt[self->interrupt_level].flag & MANA_INTERRUPT_FLAG_INITIALIZED) ? false : true;
 }
 
 /*!
  * @param[in]	self	mana_actor オブジェクト
- * @retval		MANA_TRUE	再実行が必要
- * @retval		MANA_FALSE	再実行は不要
+ * @retval		true	再実行が必要
+ * @retval		false	再実行は不要
  */
-mana_bool mana_actor_is_repeat(const mana_actor* self)
+bool mana_actor_is_repeat(const mana_actor* self)
 {
 	MANA_ASSERT(self);
 
-	return (self->interrupt[self->interrupt_level].flag & MANA_INTERRUPT_FLAG_REPEAT) ? MANA_TRUE : MANA_FALSE;
+	return (self->interrupt[self->interrupt_level].flag & MANA_INTERRUPT_FLAG_REPEAT) ? true : false;
 }
 
 /*!
  * @param[in]	self	mana_actor オブジェクト
- * @retval		MANA_TRUE	実行中
- * @retval		MANA_FALSE	停止
+ * @retval		true	実行中
+ * @retval		false	停止
  */
-mana_bool mana_actor_is_running(const mana_actor* self)
+bool mana_actor_is_running(const mana_actor* self)
 {
-	unsigned char flag;
+	uint8_t flag;
 
 	MANA_ASSERT(self);
 
 	flag = self->flag & (MANA_ACTOR_FLAG_HALT|MANA_ACTOR_FLAG_RUNNING);
-	return (flag == MANA_ACTOR_FLAG_RUNNING) ? MANA_TRUE : MANA_FALSE;
+	return (flag == MANA_ACTOR_FLAG_RUNNING) ? true : false;
 }
 
 /*!
@@ -2328,7 +2306,7 @@ mana_bool mana_actor_is_running(const mana_actor* self)
  * @param[in]	self				mana_actor オブジェクト
  * @param[in]	initial_complete	初期化完了フラグ
  */
-void mana_actor_repeat(mana_actor* self, const mana_bool initial_complete)
+void mana_actor_repeat(mana_actor* self, const bool initial_complete)
 {
 	MANA_ASSERT(self);
 
@@ -2341,7 +2319,7 @@ void mana_actor_repeat(mana_actor* self, const mana_bool initial_complete)
 
 /*!
  * 同一フレーム中に再実行します。
- * また、void mana_actor_repeat(mana_actor* self, mana_bool initial_complete)と違い中断はしません。
+ * また、void mana_actor_repeat(mana_actor* self, bool initial_complete)と違い中断はしません。
  * @param[in]	self	mana_actor オブジェクト
  */
 void mana_actor_again(mana_actor* self)
@@ -2366,7 +2344,7 @@ void mana_actor_halt(mana_actor* self)
 
 	self->flag |= MANA_ACTOR_FLAG_HALT;
 	self->interrupt_level = MANA_ACTOR_MAX_INTERRUPT_LEVEL - 1;
-	self->interrupt[self->interrupt_level].address = (unsigned int)~0;
+	self->interrupt[self->interrupt_level].address = (uint32_t)~0;
 }
 
 /*!
@@ -2417,7 +2395,7 @@ void mana_actor_refuse(mana_actor* self)
  * @param[in]	self	mana_actor オブジェクト
  * @return		現在の優先度
  */
-int mana_actor_get_interrupt_level(mana_actor* self)
+int32_t mana_actor_get_interrupt_level(mana_actor* self)
 {
 	MANA_ASSERT(self);
 
@@ -2426,23 +2404,23 @@ int mana_actor_get_interrupt_level(mana_actor* self)
 
 /*!
  * @param[in]	self	mana_actor オブジェクト
- * @retval		MANA_TRUE	同期中
- * @retval		MANA_FALSE	非同期中
+ * @retval		true	同期中
+ * @retval		false	非同期中
  */
-mana_bool mana_actor_is_synchronized(mana_actor* self)
+bool mana_actor_is_synchronized(mana_actor* self)
 {
 	MANA_ASSERT(self);
 
-	return (self->interrupt[self->interrupt_level].flag & MANA_INTERRUPT_FLAG_SYNCHRONIZED) ? MANA_TRUE : MANA_FALSE;
+	return (self->interrupt[self->interrupt_level].flag & MANA_INTERRUPT_FLAG_SYNCHRONIZED) ? true : false;
 }
 
 /*!
  * @param[in]	self			mana_actor オブジェクト
  * @param[in]	synchronized
- * - MANA_TRUEならば同期実行
- * - MANA_FALSEならば非同期実行
+ * - trueならば同期実行
+ * - falseならば非同期実行
  */
-void mana_actor_set_synchronized(mana_actor* self, mana_bool synchronized)
+void mana_actor_set_synchronized(mana_actor* self, bool synchronized)
 {
 	MANA_ASSERT(self);
 
@@ -2456,10 +2434,10 @@ void mana_actor_set_synchronized(mana_actor* self, mana_bool synchronized)
  * @param[in]	self			mana_actor オブジェクト
  * @param[in]	level			優先度
  * @param[in]	synchronized
- * - MANA_TRUEならば同期実行
- * - MANA_FALSEならば非同期実行
+ * - trueならば同期実行
+ * - falseならば非同期実行
  */
-void mana_actor_set_synchronized_with_level(mana_actor* self, int level, mana_bool synchronized)
+void mana_actor_set_synchronized_with_level(mana_actor* self, int32_t level, bool synchronized)
 {
 	MANA_ASSERT(self);
 	MANA_ASSERT(level >= 0 && level < MANA_ACTOR_MAX_INTERRUPT_LEVEL);
@@ -2476,7 +2454,7 @@ void mana_actor_set_synchronized_with_level(mana_actor* self, int level, mana_bo
  * @param[out]	buffer		データアドレス
  * @param[out]	size		データサイズ
  */
-void mana_actor_get_data(const mana_actor* self, const int resouce_id, const void** buffer, size_t* size)
+void mana_actor_get_data(const mana_actor* self, const int32_t resouce_id, const void** buffer, size_t* size)
 {
 	MANA_ASSERT(self);
 
@@ -2506,7 +2484,7 @@ void mana_actor_set_file_callback(mana_actor_file_callback* function)
  * @param[in]	level	優先度
  * @return		ファイルコールバックパラメーター
  */
-void* mana_actor_get_file_callback_parameter(mana_actor* self, int level)
+void* mana_actor_get_file_callback_parameter(mana_actor* self, int32_t level)
 {
 	MANA_ASSERT(self);
 	MANA_ASSERT(level >= 0 && level < MANA_ACTOR_MAX_INTERRUPT_LEVEL);
@@ -2519,7 +2497,7 @@ void* mana_actor_get_file_callback_parameter(mana_actor* self, int level)
  * @param[in]	level		優先度
  * @param[in]	parameter	ファイルコールバックパラメーター
  */
-void mana_actor_set_file_callback_parameter(mana_actor* self, int level, void* parameter)
+void mana_actor_set_file_callback_parameter(mana_actor* self, int32_t level, void* parameter)
 {
 	MANA_ASSERT(self);
 	MANA_ASSERT(level >= 0 && level < MANA_ACTOR_MAX_INTERRUPT_LEVEL);
@@ -2569,7 +2547,7 @@ void mana_actor_set_rollback_callback_parameter(mana_actor* self, void* paramete
  * @param[in]	self	mana_actor オブジェクト
  * @return		ユーザーデーター
  */
-unsigned int mana_actor_get_user_data(const mana_actor* self)
+uint32_t mana_actor_get_user_data(const mana_actor* self)
 {
 	MANA_ASSERT(self);
 
@@ -2580,7 +2558,7 @@ unsigned int mana_actor_get_user_data(const mana_actor* self)
  * @param[in]	self		mana_actor オブジェクト
  * @param[in]	user_data	ユーザーデーター
  */
-void mana_actor_set_user_data(mana_actor* self, unsigned int user_data)
+void mana_actor_set_user_data(mana_actor* self, uint32_t user_data)
 {
 	MANA_ASSERT(self);
 

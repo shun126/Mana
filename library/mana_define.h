@@ -15,6 +15,10 @@
 #include "mana_info.h"
 #endif
 
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)
 extern "C" {
 #endif

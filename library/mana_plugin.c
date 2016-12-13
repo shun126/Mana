@@ -48,7 +48,7 @@
 
 #if !defined(NN_PLATFORM_CTR)
 static MODULE* mana_plugins = NULL;
-static unsigned int mana_plugin_count = 0;
+static uint32_t mana_plugin_count = 0;
 
 /*!
  * void mana_initialize(void)から呼ばれるので、呼び出す必要はありません。
@@ -68,7 +68,7 @@ void mana_plugin_finalize(void)
 {
 	if(mana_plugins)
 	{
-		unsigned int i;
+		uint32_t i;
 
 		for(i = 0; i < mana_plugin_count; i++)
 		{
@@ -77,7 +77,7 @@ void mana_plugin_finalize(void)
 			module = mana_plugins[i];
 			if(module)
 			{
-				typedef int (*mana_finalize)(void);
+				typedef int32_t (*mana_finalize)(void);
 
 				mana_finalize function = (mana_finalize)GET_PROC_ADR(module, "mana_finalize");
 				if(function)
@@ -95,15 +95,15 @@ void mana_plugin_finalize(void)
 
 /*!
  * @param[in]	file_name	プラグインのファイル名
- * @retval		MANA_TRUE		成功
- * @retval		MANA_FALSE		失敗
+ * @retval		true		成功
+ * @retval		false		失敗
  */
-mana_bool mana_plugin_load(const char* file_name)
+bool mana_plugin_load(const char* file_name)
 {
 	MODULE module = LOAD_LIBRARY(file_name);
 	if(module)
 	{
-		typedef int (*mana_initialize)(void);
+		typedef int32_t (*mana_initialize)(void);
 
 		mana_initialize function = (mana_initialize)GET_PROC_ADR(module, "mana_initialize");
 		if(function && function())
@@ -111,27 +111,27 @@ mana_bool mana_plugin_load(const char* file_name)
 			mana_plugins = mana_realloc(mana_plugins, mana_plugin_count + 1);
 			mana_plugins[mana_plugin_count] = module;
 			mana_plugin_count++;
-			return MANA_TRUE;
+			return true;
 		}
 
 		FREE_LIBRARY(module);
 	}
 
-	return MANA_FALSE;
+	return false;
 }
 
 /*!
  * @param[in]	directory_name	ディレクトリ名
- * @retval		MANA_TRUE			成功
- * @retval		MANA_FALSE			失敗
+ * @retval		true			成功
+ * @retval		false			失敗
  */
-mana_bool mana_plugin_regist(const char* directory_name)
+bool mana_plugin_regist(const char* directory_name)
 {
 #if defined(_MSC_VER)
 	{
 		HANDLE handle;
 		WIN32_FIND_DATA fd;
-		char entry[_MAX_PATH];
+		int8_t entry[_MAX_PATH];
 
 #if __STDC_WANT_SECURE_LIB__
 		strcpy_s(entry, sizeof(entry), directory_name);
@@ -150,12 +150,12 @@ mana_bool mana_plugin_regist(const char* directory_name)
 					if(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 					{
 						if(!mana_plugin_regist(fd.cFileName))
-							return MANA_FALSE;
+							return false;
 					}
 					else
 					{
 						if(!mana_plugin_load(fd.cFileName))
-							return MANA_FALSE;
+							return false;
 					}
 				}
 			}
@@ -181,7 +181,7 @@ mana_bool mana_plugin_regist(const char* directory_name)
 					if(S_ISDIR(fi.st_mode))
 					{
 						if(!mana_plugin_regist(entry->d_name))
-							return MANA_FALSE;
+							return false;
 					}
 					else
 					{
@@ -189,7 +189,7 @@ mana_bool mana_plugin_regist(const char* directory_name)
 						if(position&& strcmp(position, ".ml") == 0)
 						{
 							if(!mana_plugin_load(entry->d_name))
-								return MANA_FALSE;
+								return false;
 						}
 					}
 				}
@@ -200,6 +200,6 @@ mana_bool mana_plugin_regist(const char* directory_name)
 	}
 #endif
 
-	return MANA_TRUE;
+	return true;
 }
 #endif

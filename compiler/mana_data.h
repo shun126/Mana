@@ -28,16 +28,16 @@ extern void mana_data_finalize(void);
 extern char* mana_data_get_buffer(void);
 
 /*! データセクションのサイズを取得 */
-extern unsigned int mana_data_get_size(void);
+extern uint32_t mana_data_get_size(void);
 
 /*! テキストデータを検索 */
-extern unsigned int mana_data_get(char* text);
+extern uint32_t mana_data_get(char* text);
 
 /*! テキストデータを設定 */
-extern unsigned int mana_data_set(char* text);
+extern uint32_t mana_data_set(char* text);
 
 /*! データセクションをファイルへ出力 */
-extern unsigned int mana_data_write(mana_stream* stream);
+extern uint32_t mana_data_write(mana_stream* stream);
 
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)
 }

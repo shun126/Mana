@@ -71,7 +71,7 @@ size_t mana_buffer_get_used_size(mana_buffer* self)
  * @param[in]	pointer	データの先頭アドレス
  * @param[in]	size	データのサイズ
  */
-int mana_buffer_push(mana_buffer* self, const void* pointer, const size_t size)
+int32_t mana_buffer_push(mana_buffer* self, const void* pointer, const size_t size)
 {
 	if(self && pointer)
 	{

@@ -16,6 +16,10 @@
 #if !defined(___MANA_DATALINK_H___)
 #define ___MANA_DATALINK_H___
 
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)
 extern "C" {
 #endif
@@ -25,15 +29,15 @@ extern "C" {
 /*! datalinkファイルのヘッダー */
 typedef struct mana_datalink_file_header
 {
-	unsigned int total_data_size;	/*!< 全体サイズ */
-	int number_of_datas;			/*!< データの個数 */
+	uint32_t total_data_size;	/*!< 全体サイズ */
+	int32_t number_of_datas;			/*!< データの個数 */
 } mana_datalink_file_header;
 
 /*! datalinkファイル内のデータの情報 */
 typedef struct mana_datalink_info_header
 {
-	unsigned int offset;			/*!< 先頭からのオフセット */
-	unsigned int size;				/*!< データのサイズ */
+	uint32_t offset;			/*!< 先頭からのオフセット */
+	uint32_t size;				/*!< データのサイズ */
 } mana_datalink_info_header;
 
 /*! mana_datalink */
@@ -47,8 +51,8 @@ typedef struct mana_datalink
 {
 	/*! datalinkファイルのヘッダー */
 	mana_datalink_info_header* datalink_info_header_pointer;
-	unsigned char* data_pointer;	/*!< データセクション先頭アドレス */
-	int number_of_entries;			/*!< データの個数 */
+	uint8_t* data_pointer;	/*!< データセクション先頭アドレス */
+	int32_t number_of_entries;			/*!< データの個数 */
 } mana_datalink;
 
 /*! mana_datalink オブジェクトの生成 */
@@ -70,13 +74,13 @@ extern void mana_datalink_load(mana_datalink* self, const void* buffer);
 extern void mana_datalink_release(mana_datalink* self);
 
 /*! datalinkファイル内のデータ数を取得 */
-extern int mana_datalink_get_number_of_datas(const mana_datalink* self);
+extern int32_t mana_datalink_get_number_of_datas(const mana_datalink* self);
 
 /*! データのサイズを取得 */
-extern int mana_datalink_get_data_size(const mana_datalink* self, const int index);
+extern int32_t mana_datalink_get_data_size(const mana_datalink* self, const int32_t index);
 
 /*! データのアドレスを取得 */
-extern const void* mana_datalink_get_data(const mana_datalink* self, const int index);
+extern const void* mana_datalink_get_data(const mana_datalink* self, const int32_t index);
 
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)
 }

@@ -19,7 +19,7 @@ static mana_register_entity entities[MANA_REGISTER_COUNT];
 
 void mana_register_initialzie(void)
 {
-	char i;
+	int8_t i;
 
 	for(i = 0; i < MANA_REGISTER_COUNT; ++i)
 	{

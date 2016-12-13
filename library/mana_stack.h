@@ -21,7 +21,6 @@ extern "C" {
 #if !defined(___MANA_STREAM_H___)
 #include "mana_stream.h"
 #endif
-#include <stddef.h>
 
 /*!
  * @brief	mana_stackクラス
@@ -38,7 +37,7 @@ typedef struct mana_stack
 		const char** string_handle;	/*!< 文字列ハンドル */
 		void** void_handle;			/*!< データハンドル */
 		float* float_pointer;		/*!< 実数ポインタ */
-		int* integer_pointer;		/*!< 整数ポインタ */
+		int32_t* integer_pointer;		/*!< 整数ポインタ */
 		void* void_pointer;			/*!< データポインタ */
 	}buffer;
 	size_t allocated_size;			/*!< 確保済みサイズ */
@@ -79,7 +78,7 @@ extern void mana_stack_duplicate(mana_stack* self);
 extern void mana_stack_remove(mana_stack* self, const size_t size);
 
 /*! 整数をプッシュ */
-extern void mana_stack_push_integer(mana_stack* self, const int value);
+extern void mana_stack_push_integer(mana_stack* self, const int32_t value);
 
 /*! 実数をプッシュ */
 extern void mana_stack_push_real(mana_stack* self, const float value);
@@ -94,7 +93,7 @@ extern void mana_stack_push_pointer(mana_stack* self, void* pointer);
 extern void mana_stack_push_data(mana_stack* self, const void* buffer, const size_t size);
 
 /*! 整数をポップ */
-extern int mana_stack_pop_integer(mana_stack* self);
+extern int32_t mana_stack_pop_integer(mana_stack* self);
 
 /*! 実数をポップ */
 extern float mana_stack_pop_real(mana_stack* self);
@@ -112,7 +111,7 @@ extern void* mana_stack_pop_address(mana_stack* self);
 extern void mana_stack_pop_data(mana_stack* self, void* buffer, const size_t size);
 
 /*! 整数を取得 */
-extern int mana_stack_get_integer(const mana_stack* self, const size_t index);
+extern int32_t mana_stack_get_integer(const mana_stack* self, const size_t index);
 
 /*! 実数を取得 */
 extern float mana_stack_get_real(const mana_stack* self, const size_t index);
@@ -127,7 +126,7 @@ extern void* mana_stack_get_pointer(const mana_stack* self, const size_t index);
 extern void* mana_stack_get_address(const mana_stack* self, const size_t index);
 
 /*! 整数を設定 */
-extern void mana_stack_set_integer(mana_stack* self, const size_t index, const int integer);
+extern void mana_stack_set_integer(mana_stack* self, const size_t index, const int32_t integer);
 
 /*! 実数を設定 */
 extern void mana_stack_set_real(mana_stack* self, const size_t index, const float real);
@@ -145,7 +144,7 @@ extern size_t mana_stack_get_size(const mana_stack* self);
 extern void mana_stack_set_size(mana_stack* self, const size_t size);
 
 /*! スタックを比較 */
-extern int mana_stack_compare(const mana_stack* self, const mana_stack* other);
+extern int32_t mana_stack_compare(const mana_stack* self, const mana_stack* other);
 
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)
 }

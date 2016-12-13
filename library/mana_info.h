@@ -12,7 +12,9 @@
 #define ___MANA_INFO_H___
 
 #include <assert.h>
+#include <stdbool.h>
 #include <stddef.h>
+#include <stdint.h>
 #include <stdlib.h>
 
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)
@@ -29,18 +31,14 @@ extern "C" {
 /*! @brief	π */
 #define MANA_PI (3.1415926535897932384626433832795028841971693993751f)
 
-#define MANA_FALSE 0								/*!< FALSE 偽 */
-#define MANA_TRUE  1								/*!< TRUE 真 */
-typedef int mana_bool;								/*!< 論理型 */
-
 /*! manaファイルヘッダー */
 typedef struct mana_file_header
 {
-	char header[4];									/*!< 署名 */
-	unsigned char major_version;					/*!< メジャーバージョン */
-	unsigned char minor_version;					/*!< マイナーバージョン */
-	unsigned char pad;								/*!< パディング */
-	unsigned char flag;								/*!< フラグ */
+	int8_t header[4];									/*!< 署名 */
+	uint8_t major_version;					/*!< メジャーバージョン */
+	uint8_t minor_version;					/*!< マイナーバージョン */
+	uint8_t pad;								/*!< パディング */
+	uint8_t flag;								/*!< フラグ */
 /*
 mana_file_header :: flag
 
@@ -59,18 +57,18 @@ mana_file_header :: flag
 #define MANA_HEADER_FLAG_BIG_ENDIAN	0x02			/*!< フラグ：ビックエンディアンでコンパイルされた */
 #define MANA_HEADER_FLAG_COMPILED	0x07			/*!< フラグ：コンパイル済み */
 
-	unsigned int number_of_actors;					/*!< アクター数 */
-	unsigned int size_of_constant_pool;				/*!< 定数セクションサイズ */
-	unsigned int size_of_instruction_pool;			/*!< 命令セクションサイズ */
-	unsigned int size_of_static_memory;				/*!< スタティックメモリサイズ */
-	unsigned int size_of_global_memory;				/*!< グローバルメモリサイズ */
-	unsigned int random_seed_number;				/*!< 乱数の種 */
+	uint32_t number_of_actors;					/*!< アクター数 */
+	uint32_t size_of_constant_pool;				/*!< 定数セクションサイズ */
+	uint32_t size_of_instruction_pool;			/*!< 命令セクションサイズ */
+	uint32_t size_of_static_memory;				/*!< スタティックメモリサイズ */
+	uint32_t size_of_global_memory;				/*!< グローバルメモリサイズ */
+	uint32_t random_seed_number;				/*!< 乱数の種 */
 }mana_file_header;
 
 /*! manaファイル内のアクター情報ヘッダー */
 typedef struct mana_actor_info_header
 {
-	unsigned char flag;								/*!< フラグ */
+	uint8_t flag;								/*!< フラグ */
 /*
 mana_actor_info_header :: flag
 
@@ -87,17 +85,17 @@ mana_actor_info_header :: flag
 */
 #define MANA_ACTOR_INFO_HEADER_FLAG_PHANTOM	0x01	/*!< フラグ：ファントム */
 
-	unsigned char number_of_instances;				/*!< インスタンス数（未使用） */
-	unsigned short number_of_actions;				/*!< アクション数 */
-	unsigned int name;								/*!< アクター名 */
-	unsigned int variable_size;						/*!< インスタンス変数サイズ */
+	uint8_t number_of_instances;				/*!< インスタンス数（未使用） */
+	uint16_t number_of_actions;				/*!< アクション数 */
+	uint32_t name;								/*!< アクター名 */
+	uint32_t variable_size;						/*!< インスタンス変数サイズ */
 }mana_actor_info_header;
 
 /*! manaファイル内のアクション情報ヘッダー */
 typedef struct mana_action_info_header
 {
-	unsigned int name;								/*!< アクション名 */
-	unsigned int address;							/*!< アドレス */
+	uint32_t name;								/*!< アクション名 */
+	uint32_t address;							/*!< アドレス */
 }mana_action_info_header;
 
 /*!  */
@@ -229,10 +227,10 @@ enum mana_intermediate_language
 };
 
 /*! 乱数を初期化 */
-extern void mana_srand(const unsigned int seed);
+extern void mana_srand(const uint32_t seed);
 
 /*! 乱数を取得 */
-extern int mana_rand(void);
+extern int32_t mana_rand(void);
 
 /*! ０から１までの乱数 */
 #define mana_frand()	(((float)rand() & 0x7FFF) / 32767.0f)
@@ -244,19 +242,19 @@ extern int mana_rand(void);
 #define mana_to_degree(radian)	(radian * (180.0f / MANA_PI))
 
 /*! メモリの状態取得 */
-extern int mana_is_big_endian(void);
+extern int32_t mana_is_big_endian(void);
 
-/*! short型のエンディアンを変換します */
-extern short mana_swap_endian_short(const short value);
+/*! int16_t型のエンディアンを変換します */
+extern int16_t mana_swap_endian_short(const int16_t value);
 
-/*! unsigned short型のエンディアンを変換します */
-extern unsigned short mana_swap_endian_unsigned_short(const unsigned short value);
+/*! uint16_t型のエンディアンを変換します */
+extern uint16_t mana_swap_endian_unsigned_short(const uint16_t value);
 
-/*! int型のエンディアンを変換します */
-extern int mana_swap_endian_integer(const int value);
+/*! int32_t型のエンディアンを変換します */
+extern int32_t mana_swap_endian_integer(const int32_t value);
 
-/*! unsigned int型のエンディアンを変換します */
-extern unsigned int mana_swap_endian_unsigned_integer(const unsigned int value);
+/*! uint32_t型のエンディアンを変換します */
+extern uint32_t mana_swap_endian_unsigned_integer(const uint32_t value);
 
 /*! float型のエンディアンを変換します */
 extern float mana_swap_endian_float(const float value);
@@ -265,7 +263,7 @@ extern float mana_swap_endian_float(const float value);
 extern void mana_print_debug(const char* format, ...);
 
 /*! 文字列の中から文字列を検索 */
-extern int mana_string_find(const char text[], const char pattern[]);
+extern int32_t mana_string_find(const int8_t text[], const int8_t pattern[]);
 
 /*! パフォーマンス情報をマイクロ秒で取得します */
 unsigned long long mana_get_micro_secound();
@@ -274,19 +272,21 @@ unsigned long long mana_get_micro_secound();
 extern long mana_get_file_size(const char* filename);
 
 /*! ファイルを読み込みます(エンディアン変換には対応していません) */
-extern int mana_read(void** buffer, size_t* size, const char* filename);
+extern int32_t mana_read(void** buffer, size_t* size, const char* filename);
 
 /*! 命令のサイズを取得 */
-extern int mana_get_instruction_size(const unsigned char* program);
+extern int32_t mana_get_instruction_size(const uint8_t* program);
 
 /*! オペコードとオペランドの文字列を取得 */
-extern const char* mana_get_instruction_text(const char* data, const void* program, const int address);
+extern const char* mana_get_instruction_text(const char* data, const void* program, const int32_t address);
 
 #if defined(NDEBUG)
 /*! コンソールに文字列を出力 */
 #define MANA_PRINT			printf
 /*! コンソールに文字列を出力(デバッグビルドのみ) */
 #define MANA_TRACE			if(0)printf
+/*! コンソールに文字列を出力 */
+#define MANA_WARNING(...)	{ printf(__VA_ARGS__); }
 /*! コンソールに文字列を出力後強制終了 */
 #define MANA_ERROR(...)		{ printf(__VA_ARGS__); abort(); }
 /*! 値の真偽を調べ、偽なら警告表示(デバッグビルドのみ) */
@@ -300,6 +300,8 @@ extern const char* mana_get_instruction_text(const char* data, const void* progr
 #define MANA_PRINT			mana_print_debug
 /*! コンソールに文字列を出力(デバッグビルドのみ) */
 #define MANA_TRACE			mana_print_debug
+/*! コンソールに文字列を出力 */
+#define MANA_WARNING(...)	{ mana_print_debug(__VA_ARGS__); }
 /*! コンソールに文字列を出力後強制終了 */
 #define MANA_ERROR(...)		{ mana_print_debug(__VA_ARGS__); abort(); }
 /*! 値の真偽を調べ、偽なら警告表示(デバッグビルドのみ) */
