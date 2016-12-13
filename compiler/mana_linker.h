@@ -25,9 +25,9 @@ extern "C" {
 extern void mana_linker_return(mana_symbol_entry* symbol, mana_node* node);
 extern void mana_linker_rollback(mana_node* node);
 extern void mana_linker_call_print(mana_node* node);
-extern int mana_linker_argument(mana_symbol_entry* symbol, mana_node* node);
-extern void mana_linker_expression(mana_node* node, int enable_assign);
-extern int mana_linker_condition(mana_node* node, int match);
+extern int32_t mana_linker_argument(mana_symbol_entry* symbol, mana_node* node);
+extern void mana_linker_expression(mana_node* node, int32_t enable_assign);
+extern int32_t mana_linker_condition(mana_node* node, int32_t match);
 
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)
 }

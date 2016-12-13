@@ -22,7 +22,6 @@ extern "C" {
 #if !defined(___MANA_STREAM_H___)
 #include "mana_stream.h"
 #endif
-#include <stddef.h>
 
 /*!
  * @brief	mana_frameクラス
@@ -33,7 +32,7 @@ extern "C" {
  */
 typedef struct mana_frame
 {
-	unsigned char* buffer;	/*!< バッファ */
+	uint8_t* buffer;	/*!< バッファ */
 	size_t allocated_size;	/*!< 確保済みサイズ */
 	size_t used_size;		/*!< 使用済みサイズ */
 }mana_frame;
@@ -81,7 +80,7 @@ extern size_t mana_frame_get_size(const mana_frame* self);
 extern void mana_frame_set_size(mana_frame* self, const size_t size);
 
 /*! フレームバッファを比較 */
-extern int mana_frame_compare(const mana_frame* self, const mana_frame* other);
+extern int32_t mana_frame_compare(const mana_frame* self, const mana_frame* other);
 
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)
 }

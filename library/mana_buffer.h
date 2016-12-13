@@ -14,11 +14,12 @@
 #if !defined(___MANA_BUFFER_H___)
 #define ___MANA_BUFFER_H___
 
+#include <stddef.h>
+#include <stdint.h>
+
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)
 extern "C" {
 #endif
-
-#include <stddef.h>
 
 /*!
  * @brief	mana_bufferクラス
@@ -51,7 +52,7 @@ extern size_t mana_buffer_get_allocated_size(mana_buffer* self);
 extern size_t mana_buffer_get_used_size(mana_buffer* self);
 
 /*! データをプッシュ */
-extern int mana_buffer_push(mana_buffer* self, const void* pointer, const size_t size);
+extern int32_t mana_buffer_push(mana_buffer* self, const void* pointer, const size_t size);
 
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)
 }

@@ -19,7 +19,7 @@ typedef struct mana_register_entity
 {
 	mana_symbol_entry* symbol;
 	size_t address;
-	char number;
+	int8_t number;
 }mana_register_entity;
 
 extern void mana_register_initialzie(void);

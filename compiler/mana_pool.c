@@ -14,6 +14,9 @@
 #if !defined(___MANA_POOL_H___)
 #include "mana_pool.h"
 #endif
+
+#include <stdbool.h>
+#include <stdint.h>
 #include <string.h>
 
 /*! String hash table size */
@@ -23,7 +26,7 @@
 typedef struct mana_pool_string_hash_table
 {
 	char* name;									/*!< 文字列 */
-	int length;									/*!< 文字列の長さ */
+	int32_t length;									/*!< 文字列の長さ */
 	struct mana_pool_string_hash_table* next;	/*!< 次のmana_pool_string_hash_table */
 } mana_pool_string_hash_table;
 
@@ -35,7 +38,7 @@ static mana_pool_string_hash_table *s_mana_pool_hash_table[MANA_POOL_HASH_TABLE_
  * @param[in]	string		文字列
  * @return		ハッシュ値
  */
-static int mana_pool_get_hash_value(char* string)
+static int32_t mana_pool_get_hash_value(char* string)
 {
 	unsigned h, g;
 
@@ -57,9 +60,9 @@ GzUInt32 hashstr(const char* str, size_t len)
 	GzUInt32 h	= len;
 	size_t step = (len>>5) | 1;
 
-	for(int i=0; i<=len; i += step )
+	for(int32_t i=0; i<=len; i += step )
 	{
-		h = h ^ ((h<<5)+(h>>2)+(unsigned short)*(str++));
+		h = h ^ ((h<<5)+(h>>2)+(uint16_t)*(str++));
 	}
 	return h;
 }
@@ -69,7 +72,7 @@ GzUInt32 hashstr(const char* str, size_t len)
  */
 void mana_pool_initialize(void)
 {
-	int i;
+	int32_t i;
 
 	for(i = 0; i < MANA_POOL_HASH_TABLE_SIZE; i ++)
 	{
@@ -81,7 +84,7 @@ void mana_pool_initialize(void)
  */
 void mana_pool_finalize(void)
 {
-	int i;
+	int32_t i;
 
 	for(i = 0; i < MANA_POOL_HASH_TABLE_SIZE; i++)
 	{
@@ -110,8 +113,8 @@ void mana_pool_finalize(void)
 char* mana_pool_set(char* string)
 {
 	mana_pool_string_hash_table* hash;
-	int hash_value;
-	int length;
+	int32_t hash_value;
+	int32_t length;
 
 	if(string == NULL)
 		return NULL;
