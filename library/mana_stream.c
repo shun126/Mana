@@ -62,10 +62,10 @@ static void mana_stream_resize_buffer(mana_stream* self, const size_t size)
 }
 
 /* ファイルからデータを読み込む */
-int mana_stream_load(mana_stream* self, const char* filename)
+int32_t mana_stream_load(mana_stream* self, const char* filename)
 {
 	FILE* infile;
-	int result = 0;
+	int32_t result = 0;
 
 	assert(self);
 
@@ -97,10 +97,10 @@ int mana_stream_load(mana_stream* self, const char* filename)
 }
 
 /* ファイルへデータを書き込む */
-int mana_stream_save(mana_stream* self, const char* filename)
+int32_t mana_stream_save(mana_stream* self, const char* filename)
 {
 	FILE* outfile;
-	int result = 0;
+	int32_t result = 0;
 
 	assert(self);
 
@@ -168,7 +168,7 @@ size_t mana_stream_get_used_size(const mana_stream* self)
  * @param[in]	self	mana_stream オブジェクト
  * @param[in]	value	値
  */
-void mana_stream_push_char(mana_stream* self, const char value)
+void mana_stream_push_char(mana_stream* self, const int8_t value)
 {
 	assert(self);
 
@@ -179,7 +179,7 @@ void mana_stream_push_char(mana_stream* self, const char value)
  * @param[in]	self	mana_stream オブジェクト
  * @param[in]	value	値
  */
-void mana_stream_push_short(mana_stream* self, const short value)
+void mana_stream_push_short(mana_stream* self, const int16_t value)
 {
 	assert(self);
 
@@ -190,7 +190,7 @@ void mana_stream_push_short(mana_stream* self, const short value)
  * @param[in]	self	mana_stream オブジェクト
  * @param[in]	value	値
  */
-void mana_stream_push_integer(mana_stream* self, const int value)
+void mana_stream_push_integer(mana_stream* self, const int32_t value)
 {
 	assert(self);
 
@@ -201,7 +201,7 @@ void mana_stream_push_integer(mana_stream* self, const int value)
  * @param[in]	self	mana_stream オブジェクト
  * @param[in]	value	値
  */
-void mana_stream_push_unsigned_char(mana_stream* self, const unsigned char value)
+void mana_stream_push_unsigned_char(mana_stream* self, const uint8_t value)
 {
 	assert(self);
 
@@ -212,7 +212,7 @@ void mana_stream_push_unsigned_char(mana_stream* self, const unsigned char value
  * @param[in]	self	mana_stream オブジェクト
  * @param[in]	value	値
  */
-void mana_stream_push_unsigned_short(mana_stream* self, const unsigned short value)
+void mana_stream_push_unsigned_short(mana_stream* self, const uint16_t value)
 {
 	assert(self);
 
@@ -223,7 +223,7 @@ void mana_stream_push_unsigned_short(mana_stream* self, const unsigned short val
  * @param[in]	self	mana_stream オブジェクト
  * @param[in]	value	値
  */
-void mana_stream_push_unsigned_integer(mana_stream* self, const unsigned int value)
+void mana_stream_push_unsigned_integer(mana_stream* self, const uint32_t value)
 {
 	assert(self);
 
@@ -297,9 +297,9 @@ void mana_stream_rewind(mana_stream* self)
  * @param[in]	self	mana_stream オブジェクト
  * @return		値
  */
-char mana_stream_pop_char(mana_stream* self)
+int8_t mana_stream_pop_char(mana_stream* self)
 {
-	char value;
+	int8_t value;
 
 	mana_stream_pop_data(self, &value, sizeof(value));
 
@@ -310,9 +310,9 @@ char mana_stream_pop_char(mana_stream* self)
  * @param[in]	self	mana_stream オブジェクト
  * @return		値
  */
-short mana_stream_pop_short(mana_stream* self)
+int16_t mana_stream_pop_short(mana_stream* self)
 {
-	short value;
+	int16_t value;
 
 	mana_stream_pop_data(self, &value, sizeof(value));
 
@@ -323,9 +323,9 @@ short mana_stream_pop_short(mana_stream* self)
  * @param[in]	self	mana_stream オブジェクト
  * @return		値
  */
-int mana_stream_pop_integer(mana_stream* self)
+int32_t mana_stream_pop_integer(mana_stream* self)
 {
-	int value;
+	int32_t value;
 
 	mana_stream_pop_data(self, &value, sizeof(value));
 
@@ -336,9 +336,9 @@ int mana_stream_pop_integer(mana_stream* self)
  * @param[in]	self	mana_stream オブジェクト
  * @return		値
  */
-unsigned char mana_stream_pop_unsigned_char(mana_stream* self)
+uint8_t mana_stream_pop_unsigned_char(mana_stream* self)
 {
-	unsigned char value;
+	uint8_t value;
 
 	mana_stream_pop_data(self, &value, sizeof(value));
 
@@ -349,9 +349,9 @@ unsigned char mana_stream_pop_unsigned_char(mana_stream* self)
  * @param[in]	self	mana_stream オブジェクト
  * @return		値
  */
-unsigned short mana_stream_pop_unsigned_short(mana_stream* self)
+uint16_t mana_stream_pop_unsigned_short(mana_stream* self)
 {
-	unsigned short value;
+	uint16_t value;
 
 	mana_stream_pop_data(self, &value, sizeof(value));
 
@@ -362,9 +362,9 @@ unsigned short mana_stream_pop_unsigned_short(mana_stream* self)
  * @param[in]	self	mana_stream オブジェクト
  * @return		値
  */
-unsigned int mana_stream_pop_unsigned_integer(mana_stream* self)
+uint32_t mana_stream_pop_unsigned_integer(mana_stream* self)
 {
-	unsigned int value;
+	uint32_t value;
 
 	mana_stream_pop_data(self, &value, sizeof(value));
 
@@ -426,9 +426,9 @@ void mana_stream_pop_data(mana_stream* self, void* pointer, const size_t size)
  * @param[in]	self	mana_stream オブジェクト
  * @return		値
  */
-char mana_stream_get_char(const mana_stream* self)
+int8_t mana_stream_get_char(const mana_stream* self)
 {
-	char value;
+	int8_t value;
 
 	mana_stream_get_data(self, &value, sizeof(value));
 
@@ -439,9 +439,9 @@ char mana_stream_get_char(const mana_stream* self)
  * @param[in]	self	mana_stream オブジェクト
  * @return		値
  */
-short mana_stream_get_short(const mana_stream* self)
+int16_t mana_stream_get_short(const mana_stream* self)
 {
-	short value;
+	int16_t value;
 
 	mana_stream_get_data(self, &value, sizeof(value));
 
@@ -452,9 +452,9 @@ short mana_stream_get_short(const mana_stream* self)
  * @param[in]	self	mana_stream オブジェクト
  * @return		値
  */
-int mana_stream_get_integer(const mana_stream* self)
+int32_t mana_stream_get_integer(const mana_stream* self)
 {
-	int value;
+	int32_t value;
 
 	mana_stream_get_data(self, &value, sizeof(value));
 
@@ -465,9 +465,9 @@ int mana_stream_get_integer(const mana_stream* self)
  * @param[in]	self	mana_stream オブジェクト
  * @return		値
  */
-unsigned char mana_stream_get_unsigned_char(const mana_stream* self)
+uint8_t mana_stream_get_unsigned_char(const mana_stream* self)
 {
-	unsigned char value;
+	uint8_t value;
 
 	mana_stream_get_data(self, &value, sizeof(value));
 
@@ -478,9 +478,9 @@ unsigned char mana_stream_get_unsigned_char(const mana_stream* self)
  * @param[in]	self	mana_stream オブジェクト
  * @return		値
  */
-unsigned short mana_stream_get_unsigned_short(const mana_stream* self)
+uint16_t mana_stream_get_unsigned_short(const mana_stream* self)
 {
-	unsigned short value;
+	uint16_t value;
 
 	mana_stream_get_data(self, &value, sizeof(value));
 
@@ -491,9 +491,9 @@ unsigned short mana_stream_get_unsigned_short(const mana_stream* self)
  * @param[in]	self	mana_stream オブジェクト
  * @return		値
  */
-unsigned int mana_stream_get_unsigned_integer(const mana_stream* self)
+uint32_t mana_stream_get_unsigned_integer(const mana_stream* self)
 {
-	unsigned int value;
+	uint32_t value;
 
 	mana_stream_get_data(self, &value, sizeof(value));
 
@@ -573,7 +573,7 @@ void mana_stream_get_data(const mana_stream* self, void* pointer, const size_t s
  * @param[in]	self	mana_stream オブジェクト
  * @param[in]	offset	オフセット
  */
-void mana_steram_seek(mana_stream* self, const int offset)
+void mana_steram_seek(mana_stream* self, const int32_t offset)
 {
 	size_t pointer;
 
@@ -585,17 +585,14 @@ void mana_steram_seek(mana_stream* self, const int offset)
 	self->pointer = pointer;
 }
 
-#define ENABLE_CHECK	1
-
-#if !defined(NDEBUG) && ENABLE_CHECK
-static unsigned short crc(const unsigned char* buffer, const size_t size)
+static uint16_t crc(const uint8_t* buffer, const size_t size)
 {
 	size_t i, j;
-	unsigned int r = (unsigned int)(~0);
+	uint32_t r = (uint32_t)(~0);
 
 	for(i = 0; i < size; i++)
 	{
-		r ^= (unsigned int)buffer[i] << (16 - 8);
+		r ^= (uint32_t)buffer[i] << (16 - 8);
 		for(j = 0; j < 8; j++)
 		{
 			if(r & 0x8000)
@@ -604,39 +601,34 @@ static unsigned short crc(const unsigned char* buffer, const size_t size)
 				r <<= 1;
 		}
 	}
-	return (unsigned short)(~r);
+	return (uint16_t)(~r);
 }
-#endif
 
 void mana_stream_mark(mana_stream* self)
 {
-#if !defined(NDEBUG) && ENABLE_CHECK
-	unsigned short CRC;
+	uint16_t CRC;
 
 	assert(self);
 
-	CRC = crc((unsigned char*)self->buffer, self->used_size);
+	CRC = crc((uint8_t*)self->buffer, self->used_size);
 	mana_stream_push_unsigned_short(self, CRC);
 	mana_stream_push_unsigned_integer(self, self->used_size);
-#endif
 }
 
 void mana_stream_check(mana_stream* self)
 {
-#if !defined(NDEBUG) && ENABLE_CHECK
-	unsigned short CRC1;
-	unsigned short CRC2;
+	uint16_t CRC1;
+	uint16_t CRC2;
 	size_t pointer1;
 	size_t pointer2;
 
 	assert(self);
 
-	CRC1 = crc((unsigned char*)self->buffer, self->pointer);
+	CRC1 = crc((uint8_t*)self->buffer, self->pointer);
 	CRC2 = mana_stream_pop_unsigned_short(self);
 	assert(CRC1 == CRC2);
 
 	pointer1 = self->pointer;
 	pointer2 = mana_stream_pop_unsigned_integer(self);
 	assert(pointer1 == pointer2);
-#endif
 }

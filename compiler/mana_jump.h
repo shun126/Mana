@@ -43,10 +43,10 @@ extern void mana_jump_finalize(void);
 extern void mana_jump_open_chain(mana_jump_chain_status);
 
 /*! breakの設定 */
-extern int mana_jump_break(int);
+extern int32_t mana_jump_break(int32_t);
 
 /*! continueの設定 */
-extern int mana_jump_continue(int);
+extern int32_t mana_jump_continue(int32_t);
 
 /*! continueジャンプブロックの終了 */
 extern void mana_jump_close_continue_only(void);

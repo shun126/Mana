@@ -74,16 +74,16 @@ extern void mana_initialize(void);
 extern void mana_finalize(void);
 
 /*! 外部関数の登録 */
-extern mana_bool mana_regist_function(const char* name, mana_external_funtion_type* function);
+extern bool mana_regist_function(const char* name, mana_external_funtion_type* function);
 
 /*! 外部関数の登録解除 */
 extern void mana_unregist_function(const char* name);
 
 /*! デバックモードの設定 */
-extern void mana_set_debug_mode(const mana_bool enable);
+extern void mana_set_debug_mode(const bool enable);
 
 /*! デバックモードの取得 */
-extern mana_bool mana_is_debug_mode(void);
+extern bool mana_is_debug_mode(void);
 
 /*! 角度調整 */
 extern float mana_angle_mod(const float x, const float div);
@@ -98,7 +98,7 @@ extern void mana_serialize_static_variables(mana_stream* stream);
 extern void mana_deserialize_static_variables(mana_stream* stream);
 
 /*! スタティック変数領域のアドレスの取得 */
-extern unsigned char* mana_get_static_variables(void);
+extern uint8_t* mana_get_static_variables(void);
 
 /*! スタティック変数領域のサイズの取得 */
 extern size_t mana_get_static_variables_size(void);

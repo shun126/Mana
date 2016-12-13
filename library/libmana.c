@@ -28,16 +28,16 @@ mana_hash mana_external_function_hash;
 size_t mana_static_memory_size = 0;
 
 /*! スタティック変数格納エリア */
-unsigned char* mana_static_memory = NULL;
+uint8_t* mana_static_memory = NULL;
 
 /*! デバックモードフラグ */
-mana_bool mana_debug_mode = MANA_FALSE;
+bool mana_debug_mode = false;
 
 /*! エンディアンフラグ */
-mana_bool mana_big_endian = MANA_FALSE;
+bool mana_big_endian = false;
 
 /*! ユニークな名前を生成するためのカウンタ */
-static unsigned int mana_generate_unique_name_count = 0;
+static uint32_t mana_generate_unique_name_count = 0;
 
 /*!
  * ライブラリの初期化を行ないます。
@@ -47,9 +47,9 @@ void mana_initialize(void)
 {
 	mana_big_endian = mana_is_big_endian();
 #if defined(NDEBUG)
-	mana_debug_mode = MANA_FALSE;
+	mana_debug_mode = false;
 #else
-	mana_debug_mode = MANA_TRUE;
+	mana_debug_mode = true;
 #endif
 
 	mana_hash_initialize(&mana_external_function_hash);
@@ -76,10 +76,10 @@ void mana_finalize(void)
 /*!
  * @param[in]	name		外部命令名称
  * @param[in]	function	関数へのポインタ
- * @retval		MANA_TRUE		登録成功
- * @retval		MANA_FALSE		登録失敗
+ * @retval		true		登録成功
+ * @retval		false		登録失敗
  */
-mana_bool mana_regist_function(const char* name, mana_external_funtion_type* function)
+bool mana_regist_function(const char* name, mana_external_funtion_type* function)
 {
 	return mana_hash_set(&mana_external_function_hash, name, function) != NULL;
 }
@@ -94,19 +94,19 @@ void mana_unregist_function(const char* name)
 
 /*!
  * @param[in]	enable
- * - MANA_TRUE	デバックモード
- * - MANA_FALSE	リリースモード
+ * - true	デバックモード
+ * - false	リリースモード
  */
-void mana_set_debug_mode(const mana_bool enable)
+void mana_set_debug_mode(const bool enable)
 {
 	mana_debug_mode = enable;
 }
 
 /*!
- * @retval	MANA_TRUE	デバックモード
- * @retval	MANA_FALSE	リリースモード
+ * @retval	true	デバックモード
+ * @retval	false	リリースモード
  */
-mana_bool mana_is_debug_mode(void)
+bool mana_is_debug_mode(void)
 {
 	return mana_debug_mode;
 }
@@ -119,8 +119,8 @@ mana_bool mana_is_debug_mode(void)
  */
 float mana_angle_mod(const float x, const float div)
 {
-	float div2 = div * 2.0f;
-	return x - (int)(((x >= 0.0f) ? (x + div) : (x - div)) / div2) * div2;
+	const float div2 = div * 2.0f;
+	return x - (int32_t)(((x >= 0.0f) ? (x + div) : (x - div)) / div2) * div2;
 }
 
 /*!
@@ -130,12 +130,12 @@ void mana_reallocate_static_variables(const size_t allocate_size)
 {
 	if(mana_static_memory == NULL)
 	{
-		mana_static_memory = (unsigned char*)mana_malloc(allocate_size);
+		mana_static_memory = (uint8_t*)mana_malloc(allocate_size);
 		memset(mana_static_memory, 0, allocate_size);
 	}
 	else
 	{
-		mana_static_memory = (unsigned char*)mana_realloc(mana_static_memory, allocate_size);
+		mana_static_memory = (uint8_t*)mana_realloc(mana_static_memory, allocate_size);
 		if(allocate_size > mana_static_memory_size)
 		{
 			const size_t delta = allocate_size - mana_static_memory_size;
@@ -170,7 +170,7 @@ void mana_deserialize_static_variables(mana_stream* stream)
 /*!
  * @return	グローバル変数領域のアドレス
  */
-unsigned char* mana_get_static_variables(void)
+uint8_t* mana_get_static_variables(void)
 {
 	return mana_static_memory;
 }
@@ -206,7 +206,7 @@ void mana_generate_unique_name(char* name, const size_t size)
 {
 	if(name && size >= 8)
 	{
-		char table[0x10] = {
+		static const int8_t table[0x10] = {
 			'0', '1', '2', '3', '4', '5', '6', '7',
 			'8', '9', 'A', 'b', 'C', 'd', 'E', 'f'
 		};
@@ -227,7 +227,7 @@ void mana_generate_unique_name(char* name, const size_t size)
 
 			for(; i < sizeof(mana_generate_unique_name_count) * 2; i += 2)
 			{
-				unsigned char value = *s++;
+				uint8_t value = *s++;
 
 				if(i >= size - 1)
 					break;
@@ -250,7 +250,7 @@ void mana_generate_unique_name(char* name, const size_t size)
 
 			for(; i < sizeof(long); i++)
 			{
-				unsigned char value = *s++;
+				uint8_t value = *s++;
 
 				if(i >= size - 1)
 					break;

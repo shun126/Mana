@@ -197,7 +197,7 @@ void mana_frame_set_size(mana_frame* self, const size_t size)
  * @retval		== 0	“¯ˆê‚Ì“à—e
  * @retval		!= 0	ˆÙ‚È‚é“à—e
  */
-int mana_frame_compare(const mana_frame* self, const mana_frame* other)
+int32_t mana_frame_compare(const mana_frame* self, const mana_frame* other)
 {
 	if(self == NULL)
 		return 1;

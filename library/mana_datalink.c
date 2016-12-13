@@ -72,7 +72,7 @@ void mana_datalink_finalize(mana_datalink* self)
 void mana_datalink_load(mana_datalink* self, const void* buffer)
 {
 	mana_datalink_file_header* p = (mana_datalink_file_header*)buffer;
-	int offset;
+	int32_t offset;
 
 	self->number_of_entries = p->number_of_datas;
 	self->datalink_info_header_pointer = (mana_datalink_info_header*)&p[1];
@@ -84,7 +84,7 @@ void mana_datalink_load(mana_datalink* self, const void* buffer)
 	if(offset > 0)
 		offset = MANA_DATALINK_STANDARD_ALIGNMENT_SIZE - offset;
 
-	self->data_pointer = (unsigned char*)(&self->datalink_info_header_pointer[self->number_of_entries]) + offset;
+	self->data_pointer = (uint8_t*)(&self->datalink_info_header_pointer[self->number_of_entries]) + offset;
 }
 
 /*!
@@ -104,7 +104,7 @@ void mana_datalink_release(mana_datalink* self)
  * @param[in]	self	mana_datalink オブジェクト
  * @return		datalinkファイル内のデータ数
  */
-int mana_datalink_get_number_of_datas(const mana_datalink* self)
+int32_t mana_datalink_get_number_of_datas(const mana_datalink* self)
 {
 	return self->number_of_entries;
 }
@@ -113,7 +113,7 @@ int mana_datalink_get_number_of_datas(const mana_datalink* self)
  * @param[in]	self	mana_datalink オブジェクト
  * @return		データのサイズ
  */
-int mana_datalink_get_data_size(const mana_datalink* self, const int index)
+int32_t mana_datalink_get_data_size(const mana_datalink* self, const int32_t index)
 {
 	return self->datalink_info_header_pointer[index].size;
 }
@@ -122,7 +122,7 @@ int mana_datalink_get_data_size(const mana_datalink* self, const int index)
  * @param[in]	self	mana_datalink オブジェクト
  * @return		データのアドレス
  */
-const void* mana_datalink_get_data(const mana_datalink* self, const int index)
+const void* mana_datalink_get_data(const mana_datalink* self, const int32_t index)
 {
 	return self->data_pointer + self->datalink_info_header_pointer[index].offset;
 }

@@ -126,14 +126,14 @@ declarations	: /* empty */
 				| declarations tALIAS tIDENTIFIER tSTRING ';'
 					{ mana_symbol_create_alias($3, $4); }
 				| declarations tINCLUDE tSTRING ';'
-					{ if(! mana_lexer_open($3, MANA_FALSE)){ YYABORT; } }
+					{ if(! mana_lexer_open($3, false)){ YYABORT; } }
 				| declarations tIMPORT tSTRING ';'
-					{ if(! mana_lexer_open($3, MANA_TRUE)){ YYABORT; } }
+					{ if(! mana_lexer_open($3, true)){ YYABORT; } }
 				| declarations tNATIVE variable_type function_header ';'
 					{ mana_symbol_set_native_function($4, $3); }
 				| declarations tSTATIC tALLOCATE tDIGIT
 					{
-						mana_static_block_opend = MANA_TRUE;
+						mana_static_block_opend = true;
 						mana_allocated_size = mana_symbol_get_static_memory_address() + $4;
 					}
 				  '{' allocate_declarations '}'
@@ -144,12 +144,12 @@ declarations	: /* empty */
 							mana_compile_error("static variable range over");
 						}
 						mana_symbol_set_static_memory_address(mana_allocated_size);
-						mana_static_block_opend = MANA_FALSE;
+						mana_static_block_opend = false;
 					}
 				| declarations tSTATIC
-					{ mana_static_block_opend = MANA_TRUE; }
+					{ mana_static_block_opend = true; }
 				  '{' allocate_declarations '}'
-					{ mana_static_block_opend = MANA_FALSE; }
+					{ mana_static_block_opend = false; }
 				;
 
 allocate_declarations
@@ -164,7 +164,7 @@ declaration		: variable_type declarator
 						if($2->class_type != MANA_CLASS_TYPE_VARIABLE_LOCAL)
 							mana_compile_error("can initialize variable in local space only");
 						mana_symbol_allocate_memory($2, $1, MANA_MEMORY_TYPE_NORMAL);
-						mana_linker_expression(mana_node_create_node(MANA_NODE_TYPE_ASSIGN, mana_node_create_leaf($2->name), $4), MANA_TRUE);
+						mana_linker_expression(mana_node_create_node(MANA_NODE_TYPE_ASSIGN, mana_node_create_leaf($2->name), $4), true);
 					}
 				| variable_type function_header
 					{ mana_symbol_create_prototype($2, $1); }
@@ -222,7 +222,7 @@ actor			: tACTOR tIDENTIFIER
 					}
 				  '{' actions '}'
 					{
-						mana_symbol_set_type($2, mana_symbol_close_actor($2, NULL, NULL, MANA_FALSE));
+						mana_symbol_set_type($2, mana_symbol_close_actor($2, NULL, NULL, false));
 						mana_actor_symbol_entry_pointer = NULL;
 					}
 
@@ -233,7 +233,7 @@ actor			: tACTOR tIDENTIFIER
 					}
 				  '{' actions '}'
 					{
-						mana_symbol_set_type($2, mana_symbol_close_actor($2, NULL, NULL, MANA_TRUE));
+						mana_symbol_set_type($2, mana_symbol_close_actor($2, NULL, NULL, true));
 						mana_actor_symbol_entry_pointer = NULL;
 					}
 
@@ -260,7 +260,7 @@ actor			: tACTOR tIDENTIFIER
 				  tIDENTIFIER
 					{
 						mana_function_symbol_entry_pointer = mana_symbol_create_function($5);
-						mana_symbol_open_function(MANA_TRUE, mana_function_symbol_entry_pointer, mana_type_get(MANA_DATA_TYPE_VOID));
+						mana_symbol_open_function(true, mana_function_symbol_entry_pointer, mana_type_get(MANA_DATA_TYPE_VOID));
 					}
 				  block
 					{
@@ -279,9 +279,9 @@ action			: tACTION tIDENTIFIER ';'
 				| declaration ';'
 
 				| tINCLUDE tSTRING ';'
-					{ if(! mana_lexer_open($2, MANA_FALSE)){ YYABORT; } }
+					{ if(! mana_lexer_open($2, false)){ YYABORT; } }
 				| tIMPORT tSTRING ';'
-					{ if(! mana_lexer_open($2, MANA_TRUE)){ YYABORT; } }
+					{ if(! mana_lexer_open($2, true)){ YYABORT; } }
 				| tEXTEND tIDENTIFIER ';'
 					{ mana_symbol_extend_module($2); }
 				;
@@ -306,7 +306,7 @@ struct_member	: variable_type declarator ';'
 
 function		: variable_type function_header
 					{
-						mana_symbol_open_function(MANA_FALSE, $2, $1);
+						mana_symbol_open_function(false, $2, $1);
 						mana_function_symbol_entry_pointer = $2;
 					}
 				  block
@@ -368,38 +368,38 @@ variable_size	: '[' tDIGIT ']'
 				;
 
 block			: '{'
-					{ mana_symbol_open_block(MANA_FALSE); }
+					{ mana_symbol_open_block(false); }
 				   statements '}'
 					{ mana_symbol_close_block(); }
 				;
 
 for_prefix		: tFOR '('
-					{ mana_symbol_open_block(MANA_FALSE); }
+					{ mana_symbol_open_block(false); }
 				  for_initialize
 					{ $$ = $4; }
 				;
 
 for_initialize	: expression ';' expression ';'
 					{	/* 'for(variable = expression' の形式 */
-						mana_linker_expression($1, MANA_TRUE);
+						mana_linker_expression($1, true);
 						mana_jump_open_chain(MANA_JUMP_CHAIN_STATE_FOR);
 						$$ = mana_code_get_pc();
-						mana_jump_break(mana_linker_condition($3, MANA_TRUE));
+						mana_jump_break(mana_linker_condition($3, true));
 					}
 				| variable_type declarator '=' expression ';'
 					{	/* 'for(type variable = expression' の形式 */
 						mana_symbol_allocate_memory($2, $1, MANA_MEMORY_TYPE_NORMAL);
-						mana_linker_expression(mana_node_create_node(MANA_NODE_TYPE_ASSIGN, mana_node_create_leaf($2->name), $4), MANA_TRUE);
+						mana_linker_expression(mana_node_create_node(MANA_NODE_TYPE_ASSIGN, mana_node_create_leaf($2->name), $4), true);
 					}
 				  expression ';'
 					{
 						mana_jump_open_chain(MANA_JUMP_CHAIN_STATE_FOR);
 						$$ = mana_code_get_pc();
-						mana_jump_break(mana_linker_condition($7, MANA_TRUE));
+						mana_jump_break(mana_linker_condition($7, true));
 					}
 				;
 if_prefix		: tIF '(' expression ')'
-					{ $<digit>$ = mana_linker_condition($3, MANA_TRUE); }
+					{ $<digit>$ = mana_linker_condition($3, true); }
 				  statement
 					{ $$ = $<digit>5; }
 				;
@@ -420,7 +420,7 @@ statement		: if_prefix
 					{
 						mana_type_description* type = $3->type;
 
-						mana_linker_expression($3, MANA_FALSE);
+						mana_linker_expression($3, false);
 						$<digit>$ = mana_code_get_pc();
 						mana_jump_open_chain(MANA_JUMP_CHAIN_STATE_SWITCH);
 						mana_code_set_opecode_and_operand(MANA_IL_BRA, -1);
@@ -439,7 +439,7 @@ statement		: if_prefix
 						mana_jump_open_chain(MANA_JUMP_CHAIN_STATE_WHILE);
 					}
 				  '(' expression ')'
-					{ mana_jump_break(mana_linker_condition($4, MANA_TRUE)); }
+					{ mana_jump_break(mana_linker_condition($4, true)); }
 				  statement
 					{
 						mana_code_set_opecode_and_operand(MANA_IL_BRA, mana_jump_continue(mana_code_get_pc()));
@@ -453,13 +453,13 @@ statement		: if_prefix
 				  statement tWHILE '(' expression ')' ';'
 					{
 						mana_jump_close_continue_only();
-						mana_code_replace_all(mana_linker_condition($6, MANA_FALSE), $<digit>2);
+						mana_code_replace_all(mana_linker_condition($6, false), $<digit>2);
 						mana_jump_close_chain();
 					}
 				| for_prefix expression ')' statement
 					{
 						mana_jump_close_continue_only();
-						mana_linker_expression($2, MANA_TRUE);
+						mana_linker_expression($2, true);
 						mana_code_set_opecode_and_operand(MANA_IL_BRA, mana_jump_continue(mana_code_get_pc()));
 						mana_jump_close_chain();
 						mana_symbol_close_block();
@@ -523,7 +523,7 @@ statement		: if_prefix
 				| block
 				| declaration ';'
 				| expression ';'
-					{ mana_linker_expression($1, MANA_TRUE); }
+					{ mana_linker_expression($1, true); }
 				| ';'
 				| error ';'
 				  { yyerrok; yyclearin; }
@@ -745,7 +745,7 @@ void yyerror(char* message)
  */
 void mana_parser_initialize(void)
 {
-	mana_static_block_opend = MANA_FALSE;
+	mana_static_block_opend = false;
 
 	/* レジスタ割り当て処理を初期化 */
 	mana_register_initialzie();
@@ -753,31 +753,31 @@ void mana_parser_initialize(void)
 	{
 		/* vec2 */
 		mana_symbol_open_structure();
-		mana_symbol_allocate_memory(mana_symbol_create_identification("x", NULL, MANA_FALSE), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_NORMAL);
-		mana_symbol_allocate_memory(mana_symbol_create_identification("y", NULL, MANA_FALSE), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_NORMAL);
+		mana_symbol_allocate_memory(mana_symbol_create_identification("x", NULL, false), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_NORMAL);
+		mana_symbol_allocate_memory(mana_symbol_create_identification("y", NULL, false), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_NORMAL);
 		mana_symbol_set_type("vec2", mana_symbol_close_structure("vec2"));
 
 		/* vec3 */
 		mana_symbol_open_structure();
-		mana_symbol_allocate_memory(mana_symbol_create_identification("x", NULL, MANA_FALSE), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_NORMAL);
-		mana_symbol_allocate_memory(mana_symbol_create_identification("y", NULL, MANA_FALSE), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_NORMAL);
-		mana_symbol_allocate_memory(mana_symbol_create_identification("z", NULL, MANA_FALSE), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_NORMAL);
+		mana_symbol_allocate_memory(mana_symbol_create_identification("x", NULL, false), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_NORMAL);
+		mana_symbol_allocate_memory(mana_symbol_create_identification("y", NULL, false), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_NORMAL);
+		mana_symbol_allocate_memory(mana_symbol_create_identification("z", NULL, false), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_NORMAL);
 		mana_symbol_set_type("vec3", mana_symbol_close_structure("vec3"));
 
 		/* vec4 */
 		mana_symbol_open_structure();
-		mana_symbol_allocate_memory(mana_symbol_create_identification("x", NULL, MANA_FALSE), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_NORMAL);
-		mana_symbol_allocate_memory(mana_symbol_create_identification("y", NULL, MANA_FALSE), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_NORMAL);
-		mana_symbol_allocate_memory(mana_symbol_create_identification("z", NULL, MANA_FALSE), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_NORMAL);
-		mana_symbol_allocate_memory(mana_symbol_create_identification("w", NULL, MANA_FALSE), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_NORMAL);
+		mana_symbol_allocate_memory(mana_symbol_create_identification("x", NULL, false), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_NORMAL);
+		mana_symbol_allocate_memory(mana_symbol_create_identification("y", NULL, false), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_NORMAL);
+		mana_symbol_allocate_memory(mana_symbol_create_identification("z", NULL, false), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_NORMAL);
+		mana_symbol_allocate_memory(mana_symbol_create_identification("w", NULL, false), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_NORMAL);
 		mana_symbol_set_type("vec4", mana_symbol_close_structure("vec4"));
 
 		/* color */
 		mana_symbol_open_structure();
-		mana_symbol_allocate_memory(mana_symbol_create_identification("r", NULL, MANA_FALSE), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_NORMAL);
-		mana_symbol_allocate_memory(mana_symbol_create_identification("g", NULL, MANA_FALSE), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_NORMAL);
-		mana_symbol_allocate_memory(mana_symbol_create_identification("b", NULL, MANA_FALSE), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_NORMAL);
-		mana_symbol_allocate_memory(mana_symbol_create_identification("a", NULL, MANA_FALSE), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_NORMAL);
+		mana_symbol_allocate_memory(mana_symbol_create_identification("r", NULL, false), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_NORMAL);
+		mana_symbol_allocate_memory(mana_symbol_create_identification("g", NULL, false), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_NORMAL);
+		mana_symbol_allocate_memory(mana_symbol_create_identification("b", NULL, false), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_NORMAL);
+		mana_symbol_allocate_memory(mana_symbol_create_identification("a", NULL, false), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_NORMAL);
 		mana_symbol_set_type("color", mana_symbol_close_structure("color"));
 	}
 
@@ -792,7 +792,7 @@ void mana_parser_initialize(void)
 		/* void setUserData(int data) */
 		symbol = mana_symbol_create_function("setUserData");
 		symbol->number_of_parameters = 1;
-		mana_symbol_allocate_memory(mana_symbol_create_identification("data", NULL, MANA_FALSE), mana_type_get(MANA_DATA_TYPE_INT), MANA_MEMORY_TYPE_PARAMETER);
+		mana_symbol_allocate_memory(mana_symbol_create_identification("data", NULL, false), mana_type_get(MANA_DATA_TYPE_INT), MANA_MEMORY_TYPE_PARAMETER);
 		mana_symbol_set_native_function(symbol, mana_type_get(MANA_DATA_TYPE_VOID));
 	
 		/* pointer getUserPointer() */
@@ -803,7 +803,7 @@ void mana_parser_initialize(void)
 		/* void setUserPointer(pointer address) */
 		symbol = mana_symbol_create_function("setUserPointer");
 		symbol->number_of_parameters = 1;
-		mana_symbol_allocate_memory(mana_symbol_create_identification("address", NULL, MANA_FALSE), mana_type_pointer, MANA_MEMORY_TYPE_PARAMETER);
+		mana_symbol_allocate_memory(mana_symbol_create_identification("address", NULL, false), mana_type_pointer, MANA_MEMORY_TYPE_PARAMETER);
 		mana_symbol_set_native_function(symbol, mana_type_get(MANA_DATA_TYPE_VOID));
 
 		/* int debug() */
@@ -814,32 +814,32 @@ void mana_parser_initialize(void)
 		/* void setTickCount(int count) */
 		symbol = mana_symbol_create_function("setTickCount");
 		symbol->number_of_parameters = 1;
-		mana_symbol_allocate_memory(mana_symbol_create_identification("count", NULL, MANA_FALSE), mana_type_get(MANA_DATA_TYPE_INT), MANA_MEMORY_TYPE_PARAMETER);
+		mana_symbol_allocate_memory(mana_symbol_create_identification("count", NULL, false), mana_type_get(MANA_DATA_TYPE_INT), MANA_MEMORY_TYPE_PARAMETER);
 		mana_symbol_set_native_function(symbol, mana_type_get(MANA_DATA_TYPE_VOID));
 
 		/* void wait(float) */
 		symbol = mana_symbol_create_function("wait");
 		symbol->number_of_parameters = 1;
-		mana_symbol_allocate_memory(mana_symbol_create_identification("second", NULL, MANA_FALSE), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_PARAMETER);
+		mana_symbol_allocate_memory(mana_symbol_create_identification("second", NULL, false), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_PARAMETER);
 		mana_symbol_set_native_function(symbol, mana_type_get(MANA_DATA_TYPE_VOID));
 
 		/* void waitFrame(int) */
 		symbol = mana_symbol_create_function("waitFrame");
 		symbol->number_of_parameters = 1;
-		mana_symbol_allocate_memory(mana_symbol_create_identification("frame", NULL, MANA_FALSE), mana_type_get(MANA_DATA_TYPE_INT), MANA_MEMORY_TYPE_PARAMETER);
+		mana_symbol_allocate_memory(mana_symbol_create_identification("frame", NULL, false), mana_type_get(MANA_DATA_TYPE_INT), MANA_MEMORY_TYPE_PARAMETER);
 		mana_symbol_set_native_function(symbol, mana_type_get(MANA_DATA_TYPE_VOID));
 
 		/* void srand(int count) */
 		symbol = mana_symbol_create_function("srand");
 		symbol->number_of_parameters = 1;
-		mana_symbol_allocate_memory(mana_symbol_create_identification("count", NULL, MANA_FALSE), mana_type_get(MANA_DATA_TYPE_INT), MANA_MEMORY_TYPE_PARAMETER);
+		mana_symbol_allocate_memory(mana_symbol_create_identification("count", NULL, false), mana_type_get(MANA_DATA_TYPE_INT), MANA_MEMORY_TYPE_PARAMETER);
 		mana_symbol_set_native_function(symbol, mana_type_get(MANA_DATA_TYPE_VOID));
 
 		/* int rand(int, int) */
 		symbol = mana_symbol_create_function("rand");
 		symbol->number_of_parameters = 2;
-		mana_symbol_allocate_memory(mana_symbol_create_identification("min", NULL, MANA_FALSE), mana_type_get(MANA_DATA_TYPE_INT), MANA_MEMORY_TYPE_PARAMETER);
-		mana_symbol_allocate_memory(mana_symbol_create_identification("max", NULL, MANA_FALSE), mana_type_get(MANA_DATA_TYPE_INT), MANA_MEMORY_TYPE_PARAMETER);
+		mana_symbol_allocate_memory(mana_symbol_create_identification("min", NULL, false), mana_type_get(MANA_DATA_TYPE_INT), MANA_MEMORY_TYPE_PARAMETER);
+		mana_symbol_allocate_memory(mana_symbol_create_identification("max", NULL, false), mana_type_get(MANA_DATA_TYPE_INT), MANA_MEMORY_TYPE_PARAMETER);
 		mana_symbol_set_native_function(symbol, mana_type_get(MANA_DATA_TYPE_INT));
 
 		/* float frand() */
@@ -850,44 +850,44 @@ void mana_parser_initialize(void)
 		/* float sin(float) */
 		symbol = mana_symbol_create_function("sin");
 		symbol->number_of_parameters = 1;
-		mana_symbol_allocate_memory(mana_symbol_create_identification("degree", NULL, MANA_FALSE), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_PARAMETER);
+		mana_symbol_allocate_memory(mana_symbol_create_identification("degree", NULL, false), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_PARAMETER);
 		mana_symbol_set_native_function(symbol, mana_type_get(MANA_DATA_TYPE_FLOAT));
 
 		/* float cos(float) */
 		symbol = mana_symbol_create_function("cos");
 		symbol->number_of_parameters = 1;
-		mana_symbol_allocate_memory(mana_symbol_create_identification("degree", NULL, MANA_FALSE), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_PARAMETER);
+		mana_symbol_allocate_memory(mana_symbol_create_identification("degree", NULL, false), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_PARAMETER);
 		mana_symbol_set_native_function(symbol, mana_type_get(MANA_DATA_TYPE_FLOAT));
 
 		/* float atan2(float, float) */
 		symbol = mana_symbol_create_function("atan2");
 		symbol->number_of_parameters = 2;
-		mana_symbol_allocate_memory(mana_symbol_create_identification("y", NULL, MANA_FALSE), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_PARAMETER);
-		mana_symbol_allocate_memory(mana_symbol_create_identification("x", NULL, MANA_FALSE), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_PARAMETER);
+		mana_symbol_allocate_memory(mana_symbol_create_identification("y", NULL, false), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_PARAMETER);
+		mana_symbol_allocate_memory(mana_symbol_create_identification("x", NULL, false), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_PARAMETER);
 		mana_symbol_set_native_function(symbol, mana_type_get(MANA_DATA_TYPE_FLOAT));
 
 		/* float tan(float) */
 		symbol = mana_symbol_create_function("tan");
 		symbol->number_of_parameters = 1;
-		mana_symbol_allocate_memory(mana_symbol_create_identification("degree", NULL, MANA_FALSE), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_PARAMETER);
+		mana_symbol_allocate_memory(mana_symbol_create_identification("degree", NULL, false), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_PARAMETER);
 		mana_symbol_set_native_function(symbol, mana_type_get(MANA_DATA_TYPE_FLOAT));
 
 		/* float angleMod(float) */
 		symbol = mana_symbol_create_function("angleMod");
 		symbol->number_of_parameters = 1;
-		mana_symbol_allocate_memory(mana_symbol_create_identification("degree", NULL, MANA_FALSE), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_PARAMETER);
+		mana_symbol_allocate_memory(mana_symbol_create_identification("degree", NULL, false), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_PARAMETER);
 		mana_symbol_set_native_function(symbol, mana_type_get(MANA_DATA_TYPE_FLOAT));
 
 		/* float sqrt(float) */
 		symbol = mana_symbol_create_function("sqrt");
 		symbol->number_of_parameters = 1;
-		mana_symbol_allocate_memory(mana_symbol_create_identification("degree", NULL, MANA_FALSE), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_PARAMETER);
+		mana_symbol_allocate_memory(mana_symbol_create_identification("degree", NULL, false), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_PARAMETER);
 		mana_symbol_set_native_function(symbol, mana_type_get(MANA_DATA_TYPE_FLOAT));
 
 		/* actor getActor(string) */
 		symbol = mana_symbol_create_function("getActor");
 		symbol->number_of_parameters = 1;
-		mana_symbol_allocate_memory(mana_symbol_create_identification("name", NULL, MANA_FALSE), mana_type_string, MANA_MEMORY_TYPE_PARAMETER);
+		mana_symbol_allocate_memory(mana_symbol_create_identification("name", NULL, false), mana_type_string, MANA_MEMORY_TYPE_PARAMETER);
 		mana_symbol_set_native_function(symbol, mana_type_get(MANA_DATA_TYPE_ACTOR));
 	}
 }

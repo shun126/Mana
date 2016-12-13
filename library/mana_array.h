@@ -18,7 +18,6 @@ extern "C" {
 #if !defined(___MANA_STREAM_H___)
 #include "mana_stream.h"
 #endif
-#include <stddef.h>
 
 /*!
  * @brief	ƒNƒ‰ƒX
@@ -71,7 +70,7 @@ extern void mana_array_append(mana_array* self, const void* pointer);
 extern void mana_array_resize(mana_array* self, const size_t size);
 
 /*! ”z—ñ‚ğ”äŠr */
-extern int mana_array_compare(const mana_array* self, const mana_array* other);
+extern int32_t mana_array_compare(const mana_array* self, const mana_array* other);
 
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)
 }

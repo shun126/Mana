@@ -29,18 +29,18 @@
 static struct mana_jump_chain_table
 {
 	mana_jump_chain_status status;			/*!< ジャンプチェインの状態 */
-	int break_chain;						/*!< breakチェインの位置 */
-	int continue_chain;						/*!< continueチェインの位置 */
-	int start_address;						/*!< ブロック開始位置 */
+	int32_t break_chain;						/*!< breakチェインの位置 */
+	int32_t continue_chain;						/*!< continueチェインの位置 */
+	int32_t start_address;						/*!< ブロック開始位置 */
 } mana_jump_chain_table[MANA_JUMP_CHAIN_TABLE_SIZE];
 
-static int mana_jump_chain_table_pointer;	/*!< mana_jump_chain_table の位置 */
+static int32_t mana_jump_chain_table_pointer;	/*!< mana_jump_chain_table の位置 */
 
 /*! switchブロック内のエントリー */
 typedef struct mana_jump_switch_entry
 {
 	mana_node* node;						/*!< expressionを表す mana_node */
-	int address;							/*!< アドレス */
+	int32_t address;							/*!< アドレス */
 } mana_jump_switch_entry;
 
 /*! switchブロック内のエントリースタック */
@@ -54,11 +54,11 @@ struct mana_jump_switch_stack
 {
 	mana_jump_switch_entry*	stack_pointer;	/*!< switchブロック内のエントリースタック */
 	mana_type_description* type;			/*!< mana_type_description */
-	int default_address;					/*!< @biref defaultへのアドレス */
+	int32_t default_address;					/*!< @biref defaultへのアドレス */
 } mana_jump_switch_stack[MANA_JUMP_SWITCH_STACK_SIZE];
 
 /*! switchブロックスタックポインター */
-int mana_jump_switch_stack_pointer;
+int32_t mana_jump_switch_stack_pointer;
 
 /*!
  */
@@ -92,9 +92,9 @@ void mana_jump_open_chain(mana_jump_chain_status status)
  * @param[in]	new_pc	新しいジャンプ先
  * @return		元のジャンプ先
  */
-int mana_jump_break(int new_pc)
+int32_t mana_jump_break(int32_t new_pc)
 {
-	int old_pc = -1;
+	int32_t old_pc = -1;
 
 	if(mana_jump_chain_table_pointer > 0)
 	{
@@ -110,10 +110,10 @@ int mana_jump_break(int new_pc)
  * @param[in]	new_pc	新しいジャンプ先
  * @return		元のジャンプ先
  */
-int mana_jump_continue(int new_pc)
+int32_t mana_jump_continue(int32_t new_pc)
 {
-	int i;
-	int old_pc = -1;
+	int32_t i;
+	int32_t old_pc = -1;
 
 	for(i = mana_jump_chain_table_pointer; i > 0 && mana_jump_chain_table[i].status == MANA_JUMP_CHAIN_STATE_SWITCH; i--)
 		;
@@ -209,7 +209,7 @@ void mana_jump_switch_build(void)
 
 	for(p = mana_jump_switch_stack[mana_jump_switch_stack_pointer].stack_pointer; p < mana_jump_switch_entry_stack_pointer; p++)
 	{
-		int size;
+		int32_t size;
 
 		switch(p->node->type->tcons)
 		{
@@ -218,14 +218,14 @@ void mana_jump_switch_build(void)
 		case MANA_DATA_TYPE_INT:
 		case MANA_DATA_TYPE_ACTOR:
 			mana_code_set_opecode(MANA_IL_DUPLICATE);
-			mana_linker_expression(p->node, MANA_FALSE);
+			mana_linker_expression(p->node, false);
 			mana_code_set_opecode(MANA_IL_COMPARE_EQ_INTEGER);
 			mana_code_set_opecode_and_operand(MANA_IL_BNE, p->address);
 			break;
 
 		case MANA_DATA_TYPE_FLOAT:
 			mana_code_set_opecode(MANA_IL_DUPLICATE);
-			mana_linker_expression(p->node, MANA_FALSE);
+			mana_linker_expression(p->node, false);
 			mana_code_set_opecode(MANA_IL_COMPARE_EQ_FLOAT);
 			mana_code_set_opecode_and_operand(MANA_IL_BNE, p->address);
 			break;
@@ -233,7 +233,7 @@ void mana_jump_switch_build(void)
 		case MANA_DATA_TYPE_STRUCT:
 			size = p->node->type->memory_size;
 			mana_code_set_opecode_and_operand(MANA_IL_DUPLICATE_DATA, size);
-			mana_linker_expression(p->node, MANA_FALSE);
+			mana_linker_expression(p->node, false);
 			mana_code_set_opecode_and_operand(MANA_IL_COMPARE_EQ_DATA, size);
 			mana_code_set_opecode_and_operand(MANA_IL_BNE, p->address);
 			break;

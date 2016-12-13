@@ -48,9 +48,9 @@ typedef enum mana_symbol_class_type_id
 typedef enum mana_symbol_data_type_id
 {
 	MANA_DATA_TYPE_VOID,								/*!< void型 */
-	MANA_DATA_TYPE_CHAR,								/*!< char型 */
-	MANA_DATA_TYPE_SHORT,								/*!< short型 */
-	MANA_DATA_TYPE_INT,									/*!< int型 */
+	MANA_DATA_TYPE_CHAR,								/*!< int8_t型 */
+	MANA_DATA_TYPE_SHORT,								/*!< int16_t型 */
+	MANA_DATA_TYPE_INT,									/*!< int32_t型 */
 	MANA_DATA_TYPE_FLOAT,								/*!< float型 */
 	MANA_DATA_TYPE_REFERENCE,							/*!< reference型 */
 	MANA_DATA_TYPE_ARRAY,								/*!< array型 */
@@ -135,6 +135,9 @@ typedef enum mana_node_type_id
 
 typedef struct mana_symbol_entry
 {
+#if defined(_DEBUG)
+	char magic[8];
+#endif
 	struct mana_symbol_entry* next;						/*!< 次のシンボルへのリンク */
 	struct mana_symbol_entry* hash_chain;				/*!< ハッシュチェイン */
 	struct mana_symbol_entry* parameter_list;			/*!< パラメータへのリンク */
@@ -142,81 +145,89 @@ typedef struct mana_symbol_entry
 	mana_symbol_class_type_id class_type;				/*!< シンボルの種類ID */
 	mana_symbol_memory_type_id attrib;					/*!< シンボルのメモリの種類 */
 	char* name;											/*!< 名称 */
-	int address;										/*!< アドレス */
-	int etc;											/*!< 汎用(廃止予定) */
+	int32_t address;									/*!< アドレス */
+	int32_t etc;										/*!< 汎用(廃止予定) */
 	float hloat;										/*!< 浮動小数点保存バッファ */
 	char* string;										/*!< 文字列保存バッファ */
-	int define_level;									/*!< 定義レベル */
-	int number_of_parameters;							/*!< パラメータの数 */
+	int32_t define_level;								/*!< 定義レベル */
+	int32_t number_of_parameters;						/*!< パラメータの数 */
 	unsigned used;										/*!< 参照フラグ */
 } mana_symbol_entry;
 
 typedef struct mana_type_description
 {
+#if defined(_DEBUG)
+	char magic[8];
+#endif
 	struct mana_type_description* parent;				/*!< 親の型へのリンク(継承がなくなったので未使用) */
+	struct mana_type_description* next;					/*!< 次の型へのリンク */
 	struct mana_type_description* component;			/*!< 配列、参照型の元の型へのリンク */
 	mana_symbol_data_type_id tcons;						/*!< 型のID */
 	char* name;											/*!< 型の名称 */
-	int number_of_elements;								/*!< 配列のサイズ */
-	int memory_size;									/*!< メモリサイズ */
-	int alignment_memory_size;							/*!< アライメントサイズ */
+	int32_t number_of_elements;							/*!< 配列のサイズ */
+	int32_t memory_size;								/*!< メモリサイズ */
+	int32_t alignment_memory_size;						/*!< アライメントサイズ */
 
 	union share
 	{
 		struct actor
 		{
-			int phantom;								/*!< phantom? */
+			int32_t phantom;							/*!< phantom? */
 		}actor;
 	}share;
 } mana_type_description;
 
 typedef struct mana_node
 {
+#if defined(_DEBUG)
+	char magic[8];
+#endif
 	mana_node_type_id id;								/*!< ノードID */
 	struct mana_symbol_entry* symbol;					/*!< シンボルへのポインタ */
 	struct mana_type_description* type;					/*!< 型へのポインタ */
 	struct mana_node* left;								/*!< 左 */
 	struct mana_node* right;							/*!< 右 */
 	struct mana_node* condition;						/*!< 条件 */
-	int etc;											/*!< その他 */
-	int digit;											/*!< 整数 */
+	int32_t etc;										/*!< その他 */
+	int32_t digit;										/*!< 整数 */
 	float real;											/*!< 少数 */
 	char* string;										/*!< 文字列へのポインタ */
 } mana_node;
 
 /*****************************************************************************/
-extern int mana_symbol_frame_size_list;					/*!< action,functionのフレームサイズリスト */
-extern int mana_symbol_return_address_list;				/*!< action,functionのリターンアドレスリスト */
+extern int32_t mana_symbol_frame_size_list;				/*!< action,functionのフレームサイズリスト */
+extern int32_t mana_symbol_return_address_list;			/*!< action,functionのリターンアドレスリスト */
 
 /*****************************************************************************/
 extern void mana_symbol_initialize(void);
 extern void mana_symbol_finalize(void);
 
-extern void mana_symbol_open_block(int);
+extern void mana_symbol_open_block(const bool reset_max_frame_memory_address);
 extern void mana_symbol_close_block(void);
 
-extern int mana_symbol_is_valid_variable(mana_symbol_entry*);
+extern int32_t mana_symbol_is_valid_variable(mana_symbol_entry*);
 
-extern int mana_symbol_get_static_memory_address();
-extern void mana_symbol_set_static_memory_address(int size);
+extern int32_t mana_symbol_get_static_memory_address();
+extern void mana_symbol_set_static_memory_address(int32_t size);
 
-extern int mana_symbol_get_global_memory_address();
-extern void mana_symbol_set_global_memory_address(int size);
+extern int32_t mana_symbol_get_global_memory_address();
+extern void mana_symbol_set_global_memory_address(int32_t size);
 
-extern void mana_symbol_destroy(char*);
 extern mana_symbol_entry* mana_symbol_lookup(char*);
 extern mana_symbol_entry* mana_symbol_lookup_or_create_dummy(char*);
 extern mana_symbol_entry* mana_symbol_create_alias(char*, char*);
-extern mana_symbol_entry* mana_symbol_create_const_int(char*, int);
+extern mana_symbol_entry* mana_symbol_create_const_int(char*, int32_t);
 extern mana_symbol_entry* mana_symbol_create_const_float(char*, float);
 extern mana_symbol_entry* mana_symbol_create_const_string(char*, char*);
-extern mana_symbol_entry* mana_symbol_create_type(char*);
-extern mana_symbol_entry* mana_symbol_create_identification(char*, mana_type_description*, int static_variable);
+//extern mana_symbol_entry* mana_symbol_create_type(char*);
+extern mana_symbol_entry* mana_symbol_create_identification(char*, mana_type_description*, int32_t static_variable);
 extern mana_symbol_entry* mana_symbol_create_label(char*);
 extern mana_symbol_entry* mana_symbol_create_function(char*);
 extern void mana_symbol_create_prototype(mana_symbol_entry*, mana_type_description*);
 
-extern void mana_symbol_open_function(int, mana_symbol_entry*, mana_type_description*);
+extern void mana_symbol_destroy(char* name);
+
+extern void mana_symbol_open_function(int32_t, mana_symbol_entry*, mana_type_description*);
 extern void mana_symbol_close_function(mana_symbol_entry*);
 extern void mana_symbol_set_native_function(mana_symbol_entry*, mana_type_description*);
 extern void mana_symbol_set_type(char*, mana_type_description*);
@@ -225,7 +236,7 @@ extern void mana_symbol_open_structure(void);
 extern mana_type_description* mana_symbol_close_structure(char*);
 
 extern void mana_symbol_open_actor(mana_symbol_entry*);
-extern mana_type_description* mana_symbol_close_actor(char* name, char* parent, mana_type_description* td, int phantom);
+extern mana_type_description* mana_symbol_close_actor(char* name, char* parent, mana_type_description* td, int32_t phantom);
 
 extern void mana_symbol_open_actor2(mana_symbol_entry*);
 extern void mana_symbol_close_actor2(void);
@@ -234,9 +245,9 @@ extern void mana_symbol_open_module(void);
 extern mana_type_description* mana_symbol_close_module(char* name);
 extern void mana_symbol_extend_module(char* name);
 
-extern int mana_symbol_get_number_of_actors(void);
+extern int32_t mana_symbol_get_number_of_actors(void);
 
-extern void mana_symbol_add_request(unsigned char opcode, mana_node* level, mana_node* actor, char* action);
+extern void mana_symbol_add_request(uint8_t opcode, mana_node* level, mana_node* actor, char* action);
 extern void mana_symbol_add_join(mana_node* level, mana_node* actor);
 
 extern void mana_symbol_allocate_memory(mana_symbol_entry*, mana_type_description*, mana_symbol_memory_type_id);
