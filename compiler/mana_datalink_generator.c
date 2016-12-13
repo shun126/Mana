@@ -89,7 +89,7 @@ size_t mana_datalink_generator_get_number_of_files(void)
  * @param[in]	file_name	file name
  * @return		index number. error if return value is negative.
  */
-int mana_datalink_generator_append(const char* file_name)
+int32_t mana_datalink_generator_append(const char* file_name)
 {
 	FILE* file;
 	mana_datalink_generator_file_entry* entry;
@@ -150,7 +150,7 @@ int mana_datalink_generator_append(const char* file_name)
 
 		index = mana_datalink_generator_number_of_files;
 		mana_datalink_generator_number_of_files++;
-		return (int)index;
+		return (int32_t)index;
 	}
 }
 
@@ -160,7 +160,7 @@ int mana_datalink_generator_append(const char* file_name)
  * @retval		TRUE	success
  * @retval		FALSE	write failed
  */
-int mana_datalink_generator_write_data(mana_stream* stream)
+int32_t mana_datalink_generator_write_data(mana_stream* stream)
 {
 	mana_datalink_generator_file_entry* entry;
 	mana_datalink_file_header header;
@@ -175,7 +175,7 @@ int mana_datalink_generator_write_data(mana_stream* stream)
 	/*
 	{
 		mana_compile_error("file write failed");
-		return MANA_FALSE;
+		return false;
 	}
 	*/
 
@@ -192,7 +192,7 @@ int mana_datalink_generator_write_data(mana_stream* stream)
 		if(fwrite(&entry_header, sizeof(entry_header), 1, file) != 1)
 		{
 			mana_compile_error("file write failed");
-			return MANA_FALSE;
+			return false;
 		}
 		*/
 
@@ -207,12 +207,11 @@ int mana_datalink_generator_write_data(mana_stream* stream)
 
 		header_size = MANA_DATALINK_ALIGNMENT_SIZE - header_size;
 		for(i = 0; i < header_size; i++)
-			mana_stream_push_unsigned_char(stream, rand());
+			mana_stream_push_unsigned_char(stream, (uint8_t)rand());
 	}
 
 	for(entry = mana_datalink_generator_file_entry_root; entry != NULL; entry = entry->next)
 	{
-		size_t i;
 		FILE* in;
 
 #if defined(__STDC_WANT_SECURE_LIB__)
@@ -222,10 +221,10 @@ int mana_datalink_generator_write_data(mana_stream* stream)
 #endif
 		{
 			mana_compile_error("unable to open '%s'", entry->file_name);
-			return MANA_FALSE;
+			return false;
 		}
 
-		void* program = malloc(entry->padding_size);
+		void* program = malloc(entry->file_size);
 		if(program == NULL)
 		{
 			fclose(in);
@@ -233,7 +232,7 @@ int mana_datalink_generator_write_data(mana_stream* stream)
 			return 1;
 		}
 
-		if(fread(program, 1, entry->padding_size, in) != entry->padding_size)
+		if(fread(program, 1, entry->file_size, in) != entry->file_size)
 		{
 			fclose(in);
 			free(program);
@@ -243,15 +242,15 @@ int mana_datalink_generator_write_data(mana_stream* stream)
 
 		fclose(in);
 
-		mana_stream_push_data(stream, program, entry->padding_size);
+		mana_stream_push_data(stream, program, entry->file_size);
 
 		free(program);
 
-		for(i = 0; i < entry->padding_size; i ++)
-			mana_stream_push_unsigned_char(stream, rand());
+		for(size_t i = 0; i < entry->padding_size; i ++)
+			mana_stream_push_unsigned_char(stream, (uint8_t)rand());
 
 		fclose(in);
 	}
 
-	return MANA_TRUE;
+	return true;
 }

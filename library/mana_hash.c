@@ -43,7 +43,7 @@ static void doubly_circularly_linked_list_erase(mana_hash_table_link* self)
 }
 #endif
 
-static int mana_hash_get_hash_value(const char* name)
+static int32_t mana_hash_get_hash_value(const char* name)
 {
 	unsigned h;
 
@@ -112,7 +112,7 @@ void mana_hash_finalize(mana_hash* self)
  * @retval	!= 0		一致
  * @retval	== 0		不一致
  */
-int mana_hash_compare(const mana_hash* self, const mana_hash* other)
+int32_t mana_hash_compare(const mana_hash* self, const mana_hash* other)
 {
 	mana_hash_iterator source_iterator;
 	mana_hash_iterator destination_iterator;
@@ -123,7 +123,7 @@ int mana_hash_compare(const mana_hash* self, const mana_hash* other)
 	mana_hash_iterator_rewind(&destination_iterator);
 	while(mana_hash_iterator_hash_next(self, &source_iterator))
 	{
-		const char *source_name, *destination_name;
+		const int8_t *source_name, *destination_name;
 		const void *source_data, *destination_data;
 
 		if(!mana_hash_iterator_hash_next(other, &destination_iterator))
@@ -168,7 +168,7 @@ void mana_hash_duplicate(mana_hash* self, const mana_hash* source)
  */
 void mana_hash_clear(mana_hash* self)
 {
-	int i;
+	int32_t i;
 
 	assert(self);
 
@@ -222,7 +222,7 @@ void mana_hash_erase(mana_hash* self, const char* name)
  * @retval	!=0	データは存在する
  * @retval	==0	データは存在しない
  */
-int mana_hash_test(mana_hash* self, const char* name)
+int32_t mana_hash_test(mana_hash* self, const char* name)
 {
 	mana_hash_table* table;
 
@@ -287,7 +287,7 @@ void* mana_hash_get(mana_hash* self, const char* name)
 void* mana_hash_set(mana_hash* self, const char* name, void* data)
 {
 	mana_hash_table* table;
-	int value;
+	int32_t value;
 
 	assert(self);
 
@@ -331,7 +331,7 @@ void mana_hash_iterator_rewind(mana_hash_iterator* iterator)
  * @param[in]	self		mana_hash オブジェクト
  * @param[in]	iterator	mana_hash_iterator
  */
-int mana_hash_iterator_hash_next(const mana_hash* self, mana_hash_iterator* iterator)
+int32_t mana_hash_iterator_hash_next(const mana_hash* self, mana_hash_iterator* iterator)
 {
 	assert(iterator);
 

@@ -28,7 +28,7 @@
 #endif
 
 extern mana_hash mana_external_function_hash;
-extern mana_bool mana_big_endian;
+extern bool mana_big_endian;
 
 static void mana_yield_thread(void)
 {
@@ -76,6 +76,12 @@ void mana_destroy(mana* self)
 	if(self)
 	{
 		mana_unload_program(self);
+
+		mana_datalink_finalize(&self->datalink);
+		mana_hash_finalize(&self->phantom_hash);
+		mana_hash_finalize(&self->actor_hash);
+		mana_array_finalize(&self->actor_array);
+
 		mana_free(self);
 	}
 }
@@ -160,14 +166,14 @@ actor_array
  * void mana_unload_program(mana* self)よりも先に
  * プログラム領域を開放しないでください。
  * @param[in]	program			manaプログラムアドレス
- * @param[in]	auto_release	MANA_TRUEならば自動的にコード領域を開放します
- * @retval		MANA_TRUE			読み込み成功
- * @retval		MANA_FALSE			読み込み失敗
+ * @param[in]	auto_release	trueならば自動的にコード領域を開放します
+ * @retval		true			読み込み成功
+ * @retval		false			読み込み失敗
  */
-mana_bool mana_load_program(mana* self, void* program, int auto_release)
+bool mana_load_program(mana* self, void* program, int32_t auto_release)
 {
 	mana_actor_info_header* actor_info;
-	unsigned int i;
+	uint32_t i;
 
 	assert(self);
 	assert(program);
@@ -175,21 +181,21 @@ mana_bool mana_load_program(mana* self, void* program, int auto_release)
 	/* プログラムを開放します */
 	mana_unload_program(self);
 
-	if((int)program % MANA_DATALINK_STANDARD_ALIGNMENT_SIZE)
+	if((int32_t)program % MANA_DATALINK_STANDARD_ALIGNMENT_SIZE)
 	{
-		MANA_ERROR("The program address is NOT aligned on %d-byte boundaries.\n", MANA_DATALINK_STANDARD_ALIGNMENT_SIZE);
+		MANA_WARNING("The program address is NOT aligned on %d-byte boundaries.\n", MANA_DATALINK_STANDARD_ALIGNMENT_SIZE);
 		goto ABORT;
 	}
 
 	self->file_header = (mana_file_header*)program;
 	if(!self->file_header || memcmp(MANA_SIGNATURE, self->file_header->header, sizeof(self->file_header->header)) != 0)
 	{
-		MANA_ERROR("abnormal mana program loaded.\n");
+		MANA_WARNING("abnormal mana program loaded.\n");
 		goto ABORT;
 	}
 	if(self->file_header->major_version != MANA_MAJOR_VERSION || self->file_header->minor_version != MANA_MINOR_VERSION)
 	{
-		MANA_ERROR("file version error.\n");
+		MANA_WARNING("file version error.\n");
 		goto ABORT;
 	}
 
@@ -197,14 +203,14 @@ mana_bool mana_load_program(mana* self, void* program, int auto_release)
 	mana_reallocate_static_variables(self->file_header->size_of_static_memory);
 
 	/* グローバル変数領域を確保します */
-	self->global_memory = (unsigned char*)mana_malloc(self->file_header->size_of_global_memory);
+	self->global_memory = (uint8_t*)mana_malloc(self->file_header->size_of_global_memory);
 
 	actor_info = (mana_actor_info_header*)(self->file_header + 1);
 
 	for(i = 0; i < self->file_header->number_of_actors; i++)
 	{
 		mana_action_info_header* action_info = (mana_action_info_header*)(actor_info + 1);
-		int j;
+		int32_t j;
 
 		for(j = 0; j < actor_info->number_of_actions; j++)
 		{
@@ -216,19 +222,19 @@ mana_bool mana_load_program(mana* self, void* program, int auto_release)
 
 	self->constant_pool = (char*)actor_info;
 
-	self->instruction_pool = (unsigned char*)self->constant_pool + self->file_header->size_of_constant_pool;
+	self->instruction_pool = (uint8_t*)self->constant_pool + self->file_header->size_of_constant_pool;
 
 	if(!(self->file_header->flag & MANA_HEADER_FLAG_COMPILED))
 	{
-		unsigned char* constant_pool;
-		unsigned int program_counter;
+		uint8_t* constant_pool;
+		uint32_t program_counter;
 
-		constant_pool = (unsigned char*)self->constant_pool;
+		constant_pool = (uint8_t*)self->constant_pool;
 
 		program_counter = 0;
 		while(program_counter < self->file_header->size_of_instruction_pool)
 		{
-			unsigned char opecode = self->instruction_pool[program_counter];
+			uint8_t opecode = self->instruction_pool[program_counter];
 			switch(opecode)
 			{
 			case MANA_IL_BEQ:
@@ -255,11 +261,11 @@ mana_bool mana_load_program(mana* self, void* program, int auto_release)
 			case MANA_IL_COMPARE_LS_DATA:
 				{
 #if 0
-					unsigned char* address = self->instruction_pool + mana_get_integer(self, &self->instruction_pool[program_counter + 1]);
-					self->instruction_pool[program_counter+4] = (unsigned char)(((unsigned int)address) >> 24);
-					self->instruction_pool[program_counter+3] = (unsigned char)(((unsigned int)address) >> 16);
-					self->instruction_pool[program_counter+2] = (unsigned char)(((unsigned int)address) >> 8);
-					self->instruction_pool[program_counter+1] = (unsigned char)(((unsigned int)address));
+					uint8_t* address = self->instruction_pool + mana_get_integer(self, &self->instruction_pool[program_counter + 1]);
+					self->instruction_pool[program_counter+4] = (uint8_t)(((uint32_t)address) >> 24);
+					self->instruction_pool[program_counter+3] = (uint8_t)(((uint32_t)address) >> 16);
+					self->instruction_pool[program_counter+2] = (uint8_t)(((uint32_t)address) >> 8);
+					self->instruction_pool[program_counter+1] = (uint8_t)(((uint32_t)address));
 #endif
 				}
 				break;
@@ -268,19 +274,19 @@ mana_bool mana_load_program(mana* self, void* program, int auto_release)
 				{
 					const char* name = mana_get_string(self, &self->instruction_pool[program_counter + 1]);
 
-					mana_external_funtion_type* function = (mana_external_funtion_type*)mana_hash_get(&mana_external_function_hash, name);
+					mana_external_funtion_type* function = mana_hash_get(&mana_external_function_hash, name);
 					if(function)
 					{
 #if defined(NDEBUG)
-						self->instruction_pool[program_counter+4] = ((unsigned int)function) >> 24;
-						self->instruction_pool[program_counter+3] = ((unsigned int)function) >> 16;
-						self->instruction_pool[program_counter+2] = ((unsigned int)function) >> 8;
-						self->instruction_pool[program_counter+1] = ((unsigned int)function);
+						self->instruction_pool[program_counter+4] = (uint8_t)((uint32_t)function >> 24);
+						self->instruction_pool[program_counter+3] = (uint8_t)((uint32_t)function >> 16);
+						self->instruction_pool[program_counter+2] = (uint8_t)((uint32_t)function >> 8);
+						self->instruction_pool[program_counter+1] = (uint8_t)((uint32_t)function);
 #endif
 					}
 					else
 					{
-						MANA_ERROR("An external function called %s is not found.\n", name);
+						MANA_WARNING("An external function called %s is not found.\n", name);
 						goto ABORT;
 					}
 				}
@@ -293,7 +299,7 @@ mana_bool mana_load_program(mana* self, void* program, int auto_release)
 	}
 
 	{
-		int counter = self->file_header->flag >> 2;
+		int32_t counter = self->file_header->flag >> 2;
 		counter++;
 		self->file_header->flag &= 0x03;
 		self->file_header->flag |= (counter << 2);
@@ -301,8 +307,8 @@ mana_bool mana_load_program(mana* self, void* program, int auto_release)
 
 	if(self->file_header->flag & MANA_HEADER_FLAG_RESOURCE)
 	{
-		unsigned char* p = self->instruction_pool + self->file_header->size_of_instruction_pool;
-		p = (unsigned char*)(((int)p + (MANA_DATALINK_STANDARD_ALIGNMENT_SIZE - 1))
+		uint8_t* p = self->instruction_pool + self->file_header->size_of_instruction_pool;
+		p = (uint8_t*)(((int32_t)p + (MANA_DATALINK_STANDARD_ALIGNMENT_SIZE - 1))
 			/ MANA_DATALINK_STANDARD_ALIGNMENT_SIZE * MANA_DATALINK_STANDARD_ALIGNMENT_SIZE);
 		mana_datalink_load(&self->datalink, (void*)p);
 	}
@@ -329,7 +335,7 @@ mana_bool mana_load_program(mana* self, void* program, int auto_release)
 		}
 		{
 			mana_action_info_header* action_info;
-			int j;
+			int32_t j;
 
 			action_info = (mana_action_info_header*)(actor_info + 1);
 
@@ -358,12 +364,12 @@ mana_bool mana_load_program(mana* self, void* program, int auto_release)
 	mana_request_all(self, 0, "main", NULL);
 	mana_request_all(self, 1, "init", NULL);
 
-	return MANA_TRUE;
+	return true;
 
 ABORT:
 	mana_unload_program(self);
 
-	return MANA_FALSE;
+	return false;
 }
 
 /*!
@@ -420,7 +426,7 @@ void mana_unload_program(mana* self)
 	/* プログラムの開放 */
 	if(self->file_header)
 	{
-		int counter = self->file_header->flag >> 2;
+		int32_t counter = self->file_header->flag >> 2;
 		counter--;
 		self->file_header->flag &= 0x03;
 		self->file_header->flag |= (counter << 2);
@@ -473,13 +479,13 @@ void mana_restart(mana* self)
  * yield命令など、次のフレーム待ちになる命令をフェッチするまで実行します。
  * @param[in]	self	mana オブジェクト
  * @param[in]	second	経過した時間(単位は秒)
- * @retval		MANA_TRUE	スクリプト実行中
- * @retval		MANA_FALSE	スクリプト停止
+ * @retval		true	スクリプト実行中
+ * @retval		false	スクリプト停止
  */
-mana_bool mana_run(mana* self, const float second)
+bool mana_run(mana* self, const float second)
 {
 	mana_hash_iterator iterator;
-	mana_bool running = MANA_FALSE;
+	bool running = false;
 
 	assert(self);
 
@@ -546,10 +552,10 @@ void mana_execute(mana* self)
 
 /*!
  * @param[in]	self	mana オブジェクト
- * @retval		MANA_TRUE	スクリプト実行中
- * @retval		MANA_FALSE	スクリプト停止中
+ * @retval		true	スクリプト実行中
+ * @retval		false	スクリプト停止中
  */
-mana_bool mana_is_running(mana* self)
+bool mana_is_running(mana* self)
 {
 	assert(self);
 
@@ -566,11 +572,11 @@ mana_bool mana_is_running(mana* self)
 			assert(actor);
 
 			if(mana_actor_is_running(actor))
-				return MANA_TRUE;
+				return true;
 		}
 	}
 
-	return MANA_FALSE;
+	return false;
 }
 
 /*!
@@ -579,7 +585,7 @@ mana_bool mana_is_running(mana* self)
  * @param[in]	action_name	アクション名
  * @param[in]	sender		リクエスト元アクター
  */
-void mana_request_all(mana* self, int level, const char* action_name, mana_actor* sender)
+void mana_request_all(mana* self, int32_t level, const char* action_name, mana_actor* sender)
 {
 	mana_hash_iterator iterator;
 
@@ -603,10 +609,10 @@ void mana_request_all(mana* self, int level, const char* action_name, mana_actor
  * @param[in]	actor_name	アクター名
  * @param[in]	action_name	アクション名
  * @param[in]	sender		リクエスト元アクター
- * @retval		MANA_TRUE		リクエスト成功
- * @retval		MANA_FALSE		リクエスト失敗
+ * @retval		true		リクエスト成功
+ * @retval		false		リクエスト失敗
  */
-mana_bool mana_request(mana* self, int level, const char* actor_name, const char* action_name, mana_actor* sender)
+bool mana_request(mana* self, int32_t level, const char* actor_name, const char* action_name, mana_actor* sender)
 {
 	mana_actor* actor;
 
@@ -614,7 +620,7 @@ mana_bool mana_request(mana* self, int level, const char* actor_name, const char
 
 	actor = mana_get_actor(self, actor_name);
 	if(actor == NULL)
-		return MANA_FALSE;
+		return false;
 
 	return mana_actor_request(actor, level, action_name, sender);
 }
@@ -646,7 +652,7 @@ void mana_yield(mana* self)
  * @param[in]	address	プログラムアドレス
  * @return		プログラム領域上の１バイト分の数値
  */
-char mana_get_char(const mana* self, const unsigned char* address)
+int8_t mana_get_char(const mana* self, const uint8_t* address)
 {
 	assert(self);
 	assert(address >= self->instruction_pool && address < &self->instruction_pool[self->file_header->size_of_instruction_pool]);
@@ -660,15 +666,15 @@ char mana_get_char(const mana* self, const unsigned char* address)
  * @param[in]	address	プログラムアドレス
  * @return		プログラム領域上の２バイト分の数値
  */
-short mana_get_short(const mana* self, const unsigned char* address)
+int16_t mana_get_short(const mana* self, const uint8_t* address)
 {
-	short value;
-	unsigned char* pointer;
+	int16_t value;
+	uint8_t* pointer;
 
 	assert(self);
 	assert(address >= self->instruction_pool && address < &self->instruction_pool[self->file_header->size_of_instruction_pool]);
 
-	pointer = (unsigned char*)&value;
+	pointer = (uint8_t*)&value;
 
 	if(mana_big_endian)
 	{
@@ -694,15 +700,15 @@ short mana_get_short(const mana* self, const unsigned char* address)
  * @param[in]	address	プログラムアドレス
  * @return		プログラム領域上の４バイト分の数値
  */
-int mana_get_integer(const mana* self, const unsigned char* address)
+int32_t mana_get_integer(const mana* self, const uint8_t* address)
 {
-	int value;
-	unsigned char* pointer;
+	int32_t value;
+	uint8_t* pointer;
 
 	assert(self);
 	assert(address >= self->instruction_pool && address < &self->instruction_pool[self->file_header->size_of_instruction_pool]);
 
-	pointer = (unsigned char*)&value;
+	pointer = (uint8_t*)&value;
 
 	if(mana_big_endian)
 	{
@@ -728,9 +734,9 @@ int mana_get_integer(const mana* self, const unsigned char* address)
  * @param[in]	address	プログラムアドレス
  * @return		プログラム領域上の１バイト分の数値
  */
-unsigned char mana_get_unsigned_char(const mana* self, const unsigned char* address)
+uint8_t mana_get_unsigned_char(const mana* self, const uint8_t* address)
 {
-	return (unsigned char)mana_get_char(self, address);
+	return (uint8_t)mana_get_char(self, address);
 }
 
 /*!
@@ -739,9 +745,9 @@ unsigned char mana_get_unsigned_char(const mana* self, const unsigned char* addr
  * @param[in]	address	プログラムアドレス
  * @return		プログラム領域上の２バイト分の数値
  */
-unsigned short mana_get_unsigned_short(const mana* self, const unsigned char* address)
+uint16_t mana_get_unsigned_short(const mana* self, const uint8_t* address)
 {
-	return (unsigned short)mana_get_short(self, address);
+	return (uint16_t)mana_get_short(self, address);
 }
 
 /*!
@@ -750,9 +756,9 @@ unsigned short mana_get_unsigned_short(const mana* self, const unsigned char* ad
  * @param[in]	address	プログラムアドレス
  * @return		プログラム領域上の４バイト分の数値
  */
-unsigned int mana_get_unsigned_integer(const mana* self, const unsigned char* address)
+uint32_t mana_get_unsigned_integer(const mana* self, const uint8_t* address)
 {
-	return (unsigned int)mana_get_integer(self, address);
+	return (uint32_t)mana_get_integer(self, address);
 }
 
 /*!
@@ -761,15 +767,15 @@ unsigned int mana_get_unsigned_integer(const mana* self, const unsigned char* ad
  * @param[in]	address	プログラムアドレス
  * @return		プログラム領域上の単制度浮動小数
  */
-float mana_get_float(const mana* self, const unsigned char* address)
+float mana_get_float(const mana* self, const uint8_t* address)
 {
 	float value;
-	unsigned char* pointer;
+	uint8_t* pointer;
 
 	assert(self);
 	assert(address >= self->instruction_pool && address < &self->instruction_pool[self->file_header->size_of_instruction_pool]);
 
-	pointer = (unsigned char*)&value;
+	pointer = (uint8_t*)&value;
 
 	if(mana_big_endian)
 	{
@@ -795,7 +801,7 @@ float mana_get_float(const mana* self, const unsigned char* address)
  * @param[in]	address	プログラムアドレス
  * @return		文字列へのポインタ
  */
-const char* mana_get_string(const mana* self, const unsigned char* address)
+const char* mana_get_string(const mana* self, const uint8_t* address)
 {
 	assert(self);
 
@@ -808,7 +814,7 @@ const char* mana_get_string(const mana* self, const unsigned char* address)
  * @param[in]	address	プログラムアドレス
  * @return		プログラム領域上のポインタ
  */
-unsigned char* mana_get_address(const mana* self, const unsigned char* address)
+uint8_t* mana_get_address(const mana* self, const uint8_t* address)
 {
 	assert(self);
 
@@ -911,7 +917,7 @@ struct mana_actor* mana_create_actor_from_phantom(mana* self, const char* name, 
 
 		{
 			mana_action_info_header* action_info;
-			int j;
+			int32_t j;
 
 			action_info = (mana_action_info_header*)(actor_info + 1);
 
@@ -929,35 +935,35 @@ struct mana_actor* mana_create_actor_from_phantom(mana* self, const char* name, 
 
 /*!
  * @param[in]	self	mana オブジェクト
- * @retval		MANA_TRUE	initアクション中
- * @retval		MANA_FALSE	initアクション終了
+ * @retval		true	initアクション中
+ * @retval		false	initアクション終了
  */
-mana_bool mana_is_in_init_action(mana* self)
+bool mana_is_in_init_action(mana* self)
 {
 	assert(self);
 
-	return (self->flag & MANA_FLAG_INIT_ACTION_RUNNING) ? MANA_TRUE : MANA_FALSE;
+	return (self->flag & MANA_FLAG_INIT_ACTION_RUNNING) ? true : false;
 }
 
 /*!
  * @param[in]	self	mana オブジェクト
- * @retval		MANA_TRUE	initアクション終了
- * @retval		MANA_FALSE	initアクションは実行していない
+ * @retval		true	initアクション終了
+ * @retval		false	initアクションは実行していない
  */
-mana_bool mana_is_finish_init_action(mana* self)
+bool mana_is_finish_init_action(mana* self)
 {
 	assert(self);
 
-	return (self->flag & MANA_FLAG_INIT_ACTION_FINISHED) ? MANA_TRUE : MANA_FALSE;
+	return (self->flag & MANA_FLAG_INIT_ACTION_FINISHED) ? true : false;
 }
 
 /*!
  * @param[in]	self	mana オブジェクト
  * @param[in]	enable
- * - MANA_TRUEならばリクエスト許可
- * - MANA_FALSEならばリクエスト禁止
+ * - trueならばリクエスト許可
+ * - falseならばリクエスト禁止
  */
-void mana_enable_system_request(mana* self, const mana_bool enable)
+void mana_enable_system_request(mana* self, const bool enable)
 {
 	assert(self);
 
@@ -969,21 +975,21 @@ void mana_enable_system_request(mana* self, const mana_bool enable)
 
 /*!
  * @param[in]	self	mana オブジェクト
- * @retval		MANA_TRUE	リクエスト許可
- * @retval		MANA_FALSE	リクエスト禁止
+ * @retval		true	リクエスト許可
+ * @retval		false	リクエスト禁止
  */
-mana_bool mana_is_system_request_enabled(mana* self)
+bool mana_is_system_request_enabled(mana* self)
 {
 	assert(self);
 
-	return (self->flag & MANA_FLAG_SYSTEM_REQUEST) ? MANA_TRUE : MANA_FALSE;
+	return (self->flag & MANA_FLAG_SYSTEM_REQUEST) ? true : false;
 }
 
 /*!
  * @param[in]	self	mana オブジェクト
  * @return		フレームカウンタ
  */
-unsigned int mana_get_frame_counter(mana* self)
+uint32_t mana_get_frame_counter(mana* self)
 {
 	assert(self);
 
@@ -992,14 +998,14 @@ unsigned int mana_get_frame_counter(mana* self)
 
 /*!
  * @param[in]	self	mana オブジェクト
- * @retval		MANA_TRUE	フレームが変更された
- * @retval		MANA_FALSE	同じフレーム
+ * @retval		true	フレームが変更された
+ * @retval		false	同じフレーム
  */
-mana_bool mana_is_frame_changed(mana* self)
+bool mana_is_frame_changed(mana* self)
 {
 	assert(self);
 
-	return (self->flag & MANA_FLAG_FRAME_CHANGED) ? MANA_TRUE : MANA_FALSE;
+	return (self->flag & MANA_FLAG_FRAME_CHANGED) ? true : false;
 }
 
 /*!
@@ -1008,7 +1014,7 @@ mana_bool mana_is_frame_changed(mana* self)
  * @param[out]	buffer		データアドレス
  * @param[out]	size		データサイズ
  */
-void mana_get_data(const mana* self, const int resouce_id, const void** buffer, size_t* size)
+void mana_get_data(const mana* self, const int32_t resouce_id, const void** buffer, size_t* size)
 {
 	assert(self);
 	assert(resouce_id >= 0 && resouce_id < mana_datalink_get_number_of_datas(&self->datalink));

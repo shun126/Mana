@@ -82,7 +82,7 @@ void mana_stack_destroy(mana_stack* self)
 void mana_stack_initialize(mana_stack* self)
 {
 	assert(self);
-	assert(sizeof(int) == sizeof(void*));
+	assert(sizeof(int32_t) == sizeof(void*));
 	assert(sizeof(float) == sizeof(void*));
 	assert(sizeof(char*) == sizeof(void*));
 
@@ -97,7 +97,7 @@ void mana_stack_initialize(mana_stack* self)
 void mana_stack_initialize_with_size(mana_stack* self, const size_t size)
 {
 	assert(self);
-	assert(sizeof(int) == sizeof(void*));
+	assert(sizeof(int32_t) == sizeof(void*));
 	assert(sizeof(float) == sizeof(void*));
 	assert(sizeof(char*) == sizeof(void*));
 
@@ -180,13 +180,13 @@ void mana_stack_remove(mana_stack* self, const size_t size)
  * @param[in]	self	mana_stack オブジェクト
  * @param[in]	value	プッシュする値
  */
-void mana_stack_push_integer(mana_stack* self, const int value)
+void mana_stack_push_integer(mana_stack* self, const int32_t value)
 {
 	if(self)
 	{
-		MANA_STACK_ALLOCATE_BEGIN(sizeof(int));
+		MANA_STACK_ALLOCATE_BEGIN(sizeof(int32_t));
 		self->buffer.integer_pointer[self->used_size] = value;
-		MANA_STACK_ALLOCATE_END(sizeof(int));
+		MANA_STACK_ALLOCATE_END(sizeof(int32_t));
 	}
 }
 
@@ -251,11 +251,11 @@ void mana_stack_push_data(mana_stack* self, const void* buffer, const size_t siz
  * @param[in]	self	mana_stack オブジェクト
  * @return		ポップした値
  */
-int mana_stack_pop_integer(mana_stack* self)
+int32_t mana_stack_pop_integer(mana_stack* self)
 {
 	if(self)
 	{
-		MANA_STACK_RELEASE(sizeof(int));
+		MANA_STACK_RELEASE(sizeof(int32_t));
 		return self->buffer.integer_pointer[self->used_size];
 	}
 	else
@@ -357,7 +357,7 @@ void mana_stack_pop_data(mana_stack* self, void* buffer, const size_t size)
  * @param[in]	index	スタックポインタへのオフセット値
  * @return		値
  */
-int mana_stack_get_integer(const mana_stack* self, const size_t index)
+int32_t mana_stack_get_integer(const mana_stack* self, const size_t index)
 {
 	if(self)
 	{
@@ -458,7 +458,7 @@ void* mana_stack_get_address(const mana_stack* self, const size_t index)
  * @param[in]	index	スタックポインタへのオフセット値
  * @param[in]	integer	値
  */
-void mana_stack_set_integer(mana_stack* self, const size_t index, const int integer)
+void mana_stack_set_integer(mana_stack* self, const size_t index, const int32_t integer)
 {
 	if(self)
 	{
@@ -540,7 +540,7 @@ void mana_stack_set_size(mana_stack* self, const size_t size)
  * @retval		== 0	同一の内容
  * @retval		!= 0	異なる内容
  */
-int mana_stack_compare(const mana_stack* self, const mana_stack* other)
+int32_t mana_stack_compare(const mana_stack* self, const mana_stack* other)
 {
 	if(self == NULL)
 		return 1;

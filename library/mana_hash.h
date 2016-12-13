@@ -14,6 +14,10 @@
 #if !defined(___MANA_HASH_H___)
 #define ___MANA_HASH_H___
 
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)
 extern "C" {
 #endif
@@ -72,7 +76,7 @@ extern void mana_hash_initialize(mana_hash* self);
 extern void mana_hash_finalize(mana_hash* self);
 
 /*! mana_hash オブジェクトの比較 */
-extern int mana_hash_compare(const mana_hash* self, const mana_hash* other);
+extern int32_t mana_hash_compare(const mana_hash* self, const mana_hash* other);
 
 /*! mana_hash オブジェクトのコピー */
 extern void mana_hash_duplicate(mana_hash* self, const mana_hash* source);
@@ -84,7 +88,7 @@ extern void mana_hash_clear(mana_hash* self);
 extern void mana_hash_erase(mana_hash* self, const char* name);
 
 /*! データの存在テスト */
-extern int mana_hash_test(mana_hash* self, const char* name);
+extern int32_t mana_hash_test(mana_hash* self, const char* name);
 
 /*! データを取得 */
 extern void* mana_hash_get(mana_hash* self, const char* name);
@@ -96,7 +100,7 @@ extern void* mana_hash_set(mana_hash* self, const char* name, void* data);
 extern void mana_hash_iterator_rewind(mana_hash_iterator* iterator);
 
 /*! イテレータ（反復子）を次へ移動 */
-extern int mana_hash_iterator_hash_next(const mana_hash* self, mana_hash_iterator* iterator);
+extern int32_t mana_hash_iterator_hash_next(const mana_hash* self, mana_hash_iterator* iterator);
 
 /*! イテレータ（反復子）が指すハッシュのキーを取得 */
 extern const char* mana_hash_iterator_get_name(const mana_hash_iterator* iterator);

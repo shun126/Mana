@@ -108,7 +108,7 @@ mana_node* mana_node_cast(mana_type_description* type, mana_node* node)
 		case MANA_DATA_TYPE_INT:
 			if(node->id == MANA_NODE_TYPE_CONST)
 			{
-				node->digit = (int)node->real;
+				node->digit = (int32_t)node->real;
 				node->type = mana_type_get(MANA_DATA_TYPE_INT);
 			}else{
 				node = mana_node_create_cast(mana_type_get(MANA_DATA_TYPE_INT), node);
@@ -185,6 +185,11 @@ mana_node* mana_node_allocate(mana_node_type_id id)
 	mana_node* node;
 
 	node = (mana_node*)mana_calloc(1, sizeof(mana_node));
+#if defined(_DEBUG)
+	static uint32_t count = 0;
+	snprintf(node->magic, sizeof(node->magic), "N%d", count);
+	++count;
+#endif
 	node->id = id;
 
 	return node;
@@ -583,12 +588,9 @@ mana_node* mana_node_create_node(mana_node_type_id id, mana_node* left, mana_nod
 
 	case MANA_NODE_TYPE_CALL:
 		{
-			mana_symbol_entry* sp;
-			mana_node_event_funtion_type* function;
+			mana_symbol_entry* sp = left->symbol;
 
-			sp = left->symbol;
-
-			function = (mana_node_event_funtion_type*)(mana_hash_get(mana_node_event_hash, sp->name));
+			mana_node_event_funtion_type* function = mana_hash_get(mana_node_event_hash, sp->name);
 			if(function)
 			{
 				node = (*function)(node);
@@ -700,12 +702,12 @@ mana_node* mana_node_create_call_member(mana_node* tree, char* name, mana_node* 
  * @param[in]	digit	整数
  * @return				ノードオブジェクト
  */
-mana_node* mana_node_create_digit(int digit)
+mana_node* mana_node_create_digit(int32_t digit)
 {
-	int max_char = (1 << (8 * CBSZ - 1)) - 1;
-	int min_char = -1 << (8 * CBSZ - 1);
-	int max_short = (1 << (8 * SBSZ - 1)) - 1;
-	int min_short = -1 << (8 * SBSZ - 1);
+	int32_t max_char = (1 << (8 * CBSZ - 1)) - 1;
+	int32_t min_char = -1 << (8 * CBSZ - 1);
+	int32_t max_short = (1 << (8 * SBSZ - 1)) - 1;
+	int32_t min_short = -1 << (8 * SBSZ - 1);
 	mana_node* new_node;
 
 	new_node = mana_node_allocate(MANA_NODE_TYPE_CONST);
@@ -774,7 +776,7 @@ size_t mana_node_get_memory_size(mana_node* node)
 
 	case MANA_NODE_TYPE_SELF:			/* self (actor) */
 	case MANA_NODE_TYPE_PRIORITY:		/* runlevel (integer) */
-		return sizeof(int*);
+		return sizeof(int32_t*);
 
 	case MANA_NODE_TYPE_ASSIGN:			/* = */
 	case MANA_NODE_TYPE_ARGUMENT:		/* 呼び出し側引数 */
@@ -824,5 +826,5 @@ size_t mana_node_get_memory_size(mana_node* node)
  */
 void mana_node_add_event(char* name, mana_node_event_funtion_type function)
 {
-	mana_hash_set(mana_node_event_hash, name, (void*)function);
+	mana_hash_set(mana_node_event_hash, name, function);
 }

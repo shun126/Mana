@@ -19,7 +19,7 @@
 extern void mana_datalink_generator_initialize(void);
 extern void mana_datalink_generator_finalize(void);
 extern size_t mana_datalink_generator_get_number_of_files(void);
-extern int mana_datalink_generator_append(const char* file_name);
-extern int mana_datalink_generator_write_data(mana_stream* stream);
+extern int32_t mana_datalink_generator_append(const char* file_name);
+extern int32_t mana_datalink_generator_write_data(mana_stream* stream);
 
 #endif

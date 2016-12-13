@@ -28,9 +28,9 @@
 typedef struct mana_lzss_header
 {
 	char magic[4];
-	unsigned char version;
-	unsigned char dictonary;
-	unsigned short crc;
+	uint8_t version;
+	uint8_t dictonary;
+	uint16_t crc;
 	size_t extract_size;
 	size_t compressed_size;
 }mana_lzss_header;
@@ -48,29 +48,29 @@ extern size_t mana_lzss_get_magic_word_size()
 }
 
 /*************************************************************************/
-extern unsigned char mana_lzss_get_version()
+extern uint8_t mana_lzss_get_version()
 {
 	return VERSION;
 }
 
 /*************************************************************************/
-extern unsigned char mana_lzss_get_dictonary()
+extern uint8_t mana_lzss_get_dictonary()
 {
 	return DICTONARY;
 }
 
 /*************************************************************************/
-extern mana_bool mana_lzss_is_valid(const void* compressed_data_pointer)
+extern bool mana_lzss_is_valid(const void* compressed_data_pointer)
 {
 	const mana_lzss_header* header;
 	if(compressed_data_pointer == NULL)
-		return MANA_FALSE;
+		return false;
 	header = (const mana_lzss_header*)(compressed_data_pointer);
 	return mana_lzss_is_compressed(compressed_data_pointer) && header->version == VERSION && header->dictonary == DICTONARY;
 }
 
 /*************************************************************************/
-extern mana_bool mana_lzss_is_compressed(const void* compressed_data_pointer)
+extern bool mana_lzss_is_compressed(const void* compressed_data_pointer)
 {
 	assert(compressed_data_pointer);
 	return memcmp(MAGIC, compressed_data_pointer, 4 - 1) == 0;
@@ -94,18 +94,18 @@ extern size_t mana_lzss_get_compressed_data_size(const void* compressed_data_poi
 extern void mana_lzss_extract(void* extract_data_pointer, const void* compressed_data_pointer)
 {
 	mana_lzss_header* header;
-	unsigned char *s, *d, *lim, *dstart;
+	uint8_t *s, *d, *lim, *dstart;
 	int flags, cnt;
 
 	assert(extract_data_pointer);
 	assert(compressed_data_pointer);
 
-	d = (unsigned char*)extract_data_pointer;
+	d = (uint8_t*)extract_data_pointer;
 	header = (mana_lzss_header*)compressed_data_pointer;
 
 	flags = cnt = 0;
 
-	s = (unsigned char*)(header + 1);
+	s = (uint8_t*)(header + 1);
 	lim = s + header->compressed_size;
 	dstart = d;
 
@@ -126,7 +126,7 @@ extern void mana_lzss_extract(void* extract_data_pointer, const void* compressed
 		}
 		else
 		{
-			unsigned char *limd, *p;
+			uint8_t *limd, *p;
 			int i, j;
 			if(s >= lim)
 				break;

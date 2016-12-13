@@ -11,11 +11,11 @@
 #if !defined(___MANA_MALLOC_H___)
 #define ___MANA_MALLOC_H___
 
+#include <stddef.h>
+
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)
 extern "C" {
 #endif
-
-#include <stddef.h>
 
 /*! メモリブロックを確保する関数 */
 typedef void* (*mana_malloc_function)(const size_t);

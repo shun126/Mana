@@ -321,8 +321,8 @@ static int mana_lexer_from_binary(char* p)
 
 /*!
  * check scanning complete.
- * @retval	MANA_TRUE	scanning complete.
- * @retval	MANA_FALSE	still need scanning.
+ * @retval	true	scanning complete.
+ * @retval	false	still need scanning.
  */
 int yywrap()
 {
@@ -332,15 +332,15 @@ int yywrap()
 /*!
  * initialize scanner
  * @param	pFilename	file name pointer
- * @retval	MANA_TRUE	success
- * @retval	MANA_FALSE	failed
+ * @retval	true	success
+ * @retval	false	failed
  */
 int mana_lexer_initialize(char* pFilename)
 {
 	mana_pool_initialize();
 	mana_parser_initialize();
 	yylineno = 1;
-	return(mana_lexer_open(pFilename, MANA_TRUE));
+	return(mana_lexer_open(pFilename, true));
 }
 
 /*!
@@ -357,8 +357,8 @@ void mana_lexer_finalize(void)
 /*!
  * check file opened
  * @param	path		file name pointer
- * @retval	MANA_TRUE	file already opened
- * @retval	MANA_FALSE	not yet
+ * @retval	true	file already opened
+ * @retval	false	not yet
  */
 static int mana_lexer_is_already_opened(char* path)
 {
@@ -369,21 +369,21 @@ static int mana_lexer_is_already_opened(char* path)
 	for(i = 0; i < pathCounter; i ++)
 	{
 		if(pathList[i] == path)
-			return MANA_FALSE;
+			return false;
 	}
 	pathList[pathCounter] = path;
 	if(++pathCounter >= 2048)
 		mana_compile_error("too many include files");
 
-	return MANA_TRUE;
+	return true;
 }
 
 /*!
  * open file
  * @param	filename	file name pointer
  * @param	check		ìÒèdÉtÉ@ÉCÉãÉIÁEÉvÉìÉ`ÉFÉbÉN
- * @retval	MANA_TRUE	success
- * @retval	MANA_FALSE	failed
+ * @retval	true	success
+ * @retval	false	failed
  */
 int mana_lexer_open(char* filename, int check)
 {
@@ -397,7 +397,7 @@ int mana_lexer_open(char* filename, int check)
 	if(_fullpath(path, filename, _MAX_PATH) == NULL)
 	{
 		mana_compile_error("unable to open \"%s\"", filename);
-		return MANA_FALSE;
+		return false;
 	}
 
 	if(mana_debug)
@@ -418,7 +418,7 @@ int mana_lexer_open(char* filename, int check)
 	{
 		if(! mana_lexer_is_already_opened(full_path))
 		{
-			return MANA_TRUE;
+			return true;
 		}
 	}
 #if defined(__STDC_WANT_SECURE_LIB__)
@@ -428,12 +428,12 @@ int mana_lexer_open(char* filename, int check)
 #endif
 	{
 		mana_compile_error("unable to open \"%s\"", full_path);
-		return MANA_FALSE;
+		return false;
 	}
 	if(++mana_lexer_status_pointer >= MAX_NEST_LEVEL)
 	{
 		mana_compile_error("too many include files");
-		return MANA_FALSE;
+		return false;
 	}
 	mana_lexer_status[mana_lexer_status_pointer].m_State = YY_CURRENT_BUFFER;
 	mana_lexer_status[mana_lexer_status_pointer].m_pszName = full_path;
@@ -453,13 +453,13 @@ int mana_lexer_open(char* filename, int check)
 #endif
 	_chdir(path);
 
-	return MANA_TRUE;
+	return true;
 }
 
 /*!
  * close file
- * @retval	MANA_TRUE	scanning complete.
- * @retval	MANA_FALSE	still need scanning.
+ * @retval	true	scanning complete.
+ * @retval	false	still need scanning.
  */
 int mana_lexer_close()
 {
@@ -473,7 +473,7 @@ int mana_lexer_close()
 
 	if(mana_lexer_status_pointer <= 0)
 	{
-		return MANA_TRUE;
+		return true;
 	}
 	else
 	{
@@ -492,7 +492,7 @@ int mana_lexer_close()
 #endif
 		_chdir(path);
 
-		return MANA_FALSE;
+		return false;
 	}
 }
 

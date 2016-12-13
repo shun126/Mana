@@ -147,9 +147,6 @@
     <ClInclude Include="mana_version.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\script\mana_debug.log" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="mana_version.json" />
     <None Include="mana_version.rb" />
   </ItemGroup>

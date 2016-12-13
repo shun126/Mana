@@ -28,12 +28,12 @@
 #include "platform/cocoa/mana_cocoa.h"
 #endif
 
-static unsigned int mana_random_seed = (unsigned int)(19720126);
+static uint32_t mana_random_seed = (uint32_t)(19720126);
 
 /*!
  * @param[in]	seed	乱数の種
  */
-extern void mana_srand(const unsigned int seed)
+extern void mana_srand(const uint32_t seed)
 {
 	mana_random_seed = seed;
 }
@@ -41,19 +41,19 @@ extern void mana_srand(const unsigned int seed)
 /*!
  * @return	乱数（0から32767）
  */
-int mana_rand(void)
+int32_t mana_rand(void)
 {
 	mana_random_seed = mana_random_seed * 1103515245L + 1234;
-	return (int)(mana_random_seed / 65536L) % 32768U;
+	return (int32_t)(mana_random_seed / 65536L) % 32768U;
 }
 
 /*!
  * @retval	!= 0	ビックエンディアン
  * @retval	== 0	リトルエンディアン
  */
-int mana_is_big_endian(void)
+int32_t mana_is_big_endian(void)
 {
-	int one = 1;
+	int32_t one = 1;
 	const char* pointer = (const char*)&one;
 	return pointer[0] == 0;
 }
@@ -62,7 +62,7 @@ int mana_is_big_endian(void)
  * @param[in]	value	値
  * @return		スワップされた値
  */
-short mana_swap_endian_short(const short value)
+int16_t mana_swap_endian_short(const int16_t value)
 {
 	return (value << 8 & 0xFF00) | (value >> 8 & 0x00FF);
 }
@@ -71,7 +71,7 @@ short mana_swap_endian_short(const short value)
  * @param[in]	value	値
  * @return		スワップされた値
  */
-unsigned short mana_swap_endian_unsigned_short(const unsigned short value)
+uint16_t mana_swap_endian_unsigned_short(const uint16_t value)
 {
 	return (value << 8 & 0xFF00) | (value >> 8 & 0x00FF);
 }
@@ -80,7 +80,7 @@ unsigned short mana_swap_endian_unsigned_short(const unsigned short value)
  * @param[in]	value	値
  * @return		スワップされた値
  */
-int mana_swap_endian_integer(const int value)
+int32_t mana_swap_endian_integer(const int32_t value)
 {
 	return (value << 24 & 0xFF000000) | (value << 8 & 0x00FF0000) | (value >> 8 & 0x0000FF00) | (value >> 24 & 0x000000FF);
 }
@@ -89,7 +89,7 @@ int mana_swap_endian_integer(const int value)
  * @param[in]	value	値
  * @return		スワップされた値
  */
-unsigned int mana_swap_endian_unsigned_integer(const unsigned int value)
+uint32_t mana_swap_endian_unsigned_integer(const uint32_t value)
 {
 	return (value << 24 & 0xFF000000) | (value << 8 & 0x00FF0000) | (value >> 8 & 0x0000FF00) | (value >> 24 & 0x000000FF);
 }
@@ -100,8 +100,7 @@ unsigned int mana_swap_endian_unsigned_integer(const unsigned int value)
  */
 float mana_swap_endian_float(const float value)
 {
-	MANA_ASSERT(sizeof(unsigned int) == sizeof(float));
-	return (float)mana_swap_endian_unsigned_integer((unsigned int)value);
+	return (float)mana_swap_endian_unsigned_integer((uint32_t)value);
 }
 
 /*!
@@ -111,8 +110,8 @@ void mana_print_debug(const char* format, ...)
 {
 	va_list argptr;
 	char* message = NULL;
-	int size = 0;
-	int length;
+	int32_t size = 0;
+	int32_t length;
 
 	do{
 		size += 256;
@@ -145,9 +144,9 @@ void mana_print_debug(const char* format, ...)
  * @retval		>= 0		見つかった位置（先頭からのオフセット値）
  * @retval		<  0		見つからなかった
  */
-int mana_string_find(const char text[], const char pattern[])
+int32_t mana_string_find(const int8_t text[], const int8_t pattern[])
 {
-	int i, j, k, c;
+	int32_t i, j, k, c;
 
 	c = pattern[0];
 	i = 0;
@@ -220,9 +219,9 @@ long mana_get_file_size(const char* filename)
  * @retval	!= 0	読み込み成功
  * @retval	== 0	読み込み失敗
  */
-int mana_read(void** buffer, size_t* size, const char* filename)
+int32_t mana_read(void** buffer, size_t* size, const char* filename)
 {
-	int result = 0;
+	int32_t result = 0;
 	FILE* file;
 
 #if __STDC_WANT_SECURE_LIB__
@@ -262,11 +261,11 @@ int mana_read(void** buffer, size_t* size, const char* filename)
  * @param[in]	program	命令セクション内のアドレス
  * @return		オペコードとオペランドの和
  */
-int mana_get_instruction_size(const unsigned char* program)
+int32_t mana_get_instruction_size(const uint8_t* program)
 {
 	/* 最終的には配列にしよう */
 
-#define SIZE_OF_POINTER	sizeof(unsigned int)
+#define SIZE_OF_POINTER	sizeof(uint32_t)
 
 	switch(*program)
 	{
@@ -280,27 +279,27 @@ int mana_get_instruction_size(const unsigned char* program)
 	/* constant */
 	case MANA_IL_PUSH_ZERO_INTEGER:		return 1;
 	case MANA_IL_PUSH_ZERO_FLOAT:		return 1;
-	case MANA_IL_PUSH_CHAR:				return 1 + sizeof(char);
-	case MANA_IL_PUSH_SHORT:			return 1 + sizeof(short);
-	case MANA_IL_PUSH_INTEGER:			return 1 + sizeof(int);
+	case MANA_IL_PUSH_CHAR:				return 1 + sizeof(int8_t);
+	case MANA_IL_PUSH_SHORT:			return 1 + sizeof(int16_t);
+	case MANA_IL_PUSH_INTEGER:			return 1 + sizeof(int32_t);
 	case MANA_IL_PUSH_FLOAT:			return 1 + sizeof(float);
 	case MANA_IL_PUSH_STRING:			return 1 + SIZE_OF_POINTER;
 	case MANA_IL_PUSH_PRIORITY:			return 1;
-	case MANA_IL_PUSH_ACTOR:			return 1 + sizeof(int);
+	case MANA_IL_PUSH_ACTOR:			return 1 + sizeof(int32_t);
 	case MANA_IL_PUSH_SELF:				return 1;
 	case MANA_IL_PUSH_SENDER:			return 1;
 
 	/* stack */
-	case MANA_IL_ALLOCATE:				return 1 + sizeof(int);
-	case MANA_IL_FREE:					return 1 + sizeof(int);
+	case MANA_IL_ALLOCATE:				return 1 + sizeof(int32_t);
+	case MANA_IL_FREE:					return 1 + sizeof(int32_t);
 	case MANA_IL_DUPLICATE:				return 1;
-	case MANA_IL_DUPLICATE_DATA:		return 1 + sizeof(int);
+	case MANA_IL_DUPLICATE_DATA:		return 1 + sizeof(int32_t);
 	case MANA_IL_REMOVE:				return 1;
-	case MANA_IL_REMOVE_DATA:			return 1 + sizeof(int);
-	case MANA_IL_LOAD_STATIC_ADDRESS:	return 1 + sizeof(int);
-	case MANA_IL_LOAD_GLOBAL_ADDRESS:	return 1 + sizeof(int);
-	case MANA_IL_LOAD_FRAME_ADDRESS:	return 1 + sizeof(int);
-	case MANA_IL_LOAD_SELF_ADDRESS:		return 1 + sizeof(int);
+	case MANA_IL_REMOVE_DATA:			return 1 + sizeof(int32_t);
+	case MANA_IL_LOAD_STATIC_ADDRESS:	return 1 + sizeof(int32_t);
+	case MANA_IL_LOAD_GLOBAL_ADDRESS:	return 1 + sizeof(int32_t);
+	case MANA_IL_LOAD_FRAME_ADDRESS:	return 1 + sizeof(int32_t);
+	case MANA_IL_LOAD_SELF_ADDRESS:		return 1 + sizeof(int32_t);
 
 	/* memory operation */
 	case MANA_IL_LOAD_CHAR:				return 1;
@@ -317,22 +316,22 @@ int mana_get_instruction_size(const unsigned char* program)
 	case MANA_IL_STORE_DATA:			return 1 + SIZE_OF_POINTER;
 
 	/* jump */
-	case MANA_IL_BEQ:					return 1 + sizeof(int);
-	case MANA_IL_BNE:					return 1 + sizeof(int);
-	case MANA_IL_BRA:					return 1 + sizeof(int);
-	case MANA_IL_BSR:					return 1 + sizeof(int);
-	case MANA_IL_REQ:					return 1 + sizeof(int);
-	case MANA_IL_REQWS:					return 1 + sizeof(int);
-	case MANA_IL_REQWE:					return 1 + sizeof(int);
-	case MANA_IL_DYNAMIC_REQ:			return 1 + sizeof(int);
-	case MANA_IL_DYNAMIC_REQWS:			return 1 + sizeof(int);
-	case MANA_IL_DYNAMIC_REQWE:			return 1 + sizeof(int);
+	case MANA_IL_BEQ:					return 1 + sizeof(int32_t);
+	case MANA_IL_BNE:					return 1 + sizeof(int32_t);
+	case MANA_IL_BRA:					return 1 + sizeof(int32_t);
+	case MANA_IL_BSR:					return 1 + sizeof(int32_t);
+	case MANA_IL_REQ:					return 1 + sizeof(int32_t);
+	case MANA_IL_REQWS:					return 1 + sizeof(int32_t);
+	case MANA_IL_REQWE:					return 1 + sizeof(int32_t);
+	case MANA_IL_DYNAMIC_REQ:			return 1 + sizeof(int32_t);
+	case MANA_IL_DYNAMIC_REQWS:			return 1 + sizeof(int32_t);
+	case MANA_IL_DYNAMIC_REQWE:			return 1 + sizeof(int32_t);
 	case MANA_IL_LOAD_RETURN_ADDRESS:	return 1;
 	case MANA_IL_SAVE_RETURN_ADDRESS:	return 1;
 	case MANA_IL_RETURN_FROM_FUNCTION:	return 1;
 	case MANA_IL_RETURN_FROM_ACTION:	return 1;
 	case MANA_IL_ROLLBACK:				return 1;
-	case MANA_IL_CALL:					return 1 + sizeof(int) + sizeof(short) + sizeof(short) + (program[6] * sizeof(short));
+	case MANA_IL_CALL:					return 1 + sizeof(int32_t) + sizeof(int16_t) + sizeof(int16_t) + (program[6] * sizeof(int16_t));
 
 	/* caluclation */
 	case MANA_IL_ADD_INTEGER:			return 1;
@@ -385,7 +384,7 @@ int mana_get_instruction_size(const unsigned char* program)
 	case MANA_IL_COMPARE_LS_DATA:		return 1 + SIZE_OF_POINTER;
 
 	/* inner function */
-	case MANA_IL_PRINT:					return 1 + sizeof(int);
+	case MANA_IL_PRINT:					return 1 + sizeof(int32_t);
 
 	case MANA_IL_JOIN:					return 1;
 	case MANA_IL_COMPLY:				return 1;
@@ -397,20 +396,20 @@ int mana_get_instruction_size(const unsigned char* program)
 	}
 }
 
-static char get_char(const void* program, const int address)
+static int8_t get_char(const void* program, const int32_t address)
 {
 	const char* instruction = (const char*)program;
 	return instruction[address];
 }
 
-static short get_short(const void* program, const int address)
+static int16_t get_short(const void* program, const int32_t address)
 {
-	const unsigned char* instruction;
-	unsigned char* pointer;
-	short value;
+	const uint8_t* instruction;
+	uint8_t* pointer;
+	int16_t value;
 
-	instruction = (const unsigned char*)program;
-	pointer = (unsigned char*)&value;
+	instruction = (const uint8_t*)program;
+	pointer = (uint8_t*)&value;
 
 	if(mana_is_big_endian())
 	{
@@ -425,14 +424,14 @@ static short get_short(const void* program, const int address)
 	return value;
 }
 
-static int get_integer(const void* program, const int address)
+static int32_t get_integer(const void* program, const int32_t address)
 {
-	const unsigned char* instruction;
-	unsigned char* pointer;
-	int value;
+	const uint8_t* instruction;
+	uint8_t* pointer;
+	int32_t value;
 
-	instruction = (const unsigned char*)program;
-	pointer = (unsigned char*)&value;
+	instruction = (const uint8_t*)program;
+	pointer = (uint8_t*)&value;
 
 	if(mana_is_big_endian())
 	{
@@ -451,14 +450,14 @@ static int get_integer(const void* program, const int address)
 	return value;
 }
 
-static float get_float(const void* program, const int address)
+static float get_float(const void* program, const int32_t address)
 {
-	const unsigned char* instruction;
-	unsigned char* pointer;
+	const uint8_t* instruction;
+	uint8_t* pointer;
 	float value;
 
-	instruction = (const unsigned char*)program;
-	pointer = (unsigned char*)&value;
+	instruction = (const uint8_t*)program;
+	pointer = (uint8_t*)&value;
 
 	if(mana_is_big_endian())
 	{
@@ -477,18 +476,18 @@ static float get_float(const void* program, const int address)
 	return value;
 }
 
-static const char* get_string(const void* program, const int address, const void* buffer)
+static const char* get_string(const void* program, const int32_t address, const void* buffer)
 {
 	const char* data = (const char*)buffer;
-	const int index = get_integer(program, address);
+	const int32_t index = get_integer(program, address);
 	return index >= 0 ? &data[index] : "";
 }
 
 /*
-static void* get_data(void* program, int address, void* buffer)
+static void* get_data(void* program, int32_t address, void* buffer)
 {
-	const unsigned char* data = (const unsigned char*)buffer;
-	int index = get_integer(program, address);
+	const uint8_t* data = (const uint8_t*)buffer;
+	int32_t index = get_integer(program, address);
 	return index >= 0 ? &data[index] : NULL;
 }
 */
@@ -498,15 +497,15 @@ static void* get_data(void* program, int address, void* buffer)
  * @param[in]	program	命令セクション内のアドレス
  * @param[in]	address	命令セクション内のプログラムカウンタ
  * @return		オペコードとオペランドの文字列。文字列は共通領域を使うので、
- * char* mana_get_instruction_text(char* data, void* program, int address)
+ * char* mana_get_instruction_text(char* data, void* program, int32_t address)
  * を呼び出すと上書きされます。
  */
-const char* mana_get_instruction_text(const char* data, const void* program, const int address)
+const char* mana_get_instruction_text(const char* data, const void* program, const int32_t address)
 {
-	unsigned char opecode;
-	static char text[256];
+	uint8_t opecode;
+	static int8_t text[256];
 
-	opecode = ((const unsigned char*)program)[address];
+	opecode = ((const uint8_t*)program)[address];
 	switch(opecode)
 	{
 	/* thread */
@@ -519,8 +518,8 @@ const char* mana_get_instruction_text(const char* data, const void* program, con
 	/* constant */
 	case MANA_IL_PUSH_ZERO_INTEGER:		sprintf(text, "%08x:push zero (integer)", address); break;
 	case MANA_IL_PUSH_ZERO_FLOAT:		sprintf(text, "%08x:push zero (float)", address); break;
-	case MANA_IL_PUSH_CHAR:				sprintf(text, "%08x:push %d (char)", address, get_char(program, address + 1)); break;
-	case MANA_IL_PUSH_SHORT:			sprintf(text, "%08x:push %d (short)", address, get_short(program, address + 1)); break;
+	case MANA_IL_PUSH_CHAR:				sprintf(text, "%08x:push %d (int8_t)", address, get_char(program, address + 1)); break;
+	case MANA_IL_PUSH_SHORT:			sprintf(text, "%08x:push %d (int16_t)", address, get_short(program, address + 1)); break;
 	case MANA_IL_PUSH_INTEGER:			sprintf(text, "%08x:push %d (integer)", address, get_integer(program, address + 1)); break;
 	case MANA_IL_PUSH_FLOAT:			sprintf(text, "%08x:push %f (float)", address, get_float(program, address + 1)); break;
 	case MANA_IL_PUSH_STRING:			sprintf(text, "%08x:push %x (reference)", address, get_integer(program, address + 1)); break;
@@ -542,15 +541,15 @@ const char* mana_get_instruction_text(const char* data, const void* program, con
 	case MANA_IL_LOAD_FRAME_ADDRESS:	sprintf(text, "%08x:load effective address %08x (frame)", address, get_integer(program, address + 1)); break;
 
 	/* memory */
-	case MANA_IL_LOAD_CHAR:				sprintf(text, "%08x:load (char)", address); break;
-	case MANA_IL_LOAD_SHORT:			sprintf(text, "%08x:load (short)", address); break;
-	case MANA_IL_LOAD_INTEGER:			sprintf(text, "%08x:load (int)", address); break;
+	case MANA_IL_LOAD_CHAR:				sprintf(text, "%08x:load (int8_t)", address); break;
+	case MANA_IL_LOAD_SHORT:			sprintf(text, "%08x:load (int16_t)", address); break;
+	case MANA_IL_LOAD_INTEGER:			sprintf(text, "%08x:load (int32_t)", address); break;
 	case MANA_IL_LOAD_FLOAT:			sprintf(text, "%08x:load (float)", address); break;
 	case MANA_IL_LOAD_REFFRENCE:		sprintf(text, "%08x:load (reference)", address); break;
 	case MANA_IL_LOAD_DATA:				sprintf(text, "%08x:load (data) %d byte(s)", address, get_integer(program, address + 1)); break;
-	case MANA_IL_STORE_CHAR:			sprintf(text, "%08x:store (char)", address); break;
-	case MANA_IL_STORE_SHORT:			sprintf(text, "%08x:store (short)", address); break;
-	case MANA_IL_STORE_INTEGER:			sprintf(text, "%08x:store (int)", address); break;
+	case MANA_IL_STORE_CHAR:			sprintf(text, "%08x:store (int8_t)", address); break;
+	case MANA_IL_STORE_SHORT:			sprintf(text, "%08x:store (int16_t)", address); break;
+	case MANA_IL_STORE_INTEGER:			sprintf(text, "%08x:store (int32_t)", address); break;
 	case MANA_IL_STORE_FLOAT:			sprintf(text, "%08x:store (float)", address); break;
 	case MANA_IL_STORE_REFFRENCE:		sprintf(text, "%08x:store (reference)", address); break;
 	case MANA_IL_STORE_DATA:			sprintf(text, "%08x:store (data) %d byte(s)", address, get_integer(program, address + 1)); break;
@@ -599,7 +598,7 @@ const char* mana_get_instruction_text(const char* data, const void* program, con
 	case MANA_IL_SHR:					sprintf(text, "%08x:shift right", address); break;
 
 	case MANA_IL_INT2FLOAT:				sprintf(text, "%08x:cast (float)", address); break;
-	case MANA_IL_FLOAT2INT:				sprintf(text, "%08x:cast (int)", address); break;
+	case MANA_IL_FLOAT2INT:				sprintf(text, "%08x:cast (int32_t)", address); break;
 
 	/* compare */
 	case MANA_IL_COMPARE_EQ_INTEGER:	sprintf(text, "%08x:== (integer)", address); break;

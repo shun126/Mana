@@ -27,68 +27,68 @@ extern void mana_code_finalize(void);
 /*! 命令セクションを縮小 */
 extern void mana_code_reduce(size_t size);
 
-/*! char型数値を命令セクションに設定 */
-extern void mana_code_set_char(char value);
+/*! int8_t型数値を命令セクションに設定 */
+extern void mana_code_set_char(int8_t value);
 
-/*! short型数値を命令セクションに設定 */
-extern void mana_code_set_short(short value);
+/*! int16_t型数値を命令セクションに設定 */
+extern void mana_code_set_short(int16_t value);
 
-/*! int型数値を命令セクションに設定 */
-extern void mana_code_set_integer(int value);
+/*! int32_t型数値を命令セクションに設定 */
+extern void mana_code_set_integer(int32_t value);
 
-/*! unsigned char型数値を命令セクションに設定 */
-extern void mana_code_set_unsigned_char(unsigned char value);
+/*! uint8_t型数値を命令セクションに設定 */
+extern void mana_code_set_unsigned_char(uint8_t value);
 
-/*! unsigned short型数値を命令セクションに設定 */
-extern void mana_code_set_unsigned_short(unsigned short value);
+/*! uint16_t型数値を命令セクションに設定 */
+extern void mana_code_set_unsigned_short(uint16_t value);
 
-/*! unsigned int型数値を命令セクションに設定 */
-extern void mana_code_set_unsigned_integer(unsigned int value);
+/*! uint32_t型数値を命令セクションに設定 */
+extern void mana_code_set_unsigned_integer(uint32_t value);
 
 /*! float型数値を命令セクションに設定 */
 extern void mana_code_set_float(float value);
 
 /*! オペコードを命令セクションに設定 */
-extern void mana_code_set_opecode(unsigned char code);
+extern void mana_code_set_opecode(uint8_t code);
 
 /*! オペコードとオペランドを命令セクションに設定 */
-extern int mana_code_set_opecode_and_operand(unsigned char code, int address);
+extern int32_t mana_code_set_opecode_and_operand(uint8_t code, int32_t address);
 
 /*! オペコードと二つのオペランドを命令セクションに設定 */
-extern int mana_code_set_opecode_and_two_operands(unsigned char code, int address, int size);
+extern int32_t mana_code_set_opecode_and_two_operands(uint8_t code, int32_t address, int32_t size);
 
 /*! オペコードを置換 */
-extern void mana_code_replace_opecode(int address, unsigned char code);
+extern void mana_code_replace_opecode(int32_t address, uint8_t code);
 
 /*! オペコードに関係付けられたアドレスを置換 */
-extern void mana_code_replace_address(int address, int new_address);
+extern void mana_code_replace_address(int32_t address, int32_t new_address);
 
 /*! オペコードに関係付けられたアドレスを辿って置換 */
-extern void mana_code_replace_all(int address, int new_address);
+extern void mana_code_replace_all(int32_t address, int32_t new_address);
 
 /*! 命令セクションをファイルへ出力 */
-extern int mana_code_write(mana_stream* stream);
+extern int32_t mana_code_write(mana_stream* stream);
 
 /*! 命令セクションをメモリへ出力 */
-extern int mana_code_copy(void*);
+extern int32_t mana_code_copy(void*);
 
 /*! 命令セクションのサイズを取得 */
-extern int mana_code_get_pc(void);
+extern int32_t mana_code_get_pc(void);
 
 /*! 命令セクションのサイズを取得 */
-extern int mana_code_get_size(void);
+extern int32_t mana_code_get_size(void);
 
 /*! 命令セクションバッファのアドレスを取得 */
 extern void* mana_code_get_buffer(void);
 
 /*! オペコードを取得 */
-extern unsigned char mana_code_getcode(int address);
+extern uint8_t mana_code_getcode(int32_t address);
 
-/*! int型数値を命令セクションから取得 */
-extern int mana_code_get_integer(int address);
+/*! int32_t型数値を命令セクションから取得 */
+extern int32_t mana_code_get_integer(int32_t address);
 
 /*! float型数値を命令セクションから取得 */
-extern float mana_code_get_float(int address);
+extern float mana_code_get_float(int32_t address);
 
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)
 }

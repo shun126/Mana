@@ -37,7 +37,7 @@ extern mana_node* mana_node_create_node(mana_node_type_id, mana_node*, mana_node
 extern mana_node* mana_node_create_member(mana_node*, char*);
 extern mana_node* mana_node_create_call_member(mana_node*, char*, mana_node*);
 extern mana_node* mana_node_create_function(char*);
-extern mana_node* mana_node_create_digit(int);
+extern mana_node* mana_node_create_digit(int32_t);
 extern mana_node* mana_node_create_real(float);
 extern mana_node* mana_node_create_string(char*);
 extern size_t mana_node_get_memory_size(mana_node*);

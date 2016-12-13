@@ -11,6 +11,8 @@
 #if !defined(___MANA_PLUGIN_H___)
 #define ___MANA_PLUGIN_H___
 
+#include <stdbool.h>
+
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)
 extern "C" {
 #endif
@@ -22,10 +24,10 @@ extern void mana_plugin_initialize(void);
 extern void mana_plugin_finalize(void);
 
 /*! プラグインファイルの読み込む */
-extern mana_bool mana_plugin_load(const char* file_name);
+extern bool mana_plugin_load(const char* file_name);
 
 /*! ディレクトリ内のプラグインファイルを読み込む */
-extern mana_bool mana_plugin_regist(const char* directory_name);
+extern bool mana_plugin_regist(const char* directory_name);
 
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)
 }
