@@ -27,6 +27,6 @@
 /library/Debug/
 /library/Release/
 /document/doxygen/
-/test/.vs/
-/test/Debug/
-/test/Release/
+/sample/.vs/
+/sample/Debug/
+/sample/Release/
