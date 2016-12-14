@@ -1,7 +1,7 @@
 /*!
  * mana (runner)
  *
- * @file	manarunner.cpp
+ * @file	manarunner.c
  * @brief	メインループに関するヘッダーファイル
  * @detail	このファイルはオプションなどメインループに関係するヘッダーファイルです。
  * @author	Shun Moriya <shun@mnu.sakura.ne.jp>
