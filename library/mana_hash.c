@@ -123,7 +123,7 @@ int32_t mana_hash_compare(const mana_hash* self, const mana_hash* other)
 	mana_hash_iterator_rewind(&destination_iterator);
 	while(mana_hash_iterator_hash_next(self, &source_iterator))
 	{
-		const int8_t *source_name, *destination_name;
+		const char *source_name, *destination_name;
 		const void *source_data, *destination_data;
 
 		if(!mana_hash_iterator_hash_next(other, &destination_iterator))

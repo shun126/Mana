@@ -25,7 +25,7 @@
 #include "mana_type.h"
 #endif
 
-#if defined(BUILD_XCODE)
+#if defined(__APPLE__)
 #include "y.tab.h"
 #else
 #include "mana_parser.h"

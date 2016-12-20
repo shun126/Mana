@@ -57,7 +57,7 @@ FILE* mana_variable_header_file;
 
 #if !defined(_MSC_VER)
 /* range copy */
-static void rcopy(int8_t *dp, int8_t *sp, int8_t *ep)
+static void rcopy(char* dp, char* sp, char* ep)
 {
 	while(sp < ep)
 		*dp ++ = *sp ++;
@@ -65,7 +65,7 @@ static void rcopy(int8_t *dp, int8_t *sp, int8_t *ep)
 }
 
 /* reverse find */
-static char* rfind(int8_t *sp, int8_t *ep, int32_t c)
+static char* rfind(char* sp, char* ep, int32_t c)
 {
 	while(*ep != (int8_t)c)
 	{
@@ -76,7 +76,7 @@ static char* rfind(int8_t *sp, int8_t *ep, int32_t c)
 	return ep;
 }
 
-void _makepath(int8_t *path, int8_t *drive, int8_t *dir, int8_t *file, int8_t *ext)
+void _makepath(char* path, char* drive, char* dir, char* file, char* ext)
 {
 	strcpy(path, drive);
 	strcat(path, dir);
@@ -84,11 +84,11 @@ void _makepath(int8_t *path, int8_t *drive, int8_t *dir, int8_t *file, int8_t *e
 	strcat(path, ext);
 }
 
-void _splitpath(int8_t *sptr, int8_t *drive, int8_t *dir, int8_t *file, int8_t *ext)
+void _splitpath(char* sptr, char* drive, char* dir, char* file, char* ext)
 {
-	int8_t *tptr;
-	int8_t *aptr;
-	int8_t *bptr;
+	char* tptr;
+	char* aptr;
+	char* bptr;
 
 	*drive = *dir = *file = *ext = '\0';
 	tptr = sptr;
@@ -255,7 +255,7 @@ static bool mana_test_execute(void* program)
 		mana* mana_instance = mana_create();
 		if(mana_instance)
 		{
-			if(mana_load_program(mana_instance, program, TRUE))
+			if(mana_load_program(mana_instance, program, true))
 			{
 				unsigned long long update_time = mana_get_micro_secound();
 				double update_secound;
@@ -495,9 +495,9 @@ static void print_usage()
  * @param	argv	argument
  * @return	error code.
  */
-static int32_t parse_arguments(int32_t argc, int8_t *argv[])
+static int32_t parse_arguments(int32_t argc, char* argv[])
 {
-	int8_t *cmdptr;
+	char* cmdptr;
 	int32_t cmdcnt;
 
 	if(argc < 2)
@@ -660,7 +660,7 @@ static int32_t parse_arguments(int32_t argc, int8_t *argv[])
  * @param	argv	argument
  * @return	if return value is true, compile was complete.
  */
-int32_t main(int32_t argc, int8_t *argv[])
+int32_t main(int32_t argc, char* argv[])
 {
 	int32_t result = 1;
 

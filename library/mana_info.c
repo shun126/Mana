@@ -185,7 +185,7 @@ unsigned long long mana_get_micro_secound()
 	return (unsigned long long)(counter.QuadPart * 1000000 / frequency.QuadPart);
 #else
 	struct timeval current;
-	return (gettimeofday(&current, NULL) == 0) ? static_cast<u64>(current.tv_usec) : 0;
+	return (gettimeofday(&current, NULL) == 0) ? current.tv_usec : 0;
 #endif
 }
 
