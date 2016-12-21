@@ -199,7 +199,7 @@ other		.
 }
 <COMMENT_LINE>{other}	;
 
-<LINE>[0-9]+		yylineno = atoi((char *)yytext);
+<LINE>[0-9]+		yylineno = atoi((char*)yytext);
 <LINE>{string}		{
 	static char filename[_MAX_PATH];
 	if(yyleng > 2)
@@ -287,7 +287,7 @@ static int mana_lexer_from_binary(char* p)
 {
 	int t0;
 	int t1;
-	char *sp;
+	char* sp;
 
 	p += 2;		/* '0b'ÁE�ï∂éöóÒÁE��ÉXÉLÉbÉv */
 	sp = p;
