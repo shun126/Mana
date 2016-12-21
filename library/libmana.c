@@ -206,7 +206,7 @@ void mana_generate_unique_name(char* name, const size_t size)
 {
 	if(name && size >= 8)
 	{
-		static const int8_t table[0x10] = {
+		static const char table[0x10] = {
 			'0', '1', '2', '3', '4', '5', '6', '7',
 			'8', '9', 'A', 'b', 'C', 'd', 'E', 'f'
 		};
@@ -227,7 +227,7 @@ void mana_generate_unique_name(char* name, const size_t size)
 
 			for(; i < sizeof(mana_generate_unique_name_count) * 2; i += 2)
 			{
-				uint8_t value = *s++;
+				char value = *s++;
 
 				if(i >= size - 1)
 					break;
@@ -250,7 +250,7 @@ void mana_generate_unique_name(char* name, const size_t size)
 
 			for(; i < sizeof(long); i++)
 			{
-				uint8_t value = *s++;
+				char value = *s++;
 
 				if(i >= size - 1)
 					break;

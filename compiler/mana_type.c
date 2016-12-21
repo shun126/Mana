@@ -259,7 +259,7 @@ int32_t mana_type_compatible(mana_type_description* self, mana_type_description*
 
 void mana_type_print(FILE* fp, mana_type_description* type)
 {
-	static int8_t *type_name[] = {
+	static char* type_name[] = {
 		"void",
 		"byte",
 		"int8_t",
