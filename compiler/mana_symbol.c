@@ -333,7 +333,7 @@ static mana_symbol_entry* mana_symbol_create_entry(char* name, mana_symbol_class
 mana_symbol_entry* mana_symbol_create_alias(char* name, char* filename)
 {
 	mana_symbol_entry* symbol;
-	int8_t path[_MAX_PATH];
+	char path[_MAX_PATH];
 
 	symbol = mana_symbol_lookup(name);
 	if(symbol)

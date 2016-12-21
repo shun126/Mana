@@ -49,8 +49,8 @@
 
 #define MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE	(2048)
 
-static int8_t mana_input_filename[_MAX_PATH];
-static int8_t mana_output_filename[_MAX_PATH];
+static char mana_input_filename[_MAX_PATH];
+static char mana_output_filename[_MAX_PATH];
 int32_t mana_debug;
 int32_t mana_release;
 FILE* mana_variable_header_file;
@@ -143,7 +143,7 @@ char* _fullpath(char* out, char* in, int32_t size)
 
 void mana_error(char* filename, int32_t line, char* format, ...)
 {
-	int8_t string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
+	char string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
 
 	va_list argptr;
 	va_start(argptr, format);
@@ -161,7 +161,7 @@ void mana_error(char* filename, int32_t line, char* format, ...)
 
 void mana_compile_error(char* format, ...)
 {
-	int8_t string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
+	char string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
 
 	va_list argptr;
 	va_start(argptr, format);
@@ -176,7 +176,7 @@ void mana_compile_error(char* format, ...)
 
 void mana_compile_warning(char* format, ...)
 {
-	int8_t string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
+	char string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
 
 	va_list argptr;
 	va_start(argptr, format);
@@ -195,7 +195,7 @@ void mana_compile_warning(char* format, ...)
 
 void mana_linker_error(char* format, ...)
 {
-	int8_t string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
+	char string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
 
 	va_list argptr;
 	va_start(argptr, format);
@@ -210,7 +210,7 @@ void mana_linker_error(char* format, ...)
 
 void mana_linker_warning(char* format, ...)
 {
-	int8_t string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
+	char string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
 
 	va_list argptr;
 	va_start(argptr, format);
@@ -225,7 +225,7 @@ void mana_linker_warning(char* format, ...)
 
 void mana_fatal(char* format, ...)
 {
-	int8_t string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
+	char string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
 
 	va_list argptr;
 	va_start(argptr, format);
@@ -322,11 +322,11 @@ int32_t mana_compile(void)
 		if(mana_debug)
 		{
 			FILE* log;
-			int8_t filename[_MAX_PATH];
-			int8_t drive[_MAX_DRIVE];
-			int8_t dir[_MAX_DIR];
-			int8_t fname[_MAX_FNAME];
-			int8_t ext[_MAX_EXT];
+			char filename[_MAX_PATH];
+			char drive[_MAX_DRIVE];
+			char dir[_MAX_DIR];
+			char fname[_MAX_FNAME];
+			char ext[_MAX_EXT];
 
 #if defined(__STDC_WANT_SECURE_LIB__)
 			_splitpath_s(mana_input_filename, drive, sizeof(drive), dir, sizeof(dir), fname, sizeof(fname), ext, sizeof(ext));
@@ -539,7 +539,7 @@ static int32_t parse_arguments(int32_t argc, char* argv[])
 				case 'i':
 					{
 						int32_t length;
-						int8_t filename[_MAX_PATH];
+						char filename[_MAX_PATH];
 
 						if(cmdcnt+1 < argc && *argv[cmdcnt+1] != '-')
 						{
