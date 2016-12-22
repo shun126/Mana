@@ -17,6 +17,7 @@ extern "C" {
 
 #include <libmana.h>
 #include <stdio.h>
+#include <stdint.h>
 #include <stdbool.h>
 
 typedef enum mana_symbol_memory_type_id
@@ -104,33 +105,31 @@ typedef enum mana_node_type_id
 	MANA_NODE_TYPE_EXPRESSION_IF,						/*!< 三項演算子 '?' */
 
 
-#if 0
-	MANA_NODE_TYPE_NEWLINE,								/*!<  */
-	MANA_NODE_TYPE_BLOCK,								/*!<  */
-	MANA_NODE_TYPE_ASSIGN,								/*!<  */
-	MANA_NODE_TYPE_IF,									/*!<  */
-	MANA_NODE_TYPE_SWITCH,								/*!<  */
-	MANA_NODE_TYPE_CASE,								/*!<  */
-	MANA_NODE_TYPE_DEFAULT,								/*!<  */
-	MANA_NODE_TYPE_WHILE,								/*!<  */
-	MANA_NODE_TYPE_DO,									/*!<  */
-	MANA_NODE_TYPE_FOR,									/*!<  */
-	MANA_NODE_TYPE_LOOP,								/*!<  */
-	MANA_NODE_TYPE_LOCK,								/*!<  */
-	MANA_NODE_TYPE_GOTO,								/*!<  */
-	MANA_NODE_TYPE_LABEL,								/*!<  */
-	MANA_NODE_TYPE_RETURN,								/*!<  */
-	MANA_NODE_TYPE_ROLLBACK,							/*!<  */
-	MANA_NODE_TYPE_BREAK,								/*!<  */
-	MANA_NODE_TYPE_CONTINUE,							/*!<  */
-	MANA_NODE_TYPE_HALT,								/*!<  */
-	MANA_NODE_TYPE_YIELD,								/*!<  */
-	MANA_NODE_TYPE_COMPLY,								/*!<  */
-	MANA_NODE_TYPE_REFUSE,								/*!<  */
-	MANA_NODE_TYPE_PRINT,								/*!<  */
-	MANA_NODE_TYPE_REQ,									/*!<  */
-	MANA_NODE_TYPE_JOIN,								/*!<  */
-#endif
+	MANA_NODE_TYPE_NEWLINE,								/*!< 改行 */
+	MANA_NODE_TYPE_BLOCK,								/*!< ブロック */
+	MANA_NODE_TYPE_ASSIGN,								/*!< 代入 */
+	MANA_NODE_TYPE_IF,									/*!< if */
+	MANA_NODE_TYPE_SWITCH,								/*!< switch */
+	MANA_NODE_TYPE_CASE,								/*!< case */
+	MANA_NODE_TYPE_DEFAULT,								/*!< default */
+	MANA_NODE_TYPE_WHILE,								/*!< while */
+	MANA_NODE_TYPE_DO,									/*!< do while */
+	MANA_NODE_TYPE_FOR,									/*!< for */
+	MANA_NODE_TYPE_LOOP,								/*!< loop */
+	MANA_NODE_TYPE_LOCK,								/*!< lock */
+	MANA_NODE_TYPE_GOTO,								/*!< goto */
+	MANA_NODE_TYPE_LABEL,								/*!< label */
+	MANA_NODE_TYPE_RETURN,								/*!< return */
+	MANA_NODE_TYPE_ROLLBACK,							/*!< rollback */
+	MANA_NODE_TYPE_BREAK,								/*!< break */
+	MANA_NODE_TYPE_CONTINUE,							/*!< continue */
+	MANA_NODE_TYPE_HALT,								/*!< halt */
+	MANA_NODE_TYPE_YIELD,								/*!< yield */
+	MANA_NODE_TYPE_REQUEST,								/*!< req */
+	MANA_NODE_TYPE_COMPLY,								/*!< comply (req許可) */
+	MANA_NODE_TYPE_REFUSE,								/*!< refuse (req拒否) */
+	MANA_NODE_TYPE_JOIN,								/*!< join */
+	MANA_NODE_TYPE_PRINT,								/*!< print */
 } mana_node_type_id;
 
 typedef struct mana_symbol_entry
