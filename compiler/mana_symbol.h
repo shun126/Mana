@@ -104,7 +104,7 @@ typedef enum mana_node_type_id
 	MANA_NODE_TYPE_PRIORITY,							/*!< priority (integer) */
 	MANA_NODE_TYPE_EXPRESSION_IF,						/*!< 三項演算子 '?' */
 
-
+#if 0
 	MANA_NODE_TYPE_NEWLINE,								/*!< 改行 */
 	MANA_NODE_TYPE_BLOCK,								/*!< ブロック */
 	MANA_NODE_TYPE_ASSIGN,								/*!< 代入 */
@@ -123,6 +123,7 @@ typedef enum mana_node_type_id
 	MANA_NODE_TYPE_ROLLBACK,							/*!< rollback */
 	MANA_NODE_TYPE_BREAK,								/*!< break */
 	MANA_NODE_TYPE_CONTINUE,							/*!< continue */
+#endif
 	MANA_NODE_TYPE_HALT,								/*!< halt */
 	MANA_NODE_TYPE_YIELD,								/*!< yield */
 	MANA_NODE_TYPE_REQUEST,								/*!< req */
@@ -236,9 +237,6 @@ extern mana_type_description* mana_symbol_close_structure(char*);
 
 extern void mana_symbol_open_actor(mana_symbol_entry*);
 extern mana_type_description* mana_symbol_close_actor(char* name, char* parent, mana_type_description* td, int32_t phantom);
-
-extern void mana_symbol_open_actor2(mana_symbol_entry*);
-extern void mana_symbol_close_actor2(void);
 
 extern void mana_symbol_open_module(void);
 extern mana_type_description* mana_symbol_close_module(char* name);
