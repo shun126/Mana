@@ -29,6 +29,16 @@ float realValue;
 int digitValue;
 TestStruct structValue;
 
+void test()
+{
+	// Forward declaration
+	short array[10];
+	print("test_sort: %d\n", test_sort(array, 10));
+
+	// Forward declaration
+	test_switch_while();
+}
+
 int test_sort(short array[10], int size)
 {
 	print("before\n");
@@ -114,8 +124,8 @@ actor TestActor
 
 	action main
 	{
-		request(1, OtherTestActor::talk);
-		request(2, OtherTestActor, "talk");
+		request(1, OtherTestActor::talk);	// Forward declaration
+		request(2, OtherTestActor, "talk");	// Forward declaration
 		request(5, self::talk);
 		join(0, OtherTestActor);
 	}
