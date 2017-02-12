@@ -1,41 +1,28 @@
 /*
- * mana (script)
- * Copyright (c) 2003 Shun Moriya <shun@mnu.sakura.ne.jp>
- */
-
-/*
-void test_sort(short array[16], int size)
-{
-	char hoge[10][10];
-	hoge = hoge;
-}
-
-void test()
-{
-	short array[16];
-	short a = 16;
-	a = array[1];
-	array[2] = a;
-	test_sort(array, a);
-}
-
-actor TestActor
-{
-	action init;
-	action main;
-}
-
-action TestActor::init
-{
-	test();
-}
-
-action TestActor::main
-{
-}
+mana (script)
+Copyright (c) 2003 Shun Moriya <shun@mnu.sakura.ne.jp>
 */
 
-include "sample.mh";
+// structs declarations
+struct TestStruct
+{
+	float realValue;
+	int digitValue;
+	string stringValue;
+	Actor actorValue;
+}
+
+// static variables
+static allocate 10
+{
+	float staticRealValue;
+}
+
+static
+{
+	int staticDigitValue;
+}
+
 
 // global variables
 float realValue;
@@ -100,67 +87,73 @@ void test_switch_while()
 	}
 }
 
-// actor defines
-action TestActor::init
+// actor declarations
+actor TestActor
 {
-	short array[10];
-	print("test_sort: %d\n", test_sort(array, 10));
+	int digitVariableInActor;
 
-	int localVariableInAction;
-	float arrayTest[10];
+	// actor defines
+	action init
+	{
+		short array[10];
+		print("test_sort: %d\n", test_sort(array, 10));
 
-	test_switch_while();
+		int localVariableInAction;
+		float arrayTest[10];
 
-	staticDigitValue = 1;
+		test_switch_while();
 
-	pointer p;
-	pointer q;
-	p = getUserPointer();
-	q = p;
-	setUserPointer(p);
+		staticDigitValue = 1;
+
+		pointer p;
+		pointer q;
+		p = getUserPointer();
+		q = p;
+		setUserPointer(p);
+	}
+
+	action main
+	{
+		request(1, OtherTestActor::talk);
+		request(2, OtherTestActor, "talk");
+		request(5, self::talk);
+		join(0, OtherTestActor);
+	}
+
+	action talk
+	{
+		vec2 test;
+		test.x = 0;
+		print("Nin hao!\n");
+	}
 }
 
-action TestActor::main
+actor OtherTestActor
 {
-	request(1, OtherTestActor::talk);
-	request(2, OtherTestActor, "talk");
-	request(5, self::talk);
-	join(0, OtherTestActor);
+	action talk
+	{
+		vec2 test;
+		float f;
+		f = test.x;
+		print("Hello!\n");
+		yield();
+		getUserData();
+	}
 }
 
-action TestActor::talk
-{
-vec2 test;
-test.x = 0;
-	print("Nin hao!\n");
-}
-
-action OtherTestActor::talk
-{
-	vec2 test;
-	float f;
-	f = test.x;
-	print("Hello!\n");
-	yield();
-	getUserData();
-}
 
 module Battle
 {
-	action init;
-}
-
-action Battle::init
-{
+	action init
+	{
+	}
 }
 
 phantom Aa
 {
-	action init;
-}
-
-action Aa::init
-{
+	action init
+	{
+	}
 }
 
 actor Director

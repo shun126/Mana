@@ -541,15 +541,9 @@ static int32_t mana_linker_call_argument(int32_t address, mana_symbol_entry* par
  */
 static void mana_linker_call(mana_node* tree)
 {
-	mana_node* node;
-	mana_node* argument;
-	mana_type_description* tp;
-	int32_t argument_counter;
-
-	node = tree->left;
-	argument = tree->right;
-	tp = (node->symbol)->type;
-	argument_counter = mana_linker_argument((node->symbol)->parameter_list, argument);
+	mana_node* node = tree->left;
+	mana_node* argument = tree->right;
+	int32_t argument_counter = mana_linker_argument((node->symbol)->parameter_list, argument);
 
 	/* エラーチェック */
 	if((node->symbol)->number_of_parameters != argument_counter)

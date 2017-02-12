@@ -945,20 +945,6 @@ SKIP:
 	}
 }
 
-void mana_symbol_open_actor2(mana_symbol_entry* symbol)
-{
-	if(!symbol)
-		mana_compile_error("name followed by \"::\" must be an actor");
-
-	mana_symbol_open_actor(symbol);
-}
-
-void mana_symbol_close_actor2(void)
-{
-	mana_symbol_actor_or_structure_level--;
-	mana_symbol_close_block();
-}
-
 /*****************************************************************************/
 /* module */
 void mana_symbol_open_module(void)
