@@ -62,13 +62,13 @@ static mana_node* mana_node_create_cast(mana_type_description* type, mana_node* 
 
 	if(type->tcons == MANA_DATA_TYPE_FLOAT)
 	{
-		new_node = mana_node_allocate(MANA_NODE_TYPE_I2F);
+		new_node = mana_node_allocate(MANA_NODE_I2F);
 		new_node->type = mana_type_get(MANA_DATA_TYPE_FLOAT);
 		new_node->left = node;
 	}
 	else
 	{
-		new_node = mana_node_allocate(MANA_NODE_TYPE_F2I);
+		new_node = mana_node_allocate(MANA_NODE_F2I);
 		new_node->type = mana_type_get(MANA_DATA_TYPE_INT);
 		new_node->left = node;
 	}
@@ -90,7 +90,7 @@ mana_node* mana_node_cast(mana_type_description* type, mana_node* node)
 	case MANA_DATA_TYPE_INT:
 		if(type->tcons == MANA_DATA_TYPE_FLOAT)
 		{
-			if(node->id == MANA_NODE_TYPE_CONST)
+			if(node->id == MANA_NODE_CONST)
 			{
 				node->real = (float)node->digit;
 				node->type = mana_type_get(MANA_DATA_TYPE_FLOAT);
@@ -106,7 +106,7 @@ mana_node* mana_node_cast(mana_type_description* type, mana_node* node)
 		case MANA_DATA_TYPE_CHAR:
 		case MANA_DATA_TYPE_SHORT:
 		case MANA_DATA_TYPE_INT:
-			if(node->id == MANA_NODE_TYPE_CONST)
+			if(node->id == MANA_NODE_CONST)
 			{
 				node->digit = (int32_t)node->real;
 				node->type = mana_type_get(MANA_DATA_TYPE_INT);
@@ -134,7 +134,7 @@ void mana_node_auto_cast(mana_node* node)
 {
 	if(node)
 	{
-		if(node->id != MANA_NODE_TYPE_ASSIGN && node->right && node->right->type && node->right->type->tcons == MANA_DATA_TYPE_FLOAT)
+		if(node->id != MANA_NODE_ASSIGN && node->right && node->right->type && node->right->type->tcons == MANA_DATA_TYPE_FLOAT)
 		{
 			node->type = node->right->type;
 		}
@@ -184,13 +184,16 @@ mana_node* mana_node_allocate(mana_node_type_id id)
 {
 	mana_node* node;
 
-	node = (mana_node*)mana_calloc(1, sizeof(mana_node));
+	node = (mana_node*)mana_calloc(sizeof(mana_node), 1);
 #if defined(_DEBUG)
 	static uint32_t count = 0;
 	snprintf(node->magic, sizeof(node->magic), "N%d", count);
 	++count;
 #endif
 	node->id = id;
+
+	node->filename = mana_lexer_get_current_filename();
+	node->line = mana_lexer_get_current_line();
 
 	return node;
 }
@@ -209,8 +212,8 @@ void mana_node_release(mana_node* node)
 		if(node->right)
 			mana_node_release(node->right);
 
-		if(node->condition)
-			mana_node_release(node->condition);
+		if(node->next)
+			mana_node_release(node->next);
 
 		mana_free(node);
 		node = NULL;
@@ -229,7 +232,7 @@ mana_node* mana_node_create_function(char* name)
 
 	symbol = mana_symbol_lookup_or_create_dummy(name);
 
-	node = mana_node_allocate(MANA_NODE_TYPE_FUNCTION);
+	node = mana_node_allocate(MANA_NODE_FUNCTION);
 	node->symbol = symbol;
 	node->type = symbol->type;
 
@@ -256,28 +259,28 @@ mana_node* mana_node_create_leaf(char* name)
 			symbol->address = mana_datalink_generator_append(symbol->string);
 			symbol->used = 1;
 		}
-		node = mana_node_allocate(MANA_NODE_TYPE_CONST);
+		node = mana_node_allocate(MANA_NODE_CONST);
 		node->digit = symbol->address;
 		node->symbol = symbol;
 		node->type = mana_type_get(MANA_DATA_TYPE_INT);
 		break;
 
 	case MANA_CLASS_TYPE_CONSTANT_INT:
-		node = mana_node_allocate(MANA_NODE_TYPE_CONST);
+		node = mana_node_allocate(MANA_NODE_CONST);
 		node->digit = symbol->address;
 		node->symbol = symbol;
 		node->type = mana_type_get(MANA_DATA_TYPE_INT);
 		break;
 
 	case MANA_CLASS_TYPE_CONSTANT_FLOAT:
-		node = mana_node_allocate(MANA_NODE_TYPE_CONST);
+		node = mana_node_allocate(MANA_NODE_CONST);
 		node->real = symbol->hloat;
 		node->symbol = symbol;
 		node->type = mana_type_get(MANA_DATA_TYPE_FLOAT);
 		break;
 
 	case MANA_CLASS_TYPE_CONSTANT_STRING:
-		node = mana_node_allocate(MANA_NODE_TYPE_CONST);
+		node = mana_node_allocate(MANA_NODE_CONST);
 		node->string = symbol->string;
 		node->symbol = symbol;
 		node->type = mana_type_string;
@@ -288,13 +291,13 @@ mana_node* mana_node_create_leaf(char* name)
 	case MANA_CLASS_TYPE_VARIABLE_ACTOR:
 	case MANA_CLASS_TYPE_VARIABLE_LOCAL:
 		mana_symbol_is_valid_variable(symbol);
-		node = mana_node_allocate(MANA_NODE_TYPE_VARIABLE);
+		node = mana_node_allocate(MANA_NODE_VARIABLE);
 		node->symbol = symbol;
 		node->type = symbol->type;
 		break;
 
 	case MANA_CLASS_TYPE_TYPEDEF:
-		node = mana_node_allocate(MANA_NODE_TYPE_VARIABLE);
+		node = mana_node_allocate(MANA_NODE_VARIABLE);
 		node->symbol = symbol;
 		node->type = symbol->type;
 		break;
@@ -315,13 +318,14 @@ mana_node* mana_node_create_leaf(char* name)
  * @param[in]	id		ノードタイプ番号
  * @param[in]	left	左辺ノードオブジェクト
  * @param[in]	right	右辺ノードオブジェクト
- * @return				ノードオブジェクト
+ * @param[in]	next	次のノードオブジェクト
+ * @return		ノードオブジェクト
  */
-mana_node* mana_node_create_node(mana_node_type_id id, mana_node* left, mana_node* right)
+mana_node* mana_node_create_node(mana_node_type_id id, mana_node* left, mana_node* right, mana_node* next)
 {
 	mana_node* node;
 	mana_symbol_data_type_id t1, t2;
-
+/*
 	if(left == NULL || left->type == NULL)
 	{
 		mana_compile_error("illegal left-hand side expression");
@@ -333,19 +337,20 @@ mana_node* mana_node_create_node(mana_node_type_id id, mana_node* left, mana_nod
 		mana_compile_error("illegal right-hand side expression");
 		return NULL;
 	}
-
+	*/
 	node = mana_node_allocate(id);
-	node->type = left->type;
+	node->type = left ? left->type : NULL;
 	node->left = left;
 	node->right = right;
-
+	node->next = next;
+#if 0
 	t1 = (node->left->type)->tcons;
 	t2 = node->right ? (node->right->type)->tcons : MANA_DATA_TYPE_INT;
 
 	switch(id)
 	{
-	case MANA_NODE_TYPE_ASSIGN:
-		if(left->id == MANA_NODE_TYPE_CONST)
+	case MANA_NODE_ASSIGN:
+		if(left->id == MANA_NODE_CONST)
 		{
 			mana_compile_error("already initialized constant '%s'", left->symbol->name);
 			return NULL;
@@ -354,12 +359,12 @@ mana_node* mana_node_create_node(mana_node_type_id id, mana_node* left, mana_nod
 		mana_type_compatible(node->left->type, node->right->type);
 		break;
 
-	case MANA_NODE_TYPE_ADD:
-	case MANA_NODE_TYPE_SUB:
-	case MANA_NODE_TYPE_MUL:
-	case MANA_NODE_TYPE_DIV:
-	case MANA_NODE_TYPE_REM:
-	case MANA_NODE_TYPE_POW:
+	case MANA_NODE_ADD:
+	case MANA_NODE_SUB:
+	case MANA_NODE_MUL:
+	case MANA_NODE_DIV:
+	case MANA_NODE_REM:
+	case MANA_NODE_POW:
 		mana_node_auto_cast(node);
 		if(t1 < MANA_DATA_TYPE_CHAR || t1 > MANA_DATA_TYPE_FLOAT)
 			mana_compile_error("imcompatible type operation in expression");
@@ -368,7 +373,7 @@ mana_node* mana_node_create_node(mana_node_type_id id, mana_node* left, mana_nod
 		mana_type_compatible(node->left->type, node->right->type);
 		break;
 
-	case MANA_NODE_TYPE_GT:
+	case MANA_NODE_GT:
 		mana_node_auto_cast(node);
 		mana_type_compatible(node->left->type, node->right->type);
 		switch(t1)
@@ -391,7 +396,7 @@ mana_node* mana_node_create_node(mana_node_type_id id, mana_node* left, mana_nod
 		node->type = mana_type_get(MANA_DATA_TYPE_CHAR);
 		break;
 
-	case MANA_NODE_TYPE_GE:
+	case MANA_NODE_GE:
 		mana_node_auto_cast(node);
 		mana_type_compatible(node->left->type, node->right->type);
 		switch(t1)
@@ -414,7 +419,7 @@ mana_node* mana_node_create_node(mana_node_type_id id, mana_node* left, mana_nod
 		node->type = mana_type_get(MANA_DATA_TYPE_CHAR);
 		break;
 
-	case MANA_NODE_TYPE_EQ:
+	case MANA_NODE_EQ:
 		mana_node_auto_cast(node);
 		mana_type_compatible(node->left->type, node->right->type);
 		switch(t1)
@@ -437,7 +442,7 @@ mana_node* mana_node_create_node(mana_node_type_id id, mana_node* left, mana_nod
 		node->type = mana_type_get(MANA_DATA_TYPE_CHAR);
 		break;
 
-	case MANA_NODE_TYPE_NE:
+	case MANA_NODE_NE:
 		mana_node_auto_cast(node);
 		mana_type_compatible(node->left->type, node->right->type);
 		switch(t1)
@@ -460,7 +465,7 @@ mana_node* mana_node_create_node(mana_node_type_id id, mana_node* left, mana_nod
 		node->type = mana_type_get(MANA_DATA_TYPE_CHAR);
 		break;
 
-	case MANA_NODE_TYPE_LS:
+	case MANA_NODE_LS:
 		mana_node_auto_cast(node);
 		mana_type_compatible(node->left->type, node->right->type);
 		switch(t1)
@@ -483,7 +488,7 @@ mana_node* mana_node_create_node(mana_node_type_id id, mana_node* left, mana_nod
 		node->type = mana_type_get(MANA_DATA_TYPE_CHAR);
 		break;
 
-	case MANA_NODE_TYPE_LE:
+	case MANA_NODE_LE:
 		mana_node_auto_cast(node);
 		mana_type_compatible(node->left->type, node->right->type);
 		switch(t1)
@@ -506,51 +511,51 @@ mana_node* mana_node_create_node(mana_node_type_id id, mana_node* left, mana_nod
 		node->type = mana_type_get(MANA_DATA_TYPE_CHAR);
 		break;
 
-	case MANA_NODE_TYPE_NEG:
+	case MANA_NODE_NEG:
 		if(t1 < MANA_DATA_TYPE_CHAR || t1 > MANA_DATA_TYPE_FLOAT)
 			mana_compile_error("imcompatible type operation in expression");
 		break;
 
-	case MANA_NODE_TYPE_NOT:
+	case MANA_NODE_NOT:
 		if(t1 < MANA_DATA_TYPE_CHAR || t1 > MANA_DATA_TYPE_INT)
 			mana_compile_error("imcompatible type operation in expression");
 		node->etc = MANA_IL_NOT;
 		break;
 
-	case MANA_NODE_TYPE_LNOT:
+	case MANA_NODE_LNOT:
 		if(t1 < MANA_DATA_TYPE_CHAR || t1 > MANA_DATA_TYPE_INT)
 			mana_compile_error("imcompatible type operation in expression");
 		node->etc = MANA_IL_LNOT;
 		break;
 
-	case MANA_NODE_TYPE_I2F:
+	case MANA_NODE_I2F:
 		if(t1 < MANA_DATA_TYPE_CHAR || t1 > MANA_DATA_TYPE_INT)
 			mana_compile_error("imcompatible type operation in expression");
 		break;
 
-	case MANA_NODE_TYPE_F2I:
+	case MANA_NODE_F2I:
 		if(t1 != MANA_DATA_TYPE_FLOAT)
 			mana_compile_error("imcompatible type operation in expression");
 		break;
 
-	case MANA_NODE_TYPE_SENDER:
-	case MANA_NODE_TYPE_SELF:
-	case MANA_NODE_TYPE_PRIORITY:
-	case MANA_NODE_TYPE_EXPRESSION_IF:
+	case MANA_NODE_SENDER:
+	case MANA_NODE_SELF:
+	case MANA_NODE_PRIORITY:
+	case MANA_NODE_EXPRESSION_IF:
 		break;
 
-	case MANA_NODE_TYPE_AND:
-	case MANA_NODE_TYPE_OR:
-	case MANA_NODE_TYPE_XOR:
-	case MANA_NODE_TYPE_LSH:
-	case MANA_NODE_TYPE_RSH:
+	case MANA_NODE_AND:
+	case MANA_NODE_OR:
+	case MANA_NODE_XOR:
+	case MANA_NODE_LSH:
+	case MANA_NODE_RSH:
 		if(t1 < MANA_DATA_TYPE_CHAR || t1 > MANA_DATA_TYPE_INT)
 			mana_compile_error("imcompatible type operation in expression");
 		if(t2 < MANA_DATA_TYPE_CHAR || t2 > MANA_DATA_TYPE_INT)
 			mana_compile_error("imcompatible type operation in expression");
 		break;
 
-	case MANA_NODE_TYPE_LAND:
+	case MANA_NODE_LAND:
 		if(t1 < MANA_DATA_TYPE_CHAR || t1 > MANA_DATA_TYPE_INT)
 			mana_compile_error("imcompatible type operation in expression");
 		if(t2 < MANA_DATA_TYPE_CHAR || t2 > MANA_DATA_TYPE_INT)
@@ -558,7 +563,7 @@ mana_node* mana_node_create_node(mana_node_type_id id, mana_node* left, mana_nod
 		node->etc = MANA_IL_LAND;
 		break;
 
-	case MANA_NODE_TYPE_LOR:
+	case MANA_NODE_LOR:
 		if(t1 < MANA_DATA_TYPE_CHAR || t1 > MANA_DATA_TYPE_INT)
 			mana_compile_error("imcompatible type operation in expression");
 		if(t2 < MANA_DATA_TYPE_CHAR || t2 > MANA_DATA_TYPE_INT)
@@ -566,13 +571,13 @@ mana_node* mana_node_create_node(mana_node_type_id id, mana_node* left, mana_nod
 		node->etc = MANA_IL_LOR;
 		break;
 
-	case MANA_NODE_TYPE_ARRAY:
+	case MANA_NODE_ARRAY:
 		if(t2 == MANA_DATA_TYPE_VOID || t2 > MANA_DATA_TYPE_FLOAT)
 			mana_compile_error("non-integer expression used as subscript");
 		if(t1 != MANA_DATA_TYPE_ARRAY)
 			mana_compile_error("subscript specified to non-array");
 
-		if(right->id == MANA_NODE_TYPE_CONST)
+		if(right->id == MANA_NODE_CONST)
 		{
 			assert(
 				right->type == mana_type_get(MANA_DATA_TYPE_CHAR) ||
@@ -586,7 +591,7 @@ mana_node* mana_node_create_node(mana_node_type_id id, mana_node* left, mana_nod
 		node->type = (left->type)->component;
 		break;
 
-	case MANA_NODE_TYPE_CALL:
+	case MANA_NODE_CALL:
 		{
 			mana_symbol_entry* sp = left->symbol;
 
@@ -596,25 +601,25 @@ mana_node* mana_node_create_node(mana_node_type_id id, mana_node* left, mana_nod
 				node = (*function)(node);
 			}
 
-			if(	sp->class_type != MANA_CLASS_TYPE_PROTOTYPE_FUNCTION &&
-				sp->class_type != MANA_CLASS_TYPE_FUNCTION &&
+			if(	sp->class_type != MANA_CLASS_TYPE_FUNCTION &&
 				sp->class_type != MANA_CLASS_TYPE_NATIVE_FUNCTION &&
 				sp->class_type != MANA_CLASS_TYPE_MEMBER_FUNCTION
 			)	mana_compile_error("trying to call non-funcation");
 		}
 		break;
 
-	case MANA_NODE_TYPE_ARGUMENT:
-		node->etc = (left->id == MANA_NODE_TYPE_ARGUMENT) ? left->etc + 1 : 2;
+	case MANA_NODE_ARGUMENT:
+		node->etc = (left->id == MANA_NODE_ARGUMENT) ? left->etc + 1 : 2;
 		break;
 
-	case MANA_NODE_TYPE_STRING:
+	case MANA_NODE_STRING:
 		break;
 
 	default:
-		MANA_BUG("Illgal node detect\n");
+		//MANA_BUG("Illgal node detect\n");
 		break;
 	}
+#endif
 	return node;
 }
 
@@ -626,6 +631,7 @@ mana_node* mana_node_create_node(mana_node_type_id id, mana_node* left, mana_nod
  */
 mana_node* mana_node_create_member(mana_node* tree, char* name)
 {
+	#if 0
 	mana_type_description* type;
 
 	type = tree->type;
@@ -643,7 +649,7 @@ mana_node* mana_node_create_member(mana_node* tree, char* name)
 					if(strcmp(symbol->name, name) == 0 && symbol->class_type == MANA_CLASS_TYPE_VARIABLE_ACTOR)
 					{
 						mana_node* node;
-						node = mana_node_allocate(MANA_NODE_TYPE_MEMOP);
+						node = mana_node_allocate(MANA_NODE_MEMOP);
 						node->etc = symbol->address;
 						node->type = symbol->type;
 						node->left = tree;
@@ -661,6 +667,15 @@ mana_node* mana_node_create_member(mana_node* tree, char* name)
 	}
 
 	return tree;
+#else
+	mana_node* node;
+
+	node = mana_node_allocate(MANA_NODE_MEMBER_VARIABLE);
+	node->string = name;
+	node->left = tree;
+
+	return node;
+#endif
 }
 
 /*!
@@ -672,6 +687,7 @@ mana_node* mana_node_create_member(mana_node* tree, char* name)
  */
 mana_node* mana_node_create_call_member(mana_node* tree, char* name, mana_node* members)
 {
+#if 0
 	mana_type_description* type;
 
 	type = tree->type;
@@ -680,14 +696,14 @@ mana_node* mana_node_create_call_member(mana_node* tree, char* name, mana_node* 
 	{
 		mana_node* leaf = members;
 
-		while(leaf && leaf->left && leaf->left->id == MANA_NODE_TYPE_ARGUMENT)
+		while(leaf && leaf->left && leaf->left->id == MANA_NODE_ARGUMENT)
 			leaf = leaf->left;
 
-		leaf->left = mana_node_create_node(MANA_NODE_TYPE_ARGUMENT, tree, leaf->left);
+		leaf->left = mana_node_create_node(MANA_NODE_ARGUMENT, tree, leaf->left, NULL);
 
 		members->etc++;
 
-		tree = mana_node_create_node(MANA_NODE_TYPE_CALL, mana_node_create_function(name), members);
+		tree = mana_node_create_node(MANA_NODE_CALL, mana_node_create_function(name), members, NULL);
 	}
 	else
 	{
@@ -695,6 +711,16 @@ mana_node* mana_node_create_call_member(mana_node* tree, char* name, mana_node* 
 	}
 
 	return tree;
+#else
+	mana_node* node;
+
+	node = mana_node_allocate(MANA_NODE_MEMBER_FUNCTION);
+	node->string = name;
+	node->left = tree;
+	node->left = members;
+
+	return node;
+#endif
 }
 
 /*!
@@ -710,7 +736,7 @@ mana_node* mana_node_create_digit(int32_t digit)
 	int32_t min_short = -1 << (8 * SBSZ - 1);
 	mana_node* new_node;
 
-	new_node = mana_node_allocate(MANA_NODE_TYPE_CONST);
+	new_node = mana_node_allocate(MANA_NODE_CONST);
 	new_node->digit = digit;
 	if(digit <= max_char && digit >= min_char)
 		new_node->type = mana_type_get(MANA_DATA_TYPE_CHAR);
@@ -731,7 +757,7 @@ mana_node* mana_node_create_real(float real)
 {
 	mana_node* new_node;
 
-	new_node = mana_node_allocate(MANA_NODE_TYPE_CONST);
+	new_node = mana_node_allocate(MANA_NODE_CONST);
 	new_node->real = real;
 	new_node->type = mana_type_get(MANA_DATA_TYPE_FLOAT);
 
@@ -739,17 +765,102 @@ mana_node* mana_node_create_real(float real)
 }
 
 /*!
- * 文字列ノードを作成します
- * @param[in]	string	文字列
- * @return				ノードオブジェクト
+文字列ノードを作成します
+@param[in]	string	文字列
+@return		ノードオブジェクト
  */
 mana_node* mana_node_create_string(char* string)
 {
 	mana_node* new_node;
 
-	new_node = mana_node_allocate(MANA_NODE_TYPE_STRING);
+	new_node = mana_node_allocate(MANA_NODE_STRING);
 	new_node->digit = mana_data_set(string);
 	new_node->type = mana_type_string;
+
+	return new_node;
+}
+
+/*!
+シンボルノードを作成します
+@param[in]	identifier	シンボル名
+@return		ノードオブジェクト
+*/
+mana_node* mana_node_create_identifier(char* identifier)
+{
+	mana_node* new_node;
+
+	new_node = mana_node_allocate(MANA_NODE_IDENTIFIER);
+	new_node->string = identifier;
+	new_node->type = mana_type_string;
+
+	return new_node;
+}
+
+mana_node* mana_node_create_type(mana_type_description* type, const char* identifier)
+{
+	mana_node* new_node;
+
+	new_node = mana_node_allocate(MANA_NODE_TYPE_DESCRIPTION);
+	new_node->type = type;
+	new_node->string = identifier;
+
+	return new_node;
+}
+
+mana_node* mana_node_create_declarator(const char* identifier, mana_node* left)
+{
+	mana_node* new_node;
+
+	new_node = mana_node_allocate(MANA_NODE_DECLARATOR);
+	new_node->string = identifier;
+	new_node->left = left;
+
+	return new_node;
+}
+
+mana_node* mana_node_create_declare_function(mana_node* left, const char* identifier, const int32_t argument_count, mana_node* right)
+{
+	mana_node* new_node;
+
+	new_node = mana_node_allocate(MANA_NODE_DECLARE_FUNCTION);
+	new_node->string = identifier;
+	new_node->digit = argument_count;
+	new_node->left = left;
+	new_node->right = right;
+
+	return new_node;
+}
+
+mana_node* mana_node_create_declare_native_function(mana_node* left, const char* identifier, const int32_t argument_count)
+{
+	mana_node* new_node;
+
+	new_node = mana_node_allocate(MANA_NODE_DECLARE_NATIVE_FUNCTION);
+	new_node->string = identifier;
+	new_node->digit = argument_count;
+	new_node->left = left;
+
+	return new_node;
+}
+
+mana_node* mana_node_create_allocate(int32_t size, mana_node* left)
+{
+	mana_node* new_node;
+
+	new_node = mana_node_allocate(MANA_NODE_DECLARE_ALLOCATE);
+	new_node->digit = size;
+
+	return new_node;
+}
+
+mana_node* mana_node_create_request(mana_node* left, mana_node* right, const char* action)
+{
+	mana_node* new_node;
+
+	new_node = mana_node_allocate(MANA_NODE_REQUEST);
+	new_node->left = left;
+	new_node->right = right;
+	new_node->string = action;
 
 	return new_node;
 }
@@ -763,52 +874,52 @@ size_t mana_node_get_memory_size(mana_node* node)
 {
 	switch(node->id)
 	{
-	case MANA_NODE_TYPE_CONST:			/* 定数 */
-	case MANA_NODE_TYPE_VARIABLE:		/* 変数 */
+	case MANA_NODE_CONST:			/* 定数 */
+	case MANA_NODE_VARIABLE:		/* 変数 */
 		/* 参照のactorか、actorの実体か判定できるようにする */
 		return node->type->tcons == MANA_DATA_TYPE_ACTOR ? sizeof(void*) : node->type->memory_size;
 
-	case MANA_NODE_TYPE_ARRAY:			/* variable[argument] = */
-	case MANA_NODE_TYPE_MEMOP:			/* X.variable */
-	case MANA_NODE_TYPE_NEG:			/* ±符号反転 */
+	case MANA_NODE_ARRAY:			/* variable[argument] = */
+	case MANA_NODE_MEMOP:			/* X.variable */
+	case MANA_NODE_NEG:			/* ±符号反転 */
 		return node->type->tcons == MANA_DATA_TYPE_ACTOR ? sizeof(void*) : node->type->memory_size;
 /*		return mana_node_get_memory_size(node->left);	*/
 
-	case MANA_NODE_TYPE_SELF:			/* self (actor) */
-	case MANA_NODE_TYPE_PRIORITY:		/* runlevel (integer) */
+	case MANA_NODE_SELF:			/* self (actor) */
+	case MANA_NODE_PRIORITY:		/* runlevel (integer) */
 		return sizeof(int32_t*);
 
-	case MANA_NODE_TYPE_ASSIGN:			/* = */
-	case MANA_NODE_TYPE_ARGUMENT:		/* 呼び出し側引数 */
-	case MANA_NODE_TYPE_INCOMPLETE:		/* 宣言が未完了 */
-	case MANA_NODE_TYPE_FUNCTION:		/* 関数 */
-	case MANA_NODE_TYPE_CALL:			/* 関数呼び出し */
-	case MANA_NODE_TYPE_ADD:			/* 加算 */
-	case MANA_NODE_TYPE_SUB:			/* 減算 */
-	case MANA_NODE_TYPE_MUL:			/* 乗算 */
-	case MANA_NODE_TYPE_DIV:			/* 除算 */
-	case MANA_NODE_TYPE_REM:			/* 余剰 */
-	case MANA_NODE_TYPE_POW:			/* べき乗 */
-	case MANA_NODE_TYPE_NOT:			/* ~ */
-	case MANA_NODE_TYPE_LNOT:			/* ! */
-	case MANA_NODE_TYPE_AND:			/* & */
-	case MANA_NODE_TYPE_OR:				/* | */
-	case MANA_NODE_TYPE_XOR:			/* ^ */
-	case MANA_NODE_TYPE_LSH:			/* << */
-	case MANA_NODE_TYPE_RSH:			/* >> */
-	case MANA_NODE_TYPE_LS:				/* < */
-	case MANA_NODE_TYPE_LE:				/* <= */
-	case MANA_NODE_TYPE_EQ:				/* == */
-	case MANA_NODE_TYPE_NE:				/* != */
-	case MANA_NODE_TYPE_GE:				/* >= */
-	case MANA_NODE_TYPE_GT:				/* > */
-	case MANA_NODE_TYPE_STRING:			/* 文字列 */
-	case MANA_NODE_TYPE_I2F:			/* 整数から実数へ変換 */
-	case MANA_NODE_TYPE_F2I:			/* 実数から整数へ変換 */
-	case MANA_NODE_TYPE_LOR:			/* || */
-	case MANA_NODE_TYPE_LAND:			/* && */
-	case MANA_NODE_TYPE_SENDER:			/* sender (actor) */
-	case MANA_NODE_TYPE_EXPRESSION_IF:	/* 三項演算子 '?' */
+	case MANA_NODE_ASSIGN:			/* = */
+	case MANA_NODE_ARGUMENT:		/* 呼び出し側引数 */
+	case MANA_NODE_INCOMPLETE:		/* 宣言が未完了 */
+	case MANA_NODE_FUNCTION:		/* 関数 */
+	case MANA_NODE_CALL:			/* 関数呼び出し */
+	case MANA_NODE_ADD:			/* 加算 */
+	case MANA_NODE_SUB:			/* 減算 */
+	case MANA_NODE_MUL:			/* 乗算 */
+	case MANA_NODE_DIV:			/* 除算 */
+	case MANA_NODE_REM:			/* 余剰 */
+	case MANA_NODE_POW:			/* べき乗 */
+	case MANA_NODE_NOT:			/* ~ */
+	case MANA_NODE_LNOT:			/* ! */
+	case MANA_NODE_AND:			/* & */
+	case MANA_NODE_OR:				/* | */
+	case MANA_NODE_XOR:			/* ^ */
+	case MANA_NODE_LSH:			/* << */
+	case MANA_NODE_RSH:			/* >> */
+	case MANA_NODE_LS:				/* < */
+	case MANA_NODE_LE:				/* <= */
+	case MANA_NODE_EQ:				/* == */
+	case MANA_NODE_NE:				/* != */
+	case MANA_NODE_GE:				/* >= */
+	case MANA_NODE_GT:				/* > */
+	case MANA_NODE_STRING:			/* 文字列 */
+	case MANA_NODE_I2F:			/* 整数から実数へ変換 */
+	case MANA_NODE_F2I:			/* 実数から整数へ変換 */
+	case MANA_NODE_LOR:			/* || */
+	case MANA_NODE_LAND:			/* && */
+	case MANA_NODE_SENDER:			/* sender (actor) */
+	case MANA_NODE_EXPRESSION_IF:	/* 三項演算子 '?' */
 	default:
 #if 1
 		return node->type->memory_size;
@@ -827,4 +938,149 @@ size_t mana_node_get_memory_size(mana_node* node)
 void mana_node_add_event(char* name, mana_node_event_funtion_type function)
 {
 	mana_hash_set(mana_node_event_hash, name, function);
+}
+
+
+static void mana_node_dump_(FILE* file, const mana_node* node)
+{
+	static char* name[] = {
+		"ARRAY",
+		"ASSIGN",
+		"MEMOP",
+		"ARGUMENT",
+		"CONST",
+		"VARIABLE",
+		"INCOMPLETE",
+		"FUNCTION",
+		"CALL",
+		"ADD",
+		"SUB",
+		"MUL",
+		"DIV",
+		"REM",
+		"NEG",
+		"POW",
+		"NOT",
+		"AND",
+		"OR",
+		"XOR",
+		"LSH",
+		"RSH",
+		"LS",
+		"LE",
+		"EQ",
+		"NE",
+		"GE",
+		"GT",
+		"STRING",
+		"I2F",
+		"F2I",
+		"LOR",
+		"LAND",
+		"LNOT",
+		"SENDER",
+		"SELF",
+		"PRIORITY",
+		"EXPRESSION_IF",
+		"NEWLINE",
+		"BLOCK",
+		//"ASSIGN",
+		"IF",
+		"SWITCH",
+		"CASE",
+		"DEFAULT",
+		"WHILE",
+		"DO",
+		"FOR",
+		"LOOP",
+		"LOCK",
+		"GOTO",
+		"LABEL",
+		"RETURN",
+		"ROLLBACK",
+		"BREAK",
+		"CONTINUE",
+		"HALT",
+		"YIELD",
+		"REQUEST",
+		"COMPLY",
+		"REFUSE",
+		"JOIN",
+		"PRINT"
+		"IDENTIFIER",
+		"TYPE_DESCRIPTION",
+
+		"DECLARATOR",
+
+		"DECLARE_ACTOR",
+		"DECLARE_PHANTOM",
+		"DECLARE_MODULE",
+		"DECLARE_STRUCT",
+		"DECLARE_ACTION",
+		"DECLARE_EXTEND",
+		"DECLARE_ALLOCATE",
+		"DECLARE_STATIC",
+		"DECLARE_ALIAS",
+		"DECLARE_NATIVE_FUNCTION",
+		"DECLARE_VALIABLE",
+		"DECLARE_FUNCTION",
+
+		"DEFINE_CONSTANT",
+		"UNDEFINE_CONSTANT",
+	};
+
+	if (node->id < sizeof(name) / sizeof(name[0]))
+	{
+		fprintf(file, "\"name\": \"%s\",", name[node->id]);
+	}
+	else
+	{
+		fprintf(file, "\"name\": \"%d\",", node->id);
+	}
+
+	fprintf(file, "\"digit\": \"%d\",", node->digit);
+	fprintf(file, "\"real\": \"%f\",", node->real);
+	fprintf(file, "\"string\": \"%s\",", node->string ? node->string : "");
+	fprintf(file, "\"symbol\": \"%s\",", node->symbol ? node->symbol->name : "");
+	fprintf(file, "\"type\": \"%s\"", node->type ? node->type->name : "");
+
+	if (node->left || node->right || node->next)
+		fputs(",\n", file);
+
+	if (node->left)
+	{
+		fprintf(file, "\"left\": {\n");
+		mana_node_dump_(file, node->left);
+		fprintf(file, "}\n");
+	}
+	if (node->right)
+	{
+		if (node->left)
+			fputc(',', file);
+		fprintf(file, "\"right\": {\n");
+		mana_node_dump_(file, node->right);
+		fprintf(file, "}\n");
+	}
+	if (node->next)
+	{
+		if (node->right)
+			fputc(',', file);
+		fprintf(file, "\"next\": {\n");
+		mana_node_dump_(file, node->next);
+		fprintf(file, "}\n");
+	}
+}
+
+void mana_node_dump(const mana_node* node)
+{
+	FILE* file;
+	if (fopen_s(&file, "mana_node_dump.json", "wt") == 0)
+	{
+		fprintf(file, "{\n");
+		if (node)
+			mana_node_dump_(file, node);
+		fprintf(file, "}\n");
+
+		fclose(file);
+	}
 }

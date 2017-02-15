@@ -14,6 +14,7 @@
 *.VC.db
 *.suo
 *.sdf
+*.tmp
 *.user
 **/xcuserdata
 **/xcshareddata
@@ -30,3 +31,4 @@
 /sample/.vs/
 /sample/Debug/
 /sample/Release/
+/sample/mana_node_dump.json
