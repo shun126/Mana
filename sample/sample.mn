@@ -3,13 +3,19 @@ mana (script)
 Copyright (c) 2003 Shun Moriya <shun@mnu.sakura.ne.jp>
 */
 
+////////////////////////////////////////////////////////////////////////////////
 // structs declarations
-struct TestStruct
+struct TestStruct1
 {
 	float realValue;
 	int digitValue;
 	string stringValue;
 	Actor actorValue;
+}
+
+struct TestStruct2
+{
+	float realValue;
 }
 
 // static variables
@@ -23,20 +29,21 @@ static
 	int staticDigitValue;
 }
 
-
+////////////////////////////////////////////////////////////////////////////////
 // global variables
 float realValue;
 int digitValue;
-TestStruct structValue;
+TestStruct1 structValue;
 
+////////////////////////////////////////////////////////////////////////////////
 void test()
 {
 	// Forward declaration
 	short array[10];
-	print("test_sort: %d\n", test_sort(array, 10));
+//	print("test_sort: %d\n", test_sort(array, 10));
 
 	// Forward declaration
-	test_switch_while();
+//	test_switch_while();
 }
 
 int test_sort(short array[10], int size)
@@ -97,6 +104,7 @@ void test_switch_while()
 	}
 }
 
+////////////////////////////////////////////////////////////////////////////////
 // actor declarations
 actor TestActor
 {
@@ -124,8 +132,8 @@ actor TestActor
 
 	action main
 	{
-		request(1, OtherTestActor::talk);	// Forward declaration
-		request(2, OtherTestActor, "talk");	// Forward declaration
+//		request(1, OtherTestActor::talk);	// Forward declaration
+//		request(2, OtherTestActor, "talk");	// Forward declaration
 		request(5, self::talk);
 		join(0, OtherTestActor);
 	}
@@ -151,7 +159,7 @@ actor OtherTestActor
 	}
 }
 
-
+////////////////////////////////////////////////////////////////////////////////
 module Battle
 {
 	action init
@@ -159,6 +167,7 @@ module Battle
 	}
 }
 
+////////////////////////////////////////////////////////////////////////////////
 phantom Aa
 {
 	action init
@@ -166,6 +175,7 @@ phantom Aa
 	}
 }
 
+////////////////////////////////////////////////////////////////////////////////
 actor Director
 {
 	extend Battle;
