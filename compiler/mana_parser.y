@@ -245,39 +245,22 @@ actor			: tACTOR tIDENTIFIER
 					{
 						mana_symbol_set_type($2, mana_symbol_close_module($2));
 					}
-
-
-
-				| tACTION tIDENTIFIER tDC
-					{
-						mana_symbol_entry* symbol;
-
-						symbol = mana_symbol_lookup($2);
-
-						mana_symbol_open_actor2(symbol);
-						mana_actor_symbol_entry_pointer = symbol;
-					}
-				  tIDENTIFIER
-					{
-						mana_function_symbol_entry_pointer = mana_symbol_create_function($5);
-						mana_symbol_open_function(true, mana_function_symbol_entry_pointer, mana_type_get(MANA_DATA_TYPE_VOID));
-					}
-				  block
-					{
-						mana_symbol_close_function(mana_function_symbol_entry_pointer);
-						mana_symbol_close_actor2();
-						mana_actor_symbol_entry_pointer = NULL;
-					}
 				;
 
 actions			: /* empty */
 				| actions action
 				;
 
-action			: tACTION tIDENTIFIER ';'
-					{ mana_symbol_create_prototype(mana_symbol_create_function($2), mana_type_get(MANA_DATA_TYPE_VOID)); }
+action			: tACTION tIDENTIFIER
+					{
+						mana_function_symbol_entry_pointer = mana_symbol_create_function($2);
+						mana_symbol_open_function(true, mana_function_symbol_entry_pointer, mana_type_get(MANA_DATA_TYPE_VOID));
+					}
+				  block
+					{
+						mana_symbol_close_function(mana_function_symbol_entry_pointer);
+					}
 				| declaration ';'
-
 				| tINCLUDE tSTRING ';'
 					{ if(! mana_lexer_open($2, false)){ YYABORT; } }
 				| tIMPORT tSTRING ';'

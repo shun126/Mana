@@ -300,7 +300,6 @@ int32_t mana_code_copy(void* buffer)
 	return i;
 }
 
-
 /*!
  * @return	命令セクションのサイズ
  */
