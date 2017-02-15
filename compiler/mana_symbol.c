@@ -36,7 +36,8 @@
 #include <string.h>
 
 #define MANA_SYMBOL_BLOCK_TABLE_SIZE	(256)
-#define MANA_SYMBOL_HASHTABLE_SIZE		(1021)
+#define MANA_SYMBOL_HASHTABLE_SIZE		(5)
+//#define MANA_SYMBOL_HASHTABLE_SIZE		(1021)
 
 #define MANA_SYMBOL_IS_ACTOR_OR_STRUCTER_OPENED()	(mana_symbol_actor_or_structure_level > 0)
 #define MANA_SYMBOL_IS_FUNCTION_OPENED()			(mana_symbol_is_function_opened)
@@ -236,8 +237,6 @@ void mana_symbol_open_block(const bool reset_max_frame_memory_address)
 
 void mana_symbol_close_block(void)
 {
-	assert(mana_symbol_block_level >= 0);
-
 	/* 1) check and update hash table */
 	for(mana_symbol_entry* symbol = mana_symbol_block_table[mana_symbol_block_level].head; symbol; symbol = symbol->next)
 	{
@@ -262,6 +261,8 @@ void mana_symbol_close_block(void)
 	mana_symbol_local_memory_address = mana_symbol_block_table[mana_symbol_block_level].allocp;
 
 	mana_symbol_block_level--;
+
+	assert(mana_symbol_block_level >= 0);
 }
 
 mana_symbol_entry* mana_symbol_lookup(char* name)
@@ -478,53 +479,7 @@ mana_symbol_entry* mana_symbol_create_function(char* name)
 	if(symbol == NULL)
 		symbol = mana_symbol_create_entry(name, MANA_CLASS_TYPE_NEW_SYMBOL, 0);
 
-	if(MANA_SYMBOL_IS_ACTOR_OR_STRUCTER_OPENED())
-	{
-		/* action */
-		mana_symbol_open_block(true);
-	}
-	else
-	{
-		/*
-		 * function(p1, p2);
-		 *
-		 * +--------------------+
-		 * | 4	Return Address	|
-		 * | 8	p1				|
-		 * | 12 p2				|
-		 * | 16 local variables |
-		 * |		 :			|
-		 * +--------------------+
-		 */
-		mana_symbol_open_block(false);
-		mana_symbol_local_memory_address += sizeof(void*);
-	}
-
-	mana_symbol_is_function_opened = true;
-
 	return symbol;
-}
-
-void mana_symbol_create_prototype(mana_symbol_entry* symbol, mana_type_description* type)
-{
-	/* 1) check */
-	if(type->tcons == MANA_DATA_TYPE_INCOMPLETE)
-		mana_compile_error("incomplete data type is used");
-
-	/* 2) initialize function's symbol entry */
-	symbol->class_type = MANA_CLASS_TYPE_PROTOTYPE_FUNCTION;
-	symbol->type = type;
-	symbol->address = -1;
-	symbol->parameter_list = mana_symbol_block_table[mana_symbol_block_level].head;
-
-	/* 3) all close blocks */
-	mana_symbol_is_function_opened = false;
-
-	/* 4) mana_symbol_open_blockがmana_symbol_create_functionで呼ばれるので
-	 * mana_symbol_create_prototypeにmana_symbol_open_blockを呼んでいなくても
-	 * ここでmana_symbol_close_blockを呼び出す必要がある。
-	 */
-	mana_symbol_close_block();
 }
 
 void mana_symbol_destroy(char* name)
@@ -536,11 +491,29 @@ void mana_symbol_destroy(char* name)
 
 void mana_symbol_open_function(int32_t is_action, mana_symbol_entry* function, mana_type_description* type)
 {
-	/*
-	 * 事前にmana_symbol_create_functionが呼ばれるのでmana_symbol_open_block
-	 * を呼び出さなくて良い
-	 */
-	mana_symbol_entry* symbol;
+	if (MANA_SYMBOL_IS_ACTOR_OR_STRUCTER_OPENED())
+	{
+		/* action */
+		mana_symbol_open_block(true);
+	}
+	else
+	{
+		/*
+		function(p1, p2);
+
+		+- stack ------------+
+		|  4 return address  |
+		|  8 p1              |
+		| 12 p2              |
+		| 16 local variables |
+		|          :         |
+		+--------------------+
+		*/
+		mana_symbol_open_block(false);
+		mana_symbol_local_memory_address += sizeof(void*);
+	}
+
+	mana_symbol_is_function_opened = true;
 
 	if(type->tcons == MANA_DATA_TYPE_INCOMPLETE)
 	{
@@ -550,37 +523,7 @@ void mana_symbol_open_function(int32_t is_action, mana_symbol_entry* function, m
 	/* レジスタ割り当て処理をクリア */
 	mana_register_clear();
 
-	if(function->class_type == MANA_CLASS_TYPE_PROTOTYPE_FUNCTION)
-	{
-		if(function->type == type)
-		{
-			mana_symbol_entry* p1;
-			mana_symbol_entry* p2;
-
-			p1 = function->parameter_list;
-			p2 = mana_symbol_block_table[mana_symbol_block_level].head;
-
-			while(p1 && p2)
-			{
-				if(mana_type_compare(p1->type, p2->type) == 0)
-				{
-					mana_compile_error("parameter specification unmatched");
-				}
-				p1 = p1->next;
-				p2 = p2->next;
-			}
-			if(p1 != NULL || p2 != NULL)
-			{
-				mana_compile_error("no. of parameters unmatched to the prototype");
-			}
-		}
-		else
-		{
-			mana_compile_error("function type unmatched to the prototype");
-		}
-		mana_code_replace_all(function->address, mana_code_get_pc());
-	}
-	else if(function->class_type == MANA_CLASS_TYPE_NEW_SYMBOL)
+	if(function->class_type == MANA_CLASS_TYPE_NEW_SYMBOL)
 	{
 		function->type = type;
 	}
@@ -609,7 +552,7 @@ void mana_symbol_open_function(int32_t is_action, mana_symbol_entry* function, m
 	mana_symbol_return_address_list = -1;
 
 	/* パラメータの設定 */
-	for(symbol = function->parameter_list; symbol; symbol = symbol->next)
+	for(mana_symbol_entry* symbol = function->parameter_list; symbol; symbol = symbol->next)
 	{
 		mana_code_set_opecode_and_operand(MANA_IL_LOAD_FRAME_ADDRESS, symbol->address);
 
@@ -716,7 +659,25 @@ void mana_symbol_close_function(mana_symbol_entry* function)
 		mana_symbol_align_size(mana_symbol_max_local_memory_address, FBSZ));
 }
 
-void mana_symbol_set_native_function(mana_symbol_entry* function, mana_type_description* type)
+void mana_symbol_open_native_function()
+{
+	/*
+	function(p1, p2);
+
+	+- stack ------------+
+	|  4 return address  |
+	|  8 p1              |
+	| 12 p2              |
+	| 16 local variables |
+	|          :         |
+	+--------------------+
+	*/
+	mana_symbol_open_block(false);
+	mana_symbol_is_function_opened = true;
+	mana_symbol_local_memory_address += sizeof(void*);
+}
+
+void mana_symbol_close_native_function(mana_symbol_entry* function, mana_type_description* type)
 {
 	/* 1) check */
 	if(mana_symbol_block_level > 1)
@@ -730,11 +691,6 @@ void mana_symbol_set_native_function(mana_symbol_entry* function, mana_type_desc
 	function->type = type;
 	function->parameter_list = mana_symbol_block_table[mana_symbol_block_level].head;
 
-	/* 3) close block
-	 *
-	 * mana_symbol_open_blockがmana_symbol_create_functionで呼ばれるので
-	 * ここでmana_symbol_close_blockを呼び出す必要がある。
-	 */
 	mana_symbol_close_block();
 	mana_symbol_is_function_opened = false;
 }
@@ -1180,13 +1136,6 @@ static void mana_symbol_check_undefine_recursive(char* parent_name, mana_symbol_
 	{
 		switch(symbol->class_type)
 		{
-		case MANA_CLASS_TYPE_PROTOTYPE_FUNCTION:
-			if(parent_name)
-				mana_compile_error("there's no definition of %s::%s", parent_name, symbol->name);
-			else
-				mana_compile_error("there's no definition of %s", symbol->name);
-			break;
-
 		case MANA_CLASS_TYPE_TYPEDEF:
 			if(symbol->type->tcons == MANA_DATA_TYPE_ACTOR)
 				mana_symbol_check_undefine_recursive(symbol->name, (mana_symbol_entry*)(symbol->type->component));
