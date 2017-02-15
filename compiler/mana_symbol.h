@@ -30,7 +30,6 @@ typedef enum mana_symbol_class_type_id
 {
 	MANA_CLASS_TYPE_NEW_SYMBOL,							/*!< 未割り当て関数 */
 	MANA_CLASS_TYPE_TYPEDEF,							/*!< 型定義 */
-	MANA_CLASS_TYPE_PROTOTYPE_FUNCTION,					/*!< プロトタイプ関数宣言 */
 	MANA_CLASS_TYPE_FUNCTION,							/*!< 関数 */
 	MANA_CLASS_TYPE_NATIVE_FUNCTION,					/*!< 外部関数 */
 	MANA_CLASS_TYPE_MEMBER_FUNCTION,					/*!< メンバー関数(アクション) */
@@ -65,72 +64,96 @@ typedef enum mana_symbol_data_type_id
 
 typedef enum mana_node_type_id
 {
-	MANA_NODE_TYPE_ARRAY,								/*!< variable[argument] = */
-	MANA_NODE_TYPE_ASSIGN,								/*!< = */
-	MANA_NODE_TYPE_MEMOP,								/*!< X.variable */
-	MANA_NODE_TYPE_ARGUMENT,							/*!< 呼び出し側引数 */
-	MANA_NODE_TYPE_CONST,								/*!< 定数 */
-	MANA_NODE_TYPE_VARIABLE,							/*!< 変数 */
-	MANA_NODE_TYPE_INCOMPLETE,							/*!< 宣言が未完了 */
-	MANA_NODE_TYPE_FUNCTION,							/*!< 関数 */
-	MANA_NODE_TYPE_CALL,								/*!< 関数呼び出し */
-	MANA_NODE_TYPE_ADD,									/*!< 加算 */
-	MANA_NODE_TYPE_SUB,									/*!< 減算 */
-	MANA_NODE_TYPE_MUL,									/*!< 乗算 */
-	MANA_NODE_TYPE_DIV,									/*!< 除算 */
-	MANA_NODE_TYPE_REM,									/*!< 余剰 */
-	MANA_NODE_TYPE_NEG,									/*!< ±符号反転 */
-	MANA_NODE_TYPE_POW,									/*!< べき乗 */
-	MANA_NODE_TYPE_NOT,									/*!< ~ */
-	MANA_NODE_TYPE_AND,									/*!< & */
-	MANA_NODE_TYPE_OR,									/*!< | */
-	MANA_NODE_TYPE_XOR,									/*!< ^ */
-	MANA_NODE_TYPE_LSH,									/*!< << */
-	MANA_NODE_TYPE_RSH,									/*!< >> */
-	MANA_NODE_TYPE_LS,									/*!< < */
-	MANA_NODE_TYPE_LE,									/*!< <= */
-	MANA_NODE_TYPE_EQ,									/*!< == */
-	MANA_NODE_TYPE_NE,									/*!< != */
-	MANA_NODE_TYPE_GE,									/*!< >= */
-	MANA_NODE_TYPE_GT,									/*!< > */
-	MANA_NODE_TYPE_STRING,								/*!< 文字列 */
-	MANA_NODE_TYPE_I2F,									/*!< 整数から実数へ変換 */
-	MANA_NODE_TYPE_F2I,									/*!< 実数から整数へ変換 */
-	MANA_NODE_TYPE_LOR,									/*!< || */
-	MANA_NODE_TYPE_LAND,								/*!< && */
-	MANA_NODE_TYPE_LNOT,								/*!< ! */
-	MANA_NODE_TYPE_SENDER,								/*!< sender (actor) */
-	MANA_NODE_TYPE_SELF,								/*!< self (actor) */
-	MANA_NODE_TYPE_PRIORITY,							/*!< priority (integer) */
-	MANA_NODE_TYPE_EXPRESSION_IF,						/*!< 三項演算子 '?' */
+	MANA_NODE_ARRAY,								/*!< variable[argument] = */
+	MANA_NODE_ASSIGN,								/*!< = */
+	MANA_NODE_MEMOP,								/*!< X.variable */
+	MANA_NODE_ARGUMENT,							/*!< 呼び出し側引数 */
+	MANA_NODE_CONST,								/*!< 定数 */
+	MANA_NODE_VARIABLE,							/*!< 変数 */
+	MANA_NODE_INCOMPLETE,							/*!< 宣言が未完了 */
+	MANA_NODE_FUNCTION,							/*!< 関数 */
+	MANA_NODE_CALL,								/*!< 関数呼び出し */
+	MANA_NODE_ADD,									/*!< 加算 */
+	MANA_NODE_SUB,									/*!< 減算 */
+	MANA_NODE_MUL,									/*!< 乗算 */
+	MANA_NODE_DIV,									/*!< 除算 */
+	MANA_NODE_REM,									/*!< 余剰 */
+	MANA_NODE_NEG,									/*!< ±符号反転 */
+	MANA_NODE_POW,									/*!< べき乗 */
+	MANA_NODE_NOT,									/*!< ~ */
+	MANA_NODE_AND,									/*!< & */
+	MANA_NODE_OR,									/*!< | */
+	MANA_NODE_XOR,									/*!< ^ */
+	MANA_NODE_LSH,									/*!< << */
+	MANA_NODE_RSH,									/*!< >> */
+	MANA_NODE_LS,									/*!< < */
+	MANA_NODE_LE,									/*!< <= */
+	MANA_NODE_EQ,									/*!< == */
+	MANA_NODE_NE,									/*!< != */
+	MANA_NODE_GE,									/*!< >= */
+	MANA_NODE_GT,									/*!< > */
+	MANA_NODE_STRING,								/*!< 文字列 */
+	MANA_NODE_I2F,									/*!< 整数から実数へ変換 */
+	MANA_NODE_F2I,									/*!< 実数から整数へ変換 */
+	MANA_NODE_LOR,									/*!< || */
+	MANA_NODE_LAND,								/*!< && */
+	MANA_NODE_LNOT,								/*!< ! */
+	MANA_NODE_SENDER,								/*!< sender (actor) */
+	MANA_NODE_SELF,								/*!< self (actor) */
+	MANA_NODE_PRIORITY,							/*!< priority (integer) */
+	MANA_NODE_EXPRESSION_IF,						/*!< 三項演算子 '?' */
 
-#if 0
-	MANA_NODE_TYPE_NEWLINE,								/*!< 改行 */
-	MANA_NODE_TYPE_BLOCK,								/*!< ブロック */
-	MANA_NODE_TYPE_ASSIGN,								/*!< 代入 */
-	MANA_NODE_TYPE_IF,									/*!< if */
-	MANA_NODE_TYPE_SWITCH,								/*!< switch */
-	MANA_NODE_TYPE_CASE,								/*!< case */
-	MANA_NODE_TYPE_DEFAULT,								/*!< default */
-	MANA_NODE_TYPE_WHILE,								/*!< while */
-	MANA_NODE_TYPE_DO,									/*!< do while */
-	MANA_NODE_TYPE_FOR,									/*!< for */
-	MANA_NODE_TYPE_LOOP,								/*!< loop */
-	MANA_NODE_TYPE_LOCK,								/*!< lock */
-	MANA_NODE_TYPE_GOTO,								/*!< goto */
-	MANA_NODE_TYPE_LABEL,								/*!< label */
-	MANA_NODE_TYPE_RETURN,								/*!< return */
-	MANA_NODE_TYPE_ROLLBACK,							/*!< rollback */
-	MANA_NODE_TYPE_BREAK,								/*!< break */
-	MANA_NODE_TYPE_CONTINUE,							/*!< continue */
-#endif
-	MANA_NODE_TYPE_HALT,								/*!< halt */
-	MANA_NODE_TYPE_YIELD,								/*!< yield */
-	MANA_NODE_TYPE_REQUEST,								/*!< req */
-	MANA_NODE_TYPE_COMPLY,								/*!< comply (req許可) */
-	MANA_NODE_TYPE_REFUSE,								/*!< refuse (req拒否) */
-	MANA_NODE_TYPE_JOIN,								/*!< join */
-	MANA_NODE_TYPE_PRINT,								/*!< print */
+
+	MANA_NODE_NEWLINE,								/*!< 改行 */
+	MANA_NODE_BLOCK,								/*!< ブロック */
+	//MANA_NODE_ASSIGN,								/*!< 代入 */
+	MANA_NODE_IF,									/*!< if */
+	MANA_NODE_SWITCH,								/*!< switch */
+	MANA_NODE_CASE,								/*!< case */
+	MANA_NODE_DEFAULT,								/*!< default */
+	MANA_NODE_WHILE,								/*!< while */
+	MANA_NODE_DO,									/*!< do while */
+	MANA_NODE_FOR,									/*!< for */
+	MANA_NODE_LOOP,								/*!< loop */
+	MANA_NODE_LOCK,								/*!< lock */
+	MANA_NODE_GOTO,								/*!< goto */
+	MANA_NODE_LABEL,								/*!< label */
+	MANA_NODE_RETURN,								/*!< return */
+	MANA_NODE_ROLLBACK,							/*!< rollback */
+	MANA_NODE_BREAK,								/*!< break */
+	MANA_NODE_CONTINUE,							/*!< continue */
+
+	MANA_NODE_HALT,								/*!< halt */
+	MANA_NODE_YIELD,								/*!< yield */
+	MANA_NODE_REQUEST,								/*!< req */
+	MANA_NODE_COMPLY,								/*!< comply (req許可) */
+	MANA_NODE_REFUSE,								/*!< refuse (req拒否) */
+	MANA_NODE_JOIN,								/*!< join */
+	MANA_NODE_PRINT,								/*!< print */
+
+	MANA_NODE_IDENTIFIER,
+	MANA_NODE_TYPE_DESCRIPTION,
+
+	MANA_NODE_DECLARATOR,
+
+	MANA_NODE_DECLARE_ACTOR,						//!< アクターの宣言
+	MANA_NODE_DECLARE_PHANTOM,
+	MANA_NODE_DECLARE_MODULE,
+	MANA_NODE_DECLARE_STRUCT,
+	MANA_NODE_DECLARE_ACTION,
+	MANA_NODE_DECLARE_EXTEND,
+	MANA_NODE_DECLARE_ALLOCATE,
+	MANA_NODE_DECLARE_STATIC,
+	MANA_NODE_DECLARE_ALIAS,
+	MANA_NODE_DECLARE_NATIVE_FUNCTION,
+	MANA_NODE_DECLARE_VALIABLE,
+	MANA_NODE_DECLARE_FUNCTION,
+
+	MANA_NODE_DEFINE_CONSTANT,
+	MANA_NODE_UNDEFINE_CONSTANT,
+
+	MANA_NODE_MEMBER_FUNCTION,
+	MANA_NODE_MEMBER_VARIABLE,
 } mana_node_type_id;
 
 typedef struct mana_symbol_entry
@@ -187,11 +210,14 @@ typedef struct mana_node
 	struct mana_type_description* type;					/*!< 型へのポインタ */
 	struct mana_node* left;								/*!< 左 */
 	struct mana_node* right;							/*!< 右 */
-	struct mana_node* condition;						/*!< 条件 */
+	struct mana_node* next;								/*!< 次 */
 	int32_t etc;										/*!< その他 */
 	int32_t digit;										/*!< 整数 */
 	float real;											/*!< 少数 */
 	char* string;										/*!< 文字列へのポインタ */
+
+	char* filename;
+	int32_t line;
 } mana_node;
 
 /*****************************************************************************/
@@ -223,13 +249,13 @@ extern mana_symbol_entry* mana_symbol_create_const_string(char*, char*);
 extern mana_symbol_entry* mana_symbol_create_identification(char*, mana_type_description*, int32_t static_variable);
 extern mana_symbol_entry* mana_symbol_create_label(char*);
 extern mana_symbol_entry* mana_symbol_create_function(char*);
-extern void mana_symbol_create_prototype(mana_symbol_entry*, mana_type_description*);
 
 extern void mana_symbol_destroy(char* name);
 
 extern void mana_symbol_open_function(int32_t, mana_symbol_entry*, mana_type_description*);
 extern void mana_symbol_close_function(mana_symbol_entry*);
-extern void mana_symbol_set_native_function(mana_symbol_entry*, mana_type_description*);
+extern void mana_symbol_open_native_function();
+extern void mana_symbol_close_native_function(mana_symbol_entry* function, mana_type_description* type);
 extern void mana_symbol_set_type(char*, mana_type_description*);
 
 extern void mana_symbol_open_structure(void);
