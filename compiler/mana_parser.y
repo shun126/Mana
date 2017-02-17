@@ -117,6 +117,7 @@ program			: line
 					{
 						mana_node_dump($1);
 						mana_linker_generate_symbol($1, NULL);
+						mana_linker_generate_code($1, true);
 					}
 				;
 				
@@ -139,7 +140,12 @@ declarations	: actor
 				| tSTATIC '{' allocate_declarations '}'
 					{ $$ = mana_node_create_node(MANA_NODE_DECLARE_STATIC, $3, NULL, NULL); }
 				| tSTATIC tALLOCATE tDIGIT '{' allocate_declarations '}'
-					{ $$ = mana_node_create_node(MANA_NODE_DECLARE_STATIC, mana_node_create_node(MANA_NODE_DECLARE_ALLOCATE, $5, NULL, NULL), NULL, NULL); $$->digit = $3; }
+					{
+						mana_node* allocate_node;
+						allocate_node = mana_node_create_node(MANA_NODE_DECLARE_ALLOCATE, $5, NULL, NULL);
+						allocate_node->digit = $3;
+						$$ = mana_node_create_node(MANA_NODE_DECLARE_STATIC, allocate_node, NULL, NULL);
+					}
 
 				| tALIAS tIDENTIFIER tSTRING ';'
 					{ $$ = mana_node_create_node(MANA_NODE_DECLARE_ALIAS, NULL, NULL, NULL); $$->string = $2; }
