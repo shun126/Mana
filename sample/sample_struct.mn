@@ -1,0 +1,19 @@
+/*
+mana (script)
+Copyright (c) 2003 Shun Moriya <shun@mnu.sakura.ne.jp>
+*/
+
+////////////////////////////////////////////////////////////////////////////////
+// structs declarations
+struct TestStruct1
+{
+	float realValue;
+	int digitValue;
+	string stringValue;
+	Actor actorValue;
+}
+
+struct TestStruct2
+{
+	float realValue;
+}
