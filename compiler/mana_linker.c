@@ -148,33 +148,33 @@ static void mana_linker_generate_store(mana_node* node)
 }
 
 /*!
- * ノードにを辿りながら、内部中間言語に翻訳します
- * @param	tree			ノードポインタ
- * @param	enable_load		trueならばload命令は有効、falseならばload命令は無効
- */
-static void mana_linker_generate(mana_node* tree, int32_t enable_load)
+ノードを辿りながら、内部中間言語に翻訳します
+@param	tree			ノードポインタ
+@param	enable_load		trueならばload命令は有効、falseならばload命令は無効
+*/
+void mana_linker_generate_code(mana_node* tree, int32_t enable_load)
 {
 	if(!tree)
 		return;
 
 	switch(tree->id)
 	{
-	case MANA_NODE_TYPE_ASSIGN:
-		mana_linker_generate(tree->right, enable_load);
-		mana_linker_generate(tree->left, false);
+	case MANA_NODE_ASSIGN:
+		mana_linker_generate_code(tree->right, enable_load);
+		mana_linker_generate_code(tree->left, false);
 		mana_linker_generate_store(tree->left);
 		break;
 
-	case MANA_NODE_TYPE_INCOMPLETE:
-	case MANA_NODE_TYPE_FUNCTION:
-		mana_linker_generate(tree->right, enable_load);
-		mana_linker_generate(tree->left, enable_load);
+	case MANA_NODE_INCOMPLETE:
+	case MANA_NODE_FUNCTION:
+		mana_linker_generate_code(tree->right, enable_load);
+		mana_linker_generate_code(tree->left, enable_load);
 		break;
 
-	case MANA_NODE_TYPE_VARIABLE:
+	case MANA_NODE_VARIABLE:
 		/* variable */
-		mana_linker_generate(tree->right, enable_load);
-		mana_linker_generate(tree->left, enable_load);
+		mana_linker_generate_code(tree->right, enable_load);
+		mana_linker_generate_code(tree->left, enable_load);
 
 		switch((tree->symbol)->class_type)
 		{
@@ -209,12 +209,12 @@ static void mana_linker_generate(mana_node* tree, int32_t enable_load)
 
 		break;
 
-	case MANA_NODE_TYPE_ARRAY:
+	case MANA_NODE_ARRAY:
 		/* variable[index] */
-		mana_linker_generate(tree->right, true);
+		mana_linker_generate_code(tree->right, true);
 		mana_code_set_opecode_and_operand(MANA_IL_PUSH_INTEGER, (tree->type)->memory_size);
 		mana_code_set_opecode(MANA_IL_MUL_INTEGER);
-		mana_linker_generate(tree->left, false);
+		mana_linker_generate_code(tree->left, false);
 		mana_code_set_opecode(MANA_IL_ADD_INTEGER);
 		if(enable_load)
 		{
@@ -222,10 +222,10 @@ static void mana_linker_generate(mana_node* tree, int32_t enable_load)
 		}
 		break;
 
-	case MANA_NODE_TYPE_MEMOP:
+	case MANA_NODE_MEMOP:
 		/* variable.member */
 		mana_code_set_opecode_and_operand(MANA_IL_PUSH_INTEGER, tree->etc);
-		mana_linker_generate(tree->left, false);
+		mana_linker_generate_code(tree->left, false);
 		mana_code_set_opecode(MANA_IL_ADD_INTEGER);
 		if(enable_load)
 		{
@@ -233,7 +233,7 @@ static void mana_linker_generate(mana_node* tree, int32_t enable_load)
 		}
 		break;
 
-	case MANA_NODE_TYPE_CONST:
+	case MANA_NODE_CONST:
 		switch(tree->type->tcons)
 		{
 		case MANA_DATA_TYPE_CHAR:
@@ -286,137 +286,137 @@ static void mana_linker_generate(mana_node* tree, int32_t enable_load)
 		}
 		break;
 
-	case MANA_NODE_TYPE_STRING:
+	case MANA_NODE_STRING:
 		mana_code_set_opecode_and_operand(MANA_IL_PUSH_STRING, tree->digit);
 		break;
 
-	case MANA_NODE_TYPE_ADD:
-		mana_linker_generate(tree->left, enable_load);
-		mana_linker_generate(tree->right, enable_load);
+	case MANA_NODE_ADD:
+		mana_linker_generate_code(tree->left, enable_load);
+		mana_linker_generate_code(tree->right, enable_load);
 		mana_code_set_opecode((tree->left->type)->tcons == MANA_DATA_TYPE_FLOAT ? MANA_IL_ADD_FLOAT : MANA_IL_ADD_INTEGER);
 		break;
 
-	case MANA_NODE_TYPE_SUB:
-		mana_linker_generate(tree->left, enable_load);
-		mana_linker_generate(tree->right, enable_load);
+	case MANA_NODE_SUB:
+		mana_linker_generate_code(tree->left, enable_load);
+		mana_linker_generate_code(tree->right, enable_load);
 		mana_code_set_opecode((tree->left->type)->tcons == MANA_DATA_TYPE_FLOAT ? MANA_IL_SUB_FLOAT : MANA_IL_SUB_INTEGER);
 		break;
 
-	case MANA_NODE_TYPE_MUL:
-		mana_linker_generate(tree->left, enable_load);
-		mana_linker_generate(tree->right, enable_load);
+	case MANA_NODE_MUL:
+		mana_linker_generate_code(tree->left, enable_load);
+		mana_linker_generate_code(tree->right, enable_load);
 		mana_code_set_opecode((tree->left->type)->tcons == MANA_DATA_TYPE_FLOAT ? MANA_IL_MUL_FLOAT : MANA_IL_MUL_INTEGER);
 		break;
 
-	case MANA_NODE_TYPE_DIV:
-		mana_linker_generate(tree->left, enable_load);
-		mana_linker_generate(tree->right, enable_load);
+	case MANA_NODE_DIV:
+		mana_linker_generate_code(tree->left, enable_load);
+		mana_linker_generate_code(tree->right, enable_load);
 		mana_code_set_opecode((tree->left->type)->tcons == MANA_DATA_TYPE_FLOAT ? MANA_IL_DIV_FLOAT : MANA_IL_DIV_INTEGER);
 		break;
 
-	case MANA_NODE_TYPE_REM:
-		mana_linker_generate(tree->left, enable_load);
-		mana_linker_generate(tree->right, enable_load);
+	case MANA_NODE_REM:
+		mana_linker_generate_code(tree->left, enable_load);
+		mana_linker_generate_code(tree->right, enable_load);
 		mana_code_set_opecode((tree->left->type)->tcons == MANA_DATA_TYPE_FLOAT ? MANA_IL_MOD_FLOAT : MANA_IL_MOD_INTEGER);
 		break;
 
-	case MANA_NODE_TYPE_POW:
-		mana_linker_generate(tree->left, enable_load);
-		mana_linker_generate(tree->right, enable_load);
+	case MANA_NODE_POW:
+		mana_linker_generate_code(tree->left, enable_load);
+		mana_linker_generate_code(tree->right, enable_load);
 		mana_code_set_opecode((tree->left->type)->tcons == MANA_DATA_TYPE_FLOAT ? MANA_IL_SUB_FLOAT : MANA_IL_SUB_INTEGER);
 		break;
 
-	case MANA_NODE_TYPE_AND:
-		mana_linker_generate(tree->left, enable_load);
-		mana_linker_generate(tree->right, enable_load);
+	case MANA_NODE_AND:
+		mana_linker_generate_code(tree->left, enable_load);
+		mana_linker_generate_code(tree->right, enable_load);
 		mana_code_set_opecode(MANA_IL_AND);
 		break;
 
-	case MANA_NODE_TYPE_OR:
-		mana_linker_generate(tree->left, enable_load);
-		mana_linker_generate(tree->right, enable_load);
+	case MANA_NODE_OR:
+		mana_linker_generate_code(tree->left, enable_load);
+		mana_linker_generate_code(tree->right, enable_load);
 		mana_code_set_opecode(MANA_IL_OR);
 		break;
 
-	case MANA_NODE_TYPE_XOR:
-		mana_linker_generate(tree->left, enable_load);
-		mana_linker_generate(tree->right, enable_load);
+	case MANA_NODE_XOR:
+		mana_linker_generate_code(tree->left, enable_load);
+		mana_linker_generate_code(tree->right, enable_load);
 		mana_code_set_opecode(MANA_IL_EOR);
 		break;
 
-	case MANA_NODE_TYPE_LSH:
-		mana_linker_generate(tree->left, enable_load);
-		mana_linker_generate(tree->right, enable_load);
+	case MANA_NODE_LSH:
+		mana_linker_generate_code(tree->left, enable_load);
+		mana_linker_generate_code(tree->right, enable_load);
 		mana_code_set_opecode(MANA_IL_SHL);
 		break;
 
-	case MANA_NODE_TYPE_RSH:
-		mana_linker_generate(tree->left, enable_load);
-		mana_linker_generate(tree->right, enable_load);
+	case MANA_NODE_RSH:
+		mana_linker_generate_code(tree->left, enable_load);
+		mana_linker_generate_code(tree->right, enable_load);
 		mana_code_set_opecode(MANA_IL_SHR);
 		break;
 
-	case MANA_NODE_TYPE_NEG:
-		mana_linker_generate(tree->left, enable_load);
+	case MANA_NODE_NEG:
+		mana_linker_generate_code(tree->left, enable_load);
 		mana_code_set_opecode((tree->left->type)->tcons == MANA_DATA_TYPE_FLOAT ? MANA_IL_MINUS_FLOAT : MANA_IL_MINUS_INTEGER);
 		break;
 
-	case MANA_NODE_TYPE_I2F:
-		mana_linker_generate(tree->left, enable_load);
+	case MANA_NODE_I2F:
+		mana_linker_generate_code(tree->left, enable_load);
 		mana_code_set_opecode(MANA_IL_INT2FLOAT);
 		break;
 
-	case MANA_NODE_TYPE_F2I:
-		mana_linker_generate(tree->left, enable_load);
+	case MANA_NODE_F2I:
+		mana_linker_generate_code(tree->left, enable_load);
 		mana_code_set_opecode(MANA_IL_FLOAT2INT);
 		break;
 
-	case MANA_NODE_TYPE_LS:
-	case MANA_NODE_TYPE_LE:
-	case MANA_NODE_TYPE_EQ:
-	case MANA_NODE_TYPE_NE:
-	case MANA_NODE_TYPE_GE:
-	case MANA_NODE_TYPE_GT:
-	case MANA_NODE_TYPE_LAND:
-	case MANA_NODE_TYPE_LOR:
-	case MANA_NODE_TYPE_LNOT:
-	case MANA_NODE_TYPE_NOT:
+	case MANA_NODE_LS:
+	case MANA_NODE_LE:
+	case MANA_NODE_EQ:
+	case MANA_NODE_NE:
+	case MANA_NODE_GE:
+	case MANA_NODE_GT:
+	case MANA_NODE_LAND:
+	case MANA_NODE_LOR:
+	case MANA_NODE_LNOT:
+	case MANA_NODE_NOT:
 		/* 比較、論理演算子 */
-		mana_linker_generate(tree->left, enable_load);
-		mana_linker_generate(tree->right, enable_load);
+		mana_linker_generate_code(tree->left, enable_load);
+		mana_linker_generate_code(tree->right, enable_load);
 		mana_code_set_opecode((uint8_t)tree->etc);
 		break;
 
-	case MANA_NODE_TYPE_CALL:
+	case MANA_NODE_CALL:
 		/* 関数、アクションを呼びます */
 		mana_linker_call(tree);
 		break;
 
-	case MANA_NODE_TYPE_SENDER:
+	case MANA_NODE_SENDER:
 		/* senderをpushします */
 		mana_code_set_opecode(MANA_IL_PUSH_SENDER);
 		break;
 
-	case MANA_NODE_TYPE_SELF:
+	case MANA_NODE_SELF:
 		/* selfをpushします */
 		mana_code_set_opecode(MANA_IL_PUSH_SELF);
 		break;
 
-	case MANA_NODE_TYPE_PRIORITY:
+	case MANA_NODE_PRIORITY:
 		/* priorityをpushします */
 		mana_code_set_opecode(MANA_IL_PUSH_PRIORITY);
 		break;
 
-	case MANA_NODE_TYPE_EXPRESSION_IF:
+	case MANA_NODE_EXPRESSION_IF:
 		/* 三項演算子 */
 		{
 			int32_t pc1, pc2;
-			mana_linker_condition_core(tree->condition);
+			mana_linker_condition_core(tree->next);
 			pc1 = mana_code_set_opecode_and_operand(MANA_IL_BEQ, -1);
-			mana_linker_generate(tree->left, enable_load);
+			mana_linker_generate_code(tree->left, enable_load);
 			pc2 = mana_code_set_opecode_and_operand(MANA_IL_BRA, -1);
 			mana_code_replace_all(pc1, mana_code_get_pc());
-			mana_linker_generate(tree->right, enable_load);
+			mana_linker_generate_code(tree->right, enable_load);
 			mana_code_replace_all(pc2, mana_code_get_pc());
 		}
 		break;
@@ -426,6 +426,245 @@ static void mana_linker_generate(mana_node* tree, int32_t enable_load)
 		break;
 	}
 }
+
+// TODO
+static mana_symbol_entry* mana_actor_symbol_entry_pointer = NULL;
+static mana_symbol_entry* mana_function_symbol_entry_pointer = NULL;
+static bool mana_static_block_opend = false;
+
+/*!
+ノードを辿りながら、シンボル情報を登録します
+@param	node			ノードポインタ
+*/
+void mana_linker_generate_symbol(mana_node* node, mana_node* parent_node)
+{
+	if (node == NULL)
+		return;
+
+	switch (node->id)
+	{
+	case MANA_NODE_IDENTIFIER:
+	case MANA_NODE_SIZEOF:
+	case MANA_NODE_DECLARE_VALIABLE:
+	case MANA_NODE_MEMBER_FUNCTION:
+	case MANA_NODE_MEMBER_VARIABLE:
+		mana_linker_generate_symbol(node->left, node);
+		mana_linker_generate_symbol(node->right, node);
+		break;
+
+	case MANA_NODE_DECLARE_ACTOR:
+		{
+			mana_actor_symbol_entry_pointer = mana_symbol_lookup(node->string);
+			mana_symbol_open_actor(mana_actor_symbol_entry_pointer);
+			mana_linker_generate_symbol(node->left, node);
+			mana_symbol_set_type(node->string, mana_symbol_close_actor(node->string, NULL, NULL, false));
+			mana_actor_symbol_entry_pointer = NULL;
+		}
+		break;
+
+	case MANA_NODE_DECLARE_PHANTOM:
+		{
+			mana_actor_symbol_entry_pointer = mana_symbol_lookup(node->string);
+			mana_symbol_open_actor(mana_actor_symbol_entry_pointer);
+			mana_linker_generate_symbol(node->left, node);
+			mana_symbol_set_type(node->string, mana_symbol_close_actor(node->string, NULL, NULL, true));
+			mana_actor_symbol_entry_pointer = NULL;
+		}
+		break;
+
+	case MANA_NODE_DECLARE_MODULE:
+		{
+			mana_symbol_open_module();
+			mana_linker_generate_symbol(node->left, node);
+			mana_symbol_set_type(node->string, mana_symbol_close_module(node->string));
+		}
+		break;
+
+	case MANA_NODE_DECLARE_ACTION:
+		{
+			mana_function_symbol_entry_pointer = mana_symbol_create_function(node->string);
+			mana_symbol_open_function(true, mana_function_symbol_entry_pointer, mana_type_get(MANA_DATA_TYPE_VOID));
+
+			// node->leftは mana_linker_generate_code で処理します
+
+			mana_symbol_close_function(mana_function_symbol_entry_pointer);
+			mana_function_symbol_entry_pointer = NULL;
+		}
+		break;
+
+	case MANA_NODE_DECLARE_EXTEND:
+		mana_symbol_extend_module(node->string);
+		break;
+
+	case MANA_NODE_DECLARE_STRUCT:
+		mana_symbol_open_structure();
+		mana_linker_generate_symbol(node->left, node);
+		mana_symbol_set_type(node->string, mana_symbol_close_structure(node->string));
+		break;
+
+	case MANA_NODE_DECLARE_ALLOCATE:
+		{
+			const int32_t mana_allocated_size = mana_symbol_get_static_memory_address() + node->digit;
+
+			mana_linker_generate_symbol(node->left, node);
+
+			const int32_t address = mana_symbol_get_static_memory_address();
+			if (address >= mana_allocated_size)
+			{
+				mana_compile_error("static variable range over");
+			}
+			mana_symbol_set_static_memory_address(mana_allocated_size);
+		}
+		break;
+
+	case MANA_NODE_DECLARE_STATIC:
+		mana_static_block_opend = true;
+		mana_linker_generate_symbol(node->left, node);
+		mana_static_block_opend = false;
+		break;
+
+	case MANA_NODE_DECLARE_NATIVE_FUNCTION:
+		{
+			mana_symbol_entry* symbol = mana_symbol_create_function(node->string);
+			symbol->number_of_parameters = node->digit;
+			mana_symbol_open_native_function();
+			mana_linker_generate_symbol(node->left, node);
+			mana_symbol_close_native_function(symbol, node->left->type);
+		}
+		break;
+
+	case MANA_NODE_DECLARE_FUNCTION:
+		{
+			MANA_ASSERT(node->symbol == NULL);
+			node->symbol = mana_symbol_create_function(node->string);
+
+			//mana_linker_generate_symbol(node->left, node);
+			//mana_function_symbol_entry_pointer = $2;
+
+			//mana_symbol_open_function(false, symbol, node->left->type);
+			// node->rightは mana_linker_generate_code で処理します
+			//mana_symbol_close_function(symbol);
+		}
+		break;
+
+	case MANA_NODE_VARIABLE_DECLARATION:
+		mana_linker_generate_symbol(node->left, node); // MANA_NODE_TYPE_DESCRIPTION
+		mana_linker_generate_symbol(node->right, node);// MANA_NODE_DECLARATOR
+		mana_symbol_allocate_memory(node->right->symbol, node->left->type, MANA_MEMORY_TYPE_NORMAL);
+		break;
+
+	case MANA_NODE_TYPE_DESCRIPTION:
+		if (node->type == NULL)
+		{
+			mana_symbol_entry* symbol = mana_symbol_lookup(node->string);
+			if (symbol)
+			{
+				node->type =symbol->type;
+			}
+			else
+			{
+				mana_compile_error("incomplete type name %s", node->string);
+				node->type = mana_type_get(MANA_DATA_TYPE_INT);
+			}
+		}
+		break;
+
+	case MANA_NODE_DECLARATOR:
+		//| tIDENTIFIER variable_sizes
+		MANA_ASSERT(node->symbol == NULL);
+		node->symbol = mana_symbol_create_identification(node->string, NULL, /*mana_static_block_opend*/false);
+		//mana_symbol_create_identification(node->string, $2, /*mana_static_block_opend*/false);
+		break;
+
+	case MANA_NODE_DECLARE_ALIAS:
+		mana_symbol_create_alias(node->string, node->string);
+		break;
+
+	case MANA_NODE_DEFINE_CONSTANT:
+		mana_symbol_create_const_int(node->string, node->digit);
+		break;
+
+	case MANA_NODE_UNDEFINE_CONSTANT:
+		mana_symbol_destroy(node->string);
+		break;
+
+		// 特に処理を行わないノード
+	case MANA_NODE_NEWLINE:
+		mana_linker_generate_symbol(node->left, node);
+		mana_linker_generate_symbol(node->right, node);
+		break;
+
+		// 宣言を行わないノード
+	case MANA_NODE_ARRAY:
+	case MANA_NODE_ASSIGN:
+	case MANA_NODE_MEMOP:
+	case MANA_NODE_ARGUMENT:
+	case MANA_NODE_CONST:
+	case MANA_NODE_VARIABLE:
+	case MANA_NODE_INCOMPLETE:
+	case MANA_NODE_FUNCTION:
+	case MANA_NODE_CALL:
+	case MANA_NODE_ADD:
+	case MANA_NODE_SUB:
+	case MANA_NODE_MUL:
+	case MANA_NODE_DIV:
+	case MANA_NODE_REM:
+	case MANA_NODE_NEG:
+	case MANA_NODE_POW:
+	case MANA_NODE_NOT:
+	case MANA_NODE_AND:
+	case MANA_NODE_OR:
+	case MANA_NODE_XOR:
+	case MANA_NODE_LSH:
+	case MANA_NODE_RSH:
+	case MANA_NODE_LS:
+	case MANA_NODE_LE:
+	case MANA_NODE_EQ:
+	case MANA_NODE_NE:
+	case MANA_NODE_GE:
+	case MANA_NODE_GT:
+	case MANA_NODE_STRING:
+	case MANA_NODE_I2F:
+	case MANA_NODE_F2I:
+	case MANA_NODE_LOR:
+	case MANA_NODE_LAND:
+	case MANA_NODE_LNOT:
+	case MANA_NODE_HALT:
+	case MANA_NODE_YIELD:
+	case MANA_NODE_REQUEST:
+	case MANA_NODE_COMPLY:
+	case MANA_NODE_REFUSE:
+	case MANA_NODE_JOIN:
+	case MANA_NODE_SENDER:
+	case MANA_NODE_SELF:
+	case MANA_NODE_PRIORITY:
+	case MANA_NODE_EXPRESSION_IF:
+	case MANA_NODE_PRINT:
+	case MANA_NODE_RETURN:
+	case MANA_NODE_ROLLBACK:
+	case MANA_NODE_BLOCK:
+	case MANA_NODE_IF:
+	case MANA_NODE_SWITCH:
+	case MANA_NODE_CASE:
+	case MANA_NODE_DEFAULT:
+	case MANA_NODE_WHILE:
+	case MANA_NODE_DO:
+	case MANA_NODE_FOR:
+	case MANA_NODE_LOOP:
+	case MANA_NODE_LOCK:
+	case MANA_NODE_GOTO:
+	case MANA_NODE_LABEL:
+	case MANA_NODE_BREAK:
+	case MANA_NODE_CONTINUE:
+		break;
+
+	default:
+		abort();
+	}
+
+	mana_linker_generate_symbol(node->next, node);
+}
+
 
 /*!
  * returnの処理
@@ -458,7 +697,7 @@ void mana_linker_return(mana_symbol_entry* func, mana_node* tree)
 
 		/* ノードの評価 */
 		mana_symbol_open_block(false);
-		mana_linker_generate(tree, true);
+		mana_linker_generate_code(tree, true);
 		mana_symbol_close_block();
 
 		/* ノードの解放 */
@@ -483,7 +722,7 @@ void mana_linker_rollback(mana_node* tree)
 	{
 		/* ノードの評価 */
 		mana_symbol_open_block(false);
-		mana_linker_generate(tree, true);
+		mana_linker_generate_code(tree, true);
 		mana_symbol_close_block();
 
 		/* ノードの解放 */
@@ -505,7 +744,7 @@ static int32_t mana_linker_call_argument_size(int32_t address, mana_symbol_entry
 	{
 		address += mana_linker_call_argument_size(address, param->next, arg->left);
 
-		if(arg->id == MANA_NODE_TYPE_ARGUMENT)
+		if(arg->id == MANA_NODE_ARGUMENT)
 			arg = arg->right;
 
 		address += (mana_node_get_memory_size(arg) + (sizeof(int32_t) - 1)) / sizeof(int32_t);
@@ -528,7 +767,7 @@ static int32_t mana_linker_call_argument(int32_t address, mana_symbol_entry* par
 
 		mana_code_set_short((int16_t)address);
 
-		if(arg->id == MANA_NODE_TYPE_ARGUMENT)
+		if(arg->id == MANA_NODE_ARGUMENT)
 			arg = arg->right;
 		address -= (mana_node_get_memory_size(arg) + (sizeof(int32_t) - 1)) / sizeof(int32_t);
 	}
@@ -568,10 +807,6 @@ static void mana_linker_call(mana_node* tree)
 	{
 		/* 内部関数の処理 */
 		mana_code_set_opecode_and_operand((uint8_t)MANA_IL_BSR, (node->symbol)->address);
-
-		/* 未解決関数の場合、リンクするアドレスを記録します */
-		if((node->symbol)->class_type == MANA_CLASS_TYPE_PROTOTYPE_FUNCTION)
-			(node->symbol)->address = mana_code_get_pc() - 5;
 	}
 }
 
@@ -585,7 +820,7 @@ void mana_linker_call_print(mana_node* tree)
 
 	for(mana_node* node = tree; node; node = node->left)
 	{
-		mana_linker_generate((node->id == MANA_NODE_TYPE_ARGUMENT) ? node->right : node, true);
+		mana_linker_generate_code((node->id == MANA_NODE_ARGUMENT) ? node->right : node, true);
 		argument_counter ++;
 	}
 
@@ -605,14 +840,14 @@ static int32_t mana_linker_generate_argument(int32_t count, mana_symbol_entry* p
 {
 	if(param && arg)
 	{
-		if(arg->id == MANA_NODE_TYPE_ARGUMENT)
+		if(arg->id == MANA_NODE_ARGUMENT)
 		{
 			count = mana_linker_generate_argument(count, param->next, arg->left);
 			arg = arg->right;
 		}
 		arg = mana_node_cast(param->type, arg);
 		mana_type_compatible(param->type, arg->type);
-		mana_linker_generate(arg, true);
+		mana_linker_generate_code(arg, true);
 	}
 	if(arg)
 		count ++;
@@ -644,16 +879,16 @@ void mana_linker_expression(mana_node* tree, int32_t enable_assign)
 
 	if(enable_assign)
 	{
-		if(tree->id != MANA_NODE_TYPE_ASSIGN && tree->id != MANA_NODE_TYPE_CALL && tree->id != MANA_NODE_TYPE_F2I)
+		if(tree->id != MANA_NODE_ASSIGN && tree->id != MANA_NODE_CALL && tree->id != MANA_NODE_F2I)
 			mana_compile_error("illegal expression in write-statement");
 	}else{
-		if(tree->id == MANA_NODE_TYPE_ASSIGN)
+		if(tree->id == MANA_NODE_ASSIGN)
 			mana_compile_error("illegal expression in write-statement");
 	}
 
-	mana_linker_generate(tree, true);
+	mana_linker_generate_code(tree, true);
 
-	if(enable_assign && tree->id == MANA_NODE_TYPE_CALL && tree->type)
+	if(enable_assign && tree->id == MANA_NODE_CALL && tree->type)
 	{
 		switch(tree->type->tcons)
 		{
@@ -692,7 +927,7 @@ static void mana_linker_condition_check(mana_node* tree)
 {
 	if(tree)
 	{
-		if(tree->id == MANA_NODE_TYPE_ASSIGN)
+		if(tree->id == MANA_NODE_ASSIGN)
 		{
 			/* 条件判定に代入文は使用できない */
 			mana_compile_error("can't assign expression in condition");
@@ -719,7 +954,7 @@ static int32_t mana_linker_condition_core(mana_node* tree)
 		if((tree->type)->tcons == MANA_DATA_TYPE_VOID || (tree->type)->tcons > MANA_DATA_TYPE_REFERENCE)
 			mana_compile_error("illegal type of expression in condition");
 
-		mana_linker_generate(tree, true);
+		mana_linker_generate_code(tree, true);
 	}
 	return mana_code_get_pc() - 5;
 }
