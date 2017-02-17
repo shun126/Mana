@@ -23,6 +23,7 @@
 #if !defined(___MANA_SYMBOL_H___)
 #include "mana_symbol.h"
 #endif
+#include <stdarg.h>
 #include <string.h>
 
 static mana_hash* mana_node_event_hash = NULL;
@@ -631,7 +632,6 @@ mana_node* mana_node_create_node(mana_node_type_id id, mana_node* left, mana_nod
  */
 mana_node* mana_node_create_member(mana_node* tree, char* name)
 {
-	#if 0
 	mana_type_description* type;
 
 	type = tree->type;
@@ -667,15 +667,6 @@ mana_node* mana_node_create_member(mana_node* tree, char* name)
 	}
 
 	return tree;
-#else
-	mana_node* node;
-
-	node = mana_node_allocate(MANA_NODE_MEMBER_VARIABLE);
-	node->string = name;
-	node->left = tree;
-
-	return node;
-#endif
 }
 
 /*!
@@ -687,7 +678,6 @@ mana_node* mana_node_create_member(mana_node* tree, char* name)
  */
 mana_node* mana_node_create_call_member(mana_node* tree, char* name, mana_node* members)
 {
-#if 0
 	mana_type_description* type;
 
 	type = tree->type;
@@ -711,16 +701,6 @@ mana_node* mana_node_create_call_member(mana_node* tree, char* name, mana_node* 
 	}
 
 	return tree;
-#else
-	mana_node* node;
-
-	node = mana_node_allocate(MANA_NODE_MEMBER_FUNCTION);
-	node->string = name;
-	node->left = tree;
-	node->left = members;
-
-	return node;
-#endif
 }
 
 /*!
@@ -811,7 +791,7 @@ mana_node* mana_node_create_declarator(const char* identifier, mana_node* left)
 {
 	mana_node* new_node;
 
-	new_node = mana_node_allocate(MANA_NODE_DECLARATOR);
+	new_node = mana_node_allocate(MANA_NODE_VARIABLE_DECLARATION);
 	new_node->string = identifier;
 	new_node->left = left;
 
@@ -831,7 +811,7 @@ mana_node* mana_node_create_declare_function(mana_node* left, const char* identi
 	return new_node;
 }
 
-mana_node* mana_node_create_declare_native_function(mana_node* left, const char* identifier, const int32_t argument_count)
+mana_node* mana_node_create_declare_native_function(mana_node* left, const char* identifier, const int32_t argument_count, mana_node* next)
 {
 	mana_node* new_node;
 
@@ -839,6 +819,7 @@ mana_node* mana_node_create_declare_native_function(mana_node* left, const char*
 	new_node->string = identifier;
 	new_node->digit = argument_count;
 	new_node->left = left;
+	new_node->next = next;
 
 	return new_node;
 }
@@ -940,79 +921,100 @@ void mana_node_add_event(char* name, mana_node_event_funtion_type function)
 	mana_hash_set(mana_node_event_hash, name, function);
 }
 
+static bool mana_node_dump_format_flag_ = false;
+
+static void mana_node_dump_format_(FILE* file, const char* format, ...)
+{
+	if (mana_node_dump_format_flag_)
+	{
+		mana_node_dump_format_flag_ = false;
+		fputc(',', file);
+	}
+
+	va_list arg;
+	va_start(arg, format);
+	vfprintf_s(file, format, arg);
+	va_end(arg);
+
+	mana_node_dump_format_flag_ = true;
+}
 
 static void mana_node_dump_(FILE* file, const mana_node* node)
 {
 	static char* name[] = {
-		"ARRAY",
-		"ASSIGN",
-		"MEMOP",
-		"ARGUMENT",
-		"CONST",
-		"VARIABLE",
-		"INCOMPLETE",
-		"FUNCTION",
-		"CALL",
-		"ADD",
-		"SUB",
-		"MUL",
-		"DIV",
-		"REM",
-		"NEG",
-		"POW",
-		"NOT",
-		"AND",
-		"OR",
-		"XOR",
-		"LSH",
-		"RSH",
-		"LS",
-		"LE",
-		"EQ",
-		"NE",
-		"GE",
-		"GT",
-		"STRING",
-		"I2F",
-		"F2I",
-		"LOR",
-		"LAND",
-		"LNOT",
-		"SENDER",
-		"SELF",
-		"PRIORITY",
-		"EXPRESSION_IF",
 		"NEWLINE",
-		"BLOCK",
-		//"ASSIGN",
-		"IF",
-		"SWITCH",
-		"CASE",
-		"DEFAULT",
-		"WHILE",
-		"DO",
-		"FOR",
-		"LOOP",
-		"LOCK",
-		"GOTO",
-		"LABEL",
-		"RETURN",
-		"ROLLBACK",
-		"BREAK",
-		"CONTINUE",
-		"HALT",
-		"YIELD",
-		"REQUEST",
-		"COMPLY",
-		"REFUSE",
-		"JOIN",
-		"PRINT"
+
+		"ARRAY",								/*!< variable[argument] = */
+		"ASSIGN",								/*!< = */
+		"MEMOP",								/*!< X.variable */
+		"ARGUMENT",							/*!< ŒÄ‚Ño‚µ‘¤ˆø” */
+		"CONST",								/*!< ’è” */
+		"VARIABLE",							/*!< •Ï” */
+		"INCOMPLETE",							/*!< éŒ¾‚ª–¢Š®—¹ */
+		"FUNCTION",							/*!< ŠÖ” */
+		"CALL",								/*!< ŠÖ”ŒÄ‚Ño‚µ */
+		"ADD",									/*!< ‰ÁŽZ */
+		"SUB",									/*!< Œ¸ŽZ */
+		"MUL",									/*!< æŽZ */
+		"DIV",									/*!< œŽZ */
+		"REM",									/*!< —]è */
+		"NEG",									/*!< }•„†”½“] */
+		"POW",									/*!< ‚×‚«æ */
+		"NOT",									/*!< ~ */
+		"AND",									/*!< & */
+		"OR",									/*!< | */
+		"XOR",									/*!< ^ */
+		"LSH",									/*!< << */
+		"RSH",									/*!< >> */
+		"LS",									/*!< < */
+		"LE",									/*!< <= */
+		"EQ",									/*!< == */
+		"NE",									/*!< != */
+		"GE",									/*!< >= */
+		"GT",									/*!< > */
+		"STRING",								/*!< •¶Žš—ñ */
+		"I2F",									/*!< ®”‚©‚çŽÀ”‚Ö•ÏŠ· */
+		"F2I",									/*!< ŽÀ”‚©‚ç®”‚Ö•ÏŠ· */
+		"LOR",									/*!< || */
+		"LAND",								/*!< && */
+		"LNOT",								/*!< ! */
+		"HALT",								/*!< halt */
+		"YIELD",								/*!< yield */
+		"REQUEST",								/*!< req */
+		"COMPLY",								/*!< comply (req‹–‰Â) */
+		"REFUSE",								/*!< refuse (req‹‘”Û) */
+		"JOIN",								/*!< join */
+		"SENDER",								/*!< sender (actor) */
+		"SELF",								/*!< self (actor) */
+		"PRIORITY",							/*!< priority (integer) */
+		"EXPRESSION_IF",						/*!< ŽO€‰‰ŽZŽq '?' */
+		"PRINT",								/*!< print */
+		"RETURN",								/*!< return */
+		"ROLLBACK",							/*!< rollback */
+
+		"BLOCK",								/*!< ƒuƒƒbƒN */
+		"IF",									/*!< if */
+		"SWITCH",								/*!< switch */
+		"CASE",								/*!< case */
+		"DEFAULT",								/*!< default */
+		"WHILE",								/*!< while */
+		"DO",									/*!< do while */
+		"FOR",									/*!< for */
+		"LOOP",								/*!< loop */
+		"LOCK",								/*!< lock */
+		"GOTO",								/*!< goto */
+		"LABEL",								/*!< label */
+		"BREAK",								/*!< break */
+		"CONTINUE",							/*!< continue */
+
 		"IDENTIFIER",
 		"TYPE_DESCRIPTION",
-
 		"DECLARATOR",
 
-		"DECLARE_ACTOR",
+		"VARIABLE_DECLARATION",
+		"SIZEOF",
+
+		"DECLARE_ACTOR",						//!< ƒAƒNƒ^[‚ÌéŒ¾
 		"DECLARE_PHANTOM",
 		"DECLARE_MODULE",
 		"DECLARE_STRUCT",
@@ -1027,45 +1029,43 @@ static void mana_node_dump_(FILE* file, const mana_node* node)
 
 		"DEFINE_CONSTANT",
 		"UNDEFINE_CONSTANT",
+
+		"MEMBER_FUNCTION",
+		"MEMBER_VARIABLE",
 	};
 
 	if (node->id < sizeof(name) / sizeof(name[0]))
 	{
-		fprintf(file, "\"name\": \"%s\",", name[node->id]);
+		mana_node_dump_format_(file, "\"name\": \"%s\"", name[node->id]);
 	}
 	else
 	{
-		fprintf(file, "\"name\": \"%d\",", node->id);
+		mana_node_dump_format_(file, "\"name\": \"%d\"", node->id);
 	}
 
-	fprintf(file, "\"digit\": \"%d\",", node->digit);
-	fprintf(file, "\"real\": \"%f\",", node->real);
-	fprintf(file, "\"string\": \"%s\",", node->string ? node->string : "");
-	fprintf(file, "\"symbol\": \"%s\",", node->symbol ? node->symbol->name : "");
-	fprintf(file, "\"type\": \"%s\"", node->type ? node->type->name : "");
-
-	if (node->left || node->right || node->next)
-		fputs(",\n", file);
+	if (node->string)
+		mana_node_dump_format_(file, "\"string\": \"%s\"", node->string);
+	if (node->type)
+		mana_node_dump_format_(file, "\"type\": \"%s\"", node->type->name);
 
 	if (node->left)
 	{
-		fprintf(file, "\"left\": {\n");
+		mana_node_dump_format_(file, "\"left\": {\n");
+		mana_node_dump_format_flag_ = false;
 		mana_node_dump_(file, node->left);
 		fprintf(file, "}\n");
 	}
 	if (node->right)
 	{
-		if (node->left)
-			fputc(',', file);
-		fprintf(file, "\"right\": {\n");
+		mana_node_dump_format_(file, "\"right\": {\n");
+		mana_node_dump_format_flag_ = false;
 		mana_node_dump_(file, node->right);
 		fprintf(file, "}\n");
 	}
 	if (node->next)
 	{
-		if (node->right)
-			fputc(',', file);
-		fprintf(file, "\"next\": {\n");
+		mana_node_dump_format_(file, "\"next\": {\n");
+		mana_node_dump_format_flag_ = false;
 		mana_node_dump_(file, node->next);
 		fprintf(file, "}\n");
 	}
@@ -1074,13 +1074,14 @@ static void mana_node_dump_(FILE* file, const mana_node* node)
 void mana_node_dump(const mana_node* node)
 {
 	FILE* file;
-	if (fopen_s(&file, "mana_node_dump.json", "wt") == 0)
+	if (fopen_s(&file, "mana_node.json", "wt") == 0)
 	{
-		fprintf(file, "{\n");
 		if (node)
+		{
+			fputc('{', file);
 			mana_node_dump_(file, node);
-		fprintf(file, "}\n");
-
+			fputc('}', file);
+		}
 		fclose(file);
 	}
 }

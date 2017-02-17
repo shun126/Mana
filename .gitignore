@@ -28,7 +28,4 @@
 /library/Debug/
 /library/Release/
 /document/doxygen/
-/sample/.vs/
-/sample/Debug/
-/sample/Release/
-/sample/mana_node_dump.json
+/sample/mana_node.json

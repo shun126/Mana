@@ -64,6 +64,8 @@ typedef enum mana_symbol_data_type_id
 
 typedef enum mana_node_type_id
 {
+	MANA_NODE_NEWLINE,								/*!< 改行 */
+
 	MANA_NODE_ARRAY,								/*!< variable[argument] = */
 	MANA_NODE_ASSIGN,								/*!< = */
 	MANA_NODE_MEMOP,								/*!< X.variable */
@@ -98,15 +100,21 @@ typedef enum mana_node_type_id
 	MANA_NODE_LOR,									/*!< || */
 	MANA_NODE_LAND,								/*!< && */
 	MANA_NODE_LNOT,								/*!< ! */
+	MANA_NODE_HALT,								/*!< halt */
+	MANA_NODE_YIELD,								/*!< yield */
+	MANA_NODE_REQUEST,								/*!< req */
+	MANA_NODE_COMPLY,								/*!< comply (req許可) */
+	MANA_NODE_REFUSE,								/*!< refuse (req拒否) */
+	MANA_NODE_JOIN,								/*!< join */
 	MANA_NODE_SENDER,								/*!< sender (actor) */
 	MANA_NODE_SELF,								/*!< self (actor) */
 	MANA_NODE_PRIORITY,							/*!< priority (integer) */
 	MANA_NODE_EXPRESSION_IF,						/*!< 三項演算子 '?' */
+	MANA_NODE_PRINT,								/*!< print */
+	MANA_NODE_RETURN,								/*!< return */
+	MANA_NODE_ROLLBACK,							/*!< rollback */
 
-
-	MANA_NODE_NEWLINE,								/*!< 改行 */
 	MANA_NODE_BLOCK,								/*!< ブロック */
-	//MANA_NODE_ASSIGN,								/*!< 代入 */
 	MANA_NODE_IF,									/*!< if */
 	MANA_NODE_SWITCH,								/*!< switch */
 	MANA_NODE_CASE,								/*!< case */
@@ -118,23 +126,15 @@ typedef enum mana_node_type_id
 	MANA_NODE_LOCK,								/*!< lock */
 	MANA_NODE_GOTO,								/*!< goto */
 	MANA_NODE_LABEL,								/*!< label */
-	MANA_NODE_RETURN,								/*!< return */
-	MANA_NODE_ROLLBACK,							/*!< rollback */
 	MANA_NODE_BREAK,								/*!< break */
 	MANA_NODE_CONTINUE,							/*!< continue */
 
-	MANA_NODE_HALT,								/*!< halt */
-	MANA_NODE_YIELD,								/*!< yield */
-	MANA_NODE_REQUEST,								/*!< req */
-	MANA_NODE_COMPLY,								/*!< comply (req許可) */
-	MANA_NODE_REFUSE,								/*!< refuse (req拒否) */
-	MANA_NODE_JOIN,								/*!< join */
-	MANA_NODE_PRINT,								/*!< print */
-
 	MANA_NODE_IDENTIFIER,
 	MANA_NODE_TYPE_DESCRIPTION,
-
 	MANA_NODE_DECLARATOR,
+
+	MANA_NODE_VARIABLE_DECLARATION,
+	MANA_NODE_SIZEOF,
 
 	MANA_NODE_DECLARE_ACTOR,						//!< アクターの宣言
 	MANA_NODE_DECLARE_PHANTOM,
