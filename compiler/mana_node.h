@@ -29,11 +29,13 @@ extern void mana_node_finalize(void);
 
 extern void mana_node_auto_cast(mana_node*);
 extern mana_node* mana_node_cast(mana_type_description*, mana_node*);
+
 extern mana_node* mana_node_clone(mana_node*);
 extern mana_node* mana_node_allocate(mana_node_type_id);
-extern void mana_node_release(mana_node*);
-extern mana_node* mana_node_create_leaf(char*);
 extern mana_node* mana_node_create_node(mana_node_type_id id, mana_node* left, mana_node* right, mana_node* next);
+extern void mana_node_release(mana_node*);
+
+extern mana_node* mana_node_create_leaf(char*);
 extern mana_node* mana_node_create_member(mana_node*, char*);
 extern mana_node* mana_node_create_call_member(mana_node*, char*, mana_node*);
 extern mana_node* mana_node_create_function(char*);
@@ -43,7 +45,7 @@ extern mana_node* mana_node_create_string(char* string);
 extern mana_node* mana_node_create_identifier(char* identifier);
 extern mana_node* mana_node_create_type(mana_type_description* type, const char* identifier);
 extern mana_node* mana_node_create_declare_function(mana_node* left, const char* identifier, const int32_t argument_count, mana_node* right);
-extern mana_node* mana_node_create_declare_native_function(mana_node* left, const char* identifier, const int32_t argument_count);
+extern mana_node* mana_node_create_declare_native_function(mana_node* left, const char* identifier, const int32_t argument_count, mana_node* next);
 
 extern mana_node* mana_node_create_allocate(int32_t size, mana_node* left);
 extern mana_node* mana_node_create_request(mana_node* left, mana_node* right, const char* action);
