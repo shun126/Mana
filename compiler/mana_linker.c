@@ -421,6 +421,35 @@ void mana_linker_generate_code(mana_node* node, int32_t enable_load)
 		}
 		break;
 
+	case MANA_NODE_VARIABLE_DECLARATION:
+		mana_linker_generate_code(node->left, enable_load); // MANA_NODE_TYPE_DESCRIPTION
+		mana_linker_generate_code(node->right, enable_load);// MANA_NODE_DECLARATOR
+		if(node->right->symbol->class_type == MANA_CLASS_TYPE_VARIABLE_LOCAL)
+			mana_symbol_allocate_memory(node->right->symbol, node->left->type, MANA_MEMORY_TYPE_NORMAL);
+		break;
+
+	case MANA_NODE_TYPE_DESCRIPTION:
+		if(node->type == NULL)
+		{
+			mana_symbol_entry* symbol = mana_symbol_lookup(node->string);
+			if(symbol)
+			{
+				node->type = symbol->type;
+			}
+			else
+			{
+				mana_compile_error("incomplete type name %s", node->string);
+				node->type = mana_type_get(MANA_DATA_TYPE_INT);
+			}
+		}
+		break;
+
+	case MANA_NODE_DECLARATOR:
+		//| tIDENTIFIER variable_sizes
+		if(node->symbol == NULL)
+			node->symbol = mana_symbol_create_identification(node->string, NULL, /*mana_static_block_opend*/false);
+		break;
+
 	case MANA_NODE_BLOCK:
 	case MANA_NODE_IF:
 	case MANA_NODE_SWITCH:
@@ -435,22 +464,13 @@ void mana_linker_generate_code(mana_node* node, int32_t enable_load)
 	case MANA_NODE_LABEL:
 	case MANA_NODE_BREAK:
 	case MANA_NODE_CONTINUE:
-
 	case MANA_NODE_IDENTIFIER:
-	case MANA_NODE_TYPE_DESCRIPTION:
-	case MANA_NODE_DECLARATOR:
-
-	case MANA_NODE_VARIABLE_DECLARATION:
 	case MANA_NODE_SIZEOF:
-
 	case MANA_NODE_DECLARE_ACTOR:
 	case MANA_NODE_DECLARE_PHANTOM:
 	case MANA_NODE_DECLARE_MODULE:
 	case MANA_NODE_DECLARE_ACTION:
 	case MANA_NODE_DECLARE_EXTEND:
-	case MANA_NODE_DECLARE_ALLOCATE:
-	case MANA_NODE_DECLARE_STATIC:
-	case MANA_NODE_DECLARE_NATIVE_FUNCTION:
 	case MANA_NODE_DECLARE_VALIABLE:
 	case MANA_NODE_DECLARE_FUNCTION:
 
@@ -469,6 +489,9 @@ void mana_linker_generate_code(mana_node* node, int32_t enable_load)
 		// 定義を行わないノード
 	case MANA_NODE_DECLARE_ALIAS:
 	case MANA_NODE_DECLARE_STRUCT:
+	case MANA_NODE_DECLARE_ALLOCATE:
+	case MANA_NODE_DECLARE_STATIC:
+	case MANA_NODE_DECLARE_NATIVE_FUNCTION:
 	case MANA_NODE_DEFINE_CONSTANT:
 	case MANA_NODE_UNDEFINE_CONSTANT:
 		break;
