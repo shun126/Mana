@@ -1,7 +1,7 @@
 /*
  * mana (compiler)
  *
- * @file	mana_datalink_generator.h
+ * @file	mana_jump.h
  * @brief	break,continue,gotoなどのジャンプに関するヘッダーファイル
  * @detail	このファイルはbreak,continue,gotoなどジャンプに関係するヘッダーファイルです。
  * @author	Shun Moriya <shun@mnu.sakura.ne.jp>
