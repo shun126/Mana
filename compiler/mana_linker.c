@@ -17,6 +17,9 @@
 #if !defined(___MANA_LINKER_H___)
 #include "mana_linker.h"
 #endif
+#if !defined(___MANA_JUMP_H___)
+#include "mana_jump.h"
+#endif
 #if !defined(___MANA_MAIN_H___)
 #include "mana_main.h"
 #endif
@@ -32,6 +35,12 @@
 #if !defined(___MANA_TYPE_H___)
 #include "mana_type.h"
 #endif
+
+ // TODO
+static mana_symbol_entry* mana_actor_symbol_entry_pointer = NULL;
+static mana_symbol_entry* mana_function_symbol_entry_pointer = NULL;
+static bool mana_static_block_opend = false;
+
 
 static void mana_linker_call(mana_node* node);
 static int32_t mana_linker_condition_core(mana_node* node);
@@ -708,7 +717,13 @@ void mana_linker_generate_code(mana_node* node, int32_t enable_load)
 		break;
 
 	case MANA_NODE_CALL:
-		/* 関数、アクションを呼びます */
+		// 関数、アクションを呼びます
+		if(node->symbol == NULL)
+		{
+			node->symbol = mana_symbol_lookup(node->string);
+			if(node->symbol)
+				node->type = node->symbol->type;
+		}
 		mana_linker_call(node);
 		break;
 
@@ -741,38 +756,104 @@ void mana_linker_generate_code(mana_node* node, int32_t enable_load)
 		}
 		break;
 
+	case MANA_NODE_VARIABLE_DECLARATION:
+		mana_linker_generate_code(node->left, enable_load); // MANA_NODE_TYPE_DESCRIPTION
+		mana_linker_generate_code(node->right, enable_load);// MANA_NODE_DECLARATOR
+		if(node->right->symbol->class_type == MANA_CLASS_TYPE_VARIABLE_LOCAL)
+			mana_symbol_allocate_memory(node->right->symbol, node->left->type, MANA_MEMORY_TYPE_NORMAL);
+		break;
+
+	case MANA_NODE_TYPE_DESCRIPTION:
+		if(node->type == NULL)
+		{
+			mana_symbol_entry* symbol = mana_symbol_lookup(node->string);
+			if(symbol)
+			{
+				node->type = symbol->type;
+			}
+			else
+			{
+				mana_compile_error("incomplete type name %s", node->string);
+				node->type = mana_type_get(MANA_DATA_TYPE_INT);
+			}
+		}
+		break;
+
+	case MANA_NODE_DECLARATOR:
+		//| tIDENTIFIER variable_sizes
+		if(node->symbol == NULL)
+			node->symbol = mana_symbol_create_identification(node->string, NULL, /*mana_static_block_opend*/false);
+		break;
+
+	case MANA_NODE_DECLARE_FUNCTION:
+		{
+			mana_function_symbol_entry_pointer = mana_symbol_lookup(node->string);
+			mana_linker_generate_code(node->left, enable_load);
+
+			mana_symbol_open_function(false, mana_function_symbol_entry_pointer, node->left->type);
+
+			mana_linker_generate_code(node->right, enable_load);
+
+			mana_symbol_close_function(mana_function_symbol_entry_pointer);
+			mana_function_symbol_entry_pointer = NULL;
+		}
+		break;
+
 	case MANA_NODE_BLOCK:
+		mana_symbol_open_block(false);
+		mana_linker_generate_code(node->left, enable_load);
+		mana_linker_generate_code(node->right, enable_load);
+		mana_symbol_close_block();
+		break;
+
+	case MANA_NODE_FOR:
+		/* 'for(type variable = expression' の形式 */
+		{
+			//mana_symbol_allocate_memory($2, $1, MANA_MEMORY_TYPE_NORMAL);
+			//mana_linker_expression(mana_node_create_node(MANA_NODE_TYPE_ASSIGN, mana_node_create_leaf($2->name), $4), true);
+			mana_jump_open_chain(MANA_JUMP_CHAIN_STATE_FOR);
+			//$$ = mana_code_get_pc();
+
+			mana_linker_generate_code(node->left, enable_load);
+			mana_jump_break(mana_linker_condition(node->left, true));
+
+
+			mana_jump_close_continue_only();
+			mana_linker_expression(node->right, true);
+			mana_code_set_opecode_and_operand(MANA_IL_BRA, mana_jump_continue(mana_code_get_pc()));
+			mana_jump_close_chain();
+			mana_symbol_close_block();
+		}
+		break;
+
+	case MANA_NODE_IDENTIFIER:
+		if(node->symbol == NULL)
+		{
+			node->symbol = mana_symbol_lookup(node->string);
+			if(node->symbol)
+				node->type = node->symbol->type;
+		}
+		break;
+
 	case MANA_NODE_IF:
 	case MANA_NODE_SWITCH:
 	case MANA_NODE_CASE:
 	case MANA_NODE_DEFAULT:
 	case MANA_NODE_WHILE:
 	case MANA_NODE_DO:
-	case MANA_NODE_FOR:
 	case MANA_NODE_LOOP:
 	case MANA_NODE_LOCK:
 	case MANA_NODE_GOTO:
 	case MANA_NODE_LABEL:
 	case MANA_NODE_BREAK:
 	case MANA_NODE_CONTINUE:
-
-	case MANA_NODE_IDENTIFIER:
-	case MANA_NODE_TYPE_DESCRIPTION:
-	case MANA_NODE_DECLARATOR:
-
-	case MANA_NODE_VARIABLE_DECLARATION:
 	case MANA_NODE_SIZEOF:
-
 	case MANA_NODE_DECLARE_ACTOR:
 	case MANA_NODE_DECLARE_PHANTOM:
 	case MANA_NODE_DECLARE_MODULE:
 	case MANA_NODE_DECLARE_ACTION:
 	case MANA_NODE_DECLARE_EXTEND:
-	case MANA_NODE_DECLARE_ALLOCATE:
-	case MANA_NODE_DECLARE_STATIC:
-	case MANA_NODE_DECLARE_NATIVE_FUNCTION:
 	case MANA_NODE_DECLARE_VALIABLE:
-	case MANA_NODE_DECLARE_FUNCTION:
 
 	case MANA_NODE_MEMBER_FUNCTION:
 	case MANA_NODE_MEMBER_VARIABLE:
@@ -789,6 +870,9 @@ void mana_linker_generate_code(mana_node* node, int32_t enable_load)
 		// 定義を行わないノード
 	case MANA_NODE_DECLARE_ALIAS:
 	case MANA_NODE_DECLARE_STRUCT:
+	case MANA_NODE_DECLARE_ALLOCATE:
+	case MANA_NODE_DECLARE_STATIC:
+	case MANA_NODE_DECLARE_NATIVE_FUNCTION:
 	case MANA_NODE_DEFINE_CONSTANT:
 	case MANA_NODE_UNDEFINE_CONSTANT:
 		break;
@@ -801,11 +885,6 @@ void mana_linker_generate_code(mana_node* node, int32_t enable_load)
 	if (call_next_node)
 		mana_linker_generate_code(node->next, enable_load);
 }
-
-// TODO
-static mana_symbol_entry* mana_actor_symbol_entry_pointer = NULL;
-static mana_symbol_entry* mana_function_symbol_entry_pointer = NULL;
-static bool mana_static_block_opend = false;
 
 /*!
 ノードを辿りながら、シンボル情報を登録します
@@ -821,6 +900,10 @@ void mana_linker_generate_symbol(mana_node* node, mana_node* parent_node)
 	switch (node->id)
 	{
 	case MANA_NODE_IDENTIFIER:
+		if(node->symbol == NULL)
+			node->symbol = mana_symbol_lookup(node->string);
+		break;
+
 	case MANA_NODE_SIZEOF:
 	case MANA_NODE_DECLARE_VALIABLE:
 	case MANA_NODE_MEMBER_FUNCTION:
@@ -1165,7 +1248,7 @@ static int32_t mana_linker_call_argument(int32_t address, mana_symbol_entry* par
  * 関数呼び出しのノードを評価します
  * @param	関数呼び出しのmana_node
  */
-static void mana_linker_call(mana_node* tree)
+static void mana_linker_call(mana_node* node)
 {
 	mana_linker_auto_cast(tree);
 
