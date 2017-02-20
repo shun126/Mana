@@ -410,7 +410,7 @@ primary			: '-' expression	%prec tUMINUS
 				| tSIZEOF '(' variable_type ')'
 					{ $$ = mana_node_create_node(MANA_NODE_SIZEOF, $3, NULL, NULL); }
 				| tIDENTIFIER '(' arg_calls ')'
-					{ $$ = mana_node_create_node(MANA_NODE_CALL, NULL, NULL, NULL); $$->string = $1; }
+					{ $$ = mana_node_create_node(MANA_NODE_CALL, $3, NULL, NULL); $$->string = $1; }
 				| constant
 				| left_hand
 				;
