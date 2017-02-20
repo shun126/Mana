@@ -290,6 +290,7 @@ int32_t mana_compile(void)
 	mana_code_initialize();
 	mana_data_initialzie();
 	mana_jump_initialize();
+	mana_linker_initialize();
 	mana_node_initialize();
 	mana_symbol_initialize();
 	mana_type_initialize();
@@ -449,6 +450,7 @@ ESCAPE:
 	mana_code_finalize();
 	mana_data_finalize();
 	mana_jump_finalize();
+	mana_linker_finalize();
 	mana_node_finalize();
 	mana_symbol_finalize();
 	mana_type_finalize();

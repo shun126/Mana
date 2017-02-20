@@ -22,6 +22,9 @@ extern "C" {
 #include "mana_symbol.h"
 #endif
 
+extern void mana_linker_initialize(void);
+extern void mana_linker_finalize(void);
+
 extern void mana_linker_generate_code(mana_node* node, int32_t enable_load);
 extern void mana_linker_generate_symbol(mana_node* node, mana_node* parent_node);
 
