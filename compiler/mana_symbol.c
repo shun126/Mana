@@ -479,6 +479,15 @@ mana_symbol_entry* mana_symbol_create_function(char* name)
 	if(symbol == NULL)
 		symbol = mana_symbol_create_entry(name, MANA_CLASS_TYPE_NEW_SYMBOL, 0);
 
+	if (MANA_SYMBOL_IS_ACTOR_OR_STRUCTER_OPENED())
+	{
+		symbol->class_type = MANA_CLASS_TYPE_MEMBER_FUNCTION;
+	}
+	else
+	{
+		symbol->class_type = MANA_CLASS_TYPE_FUNCTION;
+	}
+
 	return symbol;
 }
 
@@ -631,7 +640,6 @@ void mana_symbol_close_function(mana_symbol_entry* function)
 	/* return–½—ß‚Ì”­s */
 	if(MANA_SYMBOL_IS_ACTOR_OR_STRUCTER_OPENED())
 	{
-		function->class_type = MANA_CLASS_TYPE_MEMBER_FUNCTION;
 		mana_code_set_opecode((uint8_t)MANA_IL_RETURN_FROM_ACTION);
 	}
 	else
@@ -643,7 +651,6 @@ void mana_symbol_close_function(mana_symbol_entry* function)
 				mana_compile_error("meaningless return value specification");
 		}
 		mana_code_set_opecode((uint8_t)MANA_IL_RETURN_FROM_FUNCTION);
-		function->class_type = MANA_CLASS_TYPE_FUNCTION;
 	}
 
 	/*

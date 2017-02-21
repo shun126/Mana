@@ -96,6 +96,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="mana_code.c" />
+    <ClCompile Include="mana_compile.c" />
     <ClCompile Include="mana_data.c" />
     <ClCompile Include="mana_datalink_generator.c" />
     <ClCompile Include="mana_jump.c" />
@@ -133,6 +134,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mana_code.h" />
+    <ClInclude Include="mana_compile.h" />
     <ClInclude Include="mana_data.h" />
     <ClInclude Include="mana_datalink_generator.h" />
     <ClInclude Include="mana_jump.h" />
