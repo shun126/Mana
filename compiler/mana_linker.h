@@ -27,6 +27,7 @@ extern void mana_linker_finalize(void);
 
 extern void mana_linker_generate_code(mana_node* node, int32_t enable_load);
 extern void mana_linker_generate_symbol(mana_node* node, mana_node* parent_node);
+extern void mana_linker_resolve_symbol(mana_node* node);
 
 extern void mana_linker_return(mana_symbol_entry* symbol, mana_node* node);
 extern void mana_linker_rollback(mana_node* node);

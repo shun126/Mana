@@ -12,6 +12,9 @@
 #if !defined(___MANA_CODE_H___)
 #include "mana_code.h"
 #endif
+#if !defined(___MANA_COMPILE_H___)
+#include "mana_compile.h"
+#endif
 #if !defined(___MANA_DATA_H___)
 #include "mana_data.h"
 #endif
@@ -117,6 +120,7 @@ program			: line
 					{
 						mana_node_dump($1);
 						mana_linker_generate_symbol($1, NULL);
+						mana_linker_resolve_symbol($1);
 						mana_linker_generate_code($1, true);
 					}
 				;
@@ -461,7 +465,8 @@ case			: tCASE expression ':' statements
 arg_calls		: /* empty */
 					{ $$ = NULL; }
 				| expression
-				| arg_calls ',' expression
+					{ $$ = mana_node_create_node(MANA_NODE_ARGUMENT, $1, NULL, NULL); }
+				| expression ',' arg_calls
 					{ $$ = mana_node_create_node(MANA_NODE_ARGUMENT, $1, $3, NULL); }
 				;
 
