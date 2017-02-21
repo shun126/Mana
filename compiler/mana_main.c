@@ -14,6 +14,9 @@
 #if !defined(___MANA_CODE_H___)
 #include "mana_code.h"
 #endif
+#if !defined(___MANA_COMPILE_H___)
+#include "mana_compile.h"
+#endif
 #if !defined(___MANA_DATA_H___)
 #include "mana_data.h"
 #endif
@@ -288,6 +291,7 @@ int32_t mana_compile(void)
 
 	mana_datalink_generator_initialize();
 	mana_code_initialize();
+	mana_compiler_initialize();
 	mana_data_initialzie();
 	mana_jump_initialize();
 	mana_linker_initialize();
@@ -448,6 +452,7 @@ ESCAPE:
 
 	mana_datalink_generator_finalize();
 	mana_code_finalize();
+	mana_compiler_finalize();
 	mana_data_finalize();
 	mana_jump_finalize();
 	mana_linker_finalize();
