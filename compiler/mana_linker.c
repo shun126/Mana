@@ -219,6 +219,30 @@ static void mana_linker_resolve_symbol_identifier(mana_node* node)
 			if (node->type == NULL)
 				node->type = node->symbol->type;
 		}
+		else
+		{
+			mana_compile_error("incomplete type name %s", node->string);
+			node->type = mana_type_get(MANA_DATA_TYPE_INT);
+		}
+	}
+}
+
+static void mana_linker_resolve_type_description(mana_node* node)
+{
+	MANA_ASSERT(node);
+
+	if(node->type == NULL)
+	{
+		mana_symbol_entry* symbol = mana_symbol_lookup(node->string);
+		if(symbol)
+		{
+			node->type = symbol->type;
+		}
+		else
+		{
+			mana_compile_error("incomplete type name %s", node->string);
+			node->type = mana_type_get(MANA_DATA_TYPE_INT);
+		}
 	}
 }
 
@@ -359,19 +383,7 @@ void mana_linker_generate_symbol(mana_node* node, mana_node* parent_node)
 		break;
 
 	case MANA_NODE_TYPE_DESCRIPTION:
-		if (node->type == NULL)
-		{
-			mana_symbol_entry* symbol = mana_symbol_lookup(node->string);
-			if (symbol)
-			{
-				node->type = symbol->type;
-			}
-			else
-			{
-				mana_compile_error("incomplete type name %s", node->string);
-				node->type = mana_type_get(MANA_DATA_TYPE_INT);
-			}
-		}
+		mana_linker_resolve_type_description(node);
 		break;
 
 	case MANA_NODE_DECLARATOR:
@@ -590,7 +602,14 @@ void mana_linker_resolve_symbol(mana_node* node)
 */
 static void mana_linker_automatic_cast(mana_node* node)
 {
-	MANA_ASSERT(node);
+	if (node == NULL)
+		return;
+
+	mana_linker_automatic_cast(node->left);
+	mana_linker_automatic_cast(node->right);
+
+	if (node->left)
+		node->type = node->left->type;
 
 	switch (node->id)
 	{
@@ -734,6 +753,7 @@ static void mana_linker_automatic_cast(mana_node* node)
 		{
 			mana_symbol_data_type_id t1, t2;
 			mana_linker_get_both_node_type(&t1, &t2, node);
+
 			mana_node_auto_cast(node);
 			mana_type_compatible(node->left->type, node->right->type);
 			switch (t1)
@@ -917,6 +937,15 @@ static void mana_linker_automatic_cast(mana_node* node)
 		node->etc = (node->right->id == MANA_NODE_ARGUMENT) ? node->right->etc + 1 : 2;
 		break;
 
+	case MANA_NODE_TYPE_DESCRIPTION:
+		mana_linker_resolve_type_description(node);
+		break;
+
+	case MANA_NODE_DECLARATOR:
+		MANA_ASSERT(node->symbol == NULL);
+		node->symbol = mana_symbol_create_identification(node->string, NULL, /*mana_static_block_opend*/false);
+		break;
+
 	default:
 		break;
 	}
@@ -941,8 +970,6 @@ void mana_linker_generate_code(mana_node* node, int32_t enable_load)
 		break;
 
 	case MANA_NODE_ASSIGN:
-		mana_linker_generate_symbol(node->left, node);
-		mana_linker_generate_symbol(node->right, node);
 		mana_linker_automatic_cast(node);
 		mana_linker_generate_code(node->right, enable_load);
 		mana_linker_generate_code(node->left, false);
@@ -1166,8 +1193,6 @@ void mana_linker_generate_code(mana_node* node, int32_t enable_load)
 	case MANA_NODE_LNOT:
 	case MANA_NODE_NOT:
 		/* ”äŠrA˜_—‰‰ŽZŽq */
-		mana_linker_generate_symbol(node->left, node);
-		mana_linker_generate_symbol(node->right, node);
 		mana_linker_automatic_cast(node);
 		mana_linker_generate_code(node->left, enable_load);
 		mana_linker_generate_code(node->right, enable_load);
@@ -1222,19 +1247,7 @@ void mana_linker_generate_code(mana_node* node, int32_t enable_load)
 		break;
 
 	case MANA_NODE_TYPE_DESCRIPTION:
-		if(node->type == NULL)
-		{
-			mana_symbol_entry* symbol = mana_symbol_lookup(node->string);
-			if(symbol)
-			{
-				node->type = symbol->type;
-			}
-			else
-			{
-				mana_compile_error("incomplete type name %s", node->string);
-				node->type = mana_type_get(MANA_DATA_TYPE_INT);
-			}
-		}
+		mana_linker_resolve_type_description(node);
 		break;
 
 	case MANA_NODE_DECLARATOR:
