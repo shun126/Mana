@@ -262,7 +262,7 @@ statement		: tIF '(' expression ')' statement
 				| tFOR '(' variable_decl '=' expression ';' expression ';' expression ')' statement
 					{
 						$$ = mana_node_create_node(MANA_NODE_BLOCK,
-							NULL,
+							mana_node_create_node(MANA_NODE_ASSIGN, $3, $5, NULL),
 							mana_node_create_node(MANA_NODE_FOR, $7, $9, $11),
 							NULL
 						);
