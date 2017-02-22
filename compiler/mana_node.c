@@ -72,11 +72,11 @@ static mana_node* mana_node_create_cast(mana_type_description* type, mana_node* 
 }
 
 /*!
- * キャスト
- * @param[in]	type	キャストする型
- * @param[in]	node	ノードオブジェクト
- * @return				ノードオブジェクト
- */
+キャスト
+@param[in]	type	キャストする型
+@param[in]	node	ノードオブジェクト
+@return				ノードオブジェクト
+*/
 mana_node* mana_node_cast(mana_type_description* type, mana_node* node)
 {
 	switch((node->type)->tcons)
@@ -123,9 +123,9 @@ mana_node* mana_node_cast(mana_type_description* type, mana_node* node)
 }
 
 /*!
- * 自動キャスト
- * @param[in]	node	ノードオブジェクト
- */
+自動型変換ノードを挿入します
+@param[in]	node	ノードオブジェクト
+*/
 void mana_node_auto_cast(mana_node* node)
 {
 	if(node)
@@ -134,6 +134,9 @@ void mana_node_auto_cast(mana_node* node)
 		{
 			node->type = node->right->type;
 		}
+
+		assert(node->type);
+
 		if(node->left)
 		{
 			if(node->type->tcons != node->left->type->tcons)
@@ -148,10 +151,10 @@ void mana_node_auto_cast(mana_node* node)
 }
 
 /*!
- * ノードを複製します
- * @param[in]	org		元になるノードオブジェクト
- * @return				複製したノードオブジェクト
- */
+ノードを複製します
+@param[in]	org		元になるノードオブジェクト
+@return				複製したノードオブジェクト
+*/
 mana_node* mana_node_clone(mana_node* org)
 {
 	mana_node* node;
@@ -172,10 +175,10 @@ mana_node* mana_node_clone(mana_node* org)
 }
 
 /*!
- * ノード作成
- * @param[in]	id		ノードタイプ番号
- * @return				ノードオブジェクト
- */
+ノード作成
+@param[in]	id		ノードタイプ番号
+@return				ノードオブジェクト
+*/
 mana_node* mana_node_allocate(mana_node_type_id id)
 {
 	mana_node* node;
@@ -729,6 +732,10 @@ static void mana_node_dump_(FILE* file, const mana_node* node)
 		"MEMBER_FUNCTION",
 		"MEMBER_VARIABLE",
 	};
+
+#if defined(_DEBUG)
+	mana_node_dump_format_(file, "\"magic\": \"%s\"", node->magic);
+#endif
 
 	if (node->id < sizeof(name) / sizeof(name[0]))
 	{

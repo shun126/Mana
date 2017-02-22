@@ -221,8 +221,10 @@ static int32_t mana_symbol_get_hash_value(char* name)
 	return (h % MANA_SYMBOL_HASHTABLE_SIZE);
 }
 
-void mana_symbol_open_block(const bool reset_max_frame_memory_address)
+int32_t mana_symbol_open_block(const bool reset_max_frame_memory_address)
 {
+	const int32_t block_level = mana_symbol_block_level;
+
 	if(mana_symbol_block_level <= 0 || reset_max_frame_memory_address)
 		mana_symbol_max_local_memory_address = mana_symbol_local_memory_address;
 
@@ -233,9 +235,11 @@ void mana_symbol_open_block(const bool reset_max_frame_memory_address)
 
 	mana_symbol_block_table[mana_symbol_block_level].head = NULL;
 	mana_symbol_block_table[mana_symbol_block_level].allocp = mana_symbol_local_memory_address;
+
+	return block_level;
 }
 
-void mana_symbol_close_block(void)
+int32_t mana_symbol_close_block(void)
 {
 	/* 1) check and update hash table */
 	for(mana_symbol_entry* symbol = mana_symbol_block_table[mana_symbol_block_level].head; symbol; symbol = symbol->next)
@@ -263,6 +267,8 @@ void mana_symbol_close_block(void)
 	mana_symbol_block_level--;
 
 	assert(mana_symbol_block_level >= 0);
+
+	return mana_symbol_block_level;
 }
 
 mana_symbol_entry* mana_symbol_lookup(char* name)
