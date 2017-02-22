@@ -201,7 +201,7 @@ actions			: /* empty */
 				;
 
 action			: tACTION tIDENTIFIER block
-					{ $$ = mana_node_create_node(MANA_NODE_DECLARE_ACTION, $3, NULL, NULL); $$->string = $2; }
+					{ $$ = mana_node_create_node(MANA_NODE_DECLARE_ACTION, $3, NULL, NULL); $$->string = $2; $$->type = mana_type_get(MANA_DATA_TYPE_VOID); }
 				| tEXTEND tIDENTIFIER ';'
 					{ $$ = mana_node_create_node(MANA_NODE_DECLARE_EXTEND, NULL, NULL, NULL); $$->string = $2; }
 				| declaration ';'
