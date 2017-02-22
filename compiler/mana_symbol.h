@@ -228,8 +228,8 @@ extern int32_t mana_symbol_return_address_list;			/*!< action,function‚ÌƒŠƒ^[ƒ“
 extern void mana_symbol_initialize(void);
 extern void mana_symbol_finalize(void);
 
-extern void mana_symbol_open_block(const bool reset_max_frame_memory_address);
-extern void mana_symbol_close_block(void);
+extern int32_t mana_symbol_open_block(const bool reset_max_frame_memory_address);
+extern int32_t mana_symbol_close_block(void);
 
 extern int32_t mana_symbol_is_valid_variable(mana_symbol_entry*);
 

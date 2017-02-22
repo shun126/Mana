@@ -22,6 +22,12 @@ extern "C" {
 #include "mana_type.h"
 #endif
 
+#if defined(_DEBUG)
+#define MANA_NODE_CHECK(NODE, MAGIC)	(strcmp(NODE->magic, MAGIC) == 0)
+#else
+#define MANA_NODE_CHECK(NODE, MAGIC)	(false)
+#endif
+
 typedef mana_node* (mana_node_event_funtion_type)(mana_node*);
 
 extern void mana_node_initialize(void);
