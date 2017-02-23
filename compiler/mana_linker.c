@@ -400,11 +400,6 @@ void mana_linker_generate_symbol(mana_node* node, mana_node* parent_node)
 
 	case MANA_NODE_VARIABLE_DECLARATION:
 		mana_linker_resolve_variable_description(node);
-		/*
-		mana_linker_generate_symbol(node->left, node); // MANA_NODE_TYPE_DESCRIPTION
-		mana_linker_generate_symbol(node->right, node);// MANA_NODE_DECLARATOR
-		mana_symbol_allocate_memory(node->right->symbol, node->left->type, MANA_MEMORY_TYPE_NORMAL);
-		*/
 		break;
 
 	case MANA_NODE_TYPE_DESCRIPTION:
