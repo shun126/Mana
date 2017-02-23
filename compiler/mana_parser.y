@@ -491,13 +491,13 @@ declarator		: tIDENTIFIER
 				;
 
 variable_sizes	: variable_size
-				| variable_sizes variable_size 
-					{ $$ = mana_node_create_node(MANA_NODE_NEWLINE, $1, $2, NULL); }
+				| variable_size variable_sizes
+					{ if ($1) { $$ = $1; $$->next = $2; } else { $$ = $2; } }
 				;
 variable_size	: '[' tDIGIT ']'
-					{ $$ = mana_node_create_node(MANA_NODE_NEWLINE, NULL, NULL, NULL); }
+					{ $$ = mana_node_create_node(MANA_NODE_VARIABLE_SIZE, NULL, NULL, NULL); }
 				| '[' tIDENTIFIER ']'
-					{ $$ = mana_node_create_node(MANA_NODE_NEWLINE, NULL, NULL, NULL); }
+					{ $$ = mana_node_create_node(MANA_NODE_VARIABLE_SIZE, mana_node_create_node(MANA_NODE_IDENTIFIER, NULL, NULL, NULL), NULL, NULL); }
 				;
 %%
 
