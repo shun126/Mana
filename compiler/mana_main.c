@@ -144,7 +144,7 @@ char* _fullpath(char* out, char* in, int32_t size)
 
 #endif
 
-void mana_error(char* filename, int32_t line, char* format, ...)
+void mana_error(const char* filename, const size_t line, const char* format, ...)
 {
 	char string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
 
@@ -162,7 +162,25 @@ void mana_error(char* filename, int32_t line, char* format, ...)
 #endif
 }
 
-void mana_compile_error(char* format, ...)
+void mana_warning(const char* filename, const size_t line, const char* format, ...)
+{
+	char string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
+
+	va_list argptr;
+	va_start(argptr, format);
+#if defined(__STDC_WANT_SECURE_LIB__)
+	vsprintf_s(string, sizeof(string), format, argptr);
+#else
+	vsprintf(string, format, argptr);
+#endif
+#if defined(_MSC_VER)
+	mana_print("%s(%d): warning: %s\n", filename, line, string);
+#else
+	mana_print("%s:%d: warning: %s\n", filename, line, string);
+#endif
+}
+
+void mana_parse_error(char* format, ...)
 {
 	char string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
 
@@ -177,7 +195,7 @@ void mana_compile_error(char* format, ...)
 	yyerror(string);
 }
 
-void mana_compile_warning(char* format, ...)
+void mana_parse_warning(char* format, ...)
 {
 	char string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
 
@@ -193,6 +211,44 @@ void mana_compile_warning(char* format, ...)
 	mana_print("%s(%d): warning: %s\n", mana_lexer_get_current_filename(), mana_lexer_get_current_line(), string);
 #else
 	mana_print("%s(%d): warning: %s\n", mana_lexer_get_current_filename(), mana_lexer_get_current_line(), string);
+#endif
+}
+
+void mana_compile_error(const mana_node* node, const char* format, ...)
+{
+	char string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
+
+	va_list argptr;
+	va_start(argptr, format);
+#if defined(__STDC_WANT_SECURE_LIB__)
+	vsprintf_s(string, sizeof(string), format, argptr);
+#else
+	vsprintf(string, format, argptr);
+#endif
+#if defined(_MSC_VER)
+	mana_print("%s(%d): error: %s\n", node->filename, node->line, string);
+#else
+	mana_print("%s:%d: error: %s\n", node->filename, node->line, string);
+#endif
+
+	yynerrs++;
+}
+
+void mana_compile_warning(const mana_node* node, const char* format, ...)
+{
+	char string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
+
+	va_list argptr;
+	va_start(argptr, format);
+#if defined(__STDC_WANT_SECURE_LIB__)
+	vsprintf_s(string, sizeof(string), format, argptr);
+#else
+	vsprintf(string, format, argptr);
+#endif
+#if defined(_MSC_VER)
+	mana_print("%s(%d): warning: %s\n", node->filename, node->line, string);
+#else
+	mana_print("%s:%d: warning: %s\n", node->filename, node->line, string);
 #endif
 }
 

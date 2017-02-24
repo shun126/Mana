@@ -495,9 +495,9 @@ variable_sizes	: variable_size
 					{ if ($1) { $$ = $1; $$->next = $2; } else { $$ = $2; } }
 				;
 variable_size	: '[' tDIGIT ']'
-					{ $$ = mana_node_create_node(MANA_NODE_VARIABLE_SIZE, NULL, NULL, NULL); }
+					{ $$ = mana_node_create_node(MANA_NODE_VARIABLE_SIZE, NULL, NULL, NULL); $$->digit = $2; }
 				| '[' tIDENTIFIER ']'
-					{ $$ = mana_node_create_node(MANA_NODE_VARIABLE_SIZE, mana_node_create_node(MANA_NODE_IDENTIFIER, NULL, NULL, NULL), NULL, NULL); }
+					{ $$ = mana_node_create_node(MANA_NODE_VARIABLE_SIZE, NULL, NULL, NULL); $$->string = $2; }
 				;
 %%
 
