@@ -154,6 +154,8 @@ typedef enum mana_node_type_id
 
 	MANA_NODE_MEMBER_FUNCTION,
 	MANA_NODE_MEMBER_VARIABLE,
+
+	MANA_NODE_VARIABLE_SIZE,
 } mana_node_type_id;
 
 typedef struct mana_symbol_entry
