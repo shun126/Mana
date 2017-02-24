@@ -305,7 +305,7 @@ mana_node* mana_node_create_leaf(char* name)
 		break;
 
 	default:
-		mana_compile_error("illigal data type");
+		mana_parse_error("illigal data type");
 		break;
 	}
 
@@ -367,11 +367,11 @@ mana_node* mana_node_create_member(mana_node* tree, char* name)
 				}
 				type = type->parent;
 			}
-			mana_compile_error("reference to undefined field");
+			mana_parse_error("reference to undefined field");
 		}
 		else
 		{
-			mana_compile_error("reference to non-struct type");
+			mana_parse_error("reference to non-struct type");
 		}
 	}
 
@@ -406,7 +406,7 @@ mana_node* mana_node_create_call_member(mana_node* tree, char* name, mana_node* 
 	}
 	else
 	{
-		mana_compile_error("reference to non-actor type");
+		mana_parse_error("reference to non-actor type");
 	}
 
 	return tree;
@@ -614,7 +614,7 @@ size_t mana_node_get_memory_size(mana_node* node)
 #if 1
 		return node->type->memory_size;
 #else
-		mana_compile_error("illigal node type detect");
+		mana_parse_error("illigal node type detect");
 		return 0;
 #endif
 	}

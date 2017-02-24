@@ -101,7 +101,7 @@ int32_t mana_jump_break(int32_t new_pc)
 		old_pc = mana_jump_chain_table[mana_jump_chain_table_pointer].break_chain;
 		mana_jump_chain_table[mana_jump_chain_table_pointer].break_chain = new_pc;
 	}else{
-		mana_compile_error("illegal use of break statement");
+		mana_parse_error("illegal use of break statement");
 	}
 	return old_pc;
 }
@@ -122,7 +122,7 @@ int32_t mana_jump_continue(int32_t new_pc)
 		old_pc = mana_jump_chain_table[i].continue_chain;
 		mana_jump_chain_table[i].continue_chain = new_pc;
 	}else{
-		mana_compile_error("illegal use of the continue");
+		mana_parse_error("illegal use of the continue");
 	}
 	return old_pc;
 }
@@ -182,7 +182,7 @@ void mana_jump_switch_case(mana_node* node)
 		}
 		else
 		{
-			mana_compile_error("duplicated case constant");
+			mana_parse_error("duplicated case constant");
 		}
 	}
 }
@@ -197,7 +197,7 @@ void mana_jump_switch_default(void)
 	}
 	else
 	{
-		mana_compile_error("illegal default label");
+		mana_parse_error("illegal default label");
 	}
 }
 
