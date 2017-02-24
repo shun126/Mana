@@ -27,6 +27,9 @@ extern "C" {
 #if !defined(___MANA_MALLOC_H___)
 #include "../library/mana_malloc.h"
 #endif
+#if !defined(___MANA_NODE_H___)
+#include "mana_node.h"
+#endif
 #if !defined(___MANA_POOL_H___)
 #include "mana_pool.h"
 #endif
@@ -89,9 +92,12 @@ extern void mana_print_debug(const char* format, ...);
 #define MANA_SAFE_FREE(p) if(p){ free(p); p = 0; }
 
 /* external functions */
-extern void mana_error(char*, int32_t, char* format, ...);
-extern void mana_compile_error(char*, ...);
-extern void mana_compile_warning(char*, ...);
+extern void mana_error(const char* filename, const size_t line, const char* format, ...);
+extern void mana_warning(const char* filename, const size_t line, const char* format, ...);
+extern void mana_parse_error(char*, ...);
+extern void mana_parse_warning(char*, ...);
+extern void mana_compile_error(const mana_node* node, const char* format, ...);
+extern void mana_compile_warning(const mana_node* node, const char* format, ...);
 extern void mana_linker_error(char*, ...);
 extern void mana_linker_warning(char*, ...);
 extern void mana_fatal(char*, ...);

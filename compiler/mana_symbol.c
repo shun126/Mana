@@ -173,7 +173,7 @@ int32_t mana_symbol_is_valid_variable(mana_symbol_entry* symbol)
 		symbol->class_type != MANA_CLASS_TYPE_CONSTANT_FLOAT &&
 		symbol->class_type != MANA_CLASS_TYPE_CONSTANT_STRING
 	){
-		mana_compile_error("non-variable name '%s'", symbol->name);
+		mana_parse_error("non-variable name '%s'", symbol->name);
 		return false;
 	}else{
 		return true;
@@ -253,7 +253,7 @@ int32_t mana_symbol_close_block(void)
 
 		if(symbol->class_type == MANA_CLASS_TYPE_TYPEDEF && (symbol->type)->tcons == MANA_DATA_TYPE_INCOMPLETE)
 		{
-			mana_compile_error("incomplete type name %s", symbol->name);
+			mana_parse_error("incomplete type name %s", symbol->name);
 		}
 	}
 
@@ -291,7 +291,7 @@ mana_symbol_entry* mana_symbol_lookup_or_create_dummy(char* name)
 	mana_symbol_entry* symbol = mana_symbol_lookup(name);
 	if(symbol == NULL)
 	{
-		mana_compile_error("reference to undeclared identifier '%s'", name);
+		mana_parse_error("reference to undeclared identifier '%s'", name);
 
 		symbol = mana_symbol_create_entry(name, MANA_CLASS_TYPE_VARIABLE_LOCAL, 0);
 		symbol->type = mana_type_get(MANA_DATA_TYPE_INT);
@@ -344,7 +344,7 @@ mana_symbol_entry* mana_symbol_create_alias(char* name, char* filename)
 
 	symbol = mana_symbol_lookup(name);
 	if(symbol)
-		mana_compile_error("duplicated declaration '%s'", name);
+		mana_parse_error("duplicated declaration '%s'", name);
 
 	symbol = mana_symbol_create_entry(name, MANA_CLASS_TYPE_ALIAS, -1);
 	symbol->type = mana_type_get(MANA_DATA_TYPE_INT);
@@ -353,7 +353,7 @@ mana_symbol_entry* mana_symbol_create_alias(char* name, char* filename)
 	{
 		symbol->string = mana_pool_set(path);
 	}else{
-		mana_compile_error("unable to open \"%s\"", filename);
+		mana_parse_error("unable to open \"%s\"", filename);
 		symbol->string = filename;
 	}
 
@@ -364,7 +364,7 @@ mana_symbol_entry* mana_symbol_create_const_int(char* name, int32_t value)
 {
 	mana_symbol_entry* symbol = mana_symbol_lookup(name);
 	if(symbol)
-		mana_compile_error("duplicated declaration '%s'", name);
+		mana_parse_error("duplicated declaration '%s'", name);
 
 	symbol = mana_symbol_create_entry(name, MANA_CLASS_TYPE_CONSTANT_INT, value);
 	symbol->type = mana_type_get(MANA_DATA_TYPE_INT);
@@ -381,7 +381,7 @@ mana_symbol_entry* mana_symbol_create_const_float(char* name, float value)
 {
 	mana_symbol_entry* symbol = mana_symbol_lookup(name);
 	if(symbol)
-		mana_compile_error("duplicated declaration '%s'", name);
+		mana_parse_error("duplicated declaration '%s'", name);
 
 	symbol = mana_symbol_create(name, MANA_CLASS_TYPE_CONSTANT_FLOAT);
 	symbol->type = mana_type_get(MANA_DATA_TYPE_FLOAT);
@@ -399,7 +399,7 @@ mana_symbol_entry* mana_symbol_create_const_string(char* name, char* value)
 {
 	mana_symbol_entry* symbol = mana_symbol_lookup(name);
 	if(symbol)
-		mana_compile_error("duplicated declaration '%s'", name);
+		mana_parse_error("duplicated declaration '%s'", name);
 
 	symbol = mana_symbol_create(name, MANA_CLASS_TYPE_CONSTANT_STRING);
 	symbol->string = value;
@@ -423,7 +423,7 @@ mana_symbol_entry* mana_symbol_create_type(char* name)
 	{
 		if(symbol->class_type == MANA_CLASS_TYPE_TYPEDEF)
 			return symbol;
-		mana_compile_error("invalid identifier used as a type name");
+		mana_parse_error("invalid identifier used as a type name");
 	}
 
 	symbol = mana_symbol_create_entry(name, MANA_CLASS_TYPE_TYPEDEF, 0);
@@ -458,7 +458,7 @@ mana_symbol_entry* mana_symbol_create_identification(char* name, mana_type_descr
 	}
 	else
 	{
-		mana_compile_error("duplicated declaration '%s'", name);
+		mana_parse_error("duplicated declaration '%s'", name);
 	}
 
 	return symbol;
@@ -532,7 +532,7 @@ void mana_symbol_open_function(int32_t is_action, mana_symbol_entry* function, m
 
 	if(type->tcons == MANA_DATA_TYPE_INCOMPLETE)
 	{
-		mana_compile_error("incomplete data type is used");
+		mana_parse_error("incomplete data type is used");
 	}
 
 	/* レジスタ割り当て処理をクリア */
@@ -544,7 +544,7 @@ void mana_symbol_open_function(int32_t is_action, mana_symbol_entry* function, m
 	}
 	else
 	{
-		mana_compile_error("the function already declared");
+		mana_parse_error("the function already declared");
 	}
 
 	/* シンボルの設定 */
@@ -595,7 +595,7 @@ void mana_symbol_open_function(int32_t is_action, mana_symbol_entry* function, m
 
 		default:
 			if((symbol->type)->memory_size <= 0)
-				mana_compile_error("missing size information on parameter");
+				mana_parse_error("missing size information on parameter");
 			mana_code_set_opecode_and_operand(MANA_IL_STORE_DATA, (symbol->type)->memory_size);
 			break;
 		}
@@ -618,7 +618,7 @@ void mana_symbol_close_function(mana_symbol_entry* function)
 			if(symbol->class_type == MANA_CLASS_TYPE_LABEL)
 			{
 				if(symbol->address < 0)
-					mana_compile_error("label '%s' used but not defined", symbol->name);
+					mana_parse_error("label '%s' used but not defined", symbol->name);
 
 				mana_code_replace_all(symbol->etc, symbol->address);
 			}
@@ -654,7 +654,7 @@ void mana_symbol_close_function(mana_symbol_entry* function)
 		if(function->type->tcons != MANA_DATA_TYPE_VOID)
 		{
 			if(! function->used)
-				mana_compile_error("meaningless return value specification");
+				mana_parse_error("meaningless return value specification");
 		}
 		mana_code_set_opecode((uint8_t)MANA_IL_RETURN_FROM_FUNCTION);
 	}
@@ -694,10 +694,10 @@ void mana_symbol_close_native_function(mana_symbol_entry* function, mana_type_de
 {
 	/* 1) check */
 	if(mana_symbol_block_level > 1)
-		mana_compile_error("the prototype declaration ignored");
+		mana_parse_error("the prototype declaration ignored");
 
 	if(type->tcons == MANA_DATA_TYPE_INCOMPLETE)
-		mana_compile_error("incomplete data type is used");
+		mana_parse_error("incomplete data type is used");
 
 	/* 2) initialize function's symbol entry */
 	function->class_type = MANA_CLASS_TYPE_NATIVE_FUNCTION;
@@ -726,7 +726,7 @@ void mana_symbol_set_type(char* name, mana_type_description* type)
 	{
 		if(symbol == (mana_symbol_entry*)type->component || type->tcons == MANA_DATA_TYPE_INCOMPLETE)
 		{
-			mana_compile_error("illegal reference to an incomplete name");
+			mana_parse_error("illegal reference to an incomplete name");
 		}
 		else
 		{
@@ -735,7 +735,7 @@ void mana_symbol_set_type(char* name, mana_type_description* type)
 	}
 	else
 	{
-		mana_compile_error("invalid identifier used as a type name");
+		mana_parse_error("invalid identifier used as a type name");
 	}
 
 	type->name = name;
@@ -812,7 +812,7 @@ static void mana_symbol_open_actor_register_member(mana_symbol_entry* symbol)
 void mana_symbol_open_actor(mana_symbol_entry* symbol)
 {
 	if(mana_symbol_block_level != 0)
-		mana_compile_error("the actor declaration ignored");
+		mana_parse_error("the actor declaration ignored");
 
 	mana_symbol_open_block(false);
 	mana_symbol_actor_or_structure_level++;
@@ -827,7 +827,7 @@ void mana_symbol_open_actor(mana_symbol_entry* symbol)
 		/* typeがactorではない場合、続行不可能 */
 		if(type->tcons != MANA_DATA_TYPE_ACTOR && type->tcons != MANA_DATA_TYPE_MODULE)
 		{
-			mana_compile_error("%s is NOT actor!", symbol->name);
+			mana_parse_error("%s is NOT actor!", symbol->name);
 		}
 		else
 		{
@@ -865,7 +865,7 @@ mana_type_description* mana_symbol_close_actor(char* name, char* parent, mana_ty
 
 			/* actor and phantom check */
 			if(type->share.actor.phantom != phantom)
-				mana_compile_error("already declared %s", type->share.actor.phantom ? "a phantom" : "an actor");
+				mana_parse_error("already declared %s", type->share.actor.phantom ? "a phantom" : "an actor");
 
 			/* @TODO	actorの宣言が二つある場合、ワーニングを出す？ */
 			goto SKIP;
@@ -919,7 +919,7 @@ SKIP:
 void mana_symbol_open_module(void)
 {
 	if(mana_symbol_block_level)
-		mana_compile_error("the module declaration ignored");
+		mana_parse_error("the module declaration ignored");
 	mana_symbol_open_block(false);
 	mana_symbol_actor_or_structure_level++;
 	mana_symbol_actor_memory_address = 0;
@@ -971,7 +971,7 @@ void mana_symbol_extend_module(char* name)
 	}
 	else
 	{
-		mana_compile_error("name followed by \"::\" must be a module");
+		mana_parse_error("name followed by \"::\" must be a module");
 	}
 }
 
@@ -1017,7 +1017,7 @@ void mana_symbol_add_request(uint8_t opcode, mana_node* level, mana_node* actor,
 		}
 	}
 ABORT:
-	mana_compile_error("incompatible type of operand");
+	mana_parse_error("incompatible type of operand");
 }
 
 void mana_symbol_add_join(mana_node* level, mana_node* actor)
@@ -1041,7 +1041,7 @@ void mana_symbol_add_join(mana_node* level, mana_node* actor)
 		}
 	}
 /*ABORT:*/
-	mana_compile_error("incompatible type of operand");
+	mana_parse_error("incompatible type of operand");
 }
 
 int32_t mana_symbol_get_number_of_actors(void)
@@ -1082,7 +1082,7 @@ void mana_symbol_allocate_memory(mana_symbol_entry* symbol, mana_type_descriptio
 {
 	if(type->tcons == MANA_DATA_TYPE_INCOMPLETE || type->tcons == MANA_DATA_TYPE_VOID)
 	{
-		mana_compile_error("incomplete type name or void is used for declraration");
+		mana_parse_error("incomplete type name or void is used for declraration");
 		type = mana_type_get(MANA_DATA_TYPE_INT);
 	}
 
@@ -1136,7 +1136,7 @@ void mana_symbol_allocate_memory(mana_symbol_entry* symbol, mana_type_descriptio
 	}
 	else
 	{
-		mana_compile_error("no storage allocated");
+		mana_parse_error("no storage allocated");
 	}
 
 	/* 仮引数の表示の格納 */

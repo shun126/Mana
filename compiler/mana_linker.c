@@ -174,7 +174,7 @@ static void mana_linker_generate_store(mana_node* node)
 		break;
 
 	default:
-		mana_compile_error("illegal type stored");
+		mana_compile_error(node, "illegal type stored");
 		break;
 	}
 }
@@ -187,13 +187,13 @@ static bool mana_linker_get_both_node_type(mana_symbol_data_type_id* t1, mana_sy
 
 	if(node->left == NULL || node->left->type == NULL)
 	{
-		mana_compile_error("illegal left-hand side expression");
+		mana_compile_error(node, "illegal left-hand side expression");
 		return false;
 	}
 
 	if(node->right != NULL && node->right->type == NULL)
 	{
-		mana_compile_error("illegal right-hand side expression");
+		mana_compile_error(node, "illegal right-hand side expression");
 		return false;
 	}
 
@@ -221,7 +221,7 @@ static void mana_linker_resolve_identifier(mana_node* node)
 		}
 		else
 		{
-			mana_compile_error("incomplete type name %s", node->string);
+			mana_compile_error(node, "incomplete type name %s", node->string);
 			node->type = mana_type_get(MANA_DATA_TYPE_INT);
 		}
 	}
@@ -240,19 +240,67 @@ static void mana_linker_resolve_type_description(mana_node* node)
 		}
 		else
 		{
-			mana_compile_error("incomplete type name %s", node->string);
+			mana_compile_error(node, "incomplete type name %s", node->string);
 			node->type = mana_type_get(MANA_DATA_TYPE_INT);
 		}
 	}
 }
 
+static mana_type_description* mana_linker_resolve_variable_size(mana_node* node)
+{
+	if (node == NULL)
+		return NULL;
+
+	MANA_ASSERT(node->left == NULL);
+	MANA_ASSERT(node->right == NULL);
+
+	if (node->string)
+	{
+		mana_symbol_entry* symbol = mana_symbol_lookup(node->string);
+		if (symbol)
+		{
+			if (symbol->class_type == MANA_CLASS_TYPE_CONSTANT_INT)
+			{
+				node->type = mana_type_create_array(symbol->address);
+			}
+			else
+			{
+				mana_compile_error(node, "invalid size information on parameter");
+			}
+		}
+		else
+		{
+			mana_compile_error(node, "identifier %s is not defined", node->string);
+		}
+	}
+	else
+	{
+		if (node->digit > 0)
+			node->type = mana_type_create_array(node->digit);
+		else
+			mana_compile_error(node, "invalid size information on parameter");
+	}
+
+	if (node->type)
+	{
+		node->type->component = mana_linker_resolve_variable_size(node->next);
+	}
+
+	return node->type;
+}
+
 static void mana_linker_resolve_declarator(mana_node* node)
 {
 	MANA_ASSERT(node);
+
 	if (node->symbol != NULL)
 		return;
 	
-	node->symbol = mana_symbol_create_identification(node->string, NULL, mana_static_block_opend);
+	mana_type_description* type = NULL;
+	if (node->left && node->left->id == MANA_NODE_VARIABLE_SIZE)
+		type = mana_linker_resolve_variable_size(node->left);
+
+	node->symbol = mana_symbol_create_identification(node->string, type, mana_static_block_opend);
 }
 
 static void mana_linker_resolve_variable_description(mana_node* node)
@@ -264,9 +312,10 @@ static void mana_linker_resolve_variable_description(mana_node* node)
 	mana_linker_resolve_type_description(node->left);	// MANA_NODE_TYPE_DESCRIPTION
 	mana_linker_resolve_declarator(node->right);		// MANA_NODE_DECLARATOR
 
-	//if (node->right->symbol->class_type == MANA_CLASS_TYPE_VARIABLE_LOCAL)
+														//if (node->right->symbol->class_type == MANA_CLASS_TYPE_VARIABLE_LOCAL)
 	mana_symbol_allocate_memory(node->right->symbol, node->left->type, MANA_MEMORY_TYPE_NORMAL);
 }
+
 
 /*!
 ƒm[ƒh‚ð’H‚è‚È‚ª‚çƒVƒ“ƒ{ƒ‹î•ñ‚ð“o˜^‚µ‚Ü‚·
@@ -284,6 +333,10 @@ void mana_linker_generate_symbol(mana_node* node, mana_node* parent_node)
 	{
 	case MANA_NODE_IDENTIFIER:
 		mana_linker_resolve_identifier(node);
+		break;
+
+	case MANA_NODE_VARIABLE_SIZE:
+		mana_linker_generate_symbol(node->left, node);
 		break;
 
 	case MANA_NODE_SIZEOF:
@@ -316,9 +369,11 @@ void mana_linker_generate_symbol(mana_node* node, mana_node* parent_node)
 
 	case MANA_NODE_DECLARE_MODULE:
 		{
+			mana_actor_symbol_entry_pointer = mana_symbol_lookup(node->string);
 			mana_symbol_open_module();
 			mana_linker_generate_symbol(node->left, node);
 			mana_symbol_set_type(node->string, mana_symbol_close_module(node->string));
+			mana_actor_symbol_entry_pointer = NULL;
 		}
 		break;
 
@@ -327,9 +382,9 @@ void mana_linker_generate_symbol(mana_node* node, mana_node* parent_node)
 			MANA_ASSERT(node->symbol == NULL);
 			node->symbol = mana_symbol_create_function(node->string);
 			node->symbol->type = mana_type_get(MANA_DATA_TYPE_VOID);
-			mana_function_symbol_entry_pointer = node->symbol;
 
 			/*
+			mana_function_symbol_entry_pointer = node->symbol;
 			mana_symbol_open_function(true, mana_function_symbol_entry_pointer, mana_type_get(MANA_DATA_TYPE_VOID));
 
 			// node->left‚Í mana_linker_generate_code ‚Åˆ—‚µ‚Ü‚·
@@ -359,7 +414,7 @@ void mana_linker_generate_symbol(mana_node* node, mana_node* parent_node)
 			const int32_t address = mana_symbol_get_static_memory_address();
 			if (address >= mana_allocated_size)
 			{
-				mana_compile_error("static variable range over");
+				mana_compile_error(node, "static variable range over");
 			}
 			mana_symbol_set_static_memory_address(mana_allocated_size);
 		}
@@ -638,7 +693,7 @@ static void mana_linker_automatic_cast(mana_node* node)
 	case MANA_NODE_ASSIGN:
 		if (node->left->id == MANA_NODE_CONST)
 		{
-			mana_compile_error("already initialized constant '%s'", node->left->symbol->name);
+			mana_compile_error(node, "already initialized constant '%s'", node->left->symbol->name);
 			return;
 		}
 		mana_node_auto_cast(node);
@@ -656,9 +711,9 @@ static void mana_linker_automatic_cast(mana_node* node)
 			mana_linker_get_both_node_type(&t1, &t2, node);
 			mana_node_auto_cast(node);
 			if (t1 < MANA_DATA_TYPE_CHAR || t1 > MANA_DATA_TYPE_FLOAT)
-				mana_compile_error("imcompatible type operation in expression");
+				mana_compile_error(node, "imcompatible type operation in expression");
 			if (t2 < MANA_DATA_TYPE_CHAR || t2 > MANA_DATA_TYPE_FLOAT)
-				mana_compile_error("imcompatible type operation in expression");
+				mana_compile_error(node, "imcompatible type operation in expression");
 			mana_type_compatible(node->left->type, node->right->type);
 		}
 		break;
@@ -831,7 +886,7 @@ static void mana_linker_automatic_cast(mana_node* node)
 			mana_symbol_data_type_id t1, t2;
 			mana_linker_get_both_node_type(&t1, &t2, node);
 			if (t1 < MANA_DATA_TYPE_CHAR || t1 > MANA_DATA_TYPE_FLOAT)
-				mana_compile_error("imcompatible type operation in expression");
+				mana_compile_error(node, "imcompatible type operation in expression");
 		}
 		break;
 
@@ -840,7 +895,7 @@ static void mana_linker_automatic_cast(mana_node* node)
 			mana_symbol_data_type_id t1, t2;
 			mana_linker_get_both_node_type(&t1, &t2, node);
 			if (t1 < MANA_DATA_TYPE_CHAR || t1 > MANA_DATA_TYPE_INT)
-				mana_compile_error("imcompatible type operation in expression");
+				mana_compile_error(node, "imcompatible type operation in expression");
 			node->etc = MANA_IL_NOT;
 		}
 		break;
@@ -850,7 +905,7 @@ static void mana_linker_automatic_cast(mana_node* node)
 			mana_symbol_data_type_id t1, t2;
 			mana_linker_get_both_node_type(&t1, &t2, node);
 			if (t1 < MANA_DATA_TYPE_CHAR || t1 > MANA_DATA_TYPE_INT)
-				mana_compile_error("imcompatible type operation in expression");
+				mana_compile_error(node, "imcompatible type operation in expression");
 			node->etc = MANA_IL_LNOT;
 		}
 		break;
@@ -860,7 +915,7 @@ static void mana_linker_automatic_cast(mana_node* node)
 			mana_symbol_data_type_id t1, t2;
 			mana_linker_get_both_node_type(&t1, &t2, node);
 			if (t1 < MANA_DATA_TYPE_CHAR || t1 > MANA_DATA_TYPE_INT)
-				mana_compile_error("imcompatible type operation in expression");
+				mana_compile_error(node, "imcompatible type operation in expression");
 		}
 		break;
 
@@ -869,7 +924,7 @@ static void mana_linker_automatic_cast(mana_node* node)
 			mana_symbol_data_type_id t1, t2;
 			mana_linker_get_both_node_type(&t1, &t2, node);
 			if (t1 != MANA_DATA_TYPE_FLOAT)
-				mana_compile_error("imcompatible type operation in expression");
+				mana_compile_error(node, "imcompatible type operation in expression");
 		}
 		break;
 
@@ -882,9 +937,9 @@ static void mana_linker_automatic_cast(mana_node* node)
 			mana_symbol_data_type_id t1, t2;
 			mana_linker_get_both_node_type(&t1, &t2, node);
 			if (t1 < MANA_DATA_TYPE_CHAR || t1 > MANA_DATA_TYPE_INT)
-				mana_compile_error("imcompatible type operation in expression");
+				mana_compile_error(node, "imcompatible type operation in expression");
 			if (t2 < MANA_DATA_TYPE_CHAR || t2 > MANA_DATA_TYPE_INT)
-				mana_compile_error("imcompatible type operation in expression");
+				mana_compile_error(node, "imcompatible type operation in expression");
 		}
 		break;
 
@@ -893,9 +948,9 @@ static void mana_linker_automatic_cast(mana_node* node)
 			mana_symbol_data_type_id t1, t2;
 			mana_linker_get_both_node_type(&t1, &t2, node);
 			if (t1 < MANA_DATA_TYPE_CHAR || t1 > MANA_DATA_TYPE_INT)
-				mana_compile_error("imcompatible type operation in expression");
+				mana_compile_error(node, "imcompatible type operation in expression");
 			if (t2 < MANA_DATA_TYPE_CHAR || t2 > MANA_DATA_TYPE_INT)
-				mana_compile_error("imcompatible type operation in expression");
+				mana_compile_error(node, "imcompatible type operation in expression");
 			node->etc = MANA_IL_LAND;
 		}
 		break;
@@ -905,9 +960,9 @@ static void mana_linker_automatic_cast(mana_node* node)
 			mana_symbol_data_type_id t1, t2;
 			mana_linker_get_both_node_type(&t1, &t2, node);
 			if (t1 < MANA_DATA_TYPE_CHAR || t1 > MANA_DATA_TYPE_INT)
-				mana_compile_error("imcompatible type operation in expression");
+				mana_compile_error(node, "imcompatible type operation in expression");
 			if (t2 < MANA_DATA_TYPE_CHAR || t2 > MANA_DATA_TYPE_INT)
-				mana_compile_error("imcompatible type operation in expression");
+				mana_compile_error(node, "imcompatible type operation in expression");
 			node->etc = MANA_IL_LOR;
 		}
 		break;
@@ -917,9 +972,9 @@ static void mana_linker_automatic_cast(mana_node* node)
 			mana_symbol_data_type_id t1, t2;
 			mana_linker_get_both_node_type(&t1, &t2, node);
 			if (t2 == MANA_DATA_TYPE_VOID || t2 > MANA_DATA_TYPE_FLOAT)
-				mana_compile_error("non-integer expression used as subscript");
+				mana_compile_error(node, "non-integer expression used as subscript");
 			if (t1 != MANA_DATA_TYPE_ARRAY)
-				mana_compile_error("subscript specified to non-array");
+				mana_compile_error(node, "subscript specified to non-array");
 			else
 			{
 				if (node->right->id == MANA_NODE_CONST)
@@ -930,7 +985,7 @@ static void mana_linker_automatic_cast(mana_node* node)
 						node->right->type == mana_type_get(MANA_DATA_TYPE_INT));
 
 					if (node->right->digit >= (node->left->type)->number_of_elements)
-						mana_compile_error("subscript range over");
+						mana_compile_error(node, "subscript range over");
 				}
 
 				node->type = (node->left->type)->component;
@@ -952,7 +1007,7 @@ static void mana_linker_automatic_cast(mana_node* node)
 				node->symbol->class_type != MANA_CLASS_TYPE_NATIVE_FUNCTION &&
 				node->symbol->class_type != MANA_CLASS_TYPE_MEMBER_FUNCTION)
 			{
-				mana_compile_error("trying to call non-funcation");
+				mana_compile_error(node, "trying to call non-funcation");
 			}
 		}
 		break;
@@ -1042,7 +1097,7 @@ void mana_linker_generate_code(mana_node* node, int32_t enable_load)
 			break;
 
 		default:
-			mana_compile_error("illegal type of expression in statement");
+			mana_compile_error(node, "illegal type of expression in statement");
 			break;
 		}
 
@@ -1051,6 +1106,10 @@ void mana_linker_generate_code(mana_node* node, int32_t enable_load)
 			mana_linker_generate_load(node);
 		}
 
+		break;
+
+	case MANA_NODE_VARIABLE_SIZE:
+		mana_linker_generate_code(node->left, enable_load);
 		break;
 
 	case MANA_NODE_ARRAY:
@@ -1125,7 +1184,7 @@ void mana_linker_generate_code(mana_node* node, int32_t enable_load)
 			break;
 
 		default:
-			mana_compile_error("illegal type of expression in statement");
+			mana_compile_error(node, "illegal type of expression in statement");
 			break;
 		}
 		break;
@@ -1302,6 +1361,26 @@ void mana_linker_generate_code(mana_node* node, int32_t enable_load)
 		}
 		break;
 
+	case MANA_NODE_DECLARE_PHANTOM:
+		{
+			mana_actor_symbol_entry_pointer = mana_symbol_lookup(node->string);
+			mana_symbol_open_actor(mana_actor_symbol_entry_pointer);
+			mana_linker_generate_code(node->left, enable_load);
+			mana_symbol_set_type(node->string, mana_symbol_close_actor(node->string, NULL, NULL, true));
+			mana_actor_symbol_entry_pointer = NULL;
+		}
+		break;
+
+	case MANA_NODE_DECLARE_MODULE:
+		{
+			mana_actor_symbol_entry_pointer = mana_symbol_lookup(node->string);
+			mana_symbol_open_module();
+			mana_linker_generate_code(node->left, enable_load);
+			mana_symbol_set_type(node->string, mana_symbol_close_module(node->string));
+			mana_actor_symbol_entry_pointer = NULL;
+		}
+		break;
+
 	case MANA_NODE_DECLARE_ACTION:
 		{
 			mana_function_symbol_entry_pointer = mana_symbol_create_function(node->string);
@@ -1370,8 +1449,6 @@ void mana_linker_generate_code(mana_node* node, int32_t enable_load)
 	case MANA_NODE_BREAK:
 	case MANA_NODE_CONTINUE:
 	case MANA_NODE_SIZEOF:
-	case MANA_NODE_DECLARE_PHANTOM:
-	case MANA_NODE_DECLARE_MODULE:
 	case MANA_NODE_DECLARE_EXTEND:
 	case MANA_NODE_DECLARE_VALIABLE:
 
@@ -1398,7 +1475,7 @@ void mana_linker_generate_code(mana_node* node, int32_t enable_load)
 		break;
 
 	default:
-		mana_compile_error("illegal right-hand side value");
+		mana_compile_error(node, "illegal right-hand side value");
 		break;
 	}
 
@@ -1421,11 +1498,11 @@ void mana_linker_return(mana_symbol_entry* func, mana_node* tree)
 	if(type->tcons == MANA_DATA_TYPE_VOID)
 	{
 		if(tree != NULL)
-			mana_compile_error("meaningless return value specification");
+			mana_compile_error(func, "meaningless return value specification");
 	}
 	else if(tree == NULL)
 	{
-		mana_compile_error("missing return value");
+		mana_compile_error(func, "missing return value");
 	}
 	else
 	{
@@ -1523,7 +1600,7 @@ static void mana_linker_call(mana_node* node)
 	if((node->symbol)->number_of_parameters != argument_counter)
 	{
 		/* ˆø”‚Ì”‚ªˆê’v‚µ‚È‚¢ */
-		mana_compile_error("unmatched argument.");
+		mana_compile_error(node, "unmatched argument.");
 	}
 	else if((node->symbol)->class_type == MANA_CLASS_TYPE_NATIVE_FUNCTION)
 	{
@@ -1613,10 +1690,10 @@ void mana_linker_expression(mana_node* tree, int32_t enable_assign)
 	if(enable_assign)
 	{
 		if(tree->id != MANA_NODE_ASSIGN && tree->id != MANA_NODE_CALL && tree->id != MANA_NODE_F2I)
-			mana_compile_error("illegal expression in write-statement");
+			mana_compile_error(tree, "illegal expression in write-statement");
 	}else{
 		if(tree->id == MANA_NODE_ASSIGN)
-			mana_compile_error("illegal expression in write-statement");
+			mana_compile_error(tree, "illegal expression in write-statement");
 	}
 
 	mana_linker_generate_code(tree, true);
@@ -1661,7 +1738,7 @@ static void mana_linker_condition_check(mana_node* tree)
 		if(tree->id == MANA_NODE_ASSIGN)
 		{
 			/* ðŒ”»’è‚É‘ã“ü•¶‚ÍŽg—p‚Å‚«‚È‚¢ */
-			mana_compile_error("can't assign expression in condition");
+			mana_compile_error(tree, "can't assign expression in condition");
 		}
 
 		mana_linker_condition_check(tree->left);
@@ -1683,7 +1760,7 @@ static int32_t mana_linker_condition_core(mana_node* tree)
 	if(tree)
 	{
 		if((tree->type)->tcons == MANA_DATA_TYPE_VOID || (tree->type)->tcons > MANA_DATA_TYPE_REFERENCE)
-			mana_compile_error("illegal type of expression in condition");
+			mana_compile_error(tree, "illegal type of expression in condition");
 
 		mana_linker_generate_code(tree, true);
 	}
