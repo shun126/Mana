@@ -1,12 +1,12 @@
-/*
- * mana (compiler)
- *
- * @file	mana_symbol.h
- * @brief	レジスタ割り当てに関するヘッダーファイル
- * @detail	このファイルはレジスタ割り当てに関するヘッダーファイルです。
- * @author	Shun Moriya <shun@mnu.sakura.ne.jp>
- * @date	2003-
- */
+/*!
+mana (compiler)
+
+@file	mana_symbol.h
+@brief	レジスタ割り当てに関するヘッダーファイル
+@detail	このファイルはレジスタ割り当てに関するヘッダーファイルです。
+@author	Shun Moriya <shun@mnu.sakura.ne.jp>
+@date	2003-
+*/
 
 #if !defined(___MANA_SYMBOL_H___)
 #define ___MANA_SYMBOL_H___
@@ -69,11 +69,10 @@ typedef enum mana_node_type_id
 	MANA_NODE_ARRAY,								/*!< variable[argument] = */
 	MANA_NODE_ASSIGN,								/*!< = */
 	MANA_NODE_MEMOP,								/*!< X.variable */
-	MANA_NODE_ARGUMENT,							/*!< 呼び出し側引数 */
+	MANA_NODE_CALL_ARGUMENT,							//!< 引数（呼び出し）
+	MANA_NODE_DECLARE_ARGUMENT,							//!< 引数（宣言）
 	MANA_NODE_CONST,								/*!< 定数 */
 	MANA_NODE_VARIABLE,							/*!< 変数 */
-	MANA_NODE_INCOMPLETE,							/*!< 宣言が未完了 */
-	MANA_NODE_FUNCTION,							/*!< 関数 */
 	MANA_NODE_CALL,								/*!< 関数呼び出し */
 	MANA_NODE_ADD,									/*!< 加算 */
 	MANA_NODE_SUB,									/*!< 減算 */
@@ -133,7 +132,7 @@ typedef enum mana_node_type_id
 	MANA_NODE_TYPE_DESCRIPTION,
 	MANA_NODE_DECLARATOR,
 
-	MANA_NODE_VARIABLE_DECLARATION,
+	MANA_NODE_DECLARE_VARIABLE,
 	MANA_NODE_SIZEOF,
 
 	MANA_NODE_DECLARE_ACTOR,						//!< アクターの宣言
@@ -144,9 +143,8 @@ typedef enum mana_node_type_id
 	MANA_NODE_DECLARE_EXTEND,
 	MANA_NODE_DECLARE_ALLOCATE,
 	MANA_NODE_DECLARE_STATIC,
-	MANA_NODE_DECLARE_ALIAS,
+	MANA_NODE_DEFINE_ALIAS,
 	MANA_NODE_DECLARE_NATIVE_FUNCTION,
-	MANA_NODE_DECLARE_VALIABLE,
 	MANA_NODE_DECLARE_FUNCTION,
 
 	MANA_NODE_DEFINE_CONSTANT,
@@ -176,7 +174,8 @@ typedef struct mana_symbol_entry
 	char* string;										/*!< 文字列保存バッファ */
 	int32_t define_level;								/*!< 定義レベル */
 	int32_t number_of_parameters;						/*!< パラメータの数 */
-	unsigned used;										/*!< 参照フラグ */
+	bool override;										//!< 上書き許可
+	bool used;											/*!< 参照フラグ */
 } mana_symbol_entry;
 
 typedef struct mana_type_description
@@ -212,6 +211,7 @@ typedef struct mana_node
 	struct mana_type_description* type;					/*!< 型へのポインタ */
 	struct mana_node* left;								/*!< 左 */
 	struct mana_node* right;							/*!< 右 */
+	struct mana_node* body;								/*!< 右 */
 	struct mana_node* next;								/*!< 次 */
 	int32_t etc;										/*!< その他 */
 	int32_t digit;										/*!< 整数 */
@@ -220,6 +220,7 @@ typedef struct mana_node
 
 	char* filename;
 	int32_t line;
+	struct mana_node* link;								/*!< 解放用ポインタ */
 } mana_node;
 
 /*****************************************************************************/
@@ -250,25 +251,38 @@ extern mana_symbol_entry* mana_symbol_create_const_string(char*, char*);
 //extern mana_symbol_entry* mana_symbol_create_type(char*);
 extern mana_symbol_entry* mana_symbol_create_identification(char*, mana_type_description*, int32_t static_variable);
 extern mana_symbol_entry* mana_symbol_create_label(char*);
-extern mana_symbol_entry* mana_symbol_create_function(char*);
 
 extern void mana_symbol_destroy(char* name);
 
-extern void mana_symbol_open_function(int32_t, mana_symbol_entry*, mana_type_description*);
-extern void mana_symbol_close_function(mana_symbol_entry*);
-extern void mana_symbol_open_native_function();
-extern void mana_symbol_close_native_function(mana_symbol_entry* function, mana_type_description* type);
-extern void mana_symbol_set_type(char*, mana_type_description*);
 
+
+// function
+extern mana_symbol_entry* mana_symbol_create_function(const char* name);
+extern void mana_symbol_begin_function_registration(bool is_action, mana_symbol_entry* function, mana_type_description* type);
+extern void mana_symbol_commit_function_registration(mana_symbol_entry*);
+extern void mana_symbol_begin_native_function_registration();
+extern void mana_symbol_commit_native_function_registration(mana_symbol_entry* function, mana_type_description* type);
+
+
+
+// struct
 extern void mana_symbol_open_structure(void);
-extern mana_type_description* mana_symbol_close_structure(char*);
+extern mana_type_description* mana_symbol_close_structure(const char* name);
 
-extern void mana_symbol_open_actor(mana_symbol_entry*);
+// actor
+/*!
+アクターのシンボル登録を開始します
+@param[in]	symbol	NULLならば新規作成、
+*/
+extern void mana_symbol_open_actor(mana_symbol_entry* symbol);
 extern mana_type_description* mana_symbol_close_actor(char* name, char* parent, mana_type_description* td, int32_t phantom);
 
-extern void mana_symbol_open_module(void);
-extern mana_type_description* mana_symbol_close_module(char* name);
-extern void mana_symbol_extend_module(char* name);
+// module
+extern void mana_symbol_open_module(mana_symbol_entry* symbol);
+extern mana_type_description* mana_symbol_close_module(const char* name);
+extern void mana_symbol_extend_module(const char* name);
+
+extern void mana_symbol_set_type(const char* name, mana_type_description* type);
 
 extern int32_t mana_symbol_get_number_of_actors(void);
 

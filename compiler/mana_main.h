@@ -98,13 +98,13 @@ extern void mana_parse_error(char*, ...);
 extern void mana_parse_warning(char*, ...);
 extern void mana_compile_error(const mana_node* node, const char* format, ...);
 extern void mana_compile_warning(const mana_node* node, const char* format, ...);
-extern void mana_linker_error(char*, ...);
-extern void mana_linker_warning(char*, ...);
+extern void mana_compiler_error(char*, ...);
+extern void mana_compiler_warning(char*, ...);
 extern void mana_fatal(char*, ...);
 extern void mana_fatal_no_memory(void);
 
 extern int32_t yyparse(void);
-extern void yyerror(char*);
+extern void yyerror(const char* message);
 extern void mana_parser_initialize(void);
 extern void mana_parser_finalize(void);
 

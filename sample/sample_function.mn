@@ -9,7 +9,7 @@ void test()
 {
 	// Forward declaration
 	short array[10];
-	print("test_sort: %d\n", test_sort(array, 10));
+	//print("test_sort: %d\n", test_sort(array, 10));
 
 	// Forward declaration
 	test_switch_while();
@@ -17,11 +17,11 @@ void test()
 
 int test_sort(short array[10], int size)
 {
-	print("before\n");
+	//print("before\n");
 	for(int i = 0; i < size; i++)
 	{
 		array[i] = size - i;
-		print("%d: %d\n", i, array[i]);
+		//print("%d: %d\n", i, array[i]);
 	}
 
 	int count = 0;
@@ -41,10 +41,10 @@ int test_sort(short array[10], int size)
 		count++;
 	}while(!finish);
 
-	print("after\n");
+	//print("after\n");
 	for(int i = 0; i < size; i++)
 	{
-		print("%d: %d\n", i, array[i]);
+		//print("%d: %d\n", i, array[i]);
 	}
 
 	return count;
@@ -58,16 +58,16 @@ void test_switch_while()
 		switch(count)
 		{
 		case 1:
-			print("one\n");
+			//print("one\n");
 			break;
 		case 2:
-			print("two\n");
+			//print("two\n");
 			break;
 		case 3:
-			print("three\n");
+			//print("three\n");
 			break;
 		default:
-			print("ready\n");
+			//print("ready\n");
 		}
 		count--;
 	}
