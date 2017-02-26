@@ -84,13 +84,15 @@ static mana_symbol_entry* mana_symbol_hash_table[MANA_SYMBOL_HASHTABLE_SIZE];
 static int32_t mana_symbol_actor_or_structure_level;
 static int32_t mana_symbol_function_block_level;
 static int32_t mana_symbol_block_level;
-static int32_t mana_symbol_is_function_opened;
+static bool mana_symbol_is_function_opened;
 
 static int32_t mana_symbol_static_memory_address;
 static int32_t mana_symbol_global_memory_address;
 static int32_t mana_symbol_actor_memory_address;
 static int32_t mana_symbol_local_memory_address;
 static int32_t mana_symbol_max_local_memory_address;
+
+static bool mana_symbol_module_block_opened = false;
 
 int32_t mana_symbol_frame_size_list;
 int32_t mana_symbol_return_address_list;
@@ -253,7 +255,7 @@ int32_t mana_symbol_close_block(void)
 
 		if(symbol->class_type == MANA_CLASS_TYPE_TYPEDEF && (symbol->type)->tcons == MANA_DATA_TYPE_INCOMPLETE)
 		{
-			mana_parse_error("incomplete type name %s", symbol->name);
+			mana_parse_error("incomplete type name '%s'", symbol->name);
 		}
 	}
 
@@ -325,6 +327,13 @@ static mana_symbol_entry* mana_symbol_create_with_level(char* name, mana_symbol_
 static mana_symbol_entry* mana_symbol_create(char* name, mana_symbol_class_type_id class_type)
 {
 	return mana_symbol_create_with_level(name, class_type, mana_symbol_block_level);
+}
+
+void mana_symbol_destroy(char* name)
+{
+	mana_symbol_entry* symbol = mana_symbol_lookup(name);
+	if (symbol)
+		symbol->name = 0;
 }
 
 static mana_symbol_entry* mana_symbol_create_entry(char* name, mana_symbol_class_type_id class_type, int32_t address)
@@ -479,32 +488,27 @@ mana_symbol_entry* mana_symbol_create_label(char* name)
 	return symbol;
 }
 
-mana_symbol_entry* mana_symbol_create_function(char* name)
+////////////////////////////////////////////////////////////////////////////////
+mana_symbol_entry* mana_symbol_create_function(const char* name)
 {
+	const mana_symbol_class_type_id class_type = MANA_SYMBOL_IS_ACTOR_OR_STRUCTER_OPENED()
+		? MANA_CLASS_TYPE_MEMBER_FUNCTION : MANA_CLASS_TYPE_FUNCTION;
+
 	mana_symbol_entry* symbol = mana_symbol_lookup(name);
-	if(symbol == NULL)
+	if (symbol == NULL)
+	{
 		symbol = mana_symbol_create_entry(name, MANA_CLASS_TYPE_NEW_SYMBOL, 0);
-
-	if (MANA_SYMBOL_IS_ACTOR_OR_STRUCTER_OPENED())
-	{
-		symbol->class_type = MANA_CLASS_TYPE_MEMBER_FUNCTION;
+		symbol->class_type = class_type;
+		symbol->override = mana_symbol_module_block_opened;
 	}
-	else
+	else if (symbol->override == false || symbol->class_type != class_type)
 	{
-		symbol->class_type = MANA_CLASS_TYPE_FUNCTION;
+		mana_parse_error("the function already declared");
 	}
-
 	return symbol;
 }
 
-void mana_symbol_destroy(char* name)
-{
-	mana_symbol_entry* symbol = mana_symbol_lookup(name);
-	if (symbol)
-		symbol->name = 0;
-}
-
-void mana_symbol_open_function(int32_t is_action, mana_symbol_entry* function, mana_type_description* type)
+void mana_symbol_begin_function_registration(bool is_action, mana_symbol_entry* function, mana_type_description* type)
 {
 	if (MANA_SYMBOL_IS_ACTOR_OR_STRUCTER_OPENED())
 	{
@@ -541,10 +545,6 @@ void mana_symbol_open_function(int32_t is_action, mana_symbol_entry* function, m
 	if(function->class_type == MANA_CLASS_TYPE_NEW_SYMBOL)
 	{
 		function->type = type;
-	}
-	else
-	{
-		mana_parse_error("the function already declared");
 	}
 
 	/* シンボルの設定 */
@@ -602,7 +602,7 @@ void mana_symbol_open_function(int32_t is_action, mana_symbol_entry* function, m
 	}
 }
 
-void mana_symbol_close_function(mana_symbol_entry* function)
+void mana_symbol_commit_function_registration(mana_symbol_entry* function)
 {
 	if(MANA_SYMBOL_IS_ACTOR_OR_STRUCTER_OPENED())
 		mana_data_set(function->name);
@@ -663,7 +663,7 @@ void mana_symbol_close_function(mana_symbol_entry* function)
 	 * frame bufferのサイズを更新
 	 *
 	 * mana_symbol_open_blockがmana_symbol_create_functionで呼ばれるので
-	 * mana_symbol_open_functionにmana_symbol_open_blockを呼んでいなくても
+	 * mana_symbol_begin_function_registrationにmana_symbol_open_blockを呼んでいなくても
 	 * ここでmana_symbol_close_blockを呼び出す必要がある。
 	 */
 	mana_symbol_close_block();
@@ -672,7 +672,7 @@ void mana_symbol_close_function(mana_symbol_entry* function)
 		mana_symbol_align_size(mana_symbol_max_local_memory_address, FBSZ));
 }
 
-void mana_symbol_open_native_function()
+void mana_symbol_begin_native_function_registration()
 {
 	/*
 	function(p1, p2);
@@ -690,7 +690,7 @@ void mana_symbol_open_native_function()
 	mana_symbol_local_memory_address += sizeof(void*);
 }
 
-void mana_symbol_close_native_function(mana_symbol_entry* function, mana_type_description* type)
+void mana_symbol_commit_native_function_registration(mana_symbol_entry* function, mana_type_description* type)
 {
 	/* 1) check */
 	if(mana_symbol_block_level > 1)
@@ -708,39 +708,6 @@ void mana_symbol_close_native_function(mana_symbol_entry* function, mana_type_de
 	mana_symbol_is_function_opened = false;
 }
 
-void mana_symbol_set_type(char* name, mana_type_description* type)
-{
-	mana_symbol_entry* symbol;
-
-	symbol = mana_symbol_lookup(name);
-	if(symbol == NULL)
-	{
-		symbol = mana_symbol_create_entry(name, MANA_CLASS_TYPE_TYPEDEF, 0);
-		symbol->type = type;
-	}
-	else if(symbol->type == type)
-	{
-		return;
-	}
-	else if(symbol->class_type == MANA_CLASS_TYPE_TYPEDEF && (symbol->type)->tcons == MANA_DATA_TYPE_INCOMPLETE)
-	{
-		if(symbol == (mana_symbol_entry*)type->component || type->tcons == MANA_DATA_TYPE_INCOMPLETE)
-		{
-			mana_parse_error("illegal reference to an incomplete name");
-		}
-		else
-		{
-			*(symbol->type) = *type;
-		}
-	}
-	else
-	{
-		mana_parse_error("invalid identifier used as a type name");
-	}
-
-	type->name = name;
-}
-
 /*****************************************************************************/
 /* structuer */
 void mana_symbol_open_structure(void)
@@ -755,7 +722,7 @@ void mana_symbol_open_structure(void)
 	mana_symbol_actor_memory_address = 0;
 }
 
-mana_type_description* mana_symbol_close_structure(char* name)
+mana_type_description* mana_symbol_close_structure(const char* name)
 {
 	mana_symbol_entry* symbol;
 	mana_type_description* type;
@@ -916,18 +883,45 @@ SKIP:
 
 /*****************************************************************************/
 /* module */
-void mana_symbol_open_module(void)
+void mana_symbol_open_module(mana_symbol_entry* symbol)
 {
 	if(mana_symbol_block_level)
 		mana_parse_error("the module declaration ignored");
 	mana_symbol_open_block(false);
+	mana_symbol_module_block_opened = true;
 	mana_symbol_actor_or_structure_level++;
+
+	if (symbol)
+	{
+		mana_type_description* type;
+
+		for (type = symbol->type; type->tcons == MANA_DATA_TYPE_ARRAY; type = type->component)
+			;
+
+		// typeがactorではない場合、続行不可能
+		if (type->tcons != MANA_DATA_TYPE_ACTOR && type->tcons != MANA_DATA_TYPE_MODULE)
+		{
+			mana_parse_error("%s is NOT modeule!", symbol->name);
+		}
+		else
+		{
+			// mana_symbol_close_blockでmana_symbol_hash_tableを開放する
+			mana_symbol_block_table[mana_symbol_block_level].head = (mana_symbol_entry*)type->component;
+
+			// シンボルリストの末端からhashに登録
+			mana_symbol_open_actor_register_member((mana_symbol_entry*)type->component);
+		}
+	}
+
+	// instance変数サイズの再計算
 	mana_symbol_actor_memory_address = 0;
 }
 
-mana_type_description* mana_symbol_close_module(char* name)
+mana_type_description* mana_symbol_close_module(const char* name)
 {
 	mana_type_description* type;
+
+	mana_data_set(name);
 
 	/* mana_symbol_entry*をmana_type_description*として代入しています
 	 * 参照先でmana_symbol_entry*にキャストしています。
@@ -939,6 +933,7 @@ mana_type_description* mana_symbol_close_module(char* name)
 	type->alignment_memory_size = IBSZ;
 
 	mana_symbol_actor_or_structure_level--;
+	mana_symbol_module_block_opened = false;
 	mana_symbol_close_block();
 
 	type->memory_size = mana_symbol_align_size(mana_symbol_actor_memory_address, IBSZ);
@@ -946,7 +941,7 @@ mana_type_description* mana_symbol_close_module(char* name)
 	return type;
 }
 
-void mana_symbol_extend_module(char* name)
+void mana_symbol_extend_module(const char* name)
 {
 	mana_symbol_entry* symbol = mana_symbol_lookup(name);
 	if(symbol && symbol->type && symbol->type->tcons == MANA_DATA_TYPE_MODULE)
@@ -976,17 +971,51 @@ void mana_symbol_extend_module(char* name)
 }
 
 /*****************************************************************************/
+void mana_symbol_set_type(const char* name, mana_type_description* type)
+{
+	mana_symbol_entry* symbol;
+
+	symbol = mana_symbol_lookup(name);
+	if (symbol == NULL)
+	{
+		symbol = mana_symbol_create_entry(name, MANA_CLASS_TYPE_TYPEDEF, 0);
+		symbol->type = type;
+	}
+	else if (symbol->type == type)
+	{
+		return;
+	}
+	else if (symbol->class_type == MANA_CLASS_TYPE_TYPEDEF && (symbol->type)->tcons == MANA_DATA_TYPE_INCOMPLETE)
+	{
+		if (symbol == (mana_symbol_entry*)type->component || type->tcons == MANA_DATA_TYPE_INCOMPLETE)
+		{
+			mana_parse_error("illegal reference to an incomplete name");
+		}
+		else
+		{
+			*(symbol->type) = *type;
+		}
+	}
+	else
+	{
+		mana_parse_error("invalid identifier used as a type name");
+	}
+
+	type->name = name;
+}
+
+/*****************************************************************************/
 /* request */
 void mana_symbol_add_request(uint8_t opcode, mana_node* level, mana_node* actor, char* action)
 {
-	mana_linker_expression(level, false);
+	mana_compiler_expression(level, false);
 
 	if(actor && actor->type)
 	{
 		switch(actor->type->tcons)
 		{
 		case MANA_DATA_TYPE_ACTOR:
-			mana_linker_expression(actor, false);
+			mana_compiler_expression(actor, false);
 			mana_code_set_opecode_and_operand(opcode, mana_data_set(action));
 			return;
 
@@ -1007,7 +1036,7 @@ void mana_symbol_add_request(uint8_t opcode, mana_node* level, mana_node* actor,
 				default:
 					goto ABORT;
 				}
-				mana_linker_expression(actor, false);
+				mana_compiler_expression(actor, false);
 				mana_code_set_opecode_and_operand(opcode, mana_data_set(action));
 				return;
 			}
@@ -1031,8 +1060,8 @@ void mana_symbol_add_join(mana_node* level, mana_node* actor)
 				break;
 
 		case MANA_DATA_TYPE_ACTOR:
-			mana_linker_expression(actor, false);
-			mana_linker_expression(level, false);
+			mana_compiler_expression(actor, false);
+			mana_compiler_expression(level, false);
 			mana_code_set_opecode(MANA_IL_JOIN);
 			return;
 
@@ -1265,7 +1294,7 @@ static int32_t mana_symbol_write_actor_infomation_data(mana_stream* stream, mana
 	number_of_actions = mana_symbol_get_number_of_actions(type);
 	if(number_of_actions > (1 << (8 * sizeof(actor_info.number_of_actions))))
 	{
-		mana_linker_error("Too much actions in %s.\n", symbol->name);
+		mana_compiler_error("Too much actions in %s.\n", symbol->name);
 		return false;
 	}
 
@@ -1277,7 +1306,7 @@ static int32_t mana_symbol_write_actor_infomation_data(mana_stream* stream, mana
 
 	if(actor_info.name == (uint32_t)-1)
 	{
-		mana_linker_error("Can't find actor '%s'.\n", symbol->name);
+		mana_compiler_error("Can't find actor '%s'.\n", symbol->name);
 		return false;
 	}
 
@@ -1302,7 +1331,7 @@ static int32_t mana_symbol_write_actor_infomation_data(mana_stream* stream, mana
 
 				if(action_info.name == (uint32_t)-1)
 				{
-					mana_linker_error("Can't find action '%s'.\n", component_symbol->name);
+					mana_compiler_error("Can't find action '%s'.\n", component_symbol->name);
 					return false;
 				}
 
