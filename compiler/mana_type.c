@@ -174,7 +174,7 @@ int32_t mana_type_compare(mana_type_description* self, mana_type_description* T2
 			int32_t n1 = self->number_of_elements;
 			int32_t n2 = T2->number_of_elements;
 			if(n1 > 0 && n2 > 0 && n1 != n2 )
-				mana_compile_error("array size unmatched");
+				mana_parse_error("array size unmatched");
 			return mana_type_compare(self->component, T2->component);
 		}
 
@@ -252,7 +252,7 @@ int32_t mana_type_compatible(mana_type_description* self, mana_type_description*
 		break;
 	}
 
-	mana_compile_error("incompatible type of operand");
+	mana_parse_error("incompatible type of operand");
 
 	return false;
 }
