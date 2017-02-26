@@ -98,7 +98,7 @@ int32_t mana_datalink_generator_append(const char* file_name)
 
 	if(file_name == NULL)
 	{
-		mana_compile_error("file name not found");
+		mana_parse_error("file name not found");
 		return -1;
 	}
 
@@ -120,7 +120,7 @@ int32_t mana_datalink_generator_append(const char* file_name)
 #endif
 	{
 		mana_free(entry->file_name);
-		mana_compile_error("unable to open '%s'", file_name);
+		mana_parse_error("unable to open '%s'", file_name);
 		return -1;
 	}
 	else
@@ -174,7 +174,7 @@ int32_t mana_datalink_generator_write_data(mana_stream* stream)
 	mana_stream_push_data(stream, &header, sizeof(header));
 	/*
 	{
-		mana_compile_error("file write failed");
+		mana_parse_error("file write failed");
 		return false;
 	}
 	*/
@@ -191,7 +191,7 @@ int32_t mana_datalink_generator_write_data(mana_stream* stream)
 		/*
 		if(fwrite(&entry_header, sizeof(entry_header), 1, file) != 1)
 		{
-			mana_compile_error("file write failed");
+			mana_parse_error("file write failed");
 			return false;
 		}
 		*/
@@ -220,7 +220,7 @@ int32_t mana_datalink_generator_write_data(mana_stream* stream)
 		if((in = fopen(entry->file_name, "rb")) == NULL)
 #endif
 		{
-			mana_compile_error("unable to open '%s'", entry->file_name);
+			mana_parse_error("unable to open '%s'", entry->file_name);
 			return false;
 		}
 
