@@ -1,25 +1,16 @@
 %{
-/*
- * mana (compiler)
- *
- * @file	mana_parser.y
- * @brief	意味解析に関するソースファイル
- * @detail	このファイルは意味解析ノードに関係するソースファイルです。
- * @author	Shun Moriya <shun@mnu.sakura.ne.jp>
- * @date	2003-
- */
+/*!
+mana (compiler)
 
-#if !defined(___MANA_CODE_H___)
-#include "mana_code.h"
-#endif
-#if !defined(___MANA_COMPILE_H___)
-#include "mana_compile.h"
-#endif
-#if !defined(___MANA_DATA_H___)
-#include "mana_data.h"
-#endif
-#if !defined(___MANA_JUMP_H___)
-#include "mana_jump.h"
+@file	mana_parser.y
+@brief	意味解析に関するソースファイル
+@detail	このファイルは意味解析ノードに関係するソースファイルです。
+@author	Shun Moriya <shun@mnu.sakura.ne.jp>
+@date	2003-
+*/
+
+#if !defined(___MANA_COMPILER_H___)
+#include "mana_compiler.h"
 #endif
 #if !defined(___MANA_LINKER_H___)
 #include "mana_linker.h"
@@ -27,28 +18,9 @@
 #if !defined(___MANA_MAIN_H___)
 #include "mana_main.h"
 #endif
-#if !defined(___MANA_NODE_H___)
-#include "mana_node.h"
-#endif
-#if !defined(___MANA_REGISTER_H___)
-#include "mana_register.h"
-#endif
-#if !defined(___MANA_SYMBOL_H___)
-#include "mana_symbol.h"
-#endif
-#if !defined(___MANA_TYPE_H___)
-#include "mana_type.h"
-#endif
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 #define YYERROR_VERBOSE
 
-static mana_symbol_entry* mana_actor_symbol_entry_pointer;
-static mana_symbol_entry* mana_function_symbol_entry_pointer;
-static int mana_allocated_size;
-static int mana_static_block_opend;
 int yynerrs;
 
 %}
@@ -62,8 +34,7 @@ int yynerrs;
 	mana_type_description* type;
 }
 
-%type	<digit>		arg_decls
-%type	<node>		block case cases left_hand constant expression statement statements variable_size variable_sizes variable_type function struct_member struct_members struct action actions actor declarator declaration allocate_declarations declarations primary arg_calls variable_decl line
+%type	<node>		block case cases left_hand constant expression statement statements variable_size variable_sizes variable_type function struct_member struct_members struct action actions actor declarator declaration allocate_declarations declarations primary arg_calls arg_decls variable_decl line
 
 %token	<digit>		tDIGIT
 %token	<real>		tREAL
@@ -119,9 +90,9 @@ int yynerrs;
 program			: line
 					{
 						mana_node_dump($1);
-						mana_linker_generate_symbol($1, NULL);
-						mana_linker_resolve_symbol($1);
-						mana_linker_generate_code($1, true);
+						mana_compiler_generate_symbol($1, NULL);
+						mana_compiler_resolve_symbol($1, true);
+						mana_linker_resolve_address();
 					}
 				;
 				
@@ -152,7 +123,7 @@ declarations	: actor
 					}
 
 				| tALIAS tIDENTIFIER tSTRING ';'
-					{ $$ = mana_node_create_node(MANA_NODE_DECLARE_ALIAS, NULL, NULL, NULL); $$->string = $2; }
+					{ $$ = mana_node_create_node(MANA_NODE_DEFINE_ALIAS, NULL, NULL, NULL); $$->string = $2; }
 
 				| tINCLUDE tSTRING ';'
 					{ $$ = NULL; if(! mana_lexer_open($2, false)){ YYABORT; } }
@@ -414,7 +385,7 @@ primary			: '-' expression	%prec tUMINUS
 				| tSIZEOF '(' variable_type ')'
 					{ $$ = mana_node_create_node(MANA_NODE_SIZEOF, $3, NULL, NULL); }
 				| tIDENTIFIER '(' arg_calls ')'
-					{ $$ = mana_node_create_node(MANA_NODE_CALL, $3, NULL, NULL); $$->string = $1; }
+					{ $$ = mana_node_create_node(MANA_NODE_CALL, NULL, $3, NULL); $$->string = $1; }
 				| constant
 				| left_hand
 				;
@@ -465,23 +436,21 @@ case			: tCASE expression ':' statements
 arg_calls		: /* empty */
 					{ $$ = NULL; }
 				| expression
-					{ $$ = mana_node_create_node(MANA_NODE_ARGUMENT, $1, NULL, NULL); }
+					{ $$ = mana_node_create_node(MANA_NODE_CALL_ARGUMENT, $1, NULL, NULL); }
 				| expression ',' arg_calls
-					{ $$ = mana_node_create_node(MANA_NODE_ARGUMENT, $1, $3, NULL); }
-				;
-
-variable_decl	: variable_type declarator
-					{ $$ = mana_node_create_node(MANA_NODE_VARIABLE_DECLARATION, $1, $2, NULL); }
+					{ $$ = mana_node_create_node(MANA_NODE_CALL_ARGUMENT, $1, $3, NULL); }
 				;
 
 arg_decls		: /* empty */
-					{ $$ = 0; }
-				| arg_decl
-					{ $$ = 1; }
-				| arg_decls ',' arg_decl
-					{ $$ = $1 + 1; }
+					{ $$ = NULL; }
+				| variable_decl
+					{ $$ = mana_node_create_node(MANA_NODE_DECLARE_ARGUMENT, $1, NULL, NULL); }
+				| arg_decls ',' variable_decl
+					{ $$ = mana_node_create_node(MANA_NODE_DECLARE_ARGUMENT, $3, $1, NULL); }
 				;
-arg_decl		: variable_type declarator
+
+variable_decl	: variable_type declarator
+					{ $$ = mana_node_create_node(MANA_NODE_DECLARE_VARIABLE, $1, $2, NULL); }
 				;
 
 declarator		: tIDENTIFIER
@@ -492,7 +461,7 @@ declarator		: tIDENTIFIER
 
 variable_sizes	: variable_size
 				| variable_size variable_sizes
-					{ if ($1) { $$ = $1; $$->next = $2; } else { $$ = $2; } }
+					{ if ($1) { $$ = $1; $$->left = $2; } else { $$ = $2; } }
 				;
 variable_size	: '[' tDIGIT ']'
 					{ $$ = mana_node_create_node(MANA_NODE_VARIABLE_SIZE, NULL, NULL, NULL); $$->digit = $2; }
@@ -505,7 +474,7 @@ variable_size	: '[' tDIGIT ']'
  * @brief	mana_print error message
  * @param	message		error message
  */
-void yyerror(char* message)
+void yyerror(const char* message)
 {
 	yynerrs ++;
 	mana_error(mana_lexer_get_current_filename(), mana_lexer_get_current_line(), message);
@@ -516,169 +485,6 @@ void yyerror(char* message)
  */
 void mana_parser_initialize(void)
 {
-	mana_static_block_opend = false;
-
-	/* レジスタ割り当て処理を初期化 */
-	mana_register_initialzie();
-
-	{
-		/* vec2 */
-		mana_symbol_open_structure();
-		mana_symbol_allocate_memory(mana_symbol_create_identification("x", NULL, false), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_NORMAL);
-		mana_symbol_allocate_memory(mana_symbol_create_identification("y", NULL, false), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_NORMAL);
-		mana_symbol_set_type("vec2", mana_symbol_close_structure("vec2"));
-
-		/* vec3 */
-		mana_symbol_open_structure();
-		mana_symbol_allocate_memory(mana_symbol_create_identification("x", NULL, false), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_NORMAL);
-		mana_symbol_allocate_memory(mana_symbol_create_identification("y", NULL, false), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_NORMAL);
-		mana_symbol_allocate_memory(mana_symbol_create_identification("z", NULL, false), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_NORMAL);
-		mana_symbol_set_type("vec3", mana_symbol_close_structure("vec3"));
-
-		/* vec4 */
-		mana_symbol_open_structure();
-		mana_symbol_allocate_memory(mana_symbol_create_identification("x", NULL, false), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_NORMAL);
-		mana_symbol_allocate_memory(mana_symbol_create_identification("y", NULL, false), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_NORMAL);
-		mana_symbol_allocate_memory(mana_symbol_create_identification("z", NULL, false), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_NORMAL);
-		mana_symbol_allocate_memory(mana_symbol_create_identification("w", NULL, false), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_NORMAL);
-		mana_symbol_set_type("vec4", mana_symbol_close_structure("vec4"));
-
-		/* color */
-		mana_symbol_open_structure();
-		mana_symbol_allocate_memory(mana_symbol_create_identification("r", NULL, false), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_NORMAL);
-		mana_symbol_allocate_memory(mana_symbol_create_identification("g", NULL, false), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_NORMAL);
-		mana_symbol_allocate_memory(mana_symbol_create_identification("b", NULL, false), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_NORMAL);
-		mana_symbol_allocate_memory(mana_symbol_create_identification("a", NULL, false), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_NORMAL);
-		mana_symbol_set_type("color", mana_symbol_close_structure("color"));
-	}
-
-	{
-		mana_symbol_entry* symbol;
-
-		/* int getUerData() */
-		symbol = mana_symbol_create_function("getUserData");
-		symbol->number_of_parameters = 0;
-		mana_symbol_open_native_function();
-		mana_symbol_close_native_function(symbol, mana_type_get(MANA_DATA_TYPE_INT));
-
-		/* void setUserData(int data) */
-		symbol = mana_symbol_create_function("setUserData");
-		symbol->number_of_parameters = 1;
-		mana_symbol_open_native_function();
-		mana_symbol_allocate_memory(mana_symbol_create_identification("data", NULL, false), mana_type_get(MANA_DATA_TYPE_INT), MANA_MEMORY_TYPE_PARAMETER);
-		mana_symbol_close_native_function(symbol, mana_type_get(MANA_DATA_TYPE_VOID));
-	
-		/* pointer getUserPointer() */
-		symbol = mana_symbol_create_function("getUserPointer");
-		symbol->number_of_parameters = 0;
-		mana_symbol_open_native_function();
-		mana_symbol_close_native_function(symbol, mana_type_pointer);
-
-		/* void setUserPointer(pointer address) */
-		symbol = mana_symbol_create_function("setUserPointer");
-		symbol->number_of_parameters = 1;
-		mana_symbol_open_native_function();
-		mana_symbol_allocate_memory(mana_symbol_create_identification("address", NULL, false), mana_type_pointer, MANA_MEMORY_TYPE_PARAMETER);
-		mana_symbol_close_native_function(symbol, mana_type_get(MANA_DATA_TYPE_VOID));
-
-		/* int debug() */
-		symbol = mana_symbol_create_function("debug");
-		symbol->number_of_parameters = 0;
-		mana_symbol_open_native_function();
-		mana_symbol_close_native_function(symbol, mana_type_get(MANA_DATA_TYPE_INT));
-
-		/* void setTickCount(int count) */
-		symbol = mana_symbol_create_function("setTickCount");
-		symbol->number_of_parameters = 1;
-		mana_symbol_open_native_function();
-		mana_symbol_allocate_memory(mana_symbol_create_identification("count", NULL, false), mana_type_get(MANA_DATA_TYPE_INT), MANA_MEMORY_TYPE_PARAMETER);
-		mana_symbol_close_native_function(symbol, mana_type_get(MANA_DATA_TYPE_VOID));
-
-		/* void wait(float) */
-		symbol = mana_symbol_create_function("wait");
-		symbol->number_of_parameters = 1;
-		mana_symbol_open_native_function();
-		mana_symbol_allocate_memory(mana_symbol_create_identification("second", NULL, false), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_PARAMETER);
-		mana_symbol_close_native_function(symbol, mana_type_get(MANA_DATA_TYPE_VOID));
-
-		/* void waitFrame(int) */
-		symbol = mana_symbol_create_function("waitFrame");
-		symbol->number_of_parameters = 1;
-		mana_symbol_open_native_function();
-		mana_symbol_allocate_memory(mana_symbol_create_identification("frame", NULL, false), mana_type_get(MANA_DATA_TYPE_INT), MANA_MEMORY_TYPE_PARAMETER);
-		mana_symbol_close_native_function(symbol, mana_type_get(MANA_DATA_TYPE_VOID));
-
-		/* void srand(int count) */
-		symbol = mana_symbol_create_function("srand");
-		symbol->number_of_parameters = 1;
-		mana_symbol_open_native_function();
-		mana_symbol_allocate_memory(mana_symbol_create_identification("count", NULL, false), mana_type_get(MANA_DATA_TYPE_INT), MANA_MEMORY_TYPE_PARAMETER);
-		mana_symbol_close_native_function(symbol, mana_type_get(MANA_DATA_TYPE_VOID));
-
-		/* int rand(int, int) */
-		symbol = mana_symbol_create_function("rand");
-		symbol->number_of_parameters = 2;
-		mana_symbol_open_native_function();
-		mana_symbol_allocate_memory(mana_symbol_create_identification("min", NULL, false), mana_type_get(MANA_DATA_TYPE_INT), MANA_MEMORY_TYPE_PARAMETER);
-		mana_symbol_allocate_memory(mana_symbol_create_identification("max", NULL, false), mana_type_get(MANA_DATA_TYPE_INT), MANA_MEMORY_TYPE_PARAMETER);
-		mana_symbol_close_native_function(symbol, mana_type_get(MANA_DATA_TYPE_INT));
-
-		/* float frand() */
-		symbol = mana_symbol_create_function("frand");
-		symbol->number_of_parameters = 0;
-		mana_symbol_open_native_function();
-		mana_symbol_close_native_function(symbol, mana_type_get(MANA_DATA_TYPE_FLOAT));
-
-		/* float sin(float) */
-		symbol = mana_symbol_create_function("sin");
-		symbol->number_of_parameters = 1;
-		mana_symbol_open_native_function();
-		mana_symbol_allocate_memory(mana_symbol_create_identification("degree", NULL, false), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_PARAMETER);
-		mana_symbol_close_native_function(symbol, mana_type_get(MANA_DATA_TYPE_FLOAT));
-
-		/* float cos(float) */
-		symbol = mana_symbol_create_function("cos");
-		symbol->number_of_parameters = 1;
-		mana_symbol_open_native_function();
-		mana_symbol_allocate_memory(mana_symbol_create_identification("degree", NULL, false), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_PARAMETER);
-		mana_symbol_close_native_function(symbol, mana_type_get(MANA_DATA_TYPE_FLOAT));
-
-		/* float atan2(float, float) */
-		symbol = mana_symbol_create_function("atan2");
-		symbol->number_of_parameters = 2;
-		mana_symbol_open_native_function();
-		mana_symbol_allocate_memory(mana_symbol_create_identification("y", NULL, false), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_PARAMETER);
-		mana_symbol_allocate_memory(mana_symbol_create_identification("x", NULL, false), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_PARAMETER);
-		mana_symbol_close_native_function(symbol, mana_type_get(MANA_DATA_TYPE_FLOAT));
-
-		/* float tan(float) */
-		symbol = mana_symbol_create_function("tan");
-		symbol->number_of_parameters = 1;
-		mana_symbol_open_native_function();
-		mana_symbol_allocate_memory(mana_symbol_create_identification("degree", NULL, false), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_PARAMETER);
-		mana_symbol_close_native_function(symbol, mana_type_get(MANA_DATA_TYPE_FLOAT));
-
-		/* float angleMod(float) */
-		symbol = mana_symbol_create_function("angleMod");
-		symbol->number_of_parameters = 1;
-		mana_symbol_open_native_function();
-		mana_symbol_allocate_memory(mana_symbol_create_identification("degree", NULL, false), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_PARAMETER);
-		mana_symbol_close_native_function(symbol, mana_type_get(MANA_DATA_TYPE_FLOAT));
-
-		/* float sqrt(float) */
-		symbol = mana_symbol_create_function("sqrt");
-		symbol->number_of_parameters = 1;
-		mana_symbol_open_native_function();
-		mana_symbol_allocate_memory(mana_symbol_create_identification("degree", NULL, false), mana_type_get(MANA_DATA_TYPE_FLOAT), MANA_MEMORY_TYPE_PARAMETER);
-		mana_symbol_close_native_function(symbol, mana_type_get(MANA_DATA_TYPE_FLOAT));
-
-		/* actor getActor(string) */
-		symbol = mana_symbol_create_function("getActor");
-		symbol->number_of_parameters = 1;
-		mana_symbol_open_native_function();
-		mana_symbol_allocate_memory(mana_symbol_create_identification("name", NULL, false), mana_type_string, MANA_MEMORY_TYPE_PARAMETER);
-		mana_symbol_close_native_function(symbol, mana_type_get(MANA_DATA_TYPE_ACTOR));
-	}
 }
 
 /*!
@@ -686,11 +492,4 @@ void mana_parser_initialize(void)
  */
 void mana_parser_finalize(void)
 {
-	/* レジスタ割り当て処理を終了 */
-	mana_register_finalize();
-}
-
-mana_symbol_entry* mana_parser_get_actor_symbol_entry_pointer()
-{
-	return mana_actor_symbol_entry_pointer;
 }
