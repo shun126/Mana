@@ -1494,7 +1494,11 @@ DO_RECURSIVE:
 		break;
 
 	case MANA_NODE_BREAK:
+		mana_code_set_opecode_and_operand(MANA_IL_BRA, mana_jump_break(mana_code_get_pc()));
+		break;
+
 	case MANA_NODE_CONTINUE:
+		mana_code_set_opecode_and_operand(MANA_IL_BRA, mana_jump_continue(mana_code_get_pc()));
 		break;
 
 	case MANA_NODE_CALL:
@@ -1516,8 +1520,26 @@ DO_RECURSIVE:
 		break;
 
 	case MANA_NODE_CASE:
+		mana_jump_switch_case(node->left);
+		if(node->left && node->left->type) node->type = node->left->type;
+		mana_compiler_resolve_symbol(node->right, enable_load);
+		break;
+
 	case MANA_NODE_DEFAULT:
+		mana_jump_switch_default();
+		break;
+
 	case MANA_NODE_DO:
+		{
+			mana_jump_open_chain(MANA_JUMP_CHAIN_STATE_DO);
+			const int address = mana_code_get_pc();
+
+			mana_compiler_resolve_symbol(node->left, enable_load);
+
+			mana_jump_close_continue_only();
+			mana_code_replace_all(mana_compiler_condition(node->right, false), address);
+			mana_jump_close_chain();
+		}
 		break;
 
 	case MANA_NODE_FOR:
@@ -1540,11 +1562,54 @@ DO_RECURSIVE:
 		break;
 
 	case MANA_NODE_GOTO:
+		{
+			mana_symbol_entry* symbol = mana_symbol_create_label(node->string);
+			symbol->etc = mana_code_set_opecode_and_operand(MANA_IL_BRA, symbol->etc);
+		}
+		break;
+
 	case MANA_NODE_HALT:
+		mana_code_set_opecode(MANA_IL_HALT);
+		break;
+
 	case MANA_NODE_IF:
+		{
+			int address = mana_compiler_condition(node->left, true);
+			mana_compiler_resolve_symbol(node->body, enable_load);
+			if(node->right)
+			{
+				const int else_begin_address = mana_code_set_opecode_and_operand(MANA_IL_BRA, -1);
+				mana_code_replace_all(address, mana_code_get_pc());
+				mana_compiler_resolve_symbol(node->right, enable_load);
+				address = else_begin_address;
+			}
+			mana_code_replace_all(address, mana_code_get_pc());
+		}
+		break;
+
 	case MANA_NODE_LABEL:
+		{
+			mana_symbol_entry* symbol = mana_symbol_create_label(node->string);
+			symbol->address = mana_code_get_pc();
+		}
+		break;
+
 	case MANA_NODE_LOCK:
+		mana_jump_open_chain(MANA_JUMP_CHAIN_STATE_LOCK);
+		mana_code_set_opecode(MANA_IL_NONPREEMPTIVE);
+		mana_compiler_resolve_symbol(node->left, enable_load);
+		mana_jump_close_chain();
+		mana_code_set_opecode(MANA_IL_PREEMPTIVE);
+		break;
+
 	case MANA_NODE_LOOP:
+		{
+			mana_jump_open_chain(MANA_JUMP_CHAIN_STATE_LOOP);
+			const int address = mana_code_get_pc();
+			mana_compiler_resolve_symbol(node->left, enable_load);
+			mana_code_set_opecode_and_operand(MANA_IL_BRA, address);
+			mana_jump_close_chain();
+		}
 		break;
 
 	case MANA_NODE_RETURN:
@@ -1560,7 +1625,32 @@ DO_RECURSIVE:
 		break;
 
 	case MANA_NODE_SWITCH:
+		{
+			mana_type_description* type = node->left->type;
+			mana_compiler_expression(node->left, false);
+			const int address = mana_code_get_pc();
+			mana_jump_open_chain(MANA_JUMP_CHAIN_STATE_SWITCH);
+			mana_code_set_opecode_and_operand(MANA_IL_BRA, -1);
+			mana_jump_open_switch(type);
+
+			mana_compiler_resolve_symbol(node->right, enable_load);
+
+			mana_code_set_opecode_and_operand(MANA_IL_BRA, mana_jump_break(mana_code_get_pc()));
+			mana_code_replace_all(address, mana_code_get_pc());
+			mana_jump_switch_build();
+			mana_jump_close_chain();
+			mana_jump_close_switch();
+		}
+		break;
+
 	case MANA_NODE_WHILE:
+		{
+			mana_jump_open_chain(MANA_JUMP_CHAIN_STATE_WHILE);
+			mana_jump_break(mana_compiler_condition(node->left, true));
+			mana_compiler_resolve_symbol(node->right, enable_load);
+			mana_code_set_opecode_and_operand(MANA_IL_BRA, mana_jump_continue(mana_code_get_pc()));
+			mana_jump_close_chain();
+		}
 		break;
 
 		// •¡”‚Ì–½—ß‚É“WŠJ‚³‚ê‚éƒm[ƒh
@@ -1642,7 +1732,7 @@ DO_RECURSIVE:
 		break;
 
 	case MANA_NODE_EXPRESSION_IF:
-		/* ŽO€‰‰ŽZŽq */
+		// ŽO€‰‰ŽZŽq
 		{
 			int32_t pc1, pc2;
 			mana_compiler_condition_core(node->next);
@@ -1657,6 +1747,7 @@ DO_RECURSIVE:
 
 	case MANA_NODE_MEMBER_FUNCTION:
 	case MANA_NODE_MEMBER_VARIABLE:
+		// TODO:ŽÀ‘•‚µ‚Ä‚­‚¾‚³‚¢
 		mana_compiler_resolve_symbol(node->left, enable_load);
 		mana_compiler_resolve_symbol(node->right, enable_load);
 		break;
@@ -1673,9 +1764,25 @@ DO_RECURSIVE:
 		break;
 
 	case MANA_NODE_PRINT:
+		//mana_linker_call_print($3); 
 		break;
 
 	case MANA_NODE_SIZEOF:
+		{
+			int max_char = (1 << (8 * CBSZ - 1)) - 1;
+			int min_char = -1 << (8 * CBSZ - 1);
+			int max_short = (1 << (8 * SBSZ - 1)) - 1;
+			int min_short = -1 << (8 * SBSZ - 1);
+
+			node->digit = node->left->type->memory_size;
+
+			if(node->digit <= max_char && node->digit >= min_char)
+				node->type = mana_type_get(MANA_DATA_TYPE_CHAR);
+			else if(node->digit <= max_short && node->digit >= min_short)
+				node->type = mana_type_get(MANA_DATA_TYPE_SHORT);
+			else
+				node->type = mana_type_get(MANA_DATA_TYPE_INT);
+		}
 		break;
 
 	case MANA_NODE_STRING:
@@ -1812,7 +1919,7 @@ DO_RECURSIVE:
 	case MANA_NODE_LOR:
 	case MANA_NODE_LNOT:
 	case MANA_NODE_NOT:
-		/* ”äŠrA˜_—‰‰ŽZŽq */
+		// ”äŠrA˜_—‰‰ŽZŽq
 		mana_compiler_automatic_cast(node);
 		mana_compiler_resolve_symbol(node->left, enable_load);
 		mana_compiler_resolve_symbol(node->right, enable_load);
@@ -1820,25 +1927,37 @@ DO_RECURSIVE:
 		break;
 
 	case MANA_NODE_YIELD:
+		mana_code_set_opecode(MANA_IL_YIELD);
+		break;
+
 	case MANA_NODE_REQUEST:
+		mana_symbol_add_request(MANA_IL_REQ, node->left, node->right, NULL);
+		break;
+
 	case MANA_NODE_COMPLY:
+		mana_code_set_opecode(MANA_IL_COMPLY);
+		break;
+
 	case MANA_NODE_REFUSE:
+		mana_code_set_opecode(MANA_IL_REFUSE);
+		break;
+
 	case MANA_NODE_JOIN:
-		// TODO:
+		mana_symbol_add_join(node->left, node->right);
 		break;
 
 	case MANA_NODE_SENDER:
-		/* sender‚ðpush‚µ‚Ü‚· */
+		// sender‚ðpush‚µ‚Ü‚·
 		mana_code_set_opecode(MANA_IL_PUSH_SENDER);
 		break;
 
 	case MANA_NODE_SELF:
-		/* self‚ðpush‚µ‚Ü‚· */
+		// self‚ðpush‚µ‚Ü‚·
 		mana_code_set_opecode(MANA_IL_PUSH_SELF);
 		break;
 
 	case MANA_NODE_PRIORITY:
-		/* priority‚ðpush‚µ‚Ü‚· */
+		// priority‚ðpush‚µ‚Ü‚·
 		mana_code_set_opecode(MANA_IL_PUSH_PRIORITY);
 		break;
 
