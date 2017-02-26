@@ -14,8 +14,8 @@
 #if !defined(___MANA_CODE_H___)
 #include "mana_code.h"
 #endif
-#if !defined(___MANA_COMPILE_H___)
-#include "mana_compile.h"
+#if !defined(___MANA_COMPILER_H___)
+#include "mana_compiler.h"
 #endif
 #if !defined(___MANA_DATA_H___)
 #include "mana_data.h"
@@ -25,6 +25,9 @@
 #endif
 #if !defined(___MANA_JUMP_H___)
 #include "mana_jump.h"
+#endif
+#if !defined(___MANA_REGISTER_H___)
+#include "mana_register.h"
 #endif
 #if !defined(___MANA_SYMBOL_H___)
 #include "mana_symbol.h"
@@ -252,7 +255,7 @@ void mana_compile_warning(const mana_node* node, const char* format, ...)
 #endif
 }
 
-void mana_linker_error(char* format, ...)
+void mana_compiler_error(char* format, ...)
 {
 	char string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
 
@@ -267,7 +270,7 @@ void mana_linker_error(char* format, ...)
 	mana_print("%s: error: %s\n", mana_output_filename, string);
 }
 
-void mana_linker_warning(char* format, ...)
+void mana_compiler_warning(char* format, ...)
 {
 	char string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
 
@@ -347,13 +350,15 @@ int32_t mana_compile(void)
 
 	mana_datalink_generator_initialize();
 	mana_code_initialize();
-	mana_compiler_initialize();
 	mana_data_initialzie();
 	mana_jump_initialize();
-	mana_linker_initialize();
 	mana_node_initialize();
+	mana_register_initialzie();
 	mana_symbol_initialize();
 	mana_type_initialize();
+
+	mana_compiler_initialize();
+	mana_linker_initialize();
 
 	if(mana_variable_header_file)
 	{
@@ -508,13 +513,16 @@ ESCAPE:
 
 	mana_datalink_generator_finalize();
 	mana_code_finalize();
-	mana_compiler_finalize();
 	mana_data_finalize();
 	mana_jump_finalize();
-	mana_linker_finalize();
 	mana_node_finalize();
+	mana_register_finalize();
 	mana_symbol_finalize();
 	mana_type_finalize();
+
+	mana_compiler_finalize();
+	mana_linker_finalize();
+
 	mana_lexer_finalize();
 
 	return result;

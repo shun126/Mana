@@ -26,6 +26,7 @@
 #include <stdarg.h>
 #include <string.h>
 
+static mana_node* mana_node_root_pointer = NULL;
 static size_t mana_node_total_size = 0;
 
 /*!
@@ -41,6 +42,13 @@ void mana_node_initialize(void)
  */
 void mana_node_finalize(void)
 {
+	mana_node* node = mana_node_root_pointer;
+	while (node)
+	{
+		mana_node* link = node->link;
+		mana_free(node);
+		node = link;
+	}
 }
 
 /*!
@@ -179,11 +187,9 @@ mana_node* mana_node_clone(mana_node* org)
 @param[in]	id		ノードタイプ番号
 @return				ノードオブジェクト
 */
-mana_node* mana_node_allocate(mana_node_type_id id)
+mana_node* mana_node_allocate(const mana_node_type_id id)
 {
-	mana_node* node;
-
-	node = (mana_node*)mana_calloc(sizeof(mana_node), 1);
+	mana_node* node = (mana_node*)mana_calloc(sizeof(mana_node), 1);
 #if defined(_DEBUG)
 	static uint32_t count = 0;
 	snprintf(node->magic, sizeof(node->magic), "N%d", count);
@@ -194,46 +200,29 @@ mana_node* mana_node_allocate(mana_node_type_id id)
 	node->filename = mana_lexer_get_current_filename();
 	node->line = mana_lexer_get_current_line();
 
+	node->link = mana_node_root_pointer;
+	mana_node_root_pointer = node;
+
 	return node;
 }
 
 /*!
- * ノード開放
- * @param[in]	node	ノードオブジェクト
- */
-void mana_node_release(mana_node* node)
-{
-	if(node)
-	{
-		if(node->left)
-			mana_node_release(node->left);
-
-		if(node->right)
-			mana_node_release(node->right);
-
-		if(node->next)
-			mana_node_release(node->next);
-
-		mana_free(node);
-		node = NULL;
-	}
-}
-
-/*!
- * 関数ノードを作成します
- * @param[in]	name	関数名
- * @return				関数ノードオブジェクト
- */
-mana_node* mana_node_create_function(char* name)
+ノードを作成します
+@param[in]	id		ノードタイプ番号
+@param[in]	left	左辺ノードオブジェクト
+@param[in]	right	右辺ノードオブジェクト
+@param[in]	body	ノードオブジェクト
+@return		ノードオブジェクト
+*/
+mana_node* mana_node_create_node(mana_node_type_id id, mana_node* left, mana_node* right, mana_node* body)
 {
 	mana_node* node;
-	mana_symbol_entry* symbol;
 
-	symbol = mana_symbol_lookup_or_create_dummy(name);
-
-	node = mana_node_allocate(MANA_NODE_FUNCTION);
-	node->symbol = symbol;
-	node->type = symbol->type;
+	node = mana_node_allocate(id);
+	node->type = left ? left->type : NULL;
+	node->left = left;
+	node->right = right;
+	node->body = body;
 
 	return node;
 }
@@ -256,7 +245,7 @@ mana_node* mana_node_create_leaf(char* name)
 		if(!symbol->used)
 		{
 			symbol->address = mana_datalink_generator_append(symbol->string);
-			symbol->used = 1;
+			symbol->used = true;
 		}
 		node = mana_node_allocate(MANA_NODE_CONST);
 		node->digit = symbol->address;
@@ -308,27 +297,6 @@ mana_node* mana_node_create_leaf(char* name)
 		mana_parse_error("illigal data type");
 		break;
 	}
-
-	return node;
-}
-
-/*!
- * ノードを作成します
- * @param[in]	id		ノードタイプ番号
- * @param[in]	left	左辺ノードオブジェクト
- * @param[in]	right	右辺ノードオブジェクト
- * @param[in]	next	次のノードオブジェクト
- * @return		ノードオブジェクト
- */
-mana_node* mana_node_create_node(mana_node_type_id id, mana_node* left, mana_node* right, mana_node* next)
-{
-	mana_node* node;
-
-	node = mana_node_allocate(id);
-	node->type = left ? left->type : NULL;
-	node->left = left;
-	node->right = right;
-	node->next = next;
 
 	return node;
 }
@@ -395,14 +363,34 @@ mana_node* mana_node_create_call_member(mana_node* tree, char* name, mana_node* 
 	{
 		mana_node* leaf = members;
 
-		while(leaf && leaf->left && leaf->left->id == MANA_NODE_ARGUMENT)
+		while(leaf && leaf->left && leaf->left->id == MANA_NODE_CALL_ARGUMENT)
 			leaf = leaf->left;
 
-		leaf->left = mana_node_create_node(MANA_NODE_ARGUMENT, tree, leaf->left, NULL);
+		leaf->left = mana_node_create_node(MANA_NODE_CALL_ARGUMENT, tree, leaf->left, NULL);
 
 		members->etc++;
 
-		tree = mana_node_create_node(MANA_NODE_CALL, mana_node_create_function(name), members, NULL);
+		tree = mana_node_create_node(MANA_NODE_CALL, NULL/*mana_node_create_function(name)*/, members, NULL);
+#if 0
+		/*!
+		* 関数ノードを作成します
+		* @param[in]	name	関数名
+		* @return				関数ノードオブジェクト
+		*/
+		mana_node* mana_node_create_function(char* name)
+		{
+			mana_node* node;
+			mana_symbol_entry* symbol;
+
+			symbol = mana_symbol_lookup_or_create_dummy(name);
+
+			node = mana_node_allocate(MANA_NODE_FUNCTION);
+			node->symbol = symbol;
+			node->type = symbol->type;
+
+			return node;
+		}
+#endif
 	}
 	else
 	{
@@ -500,35 +488,47 @@ mana_node* mana_node_create_declarator(const char* identifier, mana_node* left)
 {
 	mana_node* new_node;
 
-	new_node = mana_node_allocate(MANA_NODE_VARIABLE_DECLARATION);
+	new_node = mana_node_allocate(MANA_NODE_DECLARE_VARIABLE);
 	new_node->string = identifier;
 	new_node->left = left;
 
 	return new_node;
 }
 
-mana_node* mana_node_create_declare_function(mana_node* left, const char* identifier, const int32_t argument_count, mana_node* right)
+mana_node* mana_node_create_declare_function(mana_node* left, const char* identifier, mana_node* argument, mana_node* body)
 {
 	mana_node* new_node;
 
 	new_node = mana_node_allocate(MANA_NODE_DECLARE_FUNCTION);
 	new_node->string = identifier;
-	new_node->digit = argument_count;
 	new_node->left = left;
-	new_node->right = right;
+	new_node->right = argument;
+	new_node->body = body;
+
+	if (argument)
+	{
+		for (mana_node* p = argument; p; p = p->right)
+			++new_node->digit;
+	}
 
 	return new_node;
 }
 
-mana_node* mana_node_create_declare_native_function(mana_node* left, const char* identifier, const int32_t argument_count, mana_node* next)
+mana_node* mana_node_create_declare_native_function(mana_node* left, const char* identifier, mana_node* argument, mana_node* body)
 {
 	mana_node* new_node;
 
 	new_node = mana_node_allocate(MANA_NODE_DECLARE_NATIVE_FUNCTION);
 	new_node->string = identifier;
-	new_node->digit = argument_count;
 	new_node->left = left;
-	new_node->next = next;
+	new_node->right = argument;
+	new_node->body = body;
+
+	if (argument)
+	{
+		for (mana_node* p = argument; p; p = p->right)
+			++new_node->digit;
+	}
 
 	return new_node;
 }
@@ -580,9 +580,7 @@ size_t mana_node_get_memory_size(mana_node* node)
 		return sizeof(int32_t*);
 
 	case MANA_NODE_ASSIGN:			/* = */
-	case MANA_NODE_ARGUMENT:		/* 呼び出し側引数 */
-	case MANA_NODE_INCOMPLETE:		/* 宣言が未完了 */
-	case MANA_NODE_FUNCTION:		/* 関数 */
+	case MANA_NODE_CALL_ARGUMENT:		/* 呼び出し側引数 */
 	case MANA_NODE_CALL:			/* 関数呼び出し */
 	case MANA_NODE_ADD:			/* 加算 */
 	case MANA_NODE_SUB:			/* 減算 */
@@ -646,11 +644,10 @@ static void mana_node_dump_(FILE* file, const mana_node* node)
 		"ARRAY",								/*!< variable[argument] = */
 		"ASSIGN",								/*!< = */
 		"MEMOP",								/*!< X.variable */
-		"ARGUMENT",							/*!< 呼び出し側引数 */
+		"CALL_ARGUMENT",							/*!< 呼び出し側引数 */
+		"DECLARE_ARGUMENT",							/*!< 呼び出し側引数 */
 		"CONST",								/*!< 定数 */
 		"VARIABLE",							/*!< 変数 */
-		"INCOMPLETE",							/*!< 宣言が未完了 */
-		"FUNCTION",							/*!< 関数 */
 		"CALL",								/*!< 関数呼び出し */
 		"ADD",									/*!< 加算 */
 		"SUB",									/*!< 減算 */
@@ -723,7 +720,6 @@ static void mana_node_dump_(FILE* file, const mana_node* node)
 		"DECLARE_STATIC",
 		"DECLARE_ALIAS",
 		"DECLARE_NATIVE_FUNCTION",
-		"DECLARE_VALIABLE",
 		"DECLARE_FUNCTION",
 
 		"DEFINE_CONSTANT",
@@ -763,6 +759,13 @@ static void mana_node_dump_(FILE* file, const mana_node* node)
 		mana_node_dump_format_(file, "\"right\": {\n");
 		mana_node_dump_format_flag_ = false;
 		mana_node_dump_(file, node->right);
+		fprintf(file, "}\n");
+	}
+	if (node->body)
+	{
+		mana_node_dump_format_(file, "\"body\": {\n");
+		mana_node_dump_format_flag_ = false;
+		mana_node_dump_(file, node->body);
 		fprintf(file, "}\n");
 	}
 	if (node->next)

@@ -1,12 +1,12 @@
 /*
- * mana (compiler)
- *
- * @file	mana_code.h
- * @brief	命令セクションに関するヘッダーファイル
- * @detail	このファイルは命令セクションに関係するヘッダーファイルです。
- * @author	Shun Moriya <shun@mnu.sakura.ne.jp>
- * @date	2003-
- */
+mana (compiler)
+
+@file	mana_code.h
+@brief	命令セクションに関するヘッダーファイル
+@detail	このファイルは命令セクションに関係するヘッダーファイルです。
+@author	Shun Moriya <shun@mnu.sakura.ne.jp>
+@date	2003-
+*/
 
 #if !defined(___MANA_CODE_H___)
 #define ___MANA_CODE_H___
