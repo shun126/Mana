@@ -91,7 +91,7 @@ program			: line
 					{
 						mana_node_dump($1);
 						mana_compiler_generate_symbol($1, NULL);
-						mana_compiler_resolve_symbol($1, true);
+						mana_compiler_genearte_symbol($1, true);
 						mana_linker_resolve_address();
 					}
 				;
@@ -221,7 +221,7 @@ statement		: tIF '(' expression ')' statement
 				| tWHILE '(' expression ')' statement
 					{ $$ = mana_node_create_node(MANA_NODE_WHILE, $3, $5, NULL); }
 				| tDO statement tWHILE '(' expression ')' ';'
-					{ $$ = mana_node_create_node(MANA_NODE_DO, $5, $2, NULL); }
+					{ $$ = mana_node_create_node(MANA_NODE_DO, $2, $5, NULL); }
 				| tFOR '(' expression ';' expression ';' expression ')' statement
 					{
 						$$ = mana_node_create_node(MANA_NODE_BLOCK,

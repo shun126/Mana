@@ -45,7 +45,7 @@ extern void mana_compiler_generate_symbol(mana_node* node);
 @param	node			ノード
 @param	enable_load		trueならばload命令は有効、falseならばload命令は無効
 */
-extern void mana_compiler_resolve_symbol(mana_node* node, int32_t enable_load);
+extern void mana_compiler_genearte_symbol(mana_node* node, int32_t enable_load);
 
 extern void mana_compiler_expression(mana_node* node, int32_t enable_assign);
 
