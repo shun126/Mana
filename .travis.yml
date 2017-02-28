@@ -1,0 +1,11 @@
+sudo: required
+language: c
+compiler:
+    - clang
+	- gcc
+script:
+    - make
+addons:
+  apt:
+    packages:
+    - clang-3.5

@@ -286,7 +286,7 @@ extern void mana_symbol_set_type(const char* name, mana_type_description* type);
 
 extern int32_t mana_symbol_get_number_of_actors(void);
 
-extern void mana_symbol_add_request(uint8_t opcode, mana_node* level, mana_node* actor, char* action);
+extern void mana_symbol_add_request(uint8_t opcode, mana_node* level, mana_node* actor, const char* action);
 extern void mana_symbol_add_join(mana_node* level, mana_node* actor);
 
 extern void mana_symbol_allocate_memory(mana_symbol_entry*, mana_type_description*, mana_symbol_memory_type_id);

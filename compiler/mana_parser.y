@@ -91,7 +91,7 @@ program			: line
 					{
 						mana_node_dump($1);
 						mana_compiler_generate_symbol($1, NULL);
-						mana_compiler_genearte_symbol($1, true);
+						mana_compiler_genearte_code($1, true);
 						mana_linker_resolve_address();
 					}
 				;
@@ -265,9 +265,9 @@ statement		: tIF '(' expression ')' statement
 				| tREFUSE '(' ')' ';'
 					{ $$ = mana_node_create_node(MANA_NODE_REFUSE, NULL, NULL, NULL); }
 				| tPRINT '(' arg_calls ')' ';'
-					{ $$ = NULL; yyerrok; yyclearin; }
+					{ $$ = mana_node_create_node(MANA_NODE_PRINT, $3, NULL, NULL); }
 				| tREQUEST '(' expression ','  expression tDC tIDENTIFIER ')' ';'
-					{ $$ = mana_node_create_node(MANA_NODE_REQUEST, $3, $5, NULL); }
+					{ $$ = mana_node_create_node(MANA_NODE_REQUEST, $3, $5, NULL); $$->string = $7; }
 				| tJOIN '(' expression ','  expression ')' ';'
 					{ $$ = mana_node_create_node(MANA_NODE_JOIN, $3, $5, NULL); }
 				| block
