@@ -1006,7 +1006,7 @@ void mana_symbol_set_type(const char* name, mana_type_description* type)
 
 /*****************************************************************************/
 /* request */
-void mana_symbol_add_request(uint8_t opcode, mana_node* level, mana_node* actor, char* action)
+void mana_symbol_add_request(uint8_t opcode, mana_node* level, mana_node* actor, const char* action)
 {
 	mana_compiler_expression(level, false);
 
