@@ -26,6 +26,8 @@
 #include <windows.h>
 #elif defined(__APPLE__)
 #include "platform/cocoa/mana_cocoa.h"
+#else
+#include <sys/time.h>
 #endif
 
 static uint32_t mana_random_seed = (uint32_t)(19720126);
