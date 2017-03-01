@@ -8,6 +8,8 @@
  * @date	2003-
  */
 
+#include "mana_compiler.h"
+
 #if !defined(___MANA_CODE_H___)
 #include "mana_code.h"
 #endif

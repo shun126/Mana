@@ -24,6 +24,7 @@
 #include "mana_symbol.h"
 #endif
 #include <stdarg.h>
+#include <stdio.h>
 #include <string.h>
 
 static mana_node* mana_node_root_pointer = NULL;

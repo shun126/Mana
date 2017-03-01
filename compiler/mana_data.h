@@ -31,10 +31,10 @@ extern char* mana_data_get_buffer(void);
 extern uint32_t mana_data_get_size(void);
 
 /*! テキストデータを検索 */
-extern uint32_t mana_data_get(char* text);
+extern uint32_t mana_data_get(const char* text);
 
 /*! テキストデータを設定 */
-extern uint32_t mana_data_set(char* text);
+extern uint32_t mana_data_set(const char* text);
 
 /*! データセクションをファイルへ出力 */
 extern uint32_t mana_data_write(mana_stream* stream);

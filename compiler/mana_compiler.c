@@ -1351,6 +1351,30 @@ static void mana_compiler_rollback(mana_node* tree)
 }
 
 /*!
+* 引数の出力（再帰呼び出し）
+* @param	count	引数の番号
+* @param	param	引数のmana_symbol_entry
+* @param	arg		引数のmana_node
+* @return	引数の数
+*/
+static int32_t mana_compiler_generate_argument(int32_t count, mana_symbol_entry* param, mana_node* arg)
+{
+	if (param && arg)
+	{
+		if (arg->id == MANA_NODE_CALL_ARGUMENT)
+		{
+			count = mana_compiler_generate_argument(count, param->next, arg->right);
+		}
+		arg = mana_node_cast(param->type, arg);
+		mana_type_compatible(param->type, arg->type);
+		mana_compiler_genearte_code(arg, true);
+	}
+	if (arg)
+		count++;
+	return count;
+}
+
+/*!
 * 関数の引数のサイズを調べます
 * @param	address	アドレス
 * @param	param	引数のmana_symbol_entry
@@ -1448,30 +1472,6 @@ static void mana_compiler_call_print(mana_node* tree)
 	}
 
 	mana_code_set_opecode_and_operand((uint8_t)MANA_IL_PRINT, argument_counter);
-}
-
-/*!
-* 引数の出力（再帰呼び出し）
-* @param	count	引数の番号
-* @param	param	引数のmana_symbol_entry
-* @param	arg		引数のmana_node
-* @return	引数の数
-*/
-static int32_t mana_compiler_generate_argument(int32_t count, mana_symbol_entry* param, mana_node* arg)
-{
-	if (param && arg)
-	{
-		if (arg->id == MANA_NODE_CALL_ARGUMENT)
-		{
-			count = mana_compiler_generate_argument(count, param->next, arg->right);
-		}
-		arg = mana_node_cast(param->type, arg);
-		mana_type_compatible(param->type, arg->type);
-		mana_compiler_genearte_code(arg, true);
-	}
-	if (arg)
-		count++;
-	return count;
 }
 
 /*!
