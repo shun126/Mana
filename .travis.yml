@@ -1,11 +1,11 @@
 sudo: required
 language: c
 compiler:
-    - clang
+	- clang
 	- gcc
 script:
-    - make
+	- make
 addons:
-  apt:
-    packages:
-    - clang-3.5
+	apt:
+		packages:
+			- clang-3.5
