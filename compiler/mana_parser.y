@@ -90,7 +90,7 @@ int yynerrs;
 program			: line
 					{
 						mana_node_dump($1);
-						mana_compiler_generate_symbol($1, NULL);
+						mana_compiler_generate_symbol($1);
 						mana_compiler_genearte_code($1, true);
 						mana_linker_resolve_address();
 					}
