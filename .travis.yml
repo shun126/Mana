@@ -1,12 +1,13 @@
 sudo: required
 language: c
-install: make get-deps
 compiler:
  - clang
  - gcc
-script:
- - make --directory=compiler
+install: true
 addons:
  apt:
   packages:
    - clang-3.5
+   - gcc-5
+script:
+ - make --directory=compiler
