@@ -1,8 +1,20 @@
 sudo: false
+
 language: c
+
 compiler:
  - clang
  - gcc
+
+install:
+  - if [ "$CC" = "gcc" ]; then export CFLAGS="-std=c11"; fi
+  - if [ "$CC" = "gcc" ]; then export CC="gcc-5"; fi
+  - if [ "$CC" = "clang" ]; then export CFLAGS="-std=c11"; fi
+  - if [ "$CC" = "clang" ]; then export CC="clang-3.7"; fi
+
+script:
+ - make --directory=compiler
+
 addons:
  apt:
   sources:
@@ -11,12 +23,5 @@ addons:
    - llvm-toolchain-precise
   packages:
    - make
-   - clang-3.9.1
-   - gcc-5.4
-install:
-  - if [ "$CC" = "gcc" ]; then export CFLAGS="-std=c11"; fi
-  - if [ "$CC" = "gcc" ]; then export CC="gcc-5.4"; fi
-  - if [ "$CC" = "clang" ]; then export CFLAGS="-std=c11"; fi
-  - if [ "$CC" = "clang" ]; then export CC="clang-3.9.1"; fi
-script:
- - make --directory=compiler
+   - clang-3.7
+   - gcc-5
