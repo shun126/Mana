@@ -1,14 +1,22 @@
-sudo: required
+sudo: false
 language: c
 compiler:
  - clang
  - gcc
 addons:
  apt:
+  sources:
+   - ubuntu-toolchain-r-test
+   - llvm-toolchain-precise-3.9.1
+   - llvm-toolchain-precise
   packages:
    - make
-   - clang
-   - gcc
-install: true
+   - clang-3.9.1
+   - gcc-5.4
+install:
+  - if [ "$CC" = "gcc" ]; then export CFLAGS="-std=c11"; fi
+  - if [ "$CC" = "gcc" ]; then export CC="gcc-5.4"; fi
+  - if [ "$CC" = "clang" ]; then export CFLAGS="-std=c11"; fi
+  - if [ "$CC" = "clang" ]; then export CC="clang-3.9.1"; fi
 script:
  - make --directory=compiler
