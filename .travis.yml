@@ -3,11 +3,12 @@ language: c
 compiler:
  - clang
  - gcc
-install: true
 addons:
  apt:
   packages:
-   - clang-3.9
-   - gcc-6.3
+   - make
+   - clang
+   - gcc
+install: true
 script:
  - make --directory=compiler
