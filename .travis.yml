@@ -13,7 +13,7 @@ install:
   - if [ "$CC" = "clang" ]; then export CC="clang-3.7"; fi
 
 script:
- - make --directory=compiler
+ - make --directory=compiler CC="${CC}" CFLAGS="${CFLAGS}"
 
 addons:
  apt:
