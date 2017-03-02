@@ -234,6 +234,8 @@ extern void mana_symbol_finalize(void);
 extern int32_t mana_symbol_open_block(const bool reset_max_frame_memory_address);
 extern int32_t mana_symbol_close_block(void);
 
+extern mana_symbol_entry* mana_symbol_get_head_symbol(void);
+
 extern int32_t mana_symbol_is_valid_variable(mana_symbol_entry*);
 
 extern int32_t mana_symbol_get_static_memory_address();

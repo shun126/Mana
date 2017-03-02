@@ -187,7 +187,7 @@ other		.
 }
 
 <COMMENT_BLOCK>"/*"	{
-	mana_parse_error("comment nest error");
+	mana_compile_error("comment nest error");
 }
 <COMMENT_BLOCK>"*/"	BEGIN INITIAL;
 <COMMENT_BLOCK>\n	yylineno ++;
@@ -250,7 +250,7 @@ static char* mana_lexer_get_string(void)
 
 	if(yytext[yyleng-1] != '\"')
 	{
-		mana_parse_error("unterminated string literal");
+		mana_compile_error("unterminated string literal");
 	}
 	for(p = &yytext[1], q = yytext; p < yytext + (yyleng - 1); p++, q++)
 	{
@@ -373,7 +373,7 @@ static int32_t mana_lexer_is_already_opened(char* path)
 	}
 	pathList[pathCounter] = path;
 	if(++pathCounter >= 2048)
-		mana_parse_error("too many include files");
+		mana_compile_error("too many include files");
 
 	return true;
 }
@@ -396,7 +396,7 @@ int32_t mana_lexer_open(char* filename, int32_t check)
 
 	if(_fullpath(path, filename, _MAX_PATH) == NULL)
 	{
-		mana_parse_error("unable to open \"%s\"", filename);
+		mana_compile_error("unable to open \"%s\"", filename);
 		return false;
 	}
 
@@ -427,12 +427,12 @@ int32_t mana_lexer_open(char* filename, int32_t check)
 	if((yyin = fopen(full_path, "rt")) == NULL)
 #endif
 	{
-		mana_parse_error("unable to open \"%s\"", full_path);
+		mana_compile_error("unable to open \"%s\"", full_path);
 		return false;
 	}
 	if(++mana_lexer_status_pointer >= MAX_NEST_LEVEL)
 	{
-		mana_parse_error("too many include files");
+		mana_compile_error("too many include files");
 		return false;
 	}
 	mana_lexer_status[mana_lexer_status_pointer].m_State = YY_CURRENT_BUFFER;
@@ -497,19 +497,37 @@ int32_t mana_lexer_close()
 }
 
 /*!
- * get current file name
- * @return	current file name pointer
- */
-char* mana_lexer_get_current_filename(void)
+get current file name
+@return	current file name pointer
+*/
+const char* mana_lexer_get_current_filename(void)
 {
 	return mana_lexer_filename;
 }
 
 /*!
- * get current line number
- * @return	current line number
- */
+set current file name
+@param[in]	filename	current file name pointer
+*/
+void mana_lexer_set_current_filename(const char* filename)
+{
+	mana_lexer_filename = filename;
+}
+
+/*!
+get current line number
+@return	current line number
+*/
 int32_t mana_lexer_get_current_line(void)
 {
 	return yylineno;
+}
+
+/*!
+set current line number
+@return	current line number
+*/
+void mana_lexer_set_current_line(const int32_t lineno)
+{
+	yylineno = lineno;
 }
