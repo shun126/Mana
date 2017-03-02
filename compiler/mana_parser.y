@@ -476,8 +476,8 @@ variable_size	: '[' tDIGIT ']'
  */
 void yyerror(const char* message)
 {
-	yynerrs ++;
 	mana_error(mana_lexer_get_current_filename(), mana_lexer_get_current_line(), message);
+	yynerrs ++;
 }
 
 /*!
