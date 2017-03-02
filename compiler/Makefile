@@ -4,12 +4,17 @@
 
 TARGET	= mana
 LIBRARY	= ../library
+
 CC	= gcc
+ifeq ($(CC),gcc)
 CFLAGS	= --std=c11 --input-charset=cp932 -c -O3 -Wall -D NDEBUG -I$(LIBRARY)
-#CC	= clang
-#CFLAGS	= --std=c11 -c -O3 -Wall -D NDEBUG -I$(LIBRARY)
+else
+CFLAGS	= --std=c11 -c -O3 -Wall -D NDEBUG -I$(LIBRARY)
+endif
+
 LK	= $(CC)
-LFLAGS	= --std=c11 -O3
+LFLAGS	= --std=c11 -O3 -ldl -lm
+
 YACC	= bison
 YFLAGS	= -d -k
 LEX	= flex
