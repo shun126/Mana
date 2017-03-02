@@ -94,10 +94,6 @@ extern void mana_print_debug(const char* format, ...);
 /* external functions */
 extern void mana_error(const char* filename, const size_t line, const char* format, ...);
 extern void mana_warning(const char* filename, const size_t line, const char* format, ...);
-extern void mana_parse_error(char*, ...);
-extern void mana_parse_warning(char*, ...);
-extern void mana_compile_error(const mana_node* node, const char* format, ...);
-extern void mana_compile_warning(const mana_node* node, const char* format, ...);
 extern void mana_compiler_error(char*, ...);
 extern void mana_compiler_warning(char*, ...);
 extern void mana_fatal(char*, ...);
@@ -114,8 +110,10 @@ extern int32_t mana_lexer_initialize(char*);
 extern void mana_lexer_finalize(void);
 extern int32_t mana_lexer_open(char*, int32_t);
 extern int32_t mana_lexer_close(void);
-extern char* mana_lexer_get_current_filename(void);
+extern const char* mana_lexer_get_current_filename(void);
+extern void mana_lexer_set_current_filename(const char* filename);
 extern int32_t mana_lexer_get_current_line(void);
+extern void mana_lexer_set_current_line(const int32_t lineno);
 
 extern void mana_compile_init(void);
 extern void mana_compile_exit(void);

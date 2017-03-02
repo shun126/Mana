@@ -273,7 +273,7 @@ static void mana_compiler_resolve_identifier(mana_node* node)
 		}
 		else
 		{
-			mana_compile_error(node, "incomplete type name '%s'", node->string);
+			mana_compile_error("incomplete type name '%s'", node->string);
 			node->type = mana_type_get(MANA_DATA_TYPE_INT);
 		}
 	}
@@ -296,7 +296,7 @@ static void mana_compiler_resolve_type_description(mana_node* node)
 		}
 		else
 		{
-			mana_compile_error(node, "incomplete type name '%s'", node->string);
+			mana_compile_error("incomplete type name '%s'", node->string);
 			node->type = mana_type_get(MANA_DATA_TYPE_INT);
 		}
 	}
@@ -326,12 +326,12 @@ static mana_type_description* mana_compiler_resolve_variable_size(mana_node* nod
 			}
 			else
 			{
-				mana_compile_error(node, "invalid size information on parameter");
+				mana_compile_error("invalid size information on parameter");
 			}
 		}
 		else
 		{
-			mana_compile_error(node, "identifier %s is not defined", node->string);
+			mana_compile_error("identifier %s is not defined", node->string);
 		}
 	}
 	else
@@ -339,7 +339,7 @@ static mana_type_description* mana_compiler_resolve_variable_size(mana_node* nod
 		if (node->digit > 0)
 			node->type = mana_type_create_array(node->digit);
 		else
-			mana_compile_error(node, "invalid size information on parameter");
+			mana_compile_error("invalid size information on parameter");
 	}
 
 	if (node->type)
@@ -374,7 +374,7 @@ static void mana_compiler_resolve_declarator(mana_node* node)
 mana_symbol_allocate_memory‚ðŽg‚Á‚Äƒƒ‚ƒŠ‚ðŠ„‚è“–‚Ä‚Ü‚·
 @param[in]	node	MANA_NODE_DECLARE_VARIABLEƒm[ƒh
 */
-static void mana_compiler_resolve_variable_description(mana_node* node)
+static void mana_compiler_resolve_variable_description(mana_node* node, const mana_symbol_memory_type_id memory_type_id)
 {
 	MANA_ASSERT(node);
 	MANA_ASSERT(node->left && node->left->id == MANA_NODE_TYPE_DESCRIPTION);
@@ -384,7 +384,7 @@ static void mana_compiler_resolve_variable_description(mana_node* node)
 	mana_compiler_resolve_declarator(node->right);		// MANA_NODE_DECLARATOR
 
 														//if (node->right->symbol->class_type == MANA_CLASS_TYPE_VARIABLE_LOCAL)
-	mana_symbol_allocate_memory(node->right->symbol, node->left->type, MANA_MEMORY_TYPE_NORMAL);
+	mana_symbol_allocate_memory(node->right->symbol, node->left->type, memory_type_id);
 	//mana_symbol_allocate_memory(node->right->symbol, node->left->type, MANA_MEMORY_TYPE_PARAMETER);
 }
 
@@ -452,7 +452,7 @@ DO_RECURSIVE:
 			const int32_t address = mana_symbol_get_static_memory_address();
 			if (address >= mana_allocated_size)
 			{
-				mana_compile_error(node, "static variable range over");
+				mana_compile_error("static variable range over");
 			}
 			mana_symbol_set_static_memory_address(mana_allocated_size);
 		}
@@ -516,18 +516,28 @@ DO_RECURSIVE:
 
 	case MANA_NODE_DECLARE_ARGUMENT:
 		MANA_ASSERT(node->body == NULL);
-		mana_compiler_generate_symbol(node->left);
+		mana_compiler_resolve_variable_description(node->left, MANA_MEMORY_TYPE_PARAMETER);
 		mana_compiler_generate_symbol(node->right);
 		break;
 
 	case MANA_NODE_DECLARE_FUNCTION:
 		{
 			MANA_ASSERT(node->symbol == NULL);
-			node->symbol = mana_symbol_create_function(node->string);
+			// ŠÖ”‚Ì–ß‚è’l‚ð•]‰¿
 			mana_compiler_generate_symbol(node->left);
-			node->type = node->symbol->type = node->left->type;
+			// ƒVƒ“ƒ{ƒ‹‚Ìì¬‚ÆŒ^‚Ì’è‹`
+			node->symbol = mana_symbol_create_function(node->string);
+			node->symbol->type = node->left->type;
+			
+			// ƒVƒ“ƒ{ƒ‹‚Éˆø”‚ÌƒVƒ“ƒ{ƒ‹‚ð“o˜^
+			mana_symbol_open_block(false);
 			mana_compiler_generate_symbol(node->right);
+			node->symbol->parameter_list = mana_symbol_get_head_symbol();
+			mana_symbol_close_block();
+
+			// ƒVƒ“ƒ{ƒ‹‚Éˆø”‚Ì”‚ð“o˜^
 			node->symbol->number_of_parameters = mana_compiler_count_declaration_argument(0, node->right);
+
 			//mana_compiler_generate_symbol(node->body); ŠÖ”“à‚ÌƒVƒ“ƒ{ƒ‹‚Í•]‰¿‚µ‚È‚¢
 		}
 		break;
@@ -550,7 +560,7 @@ DO_RECURSIVE:
 		break;
 
 	case MANA_NODE_DECLARE_VARIABLE:
-		mana_compiler_resolve_variable_description(node);
+		mana_compiler_resolve_variable_description(node, MANA_MEMORY_TYPE_NORMAL);
 		break;
 
 	case MANA_NODE_TYPE_DESCRIPTION:
@@ -693,7 +703,7 @@ static void mana_compiler_resolve_symbol(mana_node* node)
 		break;
 
 	case MANA_NODE_DECLARE_VARIABLE:
-		mana_compiler_resolve_variable_description(node);
+		mana_compiler_resolve_variable_description(node, MANA_MEMORY_TYPE_NORMAL);
 		break;
 
 	case MANA_NODE_TYPE_DESCRIPTION:
@@ -795,13 +805,13 @@ static bool mana_compiler_get_both_node_type(mana_symbol_data_type_id* t1, mana_
 
 	if (node->left == NULL || node->left->type == NULL)
 	{
-		mana_compile_error(node, "illegal left-hand side expression");
+		mana_compile_error("illegal left-hand side expression");
 		return false;
 	}
 
 	if (node->right != NULL && node->right->type == NULL)
 	{
-		mana_compile_error(node, "illegal right-hand side expression");
+		mana_compile_error("illegal right-hand side expression");
 		return false;
 	}
 
@@ -832,7 +842,7 @@ static void mana_compiler_automatic_cast(mana_node* node)
 	case MANA_NODE_ASSIGN:
 		if (node->left->id == MANA_NODE_CONST)
 		{
-			mana_compile_error(node, "already initialized constant '%s'", node->left->symbol->name);
+			mana_compile_error("already initialized constant '%s'", node->left->symbol->name);
 			return;
 		}
 		mana_node_auto_cast(node);
@@ -850,7 +860,7 @@ static void mana_compiler_automatic_cast(mana_node* node)
 			mana_compiler_get_both_node_type(&t1, &t2, node);
 			mana_node_auto_cast(node);
 			if (t1 < MANA_DATA_TYPE_CHAR || t1 > MANA_DATA_TYPE_FLOAT)
-				mana_compile_error(node, "imcompatible type operation in expression");
+				mana_compile_error("imcompatible type operation in expression");
 			if (t2 < MANA_DATA_TYPE_CHAR || t2 > MANA_DATA_TYPE_FLOAT)
 				mana_compile_error(node, "imcompatible type operation in expression");
 			mana_type_compatible(node->left->type, node->right->type);
@@ -1169,7 +1179,7 @@ static void mana_compiler_automatic_cast(mana_node* node)
 		break;
 
 	case MANA_NODE_DECLARE_VARIABLE:
-		mana_compiler_resolve_variable_description(node);
+		mana_compiler_resolve_variable_description(node, MANA_MEMORY_TYPE_NORMAL);
 		break;
 
 	default:
@@ -1617,21 +1627,24 @@ DO_RECURSIVE:
 		break;
 
 	case MANA_NODE_DECLARE_ARGUMENT:
-		mana_compiler_genearte_code(node->left, enable_load);
+		mana_compiler_resolve_variable_description(node->left, MANA_MEMORY_TYPE_PARAMETER);
 		mana_compiler_genearte_code(node->right, enable_load);
 		break;
 
 	case MANA_NODE_DECLARE_FUNCTION:
 		{
-			mana_function_symbol_entry_pointer = mana_symbol_lookup(node->string);
+			// ŠÖ”‚Ì–ß‚è’l‚ð•]‰¿
 			mana_compiler_genearte_code(node->left, enable_load);
+			// ƒVƒ“ƒ{ƒ‹‚ÌŒŸõ‚ÆŒ^‚Ì’è‹`
+			node->symbol = mana_function_symbol_entry_pointer = mana_symbol_lookup(node->string);
+			node->symbol->type = node->left->type;
+			// ŠÖ”‚Ìˆø”‚ð•]‰¿
+			mana_compiler_genearte_code(node->right, enable_load);
 
 			mana_symbol_begin_function_registration(false, mana_function_symbol_entry_pointer, node->left->type);
-
-			mana_compiler_genearte_code(node->right, enable_load);
 			mana_compiler_genearte_code(node->body, enable_load);
-
 			mana_symbol_commit_function_registration(mana_function_symbol_entry_pointer);
+
 			mana_function_symbol_entry_pointer = NULL;
 		}
 		break;
@@ -1647,7 +1660,7 @@ DO_RECURSIVE:
 		break;
 
 	case MANA_NODE_DECLARE_VARIABLE:
-		mana_compiler_resolve_variable_description(node);
+		mana_compiler_resolve_variable_description(node, MANA_MEMORY_TYPE_NORMAL);
 		/*
 		mana_compiler_genearte_code(node->left, enable_load); // MANA_NODE_TYPE_DESCRIPTION
 		mana_compiler_genearte_code(node->right, enable_load);// MANA_NODE_DECLARATOR
