@@ -7,13 +7,11 @@ compiler:
  - gcc
 
 install:
-  - if [ "$CC" = "gcc" ]; then export CFLAGS="-std=c11"; fi
   - if [ "$CC" = "gcc" ]; then export CC="gcc-5"; fi
-  - if [ "$CC" = "clang" ]; then export CFLAGS="-std=c11"; fi
   - if [ "$CC" = "clang" ]; then export CC="clang-3.7"; fi
 
 script:
- - make --directory=compiler CC="${CC}" CFLAGS="${CFLAGS}"
+ - make --directory=compiler CC="${CC}"
 
 addons:
  apt:
