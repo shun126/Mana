@@ -295,7 +295,7 @@ mana_node* mana_node_create_leaf(char* name)
 		break;
 
 	default:
-		mana_parse_error("illigal data type");
+		mana_compile_error("illigal data type");
 		break;
 	}
 
@@ -336,11 +336,11 @@ mana_node* mana_node_create_member(mana_node* tree, char* name)
 				}
 				type = type->parent;
 			}
-			mana_parse_error("reference to undefined field");
+			mana_compile_error("reference to undefined field");
 		}
 		else
 		{
-			mana_parse_error("reference to non-struct type");
+			mana_compile_error("reference to non-struct type");
 		}
 	}
 
@@ -395,7 +395,7 @@ mana_node* mana_node_create_call_member(mana_node* tree, char* name, mana_node* 
 	}
 	else
 	{
-		mana_parse_error("reference to non-actor type");
+		mana_compile_error("reference to non-actor type");
 	}
 
 	return tree;
@@ -613,7 +613,7 @@ size_t mana_node_get_memory_size(mana_node* node)
 #if 1
 		return node->type->memory_size;
 #else
-		mana_parse_error("illigal node type detect");
+		mana_compile_error("illigal node type detect");
 		return 0;
 #endif
 	}
@@ -631,7 +631,11 @@ static void mana_node_dump_format_(FILE* file, const char* format, ...)
 
 	va_list arg;
 	va_start(arg, format);
+#if __STDC_WANT_SECURE_LIB__
 	vfprintf_s(file, format, arg);
+#else
+	vfprintf(file, format, arg);
+#endif
 	va_end(arg);
 
 	mana_node_dump_format_flag_ = true;
@@ -781,7 +785,12 @@ static void mana_node_dump_(FILE* file, const mana_node* node)
 void mana_node_dump(const mana_node* node)
 {
 	FILE* file;
+#if defined(__STDC_WANT_SECURE_LIB__)
 	if (fopen_s(&file, "mana_node.json", "wt") == 0)
+#else
+	file = fopen("mana_node.json", "wt");
+	if (file)
+#endif
 	{
 		if (node)
 		{
