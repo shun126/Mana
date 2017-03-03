@@ -9,11 +9,12 @@ CC	= gcc
 CFLAGS	= --std=c11 --input-charset=cp932 -c -O3 -Wall -D NDEBUG -I$(LIBRARY)
 #CFLAGS	= --std=c11 -c -O3 -Wall -D NDEBUG -I$(LIBRARY)
 
-LK	= $(CC)
-LFLAGS	= --std=c11 -O3 -ldl -lm
+LK	= ld
+LFLAGS	= --library=dl --library=m
 
 YACC	= bison
 YFLAGS	= -d -k
+
 LEX	= flex
 LXFLAGS	= -8 -F
 
