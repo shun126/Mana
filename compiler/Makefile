@@ -27,10 +27,10 @@ LIBRARY	= ../library
 CC	= gcc
 CFLAGS	= --std=c11 --input-charset=cp932 -c -O3 -Wall -D NDEBUG -I$(LIBRARY)
 
-#LK	= ld
-#LFLAGS	= --library=c --library=dl --library=m
-LK	= gcc
-LFLAGS	= -ldl -lm
+LK	= ld
+LFLAGS	= --library=c --library=dl --library=m
+#LK	= gcc
+#LFLAGS	= -ldl -lm
 
 YACC	= bison
 YFLAGS	= -d -k
