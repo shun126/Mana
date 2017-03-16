@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.12"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>libmana: mana_buffer.h ソースファイル</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">libmana
+   &#160;<span id="projectnumber">0.0.0</span>
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.8.12 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'検索');
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','検索');
+  $(document).ready(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="headertitle">
+<div class="title">mana_buffer.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="mana__buffer_8h.html">[詳解]</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;</div><div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#if !defined(___MANA_BUFFER_H___)</span></div><div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#define ___MANA_BUFFER_H___</span></div><div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;</div><div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &lt;stddef.h&gt;</span></div><div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &lt;stdint.h&gt;</span></div><div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;</div><div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)</span></div><div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keyword">extern</span> <span class="stringliteral">&quot;C&quot;</span> {</div><div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#endif</span></div><div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div><div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="structmana__buffer.html">   32</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structmana__buffer.html">mana_buffer</a></div><div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;{</div><div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keywordtype">char</span>* buffer;</div><div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="keywordtype">size_t</span> allocated_size;</div><div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keywordtype">size_t</span> used_size;</div><div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;}<a class="code" href="mana__buffer_8h.html#a3b3b539ee7c4f5a4d06c9f3ae4c53294">mana_buffer</a>;</div><div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;</div><div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="keyword">extern</span> <a class="code" href="structmana__buffer.html">mana_buffer</a>* <a class="code" href="mana__buffer_8h.html#a693e9308cd64343d2cb557c9241a78e5">mana_buffer_create</a>(<span class="keywordtype">void</span>);</div><div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;</div><div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">void</span> <a class="code" href="mana__buffer_8h.html#a759562719fa92f38c5132f0b5c08e25b">mana_buffer_destroy</a>(<a class="code" href="structmana__buffer.html">mana_buffer</a>* <span class="keyword">self</span>);</div><div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;</div><div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">void</span>* <a class="code" href="mana__buffer_8h.html#a76275891a8128172c063a4bdf83c508e">mana_buffer_get_buffer</a>(<a class="code" href="structmana__buffer.html">mana_buffer</a>* <span class="keyword">self</span>);</div><div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;</div><div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">size_t</span> <a class="code" href="mana__buffer_8h.html#a3cdefbebe96360e96dd37a96db442d5f">mana_buffer_get_allocated_size</a>(<a class="code" href="structmana__buffer.html">mana_buffer</a>* <span class="keyword">self</span>);</div><div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;</div><div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">size_t</span> <a class="code" href="mana__buffer_8h.html#a430c5c925b0c5d7cfade9fbb4a2a1b58">mana_buffer_get_used_size</a>(<a class="code" href="structmana__buffer.html">mana_buffer</a>* <span class="keyword">self</span>);</div><div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;</div><div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="keyword">extern</span> int32_t <a class="code" href="mana__buffer_8h.html#a902ae27ef8dca9376fcd8da19840ad3b">mana_buffer_push</a>(<a class="code" href="structmana__buffer.html">mana_buffer</a>* <span class="keyword">self</span>, <span class="keyword">const</span> <span class="keywordtype">void</span>* pointer, <span class="keyword">const</span> <span class="keywordtype">size_t</span> size);</div><div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;</div><div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="preprocessor">#if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)</span></div><div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;}</div><div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="preprocessor">#endif</span></div><div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;</div><div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="preprocessor">#endif</span></div><div class="ttc" id="mana__buffer_8h_html_a76275891a8128172c063a4bdf83c508e"><div class="ttname"><a href="mana__buffer_8h.html#a76275891a8128172c063a4bdf83c508e">mana_buffer_get_buffer</a></div><div class="ttdeci">void * mana_buffer_get_buffer(mana_buffer *self)</div><div class="ttdef"><b>Definition:</b> mana_buffer.c:46</div></div>
+<div class="ttc" id="mana__buffer_8h_html_a693e9308cd64343d2cb557c9241a78e5"><div class="ttname"><a href="mana__buffer_8h.html#a693e9308cd64343d2cb557c9241a78e5">mana_buffer_create</a></div><div class="ttdeci">mana_buffer * mana_buffer_create(void)</div><div class="ttdef"><b>Definition:</b> mana_buffer.c:25</div></div>
+<div class="ttc" id="mana__buffer_8h_html_a3b3b539ee7c4f5a4d06c9f3ae4c53294"><div class="ttname"><a href="mana__buffer_8h.html#a3b3b539ee7c4f5a4d06c9f3ae4c53294">mana_buffer</a></div><div class="ttdeci">struct mana_buffer mana_buffer</div><div class="ttdoc">mana_bufferクラス </div></div>
+<div class="ttc" id="mana__buffer_8h_html_a430c5c925b0c5d7cfade9fbb4a2a1b58"><div class="ttname"><a href="mana__buffer_8h.html#a430c5c925b0c5d7cfade9fbb4a2a1b58">mana_buffer_get_used_size</a></div><div class="ttdeci">size_t mana_buffer_get_used_size(mana_buffer *self)</div><div class="ttdef"><b>Definition:</b> mana_buffer.c:64</div></div>
+<div class="ttc" id="mana__buffer_8h_html_a902ae27ef8dca9376fcd8da19840ad3b"><div class="ttname"><a href="mana__buffer_8h.html#a902ae27ef8dca9376fcd8da19840ad3b">mana_buffer_push</a></div><div class="ttdeci">int32_t mana_buffer_push(mana_buffer *self, const void *pointer, const size_t size)</div><div class="ttdef"><b>Definition:</b> mana_buffer.c:74</div></div>
+<div class="ttc" id="structmana__buffer_html"><div class="ttname"><a href="structmana__buffer.html">mana_buffer</a></div><div class="ttdoc">mana_bufferクラス </div><div class="ttdef"><b>Definition:</b> mana_buffer.h:32</div></div>
+<div class="ttc" id="mana__buffer_8h_html_a759562719fa92f38c5132f0b5c08e25b"><div class="ttname"><a href="mana__buffer_8h.html#a759562719fa92f38c5132f0b5c08e25b">mana_buffer_destroy</a></div><div class="ttdeci">void mana_buffer_destroy(mana_buffer *self)</div><div class="ttdef"><b>Definition:</b> mana_buffer.c:33</div></div>
+<div class="ttc" id="mana__buffer_8h_html_a3cdefbebe96360e96dd37a96db442d5f"><div class="ttname"><a href="mana__buffer_8h.html#a3cdefbebe96360e96dd37a96db442d5f">mana_buffer_get_allocated_size</a></div><div class="ttdeci">size_t mana_buffer_get_allocated_size(mana_buffer *self)</div><div class="ttdef"><b>Definition:</b> mana_buffer.c:55</div></div>
+</div><!-- fragment --></div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+2017年03月16日(木) 23時27分17秒作成 - libmana / 構成:  &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.12
+</small></address>
+</body>
+</html>
