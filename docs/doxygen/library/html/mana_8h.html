@@ -1,0 +1,1607 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.12"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>libmana: mana.h ファイル</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">libmana
+   &#160;<span id="projectnumber">0.0.0</span>
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.8.12 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'検索');
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','検索');
+  $(document).ready(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#nested-classes">データ構造</a> &#124;
+<a href="#define-members">マクロ定義</a> &#124;
+<a href="#typedef-members">型定義</a> &#124;
+<a href="#func-members">関数</a>  </div>
+  <div class="headertitle">
+<div class="title">mana.h ファイル</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>manaクラスに関するヘッダーファイル  このファイルはmanaクラスに関係するヘッダーファイルです。 manaクラスは更新やリクエストなどの制御、mana_actor オブジェクトの検索などの 実行環境を表しています。  
+<a href="#details">[詳解]</a></p>
+<div class="textblock"><code>#include &quot;<a class="el" href="mana__define_8h_source.html">mana_define.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="mana__actor_8h_source.html">mana_actor.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="mana__array_8h_source.html">mana_array.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="mana__datalink_8h_source.html">mana_datalink.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="mana__hash_8h_source.html">mana_hash.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="mana__info_8h_source.html">mana_info.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="mana__stream_8h_source.html">mana_stream.h</a>&quot;</code><br />
+<code>#include &lt;stdbool.h&gt;</code><br />
+<code>#include &lt;stddef.h&gt;</code><br />
+<code>#include &lt;stdint.h&gt;</code><br />
+</div>
+<p><a href="mana_8h_source.html">[ソースコード]</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+データ構造</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmana.html">mana</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">manaクラス manaクラスは実行環境を表しています。 C++でいうところのメンバー変数ですが、C言語なので全てpublicになっています。 操作用の関数を用意しているので、それらの関数を利用して操作してください。  <a href="structmana.html#details">[詳解]</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+マクロ定義</h2></td></tr>
+<tr class="memitem:a0b8be659b2132a22db06a6d07e0ca835"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana_8h.html#a0b8be659b2132a22db06a6d07e0ca835">MANA_FLAG_AUTO_RELEASE</a>&#160;&#160;&#160;(0x01)</td></tr>
+<tr class="separator:a0b8be659b2132a22db06a6d07e0ca835"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4348194a5b16be43bd23434ac4205194"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana_8h.html#a4348194a5b16be43bd23434ac4205194">MANA_FLAG_DEBUG_MODE</a>&#160;&#160;&#160;(0x02)</td></tr>
+<tr class="separator:a4348194a5b16be43bd23434ac4205194"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed12f66976929660aac44b9e8e1e78c4"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana_8h.html#aed12f66976929660aac44b9e8e1e78c4">MANA_FLAG_FRAME_CHANGED</a>&#160;&#160;&#160;(0x04)</td></tr>
+<tr class="separator:aed12f66976929660aac44b9e8e1e78c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a118323cc09de7669ee5f37bf53349012"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana_8h.html#a118323cc09de7669ee5f37bf53349012">MANA_FLAG_INIT_ACTION_RUNNING</a>&#160;&#160;&#160;(0x08)</td></tr>
+<tr class="separator:a118323cc09de7669ee5f37bf53349012"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27534295f709ba647b9cbd47c8d163c1"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana_8h.html#a27534295f709ba647b9cbd47c8d163c1">MANA_FLAG_INIT_ACTION_FINISHED</a>&#160;&#160;&#160;(0x10)</td></tr>
+<tr class="separator:a27534295f709ba647b9cbd47c8d163c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24eca80b005d47b3675419223aa62e3f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana_8h.html#a24eca80b005d47b3675419223aa62e3f">MANA_FLAG_INITIALIZED</a>&#160;&#160;&#160;(0x20)</td></tr>
+<tr class="separator:a24eca80b005d47b3675419223aa62e3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c47a6219027ed934a364c759b306dc9"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana_8h.html#a2c47a6219027ed934a364c759b306dc9">MANA_FLAG_REQUESTED</a>&#160;&#160;&#160;(0x40)</td></tr>
+<tr class="separator:a2c47a6219027ed934a364c759b306dc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac355646f6af71a00b640559cb443f34f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana_8h.html#ac355646f6af71a00b640559cb443f34f">MANA_FLAG_SYSTEM_REQUEST</a>&#160;&#160;&#160;(0x80)</td></tr>
+<tr class="separator:ac355646f6af71a00b640559cb443f34f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
+型定義</h2></td></tr>
+<tr class="memitem:aae372381578ba4e33511faddffeaf54f"><td class="memItemLeft" align="right" valign="top"><a id="aae372381578ba4e33511faddffeaf54f"></a>
+typedef struct <a class="el" href="structmana.html">mana</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana_8h.html#aae372381578ba4e33511faddffeaf54f">mana</a></td></tr>
+<tr class="memdesc:aae372381578ba4e33511faddffeaf54f"><td class="mdescLeft">&#160;</td><td class="mdescRight">manaクラス manaクラスは実行環境を表しています。 C++でいうところのメンバー変数ですが、C言語なので全てpublicになっています。 操作用の関数を用意しているので、それらの関数を利用して操作してください。 <br /></td></tr>
+<tr class="separator:aae372381578ba4e33511faddffeaf54f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+関数</h2></td></tr>
+<tr class="memitem:ace0b5b88bdb4712c08718dd619ded41d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmana.html">mana</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana_8h.html#ace0b5b88bdb4712c08718dd619ded41d">mana_create</a> (void)</td></tr>
+<tr class="separator:ace0b5b88bdb4712c08718dd619ded41d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae89f2e9c1417f4d5db52be9b6c136182"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana_8h.html#ae89f2e9c1417f4d5db52be9b6c136182">mana_destroy</a> (<a class="el" href="structmana.html">mana</a> *self)</td></tr>
+<tr class="separator:ae89f2e9c1417f4d5db52be9b6c136182"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae52fb655da8a047027b4bdf603cfe900"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana_8h.html#ae52fb655da8a047027b4bdf603cfe900">mana_serialize</a> (<a class="el" href="structmana.html">mana</a> *self, <a class="el" href="structmana__stream.html">mana_stream</a> *stream)</td></tr>
+<tr class="separator:ae52fb655da8a047027b4bdf603cfe900"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a598bf1adf31d8311eafc8160c130ae93"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana_8h.html#a598bf1adf31d8311eafc8160c130ae93">mana_deserialize</a> (<a class="el" href="structmana.html">mana</a> *self, <a class="el" href="structmana__stream.html">mana_stream</a> *stream)</td></tr>
+<tr class="separator:a598bf1adf31d8311eafc8160c130ae93"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9835e1de674ff1054c6bb1b95955640a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana_8h.html#a9835e1de674ff1054c6bb1b95955640a">mana_load_program</a> (<a class="el" href="structmana.html">mana</a> *self, void *program, int32_t auto_release)</td></tr>
+<tr class="separator:a9835e1de674ff1054c6bb1b95955640a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6aa1f940286050ebb227b3cbc9af379"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana_8h.html#ad6aa1f940286050ebb227b3cbc9af379">mana_unload_program</a> (<a class="el" href="structmana.html">mana</a> *self)</td></tr>
+<tr class="separator:ad6aa1f940286050ebb227b3cbc9af379"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac92a062e40a53c8eb4bb8996d476115"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana_8h.html#aac92a062e40a53c8eb4bb8996d476115">mana_get_program_buffer</a> (<a class="el" href="structmana.html">mana</a> *self)</td></tr>
+<tr class="separator:aac92a062e40a53c8eb4bb8996d476115"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2884ce79465220be46a93cb2e07e8450"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana_8h.html#a2884ce79465220be46a93cb2e07e8450">mana_restart</a> (<a class="el" href="structmana.html">mana</a> *self)</td></tr>
+<tr class="separator:a2884ce79465220be46a93cb2e07e8450"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab77414f128fb462f8a3194ef2904a071"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana_8h.html#ab77414f128fb462f8a3194ef2904a071">mana_run</a> (<a class="el" href="structmana.html">mana</a> *self, const float second)</td></tr>
+<tr class="separator:ab77414f128fb462f8a3194ef2904a071"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9cfb879ef170f7e130b9c3682ee66d7e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana_8h.html#a9cfb879ef170f7e130b9c3682ee66d7e">mana_execute</a> (<a class="el" href="structmana.html">mana</a> *self)</td></tr>
+<tr class="separator:a9cfb879ef170f7e130b9c3682ee66d7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afbcf090b22532820260c13b348bea96f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana_8h.html#afbcf090b22532820260c13b348bea96f">mana_is_running</a> (<a class="el" href="structmana.html">mana</a> *self)</td></tr>
+<tr class="separator:afbcf090b22532820260c13b348bea96f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5ec44f2d73861c6fab779190071bd64"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana_8h.html#ae5ec44f2d73861c6fab779190071bd64">mana_request_all</a> (<a class="el" href="structmana.html">mana</a> *self, int32_t level, const char *action_name, <a class="el" href="structmana__actor.html">mana_actor</a> *sender)</td></tr>
+<tr class="separator:ae5ec44f2d73861c6fab779190071bd64"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af84915d4aad39143026292a1c8a71d41"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana_8h.html#af84915d4aad39143026292a1c8a71d41">mana_request</a> (<a class="el" href="structmana.html">mana</a> *self, int32_t level, const char *actor_name, const char *action_name, <a class="el" href="structmana__actor.html">mana_actor</a> *sender)</td></tr>
+<tr class="separator:af84915d4aad39143026292a1c8a71d41"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3627ba51857c1cc4cba57997b14938a9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana_8h.html#a3627ba51857c1cc4cba57997b14938a9">mana_yield</a> (<a class="el" href="structmana.html">mana</a> *self)</td></tr>
+<tr class="separator:a3627ba51857c1cc4cba57997b14938a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3aa2ad5f248b74d2cbc352e720c5aa8a"><td class="memItemLeft" align="right" valign="top">int8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana_8h.html#a3aa2ad5f248b74d2cbc352e720c5aa8a">mana_get_char</a> (const <a class="el" href="structmana.html">mana</a> *self, const uint8_t *address)</td></tr>
+<tr class="separator:a3aa2ad5f248b74d2cbc352e720c5aa8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af56145877ff5833cf02ee0abe852c90c"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana_8h.html#af56145877ff5833cf02ee0abe852c90c">mana_get_short</a> (const <a class="el" href="structmana.html">mana</a> *self, const uint8_t *address)</td></tr>
+<tr class="separator:af56145877ff5833cf02ee0abe852c90c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a918a9cfb9d53fa43902188dd21c7015b"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana_8h.html#a918a9cfb9d53fa43902188dd21c7015b">mana_get_integer</a> (const <a class="el" href="structmana.html">mana</a> *self, const uint8_t *address)</td></tr>
+<tr class="separator:a918a9cfb9d53fa43902188dd21c7015b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6dbbb094c218dd22a9345a82efaed41"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana_8h.html#ad6dbbb094c218dd22a9345a82efaed41">mana_get_unsigned_char</a> (const <a class="el" href="structmana.html">mana</a> *self, const uint8_t *address)</td></tr>
+<tr class="separator:ad6dbbb094c218dd22a9345a82efaed41"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad83cfbeb8170d28b102a48a4b9a4b63b"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana_8h.html#ad83cfbeb8170d28b102a48a4b9a4b63b">mana_get_unsigned_short</a> (const <a class="el" href="structmana.html">mana</a> *self, const uint8_t *address)</td></tr>
+<tr class="separator:ad83cfbeb8170d28b102a48a4b9a4b63b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a989e405924e1caed975ffba9d00cf380"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana_8h.html#a989e405924e1caed975ffba9d00cf380">mana_get_unsigned_integer</a> (const <a class="el" href="structmana.html">mana</a> *self, const uint8_t *address)</td></tr>
+<tr class="separator:a989e405924e1caed975ffba9d00cf380"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f9bf0c7d2b27446275093473edb34ae"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana_8h.html#a1f9bf0c7d2b27446275093473edb34ae">mana_get_float</a> (const <a class="el" href="structmana.html">mana</a> *self, const uint8_t *address)</td></tr>
+<tr class="separator:a1f9bf0c7d2b27446275093473edb34ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7bdb002e3bea8b06d6bd5eba259499ca"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana_8h.html#a7bdb002e3bea8b06d6bd5eba259499ca">mana_get_string</a> (const <a class="el" href="structmana.html">mana</a> *self, const uint8_t *address)</td></tr>
+<tr class="separator:a7bdb002e3bea8b06d6bd5eba259499ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a81f62cbdf54b749b08ecdc5653560211"><td class="memItemLeft" align="right" valign="top">uint8_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana_8h.html#a81f62cbdf54b749b08ecdc5653560211">mana_get_address</a> (const <a class="el" href="structmana.html">mana</a> *self, const uint8_t *address)</td></tr>
+<tr class="separator:a81f62cbdf54b749b08ecdc5653560211"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a01bf018d017de0b3c49f8d3e5864c759"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana_8h.html#a01bf018d017de0b3c49f8d3e5864c759">mana_get_actor</a> (<a class="el" href="structmana.html">mana</a> *self, const char *name)</td></tr>
+<tr class="separator:a01bf018d017de0b3c49f8d3e5864c759"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71b0a83781f7532911949ee841a0a07c"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana_8h.html#a71b0a83781f7532911949ee841a0a07c">mana_get_actor_name</a> (<a class="el" href="structmana.html">mana</a> *self, struct <a class="el" href="structmana__actor.html">mana_actor</a> *actor)</td></tr>
+<tr class="separator:a71b0a83781f7532911949ee841a0a07c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a81a15e20ed7284db56fe62e90e63b4"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana_8h.html#a3a81a15e20ed7284db56fe62e90e63b4">mana_create_actor</a> (<a class="el" href="structmana.html">mana</a> *self, struct <a class="el" href="structmana__actor.html">mana_actor</a> *actor, const char *new_name)</td></tr>
+<tr class="separator:a3a81a15e20ed7284db56fe62e90e63b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a880a756ced5089003edf6cad3a938660"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana_8h.html#a880a756ced5089003edf6cad3a938660">mana_create_actor_name</a> (<a class="el" href="structmana.html">mana</a> *self, const char *name, const char *new_name)</td></tr>
+<tr class="separator:a880a756ced5089003edf6cad3a938660"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb1c42e43ebdd605f22aae44b096a536"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana_8h.html#afb1c42e43ebdd605f22aae44b096a536">mana_create_actor_from_phantom</a> (<a class="el" href="structmana.html">mana</a> *self, const char *name, const char *new_name)</td></tr>
+<tr class="separator:afb1c42e43ebdd605f22aae44b096a536"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a13e9df997ee0df3b65ee713067c326e3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana_8h.html#a13e9df997ee0df3b65ee713067c326e3">mana_is_in_init_action</a> (<a class="el" href="structmana.html">mana</a> *self)</td></tr>
+<tr class="separator:a13e9df997ee0df3b65ee713067c326e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2aeeb877398682e9fb13d50a11471f39"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana_8h.html#a2aeeb877398682e9fb13d50a11471f39">mana_is_finish_init_action</a> (<a class="el" href="structmana.html">mana</a> *self)</td></tr>
+<tr class="separator:a2aeeb877398682e9fb13d50a11471f39"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7b84cd6cbf0dfe0590e222cf4d1142d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana_8h.html#aa7b84cd6cbf0dfe0590e222cf4d1142d">mana_enable_system_request</a> (<a class="el" href="structmana.html">mana</a> *self, const bool enable)</td></tr>
+<tr class="separator:aa7b84cd6cbf0dfe0590e222cf4d1142d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a59323678262c741e4a9b51a121c6a301"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana_8h.html#a59323678262c741e4a9b51a121c6a301">mana_is_system_request_enabled</a> (<a class="el" href="structmana.html">mana</a> *self)</td></tr>
+<tr class="separator:a59323678262c741e4a9b51a121c6a301"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40edae79b1fd9d00c1295b06826f3122"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana_8h.html#a40edae79b1fd9d00c1295b06826f3122">mana_get_frame_counter</a> (<a class="el" href="structmana.html">mana</a> *self)</td></tr>
+<tr class="separator:a40edae79b1fd9d00c1295b06826f3122"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a134c7bf5977ee1c641b0c2acd4bb89b6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana_8h.html#a134c7bf5977ee1c641b0c2acd4bb89b6">mana_is_frame_changed</a> (<a class="el" href="structmana.html">mana</a> *self)</td></tr>
+<tr class="separator:a134c7bf5977ee1c641b0c2acd4bb89b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad81b8b8517261a9d287cc1716da4518"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana_8h.html#aad81b8b8517261a9d287cc1716da4518">mana_get_data</a> (const <a class="el" href="structmana.html">mana</a> *self, const int32_t resouce_id, const void **buffer, size_t *size)</td></tr>
+<tr class="separator:aad81b8b8517261a9d287cc1716da4518"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
+<div class="textblock"><p>manaクラスに関するヘッダーファイル  このファイルはmanaクラスに関係するヘッダーファイルです。 manaクラスは更新やリクエストなどの制御、mana_actor オブジェクトの検索などの 実行環境を表しています。 </p>
+<p>mana (library)</p>
+<dl class="section author"><dt>著者</dt><dd>Shun Moriya <a href="#" onclick="location.href='mai'+'lto:'+'shu'+'n@'+'mnu'+'.s'+'aku'+'ra'+'.ne'+'.j'+'p'; return false;">shun@<span style="display: none;">.nosp@m.</span>mnu.<span style="display: none;">.nosp@m.</span>sakur<span style="display: none;">.nosp@m.</span>a.ne<span style="display: none;">.nosp@m.</span>.jp</a> </dd></dl>
+<dl class="section date"><dt>日付</dt><dd>2003- </dd></dl>
+</div><h2 class="groupheader">マクロ定義詳解</h2>
+<a id="a0b8be659b2132a22db06a6d07e0ca835"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b8be659b2132a22db06a6d07e0ca835">&sect;&nbsp;</a></span>MANA_FLAG_AUTO_RELEASE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define MANA_FLAG_AUTO_RELEASE&#160;&#160;&#160;(0x01)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>プログラムの自動開放フラグ </p>
+
+</div>
+</div>
+<a id="a4348194a5b16be43bd23434ac4205194"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4348194a5b16be43bd23434ac4205194">&sect;&nbsp;</a></span>MANA_FLAG_DEBUG_MODE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define MANA_FLAG_DEBUG_MODE&#160;&#160;&#160;(0x02)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>デバックモードフラグ </p>
+
+</div>
+</div>
+<a id="aed12f66976929660aac44b9e8e1e78c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed12f66976929660aac44b9e8e1e78c4">&sect;&nbsp;</a></span>MANA_FLAG_FRAME_CHANGED</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define MANA_FLAG_FRAME_CHANGED&#160;&#160;&#160;(0x04)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>フレーム変更フラグ </p>
+
+</div>
+</div>
+<a id="a27534295f709ba647b9cbd47c8d163c1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a27534295f709ba647b9cbd47c8d163c1">&sect;&nbsp;</a></span>MANA_FLAG_INIT_ACTION_FINISHED</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define MANA_FLAG_INIT_ACTION_FINISHED&#160;&#160;&#160;(0x10)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>initアクション終了フラグ </p>
+
+</div>
+</div>
+<a id="a118323cc09de7669ee5f37bf53349012"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a118323cc09de7669ee5f37bf53349012">&sect;&nbsp;</a></span>MANA_FLAG_INIT_ACTION_RUNNING</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define MANA_FLAG_INIT_ACTION_RUNNING&#160;&#160;&#160;(0x08)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>initアクション実行中フラグ </p>
+
+</div>
+</div>
+<a id="a24eca80b005d47b3675419223aa62e3f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a24eca80b005d47b3675419223aa62e3f">&sect;&nbsp;</a></span>MANA_FLAG_INITIALIZED</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define MANA_FLAG_INITIALIZED&#160;&#160;&#160;(0x20)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>初期化済みフラグ </p>
+
+</div>
+</div>
+<a id="a2c47a6219027ed934a364c759b306dc9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c47a6219027ed934a364c759b306dc9">&sect;&nbsp;</a></span>MANA_FLAG_REQUESTED</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define MANA_FLAG_REQUESTED&#160;&#160;&#160;(0x40)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>リクエスト発生済みフラグ </p>
+
+</div>
+</div>
+<a id="ac355646f6af71a00b640559cb443f34f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac355646f6af71a00b640559cb443f34f">&sect;&nbsp;</a></span>MANA_FLAG_SYSTEM_REQUEST</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define MANA_FLAG_SYSTEM_REQUEST&#160;&#160;&#160;(0x80)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>システムリクエスト許可フラグ </p>
+
+</div>
+</div>
+<h2 class="groupheader">関数詳解</h2>
+<a id="ace0b5b88bdb4712c08718dd619ded41d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace0b5b88bdb4712c08718dd619ded41d">&sect;&nbsp;</a></span>mana_create()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structmana.html">mana</a>* mana_create </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>mana オブジェクトの生成</p>
+<dl class="section return"><dt>戻り値</dt><dd>mana オブジェクト </dd></dl>
+
+</div>
+</div>
+<a id="a3a81a15e20ed7284db56fe62e90e63b4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3a81a15e20ed7284db56fe62e90e63b4">&sect;&nbsp;</a></span>mana_create_actor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">struct <a class="el" href="structmana__actor.html">mana_actor</a>* mana_create_actor </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana.html">mana</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">struct <a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>actor</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>new_name</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>アクターのコピー</p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td>mana オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">actor</td><td>コピー元になるmana_actor オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">new_name</td><td>新しいアクターの名前 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>戻り値</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">!=</td><td>NULL コピーされたmana_actor オブジェクト </td></tr>
+    <tr><td class="paramname">==</td><td>NULL コピー失敗 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="afb1c42e43ebdd605f22aae44b096a536"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb1c42e43ebdd605f22aae44b096a536">&sect;&nbsp;</a></span>mana_create_actor_from_phantom()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">struct <a class="el" href="structmana__actor.html">mana_actor</a>* mana_create_actor_from_phantom </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana.html">mana</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>new_name</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>phantomを元にアクターを生成</p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td>mana オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>コピー元になるファントムの名前 </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">new_name</td><td>新しいアクターの名前 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>戻り値</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">!=</td><td>NULL コピーされたmana_actor オブジェクト </td></tr>
+    <tr><td class="paramname">==</td><td>NULL コピー失敗 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a880a756ced5089003edf6cad3a938660"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a880a756ced5089003edf6cad3a938660">&sect;&nbsp;</a></span>mana_create_actor_name()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">struct <a class="el" href="structmana__actor.html">mana_actor</a>* mana_create_actor_name </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana.html">mana</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>new_name</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>アクターのコピー</p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td>mana オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>コピー元になるアクターの名前 </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">new_name</td><td>新しいアクターの名前 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>戻り値</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">!=</td><td>NULL コピーされたmana_actor オブジェクト </td></tr>
+    <tr><td class="paramname">==</td><td>NULL コピー失敗 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a598bf1adf31d8311eafc8160c130ae93"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a598bf1adf31d8311eafc8160c130ae93">&sect;&nbsp;</a></span>mana_deserialize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_deserialize </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana.html">mana</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structmana__stream.html">mana_stream</a> *&#160;</td>
+          <td class="paramname"><em>stream</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>mana オブジェクトのデシリアライズ</p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td>mana オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">stream</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ae89f2e9c1417f4d5db52be9b6c136182"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae89f2e9c1417f4d5db52be9b6c136182">&sect;&nbsp;</a></span>mana_destroy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_destroy </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana.html">mana</a> *&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>mana オブジェクトの破棄</p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td>mana オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aa7b84cd6cbf0dfe0590e222cf4d1142d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa7b84cd6cbf0dfe0590e222cf4d1142d">&sect;&nbsp;</a></span>mana_enable_system_request()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_enable_system_request </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana.html">mana</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>enable</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>システムリクエストの許可フラグを設定</p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td>mana オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">enable</td><td><ul>
+<li>trueならばリクエスト許可</li>
+<li>falseならばリクエスト禁止 </li>
+</ul>
+</td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a9cfb879ef170f7e130b9c3682ee66d7e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9cfb879ef170f7e130b9c3682ee66d7e">&sect;&nbsp;</a></span>mana_execute()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_execute </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana.html">mana</a> *&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>非同期更新</p>
+<p>実行終了までブロックします。 スクリプトによってはデッドロックが発生する事があるので注意してください。 </p><dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td>mana オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a01bf018d017de0b3c49f8d3e5864c759"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a01bf018d017de0b3c49f8d3e5864c759">&sect;&nbsp;</a></span>mana_get_actor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">struct <a class="el" href="structmana__actor.html">mana_actor</a>* mana_get_actor </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana.html">mana</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>name</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>アクターオブジェクトを取得</p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td>mana オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>アクター名 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>戻り値</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">!=</td><td>NULL アクターオブジェクトポインタ </td></tr>
+    <tr><td class="paramname">==</td><td>NULL 検索失敗 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a71b0a83781f7532911949ee841a0a07c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a71b0a83781f7532911949ee841a0a07c">&sect;&nbsp;</a></span>mana_get_actor_name()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* mana_get_actor_name </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana.html">mana</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>actor</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>アクターの名前を取得</p>
+<p>実行速度が遅いので注意が必要です。</p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td>mana オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">actor</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>戻り値</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">!=</td><td>NULL アクターの名前 </td></tr>
+    <tr><td class="paramname">==</td><td>NULL 検索失敗 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a81f62cbdf54b749b08ecdc5653560211"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a81f62cbdf54b749b08ecdc5653560211">&sect;&nbsp;</a></span>mana_get_address()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t* mana_get_address </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structmana.html">mana</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const uint8_t *&#160;</td>
+          <td class="paramname"><em>address</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>プログラム領域からポインタを取得します </p><dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td>mana オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">address</td><td>プログラムアドレス </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>プログラム領域上のポインタ </dd></dl>
+
+</div>
+</div>
+<a id="a3aa2ad5f248b74d2cbc352e720c5aa8a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3aa2ad5f248b74d2cbc352e720c5aa8a">&sect;&nbsp;</a></span>mana_get_char()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int8_t mana_get_char </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structmana.html">mana</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const uint8_t *&#160;</td>
+          <td class="paramname"><em>address</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>プログラム領域から１バイト分の数値を取得します </p><dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td>mana オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">address</td><td>プログラムアドレス </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>プログラム領域上の１バイト分の数値 </dd></dl>
+
+</div>
+</div>
+<a id="aad81b8b8517261a9d287cc1716da4518"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad81b8b8517261a9d287cc1716da4518">&sect;&nbsp;</a></span>mana_get_data()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_get_data </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structmana.html">mana</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int32_t&#160;</td>
+          <td class="paramname"><em>resouce_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const void **&#160;</td>
+          <td class="paramname"><em>buffer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t *&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>リソースデータを取得</p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td>mana オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">resouce_id</td><td>リソース番号 </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">buffer</td><td>データアドレス </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">size</td><td>データサイズ </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a1f9bf0c7d2b27446275093473edb34ae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f9bf0c7d2b27446275093473edb34ae">&sect;&nbsp;</a></span>mana_get_float()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float mana_get_float </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structmana.html">mana</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const uint8_t *&#160;</td>
+          <td class="paramname"><em>address</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>プログラム領域から単制度浮動小数を取得します </p><dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td>mana オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">address</td><td>プログラムアドレス </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>プログラム領域上の単制度浮動小数 </dd></dl>
+
+</div>
+</div>
+<a id="a40edae79b1fd9d00c1295b06826f3122"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a40edae79b1fd9d00c1295b06826f3122">&sect;&nbsp;</a></span>mana_get_frame_counter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t mana_get_frame_counter </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana.html">mana</a> *&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>フレームカウンターを取得</p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td>mana オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>フレームカウンタ </dd></dl>
+
+</div>
+</div>
+<a id="a918a9cfb9d53fa43902188dd21c7015b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a918a9cfb9d53fa43902188dd21c7015b">&sect;&nbsp;</a></span>mana_get_integer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int32_t mana_get_integer </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structmana.html">mana</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const uint8_t *&#160;</td>
+          <td class="paramname"><em>address</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>プログラム領域から４バイト分の数値を取得します </p><dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td>mana オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">address</td><td>プログラムアドレス </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>プログラム領域上の４バイト分の数値 </dd></dl>
+
+</div>
+</div>
+<a id="aac92a062e40a53c8eb4bb8996d476115"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aac92a062e40a53c8eb4bb8996d476115">&sect;&nbsp;</a></span>mana_get_program_buffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void* mana_get_program_buffer </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana.html">mana</a> *&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>manaプログラムアドレスの取得</p>
+<dl class="section return"><dt>戻り値</dt><dd>manaプログラムアドレス </dd></dl>
+
+</div>
+</div>
+<a id="af56145877ff5833cf02ee0abe852c90c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af56145877ff5833cf02ee0abe852c90c">&sect;&nbsp;</a></span>mana_get_short()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int16_t mana_get_short </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structmana.html">mana</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const uint8_t *&#160;</td>
+          <td class="paramname"><em>address</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>プログラム領域から２バイト分の数値を取得します </p><dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td>mana オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">address</td><td>プログラムアドレス </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>プログラム領域上の２バイト分の数値 </dd></dl>
+
+</div>
+</div>
+<a id="a7bdb002e3bea8b06d6bd5eba259499ca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7bdb002e3bea8b06d6bd5eba259499ca">&sect;&nbsp;</a></span>mana_get_string()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* mana_get_string </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structmana.html">mana</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const uint8_t *&#160;</td>
+          <td class="paramname"><em>address</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>文字列領域から文字を取得します </p><dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td>mana オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">address</td><td>プログラムアドレス </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>文字列へのポインタ </dd></dl>
+
+</div>
+</div>
+<a id="ad6dbbb094c218dd22a9345a82efaed41"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad6dbbb094c218dd22a9345a82efaed41">&sect;&nbsp;</a></span>mana_get_unsigned_char()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t mana_get_unsigned_char </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structmana.html">mana</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const uint8_t *&#160;</td>
+          <td class="paramname"><em>address</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>プログラム領域から１バイト分の数値を取得します </p><dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td>mana オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">address</td><td>プログラムアドレス </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>プログラム領域上の１バイト分の数値 </dd></dl>
+
+</div>
+</div>
+<a id="a989e405924e1caed975ffba9d00cf380"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a989e405924e1caed975ffba9d00cf380">&sect;&nbsp;</a></span>mana_get_unsigned_integer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t mana_get_unsigned_integer </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structmana.html">mana</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const uint8_t *&#160;</td>
+          <td class="paramname"><em>address</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>プログラム領域から４バイト分の数値を取得します </p><dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td>mana オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">address</td><td>プログラムアドレス </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>プログラム領域上の４バイト分の数値 </dd></dl>
+
+</div>
+</div>
+<a id="ad83cfbeb8170d28b102a48a4b9a4b63b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad83cfbeb8170d28b102a48a4b9a4b63b">&sect;&nbsp;</a></span>mana_get_unsigned_short()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t mana_get_unsigned_short </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structmana.html">mana</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const uint8_t *&#160;</td>
+          <td class="paramname"><em>address</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>プログラム領域から２バイト分の数値を取得します </p><dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td>mana オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">address</td><td>プログラムアドレス </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>プログラム領域上の２バイト分の数値 </dd></dl>
+
+</div>
+</div>
+<a id="a2aeeb877398682e9fb13d50a11471f39"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2aeeb877398682e9fb13d50a11471f39">&sect;&nbsp;</a></span>mana_is_finish_init_action()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool mana_is_finish_init_action </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana.html">mana</a> *&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>initアクション終了か取得</p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td>mana オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>戻り値</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">true</td><td>initアクション終了 </td></tr>
+    <tr><td class="paramname">false</td><td>initアクションは実行していない </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a134c7bf5977ee1c641b0c2acd4bb89b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a134c7bf5977ee1c641b0c2acd4bb89b6">&sect;&nbsp;</a></span>mana_is_frame_changed()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool mana_is_frame_changed </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana.html">mana</a> *&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>フレームが変更されたか取得</p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td>mana オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>戻り値</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">true</td><td>フレームが変更された </td></tr>
+    <tr><td class="paramname">false</td><td>同じフレーム </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a13e9df997ee0df3b65ee713067c326e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a13e9df997ee0df3b65ee713067c326e3">&sect;&nbsp;</a></span>mana_is_in_init_action()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool mana_is_in_init_action </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana.html">mana</a> *&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>initアクション実行中か取得</p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td>mana オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>戻り値</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">true</td><td>initアクション中 </td></tr>
+    <tr><td class="paramname">false</td><td>initアクション終了 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="afbcf090b22532820260c13b348bea96f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afbcf090b22532820260c13b348bea96f">&sect;&nbsp;</a></span>mana_is_running()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool mana_is_running </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana.html">mana</a> *&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>実行中か調べる</p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td>mana オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>戻り値</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">true</td><td>スクリプト実行中 </td></tr>
+    <tr><td class="paramname">false</td><td>スクリプト停止中 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a59323678262c741e4a9b51a121c6a301"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a59323678262c741e4a9b51a121c6a301">&sect;&nbsp;</a></span>mana_is_system_request_enabled()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool mana_is_system_request_enabled </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana.html">mana</a> *&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>システムリクエストの許可フラグを取得</p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td>mana オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>戻り値</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">true</td><td>リクエスト許可 </td></tr>
+    <tr><td class="paramname">false</td><td>リクエスト禁止 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a9835e1de674ff1054c6bb1b95955640a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9835e1de674ff1054c6bb1b95955640a">&sect;&nbsp;</a></span>mana_load_program()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool mana_load_program </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana.html">mana</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>program</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>auto_release</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>manaプログラムの読み込み</p>
+<p>プログラム実行中はプログラム領域を参照しているので、 void <a class="el" href="mana_8c.html#ad6aa1f940286050ebb227b3cbc9af379">mana_unload_program(mana* self)</a>よりも先に プログラム領域を開放しないでください。 </p><dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">program</td><td>manaプログラムアドレス </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">auto_release</td><td>trueならば自動的にコード領域を開放します </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>戻り値</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">true</td><td>読み込み成功 </td></tr>
+    <tr><td class="paramname">false</td><td>読み込み失敗 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="af84915d4aad39143026292a1c8a71d41"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af84915d4aad39143026292a1c8a71d41">&sect;&nbsp;</a></span>mana_request()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool mana_request </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana.html">mana</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>level</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>actor_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>action_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>sender</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>アクターにリクエストを要求</p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td>mana オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">level</td><td>優先度(高いほど優先) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">actor_name</td><td>アクター名 </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">action_name</td><td>アクション名 </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">sender</td><td>リクエスト元アクター </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>戻り値</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">true</td><td>リクエスト成功 </td></tr>
+    <tr><td class="paramname">false</td><td>リクエスト失敗 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ae5ec44f2d73861c6fab779190071bd64"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae5ec44f2d73861c6fab779190071bd64">&sect;&nbsp;</a></span>mana_request_all()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_request_all </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana.html">mana</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>level</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>action_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>sender</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>全アクターにリクエストを要求</p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td>mana オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">level</td><td>優先度(高いほど優先) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">action_name</td><td>アクション名 </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">sender</td><td>リクエスト元アクター </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a2884ce79465220be46a93cb2e07e8450"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2884ce79465220be46a93cb2e07e8450">&sect;&nbsp;</a></span>mana_restart()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_restart </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana.html">mana</a> *&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>再起動</p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td>mana オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ab77414f128fb462f8a3194ef2904a071"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab77414f128fb462f8a3194ef2904a071">&sect;&nbsp;</a></span>mana_run()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool mana_run </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana.html">mana</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const float&#160;</td>
+          <td class="paramname"><em>second</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>同期更新</p>
+<p>yield命令など、次のフレーム待ちになる命令をフェッチするまで実行します。 </p><dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td>mana オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">second</td><td>経過した時間(単位は秒) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>戻り値</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">true</td><td>スクリプト実行中 </td></tr>
+    <tr><td class="paramname">false</td><td>スクリプト停止 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ae52fb655da8a047027b4bdf603cfe900"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae52fb655da8a047027b4bdf603cfe900">&sect;&nbsp;</a></span>mana_serialize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_serialize </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana.html">mana</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structmana__stream.html">mana_stream</a> *&#160;</td>
+          <td class="paramname"><em>stream</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>mana オブジェクトのシリアライズ</p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td>mana オブジェクト </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">stream</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ad6aa1f940286050ebb227b3cbc9af379"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad6aa1f940286050ebb227b3cbc9af379">&sect;&nbsp;</a></span>mana_unload_program()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_unload_program </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana.html">mana</a> *&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>manaプログラムの開放</p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td>mana オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a3627ba51857c1cc4cba57997b14938a9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3627ba51857c1cc4cba57997b14938a9">&sect;&nbsp;</a></span>mana_yield()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_yield </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana.html">mana</a> *&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>処理を譲る</p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td>mana オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+2017年03月16日(木) 23時27分17秒作成 - libmana / 構成:  &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.12
+</small></address>
+</body>
+</html>

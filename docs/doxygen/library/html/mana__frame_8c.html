@@ -1,0 +1,586 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.12"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>libmana: mana_frame.c ファイル</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">libmana
+   &#160;<span id="projectnumber">0.0.0</span>
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.8.12 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'検索');
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','検索');
+  $(document).ready(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#define-members">マクロ定義</a> &#124;
+<a href="#func-members">関数</a>  </div>
+  <div class="headertitle">
+<div class="title">mana_frame.c ファイル</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>mana_frameクラスに関するソースファイル  このファイルはmana_frameクラスに関係するソースファイルです。 mana_frameクラスはmana_actorクラスのローカル変数の操作を行ないます。 本来はスタックで操作したほうが良いのかもしれませんが…  
+<a href="#details">[詳解]</a></p>
+<div class="textblock"><code>#include &quot;<a class="el" href="mana__frame_8h_source.html">mana_frame.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="mana__malloc_8h_source.html">mana_malloc.h</a>&quot;</code><br />
+<code>#include &lt;assert.h&gt;</code><br />
+<code>#include &lt;string.h&gt;</code><br />
+</div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+マクロ定義</h2></td></tr>
+<tr class="memitem:a955cdd367706599339c3f7956465f125"><td class="memItemLeft" align="right" valign="top"><a id="a955cdd367706599339c3f7956465f125"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>MANA_FRAME_PAGE_SIZE</b>&#160;&#160;&#160;(256)</td></tr>
+<tr class="separator:a955cdd367706599339c3f7956465f125"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+関数</h2></td></tr>
+<tr class="memitem:a9f7ee997f8bf7094233b39b5c3e04d75"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmana__frame.html">mana_frame</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__frame_8c.html#a9f7ee997f8bf7094233b39b5c3e04d75">mana_frame_create</a> (void)</td></tr>
+<tr class="separator:a9f7ee997f8bf7094233b39b5c3e04d75"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86859d4ec0b756d7a42dea3b787917b7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmana__frame.html">mana_frame</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__frame_8c.html#a86859d4ec0b756d7a42dea3b787917b7">mana_frame_create_with_size</a> (const size_t size)</td></tr>
+<tr class="separator:a86859d4ec0b756d7a42dea3b787917b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7f5456426c43f5b4111462e19f299bc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__frame_8c.html#aa7f5456426c43f5b4111462e19f299bc">mana_frame_destroy</a> (<a class="el" href="structmana__frame.html">mana_frame</a> *self)</td></tr>
+<tr class="separator:aa7f5456426c43f5b4111462e19f299bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaec22d4ee3a4324539a209441df52686"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__frame_8c.html#aaec22d4ee3a4324539a209441df52686">mana_frame_initialize</a> (<a class="el" href="structmana__frame.html">mana_frame</a> *self)</td></tr>
+<tr class="separator:aaec22d4ee3a4324539a209441df52686"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac71a355ed2a960812b60b7a4691c573d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__frame_8c.html#ac71a355ed2a960812b60b7a4691c573d">mana_frame_initialize_with_size</a> (<a class="el" href="structmana__frame.html">mana_frame</a> *self, const size_t size)</td></tr>
+<tr class="separator:ac71a355ed2a960812b60b7a4691c573d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ed3f7780b45083867e3915f20e124f5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__frame_8c.html#a2ed3f7780b45083867e3915f20e124f5">mana_frame_finalize</a> (<a class="el" href="structmana__frame.html">mana_frame</a> *self)</td></tr>
+<tr class="separator:a2ed3f7780b45083867e3915f20e124f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7264d869315b09930f19563cfac4f3ac"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__frame_8c.html#a7264d869315b09930f19563cfac4f3ac">mana_frame_serialize</a> (const <a class="el" href="structmana__frame.html">mana_frame</a> *self, <a class="el" href="structmana__stream.html">mana_stream</a> *stream)</td></tr>
+<tr class="separator:a7264d869315b09930f19563cfac4f3ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20b3598727971e2709320127715fd21a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__frame_8c.html#a20b3598727971e2709320127715fd21a">mana_frame_deserialize</a> (<a class="el" href="structmana__frame.html">mana_frame</a> *self, <a class="el" href="structmana__stream.html">mana_stream</a> *stream)</td></tr>
+<tr class="separator:a20b3598727971e2709320127715fd21a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab9b82994466c2cc4d83be4456a23dad7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__frame_8c.html#ab9b82994466c2cc4d83be4456a23dad7">mana_frame_clear</a> (<a class="el" href="structmana__frame.html">mana_frame</a> *self)</td></tr>
+<tr class="separator:ab9b82994466c2cc4d83be4456a23dad7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa0e491748807d17379512c4038faa11f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__frame_8c.html#aa0e491748807d17379512c4038faa11f">mana_frame_allocate</a> (<a class="el" href="structmana__frame.html">mana_frame</a> *self, const size_t size)</td></tr>
+<tr class="separator:aa0e491748807d17379512c4038faa11f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28bac3d2cf9951f56d587289bc008e9e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__frame_8c.html#a28bac3d2cf9951f56d587289bc008e9e">mana_frame_release</a> (<a class="el" href="structmana__frame.html">mana_frame</a> *self, const size_t size)</td></tr>
+<tr class="separator:a28bac3d2cf9951f56d587289bc008e9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39ecbde12693b63a20a0d3151851bdd4"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__frame_8c.html#a39ecbde12693b63a20a0d3151851bdd4">mana_frame_get_address</a> (const <a class="el" href="structmana__frame.html">mana_frame</a> *self, const size_t index)</td></tr>
+<tr class="separator:a39ecbde12693b63a20a0d3151851bdd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0553da53be23dae760f1148d1b4aa378"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__frame_8c.html#a0553da53be23dae760f1148d1b4aa378">mana_frame_get_size</a> (const <a class="el" href="structmana__frame.html">mana_frame</a> *self)</td></tr>
+<tr class="separator:a0553da53be23dae760f1148d1b4aa378"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acbd3393a009f7e98376cde95a975e24c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__frame_8c.html#acbd3393a009f7e98376cde95a975e24c">mana_frame_set_size</a> (<a class="el" href="structmana__frame.html">mana_frame</a> *self, const size_t size)</td></tr>
+<tr class="separator:acbd3393a009f7e98376cde95a975e24c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2da4569eaf0d179150e370961a6914c3"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__frame_8c.html#a2da4569eaf0d179150e370961a6914c3">mana_frame_compare</a> (const <a class="el" href="structmana__frame.html">mana_frame</a> *self, const <a class="el" href="structmana__frame.html">mana_frame</a> *other)</td></tr>
+<tr class="separator:a2da4569eaf0d179150e370961a6914c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
+<div class="textblock"><p>mana_frameクラスに関するソースファイル  このファイルはmana_frameクラスに関係するソースファイルです。 mana_frameクラスはmana_actorクラスのローカル変数の操作を行ないます。 本来はスタックで操作したほうが良いのかもしれませんが… </p>
+<p>mana (library)</p>
+<dl class="section author"><dt>著者</dt><dd>Shun Moriya <a href="#" onclick="location.href='mai'+'lto:'+'shu'+'n@'+'mnu'+'.s'+'aku'+'ra'+'.ne'+'.j'+'p'; return false;">shun@<span style="display: none;">.nosp@m.</span>mnu.<span style="display: none;">.nosp@m.</span>sakur<span style="display: none;">.nosp@m.</span>a.ne<span style="display: none;">.nosp@m.</span>.jp</a> </dd></dl>
+<dl class="section date"><dt>日付</dt><dd>2003- </dd></dl>
+</div><h2 class="groupheader">関数詳解</h2>
+<a id="aa0e491748807d17379512c4038faa11f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa0e491748807d17379512c4038faa11f">&sect;&nbsp;</a></span>mana_frame_allocate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_frame_allocate </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__frame.html">mana_frame</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const size_t&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>追加サイズ </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ab9b82994466c2cc4d83be4456a23dad7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab9b82994466c2cc4d83be4456a23dad7">&sect;&nbsp;</a></span>mana_frame_clear()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_frame_clear </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__frame.html">mana_frame</a> *&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a2da4569eaf0d179150e370961a6914c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2da4569eaf0d179150e370961a6914c3">&sect;&nbsp;</a></span>mana_frame_compare()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int32_t mana_frame_compare </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structmana__frame.html">mana_frame</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structmana__frame.html">mana_frame</a> *&#160;</td>
+          <td class="paramname"><em>other</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">other</td><td><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>戻り値</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">==</td><td>0 同一の内容 </td></tr>
+    <tr><td class="paramname">!=</td><td>0 異なる内容 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a9f7ee997f8bf7094233b39b5c3e04d75"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9f7ee997f8bf7094233b39b5c3e04d75">&sect;&nbsp;</a></span>mana_frame_create()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structmana__frame.html">mana_frame</a>* mana_frame_create </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>戻り値</dt><dd><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクト </dd></dl>
+<dl class="section warning"><dt>警告</dt><dd>void <a class="el" href="mana__frame_8c.html#aaec22d4ee3a4324539a209441df52686">mana_frame_initialize(mana_frame* self)</a>を呼ぶ必要はありません。 </dd></dl>
+
+</div>
+</div>
+<a id="a86859d4ec0b756d7a42dea3b787917b7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a86859d4ec0b756d7a42dea3b787917b7">&sect;&nbsp;</a></span>mana_frame_create_with_size()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structmana__frame.html">mana_frame</a>* mana_frame_create_with_size </td>
+          <td>(</td>
+          <td class="paramtype">const size_t&#160;</td>
+          <td class="paramname"><em>size</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>確保サイズ </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクト </dd></dl>
+<dl class="section warning"><dt>警告</dt><dd>void <a class="el" href="mana__frame_8c.html#ac71a355ed2a960812b60b7a4691c573d">mana_frame_initialize_with_size(mana_frame* self, size_t size)</a>を呼ぶ必要はありません。 </dd></dl>
+
+</div>
+</div>
+<a id="a20b3598727971e2709320127715fd21a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a20b3598727971e2709320127715fd21a">&sect;&nbsp;</a></span>mana_frame_deserialize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_frame_deserialize </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__frame.html">mana_frame</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structmana__stream.html">mana_stream</a> *&#160;</td>
+          <td class="paramname"><em>stream</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">stream</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aa7f5456426c43f5b4111462e19f299bc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa7f5456426c43f5b4111462e19f299bc">&sect;&nbsp;</a></span>mana_frame_destroy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_frame_destroy </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__frame.html">mana_frame</a> *&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section warning"><dt>警告</dt><dd>void <a class="el" href="mana__frame_8c.html#a2ed3f7780b45083867e3915f20e124f5">mana_frame_finalize(mana_frame* self)</a>を呼ぶ必要はありません。 </dd></dl>
+
+</div>
+</div>
+<a id="a2ed3f7780b45083867e3915f20e124f5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ed3f7780b45083867e3915f20e124f5">&sect;&nbsp;</a></span>mana_frame_finalize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_frame_finalize </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__frame.html">mana_frame</a> *&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a39ecbde12693b63a20a0d3151851bdd4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a39ecbde12693b63a20a0d3151851bdd4">&sect;&nbsp;</a></span>mana_frame_get_address()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void* mana_frame_get_address </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structmana__frame.html">mana_frame</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const size_t&#160;</td>
+          <td class="paramname"><em>index</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">index</td><td>フレームポインタへのオフセット値 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>アドレス </dd></dl>
+
+</div>
+</div>
+<a id="a0553da53be23dae760f1148d1b4aa378"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0553da53be23dae760f1148d1b4aa378">&sect;&nbsp;</a></span>mana_frame_get_size()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t mana_frame_get_size </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structmana__frame.html">mana_frame</a> *&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>フレームバッファのサイズ/フレームポインタ </dd></dl>
+
+</div>
+</div>
+<a id="aaec22d4ee3a4324539a209441df52686"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaec22d4ee3a4324539a209441df52686">&sect;&nbsp;</a></span>mana_frame_initialize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_frame_initialize </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__frame.html">mana_frame</a> *&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ac71a355ed2a960812b60b7a4691c573d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac71a355ed2a960812b60b7a4691c573d">&sect;&nbsp;</a></span>mana_frame_initialize_with_size()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_frame_initialize_with_size </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__frame.html">mana_frame</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const size_t&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>確保サイズ </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a28bac3d2cf9951f56d587289bc008e9e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a28bac3d2cf9951f56d587289bc008e9e">&sect;&nbsp;</a></span>mana_frame_release()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_frame_release </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__frame.html">mana_frame</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const size_t&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>開放サイズ </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a7264d869315b09930f19563cfac4f3ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7264d869315b09930f19563cfac4f3ac">&sect;&nbsp;</a></span>mana_frame_serialize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_frame_serialize </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structmana__frame.html">mana_frame</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structmana__stream.html">mana_stream</a> *&#160;</td>
+          <td class="paramname"><em>stream</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">stream</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="acbd3393a009f7e98376cde95a975e24c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acbd3393a009f7e98376cde95a975e24c">&sect;&nbsp;</a></span>mana_frame_set_size()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_frame_set_size </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__frame.html">mana_frame</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const size_t&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>フレームバッファのサイズ/フレームポインタ </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+2017年03月16日(木) 23時27分17秒作成 - libmana / 構成:  &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.12
+</small></address>
+</body>
+</html>
