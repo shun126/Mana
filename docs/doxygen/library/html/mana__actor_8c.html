@@ -1,0 +1,2410 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.12"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>libmana: mana_actor.c ファイル</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">libmana
+   &#160;<span id="projectnumber">0.0.0</span>
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.8.12 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'検索');
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','検索');
+  $(document).ready(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#func-members">関数</a> &#124;
+<a href="#var-members">変数</a>  </div>
+  <div class="headertitle">
+<div class="title">mana_actor.c ファイル</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>mana_actorクラスに関するソースファイル  このファイルはmana_actorクラスに関係するソースファイルです。 mana_actorクラスは更新やリクエストなどの制御、外部関数の呼び出しなどの 実行環境を表しています。  
+<a href="#details">[詳解]</a></p>
+<div class="textblock"><code>#include &quot;<a class="el" href="mana__define_8h_source.html">mana_define.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="mana_8h_source.html">mana.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="mana__actor_8h_source.html">mana_actor.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="mana__hash_8h_source.html">mana_hash.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="mana__malloc_8h_source.html">mana_malloc.h</a>&quot;</code><br />
+<code>#include &lt;float.h&gt;</code><br />
+<code>#include &lt;math.h&gt;</code><br />
+<code>#include &lt;stdio.h&gt;</code><br />
+<code>#include &lt;string.h&gt;</code><br />
+</div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+関数</h2></td></tr>
+<tr class="memitem:a86b88b8f86d96defaf7c57b04ee70b14"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a86b88b8f86d96defaf7c57b04ee70b14">mana_actor_create</a> (<a class="el" href="structmana.html">mana</a> *parent, const size_t variable_size)</td></tr>
+<tr class="separator:a86b88b8f86d96defaf7c57b04ee70b14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6257ef310edae2a5e5253ef0ff106ca1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a6257ef310edae2a5e5253ef0ff106ca1">mana_actor_clone</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *actor)</td></tr>
+<tr class="separator:a6257ef310edae2a5e5253ef0ff106ca1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75254fe5d5a07ac5b8b5d6ac0a2eb276"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a75254fe5d5a07ac5b8b5d6ac0a2eb276">mana_actor_destroy</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self)</td></tr>
+<tr class="separator:a75254fe5d5a07ac5b8b5d6ac0a2eb276"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a193b556d9e3098d298f5d329311763"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a7a193b556d9e3098d298f5d329311763">mana_actor_serialize</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self, <a class="el" href="structmana__stream.html">mana_stream</a> *stream)</td></tr>
+<tr class="separator:a7a193b556d9e3098d298f5d329311763"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a719f7079e3b38c7305246dfb612d5710"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a719f7079e3b38c7305246dfb612d5710">mana_actor_deserialize</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self, <a class="el" href="structmana__stream.html">mana_stream</a> *stream)</td></tr>
+<tr class="separator:a719f7079e3b38c7305246dfb612d5710"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d85f8e55a32f4131f65d23b8ab042c9"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a1d85f8e55a32f4131f65d23b8ab042c9">mana_actor_get_delta_time</a> (void)</td></tr>
+<tr class="separator:a1d85f8e55a32f4131f65d23b8ab042c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8717f0ac92a6db52dfb312bc3889807a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a8717f0ac92a6db52dfb312bc3889807a">mana_actor_set_delta_time</a> (float second)</td></tr>
+<tr class="separator:a8717f0ac92a6db52dfb312bc3889807a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a306c78df5ea43fdbef33e973891a61af"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a306c78df5ea43fdbef33e973891a61af">mana_actor_run</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self)</td></tr>
+<tr class="separator:a306c78df5ea43fdbef33e973891a61af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2fa6da0a20a3a35a6ed2de0e57a05612"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a2fa6da0a20a3a35a6ed2de0e57a05612">mana_sync_call</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self, const int32_t level, const char *action, <a class="el" href="structmana__actor.html">mana_actor</a> *sender)</td></tr>
+<tr class="separator:a2fa6da0a20a3a35a6ed2de0e57a05612"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e70fbdbbbb1045c4576f5a14b637dae"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a4e70fbdbbbb1045c4576f5a14b637dae">mana_async_call</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self, const int32_t level, const char *action, <a class="el" href="structmana__actor.html">mana_actor</a> *sender)</td></tr>
+<tr class="separator:a4e70fbdbbbb1045c4576f5a14b637dae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b1b2829336654ac530e40b1b059ce1f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a3b1b2829336654ac530e40b1b059ce1f">mana_actor_request</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self, const int32_t level, const char *action, <a class="el" href="structmana__actor.html">mana_actor</a> *sender)</td></tr>
+<tr class="separator:a3b1b2829336654ac530e40b1b059ce1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a70924b760a2cb49d178521b4470d1940"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a70924b760a2cb49d178521b4470d1940">mana_actor_rollback</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self, int32_t level)</td></tr>
+<tr class="separator:a70924b760a2cb49d178521b4470d1940"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af9dd19a89147688a529f902ca846e52e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#af9dd19a89147688a529f902ca846e52e">mana_actor_restart</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self)</td></tr>
+<tr class="separator:af9dd19a89147688a529f902ca846e52e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab66fa15c4fe281dfe3a59f187c0756ef"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#ab66fa15c4fe281dfe3a59f187c0756ef">mana_actor_get_name</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self)</td></tr>
+<tr class="separator:ab66fa15c4fe281dfe3a59f187c0756ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2cc32c58ede07d006278ce0ee14e5bec"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a2cc32c58ede07d006278ce0ee14e5bec">mana_actor_get_action</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self, const char *action)</td></tr>
+<tr class="separator:a2cc32c58ede07d006278ce0ee14e5bec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a60791b87bbaec8fab14d765c7f8b05d1"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a60791b87bbaec8fab14d765c7f8b05d1">mana_actor_get_counter</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self)</td></tr>
+<tr class="separator:a60791b87bbaec8fab14d765c7f8b05d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b1636f7d51d94c374c2b1a1b59d255e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a2b1636f7d51d94c374c2b1a1b59d255e">mana_actor_set_counter</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self, const int32_t counter)</td></tr>
+<tr class="separator:a2b1636f7d51d94c374c2b1a1b59d255e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc06ae67bcc7e50eef349ce4524548b5"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#abc06ae67bcc7e50eef349ce4524548b5">mana_actor_get_argument_count</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self)</td></tr>
+<tr class="separator:abc06ae67bcc7e50eef349ce4524548b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c3a41f0339f2bb789ce509d7a95dbc7"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a8c3a41f0339f2bb789ce509d7a95dbc7">mana_actor_get_argument_count_by_address</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self, const uint32_t address)</td></tr>
+<tr class="separator:a8c3a41f0339f2bb789ce509d7a95dbc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09019c93bc8a475decef79cff748d15e"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a09019c93bc8a475decef79cff748d15e">mana_actor_get_argument_size</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self, const uint32_t address)</td></tr>
+<tr class="separator:a09019c93bc8a475decef79cff748d15e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a579befe34c777e4d9c1542aa571cc26a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a579befe34c777e4d9c1542aa571cc26a">mana_actor_has_return_value</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self, const uint32_t address)</td></tr>
+<tr class="separator:a579befe34c777e4d9c1542aa571cc26a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5c47a0af71346fa1701c72f7a4e8816"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#ae5c47a0af71346fa1701c72f7a4e8816">mana_actor_get_parameter_integer</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self, const int32_t value)</td></tr>
+<tr class="separator:ae5c47a0af71346fa1701c72f7a4e8816"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3bc9ffcba769a0f3aa307019a6a6929f"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a3bc9ffcba769a0f3aa307019a6a6929f">mana_actor_get_parameter_float</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self, const int32_t value)</td></tr>
+<tr class="separator:a3bc9ffcba769a0f3aa307019a6a6929f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3e1c7e4c2bab69d322ad7f90e5fd427"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#ae3e1c7e4c2bab69d322ad7f90e5fd427">mana_actor_get_parameter_string</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self, const int32_t value)</td></tr>
+<tr class="separator:ae3e1c7e4c2bab69d322ad7f90e5fd427"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a91ea35a8ebc8dd29d61a51672f572def"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a91ea35a8ebc8dd29d61a51672f572def">mana_actor_get_parameter_actor</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self, const int32_t value)</td></tr>
+<tr class="separator:a91ea35a8ebc8dd29d61a51672f572def"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76e17e755ee535dacba7ecb13d0ef204"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a76e17e755ee535dacba7ecb13d0ef204">mana_actor_get_parameter_pointer</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self, const int32_t value)</td></tr>
+<tr class="separator:a76e17e755ee535dacba7ecb13d0ef204"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8000621a02776b85ca01842d633003d"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#af8000621a02776b85ca01842d633003d">mana_actor_get_parameter_address</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self, const int32_t value)</td></tr>
+<tr class="separator:af8000621a02776b85ca01842d633003d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa306ca24f752590c468f33ce4308b15e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#aa306ca24f752590c468f33ce4308b15e">mana_actor_set_return_integer</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self, const int32_t value)</td></tr>
+<tr class="separator:aa306ca24f752590c468f33ce4308b15e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a0fac4b02281e669f6af3b561ec0cd6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a1a0fac4b02281e669f6af3b561ec0cd6">mana_actor_set_return_float</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self, const float value)</td></tr>
+<tr class="separator:a1a0fac4b02281e669f6af3b561ec0cd6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aded4416c22f5742184cc40ae8575123b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#aded4416c22f5742184cc40ae8575123b">mana_actor_set_return_string</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self, const char *string)</td></tr>
+<tr class="separator:aded4416c22f5742184cc40ae8575123b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7196dbb762e4aa010246b233d51c414b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a7196dbb762e4aa010246b233d51c414b">mana_actor_set_return_actor</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self, <a class="el" href="structmana__actor.html">mana_actor</a> *actor)</td></tr>
+<tr class="separator:a7196dbb762e4aa010246b233d51c414b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a25461fb6521c3c11e0a5b50abd68260f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a25461fb6521c3c11e0a5b50abd68260f">mana_actor_set_return_pointer</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self, void *pointer)</td></tr>
+<tr class="separator:a25461fb6521c3c11e0a5b50abd68260f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a760c53571bd71847c47b85b9ad7475bd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a760c53571bd71847c47b85b9ad7475bd">mana_actor_set_return_data</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self, const void *pointer, const int32_t size)</td></tr>
+<tr class="separator:a760c53571bd71847c47b85b9ad7475bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a72b2f6b746baf7464ec3dbb79a87bd48"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a72b2f6b746baf7464ec3dbb79a87bd48">mana_actor_get_action_name</a> (const <a class="el" href="structmana__actor.html">mana_actor</a> *self)</td></tr>
+<tr class="separator:a72b2f6b746baf7464ec3dbb79a87bd48"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf92641280b2db9379511bd890f3d0f5"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#abf92641280b2db9379511bd890f3d0f5">mana_actor_get_function_name</a> (const <a class="el" href="structmana__actor.html">mana_actor</a> *self)</td></tr>
+<tr class="separator:abf92641280b2db9379511bd890f3d0f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc741f48ba3928a26c68f1b25f3ce636"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#abc741f48ba3928a26c68f1b25f3ce636">mana_actor_set_action</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self, const char *action, uint8_t *address)</td></tr>
+<tr class="separator:abc741f48ba3928a26c68f1b25f3ce636"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f4f0065690a30497c6e22184d158bd9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmana.html">mana</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a7f4f0065690a30497c6e22184d158bd9">mana_actor_get_parent</a> (const <a class="el" href="structmana__actor.html">mana_actor</a> *self)</td></tr>
+<tr class="separator:a7f4f0065690a30497c6e22184d158bd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2c5563b523696191ace51bf01a5aee6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#af2c5563b523696191ace51bf01a5aee6">mana_actor_is_init</a> (const <a class="el" href="structmana__actor.html">mana_actor</a> *self)</td></tr>
+<tr class="separator:af2c5563b523696191ace51bf01a5aee6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0796bc33a763abd3d806d3e6b53c9f59"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a0796bc33a763abd3d806d3e6b53c9f59">mana_actor_is_repeat</a> (const <a class="el" href="structmana__actor.html">mana_actor</a> *self)</td></tr>
+<tr class="separator:a0796bc33a763abd3d806d3e6b53c9f59"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09de6ac5c13ae64ea36f57b09aff3ad3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a09de6ac5c13ae64ea36f57b09aff3ad3">mana_actor_is_running</a> (const <a class="el" href="structmana__actor.html">mana_actor</a> *self)</td></tr>
+<tr class="separator:a09de6ac5c13ae64ea36f57b09aff3ad3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade31fca11ffcb835d629e28100098e70"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#ade31fca11ffcb835d629e28100098e70">mana_actor_repeat</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self, const bool initial_complete)</td></tr>
+<tr class="separator:ade31fca11ffcb835d629e28100098e70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f1f8d53e9ef03a2d19e39bd7a609d51"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a5f1f8d53e9ef03a2d19e39bd7a609d51">mana_actor_again</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self)</td></tr>
+<tr class="separator:a5f1f8d53e9ef03a2d19e39bd7a609d51"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29e363b46ecc9ca04b8bcbedf53f4666"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a29e363b46ecc9ca04b8bcbedf53f4666">mana_actor_halt</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self)</td></tr>
+<tr class="separator:a29e363b46ecc9ca04b8bcbedf53f4666"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a764e2b33a48ec31b03c97cfb94d4a794"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a764e2b33a48ec31b03c97cfb94d4a794">mana_actor_stop</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self)</td></tr>
+<tr class="separator:a764e2b33a48ec31b03c97cfb94d4a794"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6494df5dac33414e920f50b2fc889319"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a6494df5dac33414e920f50b2fc889319">mana_actor_yield</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self)</td></tr>
+<tr class="separator:a6494df5dac33414e920f50b2fc889319"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1f2d1f3d71c54f837382f6822f46aec"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#ad1f2d1f3d71c54f837382f6822f46aec">mana_actor_comply</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self)</td></tr>
+<tr class="separator:ad1f2d1f3d71c54f837382f6822f46aec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ecd7e3fa1250c363f3ec199cea770b1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a3ecd7e3fa1250c363f3ec199cea770b1">mana_actor_refuse</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self)</td></tr>
+<tr class="separator:a3ecd7e3fa1250c363f3ec199cea770b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6c26f2a1c9dad00297843cb04d84c06"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#ae6c26f2a1c9dad00297843cb04d84c06">mana_actor_get_interrupt_level</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self)</td></tr>
+<tr class="separator:ae6c26f2a1c9dad00297843cb04d84c06"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af71505ea94ff91b1122f1f050a72e1c7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#af71505ea94ff91b1122f1f050a72e1c7">mana_actor_is_synchronized</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self)</td></tr>
+<tr class="separator:af71505ea94ff91b1122f1f050a72e1c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ea8bd75e9507720052da3af51af63cc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a9ea8bd75e9507720052da3af51af63cc">mana_actor_set_synchronized</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self, bool synchronized)</td></tr>
+<tr class="separator:a9ea8bd75e9507720052da3af51af63cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f9cbe93610178cf5b0384acc7f78e40"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a4f9cbe93610178cf5b0384acc7f78e40">mana_actor_set_synchronized_with_level</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self, int32_t level, bool synchronized)</td></tr>
+<tr class="separator:a4f9cbe93610178cf5b0384acc7f78e40"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2dd21a4e44cae2e7df94b8a4635992b6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a2dd21a4e44cae2e7df94b8a4635992b6">mana_actor_get_data</a> (const <a class="el" href="structmana__actor.html">mana_actor</a> *self, const int32_t resouce_id, const void **buffer, size_t *size)</td></tr>
+<tr class="separator:a2dd21a4e44cae2e7df94b8a4635992b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21d7f4aad9bf8570e9e18171f0454244"><td class="memItemLeft" align="right" valign="top"><a class="el" href="mana__actor_8h.html#a48a6801b7af6644205c0776bb1150f6e">mana_actor_file_callback</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a21d7f4aad9bf8570e9e18171f0454244">mana_actor_get_file_callback</a> (void)</td></tr>
+<tr class="separator:a21d7f4aad9bf8570e9e18171f0454244"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aff97f09b848f0c430bb6d15b2d9b82d8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#aff97f09b848f0c430bb6d15b2d9b82d8">mana_actor_set_file_callback</a> (<a class="el" href="mana__actor_8h.html#a48a6801b7af6644205c0776bb1150f6e">mana_actor_file_callback</a> *function)</td></tr>
+<tr class="separator:aff97f09b848f0c430bb6d15b2d9b82d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c2c9ea7290c2747f5b0981fc15ccc2e"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a4c2c9ea7290c2747f5b0981fc15ccc2e">mana_actor_get_file_callback_parameter</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self, int32_t level)</td></tr>
+<tr class="separator:a4c2c9ea7290c2747f5b0981fc15ccc2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ff13249abb7a1a4688530c3b852c169"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a6ff13249abb7a1a4688530c3b852c169">mana_actor_set_file_callback_parameter</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self, int32_t level, void *parameter)</td></tr>
+<tr class="separator:a6ff13249abb7a1a4688530c3b852c169"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a028e77206c61c6411c61c9fccb2c07eb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a028e77206c61c6411c61c9fccb2c07eb">mana_actor_set_request_callback</a> (<a class="el" href="mana__actor_8h.html#aeb4dd6793259ebe5b789f79151f3c44f">mana_actor_callback</a> *function)</td></tr>
+<tr class="separator:a028e77206c61c6411c61c9fccb2c07eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7173e90a121c5f33a0b516f1b2835a7a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a7173e90a121c5f33a0b516f1b2835a7a">mana_actor_set_request_callback_parameter</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self, void *parameter)</td></tr>
+<tr class="separator:a7173e90a121c5f33a0b516f1b2835a7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f4fedfdce33951e695fa4a7b722c806"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a7f4fedfdce33951e695fa4a7b722c806">mana_actor_set_rollback_callback</a> (<a class="el" href="mana__actor_8h.html#aeb4dd6793259ebe5b789f79151f3c44f">mana_actor_callback</a> *function)</td></tr>
+<tr class="separator:a7f4fedfdce33951e695fa4a7b722c806"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b7badb037b0b1897194e2813803ec09"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a4b7badb037b0b1897194e2813803ec09">mana_actor_set_rollback_callback_parameter</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self, void *parameter)</td></tr>
+<tr class="separator:a4b7badb037b0b1897194e2813803ec09"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a90b3a8a2ed8cf536d41c6983abb1e0ad"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a90b3a8a2ed8cf536d41c6983abb1e0ad">mana_actor_get_user_data</a> (const <a class="el" href="structmana__actor.html">mana_actor</a> *self)</td></tr>
+<tr class="separator:a90b3a8a2ed8cf536d41c6983abb1e0ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac661ba35ba4d1d06c5ff7ba78531f8c8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#ac661ba35ba4d1d06c5ff7ba78531f8c8">mana_actor_set_user_data</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self, uint32_t user_data)</td></tr>
+<tr class="separator:ac661ba35ba4d1d06c5ff7ba78531f8c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c9210380aaba5891941282c6314609d"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a0c9210380aaba5891941282c6314609d">mana_actor_get_user_pointer</a> (const <a class="el" href="structmana__actor.html">mana_actor</a> *self)</td></tr>
+<tr class="separator:a0c9210380aaba5891941282c6314609d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88648221c54825ec7257ebb5e02aa950"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a88648221c54825ec7257ebb5e02aa950">mana_actor_set_user_pointer</a> (<a class="el" href="structmana__actor.html">mana_actor</a> *self, void *user_pointer)</td></tr>
+<tr class="separator:a88648221c54825ec7257ebb5e02aa950"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+変数</h2></td></tr>
+<tr class="memitem:a47dec957dd7110dde3bf3b763de2e587"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmana__hash.html">mana_hash</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a47dec957dd7110dde3bf3b763de2e587">mana_external_function_hash</a></td></tr>
+<tr class="separator:a47dec957dd7110dde3bf3b763de2e587"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afce7155db5b5594d36333e331b516eda"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#afce7155db5b5594d36333e331b516eda">mana_static_memory_size</a></td></tr>
+<tr class="separator:afce7155db5b5594d36333e331b516eda"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2775add4035af22535422de9bc14199e"><td class="memItemLeft" align="right" valign="top">uint8_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a2775add4035af22535422de9bc14199e">mana_static_memory</a></td></tr>
+<tr class="separator:a2775add4035af22535422de9bc14199e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9adf3513102eb31fc58c4fde78e962e4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__actor_8c.html#a9adf3513102eb31fc58c4fde78e962e4">mana_big_endian</a></td></tr>
+<tr class="separator:a9adf3513102eb31fc58c4fde78e962e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
+<div class="textblock"><p>mana_actorクラスに関するソースファイル  このファイルはmana_actorクラスに関係するソースファイルです。 mana_actorクラスは更新やリクエストなどの制御、外部関数の呼び出しなどの 実行環境を表しています。 </p>
+<p>mana (library)</p>
+<dl class="section author"><dt>著者</dt><dd>Shun Moriya <a href="#" onclick="location.href='mai'+'lto:'+'shu'+'n@'+'mnu'+'.s'+'aku'+'ra'+'.ne'+'.j'+'p'; return false;">shun@<span style="display: none;">.nosp@m.</span>mnu.<span style="display: none;">.nosp@m.</span>sakur<span style="display: none;">.nosp@m.</span>a.ne<span style="display: none;">.nosp@m.</span>.jp</a> </dd></dl>
+<dl class="section date"><dt>日付</dt><dd>2003- </dd></dl>
+</div><h2 class="groupheader">関数詳解</h2>
+<a id="a5f1f8d53e9ef03a2d19e39bd7a609d51"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5f1f8d53e9ef03a2d19e39bd7a609d51">&sect;&nbsp;</a></span>mana_actor_again()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_actor_again </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>同一フレーム中に再実行します。 また、void <a class="el" href="mana__actor_8c.html#ade31fca11ffcb835d629e28100098e70">mana_actor_repeat(mana_actor* self, bool initial_complete)</a>と違い中断はしません。 </p><dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a6257ef310edae2a5e5253ef0ff106ca1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6257ef310edae2a5e5253ef0ff106ca1">&sect;&nbsp;</a></span>mana_actor_clone()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structmana__actor.html">mana_actor</a>* mana_actor_clone </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>actor</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">actor</td><td>コピー元のmana_actor オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </dd></dl>
+
+</div>
+</div>
+<a id="ad1f2d1f3d71c54f837382f6822f46aec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad1f2d1f3d71c54f837382f6822f46aec">&sect;&nbsp;</a></span>mana_actor_comply()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_actor_comply </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>リクエストを受け付けます </p><dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a86b88b8f86d96defaf7c57b04ee70b14"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a86b88b8f86d96defaf7c57b04ee70b14">&sect;&nbsp;</a></span>mana_actor_create()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structmana__actor.html">mana_actor</a>* mana_actor_create </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana.html">mana</a> *&#160;</td>
+          <td class="paramname"><em>parent</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const size_t&#160;</td>
+          <td class="paramname"><em>variable_size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">parent</td><td>mana オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">variable_size</td><td>アクター変数のサイズ </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </dd></dl>
+
+</div>
+</div>
+<a id="a719f7079e3b38c7305246dfb612d5710"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a719f7079e3b38c7305246dfb612d5710">&sect;&nbsp;</a></span>mana_actor_deserialize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_actor_deserialize </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structmana__stream.html">mana_stream</a> *&#160;</td>
+          <td class="paramname"><em>stream</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">stream</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a75254fe5d5a07ac5b8b5d6ac0a2eb276"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a75254fe5d5a07ac5b8b5d6ac0a2eb276">&sect;&nbsp;</a></span>mana_actor_destroy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_actor_destroy </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a2cc32c58ede07d006278ce0ee14e5bec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2cc32c58ede07d006278ce0ee14e5bec">&sect;&nbsp;</a></span>mana_actor_get_action()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t mana_actor_get_action </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>action</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>実行速度は遅いので注意が必要 </p><dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">action</td><td>アクションの名前 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>アクションのプログラムアドレス。0なら失敗 </dd></dl>
+
+</div>
+</div>
+<a id="a72b2f6b746baf7464ec3dbb79a87bd48"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a72b2f6b746baf7464ec3dbb79a87bd48">&sect;&nbsp;</a></span>mana_actor_get_action_name()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* mana_actor_get_action_name </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>実行中のアクション名 </dd></dl>
+
+</div>
+</div>
+<a id="abc06ae67bcc7e50eef349ce4524548b5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc06ae67bcc7e50eef349ce4524548b5">&sect;&nbsp;</a></span>mana_actor_get_argument_count()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int32_t mana_actor_get_argument_count </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>外部関数に積まれた引数の数を取得します </p><dl class="section warning"><dt>警告</dt><dd>外部関数以外から呼び出し禁止 </dd></dl>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>引数の数 </dd></dl>
+
+</div>
+</div>
+<a id="a8c3a41f0339f2bb789ce509d7a95dbc7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c3a41f0339f2bb789ce509d7a95dbc7">&sect;&nbsp;</a></span>mana_actor_get_argument_count_by_address()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int32_t mana_actor_get_argument_count_by_address </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const uint32_t&#160;</td>
+          <td class="paramname"><em>address</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>外部関数に積まれた引数の数を取得します </p><dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">address</td><td>プログラムアドレス </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>引数の数 </dd></dl>
+
+</div>
+</div>
+<a id="a09019c93bc8a475decef79cff748d15e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a09019c93bc8a475decef79cff748d15e">&sect;&nbsp;</a></span>mana_actor_get_argument_size()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int32_t mana_actor_get_argument_size </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const uint32_t&#160;</td>
+          <td class="paramname"><em>address</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>外部関数に積まれた引数のワードサイズを取得します </p><dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">address</td><td>プログラムアドレス </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>外部関数に積まれた引数のワードサイズ </dd></dl>
+
+</div>
+</div>
+<a id="a60791b87bbaec8fab14d765c7f8b05d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a60791b87bbaec8fab14d765c7f8b05d1">&sect;&nbsp;</a></span>mana_actor_get_counter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int32_t mana_actor_get_counter </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>汎用カウンターは優先度毎に設定できます </p><dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>汎用カウンター </dd></dl>
+
+</div>
+</div>
+<a id="a2dd21a4e44cae2e7df94b8a4635992b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2dd21a4e44cae2e7df94b8a4635992b6">&sect;&nbsp;</a></span>mana_actor_get_data()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_actor_get_data </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int32_t&#160;</td>
+          <td class="paramname"><em>resouce_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const void **&#160;</td>
+          <td class="paramname"><em>buffer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t *&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">resouce_id</td><td>リソース番号 </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">buffer</td><td>データアドレス </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">size</td><td>データサイズ </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a1d85f8e55a32f4131f65d23b8ab042c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d85f8e55a32f4131f65d23b8ab042c9">&sect;&nbsp;</a></span>mana_actor_get_delta_time()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float mana_actor_get_delta_time </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>外部関数内から呼ばれる事を想定しています。 bool <a class="el" href="mana_8h.html#ab77414f128fb462f8a3194ef2904a071">mana_run(mana* self, float second)</a>のsecondの値が取得できるので、 各外部関数で経過した時間が必要な時に使ってください。</p>
+<dl class="section return"><dt>戻り値</dt><dd>経過時間 </dd></dl>
+
+</div>
+</div>
+<a id="a21d7f4aad9bf8570e9e18171f0454244"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a21d7f4aad9bf8570e9e18171f0454244">&sect;&nbsp;</a></span>mana_actor_get_file_callback()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="mana__actor_8h.html#a48a6801b7af6644205c0776bb1150f6e">mana_actor_file_callback</a>* mana_actor_get_file_callback </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>戻り値</dt><dd>ファイルコールバック関数 </dd></dl>
+
+</div>
+</div>
+<a id="a4c2c9ea7290c2747f5b0981fc15ccc2e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c2c9ea7290c2747f5b0981fc15ccc2e">&sect;&nbsp;</a></span>mana_actor_get_file_callback_parameter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void* mana_actor_get_file_callback_parameter </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>level</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">level</td><td>優先度 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>ファイルコールバックパラメーター </dd></dl>
+
+</div>
+</div>
+<a id="abf92641280b2db9379511bd890f3d0f5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abf92641280b2db9379511bd890f3d0f5">&sect;&nbsp;</a></span>mana_actor_get_function_name()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* mana_actor_get_function_name </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section warning"><dt>警告</dt><dd>外部関数以外から呼び出し禁止 </dd></dl>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>外部関数名 </dd></dl>
+
+</div>
+</div>
+<a id="ae6c26f2a1c9dad00297843cb04d84c06"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae6c26f2a1c9dad00297843cb04d84c06">&sect;&nbsp;</a></span>mana_actor_get_interrupt_level()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int32_t mana_actor_get_interrupt_level </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>現在の優先度 </dd></dl>
+
+</div>
+</div>
+<a id="ab66fa15c4fe281dfe3a59f187c0756ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab66fa15c4fe281dfe3a59f187c0756ef">&sect;&nbsp;</a></span>mana_actor_get_name()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* mana_actor_get_name </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>実行速度は遅いので注意が必要 </p><dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>戻り値</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">!=</td><td>NULL アクターの名前 </td></tr>
+    <tr><td class="paramname">==</td><td>NULL 検索失敗 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a91ea35a8ebc8dd29d61a51672f572def"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a91ea35a8ebc8dd29d61a51672f572def">&sect;&nbsp;</a></span>mana_actor_get_parameter_actor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structmana__actor.html">mana_actor</a>* mana_actor_get_parameter_actor </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int32_t&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section warning"><dt>警告</dt><dd>外部関数以外から呼び出し禁止 </dd></dl>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>引数の番号 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>引数の値 </dd></dl>
+
+</div>
+</div>
+<a id="af8000621a02776b85ca01842d633003d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af8000621a02776b85ca01842d633003d">&sect;&nbsp;</a></span>mana_actor_get_parameter_address()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void* mana_actor_get_parameter_address </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int32_t&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section warning"><dt>警告</dt><dd>外部関数以外から呼び出し禁止 </dd></dl>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>引数の番号 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>引数の値 </dd></dl>
+
+</div>
+</div>
+<a id="a3bc9ffcba769a0f3aa307019a6a6929f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3bc9ffcba769a0f3aa307019a6a6929f">&sect;&nbsp;</a></span>mana_actor_get_parameter_float()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float mana_actor_get_parameter_float </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int32_t&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section warning"><dt>警告</dt><dd>外部関数以外から呼び出し禁止 </dd></dl>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>引数の番号 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>引数の値 </dd></dl>
+
+</div>
+</div>
+<a id="ae5c47a0af71346fa1701c72f7a4e8816"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae5c47a0af71346fa1701c72f7a4e8816">&sect;&nbsp;</a></span>mana_actor_get_parameter_integer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int32_t mana_actor_get_parameter_integer </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int32_t&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section warning"><dt>警告</dt><dd>外部関数以外から呼び出し禁止 </dd></dl>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>引数の番号 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>引数の値 </dd></dl>
+
+</div>
+</div>
+<a id="a76e17e755ee535dacba7ecb13d0ef204"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a76e17e755ee535dacba7ecb13d0ef204">&sect;&nbsp;</a></span>mana_actor_get_parameter_pointer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void* mana_actor_get_parameter_pointer </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int32_t&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section warning"><dt>警告</dt><dd>外部関数以外から呼び出し禁止 </dd></dl>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>引数の番号 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>引数の値 </dd></dl>
+
+</div>
+</div>
+<a id="ae3e1c7e4c2bab69d322ad7f90e5fd427"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae3e1c7e4c2bab69d322ad7f90e5fd427">&sect;&nbsp;</a></span>mana_actor_get_parameter_string()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* mana_actor_get_parameter_string </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int32_t&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section warning"><dt>警告</dt><dd>外部関数以外から呼び出し禁止 </dd></dl>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>引数の番号 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>引数の値 </dd></dl>
+
+</div>
+</div>
+<a id="a7f4f0065690a30497c6e22184d158bd9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f4f0065690a30497c6e22184d158bd9">&sect;&nbsp;</a></span>mana_actor_get_parent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structmana.html">mana</a>* mana_actor_get_parent </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>mana オブジェクト </dd></dl>
+
+</div>
+</div>
+<a id="a90b3a8a2ed8cf536d41c6983abb1e0ad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a90b3a8a2ed8cf536d41c6983abb1e0ad">&sect;&nbsp;</a></span>mana_actor_get_user_data()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t mana_actor_get_user_data </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>ユーザーデーター </dd></dl>
+
+</div>
+</div>
+<a id="a0c9210380aaba5891941282c6314609d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c9210380aaba5891941282c6314609d">&sect;&nbsp;</a></span>mana_actor_get_user_pointer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void* mana_actor_get_user_pointer </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>ユーザーポインター </dd></dl>
+
+</div>
+</div>
+<a id="a29e363b46ecc9ca04b8bcbedf53f4666"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a29e363b46ecc9ca04b8bcbedf53f4666">&sect;&nbsp;</a></span>mana_actor_halt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_actor_halt </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>void <a class="el" href="mana__actor_8c.html#a764e2b33a48ec31b03c97cfb94d4a794">mana_actor_stop(mana_actor* self)</a>はリクエストを受け付けますが、 void <a class="el" href="mana__actor_8c.html#a29e363b46ecc9ca04b8bcbedf53f4666">mana_actor_halt(mana_actor* self)</a>はリクエストも受けつめません。 </p><dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a579befe34c777e4d9c1542aa571cc26a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a579befe34c777e4d9c1542aa571cc26a">&sect;&nbsp;</a></span>mana_actor_has_return_value()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool mana_actor_has_return_value </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const uint32_t&#160;</td>
+          <td class="paramname"><em>address</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section warning"><dt>警告</dt><dd>外部関数以外から呼び出し禁止 </dd></dl>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">address</td><td>プログラムアドレス </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>戻り値</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">true</td><td>戻り値あり </td></tr>
+    <tr><td class="paramname">false</td><td>戻り値なし </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="af2c5563b523696191ace51bf01a5aee6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af2c5563b523696191ace51bf01a5aee6">&sect;&nbsp;</a></span>mana_actor_is_init()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool mana_actor_is_init </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>戻り値</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">false</td><td>初期化完了 </td></tr>
+    <tr><td class="paramname">true</td><td>初期化中 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a0796bc33a763abd3d806d3e6b53c9f59"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0796bc33a763abd3d806d3e6b53c9f59">&sect;&nbsp;</a></span>mana_actor_is_repeat()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool mana_actor_is_repeat </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>戻り値</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">true</td><td>再実行が必要 </td></tr>
+    <tr><td class="paramname">false</td><td>再実行は不要 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a09de6ac5c13ae64ea36f57b09aff3ad3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a09de6ac5c13ae64ea36f57b09aff3ad3">&sect;&nbsp;</a></span>mana_actor_is_running()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool mana_actor_is_running </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>戻り値</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">true</td><td>実行中 </td></tr>
+    <tr><td class="paramname">false</td><td>停止 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="af71505ea94ff91b1122f1f050a72e1c7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af71505ea94ff91b1122f1f050a72e1c7">&sect;&nbsp;</a></span>mana_actor_is_synchronized()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool mana_actor_is_synchronized </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>戻り値</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">true</td><td>同期中 </td></tr>
+    <tr><td class="paramname">false</td><td>非同期中 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a3ecd7e3fa1250c363f3ec199cea770b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ecd7e3fa1250c363f3ec199cea770b1">&sect;&nbsp;</a></span>mana_actor_refuse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_actor_refuse </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>リクエストを受け付けません </p><dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ade31fca11ffcb835d629e28100098e70"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ade31fca11ffcb835d629e28100098e70">&sect;&nbsp;</a></span>mana_actor_repeat()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_actor_repeat </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>initial_complete</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>実行を中断して次のフレームに再実行します。 </p><dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">initial_complete</td><td>初期化完了フラグ </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a3b1b2829336654ac530e40b1b059ce1f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3b1b2829336654ac530e40b1b059ce1f">&sect;&nbsp;</a></span>mana_actor_request()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool mana_actor_request </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int32_t&#160;</td>
+          <td class="paramname"><em>level</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>action</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>sender</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">level</td><td>優先度(高いほど優先) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">action</td><td>アクション名 </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">sender</td><td>リクエスト元アクター </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>戻り値</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">true</td><td>リクエスト成功 </td></tr>
+    <tr><td class="paramname">false</td><td>リクエスト失敗 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="af9dd19a89147688a529f902ca846e52e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af9dd19a89147688a529f902ca846e52e">&sect;&nbsp;</a></span>mana_actor_restart()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_actor_restart </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a70924b760a2cb49d178521b4470d1940"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a70924b760a2cb49d178521b4470d1940">&sect;&nbsp;</a></span>mana_actor_rollback()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_actor_rollback </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>level</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>アクションを終了して指定優先度まで還元します </p><dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">level</td><td>還元する優先度 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a306c78df5ea43fdbef33e973891a61af"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a306c78df5ea43fdbef33e973891a61af">&sect;&nbsp;</a></span>mana_actor_run()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int32_t mana_actor_run </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>戻り値</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">true</td><td>実行中 </td></tr>
+    <tr><td class="paramname">false</td><td>停止 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a7a193b556d9e3098d298f5d329311763"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a193b556d9e3098d298f5d329311763">&sect;&nbsp;</a></span>mana_actor_serialize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_actor_serialize </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structmana__stream.html">mana_stream</a> *&#160;</td>
+          <td class="paramname"><em>stream</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">stream</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="abc741f48ba3928a26c68f1b25f3ce636"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc741f48ba3928a26c68f1b25f3ce636">&sect;&nbsp;</a></span>mana_actor_set_action()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_actor_set_action </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>action</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>address</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">action</td><td>アクション名 </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">address</td><td>プログラムアドレス </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a2b1636f7d51d94c374c2b1a1b59d255e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b1636f7d51d94c374c2b1a1b59d255e">&sect;&nbsp;</a></span>mana_actor_set_counter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_actor_set_counter </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int32_t&#160;</td>
+          <td class="paramname"><em>counter</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>汎用カウンターは優先度毎に設定できます </p><dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">counter</td><td>汎用カウンター </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a8717f0ac92a6db52dfb312bc3889807a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8717f0ac92a6db52dfb312bc3889807a">&sect;&nbsp;</a></span>mana_actor_set_delta_time()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_actor_set_delta_time </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>second</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>bool <a class="el" href="mana_8h.html#ab77414f128fb462f8a3194ef2904a071">mana_run(mana* self, float second)</a>のsecondを設定しています。 </p><dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">second</td><td>経過時間(秒) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aff97f09b848f0c430bb6d15b2d9b82d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aff97f09b848f0c430bb6d15b2d9b82d8">&sect;&nbsp;</a></span>mana_actor_set_file_callback()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_actor_set_file_callback </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="mana__actor_8h.html#a48a6801b7af6644205c0776bb1150f6e">mana_actor_file_callback</a> *&#160;</td>
+          <td class="paramname"><em>function</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">function</td><td>ファイルコールバック関数 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a6ff13249abb7a1a4688530c3b852c169"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6ff13249abb7a1a4688530c3b852c169">&sect;&nbsp;</a></span>mana_actor_set_file_callback_parameter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_actor_set_file_callback_parameter </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>level</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>parameter</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">level</td><td>優先度 </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">parameter</td><td>ファイルコールバックパラメーター </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a028e77206c61c6411c61c9fccb2c07eb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a028e77206c61c6411c61c9fccb2c07eb">&sect;&nbsp;</a></span>mana_actor_set_request_callback()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_actor_set_request_callback </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="mana__actor_8h.html#aeb4dd6793259ebe5b789f79151f3c44f">mana_actor_callback</a> *&#160;</td>
+          <td class="paramname"><em>function</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">function</td><td>リクエストコールバック関数 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a7173e90a121c5f33a0b516f1b2835a7a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7173e90a121c5f33a0b516f1b2835a7a">&sect;&nbsp;</a></span>mana_actor_set_request_callback_parameter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_actor_set_request_callback_parameter </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>parameter</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">parameter</td><td>リクエストコールバックパラメーター </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a7196dbb762e4aa010246b233d51c414b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7196dbb762e4aa010246b233d51c414b">&sect;&nbsp;</a></span>mana_actor_set_return_actor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_actor_set_return_actor </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>actor</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section warning"><dt>警告</dt><dd>外部関数以外から呼び出し禁止 </dd></dl>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>戻り値 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a760c53571bd71847c47b85b9ad7475bd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a760c53571bd71847c47b85b9ad7475bd">&sect;&nbsp;</a></span>mana_actor_set_return_data()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_actor_set_return_data </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const void *&#160;</td>
+          <td class="paramname"><em>pointer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int32_t&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section warning"><dt>警告</dt><dd>外部関数以外から呼び出し禁止 </dd></dl>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>戻り値 </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>戻り値のサイズ </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a1a0fac4b02281e669f6af3b561ec0cd6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a0fac4b02281e669f6af3b561ec0cd6">&sect;&nbsp;</a></span>mana_actor_set_return_float()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_actor_set_return_float </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const float&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section warning"><dt>警告</dt><dd>外部関数以外から呼び出し禁止 </dd></dl>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>戻り値 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aa306ca24f752590c468f33ce4308b15e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa306ca24f752590c468f33ce4308b15e">&sect;&nbsp;</a></span>mana_actor_set_return_integer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_actor_set_return_integer </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int32_t&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section warning"><dt>警告</dt><dd>外部関数以外から呼び出し禁止 </dd></dl>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>戻り値 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a25461fb6521c3c11e0a5b50abd68260f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a25461fb6521c3c11e0a5b50abd68260f">&sect;&nbsp;</a></span>mana_actor_set_return_pointer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_actor_set_return_pointer </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>pointer</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section warning"><dt>警告</dt><dd>外部関数以外から呼び出し禁止 </dd></dl>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>戻り値 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aded4416c22f5742184cc40ae8575123b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aded4416c22f5742184cc40ae8575123b">&sect;&nbsp;</a></span>mana_actor_set_return_string()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_actor_set_return_string </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>string</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section warning"><dt>警告</dt><dd>外部関数以外から呼び出し禁止 </dd></dl>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>戻り値 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a7f4fedfdce33951e695fa4a7b722c806"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f4fedfdce33951e695fa4a7b722c806">&sect;&nbsp;</a></span>mana_actor_set_rollback_callback()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_actor_set_rollback_callback </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="mana__actor_8h.html#aeb4dd6793259ebe5b789f79151f3c44f">mana_actor_callback</a> *&#160;</td>
+          <td class="paramname"><em>function</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">function</td><td>ロールバックコールバック関数 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a4b7badb037b0b1897194e2813803ec09"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b7badb037b0b1897194e2813803ec09">&sect;&nbsp;</a></span>mana_actor_set_rollback_callback_parameter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_actor_set_rollback_callback_parameter </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>parameter</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">function</td><td>ロールバックコールバック関数 </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">parameter</td><td>ロールバックコールバックパラメーター </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a9ea8bd75e9507720052da3af51af63cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ea8bd75e9507720052da3af51af63cc">&sect;&nbsp;</a></span>mana_actor_set_synchronized()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_actor_set_synchronized </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>synchronized</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">synchronized</td><td><ul>
+<li>trueならば同期実行</li>
+<li>falseならば非同期実行 </li>
+</ul>
+</td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a4f9cbe93610178cf5b0384acc7f78e40"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4f9cbe93610178cf5b0384acc7f78e40">&sect;&nbsp;</a></span>mana_actor_set_synchronized_with_level()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_actor_set_synchronized_with_level </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>level</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>synchronized</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">level</td><td>優先度 </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">synchronized</td><td><ul>
+<li>trueならば同期実行</li>
+<li>falseならば非同期実行 </li>
+</ul>
+</td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ac661ba35ba4d1d06c5ff7ba78531f8c8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac661ba35ba4d1d06c5ff7ba78531f8c8">&sect;&nbsp;</a></span>mana_actor_set_user_data()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_actor_set_user_data </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>user_data</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">user_data</td><td>ユーザーデーター </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a88648221c54825ec7257ebb5e02aa950"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a88648221c54825ec7257ebb5e02aa950">&sect;&nbsp;</a></span>mana_actor_set_user_pointer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_actor_set_user_pointer </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>user_pointer</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">user_pointer</td><td>ユーザーポインター </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a764e2b33a48ec31b03c97cfb94d4a794"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a764e2b33a48ec31b03c97cfb94d4a794">&sect;&nbsp;</a></span>mana_actor_stop()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_actor_stop </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>void <a class="el" href="mana__actor_8c.html#a29e363b46ecc9ca04b8bcbedf53f4666">mana_actor_halt(mana_actor* self)</a>はリクエストを受け付けませんが、 void <a class="el" href="mana__actor_8c.html#a764e2b33a48ec31b03c97cfb94d4a794">mana_actor_stop(mana_actor* self)</a>は実行停止のみ行ないます。 </p><dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a6494df5dac33414e920f50b2fc889319"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6494df5dac33414e920f50b2fc889319">&sect;&nbsp;</a></span>mana_actor_yield()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_actor_yield </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a4e70fbdbbbb1045c4576f5a14b637dae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4e70fbdbbbb1045c4576f5a14b637dae">&sect;&nbsp;</a></span>mana_async_call()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool mana_async_call </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int32_t&#160;</td>
+          <td class="paramname"><em>level</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>action</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>sender</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>アクション終了まで実行します。 bool mana_sync_call(mana_actor* self, int32_t level, char* action, mana_actor* sender) と違い他のアクターは停止します。 アクションが終了しないとdead lockするので注意してください。 また、他のアクターに処理が移らないのでreqwsなどの命令はdead lockするので注意してください。</p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">level</td><td>優先度(高いほど優先) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">action</td><td>アクション名 </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">sender</td><td>リクエスト元アクター </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>戻り値</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">true</td><td>実行成功 </td></tr>
+    <tr><td class="paramname">false</td><td>実行失敗 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a2fa6da0a20a3a35a6ed2de0e57a05612"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2fa6da0a20a3a35a6ed2de0e57a05612">&sect;&nbsp;</a></span>mana_sync_call()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool mana_sync_call </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int32_t&#160;</td>
+          <td class="paramname"><em>level</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>action</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structmana__actor.html">mana_actor</a> *&#160;</td>
+          <td class="paramname"><em>sender</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>アクション終了まで実行します。 bool mana_async_call(mana_actor* self, int32_t level, char* action, mana_actor* sender) と違い他のアクターも並列動作します。 アクションが終了しないとdead lockするので注意してください。</p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__actor.html" title="mana_actorクラス mana_actorクラスはアクターを表しています。 C++でいうところのメンバー変数ですが、C言�...">mana_actor</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">level</td><td>優先度(高いほど優先) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">action</td><td>アクション名 </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">sender</td><td>リクエスト元アクター </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>戻り値</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">true</td><td>実行成功 </td></tr>
+    <tr><td class="paramname">false</td><td>実行失敗 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">変数詳解</h2>
+<a id="a9adf3513102eb31fc58c4fde78e962e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9adf3513102eb31fc58c4fde78e962e4">&sect;&nbsp;</a></span>mana_big_endian</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool mana_big_endian</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>エンディアンフラグ </p>
+
+</div>
+</div>
+<a id="a47dec957dd7110dde3bf3b763de2e587"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a47dec957dd7110dde3bf3b763de2e587">&sect;&nbsp;</a></span>mana_external_function_hash</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structmana__hash.html">mana_hash</a> mana_external_function_hash</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>外部関数用連装記憶配列 </p>
+
+</div>
+</div>
+<a id="a2775add4035af22535422de9bc14199e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2775add4035af22535422de9bc14199e">&sect;&nbsp;</a></span>mana_static_memory</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t* mana_static_memory</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>スタティック変数格納エリア </p>
+
+</div>
+</div>
+<a id="afce7155db5b5594d36333e331b516eda"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afce7155db5b5594d36333e331b516eda">&sect;&nbsp;</a></span>mana_static_memory_size</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t mana_static_memory_size</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>スタティック変数サイズ </p>
+
+</div>
+</div>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+2017年03月16日(木) 23時27分17秒作成 - libmana / 構成:  &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.12
+</small></address>
+</body>
+</html>

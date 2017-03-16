@@ -1,0 +1,538 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.12"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>libmana: mana_array.c ファイル</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">libmana
+   &#160;<span id="projectnumber">0.0.0</span>
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.8.12 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'検索');
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','検索');
+  $(document).ready(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#func-members">関数</a>  </div>
+  <div class="headertitle">
+<div class="title">mana_array.c ファイル</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>mana_arrayクラスに関するソースファイル  このファイルはmana_arrayクラスに関係するソースファイルです。  
+<a href="#details">[詳解]</a></p>
+<div class="textblock"><code>#include &quot;<a class="el" href="mana__array_8h_source.html">mana_array.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="mana__malloc_8h_source.html">mana_malloc.h</a>&quot;</code><br />
+<code>#include &lt;assert.h&gt;</code><br />
+<code>#include &lt;string.h&gt;</code><br />
+</div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+関数</h2></td></tr>
+<tr class="memitem:ac8ecff27210b2d21a2936b4d6b31c906"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmana__array.html">mana_array</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__array_8c.html#ac8ecff27210b2d21a2936b4d6b31c906">mana_array_create</a> (const size_t size)</td></tr>
+<tr class="separator:ac8ecff27210b2d21a2936b4d6b31c906"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb041954b058d5dfa415d58f34f93aee"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__array_8c.html#abb041954b058d5dfa415d58f34f93aee">mana_array_destroy</a> (<a class="el" href="structmana__array.html">mana_array</a> *self)</td></tr>
+<tr class="separator:abb041954b058d5dfa415d58f34f93aee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad41a8b9eebadaea5867d42e9a1fb403a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__array_8c.html#ad41a8b9eebadaea5867d42e9a1fb403a">mana_array_initialize</a> (<a class="el" href="structmana__array.html">mana_array</a> *self, const size_t size)</td></tr>
+<tr class="separator:ad41a8b9eebadaea5867d42e9a1fb403a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6115e234567ae8bfa2c28e91b8423ca"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__array_8c.html#ab6115e234567ae8bfa2c28e91b8423ca">mana_array_finalize</a> (<a class="el" href="structmana__array.html">mana_array</a> *self)</td></tr>
+<tr class="separator:ab6115e234567ae8bfa2c28e91b8423ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a34ad6203999bfac61805246ae3f44287"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__array_8c.html#a34ad6203999bfac61805246ae3f44287">mana_array_serialize</a> (const <a class="el" href="structmana__array.html">mana_array</a> *self, <a class="el" href="structmana__stream.html">mana_stream</a> *stream)</td></tr>
+<tr class="separator:a34ad6203999bfac61805246ae3f44287"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2cf4ab43352dd3c13b94f47aa921c7ad"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__array_8c.html#a2cf4ab43352dd3c13b94f47aa921c7ad">mana_array_deserialize</a> (<a class="el" href="structmana__array.html">mana_array</a> *self, <a class="el" href="structmana__stream.html">mana_stream</a> *stream)</td></tr>
+<tr class="separator:a2cf4ab43352dd3c13b94f47aa921c7ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c1e0844951d0cbac79ff772be20dfbf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__array_8c.html#a6c1e0844951d0cbac79ff772be20dfbf">mana_array_clear</a> (<a class="el" href="structmana__array.html">mana_array</a> *self)</td></tr>
+<tr class="separator:a6c1e0844951d0cbac79ff772be20dfbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9ad06c4cf492f130208265dc9b73deb"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__array_8c.html#aa9ad06c4cf492f130208265dc9b73deb">mana_array_get</a> (const <a class="el" href="structmana__array.html">mana_array</a> *self, const size_t index)</td></tr>
+<tr class="separator:aa9ad06c4cf492f130208265dc9b73deb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a445f8e966f1d13466c9882b1d05bf95e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__array_8c.html#a445f8e966f1d13466c9882b1d05bf95e">mana_array_set</a> (<a class="el" href="structmana__array.html">mana_array</a> *self, const size_t index, const void *pointer)</td></tr>
+<tr class="separator:a445f8e966f1d13466c9882b1d05bf95e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3fdb219e6fb8bfe5e36c556e23818b65"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__array_8c.html#a3fdb219e6fb8bfe5e36c556e23818b65">mana_array_get_size</a> (const <a class="el" href="structmana__array.html">mana_array</a> *self)</td></tr>
+<tr class="separator:a3fdb219e6fb8bfe5e36c556e23818b65"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab72e9be24e5cb46bccbc0c3e1ac47f24"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__array_8c.html#ab72e9be24e5cb46bccbc0c3e1ac47f24">mana_array_append</a> (<a class="el" href="structmana__array.html">mana_array</a> *self, const void *pointer)</td></tr>
+<tr class="separator:ab72e9be24e5cb46bccbc0c3e1ac47f24"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af4db23c7773559b36e62b6cbf5077135"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__array_8c.html#af4db23c7773559b36e62b6cbf5077135">mana_array_resize</a> (<a class="el" href="structmana__array.html">mana_array</a> *self, const size_t size)</td></tr>
+<tr class="separator:af4db23c7773559b36e62b6cbf5077135"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee83c2fcf87f0506b696484220fa99af"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__array_8c.html#aee83c2fcf87f0506b696484220fa99af">mana_array_compare</a> (const <a class="el" href="structmana__array.html">mana_array</a> *self, const <a class="el" href="structmana__array.html">mana_array</a> *other)</td></tr>
+<tr class="separator:aee83c2fcf87f0506b696484220fa99af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
+<div class="textblock"><p>mana_arrayクラスに関するソースファイル  このファイルはmana_arrayクラスに関係するソースファイルです。 </p>
+<p>mana (library)</p>
+<dl class="section author"><dt>著者</dt><dd>Shun Moriya <a href="#" onclick="location.href='mai'+'lto:'+'shu'+'n@'+'mnu'+'.s'+'aku'+'ra'+'.ne'+'.j'+'p'; return false;">shun@<span style="display: none;">.nosp@m.</span>mnu.<span style="display: none;">.nosp@m.</span>sakur<span style="display: none;">.nosp@m.</span>a.ne<span style="display: none;">.nosp@m.</span>.jp</a> </dd></dl>
+<dl class="section date"><dt>日付</dt><dd>2003- </dd></dl>
+</div><h2 class="groupheader">関数詳解</h2>
+<a id="ab72e9be24e5cb46bccbc0c3e1ac47f24"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab72e9be24e5cb46bccbc0c3e1ac47f24">&sect;&nbsp;</a></span>mana_array_append()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_array_append </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__array.html">mana_array</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const void *&#160;</td>
+          <td class="paramname"><em>pointer</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__array.html" title="クラス mana_arrayクラスはフレームバッファを表しています。 ">mana_array</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pointer</td><td>ポインター </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a6c1e0844951d0cbac79ff772be20dfbf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6c1e0844951d0cbac79ff772be20dfbf">&sect;&nbsp;</a></span>mana_array_clear()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_array_clear </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__array.html">mana_array</a> *&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__array.html" title="クラス mana_arrayクラスはフレームバッファを表しています。 ">mana_array</a> オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aee83c2fcf87f0506b696484220fa99af"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aee83c2fcf87f0506b696484220fa99af">&sect;&nbsp;</a></span>mana_array_compare()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int32_t mana_array_compare </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structmana__array.html">mana_array</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structmana__array.html">mana_array</a> *&#160;</td>
+          <td class="paramname"><em>other</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__array.html" title="クラス mana_arrayクラスはフレームバッファを表しています。 ">mana_array</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">other</td><td><a class="el" href="structmana__array.html" title="クラス mana_arrayクラスはフレームバッファを表しています。 ">mana_array</a> オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>戻り値</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">==</td><td>0 同一の内容 </td></tr>
+    <tr><td class="paramname">!=</td><td>0 異なる内容 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ac8ecff27210b2d21a2936b4d6b31c906"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac8ecff27210b2d21a2936b4d6b31c906">&sect;&nbsp;</a></span>mana_array_create()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structmana__array.html">mana_array</a>* mana_array_create </td>
+          <td>(</td>
+          <td class="paramtype">const size_t&#160;</td>
+          <td class="paramname"><em>size</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>確保サイズ </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd><a class="el" href="structmana__array.html" title="クラス mana_arrayクラスはフレームバッファを表しています。 ">mana_array</a> オブジェクト </dd></dl>
+<dl class="section warning"><dt>警告</dt><dd>void <a class="el" href="mana__array_8c.html#ad41a8b9eebadaea5867d42e9a1fb403a">mana_array_initialize(mana_array* self, size_t size)</a>を呼ぶ必要はありません。 </dd></dl>
+
+</div>
+</div>
+<a id="a2cf4ab43352dd3c13b94f47aa921c7ad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2cf4ab43352dd3c13b94f47aa921c7ad">&sect;&nbsp;</a></span>mana_array_deserialize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_array_deserialize </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__array.html">mana_array</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structmana__stream.html">mana_stream</a> *&#160;</td>
+          <td class="paramname"><em>stream</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__array.html" title="クラス mana_arrayクラスはフレームバッファを表しています。 ">mana_array</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">stream</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="abb041954b058d5dfa415d58f34f93aee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abb041954b058d5dfa415d58f34f93aee">&sect;&nbsp;</a></span>mana_array_destroy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_array_destroy </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__array.html">mana_array</a> *&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__array.html" title="クラス mana_arrayクラスはフレームバッファを表しています。 ">mana_array</a> オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section warning"><dt>警告</dt><dd>void <a class="el" href="mana__array_8c.html#ab6115e234567ae8bfa2c28e91b8423ca">mana_array_finalize(mana_array* self)</a>を呼ぶ必要はありません。 </dd></dl>
+
+</div>
+</div>
+<a id="ab6115e234567ae8bfa2c28e91b8423ca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab6115e234567ae8bfa2c28e91b8423ca">&sect;&nbsp;</a></span>mana_array_finalize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_array_finalize </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__array.html">mana_array</a> *&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__array.html" title="クラス mana_arrayクラスはフレームバッファを表しています。 ">mana_array</a> オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aa9ad06c4cf492f130208265dc9b73deb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa9ad06c4cf492f130208265dc9b73deb">&sect;&nbsp;</a></span>mana_array_get()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void* mana_array_get </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structmana__array.html">mana_array</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const size_t&#160;</td>
+          <td class="paramname"><em>index</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__array.html" title="クラス mana_arrayクラスはフレームバッファを表しています。 ">mana_array</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">index</td><td>配列番号 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>ポインター </dd></dl>
+
+</div>
+</div>
+<a id="a3fdb219e6fb8bfe5e36c556e23818b65"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3fdb219e6fb8bfe5e36c556e23818b65">&sect;&nbsp;</a></span>mana_array_get_size()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t mana_array_get_size </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structmana__array.html">mana_array</a> *&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__array.html" title="クラス mana_arrayクラスはフレームバッファを表しています。 ">mana_array</a> オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>フレームバッファのサイズ/フレームポインタ </dd></dl>
+
+</div>
+</div>
+<a id="ad41a8b9eebadaea5867d42e9a1fb403a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad41a8b9eebadaea5867d42e9a1fb403a">&sect;&nbsp;</a></span>mana_array_initialize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_array_initialize </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__array.html">mana_array</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const size_t&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__array.html" title="クラス mana_arrayクラスはフレームバッファを表しています。 ">mana_array</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>確保サイズ </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="af4db23c7773559b36e62b6cbf5077135"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af4db23c7773559b36e62b6cbf5077135">&sect;&nbsp;</a></span>mana_array_resize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_array_resize </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__array.html">mana_array</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const size_t&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__array.html" title="クラス mana_arrayクラスはフレームバッファを表しています。 ">mana_array</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>サイズ </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a34ad6203999bfac61805246ae3f44287"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a34ad6203999bfac61805246ae3f44287">&sect;&nbsp;</a></span>mana_array_serialize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_array_serialize </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structmana__array.html">mana_array</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structmana__stream.html">mana_stream</a> *&#160;</td>
+          <td class="paramname"><em>stream</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__array.html" title="クラス mana_arrayクラスはフレームバッファを表しています。 ">mana_array</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">stream</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a445f8e966f1d13466c9882b1d05bf95e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a445f8e966f1d13466c9882b1d05bf95e">&sect;&nbsp;</a></span>mana_array_set()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_array_set </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__array.html">mana_array</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const size_t&#160;</td>
+          <td class="paramname"><em>index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const void *&#160;</td>
+          <td class="paramname"><em>pointer</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__array.html" title="クラス mana_arrayクラスはフレームバッファを表しています。 ">mana_array</a> オブジェクト </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">index</td><td>配列番号 </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pointer</td><td>ポインター </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+2017年03月16日(木) 23時27分17秒作成 - libmana / 構成:  &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.12
+</small></address>
+</body>
+</html>
