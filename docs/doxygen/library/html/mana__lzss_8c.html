@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.12"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>libmana: mana_lzss.c ファイル</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">libmana
+   &#160;<span id="projectnumber">0.0.0</span>
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.8.12 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'検索');
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','検索');
+  $(document).ready(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#define-members">マクロ定義</a> &#124;
+<a href="#typedef-members">型定義</a> &#124;
+<a href="#func-members">関数</a>  </div>
+  <div class="headertitle">
+<div class="title">mana_lzss.c ファイル</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>LZSSに関するソースファイル  LZSS - Lempel-Ziv sliding window compression 技術評論社 C言語による最新アルゴリズム辞典 から ウィンドウバッファを使用しない方法に改変しました  
+<a href="#details">[詳解]</a></p>
+<div class="textblock"><code>#include &quot;<a class="el" href="mana__lzss_8h_source.html">mana_lzss.h</a>&quot;</code><br />
+<code>#include &lt;string.h&gt;</code><br />
+</div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+マクロ定義</h2></td></tr>
+<tr class="memitem:a779b513296068d2a6186659183ff3c2c"><td class="memItemLeft" align="right" valign="top"><a id="a779b513296068d2a6186659183ff3c2c"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>RING_BUFFER_SIZE</b>&#160;&#160;&#160;(4096)</td></tr>
+<tr class="separator:a779b513296068d2a6186659183ff3c2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a526a7f519e3bc205168effc5e3dd6d6a"><td class="memItemLeft" align="right" valign="top"><a id="a526a7f519e3bc205168effc5e3dd6d6a"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>MATCH_SIZE</b>&#160;&#160;&#160;(18)</td></tr>
+<tr class="separator:a526a7f519e3bc205168effc5e3dd6d6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a263efce0e5cda1d387a1a43f94715445"><td class="memItemLeft" align="right" valign="top"><a id="a263efce0e5cda1d387a1a43f94715445"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>NIL</b>&#160;&#160;&#160;(RING_BUFFER_SIZE)</td></tr>
+<tr class="separator:a263efce0e5cda1d387a1a43f94715445"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a348c4cf1761fbb4915dc285adc4842f9"><td class="memItemLeft" align="right" valign="top"><a id="a348c4cf1761fbb4915dc285adc4842f9"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>RING_MASK_8</b>&#160;&#160;&#160;(RING_BUFFER_SIZE - 1)</td></tr>
+<tr class="separator:a348c4cf1761fbb4915dc285adc4842f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a94630370ae389fb1189282fa0742f310"><td class="memItemLeft" align="right" valign="top"><a id="a94630370ae389fb1189282fa0742f310"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>MAGIC</b>&#160;&#160;&#160;&quot;LzSs&quot;</td></tr>
+<tr class="separator:a94630370ae389fb1189282fa0742f310"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c6d5de492ac61ad29aec7aa9a436bbf"><td class="memItemLeft" align="right" valign="top"><a id="a1c6d5de492ac61ad29aec7aa9a436bbf"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>VERSION</b>&#160;&#160;&#160;1</td></tr>
+<tr class="separator:a1c6d5de492ac61ad29aec7aa9a436bbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a493c3ff5d880393a865637be711be0f4"><td class="memItemLeft" align="right" valign="top"><a id="a493c3ff5d880393a865637be711be0f4"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>DICTONARY</b>&#160;&#160;&#160;1</td></tr>
+<tr class="separator:a493c3ff5d880393a865637be711be0f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
+型定義</h2></td></tr>
+<tr class="memitem:a11f84eeaf18a7f605e283db923c125de"><td class="memItemLeft" align="right" valign="top"><a id="a11f84eeaf18a7f605e283db923c125de"></a>
+typedef struct mana_lzss_header&#160;</td><td class="memItemRight" valign="bottom"><b>mana_lzss_header</b></td></tr>
+<tr class="separator:a11f84eeaf18a7f605e283db923c125de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+関数</h2></td></tr>
+<tr class="memitem:a5ada8f02dee1699700bbf5a8b6f90988"><td class="memItemLeft" align="right" valign="top"><a id="a5ada8f02dee1699700bbf5a8b6f90988"></a>
+const char *&#160;</td><td class="memItemRight" valign="bottom"><b>mana_lzss_get_magic_word</b> ()</td></tr>
+<tr class="separator:a5ada8f02dee1699700bbf5a8b6f90988"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a084f6dd82411c3d8cfd298d477e8322e"><td class="memItemLeft" align="right" valign="top"><a id="a084f6dd82411c3d8cfd298d477e8322e"></a>
+size_t&#160;</td><td class="memItemRight" valign="bottom"><b>mana_lzss_get_magic_word_size</b> ()</td></tr>
+<tr class="separator:a084f6dd82411c3d8cfd298d477e8322e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a835fd563ba956d10aab436eb6702f27f"><td class="memItemLeft" align="right" valign="top"><a id="a835fd563ba956d10aab436eb6702f27f"></a>
+uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>mana_lzss_get_version</b> ()</td></tr>
+<tr class="separator:a835fd563ba956d10aab436eb6702f27f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7af9d1e7b07a58986f6dd3aacffbb3e3"><td class="memItemLeft" align="right" valign="top"><a id="a7af9d1e7b07a58986f6dd3aacffbb3e3"></a>
+uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>mana_lzss_get_dictonary</b> ()</td></tr>
+<tr class="separator:a7af9d1e7b07a58986f6dd3aacffbb3e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a361b9b991adf31e916cf173c46c311d0"><td class="memItemLeft" align="right" valign="top"><a id="a361b9b991adf31e916cf173c46c311d0"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_lzss_is_valid</b> (const void *compressed_data_pointer)</td></tr>
+<tr class="separator:a361b9b991adf31e916cf173c46c311d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad44604935c3655c8e1bd0bf9de48f867"><td class="memItemLeft" align="right" valign="top"><a id="ad44604935c3655c8e1bd0bf9de48f867"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_lzss_is_compressed</b> (const void *compressed_data_pointer)</td></tr>
+<tr class="separator:ad44604935c3655c8e1bd0bf9de48f867"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaeeb3ef06b3ebebc20f22a410ec80d5b"><td class="memItemLeft" align="right" valign="top"><a id="aaeeb3ef06b3ebebc20f22a410ec80d5b"></a>
+size_t&#160;</td><td class="memItemRight" valign="bottom"><b>mana_lzss_get_extract_data_size</b> (const void *compressed_data_pointer)</td></tr>
+<tr class="separator:aaeeb3ef06b3ebebc20f22a410ec80d5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a081547e7a4539c7456abef36ad9ca9e8"><td class="memItemLeft" align="right" valign="top"><a id="a081547e7a4539c7456abef36ad9ca9e8"></a>
+size_t&#160;</td><td class="memItemRight" valign="bottom"><b>mana_lzss_get_compressed_data_size</b> (const void *compressed_data_pointer)</td></tr>
+<tr class="separator:a081547e7a4539c7456abef36ad9ca9e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8c8b2873af1d49ffa280327f79b299a"><td class="memItemLeft" align="right" valign="top"><a id="ac8c8b2873af1d49ffa280327f79b299a"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_lzss_extract</b> (void *extract_data_pointer, const void *compressed_data_pointer)</td></tr>
+<tr class="separator:ac8c8b2873af1d49ffa280327f79b299a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
+<div class="textblock"><p>LZSSに関するソースファイル  LZSS - Lempel-Ziv sliding window compression 技術評論社 C言語による最新アルゴリズム辞典 から ウィンドウバッファを使用しない方法に改変しました </p>
+<p>mana (library)</p>
+<dl class="section author"><dt>著者</dt><dd>Shun Moriya <a href="#" onclick="location.href='mai'+'lto:'+'shu'+'n@'+'mnu'+'.s'+'aku'+'ra'+'.ne'+'.j'+'p'; return false;">shun@<span style="display: none;">.nosp@m.</span>mnu.<span style="display: none;">.nosp@m.</span>sakur<span style="display: none;">.nosp@m.</span>a.ne<span style="display: none;">.nosp@m.</span>.jp</a> </dd></dl>
+<dl class="section date"><dt>日付</dt><dd>2003- </dd></dl>
+</div></div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+2017年03月16日(木) 23時27分17秒作成 - libmana / 構成:  &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.12
+</small></address>
+</body>
+</html>
