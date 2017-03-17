@@ -280,22 +280,7 @@ extern int32_t mana_get_instruction_size(const uint8_t* program);
 /*! オペコードとオペランドの文字列を取得 */
 extern const char* mana_get_instruction_text(const char* data, const void* program, const int32_t address);
 
-#if defined(NDEBUG)
-/*! コンソールに文字列を出力 */
-#define MANA_PRINT			printf
-/*! コンソールに文字列を出力(デバッグビルドのみ) */
-#define MANA_TRACE			if(0)printf
-/*! コンソールに文字列を出力 */
-#define MANA_WARNING(...)	{ printf(__VA_ARGS__); }
-/*! コンソールに文字列を出力後強制終了 */
-#define MANA_ERROR(...)		{ printf(__VA_ARGS__); abort(); }
-/*! 値の真偽を調べ、偽なら警告表示(デバッグビルドのみ) */
-#define MANA_CHECK(EXP)		assert(EXP)
-/*! 値の真偽を調べ、偽なら強制終了(デバッグビルドのみ) */
-#define MANA_ASSERT(EXP)	assert(EXP)
-/*! 値の真偽を調べ、偽なら強制終了 */
-#define MANA_VERIFY(E, M)	if(!(E)){ printf("%s: %s(%d)\n", M, __FILE__, __LINE__); abort(); }
-#else
+#if defined(_DEBUG)
 /*! コンソールに文字列を出力 */
 #define MANA_PRINT			mana_print_debug
 /*! コンソールに文字列を出力(デバッグビルドのみ) */
@@ -308,9 +293,28 @@ extern const char* mana_get_instruction_text(const char* data, const void* progr
 #define MANA_CHECK(EXP)		if(!(EXP)){ mana_print_debug("%s: %s(%d)\n", #EXP, __FILE__, __LINE__); }
 /*! 値の真偽を調べ、偽なら強制終了(デバッグビルドのみ) */
 #define MANA_ASSERT(EXP)	if(!(EXP)){ mana_print_debug("%s: %s(%d)\n", #EXP, __FILE__, __LINE__); abort(); }
-/*! 値の真偽を調べ、偽なら強制終了 */
-#define MANA_VERIFY(E, M)	if(!(E)){ mana_print_debug("%s: %s(%d)\n", M, __FILE__, __LINE__); abort(); }
+#else
+/*! コンソールに文字列を出力 */
+#define MANA_PRINT			printf
+/*! コンソールに文字列を出力(デバッグビルドのみ) */
+#define MANA_TRACE			if(0)printf
+/*! コンソールに文字列を出力 */
+#define MANA_WARNING(...)	{ printf(__VA_ARGS__); }
+/*! コンソールに文字列を出力後強制終了 */
+#define MANA_ERROR(...)		{ printf(__VA_ARGS__); abort(); }
+/*! 値の真偽を調べ、偽なら警告表示(デバッグビルドのみ) */
+#define MANA_CHECK(EXP)		assert(EXP)
+/*! 値の真偽を調べ、偽なら強制終了(デバッグビルドのみ) */
+#define MANA_ASSERT(EXP)	assert(EXP)
 #endif
+/*! 値の真偽を調べ、偽なら強制終了 */
+#define MANA_VERIFY(EXP, ...) \
+if(!(EXP)){ \
+	mana_print_debug("%s(%d): ", __FILE__, __LINE__); \
+	mana_print_debug(__VA_ARGS__); \
+	mana_print_debug(" (%s)\n", #EXP); \
+	abort(); \
+}
 
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)
 }
