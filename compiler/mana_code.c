@@ -1,12 +1,12 @@
 /*!
- * mana (compiler)
- *
- * @file	mana_code.c
- * @brief	命令セクションに関するソースファイル
- * @detail	このファイルは命令セクションに関係するソースファイルです。
- * @author	Shun Moriya <shun@mnu.sakura.ne.jp>
- * @date	2003-
- */
+mana (compiler)
+
+@file	mana_code.c
+@brief	命令セクションに関するソースファイル
+@detail	このファイルは命令セクションに関係するソースファイルです。
+@author	Shun Moriya <shun@mnu.sakura.ne.jp>
+@date	2003-
+*/
 
 #if !defined(___MANA_CODE_H___)
 #include "mana_code.h"
@@ -299,7 +299,6 @@ int32_t mana_code_copy(void* buffer)
 	}
 	return i;
 }
-
 
 /*!
  * @return	命令セクションのサイズ

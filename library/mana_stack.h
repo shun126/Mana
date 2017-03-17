@@ -37,7 +37,7 @@ typedef struct mana_stack
 		const char** string_handle;	/*!< 文字列ハンドル */
 		void** void_handle;			/*!< データハンドル */
 		float* float_pointer;		/*!< 実数ポインタ */
-		int32_t* integer_pointer;		/*!< 整数ポインタ */
+		int32_t* integer_pointer;	/*!< 整数ポインタ */
 		void* void_pointer;			/*!< データポインタ */
 	}buffer;
 	size_t allocated_size;			/*!< 確保済みサイズ */

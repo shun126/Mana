@@ -1,0 +1,77 @@
+/*
+mana (script)
+Copyright (c) 2003 Shun Moriya <shun@mnu.sakura.ne.jp>
+*/
+
+// actor declarations
+actor TestActor
+{
+	int digitVariableInActor;
+
+	// actor defines
+	action init
+	{
+		short array[10];
+		print("test_sort: %d\n", test_sort(array, 10));
+
+		int localVariableInAction;
+		float arrayTest[10];
+
+		test();
+		test_switch_while();
+
+		staticDigitValue = 1;
+
+		pointer p;
+		pointer q;
+		p = getUserPointer();
+		q = p;
+		setUserPointer(p);
+	}
+
+	action main
+	{
+//		request(1, OtherTestActor::talk);	// Forward declaration
+//		request(2, OtherTestActor, "talk");	// Forward declaration
+		request(5, self::talk);
+		join(0, OtherTestActor);
+	}
+
+	action talk
+	{
+		vec2 test;
+		//test.x = 0;
+		print("Nin hao!\n");
+	}
+}
+
+module Battler
+{
+	action init
+	{
+	}
+}
+
+actor OtherTestActor
+{
+	extend Battler;
+
+	action talk
+	{
+		vec2 test;
+		float f;
+		//f = test.x;
+		print("Hello!\n");
+		yield();
+		getUserData();
+	}
+}
+
+phantom Phantom
+{
+	extend Battler;
+
+	action init
+	{
+	}
+}
