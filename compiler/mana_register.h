@@ -1,12 +1,12 @@
 /*
- * mana (compiler)
- *
- * @file	mana_register.h
- * @brief	レジスタ割り当てに関するヘッダーファイル
- * @detail	このファイルはレジスタ割り当てに関するヘッダーファイルです。
- * @author	Shun Moriya <shun@mnu.sakura.ne.jp>
- * @date	2003-
- */
+mana (compiler)
+
+@file	mana_register.h
+@brief	レジスタ割り当てに関するヘッダーファイル
+@detail	このファイルはレジスタ割り当てに関するヘッダーファイルです。
+@author	Shun Moriya <shun@mnu.sakura.ne.jp>
+@date	2003-
+*/
 
 #if !defined(___MANA_REGISTER_H___)
 #define ___MANA_REGISTER_H___

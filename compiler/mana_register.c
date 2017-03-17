@@ -1,12 +1,12 @@
 /*
- * mana (compiler)
- *
- * @file	mana_register.c
- * @brief	レジスタ割り当てに関するソースファイル
- * @detail	このファイルは型情報に関係するソースファイルです。
- * @author	Shun Moriya <shun@mnu.sakura.ne.jp>
- * @date	2003-
- */
+mana (compiler)
+
+@file	mana_register.c
+@brief	レジスタ割り当てに関するソースファイル
+@detail	このファイルは型情報に関係するソースファイルです。
+@author	Shun Moriya <shun@mnu.sakura.ne.jp>
+@date	2003-
+*/
 
 #if !defined(___MANA_INFO_H___)
 #include "../library/mana_info.h"

@@ -505,7 +505,7 @@ static void* get_data(void* program, int32_t address, void* buffer)
 const char* mana_get_instruction_text(const char* data, const void* program, const int32_t address)
 {
 	uint8_t opecode;
-	static int8_t text[256];
+	static char text[256];
 
 	opecode = ((const uint8_t*)program)[address];
 	switch(opecode)

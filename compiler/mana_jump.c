@@ -28,7 +28,7 @@
 /*! ジャンプチェインテーブル */
 static struct mana_jump_chain_table
 {
-	mana_jump_chain_status status;			/*!< ジャンプチェインの状態 */
+	mana_jump_chain_status status;				/*!< ジャンプチェインの状態 */
 	int32_t break_chain;						/*!< breakチェインの位置 */
 	int32_t continue_chain;						/*!< continueチェインの位置 */
 	int32_t start_address;						/*!< ブロック開始位置 */
@@ -39,7 +39,7 @@ static int32_t mana_jump_chain_table_pointer;	/*!< mana_jump_chain_table の位置 
 /*! switchブロック内のエントリー */
 typedef struct mana_jump_switch_entry
 {
-	mana_node* node;						/*!< expressionを表す mana_node */
+	mana_node* node;							/*!< expressionを表す mana_node */
 	int32_t address;							/*!< アドレス */
 } mana_jump_switch_entry;
 
@@ -52,8 +52,8 @@ mana_jump_switch_entry* mana_jump_switch_entry_stack_pointer;
 /*! switchブロックスタック */
 struct mana_jump_switch_stack
 {
-	mana_jump_switch_entry*	stack_pointer;	/*!< switchブロック内のエントリースタック */
-	mana_type_description* type;			/*!< mana_type_description */
+	mana_jump_switch_entry*	stack_pointer;		/*!< switchブロック内のエントリースタック */
+	mana_type_description* type;				/*!< mana_type_description */
 	int32_t default_address;					/*!< @biref defaultへのアドレス */
 } mana_jump_switch_stack[MANA_JUMP_SWITCH_STACK_SIZE];
 
@@ -218,14 +218,14 @@ void mana_jump_switch_build(void)
 		case MANA_DATA_TYPE_INT:
 		case MANA_DATA_TYPE_ACTOR:
 			mana_code_set_opecode(MANA_IL_DUPLICATE);
-			mana_linker_expression(p->node, false);
+			mana_compiler_expression(p->node, false);
 			mana_code_set_opecode(MANA_IL_COMPARE_EQ_INTEGER);
 			mana_code_set_opecode_and_operand(MANA_IL_BNE, p->address);
 			break;
 
 		case MANA_DATA_TYPE_FLOAT:
 			mana_code_set_opecode(MANA_IL_DUPLICATE);
-			mana_linker_expression(p->node, false);
+			mana_compiler_expression(p->node, false);
 			mana_code_set_opecode(MANA_IL_COMPARE_EQ_FLOAT);
 			mana_code_set_opecode_and_operand(MANA_IL_BNE, p->address);
 			break;
@@ -233,7 +233,7 @@ void mana_jump_switch_build(void)
 		case MANA_DATA_TYPE_STRUCT:
 			size = p->node->type->memory_size;
 			mana_code_set_opecode_and_operand(MANA_IL_DUPLICATE_DATA, size);
-			mana_linker_expression(p->node, false);
+			mana_compiler_expression(p->node, false);
 			mana_code_set_opecode_and_operand(MANA_IL_COMPARE_EQ_DATA, size);
 			mana_code_set_opecode_and_operand(MANA_IL_BNE, p->address);
 			break;

@@ -1,0 +1,74 @@
+/*
+mana (script)
+Copyright (c) 2003 Shun Moriya <shun@mnu.sakura.ne.jp>
+*/
+
+native int nativeFunction(int a0, float a1);
+
+void test()
+{
+	// Forward declaration
+	short array[10];
+	//print("test_sort: %d\n", test_sort(array, 10));
+
+	// Forward declaration
+	test_switch_while();
+}
+
+int test_sort(short array[10], int size)
+{
+	//print("before\n");
+	for(int i = 0; i < size; i++)
+	{
+		array[i] = size - i;
+		//print("%d: %d\n", i, array[i]);
+	}
+
+	int count = 0;
+	int finish;
+	do{
+		finish = true;
+		for(int i = 0; i < size - 1; i++)
+		{
+			if(array[i] > array[i + 1])
+			{
+				short tmp = array[i];
+				array[i] = array[i + 1];
+				array[i + 1] = tmp;
+				finish = false;
+			}
+		}
+		count++;
+	}while(!finish);
+
+	//print("after\n");
+	for(int i = 0; i < size; i++)
+	{
+		//print("%d: %d\n", i, array[i]);
+	}
+
+	return count;
+}
+
+void test_switch_while()
+{
+	int count = 4;
+	while(count)
+	{
+		switch(count)
+		{
+		case 1:
+			//print("one\n");
+			break;
+		case 2:
+			//print("two\n");
+			break;
+		case 3:
+			//print("three\n");
+			break;
+		default:
+			//print("ready\n");
+		}
+		count--;
+	}
+}

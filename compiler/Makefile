@@ -1,36 +1,16 @@
 # mana (compiler)
 # Copyright (c) 2003 Shun Moriya <shun@mnu.sakura.ne.jp>
 #
-# The zlib/libpng License
-#
-# This software is provided 'as-is', without any express or implied warranty.
-# In no event will the authors be held liable for any damages arising from
-# the use of this software.
-#
-# Permission is granted to anyone to use this software for any purpose,
-# including commercial applications, and to alter it and redistribute it freely,
-# subject to the following restrictions:
-#
-# 1. The origin of this software must not be misrepresented; you must not claim that
-#    you wrote the original software. If you use this software in a product,
-#    an acknowledgment in the product documentation would be appreciated but is not required.
-#
-# 2. Altered source versions must be plainly marked as such,
-#    and must not be misrepresented as being the original software.
-#
-# 3. This notice may not be removed or altered from any source distribution.
-#
 
 TARGET	= mana
 LIBRARY	= ../library
 
 CC	= gcc
 CFLAGS	= --std=c11 --input-charset=cp932 -c -O3 -Wall -D NDEBUG -I$(LIBRARY)
+#CFLAGS	= --std=c11 -c -O3 -Wall -D NDEBUG -I$(LIBRARY)
 
 LK	= ld
 LFLAGS	= --library=c --library=dl --library=m
-#LK	= gcc
-#LFLAGS	= -ldl -lm
 
 YACC	= bison
 YFLAGS	= -d -k
@@ -41,8 +21,8 @@ LXFLAGS	= -8 -F
 CP      = cp -f
 RM	= rm -f
 
-SOURCES	= mana_code.c mana_data.c mana_datalink_generator.c mana_jump.c mana_linker.c mana_main.c mana_node.c mana_pool.c mana_register.c mana_symbol.c mana_type.c mana_parser.y mana_lexer.l
-OBJECTS	= mana_code.o mana_data.o mana_datalink_generator.o mana_jump.o mana_linker.o mana_main.o mana_node.o mana_pool.o mana_register.o mana_symbol.o mana_type.o mana_parser.o mana_lexer.o
+SOURCES	= mana_code.c mana_compiler.c mana_data.c mana_datalink_generator.c mana_jump.c mana_linker.c mana_main.c mana_node.c mana_pool.c mana_register.c mana_symbol.c mana_type.c mana_parser.y mana_lexer.l
+OBJECTS	= mana_code.o mana_compiler.o mana_data.o mana_datalink_generator.o mana_jump.o mana_linker.o mana_main.o mana_node.o mana_pool.o mana_register.o mana_symbol.o mana_type.o mana_parser.o mana_lexer.o
 
 SECOUND	= mana_parser.c mana_parser.h mana_lexer.c
 
@@ -74,6 +54,7 @@ clean:
 
 depend:
 	makedepend -Y -- $(CFLAGS) -- $(SOURCES)
+	make --directory=$(LIBRARY) depend
 
 # DO NOT DELETE
 
@@ -84,7 +65,19 @@ mana_code.o: ../library/mana_hash.h ../library/mana_stack.h
 mana_code.o: ../library/mana_array.h ../library/mana_datalink.h
 mana_code.o: ../library/mana_buffer.h ../library/mana_function.h
 mana_code.o: ../library/mana_lzss.h ../library/mana_malloc.h
-mana_code.o: ../library/mana_plugin.h mana_main.h mana_pool.h
+mana_code.o: ../library/mana_plugin.h mana_main.h mana_node.h mana_symbol.h
+mana_code.o: mana_type.h mana_pool.h
+mana_compiler.o: mana_compiler.h mana_symbol.h ../library/libmana.h
+mana_compiler.o: ../library/mana_define.h ../library/mana_info.h
+mana_compiler.o: ../library/mana.h ../library/mana_actor.h
+mana_compiler.o: ../library/mana_frame.h ../library/mana_stream.h
+mana_compiler.o: ../library/mana_hash.h ../library/mana_stack.h
+mana_compiler.o: ../library/mana_array.h ../library/mana_datalink.h
+mana_compiler.o: ../library/mana_buffer.h ../library/mana_function.h
+mana_compiler.o: ../library/mana_lzss.h ../library/mana_malloc.h
+mana_compiler.o: ../library/mana_plugin.h mana_code.h mana_data.h mana_jump.h
+mana_compiler.o: mana_node.h mana_type.h mana_linker.h mana_main.h
+mana_compiler.o: mana_pool.h mana_register.h
 mana_data.o: ../library/mana_info.h ../library/mana_malloc.h mana_data.h
 mana_data.o: ../library/libmana.h ../library/mana_define.h
 mana_data.o: ../library/mana_info.h ../library/mana.h ../library/mana_actor.h
@@ -94,7 +87,7 @@ mana_data.o: ../library/mana_array.h ../library/mana_datalink.h
 mana_data.o: ../library/mana_buffer.h ../library/mana_function.h
 mana_data.o: ../library/mana_lzss.h ../library/mana_malloc.h
 mana_data.o: ../library/mana_plugin.h
-mana_datalink_generator.o: mana_main.h mana_pool.h mana_datalink_generator.h
+mana_datalink_generator.o: mana_main.h mana_node.h mana_symbol.h
 mana_datalink_generator.o: ../library/libmana.h ../library/mana_define.h
 mana_datalink_generator.o: ../library/mana_info.h ../library/mana.h
 mana_datalink_generator.o: ../library/mana_actor.h ../library/mana_frame.h
@@ -104,7 +97,8 @@ mana_datalink_generator.o: ../library/mana_datalink.h
 mana_datalink_generator.o: ../library/mana_buffer.h
 mana_datalink_generator.o: ../library/mana_function.h ../library/mana_lzss.h
 mana_datalink_generator.o: ../library/mana_malloc.h ../library/mana_plugin.h
-mana_jump.o: mana_main.h mana_pool.h mana_code.h ../library/libmana.h
+mana_datalink_generator.o: mana_type.h mana_pool.h mana_datalink_generator.h
+mana_jump.o: mana_main.h mana_node.h mana_symbol.h ../library/libmana.h
 mana_jump.o: ../library/mana_define.h ../library/mana_info.h
 mana_jump.o: ../library/mana.h ../library/mana_actor.h
 mana_jump.o: ../library/mana_frame.h ../library/mana_stream.h
@@ -112,19 +106,18 @@ mana_jump.o: ../library/mana_hash.h ../library/mana_stack.h
 mana_jump.o: ../library/mana_array.h ../library/mana_datalink.h
 mana_jump.o: ../library/mana_buffer.h ../library/mana_function.h
 mana_jump.o: ../library/mana_lzss.h ../library/mana_malloc.h
-mana_jump.o: ../library/mana_plugin.h mana_jump.h mana_node.h mana_symbol.h
-mana_jump.o: mana_type.h mana_linker.h
-mana_linker.o: mana_code.h ../library/libmana.h ../library/mana_define.h
-mana_linker.o: ../library/mana_info.h ../library/mana.h
-mana_linker.o: ../library/mana_actor.h ../library/mana_frame.h
-mana_linker.o: ../library/mana_stream.h ../library/mana_hash.h
-mana_linker.o: ../library/mana_stack.h ../library/mana_array.h
-mana_linker.o: ../library/mana_datalink.h ../library/mana_buffer.h
-mana_linker.o: ../library/mana_function.h ../library/mana_lzss.h
-mana_linker.o: ../library/mana_malloc.h ../library/mana_plugin.h mana_data.h
-mana_linker.o: mana_linker.h mana_main.h mana_pool.h mana_node.h
-mana_linker.o: mana_symbol.h mana_type.h mana_register.h
-mana_main.o: mana_main.h mana_pool.h mana_code.h ../library/libmana.h
+mana_jump.o: ../library/mana_plugin.h mana_type.h mana_pool.h mana_code.h
+mana_jump.o: mana_jump.h mana_linker.h
+mana_linker.o: mana_linker.h mana_code.h ../library/libmana.h
+mana_linker.o: ../library/mana_define.h ../library/mana_info.h
+mana_linker.o: ../library/mana.h ../library/mana_actor.h
+mana_linker.o: ../library/mana_frame.h ../library/mana_stream.h
+mana_linker.o: ../library/mana_hash.h ../library/mana_stack.h
+mana_linker.o: ../library/mana_array.h ../library/mana_datalink.h
+mana_linker.o: ../library/mana_buffer.h ../library/mana_function.h
+mana_linker.o: ../library/mana_lzss.h ../library/mana_malloc.h
+mana_linker.o: ../library/mana_plugin.h
+mana_main.o: mana_main.h mana_node.h mana_symbol.h ../library/libmana.h
 mana_main.o: ../library/mana_define.h ../library/mana_info.h
 mana_main.o: ../library/mana.h ../library/mana_actor.h
 mana_main.o: ../library/mana_frame.h ../library/mana_stream.h
@@ -132,8 +125,9 @@ mana_main.o: ../library/mana_hash.h ../library/mana_stack.h
 mana_main.o: ../library/mana_array.h ../library/mana_datalink.h
 mana_main.o: ../library/mana_buffer.h ../library/mana_function.h
 mana_main.o: ../library/mana_lzss.h ../library/mana_malloc.h
-mana_main.o: ../library/mana_plugin.h mana_data.h mana_datalink_generator.h
-mana_main.o: mana_jump.h mana_node.h mana_symbol.h mana_type.h mana_version.h
+mana_main.o: ../library/mana_plugin.h mana_type.h mana_pool.h mana_code.h
+mana_main.o: mana_compiler.h mana_data.h mana_datalink_generator.h
+mana_main.o: mana_jump.h mana_register.h mana_version.h
 mana_node.o: mana_data.h ../library/libmana.h ../library/mana_define.h
 mana_node.o: ../library/mana_info.h ../library/mana.h ../library/mana_actor.h
 mana_node.o: ../library/mana_frame.h ../library/mana_stream.h
@@ -142,20 +136,21 @@ mana_node.o: ../library/mana_array.h ../library/mana_datalink.h
 mana_node.o: ../library/mana_buffer.h ../library/mana_function.h
 mana_node.o: ../library/mana_lzss.h ../library/mana_malloc.h
 mana_node.o: ../library/mana_plugin.h mana_datalink_generator.h mana_main.h
-mana_node.o: mana_pool.h mana_node.h mana_symbol.h mana_type.h
+mana_node.o: mana_node.h mana_symbol.h mana_type.h mana_pool.h
 mana_pool.o: ../library/mana_malloc.h mana_pool.h
 mana_register.o: ../library/mana_info.h mana_register.h
-mana_symbol.o: mana_code.h ../library/libmana.h ../library/mana_define.h
-mana_symbol.o: ../library/mana_info.h ../library/mana.h
-mana_symbol.o: ../library/mana_actor.h ../library/mana_frame.h
-mana_symbol.o: ../library/mana_stream.h ../library/mana_hash.h
-mana_symbol.o: ../library/mana_stack.h ../library/mana_array.h
-mana_symbol.o: ../library/mana_datalink.h ../library/mana_buffer.h
-mana_symbol.o: ../library/mana_function.h ../library/mana_lzss.h
-mana_symbol.o: ../library/mana_malloc.h ../library/mana_plugin.h mana_data.h
-mana_symbol.o: mana_linker.h mana_main.h mana_pool.h mana_node.h
-mana_symbol.o: mana_symbol.h mana_type.h mana_register.h
-mana_type.o: mana_main.h mana_pool.h mana_symbol.h ../library/libmana.h
+mana_symbol.o: mana_compiler.h mana_symbol.h ../library/libmana.h
+mana_symbol.o: ../library/mana_define.h ../library/mana_info.h
+mana_symbol.o: ../library/mana.h ../library/mana_actor.h
+mana_symbol.o: ../library/mana_frame.h ../library/mana_stream.h
+mana_symbol.o: ../library/mana_hash.h ../library/mana_stack.h
+mana_symbol.o: ../library/mana_array.h ../library/mana_datalink.h
+mana_symbol.o: ../library/mana_buffer.h ../library/mana_function.h
+mana_symbol.o: ../library/mana_lzss.h ../library/mana_malloc.h
+mana_symbol.o: ../library/mana_plugin.h mana_code.h mana_data.h mana_linker.h
+mana_symbol.o: mana_main.h mana_node.h mana_type.h mana_pool.h
+mana_symbol.o: mana_register.h
+mana_type.o: mana_main.h mana_node.h mana_symbol.h ../library/libmana.h
 mana_type.o: ../library/mana_define.h ../library/mana_info.h
 mana_type.o: ../library/mana.h ../library/mana_actor.h
 mana_type.o: ../library/mana_frame.h ../library/mana_stream.h
@@ -163,23 +158,23 @@ mana_type.o: ../library/mana_hash.h ../library/mana_stack.h
 mana_type.o: ../library/mana_array.h ../library/mana_datalink.h
 mana_type.o: ../library/mana_buffer.h ../library/mana_function.h
 mana_type.o: ../library/mana_lzss.h ../library/mana_malloc.h
-mana_type.o: ../library/mana_plugin.h mana_type.h
-mana_parser.o: mana_code.h ../library/libmana.h ../library/mana_define.h
-mana_parser.o: ../library/mana_info.h ../library/mana.h
-mana_parser.o: ../library/mana_actor.h ../library/mana_frame.h
-mana_parser.o: ../library/mana_stream.h ../library/mana_hash.h
-mana_parser.o: ../library/mana_stack.h ../library/mana_array.h
-mana_parser.o: ../library/mana_datalink.h ../library/mana_buffer.h
-mana_parser.o: ../library/mana_function.h ../library/mana_lzss.h
-mana_parser.o: ../library/mana_malloc.h ../library/mana_plugin.h mana_data.h
-mana_parser.o: mana_jump.h mana_node.h mana_symbol.h mana_type.h
-mana_parser.o: mana_linker.h mana_main.h mana_pool.h mana_register.h
-mana_lexer.o: mana_main.h mana_pool.h mana_node.h mana_symbol.h
-mana_lexer.o: ../library/libmana.h ../library/mana_define.h
-mana_lexer.o: ../library/mana_info.h ../library/mana.h
-mana_lexer.o: ../library/mana_actor.h ../library/mana_frame.h
-mana_lexer.o: ../library/mana_stream.h ../library/mana_hash.h
-mana_lexer.o: ../library/mana_stack.h ../library/mana_array.h
-mana_lexer.o: ../library/mana_datalink.h ../library/mana_buffer.h
-mana_lexer.o: ../library/mana_function.h ../library/mana_lzss.h
-mana_lexer.o: ../library/mana_malloc.h ../library/mana_plugin.h mana_type.h
+mana_type.o: ../library/mana_plugin.h mana_type.h mana_pool.h
+mana_parser.o: mana_compiler.h mana_symbol.h ../library/libmana.h
+mana_parser.o: ../library/mana_define.h ../library/mana_info.h
+mana_parser.o: ../library/mana.h ../library/mana_actor.h
+mana_parser.o: ../library/mana_frame.h ../library/mana_stream.h
+mana_parser.o: ../library/mana_hash.h ../library/mana_stack.h
+mana_parser.o: ../library/mana_array.h ../library/mana_datalink.h
+mana_parser.o: ../library/mana_buffer.h ../library/mana_function.h
+mana_parser.o: ../library/mana_lzss.h ../library/mana_malloc.h
+mana_parser.o: ../library/mana_plugin.h mana_linker.h mana_main.h mana_node.h
+mana_parser.o: mana_type.h mana_pool.h
+mana_lexer.o: mana_main.h mana_node.h mana_symbol.h ../library/libmana.h
+mana_lexer.o: ../library/mana_define.h ../library/mana_info.h
+mana_lexer.o: ../library/mana.h ../library/mana_actor.h
+mana_lexer.o: ../library/mana_frame.h ../library/mana_stream.h
+mana_lexer.o: ../library/mana_hash.h ../library/mana_stack.h
+mana_lexer.o: ../library/mana_array.h ../library/mana_datalink.h
+mana_lexer.o: ../library/mana_buffer.h ../library/mana_function.h
+mana_lexer.o: ../library/mana_lzss.h ../library/mana_malloc.h
+mana_lexer.o: ../library/mana_plugin.h mana_type.h mana_pool.h
