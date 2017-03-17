@@ -11,9 +11,9 @@
 #if !defined(___MANA_VERSION_H___)
 #define ___MANA_VERSION_H___
 
-#define MANA_BUILD_YEAR 2016
-#define MANA_BUILD_MONTH 12
-#define MANA_BUILD_DAY 13
+#define MANA_BUILD_YEAR 2017
+#define MANA_BUILD_MONTH 2
+#define MANA_BUILD_DAY 18
 #define MANA_BUILD_MAJOR_VERSION "0"
 #define MANA_BUILD_MINOR_VERSION "9.5"
 

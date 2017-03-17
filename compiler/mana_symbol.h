@@ -1,12 +1,12 @@
-/*
- * mana (compiler)
- *
- * @file	mana_symbol.h
- * @brief	レジスタ割り当てに関するヘッダーファイル
- * @detail	このファイルはレジスタ割り当てに関するヘッダーファイルです。
- * @author	Shun Moriya <shun@mnu.sakura.ne.jp>
- * @date	2003-
- */
+/*!
+mana (compiler)
+
+@file	mana_symbol.h
+@brief	レジスタ割り当てに関するヘッダーファイル
+@detail	このファイルはレジスタ割り当てに関するヘッダーファイルです。
+@author	Shun Moriya <shun@mnu.sakura.ne.jp>
+@date	2003-
+*/
 
 #if !defined(___MANA_SYMBOL_H___)
 #define ___MANA_SYMBOL_H___
@@ -17,6 +17,7 @@ extern "C" {
 
 #include <libmana.h>
 #include <stdio.h>
+#include <stdint.h>
 #include <stdbool.h>
 
 typedef enum mana_symbol_memory_type_id
@@ -29,7 +30,6 @@ typedef enum mana_symbol_class_type_id
 {
 	MANA_CLASS_TYPE_NEW_SYMBOL,							/*!< 未割り当て関数 */
 	MANA_CLASS_TYPE_TYPEDEF,							/*!< 型定義 */
-	MANA_CLASS_TYPE_PROTOTYPE_FUNCTION,					/*!< プロトタイプ関数宣言 */
 	MANA_CLASS_TYPE_FUNCTION,							/*!< 関数 */
 	MANA_CLASS_TYPE_NATIVE_FUNCTION,					/*!< 外部関数 */
 	MANA_CLASS_TYPE_MEMBER_FUNCTION,					/*!< メンバー関数(アクション) */
@@ -64,73 +64,96 @@ typedef enum mana_symbol_data_type_id
 
 typedef enum mana_node_type_id
 {
-	MANA_NODE_TYPE_ARRAY,								/*!< variable[argument] = */
-	MANA_NODE_TYPE_ASSIGN,								/*!< = */
-	MANA_NODE_TYPE_MEMOP,								/*!< X.variable */
-	MANA_NODE_TYPE_ARGUMENT,							/*!< 呼び出し側引数 */
-	MANA_NODE_TYPE_CONST,								/*!< 定数 */
-	MANA_NODE_TYPE_VARIABLE,							/*!< 変数 */
-	MANA_NODE_TYPE_INCOMPLETE,							/*!< 宣言が未完了 */
-	MANA_NODE_TYPE_FUNCTION,							/*!< 関数 */
-	MANA_NODE_TYPE_CALL,								/*!< 関数呼び出し */
-	MANA_NODE_TYPE_ADD,									/*!< 加算 */
-	MANA_NODE_TYPE_SUB,									/*!< 減算 */
-	MANA_NODE_TYPE_MUL,									/*!< 乗算 */
-	MANA_NODE_TYPE_DIV,									/*!< 除算 */
-	MANA_NODE_TYPE_REM,									/*!< 余剰 */
-	MANA_NODE_TYPE_NEG,									/*!< ±符号反転 */
-	MANA_NODE_TYPE_POW,									/*!< べき乗 */
-	MANA_NODE_TYPE_NOT,									/*!< ~ */
-	MANA_NODE_TYPE_AND,									/*!< & */
-	MANA_NODE_TYPE_OR,									/*!< | */
-	MANA_NODE_TYPE_XOR,									/*!< ^ */
-	MANA_NODE_TYPE_LSH,									/*!< << */
-	MANA_NODE_TYPE_RSH,									/*!< >> */
-	MANA_NODE_TYPE_LS,									/*!< < */
-	MANA_NODE_TYPE_LE,									/*!< <= */
-	MANA_NODE_TYPE_EQ,									/*!< == */
-	MANA_NODE_TYPE_NE,									/*!< != */
-	MANA_NODE_TYPE_GE,									/*!< >= */
-	MANA_NODE_TYPE_GT,									/*!< > */
-	MANA_NODE_TYPE_STRING,								/*!< 文字列 */
-	MANA_NODE_TYPE_I2F,									/*!< 整数から実数へ変換 */
-	MANA_NODE_TYPE_F2I,									/*!< 実数から整数へ変換 */
-	MANA_NODE_TYPE_LOR,									/*!< || */
-	MANA_NODE_TYPE_LAND,								/*!< && */
-	MANA_NODE_TYPE_LNOT,								/*!< ! */
-	MANA_NODE_TYPE_SENDER,								/*!< sender (actor) */
-	MANA_NODE_TYPE_SELF,								/*!< self (actor) */
-	MANA_NODE_TYPE_PRIORITY,							/*!< priority (integer) */
-	MANA_NODE_TYPE_EXPRESSION_IF,						/*!< 三項演算子 '?' */
+	MANA_NODE_NEWLINE,								/*!< 改行 */
 
+	MANA_NODE_ARRAY,								/*!< variable[argument] = */
+	MANA_NODE_ASSIGN,								/*!< = */
+	MANA_NODE_MEMOP,								/*!< X.variable */
+	MANA_NODE_CALL_ARGUMENT,							//!< 引数（呼び出し）
+	MANA_NODE_DECLARE_ARGUMENT,							//!< 引数（宣言）
+	MANA_NODE_CONST,								/*!< 定数 */
+	MANA_NODE_VARIABLE,							/*!< 変数 */
+	MANA_NODE_CALL,								/*!< 関数呼び出し */
+	MANA_NODE_ADD,									/*!< 加算 */
+	MANA_NODE_SUB,									/*!< 減算 */
+	MANA_NODE_MUL,									/*!< 乗算 */
+	MANA_NODE_DIV,									/*!< 除算 */
+	MANA_NODE_REM,									/*!< 余剰 */
+	MANA_NODE_NEG,									/*!< ±符号反転 */
+	MANA_NODE_POW,									/*!< べき乗 */
+	MANA_NODE_NOT,									/*!< ~ */
+	MANA_NODE_AND,									/*!< & */
+	MANA_NODE_OR,									/*!< | */
+	MANA_NODE_XOR,									/*!< ^ */
+	MANA_NODE_LSH,									/*!< << */
+	MANA_NODE_RSH,									/*!< >> */
+	MANA_NODE_LS,									/*!< < */
+	MANA_NODE_LE,									/*!< <= */
+	MANA_NODE_EQ,									/*!< == */
+	MANA_NODE_NE,									/*!< != */
+	MANA_NODE_GE,									/*!< >= */
+	MANA_NODE_GT,									/*!< > */
+	MANA_NODE_STRING,								/*!< 文字列 */
+	MANA_NODE_I2F,									/*!< 整数から実数へ変換 */
+	MANA_NODE_F2I,									/*!< 実数から整数へ変換 */
+	MANA_NODE_LOR,									/*!< || */
+	MANA_NODE_LAND,								/*!< && */
+	MANA_NODE_LNOT,								/*!< ! */
+	MANA_NODE_HALT,								/*!< halt */
+	MANA_NODE_YIELD,								/*!< yield */
+	MANA_NODE_REQUEST,								/*!< req */
+	MANA_NODE_COMPLY,								/*!< comply (req許可) */
+	MANA_NODE_REFUSE,								/*!< refuse (req拒否) */
+	MANA_NODE_JOIN,								/*!< join */
+	MANA_NODE_SENDER,								/*!< sender (actor) */
+	MANA_NODE_SELF,								/*!< self (actor) */
+	MANA_NODE_PRIORITY,							/*!< priority (integer) */
+	MANA_NODE_EXPRESSION_IF,						/*!< 三項演算子 '?' */
+	MANA_NODE_PRINT,								/*!< print */
+	MANA_NODE_RETURN,								/*!< return */
+	MANA_NODE_ROLLBACK,							/*!< rollback */
 
-#if 0
-	MANA_NODE_TYPE_NEWLINE,								/*!<  */
-	MANA_NODE_TYPE_BLOCK,								/*!<  */
-	MANA_NODE_TYPE_ASSIGN,								/*!<  */
-	MANA_NODE_TYPE_IF,									/*!<  */
-	MANA_NODE_TYPE_SWITCH,								/*!<  */
-	MANA_NODE_TYPE_CASE,								/*!<  */
-	MANA_NODE_TYPE_DEFAULT,								/*!<  */
-	MANA_NODE_TYPE_WHILE,								/*!<  */
-	MANA_NODE_TYPE_DO,									/*!<  */
-	MANA_NODE_TYPE_FOR,									/*!<  */
-	MANA_NODE_TYPE_LOOP,								/*!<  */
-	MANA_NODE_TYPE_LOCK,								/*!<  */
-	MANA_NODE_TYPE_GOTO,								/*!<  */
-	MANA_NODE_TYPE_LABEL,								/*!<  */
-	MANA_NODE_TYPE_RETURN,								/*!<  */
-	MANA_NODE_TYPE_ROLLBACK,							/*!<  */
-	MANA_NODE_TYPE_BREAK,								/*!<  */
-	MANA_NODE_TYPE_CONTINUE,							/*!<  */
-	MANA_NODE_TYPE_HALT,								/*!<  */
-	MANA_NODE_TYPE_YIELD,								/*!<  */
-	MANA_NODE_TYPE_COMPLY,								/*!<  */
-	MANA_NODE_TYPE_REFUSE,								/*!<  */
-	MANA_NODE_TYPE_PRINT,								/*!<  */
-	MANA_NODE_TYPE_REQ,									/*!<  */
-	MANA_NODE_TYPE_JOIN,								/*!<  */
-#endif
+	MANA_NODE_BLOCK,								/*!< ブロック */
+	MANA_NODE_IF,									/*!< if */
+	MANA_NODE_SWITCH,								/*!< switch */
+	MANA_NODE_CASE,								/*!< case */
+	MANA_NODE_DEFAULT,								/*!< default */
+	MANA_NODE_WHILE,								/*!< while */
+	MANA_NODE_DO,									/*!< do while */
+	MANA_NODE_FOR,									/*!< for */
+	MANA_NODE_LOOP,								/*!< loop */
+	MANA_NODE_LOCK,								/*!< lock */
+	MANA_NODE_GOTO,								/*!< goto */
+	MANA_NODE_LABEL,								/*!< label */
+	MANA_NODE_BREAK,								/*!< break */
+	MANA_NODE_CONTINUE,							/*!< continue */
+
+	MANA_NODE_IDENTIFIER,
+	MANA_NODE_TYPE_DESCRIPTION,
+	MANA_NODE_DECLARATOR,
+
+	MANA_NODE_DECLARE_VARIABLE,
+	MANA_NODE_SIZEOF,
+
+	MANA_NODE_DECLARE_ACTOR,						//!< アクターの宣言
+	MANA_NODE_DECLARE_PHANTOM,
+	MANA_NODE_DECLARE_MODULE,
+	MANA_NODE_DECLARE_STRUCT,
+	MANA_NODE_DECLARE_ACTION,
+	MANA_NODE_DECLARE_EXTEND,
+	MANA_NODE_DECLARE_ALLOCATE,
+	MANA_NODE_DECLARE_STATIC,
+	MANA_NODE_DEFINE_ALIAS,
+	MANA_NODE_DECLARE_NATIVE_FUNCTION,
+	MANA_NODE_DECLARE_FUNCTION,
+
+	MANA_NODE_DEFINE_CONSTANT,
+	MANA_NODE_UNDEFINE_CONSTANT,
+
+	MANA_NODE_MEMBER_FUNCTION,
+	MANA_NODE_MEMBER_VARIABLE,
+
+	MANA_NODE_VARIABLE_SIZE,
 } mana_node_type_id;
 
 typedef struct mana_symbol_entry
@@ -151,7 +174,8 @@ typedef struct mana_symbol_entry
 	char* string;										/*!< 文字列保存バッファ */
 	int32_t define_level;								/*!< 定義レベル */
 	int32_t number_of_parameters;						/*!< パラメータの数 */
-	unsigned used;										/*!< 参照フラグ */
+	bool override;										//!< 上書き許可
+	bool used;											/*!< 参照フラグ */
 } mana_symbol_entry;
 
 typedef struct mana_type_description
@@ -187,11 +211,16 @@ typedef struct mana_node
 	struct mana_type_description* type;					/*!< 型へのポインタ */
 	struct mana_node* left;								/*!< 左 */
 	struct mana_node* right;							/*!< 右 */
-	struct mana_node* condition;						/*!< 条件 */
+	struct mana_node* body;								/*!< 右 */
+	struct mana_node* next;								/*!< 次 */
 	int32_t etc;										/*!< その他 */
 	int32_t digit;										/*!< 整数 */
 	float real;											/*!< 少数 */
 	char* string;										/*!< 文字列へのポインタ */
+
+	char* filename;
+	int32_t line;
+	struct mana_node* link;								/*!< 解放用ポインタ */
 } mana_node;
 
 /*****************************************************************************/
@@ -202,8 +231,10 @@ extern int32_t mana_symbol_return_address_list;			/*!< action,functionのリターン
 extern void mana_symbol_initialize(void);
 extern void mana_symbol_finalize(void);
 
-extern void mana_symbol_open_block(const bool reset_max_frame_memory_address);
-extern void mana_symbol_close_block(void);
+extern int32_t mana_symbol_open_block(const bool reset_max_frame_memory_address);
+extern int32_t mana_symbol_close_block(void);
+
+extern mana_symbol_entry* mana_symbol_get_head_symbol(void);
 
 extern int32_t mana_symbol_is_valid_variable(mana_symbol_entry*);
 
@@ -222,32 +253,42 @@ extern mana_symbol_entry* mana_symbol_create_const_string(char*, char*);
 //extern mana_symbol_entry* mana_symbol_create_type(char*);
 extern mana_symbol_entry* mana_symbol_create_identification(char*, mana_type_description*, int32_t static_variable);
 extern mana_symbol_entry* mana_symbol_create_label(char*);
-extern mana_symbol_entry* mana_symbol_create_function(char*);
-extern void mana_symbol_create_prototype(mana_symbol_entry*, mana_type_description*);
 
 extern void mana_symbol_destroy(char* name);
 
-extern void mana_symbol_open_function(int32_t, mana_symbol_entry*, mana_type_description*);
-extern void mana_symbol_close_function(mana_symbol_entry*);
-extern void mana_symbol_set_native_function(mana_symbol_entry*, mana_type_description*);
-extern void mana_symbol_set_type(char*, mana_type_description*);
 
+
+// function
+extern mana_symbol_entry* mana_symbol_create_function(const char* name);
+extern void mana_symbol_begin_function_registration(bool is_action, mana_symbol_entry* function, mana_type_description* type);
+extern void mana_symbol_commit_function_registration(mana_symbol_entry*);
+extern void mana_symbol_begin_native_function_registration();
+extern void mana_symbol_commit_native_function_registration(mana_symbol_entry* function, mana_type_description* type);
+
+
+
+// struct
 extern void mana_symbol_open_structure(void);
-extern mana_type_description* mana_symbol_close_structure(char*);
+extern mana_type_description* mana_symbol_close_structure(const char* name);
 
-extern void mana_symbol_open_actor(mana_symbol_entry*);
+// actor
+/*!
+アクターのシンボル登録を開始します
+@param[in]	symbol	NULLならば新規作成、
+*/
+extern void mana_symbol_open_actor(mana_symbol_entry* symbol);
 extern mana_type_description* mana_symbol_close_actor(char* name, char* parent, mana_type_description* td, int32_t phantom);
 
-extern void mana_symbol_open_actor2(mana_symbol_entry*);
-extern void mana_symbol_close_actor2(void);
+// module
+extern void mana_symbol_open_module(mana_symbol_entry* symbol);
+extern mana_type_description* mana_symbol_close_module(const char* name);
+extern void mana_symbol_extend_module(const char* name);
 
-extern void mana_symbol_open_module(void);
-extern mana_type_description* mana_symbol_close_module(char* name);
-extern void mana_symbol_extend_module(char* name);
+extern void mana_symbol_set_type(const char* name, mana_type_description* type);
 
 extern int32_t mana_symbol_get_number_of_actors(void);
 
-extern void mana_symbol_add_request(uint8_t opcode, mana_node* level, mana_node* actor, char* action);
+extern void mana_symbol_add_request(uint8_t opcode, mana_node* level, mana_node* actor, const char* action);
 extern void mana_symbol_add_join(mana_node* level, mana_node* actor);
 
 extern void mana_symbol_allocate_memory(mana_symbol_entry*, mana_type_description*, mana_symbol_memory_type_id);

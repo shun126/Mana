@@ -14,6 +14,9 @@
 #if !defined(___MANA_CODE_H___)
 #include "mana_code.h"
 #endif
+#if !defined(___MANA_COMPILER_H___)
+#include "mana_compiler.h"
+#endif
 #if !defined(___MANA_DATA_H___)
 #include "mana_data.h"
 #endif
@@ -22,6 +25,9 @@
 #endif
 #if !defined(___MANA_JUMP_H___)
 #include "mana_jump.h"
+#endif
+#if !defined(___MANA_REGISTER_H___)
+#include "mana_register.h"
 #endif
 #if !defined(___MANA_SYMBOL_H___)
 #include "mana_symbol.h"
@@ -49,8 +55,8 @@
 
 #define MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE	(2048)
 
-static int8_t mana_input_filename[_MAX_PATH];
-static int8_t mana_output_filename[_MAX_PATH];
+static char mana_input_filename[_MAX_PATH];
+static char mana_output_filename[_MAX_PATH];
 int32_t mana_debug;
 int32_t mana_release;
 FILE* mana_variable_header_file;
@@ -141,9 +147,9 @@ char* _fullpath(char* out, char* in, int32_t size)
 
 #endif
 
-void mana_error(char* filename, int32_t line, char* format, ...)
+void mana_error(const char* filename, const size_t line, const char* format, ...)
 {
-	int8_t string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
+	char string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
 
 	va_list argptr;
 	va_start(argptr, format);
@@ -159,9 +165,27 @@ void mana_error(char* filename, int32_t line, char* format, ...)
 #endif
 }
 
+void mana_warning(const char* filename, const size_t line, const char* format, ...)
+{
+	char string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
+
+	va_list argptr;
+	va_start(argptr, format);
+#if defined(__STDC_WANT_SECURE_LIB__)
+	vsprintf_s(string, sizeof(string), format, argptr);
+#else
+	vsprintf(string, format, argptr);
+#endif
+#if defined(_MSC_VER)
+	mana_print("%s(%d): warning: %s\n", filename, line, string);
+#else
+	mana_print("%s:%d: warning: %s\n", filename, line, string);
+#endif
+}
+
 void mana_compile_error(char* format, ...)
 {
-	int8_t string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
+	char string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
 
 	va_list argptr;
 	va_start(argptr, format);
@@ -176,7 +200,7 @@ void mana_compile_error(char* format, ...)
 
 void mana_compile_warning(char* format, ...)
 {
-	int8_t string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
+	char string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
 
 	va_list argptr;
 	va_start(argptr, format);
@@ -193,9 +217,9 @@ void mana_compile_warning(char* format, ...)
 #endif
 }
 
-void mana_linker_error(char* format, ...)
+void mana_compiler_error(char* format, ...)
 {
-	int8_t string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
+	char string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
 
 	va_list argptr;
 	va_start(argptr, format);
@@ -208,9 +232,9 @@ void mana_linker_error(char* format, ...)
 	mana_print("%s: error: %s\n", mana_output_filename, string);
 }
 
-void mana_linker_warning(char* format, ...)
+void mana_compiler_warning(char* format, ...)
 {
-	int8_t string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
+	char string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
 
 	va_list argptr;
 	va_start(argptr, format);
@@ -225,7 +249,7 @@ void mana_linker_warning(char* format, ...)
 
 void mana_fatal(char* format, ...)
 {
-	int8_t string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
+	char string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
 
 	va_list argptr;
 	va_start(argptr, format);
@@ -291,8 +315,12 @@ int32_t mana_compile(void)
 	mana_data_initialzie();
 	mana_jump_initialize();
 	mana_node_initialize();
+	mana_register_initialzie();
 	mana_symbol_initialize();
 	mana_type_initialize();
+
+	mana_compiler_initialize();
+	mana_linker_initialize();
 
 	if(mana_variable_header_file)
 	{
@@ -322,11 +350,11 @@ int32_t mana_compile(void)
 		if(mana_debug)
 		{
 			FILE* log;
-			int8_t filename[_MAX_PATH];
-			int8_t drive[_MAX_DRIVE];
-			int8_t dir[_MAX_DIR];
-			int8_t fname[_MAX_FNAME];
-			int8_t ext[_MAX_EXT];
+			char filename[_MAX_PATH];
+			char drive[_MAX_DRIVE];
+			char dir[_MAX_DIR];
+			char fname[_MAX_FNAME];
+			char ext[_MAX_EXT];
 
 #if defined(__STDC_WANT_SECURE_LIB__)
 			_splitpath_s(mana_input_filename, drive, sizeof(drive), dir, sizeof(dir), fname, sizeof(fname), ext, sizeof(ext));
@@ -450,8 +478,13 @@ ESCAPE:
 	mana_data_finalize();
 	mana_jump_finalize();
 	mana_node_finalize();
+	mana_register_finalize();
 	mana_symbol_finalize();
 	mana_type_finalize();
+
+	mana_compiler_finalize();
+	mana_linker_finalize();
+
 	mana_lexer_finalize();
 
 	return result;
@@ -539,7 +572,7 @@ static int32_t parse_arguments(int32_t argc, char* argv[])
 				case 'i':
 					{
 						int32_t length;
-						int8_t filename[_MAX_PATH];
+						char filename[_MAX_PATH];
 
 						if(cmdcnt+1 < argc && *argv[cmdcnt+1] != '-')
 						{
