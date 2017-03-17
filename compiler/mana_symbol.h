@@ -244,14 +244,14 @@ extern void mana_symbol_set_static_memory_address(int32_t size);
 extern int32_t mana_symbol_get_global_memory_address();
 extern void mana_symbol_set_global_memory_address(int32_t size);
 
-extern mana_symbol_entry* mana_symbol_lookup(char*);
-extern mana_symbol_entry* mana_symbol_lookup_or_create_dummy(char*);
+extern mana_symbol_entry* mana_symbol_lookup(const char* name);
+extern mana_symbol_entry* mana_symbol_lookup_or_create_dummy(const char* name);
 extern mana_symbol_entry* mana_symbol_create_alias(char*, char*);
 extern mana_symbol_entry* mana_symbol_create_const_int(char*, int32_t);
 extern mana_symbol_entry* mana_symbol_create_const_float(char*, float);
 extern mana_symbol_entry* mana_symbol_create_const_string(char*, char*);
 //extern mana_symbol_entry* mana_symbol_create_type(char*);
-extern mana_symbol_entry* mana_symbol_create_identification(char*, mana_type_description*, int32_t static_variable);
+extern mana_symbol_entry* mana_symbol_create_identification(const char*, mana_type_description*, const int32_t static_variable);
 extern mana_symbol_entry* mana_symbol_create_label(char*);
 
 extern void mana_symbol_destroy(char* name);
@@ -260,30 +260,51 @@ extern void mana_symbol_destroy(char* name);
 
 // function
 extern mana_symbol_entry* mana_symbol_create_function(const char* name);
-extern void mana_symbol_begin_function_registration(bool is_action, mana_symbol_entry* function, mana_type_description* type);
-extern void mana_symbol_commit_function_registration(mana_symbol_entry*);
+extern void mana_symbol_open_function(mana_node* node, const bool is_action);
+extern void mana_symbol_close_function(mana_node* node, const bool is_action);
+
+
 extern void mana_symbol_begin_native_function_registration();
 extern void mana_symbol_commit_native_function_registration(mana_symbol_entry* function, mana_type_description* type);
 
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
 // struct
 extern void mana_symbol_open_structure(void);
 extern mana_type_description* mana_symbol_close_structure(const char* name);
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
 // actor
 /*!
-アクターのシンボル登録を開始します
-@param[in]	symbol	NULLならば新規作成、
+アクターシンボルの登録を開始します
+@param[in]	symbol	NULLならば新規作成
 */
-extern void mana_symbol_open_actor(mana_symbol_entry* symbol);
-extern mana_type_description* mana_symbol_close_actor(char* name, char* parent, mana_type_description* td, int32_t phantom);
+extern void mana_symbol_begin_registration_actor(mana_symbol_entry* symbol);
 
+/*!
+アクターシンボルの登録を確定します
+*/
+extern mana_type_description* mana_symbol_commit_registration_actor(const char* name, const char* parent, mana_type_description* td, const bool phantom);
+
+/*!
+アクターのシンボル登録を開始します
+@param[in]	symbol	
+*/
+extern void mana_symbol_open_actor(const char* name);
+extern void mana_symbol_close_actor();
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 // module
+extern void mana_symbol_begin_registration_module(mana_symbol_entry* symbol);
+extern mana_type_description* mana_symbol_commit_registration_module(const char* name);
+
 extern void mana_symbol_open_module(mana_symbol_entry* symbol);
 extern mana_type_description* mana_symbol_close_module(const char* name);
+
 extern void mana_symbol_extend_module(const char* name);
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
 extern void mana_symbol_set_type(const char* name, mana_type_description* type);
 
 extern int32_t mana_symbol_get_number_of_actors(void);
