@@ -20,13 +20,12 @@
 **/xcuserdata
 **/xcshareddata
 /compiler/.vs/
-/compiler/Debug/
-/compiler/Release/
+/compiler/Win32/Debug/
+/compiler/Win32/Release/
 /compiler/mana_parser.h
 /compiler/mana_parser.c
 /compiler/mana_lexer.c
 /library/.vs/
-/library/Debug/
-/library/Release/
-/document/doxygen/
+/library/Win32/Debug/
+/library/Win32/Release/
 /sample/mana_node.json
