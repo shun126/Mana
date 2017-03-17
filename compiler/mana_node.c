@@ -227,7 +227,7 @@ mana_node* mana_node_create_node(mana_node_type_id id, mana_node* left, mana_nod
 
 	return node;
 }
-
+#if 0
 /*!
  * リーフを作成します
  * @param[in]	name	名称
@@ -301,7 +301,7 @@ mana_node* mana_node_create_leaf(char* name)
 
 	return node;
 }
-
+#endif
 /*!
  * メンバーノードを作成します
  * @param[in]	tree	ノードオブジェクト
@@ -346,7 +346,7 @@ mana_node* mana_node_create_member(mana_node* tree, char* name)
 
 	return tree;
 }
-
+#if 0
 /*!
  * メンバーノードを作成します
  * @param[in]	tree	ノードオブジェクト
@@ -400,6 +400,7 @@ mana_node* mana_node_create_call_member(mana_node* tree, char* name, mana_node* 
 
 	return tree;
 }
+#endif
 
 /*!
  * 整数ノードを作成します
@@ -453,22 +454,6 @@ mana_node* mana_node_create_string(char* string)
 
 	new_node = mana_node_allocate(MANA_NODE_STRING);
 	new_node->digit = mana_data_set(string);
-	new_node->type = mana_type_string;
-
-	return new_node;
-}
-
-/*!
-シンボルノードを作成します
-@param[in]	identifier	シンボル名
-@return		ノードオブジェクト
-*/
-mana_node* mana_node_create_identifier(char* identifier)
-{
-	mana_node* new_node;
-
-	new_node = mana_node_allocate(MANA_NODE_IDENTIFIER);
-	new_node->string = identifier;
 	new_node->type = mana_type_string;
 
 	return new_node;
