@@ -1,4 +1,5 @@
 ﻿#
+*.bak
 *.exe
 *.idb
 *.ilk
@@ -14,6 +15,7 @@
 *.VC.db
 *.suo
 *.sdf
+*.tmp
 *.user
 **/xcuserdata
 **/xcshareddata
@@ -26,6 +28,5 @@
 /library/.vs/
 /library/Debug/
 /library/Release/
-/sample/.vs/
-/sample/Debug/
-/sample/Release/
+/document/doxygen/
+/sample/mana_node.json

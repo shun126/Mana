@@ -22,16 +22,16 @@
 
 typedef struct mana_data_list
 {
-	uint32_t address;							/*!< address */
-	struct mana_data_list* next;					/*!< next mana_data_list block address */
+	uint32_t address;				/*!< address */
+	struct mana_data_list* next;	/*!< next mana_data_list block address */
 } mana_data_list;
 
 typedef struct mana_data
 {
-	mana_data_list* constant;						/*!< Constant list top address */
-	char* buffer;									/*!< Constant pool data address */
-	uint32_t used_size;							/*!< Constant pool size */
-	uint32_t allocated_size;					/*!< Allocated size */
+	mana_data_list* constant;		/*!< Constant list top address */
+	char* buffer;					/*!< Constant pool data address */
+	uint32_t used_size;				/*!< Constant pool size */
+	uint32_t allocated_size;		/*!< Allocated size */
 } mana_data;
 
 static mana_data mana_data_buffer;
@@ -105,7 +105,7 @@ static mana_data_list* mana_data_find(char* text)
  * @param[in]	text	テキスト
  * @return		オフセットアドレス
  */
-uint32_t mana_data_get(char* text)
+uint32_t mana_data_get(const char* text)
 {
 	mana_data_list* list;
 	list = mana_data_find(text);
@@ -116,7 +116,7 @@ uint32_t mana_data_get(char* text)
  * @param[in]	text	テキスト
  * @return		オフセットアドレス
  */
-uint32_t mana_data_set(char* text)
+uint32_t mana_data_set(const char* text)
 {
 	mana_data_list* list;
 	list = mana_data_find(text);

@@ -51,15 +51,15 @@ static struct mana_lexer_status
 {
 	YY_BUFFER_STATE m_State;
 	char* m_pszName;
-	int m_iLine;
+	int32_t m_iLine;
 } mana_lexer_status[MAX_NEST_LEVEL];
 
-static int mana_lexer_status_pointer = -1;
+static int32_t mana_lexer_status_pointer = -1;
 static char* mana_lexer_filename;
-int yylineno;
+int32_t yylineno;
 
 static char* mana_lexer_get_string(void);
-static int mana_lexer_from_binary(char*);
+static int32_t mana_lexer_from_binary(char*);
 
 %}
 
@@ -199,7 +199,7 @@ other		.
 }
 <COMMENT_LINE>{other}	;
 
-<LINE>[0-9]+		yylineno = atoi((char *)yytext);
+<LINE>[0-9]+		yylineno = atoi((char*)yytext);
 <LINE>{string}		{
 	static char filename[_MAX_PATH];
 	if(yyleng > 2)
@@ -283,11 +283,11 @@ static char* mana_lexer_get_string(void)
  * @param	p		text pointer
  * @return	integer number.
  */
-static int mana_lexer_from_binary(char* p)
+static int32_t mana_lexer_from_binary(char* p)
 {
-	int t0;
-	int t1;
-	char *sp;
+	int32_t t0;
+	int32_t t1;
+	char* sp;
 
 	p += 2;		/* '0b'ÁE�ï∂éöóÒÁE��ÉXÉLÉbÉv */
 	sp = p;
@@ -324,7 +324,7 @@ static int mana_lexer_from_binary(char* p)
  * @retval	true	scanning complete.
  * @retval	false	still need scanning.
  */
-int yywrap()
+int32_t yywrap()
 {
 	return(mana_lexer_close());
 }
@@ -335,7 +335,7 @@ int yywrap()
  * @retval	true	success
  * @retval	false	failed
  */
-int mana_lexer_initialize(char* pFilename)
+int32_t mana_lexer_initialize(char* pFilename)
 {
 	mana_pool_initialize();
 	mana_parser_initialize();
@@ -360,11 +360,11 @@ void mana_lexer_finalize(void)
  * @retval	true	file already opened
  * @retval	false	not yet
  */
-static int mana_lexer_is_already_opened(char* path)
+static int32_t mana_lexer_is_already_opened(char* path)
 {
 	static char* pathList[2048];
-	static int pathCounter = 0;
-	int i;
+	static int32_t pathCounter = 0;
+	int32_t i;
 
 	for(i = 0; i < pathCounter; i ++)
 	{
@@ -381,11 +381,11 @@ static int mana_lexer_is_already_opened(char* path)
 /*!
  * open file
  * @param	filename	file name pointer
- * @param	check		ìÒèdÉtÉ@ÉCÉãÉIÁEÉvÉìÉ`ÉFÉbÉN
+ * @param	check		
  * @retval	true	success
  * @retval	false	failed
  */
-int mana_lexer_open(char* filename, int check)
+int32_t mana_lexer_open(char* filename, int32_t check)
 {
 	char path[_MAX_PATH];
 	char drive[_MAX_DRIVE];
@@ -461,7 +461,7 @@ int mana_lexer_open(char* filename, int check)
  * @retval	true	scanning complete.
  * @retval	false	still need scanning.
  */
-int mana_lexer_close()
+int32_t mana_lexer_close()
 {
 	char path[_MAX_PATH];
 	char drive[_MAX_DRIVE];
@@ -497,19 +497,37 @@ int mana_lexer_close()
 }
 
 /*!
- * get current file name
- * @return	current file name pointer
- */
-char* mana_lexer_get_current_filename(void)
+get current file name
+@return	current file name pointer
+*/
+const char* mana_lexer_get_current_filename(void)
 {
 	return mana_lexer_filename;
 }
 
 /*!
- * get current line number
- * @return	current line number
- */
-int mana_lexer_get_current_line(void)
+set current file name
+@param[in]	filename	current file name pointer
+*/
+void mana_lexer_set_current_filename(const char* filename)
+{
+	mana_lexer_filename = filename;
+}
+
+/*!
+get current line number
+@return	current line number
+*/
+int32_t mana_lexer_get_current_line(void)
 {
 	return yylineno;
+}
+
+/*!
+set current line number
+@return	current line number
+*/
+void mana_lexer_set_current_line(const int32_t lineno)
+{
+	yylineno = lineno;
 }

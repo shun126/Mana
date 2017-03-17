@@ -27,6 +27,9 @@ extern "C" {
 #if !defined(___MANA_MALLOC_H___)
 #include "../library/mana_malloc.h"
 #endif
+#if !defined(___MANA_NODE_H___)
+#include "mana_node.h"
+#endif
 #if !defined(___MANA_POOL_H___)
 #include "mana_pool.h"
 #endif
@@ -89,16 +92,15 @@ extern void mana_print_debug(const char* format, ...);
 #define MANA_SAFE_FREE(p) if(p){ free(p); p = 0; }
 
 /* external functions */
-extern void mana_error(char*, int32_t, char* format, ...);
-extern void mana_compile_error(char*, ...);
-extern void mana_compile_warning(char*, ...);
-extern void mana_linker_error(char*, ...);
-extern void mana_linker_warning(char*, ...);
+extern void mana_error(const char* filename, const size_t line, const char* format, ...);
+extern void mana_warning(const char* filename, const size_t line, const char* format, ...);
+extern void mana_compiler_error(char*, ...);
+extern void mana_compiler_warning(char*, ...);
 extern void mana_fatal(char*, ...);
 extern void mana_fatal_no_memory(void);
 
 extern int32_t yyparse(void);
-extern void yyerror(char*);
+extern void yyerror(const char* message);
 extern void mana_parser_initialize(void);
 extern void mana_parser_finalize(void);
 
@@ -108,8 +110,10 @@ extern int32_t mana_lexer_initialize(char*);
 extern void mana_lexer_finalize(void);
 extern int32_t mana_lexer_open(char*, int32_t);
 extern int32_t mana_lexer_close(void);
-extern char* mana_lexer_get_current_filename(void);
+extern const char* mana_lexer_get_current_filename(void);
+extern void mana_lexer_set_current_filename(const char* filename);
 extern int32_t mana_lexer_get_current_line(void);
+extern void mana_lexer_set_current_line(const int32_t lineno);
 
 extern void mana_compile_init(void);
 extern void mana_compile_exit(void);

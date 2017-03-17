@@ -1126,7 +1126,7 @@ static void mana_actor_cmd_print(mana_actor* actor)
 {
 	int32_t number_of_arguments;
 	int32_t message_pointer;
-	int8_t message[1024];
+	char message[1024];
 
 	message_pointer = 0;
 	number_of_arguments = mana_actor_get_integer_from_memory(actor, actor->pc + 1);
