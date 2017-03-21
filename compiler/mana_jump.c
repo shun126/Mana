@@ -4,7 +4,7 @@
  * @file	mana_datalink_generator.h
  * @brief	break,continue,gotoなどのジャンプに関するソースファイル
  * @detail	このファイルはbreak,continue,gotoなどジャンプに関係するソースファイルです。
- * @author	Shun Moriya <shun@mnu.sakura.ne.jp>
+ * @author	Shun Moriya
  * @date	2003-
  */
 

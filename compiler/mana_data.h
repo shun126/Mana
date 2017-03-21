@@ -4,7 +4,7 @@
  * @file	mana_data.h
  * @brief	データセクションに関するヘッダーファイル
  * @detail	このファイルはデータセクションに関係するヘッダーファイルです。
- * @author	Shun Moriya <shun@mnu.sakura.ne.jp>
+ * @author	Shun Moriya
  * @date	2003-
  */
 

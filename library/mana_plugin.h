@@ -4,7 +4,7 @@
  * @file	mana_plugin.h
  * @brief	プラグイン関係のヘッダーファイル
  * @detail	このファイルはプラグイン関係のヘッダーファイルです。
- * @author	Shun Moriya <shun@mnu.sakura.ne.jp>
+ * @author	Shun Moriya
  * @date	2003-
  */
 
