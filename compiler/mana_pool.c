@@ -4,7 +4,7 @@
  * @file	mana_pool.c
  * @brief	文字列格納に関するソースファイル
  * @detail	このファイルは文字列を高速に参照するためのハッシュに関係するソースファイルです。
- * @author	Shun Moriya <shun@mnu.sakura.ne.jp>
+ * @author	Shun Moriya
  * @date	2003-
  */
 

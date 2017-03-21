@@ -4,7 +4,7 @@ mana (compiler)
 @file	mana_linker.c
 @brief	リンクに関するソースファイル
 @detail	このファイルはリンクに関係するソースファイルです。
-@author	Shun Moriya <shun@mnu.sakura.ne.jp>
+@author	Shun Moriya
 @date	2003-
 */
 

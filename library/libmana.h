@@ -4,7 +4,7 @@
  * @file	libmana.h
  * @brief	システム全体に関するヘッダファイル
  * @detail	このファイルはライブラリ全体に関係するヘッダファイルです。
- * @author	Shun Moriya <shun@mnu.sakura.ne.jp>
+ * @author	Shun Moriya
  * @date	2003-
  */
 

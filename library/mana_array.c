@@ -4,7 +4,7 @@
  * @file	mana_array.c
  * @brief	mana_arrayクラスに関するソースファイル
  * @detail	このファイルはmana_arrayクラスに関係するソースファイルです。
- * @author	Shun Moriya <shun@mnu.sakura.ne.jp>
+ * @author	Shun Moriya
  * @date	2003-
  */
 

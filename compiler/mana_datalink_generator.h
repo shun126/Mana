@@ -4,7 +4,7 @@
  * @file	mana_datalink_generator.h
  * @brief	データセクションに関するヘッダファイル
  * @detail	このファイルはデータセクションに関係するヘッダファイルです。
- * @author	Shun Moriya <shun@mnu.sakura.ne.jp>
+ * @author	Shun Moriya
  * @date	2003-
  */
 

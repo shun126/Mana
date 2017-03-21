@@ -7,7 +7,7 @@
  * このファイルはmana_hashクラスに関係するヘッダーファイルです。
  * mana_hashクラスは文字列をキーにした連想配列に関数操作を行ないます。
  *
- * @author	Shun Moriya <shun@mnu.sakura.ne.jp>
+ * @author	Shun Moriya
  * @date	2003-
  */
 

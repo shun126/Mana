@@ -1,10 +1,10 @@
 /*
  * mana (compiler)
  *
- * @file	mana_symbol.c
+ * @file	mana_type.h
  * @brief	型情報に関するヘッダーファイル
  * @detail	このファイルは型情報に関係するヘッダーファイルです。
- * @author	Shun Moriya <shun@mnu.sakura.ne.jp>
+ * @author	Shun Moriya
  * @date	2003-
  */
 
@@ -24,7 +24,9 @@ extern "C" {
 #define BBSZ sizeof(uint8_t)
 #define SBSZ sizeof(int16_t)
 #define IBSZ sizeof(int32_t)
+#define LBSZ sizeof(int64_t)
 #define FBSZ sizeof(float)
+#define DBSZ sizeof(double)
 
 extern void mana_type_initialize(void);
 extern void mana_type_finalize(void);

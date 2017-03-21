@@ -4,7 +4,7 @@
  * @file	mana_version.h
  * @brief	バージョン情報に関するヘッダーファイル
  * @detail	このファイルはバージョン情報に関するヘッダーファイルです。
- * @author	Shun Moriya <shun@mnu.sakura.ne.jp>
+ * @author	Shun Moriya
  * @date	2003-
  */
 

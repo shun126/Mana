@@ -9,7 +9,7 @@
  * 結合します。
  * mana_datalinkクラスは結合されたデータを参照する機能を持っています。
  *
- * @author	Shun Moriya <shun@mnu.sakura.ne.jp>
+ * @author	Shun Moriya
  * @date	2003-
  */
 

@@ -4,7 +4,7 @@ mana (compiler)
 @file	mana_register.h
 @brief	レジスタ割り当てに関するヘッダーファイル
 @detail	このファイルはレジスタ割り当てに関するヘッダーファイルです。
-@author	Shun Moriya <shun@mnu.sakura.ne.jp>
+@author	Shun Moriya
 @date	2003-
 */
 

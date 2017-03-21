@@ -4,7 +4,7 @@ mana (compiler)
 @file	mana_symbol.h
 @brief	レジスタ割り当てに関するヘッダーファイル
 @detail	このファイルはレジスタ割り当てに関するヘッダーファイルです。
-@author	Shun Moriya <shun@mnu.sakura.ne.jp>
+@author	Shun Moriya
 @date	2003-
 */
 
@@ -272,7 +272,7 @@ extern void mana_symbol_commit_native_function_registration(mana_symbol_entry* f
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // struct
 extern void mana_symbol_open_structure(void);
-extern mana_type_description* mana_symbol_close_structure(const char* name);
+extern void mana_symbol_close_structure(const char* name);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // actor
@@ -285,7 +285,7 @@ extern void mana_symbol_begin_registration_actor(mana_symbol_entry* symbol);
 /*!
 アクターシンボルの登録を確定します
 */
-extern mana_type_description* mana_symbol_commit_registration_actor(const char* name, const char* parent, mana_type_description* td, const bool phantom);
+extern void mana_symbol_commit_registration_actor(const char* name, const char* parent, mana_type_description* td, const bool phantom);
 
 /*!
 アクターのシンボル登録を開始します
@@ -297,10 +297,10 @@ extern void mana_symbol_close_actor();
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // module
 extern void mana_symbol_begin_registration_module(mana_symbol_entry* symbol);
-extern mana_type_description* mana_symbol_commit_registration_module(const char* name);
+extern void mana_symbol_commit_registration_module(const char* name);
 
 extern void mana_symbol_open_module(mana_symbol_entry* symbol);
-extern mana_type_description* mana_symbol_close_module(const char* name);
+extern void mana_symbol_close_module(const char* name);
 
 extern void mana_symbol_extend_module(const char* name);
 

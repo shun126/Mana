@@ -4,7 +4,7 @@
  * @file	mana_main.c
  * @brief	メインループに関するソースファイル
  * @detail	このファイルはメインループに関係するソースファイルです。
- * @author	Shun Moriya <shun@mnu.sakura.ne.jp>
+ * @author	Shun Moriya
  * @date	2003-
  */
 
@@ -22,6 +22,9 @@
 #endif
 #if !defined(___MANA_DATALINK_GENERATOR_H___)
 #include "mana_datalink_generator.h"
+#endif
+#if !defined(___MANA_EVALUATOR_H___)
+#include "mana_evaluator.h"
 #endif
 #if !defined(___MANA_JUMP_H___)
 #include "mana_jump.h"
@@ -183,7 +186,7 @@ void mana_warning(const char* filename, const size_t line, const char* format, .
 #endif
 }
 
-void mana_compile_error(char* format, ...)
+void mana_compile_error(const char* format, ...)
 {
 	char string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
 
@@ -198,7 +201,7 @@ void mana_compile_error(char* format, ...)
 	yyerror(string);
 }
 
-void mana_compile_warning(char* format, ...)
+void mana_compile_warning(const char* format, ...)
 {
 	char string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
 
@@ -217,7 +220,7 @@ void mana_compile_warning(char* format, ...)
 #endif
 }
 
-void mana_compiler_error(char* format, ...)
+void mana_compiler_error(const char* format, ...)
 {
 	char string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
 
@@ -232,7 +235,7 @@ void mana_compiler_error(char* format, ...)
 	mana_print("%s: error: %s\n", mana_output_filename, string);
 }
 
-void mana_compiler_warning(char* format, ...)
+void mana_compiler_warning(const char* format, ...)
 {
 	char string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
 
@@ -247,7 +250,7 @@ void mana_compiler_warning(char* format, ...)
 	mana_print("%s: warning: %s\n", mana_output_filename, string);
 }
 
-void mana_fatal(char* format, ...)
+void mana_fatal(const char* format, ...)
 {
 	char string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
 
@@ -320,6 +323,7 @@ int32_t mana_compile(void)
 	mana_type_initialize();
 
 	mana_compiler_initialize();
+	mana_evaluator_initialize();
 	mana_linker_initialize();
 
 	if(mana_variable_header_file)
@@ -483,6 +487,7 @@ ESCAPE:
 	mana_type_finalize();
 
 	mana_compiler_finalize();
+	mana_evaluator_finalize();
 	mana_linker_finalize();
 
 	mana_lexer_finalize();
@@ -519,7 +524,7 @@ static void print_usage()
 	mana_print("            --help          print this message\n");
 	mana_print("            --copyright     print copyright holder\n");
 	mana_print("            --version       print the version\n");
-	mana_print("\n\nReport bugs to <shun@mnu.sakura.ne.jp>\n");
+	mana_print("\n\nReport bugs to\n");
 }
 
 /**

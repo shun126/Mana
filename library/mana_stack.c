@@ -7,7 +7,7 @@
  * このファイルはmana_stackクラスに関係するソースファイルです。
  * mana_stackクラスはmana_actorクラスのスタック操作を行ないます。
  *
- * @author	Shun Moriya <shun@mnu.sakura.ne.jp>
+ * @author	Shun Moriya
  * @date	2003-
  */
 

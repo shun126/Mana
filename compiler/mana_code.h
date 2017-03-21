@@ -4,7 +4,7 @@ mana (compiler)
 @file	mana_code.h
 @brief	命令セクションに関するヘッダーファイル
 @detail	このファイルは命令セクションに関係するヘッダーファイルです。
-@author	Shun Moriya <shun@mnu.sakura.ne.jp>
+@author	Shun Moriya
 @date	2003-
 */
 

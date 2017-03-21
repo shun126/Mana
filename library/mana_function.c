@@ -4,7 +4,7 @@
  * @file	mana_function.c
  * @brief	manaの組み込み関数関係のソースファイル
  * @detail	このファイルはmanaの組み込み関数関係のソースファイルです。
- * @author	Shun Moriya <shun@mnu.sakura.ne.jp>
+ * @author	Shun Moriya
  * @date	2003-
  */
 

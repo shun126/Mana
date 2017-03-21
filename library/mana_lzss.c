@@ -8,7 +8,7 @@
  * 技術評論社 C言語による最新アルゴリズム辞典 から
  * ウィンドウバッファを使用しない方法に改変しました
  *
- * @author	Shun Moriya <shun@mnu.sakura.ne.jp>
+ * @author	Shun Moriya
  * @date	2003-
  */
 

@@ -4,7 +4,7 @@
  * @file	mana_define.c
  * @brief	manaライブラリ内で共通利用されるソースファイル
  * @detail	このファイルはmanaライブラリ内で共通利用されるソースファイルです。
- * @author	Shun Moriya <shun@mnu.sakura.ne.jp>
+ * @author	Shun Moriya
  * @date	2003-
  */
 
