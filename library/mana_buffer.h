@@ -7,7 +7,7 @@
  * このファイルはmana_bufferクラスに関係するヘッダーファイルです。
  * mana_streamクラスは可変長バッファに関する操作を行ないます。
  *
- * @author	Shun Moriya <shun@mnu.sakura.ne.jp>
+ * @author	Shun Moriya
  * @date	2003-
  */
 

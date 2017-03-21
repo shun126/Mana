@@ -4,7 +4,7 @@
  * @file	mana_malloc.c
  * @brief	manaライブラリ内で共通利用されるメモリ管理に関するソースファイル
  * @detail	このファイルはmanaライブラリ内で共通利用されるメモリ管理に関するソースファイルです。
- * @author	Shun Moriya <shun@mnu.sakura.ne.jp>
+ * @author	Shun Moriya
  * @date	2003-
  */
 
