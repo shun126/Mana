@@ -8,7 +8,7 @@
  * mana_frameクラスはmana_actorクラスのローカル変数の操作を行ないます。
  * 本来はスタックで操作したほうが良いのかもしれませんが…
  *
- * @author	Shun Moriya <shun@mnu.sakura.ne.jp>
+ * @author	Shun Moriya
  * @date	2003-
  */
 

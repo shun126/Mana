@@ -4,7 +4,7 @@
  * @file	mana_define.h
  * @brief	manaライブラリ内で共通利用されるヘッダーファイル
  * @detail	このファイルはmanaライブラリ内で共通利用されるヘッダーファイルです。
- * @author	Shun Moriya <shun@mnu.sakura.ne.jp>
+ * @author	Shun Moriya
  * @date	2003-
  */
 
