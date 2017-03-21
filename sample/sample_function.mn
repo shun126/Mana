@@ -11,8 +11,51 @@ void test()
 	short array[10];
 	//print("test_sort: %d\n", test_sort(array, 10));
 
+	test_if();
+
 	// Forward declaration
 	test_switch_while();
+}
+
+void test_if()
+{
+	if(true)
+	{
+		print("true");
+	}
+	else
+	{
+		print("false");
+	}
+
+	vec3 vector;
+	vector.x = 0;
+	vector.y = 1;
+	vector.z = 2;
+	vector.w = 2;
+}
+
+void test_switch_while()
+{
+	int count = 4;
+	while(count)
+	{
+		switch(count)
+		{
+		case 1:
+			//print("one\n");
+			break;
+		case 2:
+			//print("two\n");
+			break;
+		case 3:
+			//print("three\n");
+			break;
+		default:
+			//print("ready\n");
+		}
+		count--;
+	}
 }
 
 int test_sort(short array[10], int size)
@@ -48,27 +91,4 @@ int test_sort(short array[10], int size)
 	}
 
 	return count;
-}
-
-void test_switch_while()
-{
-	int count = 4;
-	while(count)
-	{
-		switch(count)
-		{
-		case 1:
-			//print("one\n");
-			break;
-		case 2:
-			//print("two\n");
-			break;
-		case 3:
-			//print("three\n");
-			break;
-		default:
-			//print("ready\n");
-		}
-		count--;
-	}
 }

@@ -100,6 +100,7 @@
     <ClCompile Include="mana_compiler.c" />
     <ClCompile Include="mana_data.c" />
     <ClCompile Include="mana_datalink_generator.c" />
+    <ClCompile Include="mana_evaluator.c" />
     <ClCompile Include="mana_jump.c" />
     <ClCompile Include="mana_lexer.c" />
     <ClCompile Include="mana_linker.c" />
@@ -138,6 +139,7 @@
     <ClInclude Include="mana_compiler.h" />
     <ClInclude Include="mana_data.h" />
     <ClInclude Include="mana_datalink_generator.h" />
+    <ClInclude Include="mana_evaluator.h" />
     <ClInclude Include="mana_jump.h" />
     <ClInclude Include="mana_linker.h" />
     <ClInclude Include="mana_main.h" />

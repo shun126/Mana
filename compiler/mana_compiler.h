@@ -4,7 +4,7 @@ mana (compiler)
 @file	mana_compile.h
 @brief	コンパイルセクションに関するソースファイル
 @detail	このファイルはコンパイルセクションに関係するソースファイルです。
-@author	Shun Moriya <shun@mnu.sakura.ne.jp>
+@author	Shun Moriya
 @date	2017-
 */
 
@@ -33,12 +33,6 @@ MANA_NODE_CALLノードを解決する時に呼ばれるコールバック関数を登録します
 @param[in]	function	コールバック関数
 */
 extern void mana_compiler_add_event(const char* name, mana_compiler_event_funtion_type function);
-
-/*!
-ノードを辿りながらシンボル情報を登録します（ただし中間言語に対して評価しません）
-@param	node	ノード
-*/
-extern void mana_compiler_generate_symbol(mana_node* node);
 
 /*!
 ノードを辿りながら中間言語に翻訳します
