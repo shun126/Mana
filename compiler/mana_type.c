@@ -1,10 +1,10 @@
 /*
  * mana (compiler)
  *
- * @file	mana_symbol.c
+ * @file	mana_type.c
  * @brief	型情報に関するソースファイル
  * @detail	このファイルは型情報に関係するソースファイルです。
- * @author	Shun Moriya <shun@mnu.sakura.ne.jp>
+ * @author	Shun Moriya
  * @date	2003-
  */
 

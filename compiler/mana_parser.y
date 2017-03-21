@@ -5,7 +5,7 @@ mana (compiler)
 @file	mana_parser.y
 @brief	意味解析に関するソースファイル
 @detail	このファイルは意味解析ノードに関係するソースファイルです。
-@author	Shun Moriya <shun@mnu.sakura.ne.jp>
+@author	Shun Moriya
 @date	2003-
 */
 
@@ -14,6 +14,9 @@ mana (compiler)
 #endif
 #if !defined(___MANA_LINKER_H___)
 #include "mana_linker.h"
+#endif
+#if !defined(___MANA_EVALUATOR_H___)
+#include "mana_evaluator.h"
 #endif
 #if !defined(___MANA_MAIN_H___)
 #include "mana_main.h"
@@ -90,7 +93,7 @@ int yynerrs;
 program			: line
 					{
 						mana_node_dump($1);
-						mana_compiler_generate_symbol($1);
+						mana_evaluator_evaluate($1);
 						mana_compiler_genearte_code($1, true);
 						mana_linker_resolve_address();
 					}
