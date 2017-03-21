@@ -4,7 +4,7 @@
   * @file	mana_malloc.h
   * @brief	manaライブラリ内で共通利用されるメモリ管理に関するヘッダーファイル
   * @detail	このファイルはmanaライブラリ内で共通利用されるメモリ管理に関するヘッダーファイルです。
-  * @author	Shun Moriya <shun@mnu.sakura.ne.jp>
+  * @author	Shun Moriya
   * @date	2003-
   */
 

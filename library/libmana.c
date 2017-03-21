@@ -4,7 +4,7 @@
  * @file	libmana.c
  * @brief	システム全体に関するソースファイル
  * @detail	このファイルはライブラリ全体に関係するソースファイルです。
- * @author	Shun Moriya <shun@mnu.sakura.ne.jp>
+ * @author	Shun Moriya
  * @date	2003-
  */
 

@@ -4,7 +4,7 @@
  * @file	mana_info.h
  * @brief	manaコンパイラとmanaライブラリで共通利用するヘッダーファイル
  * @detail	このファイルはmanaコンパイラとmanaライブラリで共通利用するヘッダーファイルです。
- * @author	Shun Moriya <shun@mnu.sakura.ne.jp>
+ * @author	Shun Moriya
  * @date	2003-
  */
 

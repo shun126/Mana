@@ -5,7 +5,7 @@
  * @file	mana_lexer.l
  * @brief	字句解析に関するソースファイル
  * @detail	字句解析に関係するソースファイルです。
- * @author	Shun Moriya <shun@mnu.sakura.ne.jp>
+ * @author	Shun Moriya
  * @date	2003-
  */
 

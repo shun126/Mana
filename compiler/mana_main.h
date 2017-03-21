@@ -4,7 +4,7 @@
  * @file	mana_main.h
  * @brief	メインループに関するヘッダファイル
  * @detail	このファイルはメインループに関係するヘッダファイルです。
- * @author	Shun Moriya <shun@mnu.sakura.ne.jp>
+ * @author	Shun Moriya
  * @date	2003-
  */
 
@@ -94,9 +94,9 @@ extern void mana_print_debug(const char* format, ...);
 /* external functions */
 extern void mana_error(const char* filename, const size_t line, const char* format, ...);
 extern void mana_warning(const char* filename, const size_t line, const char* format, ...);
-extern void mana_compiler_error(char*, ...);
-extern void mana_compiler_warning(char*, ...);
-extern void mana_fatal(char*, ...);
+extern void mana_compiler_error(const char* format, ...);
+extern void mana_compiler_warning(const char* format, ...);
+extern void mana_fatal(const char* format, ...);
 extern void mana_fatal_no_memory(void);
 
 extern int32_t yyparse(void);

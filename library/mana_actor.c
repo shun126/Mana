@@ -8,7 +8,7 @@
  * mana_actorクラスは更新やリクエストなどの制御、外部関数の呼び出しなどの
  * 実行環境を表しています。
  *
- * @author	Shun Moriya <shun@mnu.sakura.ne.jp>
+ * @author	Shun Moriya
  * @date	2003-
  */
 

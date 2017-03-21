@@ -4,7 +4,7 @@
  * @file	mana_symbol.c
  * @brief	レジスタ割り当てに関するソースファイル
  * @detail	このファイルはレジスタ割り当てに関するソースファイルです。
- * @author	Shun Moriya <shun@mnu.sakura.ne.jp>
+ * @author	Shun Moriya
  * @date	2003-
  */
 
@@ -739,7 +739,7 @@ void mana_symbol_open_structure(void)
 	mana_symbol_actor_memory_address = 0;
 }
 
-mana_type_description* mana_symbol_close_structure(const char* name)
+void mana_symbol_close_structure(const char* name)
 {
 	mana_symbol_entry* symbol;
 	mana_type_description* type;
@@ -775,7 +775,7 @@ mana_type_description* mana_symbol_close_structure(const char* name)
 	if(mana_variable_header_file)
 		mana_symbol_print_footer(name, type);
 
-	return type;
+	mana_symbol_set_type(name, type);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -827,7 +827,7 @@ void mana_symbol_begin_registration_actor(mana_symbol_entry* symbol)
 	mana_symbol_actor_memory_address = (symbol && symbol->type) ? symbol->type->memory_size : 0;
 }
 
-mana_type_description* mana_symbol_commit_registration_actor(const char* name, const char* parent, mana_type_description* td, const bool phantom)
+void mana_symbol_commit_registration_actor(const char* name, const char* parent, mana_type_description* td, const bool phantom)
 {
 	mana_symbol_entry* symbol;
 	mana_type_description* type;
@@ -890,11 +890,12 @@ SKIP:
 		for (nested_type = td; nested_type->component; nested_type = nested_type->component)
 			;
 		nested_type->component = type;
-		return td;
+
+		mana_symbol_set_type(name, td);
 	}
 	else
 	{
-		return type;
+		mana_symbol_set_type(name, type);
 	}
 }
 
@@ -996,7 +997,7 @@ void mana_symbol_begin_registration_module(mana_symbol_entry* symbol)
 	mana_symbol_actor_memory_address = 0;
 }
 
-mana_type_description* mana_symbol_commit_registration_module(const char* name)
+void mana_symbol_commit_registration_module(const char* name)
 {
 	mana_type_description* type;
 
@@ -1017,16 +1018,15 @@ mana_type_description* mana_symbol_commit_registration_module(const char* name)
 
 	type->memory_size = mana_symbol_align_size(mana_symbol_actor_memory_address, IBSZ);
 
-	return type;
+	mana_symbol_set_type(name, type);
 }
 
 void mana_symbol_open_module(mana_symbol_entry* symbol)
 {
 }
 
-mana_type_description* mana_symbol_close_module(const char* name)
+void mana_symbol_close_module(const char* name)
 {
-	return NULL;
 }
 
 void mana_symbol_extend_module(const char* name)

@@ -4,7 +4,7 @@
  * @file	mana_node.c
  * @brief	意味解析ノードに関するヘッダーファイル
  * @detail	このファイルは意味解析ノードに関係するヘッダーファイルです。
- * @author	Shun Moriya <shun@mnu.sakura.ne.jp>
+ * @author	Shun Moriya
  * @date	2003-
  */
 
