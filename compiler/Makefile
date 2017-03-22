@@ -21,8 +21,8 @@ LXFLAGS	= -8 -F
 CP      = cp -f
 RM	= rm -f
 
-SOURCES	= mana_code.c mana_compiler.c mana_data.c mana_datalink_generator.c mana_jump.c mana_linker.c mana_main.c mana_node.c mana_pool.c mana_register.c mana_symbol.c mana_type.c mana_parser.y mana_lexer.l
-OBJECTS	= mana_code.o mana_compiler.o mana_data.o mana_datalink_generator.o mana_jump.o mana_linker.o mana_main.o mana_node.o mana_pool.o mana_register.o mana_symbol.o mana_type.o mana_parser.o mana_lexer.o
+SOURCES	= mana_code.c mana_compiler.c mana_data.c mana_datalink_generator.c mana_evaluator.c mana_jump.c mana_linker.c mana_main.c mana_node.c mana_pool.c mana_register.c mana_symbol.c mana_type.c mana_parser.y mana_lexer.l
+OBJECTS	= mana_code.o mana_compiler.o mana_data.o mana_datalink_generator.o mana_evaluator.o mana_jump.o mana_linker.o mana_main.o mana_node.o mana_pool.o mana_register.o mana_symbol.o mana_type.o mana_parser.o mana_lexer.o
 
 SECOUND	= mana_parser.c mana_parser.h mana_lexer.c
 
