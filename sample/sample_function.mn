@@ -7,6 +7,27 @@ native int nativeFunction(int a0, float a1);
 
 void test()
 {
+	TestStruct2 hoge[2];
+	hoge[1].realValue = 1.5;
+
+	char i;
+	i = 1;
+	short j;
+	j = 65535;
+	int k;
+	k = 0xFFFFFF;
+	float l;
+	l = 4.0;
+	l = 5;
+	l = i;
+
+	short array[10];
+	array = array;
+}
+
+/*
+void test()
+{
 	// Forward declaration
 	short array[10];
 	//print("test_sort: %d\n", test_sort(array, 10));
@@ -92,3 +113,4 @@ int test_sort(short array[10], int size)
 
 	return count;
 }
+*/
