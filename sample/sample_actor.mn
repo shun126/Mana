@@ -3,6 +3,18 @@ mana (script)
 Copyright (c) 2003 Shun Moriya <shun@mnu.sakura.ne.jp>
 */
 
+actor TestActor1
+{
+	action init
+	{
+	}
+
+	action main
+	{
+	}
+}
+
+/*
 // actor declarations
 actor TestActor
 {
@@ -75,3 +87,4 @@ phantom Phantom
 	{
 	}
 }
+*/
