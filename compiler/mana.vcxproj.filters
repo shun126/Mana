@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="mana_code.c" />
+    <ClCompile Include="mana_compiler.c" />
+    <ClCompile Include="mana_data.c" />
+    <ClCompile Include="mana_datalink_generator.c" />
+    <ClCompile Include="mana_evaluator.c" />
+    <ClCompile Include="mana_jump.c" />
+    <ClCompile Include="mana_lexer.c" />
+    <ClCompile Include="mana_linker.c" />
+    <ClCompile Include="mana_main.c" />
+    <ClCompile Include="mana_node.c" />
+    <ClCompile Include="mana_parser.c" />
+    <ClCompile Include="mana_pool.c" />
+    <ClCompile Include="mana_register.c" />
+    <ClCompile Include="mana_symbol.c" />
+    <ClCompile Include="mana_type.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="mana_code.h" />
+    <ClInclude Include="mana_compiler.h" />
+    <ClInclude Include="mana_data.h" />
+    <ClInclude Include="mana_datalink_generator.h" />
+    <ClInclude Include="mana_evaluator.h" />
+    <ClInclude Include="mana_jump.h" />
+    <ClInclude Include="mana_linker.h" />
+    <ClInclude Include="mana_main.h" />
+    <ClInclude Include="mana_node.h" />
+    <ClInclude Include="mana_parser.h" />
+    <ClInclude Include="mana_pool.h" />
+    <ClInclude Include="mana_register.h" />
+    <ClInclude Include="mana_symbol.h" />
+    <ClInclude Include="mana_type.h" />
+    <ClInclude Include="mana_version.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="mana_lexer.l" />
+    <CustomBuild Include="mana_parser.y" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="mana_version.json" />
+    <None Include="mana_version.rb" />
+    <None Include="..\sample\sample.mn">
+      <Filter>sample</Filter>
+    </None>
+    <None Include="..\sample\sample_actor.mn">
+      <Filter>sample</Filter>
+    </None>
+    <None Include="..\sample\sample_const.mn">
+      <Filter>sample</Filter>
+    </None>
+    <None Include="..\sample\sample_function.mn">
+      <Filter>sample</Filter>
+    </None>
+    <None Include="..\sample\sample_struct.mn">
+      <Filter>sample</Filter>
+    </None>
+    <None Include="..\sample\sample_variable.mn">
+      <Filter>sample</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="sample">
+      <UniqueIdentifier>{5a2e2d75-6317-49c2-8204-c5eb801d81ad}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\sample\sample.log">
+      <Filter>sample</Filter>
+    </Text>
+  </ItemGroup>
+</Project>
