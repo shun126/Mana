@@ -251,7 +251,7 @@ extern mana_symbol_entry* mana_symbol_create_const_int(char*, int32_t);
 extern mana_symbol_entry* mana_symbol_create_const_float(char*, float);
 extern mana_symbol_entry* mana_symbol_create_const_string(char*, char*);
 //extern mana_symbol_entry* mana_symbol_create_type(char*);
-extern mana_symbol_entry* mana_symbol_create_identification(const char*, mana_type_description*, const int32_t static_variable);
+extern mana_symbol_entry* mana_symbol_create_identification(const char* name, mana_type_description* type , const bool static_variable);
 extern mana_symbol_entry* mana_symbol_create_label(char*);
 
 extern void mana_symbol_destroy(char* name);
