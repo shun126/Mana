@@ -264,6 +264,7 @@ static int32_t mana_compiler_count_declaration_argument(int32_t count, mana_node
 ////////////////////////////////////////////////////////////////////////////////
 // 以下は 関数内のシンボルを解決する 関数郡
 ////////////////////////////////////////////////////////////////////////////////
+#if 0
 static void mana_compiler_resolve_symbol(mana_node* node)
 {
 	if(node == NULL)
@@ -393,6 +394,161 @@ static void mana_compiler_resolve_symbol(mana_node* node)
 	// 子ノードから型を継承する
 	mana_compiler_inherit_type_from_child_node(node);
 }
+#else
+/*!
+ノードを横断しながらシンボル情報を解決します
+@param[in]	node	親ノード
+*/
+static void mana_compiler_resolve_symbol(mana_node* node)
+{
+	if (node == NULL)
+		return;
+
+DO_RECURSIVE:
+
+	mana_compiler_resolve_symbol(node->left);
+	mana_compiler_resolve_symbol(node->right);
+
+	switch (node->id)
+	{
+		// 特に処理を行わないノード
+	case MANA_NODE_NEWLINE:
+		MANA_ASSERT(node->body == NULL);
+		break;
+
+	case MANA_NODE_IDENTIFIER:
+		mana_compiler_resolve_identifier(node);
+		break;
+
+		// 定数定義に関するノード
+	case MANA_NODE_DEFINE_ALIAS:
+	case MANA_NODE_DEFINE_CONSTANT:
+	case MANA_NODE_UNDEFINE_CONSTANT:
+
+		// メモリレイアウトに関するノード									
+	case MANA_NODE_DECLARE_ALLOCATE:
+	case MANA_NODE_DECLARE_STATIC:
+
+		// 構造に関するノード
+	case MANA_NODE_DECLARE_ACTOR:
+	case MANA_NODE_DECLARE_EXTEND:
+	case MANA_NODE_DECLARE_MODULE:
+	case MANA_NODE_DECLARE_PHANTOM:
+	case MANA_NODE_DECLARE_STRUCT:
+
+		// 関数宣言に関するノード									
+	case MANA_NODE_DECLARE_ACTION:
+	case MANA_NODE_DECLARE_ARGUMENT:
+	case MANA_NODE_DECLARE_FUNCTION:
+	case MANA_NODE_DECLARE_NATIVE_FUNCTION:
+		MANA_BUG("illigal node detect");
+		break;
+
+		// 変数宣言に関するノード									
+	case MANA_NODE_DECLARATOR:
+		break;
+
+	case MANA_NODE_DECLARE_VARIABLE:
+		break;
+
+	case MANA_NODE_TYPE_DESCRIPTION:
+		break;
+
+	case MANA_NODE_VARIABLE_SIZE:
+		MANA_ASSERT(node->left);
+		MANA_ASSERT(node->right);
+		abort();
+		break;
+
+		///////////////////////////////////////////////////////////////////////
+		// 以下はシンボル生成を行わないノード
+		///////////////////////////////////////////////////////////////////////
+
+		// ブロックを伴う制御に関するノード
+	case MANA_NODE_BLOCK:
+	case MANA_NODE_BREAK:
+	case MANA_NODE_CASE:
+	case MANA_NODE_CONTINUE:
+	case MANA_NODE_DEFAULT:
+	case MANA_NODE_DO:
+	case MANA_NODE_FOR:
+	case MANA_NODE_GOTO:
+	case MANA_NODE_HALT:
+	case MANA_NODE_IF:
+	case MANA_NODE_LABEL:
+	case MANA_NODE_LOCK:
+	case MANA_NODE_LOOP:
+	case MANA_NODE_RETURN:
+	case MANA_NODE_ROLLBACK:
+	case MANA_NODE_SWITCH:
+	case MANA_NODE_WHILE:
+
+		// 複数の命令に展開されるノード									
+	case MANA_NODE_COMPLY:
+	case MANA_NODE_JOIN:
+	case MANA_NODE_MEMOP:
+	case MANA_NODE_PRINT:
+	case MANA_NODE_REFUSE:
+	case MANA_NODE_REQUEST:
+	case MANA_NODE_STRING:
+	case MANA_NODE_VARIABLE:
+	case MANA_NODE_YIELD:
+
+		// 中間言語と対になるノード
+	case MANA_NODE_SIZEOF:
+	case MANA_NODE_ARRAY:
+	case MANA_NODE_ASSIGN:
+	case MANA_NODE_CONST:
+	case MANA_NODE_EXPRESSION_IF:
+	case MANA_NODE_MEMBER_FUNCTION:
+	case MANA_NODE_MEMBER_VARIABLE:
+	case MANA_NODE_CALL:
+	case MANA_NODE_CALL_ARGUMENT:
+	case MANA_NODE_ADD:
+	case MANA_NODE_SUB:
+	case MANA_NODE_MUL:
+	case MANA_NODE_DIV:
+	case MANA_NODE_REM:
+	case MANA_NODE_NEG:
+	case MANA_NODE_POW:
+	case MANA_NODE_NOT:
+	case MANA_NODE_AND:
+	case MANA_NODE_OR:
+	case MANA_NODE_XOR:
+	case MANA_NODE_LSH:
+	case MANA_NODE_RSH:
+	case MANA_NODE_LS:
+	case MANA_NODE_LE:
+	case MANA_NODE_EQ:
+	case MANA_NODE_NE:
+	case MANA_NODE_GE:
+	case MANA_NODE_GT:
+	case MANA_NODE_I2F:
+	case MANA_NODE_F2I:
+	case MANA_NODE_LOR:
+	case MANA_NODE_LAND:
+	case MANA_NODE_LNOT:
+	case MANA_NODE_SENDER:
+	case MANA_NODE_SELF:
+	case MANA_NODE_PRIORITY:
+		break;
+
+	default:
+		MANA_BUG("illigal node detect");
+	}
+
+	// 子ノードから型を継承する
+	mana_evaluator_inherit_type_from_child_node(node);
+
+	if (node->next)
+	{
+		// 末尾再帰なのでgotoにて処理する
+		//mana_compiler_resolve_symbol(node->next);
+		node = node->next;
+		goto DO_RECURSIVE;
+	}
+}
+#endif
 
 ////////////////////////////////////////////////////////////////////////////////
 // 以下は ノードの型にあわせて型変換をするノードを差し込む関数郡
@@ -783,6 +939,13 @@ static void mana_compiler_automatic_cast(mana_node* node)
 		mana_compiler_resolve_variable_description(node, MANA_MEMORY_TYPE_NORMAL);
 		break;
 
+	case MANA_NODE_MEMBER_VARIABLE:
+#if 0
+		mana_compiler_resolve_identifier(node);
+		node->type = node->symbol->type;
+#endif
+		break;
+
 	default:
 		break;
 	}
@@ -924,10 +1087,10 @@ static void mana_compiler_return(mana_symbol_entry* func, mana_node* tree)
 	else
 	{
 		/* 自動キャスト */
-		tree = mana_node_cast(type, tree);
+		tree->left = mana_node_cast(type, tree->left);
 
 		/* 型の検証 */
-		mana_type_compatible(type, tree->type);
+		mana_type_compatible(type, tree->left->type);
 
 		/* ノードの評価 */
 		const int32_t in_depth = mana_symbol_open_block(false);
@@ -1229,54 +1392,67 @@ static void mana_compier_generate_hogehoge(mana_node* node)
 	MANA_ASSERT(node);
 	MANA_ASSERT(node->symbol);
 
-	switch (node->symbol->class_type)
-	{
-	case MANA_CLASS_TYPE_ALIAS:
-		if (!node->symbol->used)
-		{
-			node->symbol->address = mana_datalink_generator_append(node->symbol->string);
-			node->symbol->type = mana_type_get(MANA_DATA_TYPE_INT);
-			node->symbol->used = 1;
-		}
-		mana_compiler_generate_const_int(node->symbol->type->tcons, node->symbol->address);
-		break;
-
-	case MANA_CLASS_TYPE_CONSTANT_INT:
-		node->symbol->type = mana_type_get(MANA_DATA_TYPE_INT);
-		mana_compiler_generate_const_int(node->symbol->type->tcons, node->symbol->address);
-		break;
-
-	case MANA_CLASS_TYPE_CONSTANT_FLOAT:
-		node->symbol->type = mana_type_get(MANA_DATA_TYPE_FLOAT);
-		mana_compiler_generate_const_int(node->symbol->type->tcons, node->symbol->address);
-		break;
-
-	case MANA_CLASS_TYPE_CONSTANT_STRING:
-		node->symbol->type = mana_type_string;
-		mana_compiler_generate_const_int(node->symbol->type->tcons, node->symbol->address);
-		break;
-
-	case MANA_CLASS_TYPE_VARIABLE_STATIC:
-	case MANA_CLASS_TYPE_VARIABLE_GLOBAL:
-	case MANA_CLASS_TYPE_VARIABLE_ACTOR:
-	case MANA_CLASS_TYPE_VARIABLE_LOCAL:
-		mana_symbol_is_valid_variable(node->symbol);
-		mana_compiler_resolve_load(node);
-		break;
-
-	case MANA_CLASS_TYPE_TYPEDEF:
-		mana_compiler_resolve_load(node);
-		break;
-
-	case MANA_CLASS_TYPE_NEW_SYMBOL:
-
-	default:
-		mana_compile_error("illigal data type");
-		break;
-	}
 }
 
 
+////////////////////////////////////////////////////////////////////////////////
+/*!
+式の評価
+@param	tree			式のmana_node
+@param	enable_assign	trueならば代入式、falseならばそれ以外
+*/
+void mana_compiler_expression(mana_node* tree, int32_t enable_assign)
+{
+	if (!tree)
+		return;
+
+	mana_compiler_resolve_symbol(tree);
+
+	const int32_t in_depth = mana_symbol_open_block(false);
+
+	if (enable_assign)
+	{
+		if (tree->id != MANA_NODE_ASSIGN && tree->id != MANA_NODE_CALL && tree->id != MANA_NODE_F2I)
+			mana_compile_error(tree, "illegal expression in write-statement");
+	}
+	else {
+		if (tree->id == MANA_NODE_ASSIGN)
+			mana_compile_error(tree, "illegal expression in write-statement");
+	}
+
+	mana_compiler_genearte_code(tree, true);
+
+	if (enable_assign && tree->id == MANA_NODE_CALL && tree->type)
+	{
+		switch (tree->type->tcons)
+		{
+		case MANA_DATA_TYPE_VOID:
+			break;
+
+		case MANA_DATA_TYPE_CHAR:
+		case MANA_DATA_TYPE_SHORT:
+		case MANA_DATA_TYPE_INT:
+		case MANA_DATA_TYPE_FLOAT:
+		case MANA_DATA_TYPE_ACTOR:
+			mana_code_set_opecode(MANA_IL_REMOVE);
+			break;
+
+		case MANA_DATA_TYPE_STRUCT:
+			mana_code_set_opecode_and_operand(MANA_IL_REMOVE_DATA, tree->type->memory_size);
+			break;
+
+		default:
+			MANA_BUG("illegal type of expression");
+			break;
+		}
+	}
+
+	const int32_t out_depth = mana_symbol_close_block();
+	MANA_VERIFY(in_depth == out_depth, "ブロックの深さが一致しません in:%d out:%d", in_depth, out_depth);
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
 void mana_compiler_genearte_code(mana_node* node, int32_t enable_load)
 {
 	if (!node)
@@ -1297,7 +1473,68 @@ DO_RECURSIVE:
 		mana_compiler_resolve_identifier(node);
 		if (node->symbol)
 			node->type = node->symbol->type;
-		mana_compier_generate_hogehoge(node);
+		//mana_compier_generate_hogehoge(node);
+		{
+			switch (node->symbol->class_type)
+			{
+			case MANA_CLASS_TYPE_ALIAS:
+				if (!node->symbol->used)
+				{
+					node->symbol->address = mana_datalink_generator_append(node->symbol->string);
+					node->symbol->type = mana_type_get(MANA_DATA_TYPE_INT);
+					node->symbol->used = 1;
+				}
+				mana_compiler_generate_const_int(node->symbol->type->tcons, node->symbol->address);
+				break;
+
+			case MANA_CLASS_TYPE_CONSTANT_INT:
+				node->symbol->type = mana_type_get(MANA_DATA_TYPE_INT);
+				mana_compiler_generate_const_int(node->symbol->type->tcons, node->symbol->address);
+				break;
+
+			case MANA_CLASS_TYPE_CONSTANT_FLOAT:
+				node->symbol->type = mana_type_get(MANA_DATA_TYPE_FLOAT);
+				mana_compiler_generate_const_int(node->symbol->type->tcons, node->symbol->address);
+				break;
+
+			case MANA_CLASS_TYPE_CONSTANT_STRING:
+				node->symbol->type = mana_type_string;
+				mana_compiler_generate_const_int(node->symbol->type->tcons, node->symbol->address);
+				break;
+
+			case MANA_CLASS_TYPE_VARIABLE_STATIC:
+				mana_symbol_is_valid_variable(node->symbol);
+				mana_code_set_opecode_and_operand(MANA_IL_LOAD_STATIC_ADDRESS, (node->symbol)->address);
+				break;
+
+			case MANA_CLASS_TYPE_VARIABLE_GLOBAL:
+				mana_symbol_is_valid_variable(node->symbol);
+				mana_code_set_opecode_and_operand(MANA_IL_LOAD_GLOBAL_ADDRESS, (node->symbol)->address);
+				break;
+
+			case MANA_CLASS_TYPE_VARIABLE_ACTOR:
+				mana_symbol_is_valid_variable(node->symbol);
+				mana_code_set_opecode_and_operand(MANA_IL_LOAD_SELF_ADDRESS, (node->symbol)->address);
+				break;
+
+			case MANA_CLASS_TYPE_VARIABLE_LOCAL:
+				mana_symbol_is_valid_variable(node->symbol);
+				mana_code_set_opecode_and_operand(MANA_IL_LOAD_FRAME_ADDRESS, (node->symbol)->address);
+				break;
+
+			case MANA_CLASS_TYPE_TYPEDEF:
+				break;
+
+			case MANA_CLASS_TYPE_NEW_SYMBOL:
+
+			default:
+				mana_compile_error("illigal data type");
+				break;
+			}
+
+			if(enable_load)
+				mana_compiler_resolve_load(node);
+		}
 		break;
 
 		// 定数定義に関するノード									
@@ -1382,7 +1619,7 @@ DO_RECURSIVE:
 			mana_compiler_genearte_code(node->body, enable_load);
 			mana_symbol_close_function(node, false);
 
-			mana_symbol_close_block(false);
+			mana_symbol_close_block();
 
 			mana_function_symbol_entry_pointer = NULL;
 		}
@@ -1433,7 +1670,7 @@ DO_RECURSIVE:
 
 	case MANA_NODE_CASE:
 		mana_jump_switch_case(node->left);
-		if(node->left && node->left->type) node->type = node->left->type;
+		if (node->left && node->left->type) node->type = node->left->type;
 		mana_compiler_genearte_code(node->right, enable_load);
 		break;
 
@@ -1448,7 +1685,7 @@ DO_RECURSIVE:
 	case MANA_NODE_DO:
 		{
 			mana_jump_open_chain(MANA_JUMP_CHAIN_STATE_DO);
-			const int address = mana_code_get_pc();
+			const int32_t address = mana_code_get_pc();
 			mana_compiler_genearte_code(node->left, enable_load);
 			mana_jump_close_continue_only();
 
@@ -1465,9 +1702,10 @@ DO_RECURSIVE:
 			mana_jump_open_chain(MANA_JUMP_CHAIN_STATE_FOR);
 			//$$ = mana_code_get_pc();
 
-			mana_compiler_genearte_code(node->left, enable_load);
+			//mana_compiler_genearte_code(node->left, enable_load);
 			mana_jump_break(mana_compiler_condition(node->left, true));
 
+			mana_compiler_genearte_code(node->body, enable_load);
 
 			mana_jump_close_continue_only();
 			mana_compiler_expression(node->right, true);
@@ -1489,13 +1727,13 @@ DO_RECURSIVE:
 
 	case MANA_NODE_IF:
 		{
-			int address = mana_compiler_condition(node->left, true);
-			mana_compiler_genearte_code(node->body, enable_load);
-			if(node->right)
+			int32_t address = mana_compiler_condition(node->left, true);
+			mana_compiler_genearte_code(node->right, enable_load);
+			if (node->body)
 			{
-				const int else_begin_address = mana_code_set_opecode_and_operand(MANA_IL_BRA, -1);
+				const int32_t else_begin_address = mana_code_set_opecode_and_operand(MANA_IL_BRA, -1);
 				mana_code_replace_all(address, mana_code_get_pc());
-				mana_compiler_genearte_code(node->right, enable_load);
+				mana_compiler_genearte_code(node->body, enable_load);
 				address = else_begin_address;
 			}
 			mana_code_replace_all(address, mana_code_get_pc());
@@ -1520,7 +1758,7 @@ DO_RECURSIVE:
 	case MANA_NODE_LOOP:
 		{
 			mana_jump_open_chain(MANA_JUMP_CHAIN_STATE_LOOP);
-			const int address = mana_code_get_pc();
+			const int32_t address = mana_code_get_pc();
 			mana_compiler_genearte_code(node->left, enable_load);
 			mana_code_set_opecode_and_operand(MANA_IL_BRA, address);
 			mana_jump_close_chain();
@@ -1542,7 +1780,7 @@ DO_RECURSIVE:
 	case MANA_NODE_SWITCH:
 		{
 			mana_compiler_expression(node->left, false);
-			const int address = mana_code_get_pc();
+			const int32_t address = mana_code_get_pc();
 			mana_jump_open_chain(MANA_JUMP_CHAIN_STATE_SWITCH);
 			mana_code_set_opecode_and_operand(MANA_IL_BRA, -1);
 			mana_jump_open_switch(node->left->type);
@@ -1578,7 +1816,7 @@ DO_RECURSIVE:
 		break;
 
 	case MANA_NODE_PRINT:
-		mana_compiler_call_print(node->left); 
+		mana_compiler_call_print(node->left);
 		break;
 
 	case MANA_NODE_REFUSE:
@@ -1651,7 +1889,7 @@ DO_RECURSIVE:
 		break;
 
 	case MANA_NODE_ASSIGN:
-		//mana_compiler_automatic_cast(node);
+		mana_compiler_automatic_cast(node);
 		mana_compiler_genearte_code(node->right, enable_load);
 		mana_compiler_genearte_code(node->left, false);
 		mana_compiler_resolve_store(node->left);
@@ -1717,6 +1955,9 @@ DO_RECURSIVE:
 		MANA_ASSERT(node->right == NULL);
 		MANA_ASSERT(node->left);
 		{
+			mana_compiler_resolve_symbol(node->left);
+			mana_compiler_resolve_identifier(node);
+
 			mana_type_description* type = node->left->type;
 			if (type)
 			{
@@ -1734,6 +1975,7 @@ DO_RECURSIVE:
 								mana_code_set_opecode(MANA_IL_ADD_INTEGER);
 								if (enable_load)
 									mana_compiler_resolve_load(node);
+								goto ESCAPE;
 							}
 						}
 						type = type->parent;
@@ -1746,6 +1988,7 @@ DO_RECURSIVE:
 				}
 			}
 		}
+		ESCAPE:
 		break;
 
 	case MANA_NODE_MEMOP:
@@ -1761,16 +2004,16 @@ DO_RECURSIVE:
 
 	case MANA_NODE_SIZEOF:
 		{
-			int max_char = (1 << (8 * CBSZ - 1)) - 1;
-			int min_char = -1 << (8 * CBSZ - 1);
-			int max_short = (1 << (8 * SBSZ - 1)) - 1;
-			int min_short = -1 << (8 * SBSZ - 1);
+			int32_t max_char = (1 << (8 * CBSZ - 1)) - 1;
+			int32_t min_char = -1 << (8 * CBSZ - 1);
+			int32_t max_short = (1 << (8 * SBSZ - 1)) - 1;
+			int32_t min_short = -1 << (8 * SBSZ - 1);
 
 			node->digit = node->left->type->memory_size;
 
-			if(node->digit <= max_char && node->digit >= min_char)
+			if (node->digit <= max_char && node->digit >= min_char)
 				node->type = mana_type_get(MANA_DATA_TYPE_CHAR);
-			else if(node->digit <= max_short && node->digit >= min_short)
+			else if (node->digit <= max_short && node->digit >= min_short)
 				node->type = mana_type_get(MANA_DATA_TYPE_SHORT);
 			else
 				node->type = mana_type_get(MANA_DATA_TYPE_INT);
@@ -1869,7 +2112,7 @@ DO_RECURSIVE:
 	case MANA_NODE_LNOT:
 	case MANA_NODE_NOT:
 		// 比較、論理演算子
-		//mana_compiler_automatic_cast(node);
+		mana_compiler_automatic_cast(node);
 		mana_compiler_genearte_code(node->left, enable_load);
 		mana_compiler_genearte_code(node->right, enable_load);
 		// TODO:オペコードを設定してください
@@ -1907,60 +2150,4 @@ DO_RECURSIVE:
 		node = node->next;
 		goto DO_RECURSIVE;
 	}
-}
-
-////////////////////////////////////////////////////////////////////////////////
-/*!
-式の評価
-@param	tree			式のmana_node
-@param	enable_assign	trueならば代入式、falseならばそれ以外
-*/
-void mana_compiler_expression(mana_node* tree, int32_t enable_assign)
-{
-	if (!tree)
-		return;
-
-	mana_compiler_resolve_symbol(tree);
-
-	const int32_t in_depth = mana_symbol_open_block(false);
-
-	if (enable_assign)
-	{
-		if (tree->id != MANA_NODE_ASSIGN && tree->id != MANA_NODE_CALL && tree->id != MANA_NODE_F2I)
-			mana_compile_error(tree, "illegal expression in write-statement");
-	}
-	else {
-		if (tree->id == MANA_NODE_ASSIGN)
-			mana_compile_error(tree, "illegal expression in write-statement");
-	}
-
-	mana_compiler_genearte_code(tree, true);
-
-	if (enable_assign && tree->id == MANA_NODE_CALL && tree->type)
-	{
-		switch (tree->type->tcons)
-		{
-		case MANA_DATA_TYPE_VOID:
-			break;
-
-		case MANA_DATA_TYPE_CHAR:
-		case MANA_DATA_TYPE_SHORT:
-		case MANA_DATA_TYPE_INT:
-		case MANA_DATA_TYPE_FLOAT:
-		case MANA_DATA_TYPE_ACTOR:
-			mana_code_set_opecode(MANA_IL_REMOVE);
-			break;
-
-		case MANA_DATA_TYPE_STRUCT:
-			mana_code_set_opecode_and_operand(MANA_IL_REMOVE_DATA, tree->type->memory_size);
-			break;
-
-		default:
-			MANA_BUG("illegal type of expression");
-			break;
-		}
-	}
-
-	const int32_t out_depth = mana_symbol_close_block();
-	MANA_VERIFY(in_depth == out_depth, "ブロックの深さが一致しません in:%d out:%d", in_depth, out_depth);
 }
