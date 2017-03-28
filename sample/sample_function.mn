@@ -5,38 +5,80 @@ Copyright (c) 2003 Shun Moriya <shun@mnu.sakura.ne.jp>
 
 native int nativeFunction(int a0, float a1);
 
-void test()
+void assignmentTest(float value)
 {
-	// Forward declaration
-	short array[10];
-	//print("test_sort: %d\n", test_sort(array, 10));
-
-	test_if();
-
-	// Forward declaration
-	test_switch_while();
-}
-
-void test_if()
-{
-	if(true)
-	{
-		print("true");
-	}
-	else
-	{
-		print("false");
-	}
+	TestStruct1 hoge[2];
+	hoge[1].realValue = 1.5;
 
 	vec3 vector;
 	vector.x = 0;
 	vector.y = 1;
 	vector.z = 2;
 	vector.w = 2;
+
+	char i;
+	i = 1;
+	short j;
+	j = 65535;
+	int k;
+	k = 0xFFFFFF;
+	float l;
+	l = 4.0;
+	l = 5;
+	l = i;
+
+	short array[10];
+	array = array;
 }
 
-void test_switch_while()
+void expressionTest()
 {
+	float f;
+	int i;
+
+	f = f + 1;
+	f = f - 1;
+	f = f * 1;
+	f = f / 1;
+	f = f % 1;
+
+	i = i + 1;
+	i = i - 1;
+	i = i * 1;
+	i = i / 1;
+	i = i % 1;
+
+	i = i & 1;
+	i = i | 1;
+	i = i ^ 1;
+
+	i = i && 1;
+	i = i || 1;
+	i = ~i;
+
+	i = i << 1;
+	i = i >> 1;
+}
+
+void statementTest()
+{
+	if(true)
+	{
+		int i;
+		i = 0;
+	}
+
+	if(false)
+	{
+		float j;
+		j = 0;
+	}
+	else
+	{
+		short k;
+		k = 0;
+	}
+
 	int count = 4;
 	while(count)
 	{
@@ -56,6 +98,39 @@ void test_switch_while()
 		}
 		count--;
 	}
+
+	// loop
+	loop
+	{
+		int i;
+		i = 10;
+		while(i)
+		{
+			i--;
+		}
+
+		do{
+			i++;
+		}while(i < 10);
+
+		int j;
+		for(j = 0; j < 10; j++)
+		{
+			--i;			
+		}
+
+		break;
+	}
+}
+
+float functionCallingTest()
+{
+	assignmentTest(0);
+
+	int value;
+	assignmentTest(value);
+
+	return value;
 }
 
 int test_sort(short array[10], int size)
@@ -92,3 +167,18 @@ int test_sort(short array[10], int size)
 
 	return count;
 }
+
+/*
+void test()
+{
+	// Forward declaration
+	short array[10];
+	//print("test_sort: %d\n", test_sort(array, 10));
+
+	test_if();
+
+	// Forward declaration
+	test_switch_while();
+}
+
+*/
