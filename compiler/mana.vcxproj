@@ -152,6 +152,12 @@
     <ClInclude Include="mana_version.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\sample\sample.mn" />
+    <None Include="..\sample\sample_actor.mn" />
+    <None Include="..\sample\sample_const.mn" />
+    <None Include="..\sample\sample_function.mn" />
+    <None Include="..\sample\sample_struct.mn" />
+    <None Include="..\sample\sample_variable.mn" />
     <None Include="mana_version.json" />
     <None Include="mana_version.rb" />
   </ItemGroup>
@@ -159,6 +165,9 @@
     <ProjectReference Include="..\library\libmana.vcxproj">
       <Project>{fd619018-4982-4fcf-9cc4-9177662781dd}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\sample\sample.log" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
