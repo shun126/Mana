@@ -218,14 +218,14 @@ void mana_jump_switch_build(void)
 		case MANA_DATA_TYPE_INT:
 		case MANA_DATA_TYPE_ACTOR:
 			mana_code_set_opecode(MANA_IL_DUPLICATE);
-			mana_compiler_expression(p->node, false);
+			mana_generator_expression(p->node, false);
 			mana_code_set_opecode(MANA_IL_COMPARE_EQ_INTEGER);
 			mana_code_set_opecode_and_operand(MANA_IL_BNE, p->address);
 			break;
 
 		case MANA_DATA_TYPE_FLOAT:
 			mana_code_set_opecode(MANA_IL_DUPLICATE);
-			mana_compiler_expression(p->node, false);
+			mana_generator_expression(p->node, false);
 			mana_code_set_opecode(MANA_IL_COMPARE_EQ_FLOAT);
 			mana_code_set_opecode_and_operand(MANA_IL_BNE, p->address);
 			break;
@@ -233,7 +233,7 @@ void mana_jump_switch_build(void)
 		case MANA_DATA_TYPE_STRUCT:
 			size = p->node->type->memory_size;
 			mana_code_set_opecode_and_operand(MANA_IL_DUPLICATE_DATA, size);
-			mana_compiler_expression(p->node, false);
+			mana_generator_expression(p->node, false);
 			mana_code_set_opecode_and_operand(MANA_IL_COMPARE_EQ_DATA, size);
 			mana_code_set_opecode_and_operand(MANA_IL_BNE, p->address);
 			break;
