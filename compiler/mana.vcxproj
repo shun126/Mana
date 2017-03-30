@@ -97,10 +97,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="mana_code.c" />
-    <ClCompile Include="mana_compiler.c" />
     <ClCompile Include="mana_data.c" />
     <ClCompile Include="mana_datalink_generator.c" />
-    <ClCompile Include="mana_evaluator.c" />
+    <ClCompile Include="mana_generator.c" />
     <ClCompile Include="mana_jump.c" />
     <ClCompile Include="mana_lexer.c" />
     <ClCompile Include="mana_linker.c" />
@@ -108,7 +107,10 @@
     <ClCompile Include="mana_node.c" />
     <ClCompile Include="mana_parser.c" />
     <ClCompile Include="mana_pool.c" />
+    <ClCompile Include="mana_post_resolver.c" />
+    <ClCompile Include="mana_pre_resolver.c" />
     <ClCompile Include="mana_register.c" />
+    <ClCompile Include="mana_resolver.c" />
     <ClCompile Include="mana_symbol.c" />
     <ClCompile Include="mana_type.c" />
   </ItemGroup>
@@ -136,17 +138,19 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mana_code.h" />
-    <ClInclude Include="mana_compiler.h" />
     <ClInclude Include="mana_data.h" />
     <ClInclude Include="mana_datalink_generator.h" />
-    <ClInclude Include="mana_evaluator.h" />
+    <ClInclude Include="mana_generator.h" />
     <ClInclude Include="mana_jump.h" />
     <ClInclude Include="mana_linker.h" />
     <ClInclude Include="mana_main.h" />
     <ClInclude Include="mana_node.h" />
     <ClInclude Include="mana_parser.h" />
     <ClInclude Include="mana_pool.h" />
+    <ClInclude Include="mana_post_resolver.h" />
+    <ClInclude Include="mana_pre_resolver.h" />
     <ClInclude Include="mana_register.h" />
+    <ClInclude Include="mana_resolver.h" />
     <ClInclude Include="mana_symbol.h" />
     <ClInclude Include="mana_type.h" />
     <ClInclude Include="mana_version.h" />
