@@ -8,7 +8,7 @@
  * @date	2003-
  */
 
-#include "mana_compiler.h"
+#include "mana_generator.h"
 
 #if !defined(___MANA_CODE_H___)
 #include "mana_code.h"
@@ -1096,14 +1096,14 @@ void mana_symbol_set_type(const char* name, mana_type_description* type)
 /* request */
 void mana_symbol_add_request(uint8_t opcode, mana_node* level, mana_node* actor, const char* action)
 {
-	mana_compiler_expression(level, false);
+	mana_generator_expression(level, false);
 
 	if(actor && actor->type)
 	{
 		switch(actor->type->tcons)
 		{
 		case MANA_DATA_TYPE_ACTOR:
-			mana_compiler_expression(actor, false);
+			mana_generator_expression(actor, false);
 			mana_code_set_opecode_and_operand(opcode, mana_data_set(action));
 			return;
 
@@ -1124,7 +1124,7 @@ void mana_symbol_add_request(uint8_t opcode, mana_node* level, mana_node* actor,
 				default:
 					goto ABORT;
 				}
-				mana_compiler_expression(actor, false);
+				mana_generator_expression(actor, false);
 				mana_code_set_opecode_and_operand(opcode, mana_data_set(action));
 				return;
 			}
@@ -1148,8 +1148,8 @@ void mana_symbol_add_join(mana_node* level, mana_node* actor)
 				break;
 
 		case MANA_DATA_TYPE_ACTOR:
-			mana_compiler_expression(actor, false);
-			mana_compiler_expression(level, false);
+			mana_generator_expression(actor, false);
+			mana_generator_expression(level, false);
 			mana_code_set_opecode(MANA_IL_JOIN);
 			return;
 
@@ -1382,7 +1382,7 @@ static int32_t mana_symbol_write_actor_infomation_data(mana_stream* stream, mana
 	number_of_actions = mana_symbol_get_number_of_actions(type);
 	if(number_of_actions > (1 << (8 * sizeof(actor_info.number_of_actions))))
 	{
-		mana_compiler_error("Too much actions in %s.\n", symbol->name);
+		mana_generator_error("Too much actions in %s.\n", symbol->name);
 		return false;
 	}
 
@@ -1394,7 +1394,7 @@ static int32_t mana_symbol_write_actor_infomation_data(mana_stream* stream, mana
 
 	if(actor_info.name == (uint32_t)-1)
 	{
-		mana_compiler_error("Can't find actor '%s'.\n", symbol->name);
+		mana_generator_error("Can't find actor '%s'.\n", symbol->name);
 		return false;
 	}
 
@@ -1417,7 +1417,7 @@ static int32_t mana_symbol_write_actor_infomation_data(mana_stream* stream, mana
 
 			if(action_info.name == (uint32_t)-1)
 			{
-				mana_compiler_error("Can't find action '%s'.\n", component_symbol->name);
+				mana_generator_error("Can't find action '%s'.\n", component_symbol->name);
 				return false;
 			}
 
