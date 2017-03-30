@@ -94,8 +94,8 @@ extern void mana_print_debug(const char* format, ...);
 /* external functions */
 extern void mana_error(const char* filename, const size_t line, const char* format, ...);
 extern void mana_warning(const char* filename, const size_t line, const char* format, ...);
-extern void mana_compiler_error(const char* format, ...);
-extern void mana_compiler_warning(const char* format, ...);
+extern void mana_generator_error(const char* format, ...);
+extern void mana_generator_warning(const char* format, ...);
 extern void mana_fatal(const char* format, ...);
 extern void mana_fatal_no_memory(void);
 
@@ -117,7 +117,7 @@ extern void mana_lexer_set_current_line(const int32_t lineno);
 
 extern void mana_compile_init(void);
 extern void mana_compile_exit(void);
-extern int32_t mana_compile(void);
+extern int32_t mana_generator(void);
 
 extern void mana_output_global_memory_map(char*);
 

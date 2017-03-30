@@ -64,15 +64,11 @@ typedef enum mana_symbol_data_type_id
 
 typedef enum mana_node_type_id
 {
-	MANA_NODE_NEWLINE,								/*!< 改行 */
-
 	MANA_NODE_ARRAY,								/*!< variable[argument] = */
 	MANA_NODE_ASSIGN,								/*!< = */
-	MANA_NODE_MEMOP,								/*!< X.variable */
 	MANA_NODE_CALL_ARGUMENT,							//!< 引数（呼び出し）
 	MANA_NODE_DECLARE_ARGUMENT,							//!< 引数（宣言）
 	MANA_NODE_CONST,								/*!< 定数 */
-	MANA_NODE_VARIABLE,							/*!< 変数 */
 	MANA_NODE_CALL,								/*!< 関数呼び出し */
 	MANA_NODE_ADD,									/*!< 加算 */
 	MANA_NODE_SUB,									/*!< 減算 */
@@ -251,7 +247,7 @@ extern mana_symbol_entry* mana_symbol_create_const_int(char*, int32_t);
 extern mana_symbol_entry* mana_symbol_create_const_float(char*, float);
 extern mana_symbol_entry* mana_symbol_create_const_string(char*, char*);
 //extern mana_symbol_entry* mana_symbol_create_type(char*);
-extern mana_symbol_entry* mana_symbol_create_identification(const char* name, mana_type_description* type , const bool static_variable);
+extern mana_symbol_entry* mana_symbol_create_identification(const char* name, mana_type_description* type, const bool static_variable);
 extern mana_symbol_entry* mana_symbol_create_label(char*);
 
 extern void mana_symbol_destroy(char* name);
