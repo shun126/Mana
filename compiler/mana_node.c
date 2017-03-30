@@ -137,14 +137,12 @@ mana_node* mana_node_cast(mana_type_description* type, mana_node* node)
 */
 void mana_node_auto_cast(mana_node* node)
 {
-	if(node)
+	if(node && node->type)
 	{
 		if(node->id != MANA_NODE_ASSIGN && node->right && node->right->type && node->right->type->tcons == MANA_DATA_TYPE_FLOAT)
 		{
 			node->type = node->right->type;
 		}
-
-		assert(node->type);
 
 		if(node->left)
 		{
@@ -302,6 +300,7 @@ mana_node* mana_node_create_leaf(char* name)
 	return node;
 }
 #endif
+#if 0
 /*!
  * メンバーノードを作成します
  * @param[in]	tree	ノードオブジェクト
@@ -346,7 +345,6 @@ mana_node* mana_node_create_member(mana_node* tree, char* name)
 
 	return tree;
 }
-#if 0
 /*!
  * メンバーノードを作成します
  * @param[in]	tree	ノードオブジェクト
@@ -551,12 +549,12 @@ size_t mana_node_get_memory_size(mana_node* node)
 	switch(node->id)
 	{
 	case MANA_NODE_CONST:			/* 定数 */
-	case MANA_NODE_VARIABLE:		/* 変数 */
+	case MANA_NODE_IDENTIFIER:		/* 変数 */
 		/* 参照のactorか、actorの実体か判定できるようにする */
 		return node->type->tcons == MANA_DATA_TYPE_ACTOR ? sizeof(void*) : node->type->memory_size;
 
 	case MANA_NODE_ARRAY:			/* variable[argument] = */
-	case MANA_NODE_MEMOP:			/* X.variable */
+	case MANA_NODE_MEMBER_VARIABLE:			/* X.variable */
 	case MANA_NODE_NEG:			/* ±符号反転 */
 		return node->type->tcons == MANA_DATA_TYPE_ACTOR ? sizeof(void*) : node->type->memory_size;
 /*		return mana_node_get_memory_size(node->left);	*/

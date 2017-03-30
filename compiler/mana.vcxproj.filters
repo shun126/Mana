@@ -2,10 +2,8 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="mana_code.c" />
-    <ClCompile Include="mana_compiler.c" />
     <ClCompile Include="mana_data.c" />
     <ClCompile Include="mana_datalink_generator.c" />
-    <ClCompile Include="mana_evaluator.c" />
     <ClCompile Include="mana_jump.c" />
     <ClCompile Include="mana_lexer.c" />
     <ClCompile Include="mana_linker.c" />
@@ -16,13 +14,15 @@
     <ClCompile Include="mana_register.c" />
     <ClCompile Include="mana_symbol.c" />
     <ClCompile Include="mana_type.c" />
+    <ClCompile Include="mana_resolver.c" />
+    <ClCompile Include="mana_generator.c" />
+    <ClCompile Include="mana_post_resolver.c" />
+    <ClCompile Include="mana_pre_resolver.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mana_code.h" />
-    <ClInclude Include="mana_compiler.h" />
     <ClInclude Include="mana_data.h" />
     <ClInclude Include="mana_datalink_generator.h" />
-    <ClInclude Include="mana_evaluator.h" />
     <ClInclude Include="mana_jump.h" />
     <ClInclude Include="mana_linker.h" />
     <ClInclude Include="mana_main.h" />
@@ -33,6 +33,10 @@
     <ClInclude Include="mana_symbol.h" />
     <ClInclude Include="mana_type.h" />
     <ClInclude Include="mana_version.h" />
+    <ClInclude Include="mana_resolver.h" />
+    <ClInclude Include="mana_generator.h" />
+    <ClInclude Include="mana_post_resolver.h" />
+    <ClInclude Include="mana_pre_resolver.h" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="mana_lexer.l" />

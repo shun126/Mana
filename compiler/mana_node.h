@@ -38,8 +38,6 @@ extern mana_node* mana_node_clone(mana_node*);
 extern mana_node* mana_node_allocate(const mana_node_type_id id);
 extern mana_node* mana_node_create_node(const mana_node_type_id id, mana_node* left, mana_node* right, mana_node* body);
 
-extern mana_node* mana_node_create_member(mana_node*, char*);
-extern mana_node* mana_node_create_call_member(mana_node*, char*, mana_node*);
 extern mana_node* mana_node_create_digit(int32_t);
 extern mana_node* mana_node_create_real(float);
 extern mana_node* mana_node_create_string(char* string);

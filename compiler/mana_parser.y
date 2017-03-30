@@ -9,17 +9,17 @@ mana (compiler)
 @date	2003-
 */
 
-#if !defined(___MANA_COMPILER_H___)
-#include "mana_compiler.h"
+#if !defined(__MANA_GENERATOR_H___)
+#include "mana_generator.h"
 #endif
 #if !defined(___MANA_LINKER_H___)
 #include "mana_linker.h"
 #endif
-#if !defined(___MANA_EVALUATOR_H___)
-#include "mana_evaluator.h"
-#endif
 #if !defined(___MANA_MAIN_H___)
 #include "mana_main.h"
+#endif
+#if !defined(___MANA_PRE_RESOLVER_H___)
+#include "mana_pre_resolver.h"
 #endif
 
 #define YYERROR_VERBOSE
@@ -93,8 +93,8 @@ int yynerrs;
 program			: line
 					{
 						mana_node_dump($1);
-						mana_evaluator_evaluate($1);
-						mana_compiler_genearte_code($1, true);
+						mana_pre_resolver_resolve($1);
+						mana_generator_genearte_code($1, true);
 						mana_linker_resolve_address();
 					}
 				;

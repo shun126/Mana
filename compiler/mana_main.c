@@ -14,8 +14,8 @@
 #if !defined(___MANA_CODE_H___)
 #include "mana_code.h"
 #endif
-#if !defined(___MANA_COMPILER_H___)
-#include "mana_compiler.h"
+#if !defined(__MANA_GENERATOR_H___)
+#include "mana_generator.h"
 #endif
 #if !defined(___MANA_DATA_H___)
 #include "mana_data.h"
@@ -23,8 +23,8 @@
 #if !defined(___MANA_DATALINK_GENERATOR_H___)
 #include "mana_datalink_generator.h"
 #endif
-#if !defined(___MANA_EVALUATOR_H___)
-#include "mana_evaluator.h"
+#if !defined(___MANA_PRE_RESOLVER_H___)
+#include "mana_pre_resolver.h"
 #endif
 #if !defined(___MANA_JUMP_H___)
 #include "mana_jump.h"
@@ -220,7 +220,7 @@ void mana_compile_warning(const char* format, ...)
 #endif
 }
 
-void mana_compiler_error(const char* format, ...)
+void mana_generator_error(const char* format, ...)
 {
 	char string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
 
@@ -235,7 +235,7 @@ void mana_compiler_error(const char* format, ...)
 	mana_print("%s: error: %s\n", mana_output_filename, string);
 }
 
-void mana_compiler_warning(const char* format, ...)
+void mana_generator_warning(const char* format, ...)
 {
 	char string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
 
@@ -309,7 +309,7 @@ static bool mana_test_execute(void* program)
 	return result;
 }
 
-int32_t mana_compile(void)
+int32_t mana_generator(void)
 {
 	int32_t result = 0;
 
@@ -322,8 +322,8 @@ int32_t mana_compile(void)
 	mana_symbol_initialize();
 	mana_type_initialize();
 
-	mana_compiler_initialize();
-	mana_evaluator_initialize();
+	mana_generator_initialize();
+	mana_pre_resolver_initialize();
 	mana_linker_initialize();
 
 	if(mana_variable_header_file)
@@ -486,8 +486,8 @@ ESCAPE:
 	mana_symbol_finalize();
 	mana_type_finalize();
 
-	mana_compiler_finalize();
-	mana_evaluator_finalize();
+	mana_generator_finalize();
+	mana_pre_resolver_finalize();
 	mana_linker_finalize();
 
 	mana_lexer_finalize();
@@ -711,7 +711,7 @@ int32_t main(int32_t argc, char* argv[])
 
 	if(parse_arguments(argc, argv))
 	{
-		result = mana_compile();
+		result = mana_generator();
 	}
 
 #if defined(_DEBUG) && defined(_MSC_VER)
