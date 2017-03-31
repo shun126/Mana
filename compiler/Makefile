@@ -11,7 +11,7 @@ CFLAGS	= --std=c99 --input-charset=cp932 -c -O3 -Wall -D NDEBUG -I$(LIBRARY)
 #CFLAGS	= --std=c99 -c -O3 -Wall -D NDEBUG -I$(LIBRARY)
 
 LK	= $(CC)
-LFLAGS	= -ldl -lm
+LFLAGS	= -ldl -lm 
 
 YACC	= bison
 YFLAGS	= -d -k
@@ -45,6 +45,8 @@ $(LIBRARY)/libmana.a:
 .c.o:
 	$(CC) $(CFLAGS) -o $@ $<
 
+all: $(TARGET)
+
 clean:
 	$(RM) $(TARGET) $(OBJECTS) $(SECOUND)
 	make --directory=$(LIBRARY) clean
@@ -55,6 +57,9 @@ depend:
 
 test:
 	./$(TARGET) --debug ../sample/sample.mn
+
+version:
+	ruby mana_version.rb
 
 # DO NOT DELETE
 
