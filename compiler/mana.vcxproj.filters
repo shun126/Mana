@@ -1,50 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="mana_code.c" />
-    <ClCompile Include="mana_data.c" />
-    <ClCompile Include="mana_datalink_generator.c" />
-    <ClCompile Include="mana_jump.c" />
-    <ClCompile Include="mana_lexer.c" />
-    <ClCompile Include="mana_linker.c" />
-    <ClCompile Include="mana_main.c" />
-    <ClCompile Include="mana_node.c" />
-    <ClCompile Include="mana_parser.c" />
-    <ClCompile Include="mana_pool.c" />
-    <ClCompile Include="mana_register.c" />
-    <ClCompile Include="mana_symbol.c" />
-    <ClCompile Include="mana_type.c" />
-    <ClCompile Include="mana_resolver.c" />
-    <ClCompile Include="mana_generator.c" />
-    <ClCompile Include="mana_post_resolver.c" />
-    <ClCompile Include="mana_pre_resolver.c" />
+    <CustomBuild Include="parser.y" />
+    <CustomBuild Include="lexer.l" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="mana_code.h" />
-    <ClInclude Include="mana_data.h" />
-    <ClInclude Include="mana_datalink_generator.h" />
-    <ClInclude Include="mana_jump.h" />
-    <ClInclude Include="mana_linker.h" />
-    <ClInclude Include="mana_main.h" />
-    <ClInclude Include="mana_node.h" />
-    <ClInclude Include="mana_parser.h" />
-    <ClInclude Include="mana_pool.h" />
-    <ClInclude Include="mana_register.h" />
-    <ClInclude Include="mana_symbol.h" />
-    <ClInclude Include="mana_type.h" />
-    <ClInclude Include="mana_version.h" />
-    <ClInclude Include="mana_resolver.h" />
-    <ClInclude Include="mana_generator.h" />
-    <ClInclude Include="mana_post_resolver.h" />
-    <ClInclude Include="mana_pre_resolver.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <CustomBuild Include="mana_lexer.l" />
-    <CustomBuild Include="mana_parser.y" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="mana_version.json" />
-    <None Include="mana_version.rb" />
     <None Include="..\sample\sample.mn">
       <Filter>sample</Filter>
     </None>
@@ -63,6 +23,8 @@
     <None Include="..\sample\sample_variable.mn">
       <Filter>sample</Filter>
     </None>
+    <None Include="version.json" />
+    <None Include="version.rb" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="sample">
@@ -73,5 +35,43 @@
     <Text Include="..\sample\sample.log">
       <Filter>sample</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="code.c" />
+    <ClCompile Include="data.c" />
+    <ClCompile Include="datalink_generator.c" />
+    <ClCompile Include="generator.c" />
+    <ClCompile Include="jump.c" />
+    <ClCompile Include="linker.c" />
+    <ClCompile Include="main.c" />
+    <ClCompile Include="node.c" />
+    <ClCompile Include="pool.c" />
+    <ClCompile Include="post_resolver.c" />
+    <ClCompile Include="pre_resolver.c" />
+    <ClCompile Include="register.c" />
+    <ClCompile Include="resolver.c" />
+    <ClCompile Include="symbol.c" />
+    <ClCompile Include="type.c" />
+    <ClCompile Include="lexer.c" />
+    <ClCompile Include="parser.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="code.h" />
+    <ClInclude Include="data.h" />
+    <ClInclude Include="datalink_generator.h" />
+    <ClInclude Include="generator.h" />
+    <ClInclude Include="jump.h" />
+    <ClInclude Include="linker.h" />
+    <ClInclude Include="main.h" />
+    <ClInclude Include="node.h" />
+    <ClInclude Include="pool.h" />
+    <ClInclude Include="post_resolver.h" />
+    <ClInclude Include="pre_resolver.h" />
+    <ClInclude Include="register.h" />
+    <ClInclude Include="resolver.h" />
+    <ClInclude Include="symbol.h" />
+    <ClInclude Include="type.h" />
+    <ClInclude Include="version.h" />
+    <ClInclude Include="parser.h" />
   </ItemGroup>
 </Project>
