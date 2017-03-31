@@ -1,0 +1,16 @@
+sudo: false
+
+language: c
+
+compiler:
+# - clang
+ - gcc
+
+script:
+ - make --directory=compiler CC="${CC}" && make --directory=compiler test
+
+addons:
+ apt:
+  sources:
+  packages:
+   - make
