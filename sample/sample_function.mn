@@ -14,7 +14,6 @@ void assignmentTest(float value)
 	vector.x = 0;
 	vector.y = 1;
 	vector.z = 2;
-	vector.w = 2;
 
 	char i;
 	i = 1;
