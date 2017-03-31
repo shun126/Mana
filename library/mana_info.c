@@ -520,8 +520,8 @@ const char* mana_get_instruction_text(const char* data, const void* program, con
 	/* constant */
 	case MANA_IL_PUSH_ZERO_INTEGER:		sprintf(text, "%08x:push zero (integer)", address); break;
 	case MANA_IL_PUSH_ZERO_FLOAT:		sprintf(text, "%08x:push zero (float)", address); break;
-	case MANA_IL_PUSH_CHAR:				sprintf(text, "%08x:push %d (int8_t)", address, get_char(program, address + 1)); break;
-	case MANA_IL_PUSH_SHORT:			sprintf(text, "%08x:push %d (int16_t)", address, get_short(program, address + 1)); break;
+	case MANA_IL_PUSH_CHAR:				sprintf(text, "%08x:push %d (char)", address, get_char(program, address + 1)); break;
+	case MANA_IL_PUSH_SHORT:			sprintf(text, "%08x:push %d (short)", address, get_short(program, address + 1)); break;
 	case MANA_IL_PUSH_INTEGER:			sprintf(text, "%08x:push %d (integer)", address, get_integer(program, address + 1)); break;
 	case MANA_IL_PUSH_FLOAT:			sprintf(text, "%08x:push %f (float)", address, get_float(program, address + 1)); break;
 	case MANA_IL_PUSH_STRING:			sprintf(text, "%08x:push %x (reference)", address, get_integer(program, address + 1)); break;
