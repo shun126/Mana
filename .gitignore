@@ -22,9 +22,9 @@
 /compiler/.vs/
 /compiler/Win32/Debug/
 /compiler/Win32/Release/
-/compiler/mana_parser.h
-/compiler/mana_parser.c
-/compiler/mana_lexer.c
+/compiler/parser.h
+/compiler/parser.c
+/compiler/lexer.c
 /library/.vs/
 /library/Win32/Debug/
 /library/Win32/Release/
