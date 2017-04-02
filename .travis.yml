@@ -24,4 +24,4 @@ addons:
    - gcc-6
    - clang-3.7
    - libc6
-#   - libgcc1
+   - libgcc1
