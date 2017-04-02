@@ -23,5 +23,5 @@ addons:
    - make
    - gcc-6
    - clang-3.7
-   - openmpi-bin
-   - libopenmpi-dev
+   - libc6
+#   - libgcc1
