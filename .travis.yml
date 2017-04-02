@@ -17,6 +17,8 @@ addons:
  apt:
   sources:
    - ubuntu-toolchain-r-test
+   - llvm-toolchain-precise-3.7 
+   - llvm-toolchain-precise 
   packages:
    - make
    - gcc-6
