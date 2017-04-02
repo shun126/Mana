@@ -282,9 +282,9 @@ extern const char* mana_get_instruction_text(const char* data, const void* progr
 
 #if defined(_DEBUG)
 /*! コンソールに文字列を出力 */
-#define MANA_PRINT			mana_print_debug
+#define MANA_PRINT(...)			mana_print_debug(__VA_ARGS__)
 /*! コンソールに文字列を出力(デバッグビルドのみ) */
-#define MANA_TRACE			mana_print_debug
+#define MANA_TRACE(...)			mana_print_debug(__VA_ARGS__)
 /*! コンソールに文字列を出力 */
 #define MANA_WARNING(...)	{ mana_print_debug(__VA_ARGS__); }
 /*! コンソールに文字列を出力後強制終了 */
@@ -295,9 +295,9 @@ extern const char* mana_get_instruction_text(const char* data, const void* progr
 #define MANA_ASSERT(EXP)	if(!(EXP)){ mana_print_debug("%s: %s(%d)\n", #EXP, __FILE__, __LINE__); abort(); }
 #else
 /*! コンソールに文字列を出力 */
-#define MANA_PRINT			printf
+#define MANA_PRINT(...)			printf(__VA_ARGS__)
 /*! コンソールに文字列を出力(デバッグビルドのみ) */
-#define MANA_TRACE			if(0)printf
+#define MANA_TRACE(...)			((void)0)
 /*! コンソールに文字列を出力 */
 #define MANA_WARNING(...)	{ printf(__VA_ARGS__); }
 /*! コンソールに文字列を出力後強制終了 */
