@@ -6,12 +6,12 @@ TARGET	= mana
 LIBRARY	= ../library
 
 CC	= gcc
-CFLAGS	= --std=c99 --input-charset=cp932 -c -O3 -Wall -D NDEBUG -I$(LIBRARY)
+CFLAGS	= --std=c99 -O3 -c --input-charset=cp932 -Wall -D NDEBUG -I$(LIBRARY)
 #CC	= clang
-#CFLAGS	= --std=c99 -c -O3 -Wall -D NDEBUG -I$(LIBRARY)
+#CFLAGS	= --std=c99 -O3 -c -Wall -D NDEBUG -I$(LIBRARY)
 
 LK	= $(CC)
-LFLAGS	= -ldl -lm 
+LFLAGS	= --std=c99 -O3 -ldl -lm 
 
 YACC	= bison
 YFLAGS	= -d -k
