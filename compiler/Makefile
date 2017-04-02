@@ -11,7 +11,7 @@ CFLAGS	= --std=c99 -O3 -c --input-charset=cp932 -Wall -D NDEBUG -I$(LIBRARY)
 #CFLAGS	= --std=c99 -O3 -c -Wall -D NDEBUG -I$(LIBRARY)
 
 LK	= $(CC)
-LFLAGS	= --std=c99 -O3 -ldl -lm 
+LFLAGS	= --std=c99 -O3
 
 YACC	= bison
 YFLAGS	= -d -k
@@ -31,7 +31,7 @@ SECOUND	= parser.c parser.h lexer.c
 .SECOUNDLY: $(SECOUND)
 
 $(TARGET): $(SOURCES) $(OBJECTS) $(LIBRARY)/libmana.a
-	$(LK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(LIBRARY)/libmana.a
+	$(LK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(LIBRARY)/libmana.a -ldl -lm
 
 $(LIBRARY)/libmana.a:
 	make --directory=$(LIBRARY)
