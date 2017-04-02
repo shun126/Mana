@@ -6,6 +6,10 @@ compiler:
 # - clang
  - gcc
 
+install: 
+ - if [ "$CC" = "gcc" ]; then export CC="gcc-6"; fi 
+ - if [ "$CC" = "clang" ]; then export CC="clang-3.7"; fi 
+
 script:
  - make --directory=compiler CC="${CC}" version all test
 
@@ -15,5 +19,7 @@ addons:
    - ubuntu-toolchain-r-test
   packages:
    - make
+   - gcc-6
+   - clang-3.7
    - openmpi-bin
    - libopenmpi-dev
