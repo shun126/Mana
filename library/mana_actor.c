@@ -474,7 +474,7 @@ static void mana_actor_cmd_call(mana_actor* actor)
 #if defined(NDEBUG)
 	function = (mana_external_funtion_type*)mana_get_unsigned_integer(actor->parent, (const uint8_t*)(actor->pc + 1));
 #else
-	char* name = mana_actor_get_string_from_memory(actor, actor->pc + 1);
+	const char* name = mana_actor_get_string_from_memory(actor, actor->pc + 1);
 	function = mana_hash_get(&mana_external_function_hash, name);
 	if(!function)
 	{

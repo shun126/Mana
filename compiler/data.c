@@ -85,7 +85,7 @@ uint32_t mana_data_get_size(void)
 	return mana_data_buffer.used_size;
 }
 
-static mana_data_list* mana_data_find(char* text)
+static mana_data_list* mana_data_find(const char* text)
 {
 	if(text)
 	{
@@ -118,11 +118,9 @@ uint32_t mana_data_get(const char* text)
  */
 uint32_t mana_data_set(const char* text)
 {
-	mana_data_list* list;
-	list = mana_data_find(text);
+	mana_data_list* list = mana_data_find(text);
 	if(list == NULL)
 	{
-		int32_t length;
 		list = (mana_data_list*)mana_calloc(1, sizeof(mana_data_list));
 		if(list == NULL)
 		{
@@ -130,7 +128,7 @@ uint32_t mana_data_set(const char* text)
 			/* error message */
 			return (uint32_t)~0;
 		}
-		length = strlen(text) + 1;
+		uint32_t length = strlen(text) + 1;
 		if(mana_data_buffer.used_size + length >= mana_data_buffer.allocated_size)
 		{
 			mana_data_buffer.allocated_size += (mana_data_buffer.used_size + length + 4096);

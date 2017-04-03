@@ -54,6 +54,7 @@
     <ClCompile Include="type.c" />
     <ClCompile Include="lexer.c" />
     <ClCompile Include="parser.c" />
+    <ClCompile Include="error.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code.h" />
@@ -73,5 +74,7 @@
     <ClInclude Include="type.h" />
     <ClInclude Include="version.h" />
     <ClInclude Include="parser.h" />
+    <ClInclude Include="error.h" />
+    <ClInclude Include="lexer.h" />
   </ItemGroup>
 </Project>

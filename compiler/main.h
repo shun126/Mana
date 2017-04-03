@@ -78,42 +78,11 @@ extern char* _fullpath(char* , char* , int32_t);
 #include <stdio.h>
 #include <stdlib.h>
 
-#if defined(_DEBUG)
-extern void mana_print_debug(const char* format, ...);
-#define mana_print	mana_print_debug
-#define mana_trace	mana_print_debug
-#else
-#define mana_print	printf
-#define mana_trace 1 ? (void)0 : printf
-#endif
-
-#define MANA_ASSERT_MESSAGE(e, m) if(!(e)){ mana_print("%s(%d): BUG!: %s\n", __FILE__, __LINE__, m); abort(); }
-#define MANA_BUG(m) { mana_print("%s(%d): BUG!: %s\n", __FILE__, __LINE__, m); abort(); }
-#define MANA_SAFE_FREE(p) if(p){ free(p); p = 0; }
-
-/* external functions */
-extern void mana_error(const char* filename, const size_t line, const char* format, ...);
-extern void mana_warning(const char* filename, const size_t line, const char* format, ...);
-extern void mana_generator_error(const char* format, ...);
-extern void mana_generator_warning(const char* format, ...);
-extern void mana_fatal(const char* format, ...);
-extern void mana_fatal_no_memory(void);
-
 extern int32_t yyparse(void);
-extern void yyerror(const char* message);
 extern void mana_parser_initialize(void);
 extern void mana_parser_finalize(void);
 
 
-extern int32_t yylex(void);
-extern int32_t mana_lexer_initialize(char*);
-extern void mana_lexer_finalize(void);
-extern int32_t mana_lexer_open(char*, int32_t);
-extern int32_t mana_lexer_close(void);
-extern const char* mana_lexer_get_current_filename(void);
-extern void mana_lexer_set_current_filename(const char* filename);
-extern int32_t mana_lexer_get_current_line(void);
-extern void mana_lexer_set_current_line(const int32_t lineno);
 
 extern void mana_compile_init(void);
 extern void mana_compile_exit(void);
@@ -121,12 +90,13 @@ extern int32_t mana_generator(void);
 
 extern void mana_output_global_memory_map(char*);
 
+extern const char* mana_get_output_filename();
+
 /* external variables */
 extern int32_t mana_debug;
 extern int32_t mana_release;
 extern FILE* mana_variable_header_file;
 
-extern int32_t yynerrs;
 extern FILE* yyin;
 extern FILE* yyout;
 

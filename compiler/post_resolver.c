@@ -11,11 +11,17 @@ mana (compiler)
 #if !defined(___MANA_POST_RESOLVER_H___)
 #include "post_resolver.h"
 #endif
-#if !defined(___MANA_RESOLVER_H___)
-#include "resolver.h"
+#if !defined(___MANA_DATALINK_GENERATOR_H___)
+#include "datalink_generator.h"
+#endif
+#if !defined(___MANA_ERROR_H___)
+#include "error.h"
 #endif
 #if !defined(___MANA_MAIN_H___)
 #include "main.h"
+#endif
+#if !defined(___MANA_RESOLVER_H___)
+#include "resolver.h"
 #endif
 #if !defined(___MANA_TYPE_H___)
 #include "type.h"
@@ -80,6 +86,7 @@ void mana_post_resolver_resolve(mana_node* node)
 		return;
 
 DO_RECURSIVE:
+	mana_resolver_set_current_file_infomation(node);
 
 	switch (node->id)
 	{
@@ -376,7 +383,7 @@ DO_RECURSIVE:
 			{
 				if (t1 < MANA_DATA_TYPE_CHAR || t1 > MANA_DATA_TYPE_FLOAT || t2 < MANA_DATA_TYPE_CHAR || t2 > MANA_DATA_TYPE_FLOAT)
 				{
-					mana_compile_error(node, "imcompatible type operation in expression");
+					mana_compile_error("imcompatible type operation in expression");
 				}
 				else
 				{
@@ -400,7 +407,7 @@ DO_RECURSIVE:
 			if (get_node_type(&t1, &t2, node))
 			{
 				if (t1 < MANA_DATA_TYPE_CHAR || t1 > MANA_DATA_TYPE_INT || t2 < MANA_DATA_TYPE_CHAR || t2 > MANA_DATA_TYPE_INT)
-					mana_compile_error(node, "imcompatible type operation in expression");
+					mana_compile_error("imcompatible type operation in expression");
 			}
 		}
 		break;
@@ -414,7 +421,7 @@ DO_RECURSIVE:
 			if (get_node_type(&t1, &t2, node))
 			{
 				if (t1 < MANA_DATA_TYPE_CHAR || t1 > MANA_DATA_TYPE_INT || t2 < MANA_DATA_TYPE_CHAR || t2 > MANA_DATA_TYPE_INT)
-					mana_compile_error(node, "imcompatible type operation in expression");
+					mana_compile_error("imcompatible type operation in expression");
 				node->etc = MANA_IL_LAND;
 			}
 		}
@@ -429,7 +436,7 @@ DO_RECURSIVE:
 			if (get_node_type(&t1, &t2, node))
 			{
 				if (t1 < MANA_DATA_TYPE_CHAR || t1 > MANA_DATA_TYPE_INT || t2 < MANA_DATA_TYPE_CHAR || t2 > MANA_DATA_TYPE_INT)
-					mana_compile_error(node, "imcompatible type operation in expression");
+					mana_compile_error("imcompatible type operation in expression");
 				node->etc = MANA_IL_LOR;
 			}
 		}
@@ -638,7 +645,7 @@ DO_RECURSIVE:
 			if (get_node_type(&t1, &t2, node))
 			{
 				if (t1 < MANA_DATA_TYPE_CHAR || t1 > MANA_DATA_TYPE_INT)
-					mana_compile_error(node, "imcompatible type operation in expression");
+					mana_compile_error("imcompatible type operation in expression");
 				node->etc = MANA_IL_LNOT;
 			}
 		}
@@ -653,7 +660,7 @@ DO_RECURSIVE:
 			if (get_node_type(&t1, &t2, node))
 			{
 				if (t1 < MANA_DATA_TYPE_CHAR || t1 > MANA_DATA_TYPE_INT)
-					mana_compile_error(node, "imcompatible type operation in expression");
+					mana_compile_error("imcompatible type operation in expression");
 				node->etc = MANA_IL_NOT;
 			}
 		}
@@ -668,7 +675,7 @@ DO_RECURSIVE:
 			if (get_node_type(&t1, &t2, node))
 			{
 				if (t1 < MANA_DATA_TYPE_CHAR || t1 > MANA_DATA_TYPE_FLOAT)
-					mana_compile_error(node, "imcompatible type operation in expression");
+					mana_compile_error("imcompatible type operation in expression");
 			}
 		}
 		break;
@@ -684,9 +691,9 @@ DO_RECURSIVE:
 			if (get_node_type(&t1, &t2, node))
 			{
 				if (t2 == MANA_DATA_TYPE_VOID || t2 > MANA_DATA_TYPE_FLOAT)
-					mana_compile_error(node, "non-integer expression used as subscript");
+					mana_compile_error("non-integer expression used as subscript");
 				if (t1 != MANA_DATA_TYPE_ARRAY)
-					mana_compile_error(node, "subscript specified to non-array");
+					mana_compile_error("subscript specified to non-array");
 				else
 				{
 					if (node->right->id == MANA_NODE_CONST)
@@ -697,7 +704,7 @@ DO_RECURSIVE:
 							node->right->type == mana_type_get(MANA_DATA_TYPE_INT));
 
 						if (node->right->digit >= (node->left->type)->number_of_elements)
-							mana_compile_error(node, "subscript range over");
+							mana_compile_error("subscript range over");
 					}
 
 					node->type = (node->left->type)->component;
@@ -739,7 +746,7 @@ DO_RECURSIVE:
 				node->symbol->class_type != MANA_CLASS_TYPE_NATIVE_FUNCTION &&
 				node->symbol->class_type != MANA_CLASS_TYPE_MEMBER_FUNCTION)
 			{
-				mana_compile_error(node, "trying to call non-funcation");
+				mana_compile_error("trying to call non-funcation");
 			}
 #endif
 		}
@@ -776,7 +783,7 @@ DO_RECURSIVE:
 			if (get_node_type(&t1, &t2, node))
 			{
 				if (t1 < MANA_DATA_TYPE_CHAR || t1 > MANA_DATA_TYPE_INT)
-					mana_compile_error(node, "imcompatible type operation in expression");
+					mana_compile_error("imcompatible type operation in expression");
 			}
 		}
 		break;
@@ -790,7 +797,7 @@ DO_RECURSIVE:
 			if (get_node_type(&t1, &t2, node))
 			{
 				if (t1 != MANA_DATA_TYPE_FLOAT)
-					mana_compile_error(node, "imcompatible type operation in expression");
+					mana_compile_error("imcompatible type operation in expression");
 			}
 		}
 		break;

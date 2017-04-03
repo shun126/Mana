@@ -163,11 +163,11 @@ typedef struct mana_symbol_entry
 	struct mana_type_description* type;					/*!< mana_type_descriptionのリンク */
 	mana_symbol_class_type_id class_type;				/*!< シンボルの種類ID */
 	mana_symbol_memory_type_id attrib;					/*!< シンボルのメモリの種類 */
-	char* name;											/*!< 名称 */
+	const char* name;									/*!< 名称 */
 	int32_t address;									/*!< アドレス */
 	int32_t etc;										/*!< 汎用(廃止予定) */
 	float hloat;										/*!< 浮動小数点保存バッファ */
-	char* string;										/*!< 文字列保存バッファ */
+	const char* string;									/*!< 文字列保存バッファ */
 	int32_t define_level;								/*!< 定義レベル */
 	int32_t number_of_parameters;						/*!< パラメータの数 */
 	bool override;										//!< 上書き許可
@@ -184,7 +184,7 @@ typedef struct mana_type_description
 	struct mana_type_description* parent;				/*!< 親の型へのリンク(継承がなくなったので未使用) */
 	struct mana_type_description* component;			/*!< 配列、参照型の元の型へのリンク */
 	mana_symbol_data_type_id tcons;						/*!< 型のID */
-	char* name;											/*!< 型の名称 */
+	const char* name;									/*!< 型の名称 */
 	int32_t number_of_elements;							/*!< 配列のサイズ */
 	int32_t memory_size;								/*!< メモリサイズ */
 	int32_t alignment_memory_size;						/*!< アライメントサイズ */
@@ -238,22 +238,22 @@ extern mana_symbol_entry* mana_symbol_get_head_symbol(void);
 extern int32_t mana_symbol_is_valid_variable(mana_symbol_entry*);
 
 extern int32_t mana_symbol_get_static_memory_address();
-extern void mana_symbol_set_static_memory_address(int32_t size);
+extern void mana_symbol_set_static_memory_address(const int32_t size);
 
 extern int32_t mana_symbol_get_global_memory_address();
-extern void mana_symbol_set_global_memory_address(int32_t size);
+extern void mana_symbol_set_global_memory_address(const int32_t size);
 
 extern mana_symbol_entry* mana_symbol_lookup(const char* name);
 extern mana_symbol_entry* mana_symbol_lookup_or_create_dummy(const char* name);
-extern mana_symbol_entry* mana_symbol_create_alias(char*, char*);
-extern mana_symbol_entry* mana_symbol_create_const_int(char*, int32_t);
-extern mana_symbol_entry* mana_symbol_create_const_float(char*, float);
-extern mana_symbol_entry* mana_symbol_create_const_string(char*, char*);
+extern mana_symbol_entry* mana_symbol_create_alias(const char*, const char*);
+extern mana_symbol_entry* mana_symbol_create_const_int(const char*, const int32_t);
+extern mana_symbol_entry* mana_symbol_create_const_float(const char*, const float);
+extern mana_symbol_entry* mana_symbol_create_const_string(const char*, const char*);
 //extern mana_symbol_entry* mana_symbol_create_type(char*);
 extern mana_symbol_entry* mana_symbol_create_identification(const char* name, mana_type_description* type, const bool static_variable);
-extern mana_symbol_entry* mana_symbol_create_label(char*);
+extern mana_symbol_entry* mana_symbol_create_label(const char*);
 
-extern void mana_symbol_destroy(char* name);
+extern void mana_symbol_destroy(const char* name);
 
 // function
 extern mana_symbol_entry* mana_symbol_create_function(const char* name);
@@ -310,7 +310,7 @@ extern void mana_symbol_allocate_memory(mana_symbol_entry*, mana_type_descriptio
 extern void mana_symbol_check_undefine(void);
 
 extern void mana_symbol_print_header(void);
-extern void mana_symbol_print_footer(char*, mana_type_description*);
+extern void mana_symbol_print_footer(const char*, mana_type_description*);
 extern void mana_symbol_print_entry(mana_symbol_entry*, mana_type_description*);
 extern void mana_symbol_print_dummy_global_variable(size_t size);
 

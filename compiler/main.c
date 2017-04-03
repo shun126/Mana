@@ -23,11 +23,17 @@
 #if !defined(___MANA_DATALINK_GENERATOR_H___)
 #include "datalink_generator.h"
 #endif
+#if !defined(___MANA_ERROR_H___)
+#include "error.h"
+#endif
 #if !defined(___MANA_PRE_RESOLVER_H___)
 #include "pre_resolver.h"
 #endif
 #if !defined(___MANA_JUMP_H___)
 #include "jump.h"
+#endif
+#if !defined(___MANA_LINKER_H___)
+#include "linker.h"
 #endif
 #if !defined(___MANA_REGISTER_H___)
 #include "register.h"
@@ -55,8 +61,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-
-#define MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE	(2048)
 
 static char mana_input_filename[_MAX_PATH];
 static char mana_output_filename[_MAX_PATH];
@@ -150,125 +154,9 @@ char* _fullpath(char* out, char* in, int32_t size)
 
 #endif
 
-void mana_error(const char* filename, const size_t line, const char* format, ...)
+extern const char* mana_get_output_filename()
 {
-	char string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
-
-	va_list argptr;
-	va_start(argptr, format);
-#if defined(__STDC_WANT_SECURE_LIB__)
-	vsprintf_s(string, sizeof(string), format, argptr);
-#else
-	vsprintf(string, format, argptr);
-#endif
-#if defined(_MSC_VER)
-	mana_print("%s(%d): error: %s\n", filename, line, string);
-#else
-	mana_print("%s:%d: error: %s\n", filename, line, string);
-#endif
-}
-
-void mana_warning(const char* filename, const size_t line, const char* format, ...)
-{
-	char string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
-
-	va_list argptr;
-	va_start(argptr, format);
-#if defined(__STDC_WANT_SECURE_LIB__)
-	vsprintf_s(string, sizeof(string), format, argptr);
-#else
-	vsprintf(string, format, argptr);
-#endif
-#if defined(_MSC_VER)
-	mana_print("%s(%d): warning: %s\n", filename, line, string);
-#else
-	mana_print("%s:%d: warning: %s\n", filename, line, string);
-#endif
-}
-
-void mana_compile_error(const char* format, ...)
-{
-	char string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
-
-	va_list argptr;
-	va_start(argptr, format);
-#if defined(__STDC_WANT_SECURE_LIB__)
-	vsprintf_s(string, sizeof(string), format, argptr);
-#else
-	vsprintf(string, format, argptr);
-#endif
-
-	yyerror(string);
-}
-
-void mana_compile_warning(const char* format, ...)
-{
-	char string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
-
-	va_list argptr;
-	va_start(argptr, format);
-#if defined(__STDC_WANT_SECURE_LIB__)
-	vsprintf_s(string, sizeof(string), format, argptr);
-#else
-	vsprintf(string, format, argptr);
-#endif
-
-#if defined(_MSC_VER)
-	mana_print("%s(%d): warning: %s\n", mana_lexer_get_current_filename(), mana_lexer_get_current_line(), string);
-#else
-	mana_print("%s(%d): warning: %s\n", mana_lexer_get_current_filename(), mana_lexer_get_current_line(), string);
-#endif
-}
-
-void mana_generator_error(const char* format, ...)
-{
-	char string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
-
-	va_list argptr;
-	va_start(argptr, format);
-#if defined(__STDC_WANT_SECURE_LIB__)
-	vsprintf_s(string, sizeof(string), format, argptr);
-#else
-	vsprintf(string, format, argptr);
-#endif
-
-	mana_print("%s: error: %s\n", mana_output_filename, string);
-}
-
-void mana_generator_warning(const char* format, ...)
-{
-	char string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
-
-	va_list argptr;
-	va_start(argptr, format);
-#if defined(__STDC_WANT_SECURE_LIB__)
-	vsprintf_s(string, sizeof(string), format, argptr);
-#else
-	vsprintf(string, format, argptr);
-#endif
-
-	mana_print("%s: warning: %s\n", mana_output_filename, string);
-}
-
-void mana_fatal(const char* format, ...)
-{
-	char string[MANA_COMPILER_MAX_MESSAGE_BUFFER_SIZE];
-
-	va_list argptr;
-	va_start(argptr, format);
-#if defined(__STDC_WANT_SECURE_LIB__)
-	vsprintf_s(string, sizeof(string), format, argptr);
-#else
-	vsprintf(string, format, argptr);
-#endif
-
-	mana_print("%s: fatal: %s\n", mana_output_filename, string);
-	yynerrs++;
-}
-
-void mana_fatal_no_memory(void)
-{
-	mana_fatal("no memory error");
+	return mana_output_filename;
 }
 
 static bool mana_test_execute(void* program)
@@ -284,10 +172,10 @@ static bool mana_test_execute(void* program)
 		{
 			if(mana_load_program(mana_instance, program, true))
 			{
-				unsigned long long update_time = mana_get_micro_secound();
+				uint64_t update_time = mana_get_micro_secound();
 				double update_secound;
 				do{
-					unsigned long long current_update_time = mana_get_micro_secound();
+					uint64_t current_update_time = mana_get_micro_secound();
 					update_secound = (double)(current_update_time - update_time) / 1000000.f;
 					update_time = current_update_time;
 				} while (mana_run(mana_instance, (float)update_secound));
@@ -498,35 +386,35 @@ ESCAPE:
 }
 
 /**
- * mana_print title
+ * MANA_PRINT title
  */
 static void print_title()
 {
-	mana_print("mana %s.%s (%04d-%02d-%02d)\n",
+	MANA_PRINT("mana %s.%s (%04d-%02d-%02d)\n",
 		BUILD_MAJOR_VERSION, BUILD_MINOR_VERSION,
 		BUILD_YEAR, BUILD_MONTH, BUILD_DAY);
 }
 
 /**
- * mana_print copyright holder's name
+ * MANA_PRINT copyright holder's name
  */
 static void print_copyright()
 {
-	mana_print("mana - Copyright (C) 2002-%04d Shun Moriya\n", BUILD_YEAR);
+	MANA_PRINT("mana - Copyright (C) 2002-%04d Shun Moriya\n", BUILD_YEAR);
 }
 
 /**
- * mana_print usage
+ * MANA_PRINT usage
  */
 static void print_usage()
 {
-	mana_print("usage:mana [switch] infile\n");
-	mana_print("            -o filename     specify output file name\n");
-	mana_print("            -i dirname      specify program header directory name\n");
-	mana_print("            --help          print this message\n");
-	mana_print("            --copyright     print copyright holder\n");
-	mana_print("            --version       print the version\n");
-	mana_print("\n\nReport bugs to\n");
+	MANA_PRINT("usage:mana [switch] infile\n");
+	MANA_PRINT("            -o filename     specify output file name\n");
+	MANA_PRINT("            -i dirname      specify program header directory name\n");
+	MANA_PRINT("            --help          print this message\n");
+	MANA_PRINT("            --copyright     print copyright holder\n");
+	MANA_PRINT("            --version       print the version\n");
+	MANA_PRINT("\n\nReport bugs to\n");
 }
 
 /**
@@ -542,7 +430,7 @@ static int32_t parse_arguments(int32_t argc, char* argv[])
 
 	if(argc < 2)
 	{
-		mana_print("No input files\n");
+		MANA_PRINT("No input files\n");
 		return false;
 	}else{
 		mana_input_filename[0] = '\0';
@@ -563,7 +451,7 @@ static int32_t parse_arguments(int32_t argc, char* argv[])
 					cmdcnt ++;
 					if(cmdcnt >= argc)
 					{
-						mana_print("no output file name\n");
+						MANA_PRINT("no output file name\n");
 						return false;
 					}
 					else
@@ -620,7 +508,7 @@ static int32_t parse_arguments(int32_t argc, char* argv[])
 						if((mana_variable_header_file = fopen(filename, "wt")) == NULL)
 #endif
 						{
-							mana_print("'%s' open failed.\n", filename);
+							MANA_PRINT("'%s' open failed.\n", filename);
 							return false;
 						}
 					}
@@ -655,7 +543,7 @@ static int32_t parse_arguments(int32_t argc, char* argv[])
 					}
 
 				default:
-					mana_print("unrecognized option\n");
+					MANA_PRINT("unrecognized option\n");
 					return false;
 				}
 			}
@@ -669,7 +557,7 @@ static int32_t parse_arguments(int32_t argc, char* argv[])
 			}
 			else
 			{
-				mana_print("unrecognized option\n");
+				MANA_PRINT("unrecognized option\n");
 				return false;
 			}
 		}
@@ -702,7 +590,7 @@ static int32_t parse_arguments(int32_t argc, char* argv[])
  */
 int32_t main(int32_t argc, char* argv[])
 {
-	int32_t result = 1;
+	int32_t result = 0;
 
 #if defined(_DEBUG) && defined(_MSC_VER)
 	_CrtMemState stOldMemState;

@@ -100,8 +100,8 @@ int32_t mana_symbol_return_address_list;
 
 static mana_symbol_entry* mana_symbol_root_pointer = NULL;
 
-static mana_symbol_entry* mana_symbol_create(char* name, mana_symbol_class_type_id class_type);
-static mana_symbol_entry* mana_symbol_create_entry(char* name, mana_symbol_class_type_id class_type, int32_t address);
+static mana_symbol_entry* mana_symbol_create(const char* name, const mana_symbol_class_type_id class_type);
+static mana_symbol_entry* mana_symbol_create_entry(const char* name, const mana_symbol_class_type_id class_type, const int32_t address);
 
 void mana_symbol_initialize(void)
 {
@@ -202,7 +202,7 @@ int32_t mana_symbol_get_static_memory_address()
 	return mana_symbol_static_memory_address;
 }
 
-void mana_symbol_set_static_memory_address(int32_t size)
+void mana_symbol_set_static_memory_address(const int32_t size)
 {
 	if(mana_symbol_static_memory_address < size)
 		mana_symbol_static_memory_address = size;
@@ -213,13 +213,13 @@ int32_t mana_symbol_get_global_memory_address()
 	return mana_symbol_global_memory_address;
 }
 
-void mana_symbol_set_global_memory_address(int32_t size)
+void mana_symbol_set_global_memory_address(const int32_t size)
 {
 	if(mana_symbol_global_memory_address < size)
 		mana_symbol_global_memory_address = size;
 }
 
-static int32_t mana_symbol_get_hash_value(char* name)
+static int32_t mana_symbol_get_hash_value(const char* name)
 {
 	unsigned h = 0;
 
@@ -318,7 +318,7 @@ mana_symbol_entry* mana_symbol_lookup_or_create_dummy(const char* name)
 	return symbol;
 }
 
-static mana_symbol_entry* mana_symbol_create_with_level(char* name, mana_symbol_class_type_id class_type, int32_t level)
+static mana_symbol_entry* mana_symbol_create_with_level(const char* name, mana_symbol_class_type_id class_type, int32_t level)
 {
 	mana_symbol_entry* symbol;
 	int32_t hash_value;
@@ -344,19 +344,19 @@ static mana_symbol_entry* mana_symbol_create_with_level(char* name, mana_symbol_
 	return symbol;
 }
 
-static mana_symbol_entry* mana_symbol_create(char* name, mana_symbol_class_type_id class_type)
+static mana_symbol_entry* mana_symbol_create(const char* name, const mana_symbol_class_type_id class_type)
 {
 	return mana_symbol_create_with_level(name, class_type, mana_symbol_block_level);
 }
 
-void mana_symbol_destroy(char* name)
+void mana_symbol_destroy(const char* name)
 {
 	mana_symbol_entry* symbol = mana_symbol_lookup(name);
 	if (symbol)
 		symbol->name = 0;
 }
 
-static mana_symbol_entry* mana_symbol_create_entry(char* name, mana_symbol_class_type_id class_type, int32_t address)
+static mana_symbol_entry* mana_symbol_create_entry(const char* name, const mana_symbol_class_type_id class_type, const int32_t address)
 {
 	mana_symbol_entry* symbol;
 
@@ -366,7 +366,7 @@ static mana_symbol_entry* mana_symbol_create_entry(char* name, mana_symbol_class
 	return symbol;
 }
 
-mana_symbol_entry* mana_symbol_create_alias(char* name, char* filename)
+mana_symbol_entry* mana_symbol_create_alias(const char* name, const char* filename)
 {
 	mana_symbol_entry* symbol;
 	char path[_MAX_PATH];
@@ -389,7 +389,7 @@ mana_symbol_entry* mana_symbol_create_alias(char* name, char* filename)
 	return symbol;
 }
 
-mana_symbol_entry* mana_symbol_create_const_int(char* name, int32_t value)
+mana_symbol_entry* mana_symbol_create_const_int(const char* name, const int32_t value)
 {
 	mana_symbol_entry* symbol = mana_symbol_lookup(name);
 	if(symbol)
@@ -406,7 +406,7 @@ mana_symbol_entry* mana_symbol_create_const_int(char* name, int32_t value)
 	return symbol;
 }
 
-mana_symbol_entry* mana_symbol_create_const_float(char* name, float value)
+mana_symbol_entry* mana_symbol_create_const_float(const char* name, const float value)
 {
 	mana_symbol_entry* symbol = mana_symbol_lookup(name);
 	if(symbol)
@@ -424,7 +424,7 @@ mana_symbol_entry* mana_symbol_create_const_float(char* name, float value)
 	return symbol;
 }
 
-mana_symbol_entry* mana_symbol_create_const_string(char* name, char* value)
+mana_symbol_entry* mana_symbol_create_const_string(const char* name, const char* value)
 {
 	mana_symbol_entry* symbol = mana_symbol_lookup(name);
 	if(symbol)
@@ -493,7 +493,7 @@ mana_symbol_entry* mana_symbol_create_identification(const char* name, mana_type
 	return symbol;
 }
 
-mana_symbol_entry* mana_symbol_create_label(char* name)
+mana_symbol_entry* mana_symbol_create_label(const char* name)
 {
 	mana_symbol_entry* symbol;
 
@@ -1040,10 +1040,12 @@ void mana_symbol_commit_registration_module(const char* name)
 
 void mana_symbol_open_module(mana_symbol_entry* symbol)
 {
+	MANA_UNUSED_VAR(symbol);
 }
 
 void mana_symbol_close_module(const char* name)
 {
+	MANA_UNUSED_VAR(name);
 }
 
 void mana_symbol_extend_module(const char* name)
@@ -1277,7 +1279,7 @@ void mana_symbol_allocate_memory(mana_symbol_entry* symbol, mana_type_descriptio
 	symbol->attrib = parameter;
 }
 
-static void mana_symbol_check_undefine_recursive(char* parent_name, mana_symbol_entry* symbol)
+static void mana_symbol_check_undefine_recursive(mana_symbol_entry* symbol)
 {
 	while(symbol)
 	{
@@ -1285,7 +1287,7 @@ static void mana_symbol_check_undefine_recursive(char* parent_name, mana_symbol_
 		{
 		case MANA_CLASS_TYPE_TYPEDEF:
 			if(symbol->type->tcons == MANA_DATA_TYPE_ACTOR)
-				mana_symbol_check_undefine_recursive(symbol->name, (mana_symbol_entry*)(symbol->type->component));
+				mana_symbol_check_undefine_recursive((mana_symbol_entry*)(symbol->type->component));
 			break;
 
 		default:
@@ -1298,7 +1300,7 @@ static void mana_symbol_check_undefine_recursive(char* parent_name, mana_symbol_
 
 void mana_symbol_check_undefine(void)
 {
-	mana_symbol_check_undefine_recursive(NULL, mana_symbol_block_table[0].head);
+	mana_symbol_check_undefine_recursive(mana_symbol_block_table[0].head);
 }
 
 void mana_symbol_print_header(void)
@@ -1315,7 +1317,7 @@ void mana_symbol_print_header(void)
 	}
 }
 
-void mana_symbol_print_footer(char* name, mana_type_description* type)
+void mana_symbol_print_footer(const char* name, mana_type_description* type)
 {
 	int32_t i;
 
@@ -1399,7 +1401,7 @@ static int32_t mana_symbol_write_actor_infomation_data(mana_stream* stream, mana
 	number_of_actions = mana_symbol_get_number_of_actions(type);
 	if(number_of_actions > (1 << (8 * sizeof(actor_info.number_of_actions))))
 	{
-		mana_generator_error("Too much actions in %s.\n", symbol->name);
+		mana_linker_error("Too much actions in %s.\n", symbol->name);
 		return false;
 	}
 
@@ -1411,7 +1413,7 @@ static int32_t mana_symbol_write_actor_infomation_data(mana_stream* stream, mana
 
 	if(actor_info.name == (uint32_t)-1)
 	{
-		mana_generator_error("Can't find actor '%s'.\n", symbol->name);
+		mana_linker_error("Can't find actor '%s'.\n", symbol->name);
 		return false;
 	}
 
@@ -1434,7 +1436,7 @@ static int32_t mana_symbol_write_actor_infomation_data(mana_stream* stream, mana
 
 			if(action_info.name == (uint32_t)-1)
 			{
-				mana_generator_error("Can't find action '%s'.\n", component_symbol->name);
+				mana_linker_error("Can't find action '%s'.\n", component_symbol->name);
 				return false;
 			}
 

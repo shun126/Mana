@@ -9,6 +9,9 @@ mana (compiler)
 @date	2003-
 */
 
+#if !defined(___MANA_ERROR_H___)
+#include "error.h"
+#endif
 #if !defined(__MANA_GENERATOR_H___)
 #include "generator.h"
 #endif
@@ -476,12 +479,16 @@ variable_size	: '[' tDIGIT ']'
 %%
 
 /*!
- * @brief	mana_print error message
+ * @brief	MANA_PRINT error message
  * @param	message		error message
  */
-void yyerror(const char* message)
+void yyerror(char* message)
 {
-	mana_error(mana_lexer_get_current_filename(), mana_lexer_get_current_line(), message);
+#if defined(_MSC_VER)
+	MANA_PRINT("%s(%d): error: %s\n", mana_lexer_get_current_filename(), mana_lexer_get_current_line(), message);
+#else
+	MANA_PRINT("%s:%d: error: %s\n", mana_lexer_get_current_filename(), mana_lexer_get_current_line(), message);
+#endif
 	yynerrs ++;
 }
 

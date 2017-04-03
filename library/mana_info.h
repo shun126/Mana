@@ -95,7 +95,7 @@ mana_actor_info_header :: flag
 typedef struct mana_action_info_header
 {
 	uint32_t name;								/*!< アクション名 */
-	uint32_t address;							/*!< アドレス */
+	intptr_t address;							/*!< アドレス */
 }mana_action_info_header;
 
 /*!  */
@@ -266,7 +266,7 @@ extern void mana_print_debug(const char* format, ...);
 extern int32_t mana_string_find(const int8_t text[], const int8_t pattern[]);
 
 /*! パフォーマンス情報をマイクロ秒で取得します */
-unsigned long long mana_get_micro_secound();
+extern uint64_t mana_get_micro_secound(void);
 
 /*! ファイルサイズを取得 */
 extern long mana_get_file_size(const char* filename);
@@ -282,9 +282,9 @@ extern const char* mana_get_instruction_text(const char* data, const void* progr
 
 #if defined(_DEBUG)
 /*! コンソールに文字列を出力 */
-#define MANA_PRINT(...)			mana_print_debug(__VA_ARGS__)
+#define MANA_PRINT(...)		mana_print_debug(__VA_ARGS__)
 /*! コンソールに文字列を出力(デバッグビルドのみ) */
-#define MANA_TRACE(...)			mana_print_debug(__VA_ARGS__)
+#define MANA_TRACE(...)		mana_print_debug(__VA_ARGS__)
 /*! コンソールに文字列を出力 */
 #define MANA_WARNING(...)	{ mana_print_debug(__VA_ARGS__); }
 /*! コンソールに文字列を出力後強制終了 */
@@ -293,28 +293,37 @@ extern const char* mana_get_instruction_text(const char* data, const void* progr
 #define MANA_CHECK(EXP)		if(!(EXP)){ mana_print_debug("%s: %s(%d)\n", #EXP, __FILE__, __LINE__); }
 /*! 値の真偽を調べ、偽なら強制終了(デバッグビルドのみ) */
 #define MANA_ASSERT(EXP)	if(!(EXP)){ mana_print_debug("%s: %s(%d)\n", #EXP, __FILE__, __LINE__); abort(); }
+/*! 値の真偽を調べ、偽なら強制終了(デバッグビルドのみ) */
+#define MANA_ASSERT_MESSAGE(EXP, m) if(!(EXP)){ mana_print_debug("%s: %s(%d): %s\n", #EXP, __FILE__, __LINE__, m); abort(); }
+//! 強制終了
+#define MANA_BUG(m) { mana_print_debug("%s(%d): BUG!: %s\n", __FILE__, __LINE__, m); abort(); }
 #else
 /*! コンソールに文字列を出力 */
-#define MANA_PRINT(...)			printf(__VA_ARGS__)
+#define MANA_PRINT(...)		printf(__VA_ARGS__)
 /*! コンソールに文字列を出力(デバッグビルドのみ) */
-#define MANA_TRACE(...)			((void)0)
+#define MANA_TRACE(...)		((void)0)
 /*! コンソールに文字列を出力 */
 #define MANA_WARNING(...)	{ printf(__VA_ARGS__); }
 /*! コンソールに文字列を出力後強制終了 */
 #define MANA_ERROR(...)		{ printf(__VA_ARGS__); abort(); }
 /*! 値の真偽を調べ、偽なら警告表示(デバッグビルドのみ) */
-#define MANA_CHECK(EXP)		assert(EXP)
+#define MANA_CHECK(EXP)		((void)0)
 /*! 値の真偽を調べ、偽なら強制終了(デバッグビルドのみ) */
-#define MANA_ASSERT(EXP)	assert(EXP)
+#define MANA_ASSERT(EXP)	((void)0)
+/*! 値の真偽を調べ、偽なら強制終了(デバッグビルドのみ) */
+#define MANA_ASSERT_MESSAGE(EXP, m) ((void)0)
+//! 強制終了
+#define MANA_BUG(m) { printf("%s(%d): BUG!: %s\n", __FILE__, __LINE__, m); abort(); }
 #endif
 /*! 値の真偽を調べ、偽なら強制終了 */
 #define MANA_VERIFY(EXP, ...) \
 if(!(EXP)){ \
-	mana_print_debug("%s(%d): ", __FILE__, __LINE__); \
-	mana_print_debug(__VA_ARGS__); \
-	mana_print_debug(" (%s)\n", #EXP); \
+	MANA_PRINT("%s(%d): ", __FILE__, __LINE__); \
+	MANA_PRINT(__VA_ARGS__); \
+	MANA_PRINT(" (%s)\n", #EXP); \
 	abort(); \
 }
+#define MANA_UNUSED_VAR(var)	((void)&var);
 
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)
 }
