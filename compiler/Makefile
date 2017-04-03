@@ -22,8 +22,8 @@ LXFLAGS	= -8 -F
 CP      = cp -f
 RM	= rm -f
 
-SOURCES	= code.c data.c datalink_generator.c generator.c jump.c linker.c main.c node.c pool.c post_resolver.c pre_resolver.c register.c resolver.c symbol.c type.c parser.y lexer.l
-OBJECTS	= code.o data.o datalink_generator.o generator.o jump.o linker.o main.o node.o pool.o post_resolver.o pre_resolver.o register.o resolver.o symbol.o type.o parser.o lexer.o
+SOURCES	= code.c data.c datalink_generator.c error.c generator.c jump.c linker.c main.c node.c pool.c post_resolver.c pre_resolver.c register.c resolver.c symbol.c type.c parser.y lexer.l
+OBJECTS	= code.o data.o datalink_generator.o error.o generator.o jump.o linker.o main.o node.o pool.o post_resolver.o pre_resolver.o register.o resolver.o symbol.o type.o parser.o lexer.o
 SECOUND	= parser.c parser.h lexer.c
 
 .SUFFIXES: .y .l .c .o

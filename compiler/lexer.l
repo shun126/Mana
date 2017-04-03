@@ -1,14 +1,20 @@
 %{
 /*
- * mana (compiler)
- *
- * @file	mana_lexer.l
- * @brief	字句解析に関するソースファイル
- * @detail	字句解析に関係するソースファイルです。
- * @author	Shun Moriya
- * @date	2003-
- */
+mana (compiler)
 
+@file	mana_lexer.l
+@brief	字句解析に関係するソースファイル
+@detail	このファイルは字句解析に関係するソースファイルです。
+@author	Shun Moriya
+@date	2003-
+*/
+
+#if !defined(___MANA_LEXER_H___)
+#include "lexer.h"
+#endif
+#if !defined(___MANA_ERROR_H___)
+#include "error.h"
+#endif
 #if !defined(___MANA_MAIN_H___)
 #include "main.h"
 #endif
@@ -182,12 +188,11 @@ other		.
 	return tSTRING;
 }
 <INITIAL>{other}	{
-	mana_print("%s(%d): error: Illegal char '%c' ignored\n",
-		mana_lexer_get_current_filename(), mana_lexer_get_current_line(), yytext[0]);
+	yyerror("Illegal char '%c' ignored\n", yytext[0]);
 }
 
 <COMMENT_BLOCK>"/*"	{
-	mana_compile_error("comment nest error");
+	yyerror("comment nest error");
 }
 <COMMENT_BLOCK>"*/"	BEGIN INITIAL;
 <COMMENT_BLOCK>\n	yylineno ++;
@@ -223,8 +228,7 @@ other		.
 }
 <HEX>{ws}+			;
 <HEX>{other}		{
-	mana_print("%s(%d): error: Illegal char '%c' ignored\n",
-		mana_lexer_get_current_filename(), mana_lexer_get_current_line(), yytext[0]);
+	yyerror("Illegal char '%c' ignored\n", yytext[0]);
 }
 
 <BIN>[01_]+			{
@@ -234,8 +238,7 @@ other		.
 }
 <BIN>{ws}+			;
 <BIN>{other}		{
-	mana_print("%s(%d): error: Illegal char '%c' ignored\n",
-		mana_lexer_get_current_filename(), mana_lexer_get_current_line(), yytext[0]);
+	yyerror("Illegal char '%c' ignored\n", yytext[0]);
 }
 
 %%
@@ -329,23 +332,14 @@ int32_t yywrap()
 	return mana_lexer_close();
 }
 
-/*!
- * initialize scanner
- * @param	pFilename	file name pointer
- * @retval	true	success
- * @retval	false	failed
- */
-int32_t mana_lexer_initialize(char* pFilename)
+int32_t mana_lexer_initialize(const char* filename)
 {
 	mana_pool_initialize();
 	mana_parser_initialize();
 	yylineno = 1;
-	return mana_lexer_open(pFilename, true);
+	return mana_lexer_open(filename, true);
 }
 
-/*!
- * finalize scanner
- */
 void mana_lexer_finalize(void)
 {
 	if(mana_lexer_status_pointer > 0)
@@ -365,9 +359,9 @@ void mana_lexer_finalize(void)
  * @retval	true	file already opened
  * @retval	false	not yet
  */
-static int32_t mana_lexer_is_already_opened(char* path)
+static int32_t mana_lexer_is_already_opened(const char* path)
 {
-	static char* pathList[2048];
+	static const char* pathList[2048];
 	static int32_t pathCounter = 0;
 	int32_t i;
 
@@ -377,20 +371,13 @@ static int32_t mana_lexer_is_already_opened(char* path)
 			return false;
 	}
 	pathList[pathCounter] = path;
-	if(++pathCounter >= 2048)
+	if(++pathCounter >= sizeof(pathList) / sizeof(pathList[0]))
 		mana_compile_error("too many include files");
 
 	return true;
 }
 
-/*!
- * open file
- * @param	filename	file name pointer
- * @param	check		
- * @retval	true	success
- * @retval	false	failed
- */
-int32_t mana_lexer_open(char* filename, int32_t check)
+int32_t mana_lexer_open(const char* filename, const bool check)
 {
 	char path[_MAX_PATH];
 	char drive[_MAX_DRIVE];
@@ -463,11 +450,6 @@ int32_t mana_lexer_open(char* filename, int32_t check)
 	return true;
 }
 
-/*!
- * close file
- * @retval	true	scanning complete.
- * @retval	false	still need scanning.
- */
 int32_t mana_lexer_close()
 {
 	char path[_MAX_PATH];
@@ -505,38 +487,22 @@ int32_t mana_lexer_close()
 	}
 }
 
-/*!
-get current file name
-@return	current file name pointer
-*/
 const char* mana_lexer_get_current_filename(void)
 {
 	return mana_lexer_filename;
 }
 
-/*!
-set current file name
-@param[in]	filename	current file name pointer
-*/
 void mana_lexer_set_current_filename(const char* filename)
 {
 	mana_lexer_filename = filename;
 }
 
-/*!
-get current line number
-@return	current line number
-*/
-int32_t mana_lexer_get_current_line(void)
+int mana_lexer_get_current_line(void)
 {
 	return yylineno;
 }
 
-/*!
-set current line number
-@return	current line number
-*/
-void mana_lexer_set_current_line(const int32_t lineno)
+void mana_lexer_set_current_line(const int lineno)
 {
 	yylineno = lineno;
 }
