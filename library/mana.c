@@ -172,16 +172,13 @@ actor_array
  */
 bool mana_load_program(mana* self, void* program, int32_t auto_release)
 {
-	mana_actor_info_header* actor_info;
-	uint32_t i;
-
 	assert(self);
 	assert(program);
 
 	/* プログラムを開放します */
 	mana_unload_program(self);
 
-	if((int32_t)program % MANA_DATALINK_STANDARD_ALIGNMENT_SIZE)
+	if((intptr_t)program % MANA_DATALINK_STANDARD_ALIGNMENT_SIZE)
 	{
 		MANA_WARNING("The program address is NOT aligned on %d-byte boundaries.\n", MANA_DATALINK_STANDARD_ALIGNMENT_SIZE);
 		goto ABORT;
@@ -205,9 +202,9 @@ bool mana_load_program(mana* self, void* program, int32_t auto_release)
 	/* グローバル変数領域を確保します */
 	self->global_memory = (uint8_t*)mana_malloc(self->file_header->size_of_global_memory);
 
-	actor_info = (mana_actor_info_header*)(self->file_header + 1);
+	mana_actor_info_header* actor_info = (mana_actor_info_header*)(self->file_header + 1);
 
-	for(i = 0; i < self->file_header->number_of_actors; i++)
+	for(uint32_t i = 0; i < self->file_header->number_of_actors; i++)
 	{
 		mana_action_info_header* action_info = (mana_action_info_header*)(actor_info + 1);
 		int32_t j;
@@ -308,14 +305,14 @@ bool mana_load_program(mana* self, void* program, int32_t auto_release)
 	if(self->file_header->flag & MANA_HEADER_FLAG_RESOURCE)
 	{
 		uint8_t* p = self->instruction_pool + self->file_header->size_of_instruction_pool;
-		p = (uint8_t*)(((int32_t)p + (MANA_DATALINK_STANDARD_ALIGNMENT_SIZE - 1))
+		p = (uint8_t*)(((intptr_t)p + (MANA_DATALINK_STANDARD_ALIGNMENT_SIZE - 1))
 			/ MANA_DATALINK_STANDARD_ALIGNMENT_SIZE * MANA_DATALINK_STANDARD_ALIGNMENT_SIZE);
 		mana_datalink_load(&self->datalink, (void*)p);
 	}
 
 	actor_info = (mana_actor_info_header*)(self->file_header + 1);
 
-	for(i = 0; i < self->file_header->number_of_actors; i++)
+	for(uint32_t i = 0; i < self->file_header->number_of_actors; i++)
 	{
 		mana_actor* actor;
 		char* actor_name = &self->constant_pool[actor_info->name];

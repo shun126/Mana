@@ -38,9 +38,13 @@ mana (compiler)
 #if !defined(___MANA_RESOLVER_H___)
 #include "resolver.h"
 #endif
+#if !defined(___MANA_PRE_RESOLVER_H___)
+#include "pre_resolver.h"
+#endif
 #if !defined(___MANA_POST_RESOLVER_H___)
 #include "post_resolver.h"
 #endif
+#include <string.h>
 
 // TODO
 static mana_symbol_entry* mana_actor_symbol_entry_pointer = NULL;
@@ -465,10 +469,6 @@ static int32_t mana_generator_condition(mana_node* tree, int32_t match)
 	return mana_code_set_opecode_and_operand(match ? MANA_IL_BEQ : MANA_IL_BNE, -1);
 }
 
-static void mana_generator_generate_variable_value(mana_node* node)
-{
-}
-
 static void mana_generator_generate_const_int(const mana_symbol_data_type_id type_id, const int32_t value)
 {
 	switch (type_id)
@@ -535,14 +535,6 @@ static void mana_generator_generate_const_float(const mana_symbol_data_type_id t
 	}
 }
 
-static void mana_compier_generate_hogehoge(mana_node* node)
-{
-	MANA_ASSERT(node);
-	MANA_ASSERT(node->symbol);
-
-}
-
-
 ////////////////////////////////////////////////////////////////////////////////
 /*!
 Ž®‚Ì•]‰¿
@@ -607,6 +599,7 @@ void mana_generator_genearte_code(mana_node* node, int32_t enable_load)
 		return;
 
 DO_RECURSIVE:
+	mana_resolver_set_current_file_infomation(node);
 
 	switch (node->id)
 	{
@@ -667,7 +660,7 @@ DO_RECURSIVE:
 	case MANA_NODE_DECLARE_MODULE:
 		{
 			mana_actor_symbol_entry_pointer = mana_symbol_lookup(node->string);
-			mana_symbol_open_module(node->string);
+			mana_symbol_open_module(mana_actor_symbol_entry_pointer);
 			mana_generator_genearte_code(node->left, enable_load);
 			mana_symbol_close_module(node->string);
 			mana_actor_symbol_entry_pointer = NULL;
@@ -679,7 +672,7 @@ DO_RECURSIVE:
 	case MANA_NODE_DECLARE_PHANTOM:
 		{
 			mana_actor_symbol_entry_pointer = mana_symbol_lookup(node->string);
-			mana_symbol_open_actor(mana_actor_symbol_entry_pointer);
+			mana_symbol_open_actor(node->string);
 			mana_generator_genearte_code(node->left, enable_load);
 			mana_symbol_close_actor();
 			mana_actor_symbol_entry_pointer = NULL;
@@ -713,8 +706,8 @@ DO_RECURSIVE:
 		break;
 
 	case MANA_NODE_DECLARE_ARGUMENT:
-		MANA_BUG("illegal type of expression");
 		MANA_ASSERT(node->body == NULL);
+		MANA_BUG("illegal type of expression");
 		break;
 
 	case MANA_NODE_DECLARE_FUNCTION:
@@ -727,8 +720,8 @@ DO_RECURSIVE:
 
 			mana_symbol_open_block(false);
 
-			// ŠÖ”‚Ìˆø”‚ð•]‰¿
-			mana_pre_resolver_resolve(node->right, enable_load);
+			// ŠÖ”‚Ìˆø”‚ð“o˜^
+			mana_pre_resolver_resolve(node->right);
 			node->symbol->parameter_list = mana_symbol_get_head_symbol();
 
 			// 
@@ -1424,7 +1417,6 @@ DO_RECURSIVE:
 #endif
 	default:
 		MANA_BUG("illegal right-hand side value");
-		mana_compile_error(node, "illegal right-hand side value");
 		break;
 	}
 
@@ -1434,7 +1426,7 @@ DO_RECURSIVE:
 	if (node->next)
 	{
 		// ––”öÄ‹A‚È‚Ì‚Ågoto‚É‚Äˆ—‚·‚é
-		//mana_pre_resolver_resolve(node->next);
+		//mana_generator_genearte_code(node->next);
 		node = node->next;
 		goto DO_RECURSIVE;
 	}

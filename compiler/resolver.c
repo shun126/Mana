@@ -11,6 +11,16 @@ mana (compiler)
 #if !defined(___MANA_RESOLVER_H___)
 #include "resolver.h"
 #endif
+#if !defined(___MANA_LEXER_H___)
+#include "lexer.h"
+#endif
+
+void mana_resolver_set_current_file_infomation(mana_node* self)
+{
+	MANA_ASSERT(self);
+	mana_lexer_set_current_filename(self->filename);
+	mana_lexer_set_current_line(self->line);
+}
 
 void mana_resolver_search_symbol_from_name(mana_node* node)
 {

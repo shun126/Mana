@@ -19,7 +19,8 @@ mana (compiler)
 extern "C" {
 #endif
 
-
+extern void mana_resolver_set_current_file_infomation(mana_node* self);
+	
 /*!
 mana_symbol_lookup‚ğŒÄ‚Ño‚µmana_symbol‚ğŒŸõ‚µ‚Änode‚Éİ’è‚µ‚Ü‚·
 @param	node	MANA_NODE_IDENTIFIERƒm[ƒh

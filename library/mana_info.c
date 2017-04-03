@@ -176,7 +176,7 @@ int32_t mana_string_find(const int8_t text[], const int8_t pattern[])
 /*!
  * @return	É}ÉCÉNÉçïb
  */
-unsigned long long mana_get_micro_secound()
+uint64_t mana_get_micro_secound(void)
 {
 #if defined(WIN32)
 	LARGE_INTEGER frequency, counter;
@@ -184,7 +184,7 @@ unsigned long long mana_get_micro_secound()
 	if (!QueryPerformanceFrequency(&frequency) || !QueryPerformanceCounter(&counter))
 		return 0;
 
-	return (unsigned long long)(counter.QuadPart * 1000000 / frequency.QuadPart);
+	return (uint64_t)(counter.QuadPart * 1000000 / frequency.QuadPart);
 #else
 	struct timeval current;
 	return (gettimeofday(&current, NULL) == 0) ? current.tv_usec : 0;
