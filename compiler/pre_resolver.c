@@ -217,6 +217,7 @@ void mana_pre_resolver_resolve(mana_node* node)
 		return;
 
 DO_RECURSIVE:
+	mana_resolver_set_current_file_infomation(node);
 
 	switch (node->id)
 	{
@@ -400,7 +401,7 @@ DO_RECURSIVE:
 			if (symbol)
 				node->digit = symbol->address;
 			else
-				mana_generator_error("undefined symbol '%s'", node->string);
+				mana_linker_error("undefined symbol '%s'", node->string);
 		}
 		break;
 
