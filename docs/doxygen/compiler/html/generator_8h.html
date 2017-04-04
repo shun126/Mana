@@ -1,0 +1,226 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.12"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>mana: generator.h ファイル</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">mana
+   &#160;<span id="projectnumber">0.9.6</span>
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.8.12 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'検索');
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','検索');
+  $(document).ready(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#typedef-members">型定義</a> &#124;
+<a href="#func-members">関数</a>  </div>
+  <div class="headertitle">
+<div class="title">generator.h ファイル</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>コンパイルセクションに関するソースファイル  このファイルはコンパイルセクションに関係するソースファイルです。  
+<a href="#details">[詳解]</a></p>
+<div class="textblock"><code>#include &quot;<a class="el" href="symbol_8h_source.html">symbol.h</a>&quot;</code><br />
+</div>
+<p><a href="generator_8h_source.html">[ソースコード]</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
+型定義</h2></td></tr>
+<tr class="memitem:a00175c6b444916197f7c4987edd5f77e"><td class="memItemLeft" align="right" valign="top"><a id="a00175c6b444916197f7c4987edd5f77e"></a>
+typedef <a class="el" href="structmana__node.html">mana_node</a> *(&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="generator_8h.html#a00175c6b444916197f7c4987edd5f77e">mana_generator_event_funtion_type</a>) (<a class="el" href="structmana__node.html">mana_node</a> *)</td></tr>
+<tr class="memdesc:a00175c6b444916197f7c4987edd5f77e"><td class="mdescLeft">&#160;</td><td class="mdescRight">MANA_NODE_CALLノードを解決する時に呼ばれるコールバック関数の型 <br /></td></tr>
+<tr class="separator:a00175c6b444916197f7c4987edd5f77e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+関数</h2></td></tr>
+<tr class="memitem:a1b3b9ea91cd7555845287d8c826048c0"><td class="memItemLeft" align="right" valign="top"><a id="a1b3b9ea91cd7555845287d8c826048c0"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="generator_8h.html#a1b3b9ea91cd7555845287d8c826048c0">mana_generator_initialize</a> (void)</td></tr>
+<tr class="memdesc:a1b3b9ea91cd7555845287d8c826048c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">初期化 <br /></td></tr>
+<tr class="separator:a1b3b9ea91cd7555845287d8c826048c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86d7c4467fdd91df9e42cbc07d273d40"><td class="memItemLeft" align="right" valign="top"><a id="a86d7c4467fdd91df9e42cbc07d273d40"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="generator_8h.html#a86d7c4467fdd91df9e42cbc07d273d40">mana_generator_finalize</a> (void)</td></tr>
+<tr class="memdesc:a86d7c4467fdd91df9e42cbc07d273d40"><td class="mdescLeft">&#160;</td><td class="mdescRight">終了 <br /></td></tr>
+<tr class="separator:a86d7c4467fdd91df9e42cbc07d273d40"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b934fe387e893f114bd81fb4f09a163"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="generator_8h.html#a5b934fe387e893f114bd81fb4f09a163">mana_generator_add_event</a> (const char *name, <a class="el" href="generator_8h.html#a00175c6b444916197f7c4987edd5f77e">mana_generator_event_funtion_type</a> function)</td></tr>
+<tr class="separator:a5b934fe387e893f114bd81fb4f09a163"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e14ccb8a7af3971341ed247fc92b097"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="generator_8h.html#a5e14ccb8a7af3971341ed247fc92b097">mana_generator_genearte_code</a> (<a class="el" href="structmana__node.html">mana_node</a> *node, int32_t enable_load)</td></tr>
+<tr class="separator:a5e14ccb8a7af3971341ed247fc92b097"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9106e638a2075f703984d393523fb6b9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="generator_8h.html#a9106e638a2075f703984d393523fb6b9">mana_generator_expression</a> (<a class="el" href="structmana__node.html">mana_node</a> *node, int32_t enable_assign)</td></tr>
+<tr class="separator:a9106e638a2075f703984d393523fb6b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
+<div class="textblock"><p>コンパイルセクションに関するソースファイル  このファイルはコンパイルセクションに関係するソースファイルです。 </p>
+<p>mana (compiler)</p>
+<dl class="section author"><dt>著者</dt><dd>Shun Moriya </dd></dl>
+<dl class="section date"><dt>日付</dt><dd>2017- </dd></dl>
+</div><h2 class="groupheader">関数詳解</h2>
+<a id="a5b934fe387e893f114bd81fb4f09a163"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5b934fe387e893f114bd81fb4f09a163">&sect;&nbsp;</a></span>mana_generator_add_event()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_generator_add_event </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="generator_8h.html#a00175c6b444916197f7c4987edd5f77e">mana_generator_event_funtion_type</a>&#160;</td>
+          <td class="paramname"><em>function</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>MANA_NODE_CALLノードを解決する時に呼ばれるコールバック関数を登録します </p><dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>関数名 </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">function</td><td>コールバック関数</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>関数毎に特別な処理を行なうためのコールバック関数を登録します </p><dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>関数名 </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">function</td><td>コールバック関数 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a9106e638a2075f703984d393523fb6b9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9106e638a2075f703984d393523fb6b9">&sect;&nbsp;</a></span>mana_generator_expression()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_generator_expression </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__node.html">mana_node</a> *&#160;</td>
+          <td class="paramname"><em>tree</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>enable_assign</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>式の評価 </p><dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tree</td><td>式のmana_node </td></tr>
+    <tr><td class="paramname">enable_assign</td><td>trueならば代入式、falseならばそれ以外 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a5e14ccb8a7af3971341ed247fc92b097"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e14ccb8a7af3971341ed247fc92b097">&sect;&nbsp;</a></span>mana_generator_genearte_code()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_generator_genearte_code </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__node.html">mana_node</a> *&#160;</td>
+          <td class="paramname"><em>node</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>enable_load</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>ノードを辿りながら中間言語に翻訳します </p><dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">node</td><td>ノード </td></tr>
+    <tr><td class="paramname">enable_load</td><td>trueならばload命令は有効、falseならばload命令は無効 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+2017年04月04日(火) 22時58分52秒作成 - mana / 構成:  &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.12
+</small></address>
+</body>
+</html>

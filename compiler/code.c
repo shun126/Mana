@@ -1,7 +1,7 @@
 /*!
 mana (compiler)
 
-@file	mana_code.c
+@file	code.c
 @brief	命令セクションに関するソースファイル
 @detail	このファイルは命令セクションに関係するソースファイルです。
 @author	Shun Moriya

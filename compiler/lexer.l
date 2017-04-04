@@ -1,8 +1,8 @@
 %{
-/*
+/*!
 mana (compiler)
 
-@file	mana_lexer.l
+@file	lexer.l
 @brief	字句解析に関係するソースファイル
 @detail	このファイルは字句解析に関係するソースファイルです。
 @author	Shun Moriya
@@ -18,7 +18,7 @@ mana (compiler)
 #if !defined(___MANA_MAIN_H___)
 #include "main.h"
 #endif
-#if !defined(___MANA_NODE_H___)
+#if !defined(___NODE_H___)
 #include "node.h"
 #endif
 #if !defined(___MANA_POOL_H___)
@@ -61,7 +61,7 @@ static struct mana_lexer_status
 } mana_lexer_status[MAX_NEST_LEVEL];
 
 static int32_t mana_lexer_status_pointer = -1;
-static char* mana_lexer_filename;
+static const char* mana_lexer_filename;
 int32_t yylineno;
 
 static char* mana_lexer_get_string(void);
@@ -120,11 +120,11 @@ other		.
 <INITIAL>"include"	return tINCLUDE;
 <INITIAL>"import"	return tIMPORT;
 
-<INITIAL>"void"		{ yylval.type = mana_type_get(MANA_DATA_TYPE_VOID); return tTYPE; }
-<INITIAL>"char"		{ yylval.type = mana_type_get(MANA_DATA_TYPE_CHAR); return tTYPE; }
-<INITIAL>"short"	{ yylval.type = mana_type_get(MANA_DATA_TYPE_SHORT); return tTYPE; }
-<INITIAL>"int"		{ yylval.type = mana_type_get(MANA_DATA_TYPE_INT); return tTYPE; }
-<INITIAL>"float"	{ yylval.type = mana_type_get(MANA_DATA_TYPE_FLOAT); return tTYPE; }
+<INITIAL>"void"		{ yylval.type = mana_type_get(SYMBOL_DATA_TYPE_VOID); return tTYPE; }
+<INITIAL>"char"		{ yylval.type = mana_type_get(SYMBOL_DATA_TYPE_CHAR); return tTYPE; }
+<INITIAL>"short"	{ yylval.type = mana_type_get(SYMBOL_DATA_TYPE_SHORT); return tTYPE; }
+<INITIAL>"int"		{ yylval.type = mana_type_get(SYMBOL_DATA_TYPE_INT); return tTYPE; }
+<INITIAL>"float"	{ yylval.type = mana_type_get(SYMBOL_DATA_TYPE_FLOAT); return tTYPE; }
 <INITIAL>"string"	{ yylval.type = mana_type_string; return tTYPE; }
 <INITIAL>"pointer"	{ yylval.type = mana_type_pointer; return tTYPE; }
 
@@ -188,7 +188,7 @@ other		.
 	return tSTRING;
 }
 <INITIAL>{other}	{
-	yyerror("Illegal char '%c' ignored\n", yytext[0]);
+	mana_compile_error("Illegal char '%c' ignored\n", yytext[0]);
 }
 
 <COMMENT_BLOCK>"/*"	{
@@ -228,7 +228,7 @@ other		.
 }
 <HEX>{ws}+			;
 <HEX>{other}		{
-	yyerror("Illegal char '%c' ignored\n", yytext[0]);
+	mana_compile_error("Illegal char '%c' ignored\n", yytext[0]);
 }
 
 <BIN>[01_]+			{
@@ -238,7 +238,7 @@ other		.
 }
 <BIN>{ws}+			;
 <BIN>{other}		{
-	yyerror("Illegal char '%c' ignored\n", yytext[0]);
+	mana_compile_error("Illegal char '%c' ignored\n", yytext[0]);
 }
 
 %%

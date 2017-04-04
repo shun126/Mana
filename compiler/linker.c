@@ -1,7 +1,7 @@
 /*!
 mana (compiler)
 
-@file	mana_linker.c
+@file	linker.c
 @brief	リンクに関するソースファイル
 @detail	このファイルはリンクに関係するソースファイルです。
 @author	Shun Moriya
@@ -20,7 +20,7 @@ mana (compiler)
 
 typedef struct mana_linker_call_list
 {
-	mana_symbol_entry* symbol;
+	symbol_entry* symbol;
 	int32_t code_address;
 	struct mana_linker_call_list* next;
 }mana_linker_call_list;
@@ -43,7 +43,7 @@ void mana_linker_finalize(void)
 	mana_linker_call_list_root_pointer = NULL;
 }
 
-void mana_linker_add_call_list(const int32_t code_address, mana_symbol_entry* symbol)
+void mana_linker_add_call_list(const int32_t code_address, symbol_entry* symbol)
 {
 	mana_linker_call_list* entity = mana_malloc(sizeof(mana_linker_call_list));
 	entity->symbol = symbol;

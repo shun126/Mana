@@ -11,6 +11,9 @@ mana (compiler)
 #if !defined(___MANA_ERROR_H___)
 #include "error.h"
 #endif
+#if !defined(___MANA_LEXER_H___)
+#include "lexer.h"
+#endif
 #if !defined(___MANA_MAIN_H___)
 #include "main.h"
 #endif

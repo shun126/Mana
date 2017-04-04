@@ -1,7 +1,7 @@
-/*
+/*!
 mana (compiler)
 
-@file	mana_post_resolver.h
+@file	post_resolver.h
 @brief	関数またはアクション内のシンボルの解決に関するヘッダーファイル
 @detail	関数またはアクション内のシンボルの解決に関係するヘッダーファイルです。
 @author	Shun Moriya
@@ -24,7 +24,7 @@ extern "C" {
 @param	node	ノード
 @note	mana_generator_genearte_code内のactionまたはfunctionノードからのみ呼び出される
 */
-extern void mana_post_resolver_resolve(mana_node* node);
+extern void mana_post_resolver_resolve(node_entry* node);
 
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)
 }

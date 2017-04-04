@@ -1,12 +1,12 @@
-/*
- * mana (compiler)
- *
- * @file	mana_version.h
- * @brief	バージョン情報に関するヘッダーファイル
- * @detail	このファイルはバージョン情報に関するヘッダーファイルです。
- * @author	Shun Moriya <shun@mnu.sakura.ne.jp>
- * @date	2016-
- */
+/*!
+mana (compiler)
+
+@file	version.h
+@brief	バージョン情報に関するヘッダーファイル
+@detail	このファイルはバージョン情報に関するヘッダーファイルです。
+@author	Shun Moriya <shun@mnu.sakura.ne.jp>
+@date	2016-
+*/
 
 #if !defined(___VERSION_H___)
 #define ___VERSION_H___

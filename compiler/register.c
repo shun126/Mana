@@ -1,7 +1,7 @@
-/*
+/*!
 mana (compiler)
 
-@file	mana_register.c
+@file	register.c
 @brief	レジスタ割り当てに関するソースファイル
 @detail	このファイルは型情報に関係するソースファイルです。
 @author	Shun Moriya
@@ -44,7 +44,7 @@ void mana_register_clear(void)
 	}
 }
 
-mana_register_entity* mana_register_find(mana_symbol_entry* symbol)
+mana_register_entity* mana_register_find(symbol_entry* symbol)
 {
 	size_t i;
 
@@ -63,7 +63,7 @@ mana_register_entity* mana_register_find(mana_symbol_entry* symbol)
 /* TODO:無名レジスタの登録が必要
 */
 
-mana_register_entity* mana_register_allocate(mana_symbol_entry* symbol, size_t address)
+mana_register_entity* mana_register_allocate(symbol_entry* symbol, size_t address)
 {
 	size_t i;
 
