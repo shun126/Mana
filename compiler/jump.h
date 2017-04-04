@@ -1,12 +1,12 @@
-/*
- * mana (compiler)
- *
- * @file	mana_jump.h
- * @brief	break,continue,gotoなどのジャンプに関するヘッダーファイル
- * @detail	このファイルはbreak,continue,gotoなどジャンプに関係するヘッダーファイルです。
- * @author	Shun Moriya
- * @date	2003-
- */
+/*!
+mana (compiler)
+
+@file	jump.h
+@brief	break,continue,gotoなどのジャンプに関するヘッダーファイル
+@detail	このファイルはbreak,continue,gotoなどジャンプに関係するヘッダーファイルです。
+@author	Shun Moriya
+@date	2003-
+*/
 
 #if !defined(___MANA_JUMP_H___)
 #define ___MANA_JUMP_H___
@@ -15,7 +15,7 @@
 extern "C" {
 #endif
 
-#if !defined(___MANA_NODE_H___)
+#if !defined(___NODE_H___)
 #include "node.h"
 #endif
 #if !defined(___MANA_TYPE_H___)
@@ -55,10 +55,10 @@ extern void mana_jump_close_continue_only(void);
 extern void mana_jump_close_chain(void);
 
 /*! switchブロックの開始 */
-extern void mana_jump_open_switch(mana_type_description*);
+extern void mana_jump_open_switch(type_description*);
 
 /*! caseの登録 */
-extern void mana_jump_switch_case(mana_node*);
+extern void mana_jump_switch_case(node_entry*);
 
 /*! defaultの登録 */
 extern void mana_jump_switch_default(void);

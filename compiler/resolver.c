@@ -1,7 +1,7 @@
-/*
+/*!
 mana (compiler)
 
-@file	mana_resolver.c
+@file	resolver.c
 @brief	ƒVƒ“ƒ{ƒ‹‚Ì‰ðŒˆ‚ÉŠÖŒW‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹
 @detail	ƒVƒ“ƒ{ƒ‹‚Ì‰ðŒˆ‚ÉŠÖŒW‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹‚Å‚·B
 @author	Shun Moriya
@@ -11,86 +11,92 @@ mana (compiler)
 #if !defined(___MANA_RESOLVER_H___)
 #include "resolver.h"
 #endif
+#if !defined(___MANA_ERROR_H___)
+#include "error.h"
+#endif
 #if !defined(___MANA_LEXER_H___)
 #include "lexer.h"
 #endif
+#if !defined(___MANA_TYPE_H___)
+#include "type.h"
+#endif
 
-void mana_resolver_set_current_file_infomation(mana_node* self)
+void mana_resolver_set_current_file_infomation(node_entry* self)
 {
 	MANA_ASSERT(self);
 	mana_lexer_set_current_filename(self->filename);
 	mana_lexer_set_current_line(self->line);
 }
 
-void mana_resolver_search_symbol_from_name(mana_node* node)
+void mana_resolver_search_symbol_from_name(node_entry* self)
 {
-	MANA_ASSERT(node);
+	MANA_ASSERT(self);
 
-	if (node->symbol == NULL)
+	if (self->symbol == NULL)
 	{
-		node->symbol = mana_symbol_lookup(node->string);
-		if (node->symbol)
+		self->symbol = mana_symbol_lookup(self->string);
+		if (self->symbol)
 		{
-			if (node->type == NULL)
-				node->type = node->symbol->type;
+			if (self->type == NULL)
+				self->type = self->symbol->type;
 		}
 		else
 		{
-			mana_compile_error("incomplete type name '%s'", node->string);
-			node->type = mana_type_get(MANA_DATA_TYPE_INT);
+			mana_compile_error("incomplete type name '%s'", self->string);
+			self->type = mana_type_get(SYMBOL_DATA_TYPE_INT);
 		}
 	}
 }
 
-void mana_resolver_resolve_type_description(mana_node* node)
+void mana_resolver_resolve_type_description(node_entry* self)
 {
-	MANA_ASSERT(node);
+	MANA_ASSERT(self);
 
-	if (node->type == NULL)
+	if (self->type == NULL)
 	{
-		node->symbol = mana_symbol_lookup(node->string);
-		if (node->symbol)
+		self->symbol = mana_symbol_lookup(self->string);
+		if (self->symbol)
 		{
-			node->type = node->symbol->type;
+			self->type = self->symbol->type;
 		}
 		else
 		{
-			mana_compile_error("incomplete type name '%s'", node->string);
-			node->type = mana_type_get(MANA_DATA_TYPE_INT);
+			mana_compile_error("incomplete type name '%s'", self->string);
+			self->type = mana_type_get(SYMBOL_DATA_TYPE_INT);
 		}
 	}
 }
 
-void mana_resolver_resolve_declarator(mana_node* node, const bool static_variable)
+void mana_resolver_resolve_declarator(node_entry* self, const bool static_variable)
 {
-	MANA_ASSERT(node);
+	MANA_ASSERT(self);
 
-	if (node->symbol != NULL)
+	if (self->symbol != NULL)
 		return;
 
-	mana_type_description* type = NULL;
-	if (node->left && node->left->id == MANA_NODE_VARIABLE_SIZE)
-		type = mana_resolver_resolve_variable_size(node->left);
+	type_description* type = NULL;
+	if (self->left && self->left->id == NODE_VARIABLE_SIZE)
+		type = mana_resolver_resolve_variable_size(self->left);
 
-	node->symbol = mana_symbol_create_identification(node->string, type, false);
+	self->symbol = mana_symbol_create_variable(self->string, type, static_variable);
 }
 
-mana_type_description* mana_resolver_resolve_variable_size(mana_node* node)
+type_description* mana_resolver_resolve_variable_size(node_entry* self)
 {
-	if (node == NULL)
+	if (self == NULL)
 		return NULL;
 
-	MANA_ASSERT(node->left == NULL);
-	MANA_ASSERT(node->right == NULL);
+	MANA_ASSERT(self->left == NULL);
+	MANA_ASSERT(self->right == NULL);
 
-	if (node->string)
+	if (self->string)
 	{
-		mana_symbol_entry* symbol = mana_symbol_lookup(node->string);
+		symbol_entry* symbol = mana_symbol_lookup(self->string);
 		if (symbol)
 		{
-			if (symbol->class_type == MANA_CLASS_TYPE_CONSTANT_INT)
+			if (symbol->class_type == SYMBOL_CLASS_TYPE_CONSTANT_INT)
 			{
-				node->type = mana_type_create_array(symbol->address);
+				self->type = mana_type_create_array(symbol->address);
 			}
 			else
 			{
@@ -99,62 +105,62 @@ mana_type_description* mana_resolver_resolve_variable_size(mana_node* node)
 		}
 		else
 		{
-			mana_compile_error("identifier %s is not defined", node->string);
+			mana_compile_error("identifier %s is not defined", self->string);
 		}
 	}
 	else
 	{
-		if (node->digit > 0)
-			node->type = mana_type_create_array(node->digit);
+		if (self->digit > 0)
+			self->type = mana_type_create_array(self->digit);
 		else
 			mana_compile_error("invalid size information on parameter");
 	}
 
-	if (node->type)
+	if (self->type)
 	{
-		node->type->component = mana_resolver_resolve_variable_size(node->left);
+		self->type->component = mana_resolver_resolve_variable_size(self->left);
 	}
 
-	return node->type;
+	return self->type;
 }
 
-void mana_resolver_resolve_variable_description(mana_node* node, const mana_symbol_memory_type_id memory_type_id, const bool static_variable)
+void mana_resolver_resolve_variable_description(node_entry* self, const symbol_memory_type_id memory_type_id, const bool static_variable)
 {
-	MANA_ASSERT(node);
-	MANA_ASSERT(node->left && node->left->id == MANA_NODE_TYPE_DESCRIPTION);
-	MANA_ASSERT(node->right && node->right->id == MANA_NODE_DECLARATOR);
+	MANA_ASSERT(self);
+	MANA_ASSERT(self->left && self->left->id == NODE_TYPE_DESCRIPTION);
+	MANA_ASSERT(self->right && self->right->id == NODE_DECLARATOR);
 
-	mana_resolver_resolve_type_description(node->left);				// MANA_NODE_TYPE_DESCRIPTION
-	mana_resolver_resolve_declarator(node->right, static_variable);	// MANA_NODE_DECLARATOR
+	mana_resolver_resolve_type_description(self->left);				// NODE_TYPE_DESCRIPTION
+	mana_resolver_resolve_declarator(self->right, static_variable);	// NODE_DECLARATOR
 
-	//if (node->right->symbol->class_type == MANA_CLASS_TYPE_VARIABLE_LOCAL)
-	mana_symbol_allocate_memory(node->right->symbol, node->left->type, memory_type_id);
-	//mana_symbol_allocate_memory(node->right->symbol, node->left->type, MANA_MEMORY_TYPE_PARAMETER);
+	//if (self->right->symbol->class_type == SYMBOL_CLASS_TYPE_VARIABLE_LOCAL)
+	mana_symbol_allocate_memory(self->right->symbol, self->left->type, memory_type_id);
+	//mana_symbol_allocate_memory(self->right->symbol, self->left->type, MEMORY_TYPE_PARAMETER);
 }
 
-void mana_resolver_resolve_type_from_child_node(mana_node* node)
+void mana_resolver_resolve_type_from_child_node(node_entry* self)
 {
-	MANA_ASSERT(node);
+	MANA_ASSERT(self);
 
 	// Ž©•ª‚ÌŒ^‚ª“o˜^‚³‚ê‚Ä‚¢‚È‚¢
-	if (node->type == NULL)
+	if (self->type == NULL)
 	{
 		// ƒVƒ“ƒ{ƒ‹‚ª“o˜^‚³‚ê‚Ä‚¢‚é‚È‚çAƒVƒ“ƒ{ƒ‹‚ÌŒ^‚ðŒp³‚·‚é
-		if (node->symbol && node->symbol->type)
+		if (self->symbol && self->symbol->type)
 		{
-			node->type = node->symbol->type;
+			self->type = self->symbol->type;
 		}
-		else if (node->left)
+		else if (self->left)
 		{
 			// ¶•Ó‚ÌŒ^‚ª“o˜^‚³‚ê‚Ä‚¢‚é‚È‚çA¶•Ó‚ÌŒ^‚ðŒp³‚·‚é
-			if (node->left->type)
+			if (self->left->type)
 			{
-				node->type = node->left->type;
+				self->type = self->left->type;
 			}
 			// ¶•Ó‚ÌƒVƒ“ƒ{ƒ‹‚ª“o˜^‚³‚ê‚Ä‚¢‚é‚È‚çA¶•Ó‚ÌƒVƒ“ƒ{ƒ‹‚ÌŒ^‚ðŒp³‚·‚é
-			else if (node->left->symbol && node->left->symbol->type)
+			else if (self->left->symbol && self->left->symbol->type)
 			{
-				node->type = node->left->symbol->type;
+				self->type = self->left->symbol->type;
 			}
 		}
 	}
