@@ -1,12 +1,12 @@
-/*
- * mana (compiler)
- *
- * @file	mana_pool.h
- * @brief	文字列格納に関するヘッダーファイル
- * @detail	このファイルは文字列を高速に参照するためのハッシュに関係するヘッダーファイルです。
- * @author	Shun Moriya
- * @date	2003-
- */
+/*!
+mana (compiler)
+
+@file	pool.h
+@brief	文字列格納に関するヘッダーファイル
+@detail	このファイルは文字列を高速に参照するためのハッシュに関係するヘッダーファイルです。
+@author	Shun Moriya
+@date	2003-
+*/
 
 #if !defined(___MANA_POOL_H___)
 #define ___MANA_POOL_H___

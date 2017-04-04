@@ -1,15 +1,15 @@
 /*!
- * mana (compiler)
- *
- * @file	mana_data.h
- * @brief	データセクションに関するヘッダーファイル
- * @detail	このファイルはデータセクションに関係するヘッダーファイルです。
- * @author	Shun Moriya
- * @date	2003-
- */
+mana (compiler)
 
-#if !defined(___MANA_DATA_H___)
-#define ___MANA_DATA_H___
+@file	data.h
+@brief	データセクションに関するヘッダーファイル
+@detail	このファイルはデータセクションに関係するヘッダーファイルです。
+@author	Shun Moriya
+@date	2003-
+*/
+
+#if !defined(___SYMBOL_DATA_H___)
+#define ___SYMBOL_DATA_H___
 
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)
 extern "C" {

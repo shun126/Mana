@@ -1,12 +1,12 @@
-/*
- * mana (compiler)
- *
- * @file	mana_main.h
- * @brief	メインループに関するヘッダファイル
- * @detail	このファイルはメインループに関係するヘッダファイルです。
- * @author	Shun Moriya
- * @date	2003-
- */
+/*!
+mana (compiler)
+
+@file	main.h
+@brief	メインループに関するヘッダファイル
+@detail	このファイルはメインループに関係するヘッダファイルです。
+@author	Shun Moriya
+@date	2003-
+*/
 
 #if !defined(___MANA_MAIN_H___)
 #define ___MANA_MAIN_H___
@@ -27,7 +27,7 @@ extern "C" {
 #if !defined(___MANA_MALLOC_H___)
 #include "../library/mana_malloc.h"
 #endif
-#if !defined(___MANA_NODE_H___)
+#if !defined(___NODE_H___)
 #include "node.h"
 #endif
 #if !defined(___MANA_POOL_H___)
@@ -40,10 +40,6 @@ extern "C" {
 
 #if !defined(false)
 #define false 0
-#endif
-
-#if !defined(MANA_NIL)
-#define MANA_NIL 0
 #endif
 
 #if !defined(_MAX_PATH)

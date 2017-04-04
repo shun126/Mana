@@ -1,12 +1,12 @@
-/*
- * mana (compiler)
- *
- * @file	mana_main.c
- * @brief	メインループに関するソースファイル
- * @detail	このファイルはメインループに関係するソースファイルです。
- * @author	Shun Moriya
- * @date	2003-
- */
+/*!
+mana (compiler)
+
+@file	main.c
+@brief	メインループに関するソースファイル
+@detail	このファイルはメインループに関係するソースファイルです。
+@author	Shun Moriya
+@date	2003-
+*/
 
 #if !defined(___MANA_MAIN_H___)
 #include "main.h"
@@ -14,10 +14,10 @@
 #if !defined(___MANA_CODE_H___)
 #include "code.h"
 #endif
-#if !defined(__MANA_GENERATOR_H___)
+#if !defined(___MANA_GENERATOR_H___)
 #include "generator.h"
 #endif
-#if !defined(___MANA_DATA_H___)
+#if !defined(___SYMBOL_DATA_H___)
 #include "data.h"
 #endif
 #if !defined(___MANA_DATALINK_GENERATOR_H___)
@@ -31,6 +31,9 @@
 #endif
 #if !defined(___MANA_JUMP_H___)
 #include "jump.h"
+#endif
+#if !defined(___MANA_LEXER_H___)
+#include "lexer.h"
 #endif
 #if !defined(___MANA_LINKER_H___)
 #include "linker.h"

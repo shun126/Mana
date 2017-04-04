@@ -1,33 +1,26 @@
-/*
- * mana (compiler)
- *
- * @file	mana_node.c
- * @brief	意味解析ノードに関するソースファイル
- * @detail	このファイルは意味解析ノードに関係するソースファイルです。
- * @author	Shun Moriya
- * @date	2003-
- */
+/*!
+mana (compiler)
 
-#if !defined(___MANA_DATA_H___)
-#include "data.h"
-#endif
-#if !defined(___MANA_DATALINK_GENERATOR_H___)
-#include "datalink_generator.h"
-#endif
-#if !defined(___MANA_MAIN_H___)
-#include "main.h"
-#endif
-#if !defined(___MANA_NODE_H___)
+@file	node.c
+@brief	意味解析ノードに関するソースファイル
+@detail	このファイルは意味解析ノードに関係するソースファイルです。
+@author	Shun Moriya
+@date	2003-
+*/
+
+#if !defined(___NODE_H___)
 #include "node.h"
 #endif
-#if !defined(___MANA_SYMBOL_H___)
-#include "symbol.h"
+#if !defined(___SYMBOL_DATA_H___)
+#include "data.h"
+#endif
+#if !defined(___MANA_LEXER_H___)
+#include "lexer.h"
 #endif
 #include <stdarg.h>
-#include <stdio.h>
 #include <string.h>
 
-static mana_node* mana_node_root_pointer = NULL;
+static node_entry* mana_node_root_pointer = NULL;
 static size_t mana_node_total_size = 0;
 
 void mana_node_initialize(void)
@@ -37,21 +30,21 @@ void mana_node_initialize(void)
 
 void mana_node_finalize(void)
 {
-	mana_node* node = mana_node_root_pointer;
-	while (node)
+	node_entry* n = mana_node_root_pointer;
+	while (n)
 	{
-		mana_node* link = node->link;
-		mana_free(node);
-		node = link;
+		node_entry* link = n->link;
+		mana_free(n);
+		n = link;
 	}
 	mana_node_root_pointer = NULL;
 }
 
 /*!
 ノード生成時の初期化
-@param[in]	node	ノードオブジェクト
+@param[in]	self	ノードオブジェクト
 */
-static void node_constructor(mana_node* self)
+static void node_constructor(node_entry* self)
 {
 #if defined(_DEBUG)
 	static uint32_t count = 0;
@@ -66,308 +59,83 @@ static void node_constructor(mana_node* self)
 	mana_node_root_pointer = self;
 }
 
-mana_node* mana_node_clone(mana_node* org)
+node_entry* mana_node_clone(const node_entry* org)
 {
-	mana_node* node;
-
-	node = NULL;
+	node_entry* self = NULL;
 	if(org)
 	{
-		node = (mana_node*)mana_malloc(sizeof(mana_node));
-		memcpy(node, org, sizeof(mana_node));
+		self = (node_entry*)mana_malloc(sizeof(node_entry));
+		memcpy(self, org, sizeof(node_entry));
 
-		node_constructor(node);
+		node_constructor(self);
 
 		if(org->left)
-			node->left = mana_node_clone(org->left);
+			self->left = mana_node_clone(org->left);
 
 		if(org->right)
-			node->right = mana_node_clone(org->right);
+			self->right = mana_node_clone(org->right);
 	}
-	return node;
+	return self;
 }
 
-mana_node* mana_node_allocate(const mana_node_type_id id)
+node_entry* mana_node_allocate(const node_id id)
 {
-	mana_node* node = (mana_node*)mana_calloc(sizeof(mana_node), 1);
-	node->id = id;
+	node_entry* self = (node_entry*)mana_calloc(sizeof(node_entry), 1);
+	self->id = id;
 
-	node_constructor(node);
+	node_constructor(self);
 
-	return node;
+	return self;
 }
 
-mana_node* mana_node_create_node(mana_node_type_id id, mana_node* left, mana_node* right, mana_node* body)
+node_entry* mana_node_create_node(node_id id, node_entry* left, node_entry* right, node_entry* body)
 {
-	mana_node* node;
-
-	node = mana_node_allocate(id);
-	node->type = left ? left->type : NULL;
-	node->left = left;
-	node->right = right;
-	node->body = body;
-
-	return node;
+	node_entry* self = mana_node_allocate(id);
+	self->type = left ? left->type : NULL;
+	self->left = left;
+	self->right = right;
+	self->body = body;
+	return self;
 }
-#if 0
-/*!
- * リーフを作成します
- * @param[in]	name	名称
- * @return				リーフオブジェクト
- */
-mana_node* mana_node_create_leaf(char* name)
-{
-	mana_node* node;
-	mana_symbol_entry* symbol;
 
-	node = NULL;
-	symbol = mana_symbol_lookup_or_create_dummy(name);
-	switch(symbol->class_type)
-	{
-	case MANA_CLASS_TYPE_ALIAS:
-		if(!symbol->used)
-		{
-			symbol->address = mana_datalink_generator_append(symbol->string);
-			symbol->used = true;
-		}
-		node = mana_node_allocate(MANA_NODE_CONST);
-		node->digit = symbol->address;
-		node->symbol = symbol;
-		node->type = mana_type_get(MANA_DATA_TYPE_INT);
-		break;
-
-	case MANA_CLASS_TYPE_CONSTANT_INT:
-		node = mana_node_allocate(MANA_NODE_CONST);
-		node->digit = symbol->address;
-		node->symbol = symbol;
-		node->type = mana_type_get(MANA_DATA_TYPE_INT);
-		break;
-
-	case MANA_CLASS_TYPE_CONSTANT_FLOAT:
-		node = mana_node_allocate(MANA_NODE_CONST);
-		node->real = symbol->hloat;
-		node->symbol = symbol;
-		node->type = mana_type_get(MANA_DATA_TYPE_FLOAT);
-		break;
-
-	case MANA_CLASS_TYPE_CONSTANT_STRING:
-		node = mana_node_allocate(MANA_NODE_CONST);
-		node->string = symbol->string;
-		node->symbol = symbol;
-		node->type = mana_type_string;
-		break;
-
-	case MANA_CLASS_TYPE_VARIABLE_STATIC:
-	case MANA_CLASS_TYPE_VARIABLE_GLOBAL:
-	case MANA_CLASS_TYPE_VARIABLE_ACTOR:
-	case MANA_CLASS_TYPE_VARIABLE_LOCAL:
-		mana_symbol_is_valid_variable(symbol);
-		node = mana_node_allocate(MANA_NODE_VARIABLE);
-		node->symbol = symbol;
-		node->type = symbol->type;
-		break;
-
-	case MANA_CLASS_TYPE_TYPEDEF:
-		node = mana_node_allocate(MANA_NODE_VARIABLE);
-		node->symbol = symbol;
-		node->type = symbol->type;
-		break;
-
-	case MANA_CLASS_TYPE_NEW_SYMBOL:
-		break;
-
-	default:
-		mana_compile_error("illigal data type");
-		break;
-	}
-
-	return node;
-}
-#endif
-#if 0
-/*!
- * メンバーノードを作成します
- * @param[in]	tree	ノードオブジェクト
- * @param[in]	name	メンバー名
- * @return				ノードオブジェクト
- */
-mana_node* mana_node_create_member(mana_node* tree, char* name)
-{
-	mana_type_description* type;
-
-	type = tree->type;
-
-	if(type)
-	{
-		if(type->tcons == MANA_DATA_TYPE_STRUCT)
-		{
-			mana_symbol_entry* symbol;
-
-			while(type)
-			{
-				for(symbol = (mana_symbol_entry*)type->component; symbol != NULL; symbol = symbol->next)
-				{
-					if(strcmp(symbol->name, name) == 0 && symbol->class_type == MANA_CLASS_TYPE_VARIABLE_ACTOR)
-					{
-						mana_node* node;
-						node = mana_node_allocate(MANA_NODE_MEMOP);
-						node->etc = symbol->address;
-						node->type = symbol->type;
-						node->left = tree;
-						return node;
-					}
-				}
-				type = type->parent;
-			}
-			mana_compile_error("reference to undefined field");
-		}
-		else
-		{
-			mana_compile_error("reference to non-struct type");
-		}
-	}
-
-	return tree;
-}
-/*!
- * メンバーノードを作成します
- * @param[in]	tree	ノードオブジェクト
- * @param[in]	name	メンバー名
- * @param[in]	members	メンバーノードオブジェクト
- * @return				ノードオブジェクト
- */
-mana_node* mana_node_create_call_member(mana_node* tree, char* name, mana_node* members)
-{
-	mana_type_description* type;
-
-	type = tree->type;
-
-	if(type->tcons == MANA_DATA_TYPE_ACTOR)
-	{
-		mana_node* leaf = members;
-
-		while(leaf && leaf->left && leaf->left->id == MANA_NODE_CALL_ARGUMENT)
-			leaf = leaf->left;
-
-		leaf->left = mana_node_create_node(MANA_NODE_CALL_ARGUMENT, tree, leaf->left, NULL);
-
-		members->etc++;
-
-		tree = mana_node_create_node(MANA_NODE_CALL, NULL/*mana_node_create_function(name)*/, members, NULL);
-#if 0
-		/*!
-		* 関数ノードを作成します
-		* @param[in]	name	関数名
-		* @return				関数ノードオブジェクト
-		*/
-		mana_node* mana_node_create_function(char* name)
-		{
-			mana_node* node;
-			mana_symbol_entry* symbol;
-
-			symbol = mana_symbol_lookup_or_create_dummy(name);
-
-			node = mana_node_allocate(MANA_NODE_FUNCTION);
-			node->symbol = symbol;
-			node->type = symbol->type;
-
-			return node;
-		}
-#endif
-	}
-	else
-	{
-		mana_compile_error("reference to non-actor type");
-	}
-
-	return tree;
-}
-#endif
-
-/*!
- * 整数ノードを作成します
- * @param[in]	digit	整数
- * @return				ノードオブジェクト
- */
-mana_node* mana_node_create_digit(int32_t digit)
+node_entry* mana_node_create_digit(const int32_t digit)
 {
 	int32_t max_char = (1 << (8 * CBSZ - 1)) - 1;
 	int32_t min_char = -1 << (8 * CBSZ - 1);
 	int32_t max_short = (1 << (8 * SBSZ - 1)) - 1;
 	int32_t min_short = -1 << (8 * SBSZ - 1);
-	mana_node* new_node;
 
-	new_node = mana_node_allocate(MANA_NODE_CONST);
+	node_entry* new_node = mana_node_allocate(NODE_CONST);
 	new_node->digit = digit;
 	if(digit <= max_char && digit >= min_char)
-		new_node->type = mana_type_get(MANA_DATA_TYPE_CHAR);
+		new_node->type = mana_type_get(SYMBOL_DATA_TYPE_CHAR);
 	else if(digit <= max_short && digit >= min_short)
-		new_node->type = mana_type_get(MANA_DATA_TYPE_SHORT);
+		new_node->type = mana_type_get(SYMBOL_DATA_TYPE_SHORT);
 	else
-		new_node->type = mana_type_get(MANA_DATA_TYPE_INT);
+		new_node->type = mana_type_get(SYMBOL_DATA_TYPE_INT);
 
 	return new_node;
 }
 
-/*!
- * 実数ノードを作成します
- * @param[in]	real	実数
- * @return				ノードオブジェクト
- */
-mana_node* mana_node_create_real(float real)
+node_entry* mana_node_create_real(const float real)
 {
-	mana_node* new_node;
-
-	new_node = mana_node_allocate(MANA_NODE_CONST);
+	node_entry* new_node = mana_node_allocate(NODE_CONST);
 	new_node->real = real;
-	new_node->type = mana_type_get(MANA_DATA_TYPE_FLOAT);
-
+	new_node->type = mana_type_get(SYMBOL_DATA_TYPE_FLOAT);
 	return new_node;
 }
 
-/*!
-文字列ノードを作成します
-@param[in]	string	文字列
-@return		ノードオブジェクト
- */
-mana_node* mana_node_create_string(char* string)
+node_entry* mana_node_create_string(const char* string)
 {
-	mana_node* new_node;
-
-	new_node = mana_node_allocate(MANA_NODE_STRING);
+	node_entry* new_node = mana_node_allocate(NODE_STRING);
 	new_node->digit = mana_data_set(string);
 	new_node->type = mana_type_string;
-
 	return new_node;
 }
 
-mana_node* mana_node_create_type(mana_type_description* type, const char* identifier)
+node_entry* mana_node_create_declare_function(node_entry* left, const char* identifier, node_entry* argument, node_entry* body)
 {
-	mana_node* new_node;
-
-	new_node = mana_node_allocate(MANA_NODE_TYPE_DESCRIPTION);
-	new_node->type = type;
-	new_node->string = identifier;
-
-	return new_node;
-}
-
-mana_node* mana_node_create_declarator(const char* identifier, mana_node* left)
-{
-	mana_node* new_node;
-
-	new_node = mana_node_allocate(MANA_NODE_DECLARE_VARIABLE);
-	new_node->string = identifier;
-	new_node->left = left;
-
-	return new_node;
-}
-
-mana_node* mana_node_create_declare_function(mana_node* left, const char* identifier, mana_node* argument, mana_node* body)
-{
-	mana_node* new_node;
-
-	new_node = mana_node_allocate(MANA_NODE_DECLARE_FUNCTION);
+	node_entry* new_node = mana_node_allocate(NODE_DECLARE_FUNCTION);
 	new_node->string = identifier;
 	new_node->left = left;
 	new_node->right = argument;
@@ -375,18 +143,16 @@ mana_node* mana_node_create_declare_function(mana_node* left, const char* identi
 
 	if (argument)
 	{
-		for (mana_node* p = argument; p; p = p->right)
+		for (node_entry* p = argument; p; p = p->right)
 			++new_node->digit;
 	}
 
 	return new_node;
 }
 
-mana_node* mana_node_create_declare_native_function(mana_node* left, const char* identifier, mana_node* argument, mana_node* body)
+node_entry* mana_node_create_declare_native_function(node_entry* left, const char* identifier, node_entry* argument, node_entry* body)
 {
-	mana_node* new_node;
-
-	new_node = mana_node_allocate(MANA_NODE_DECLARE_NATIVE_FUNCTION);
+	node_entry* new_node = mana_node_allocate(NODE_DECLARE_NATIVE_FUNCTION);
 	new_node->string = identifier;
 	new_node->left = left;
 	new_node->right = argument;
@@ -394,96 +160,75 @@ mana_node* mana_node_create_declare_native_function(mana_node* left, const char*
 
 	if (argument)
 	{
-		for (mana_node* p = argument; p; p = p->right)
+		for (node_entry* p = argument; p; p = p->right)
 			++new_node->digit;
 	}
-
-	return new_node;
-}
-
-mana_node* mana_node_create_allocate(int32_t size, mana_node* left)
-{
-	mana_node* new_node;
-
-	new_node = mana_node_allocate(MANA_NODE_DECLARE_ALLOCATE);
-	new_node->digit = size;
-
-	return new_node;
-}
-
-mana_node* mana_node_create_request(mana_node* left, mana_node* right, const char* action)
-{
-	mana_node* new_node;
-
-	new_node = mana_node_allocate(MANA_NODE_REQUEST);
-	new_node->left = left;
-	new_node->right = right;
-	new_node->string = action;
 
 	return new_node;
 }
 
 /*!
-* キャストノードを作成します
-* @param[in]	type	キャストする型
-* @param[in]	node	ノードオブジェクト
-* @return				ノードオブジェクト
+キャストノードを作成します
+@param[in]	type	キャストする型
+@param[in]	self	ノードオブジェクト
+@return				ノードオブジェクト
 */
-static mana_node* mana_node_create_cast(mana_type_description* type, mana_node* node)
+static node_entry* mana_node_create_cast(type_description* type, node_entry* self)
 {
-	mana_node* new_node;
+	if (type->tcons == self->type->tcons)
+		return self;
 
-	if (type->tcons == node->type->tcons)
-		return node;
+	node_entry* new_node;
 
-	if (type->tcons == MANA_DATA_TYPE_FLOAT)
+	if (type->tcons == SYMBOL_DATA_TYPE_FLOAT)
 	{
-		new_node = mana_node_allocate(MANA_NODE_I2F);
-		new_node->type = mana_type_get(MANA_DATA_TYPE_FLOAT);
-		new_node->left = node;
+		new_node = mana_node_allocate(NODE_I2F);
+		new_node->type = mana_type_get(SYMBOL_DATA_TYPE_FLOAT);
+		new_node->left = self;
 	}
 	else
 	{
-		new_node = mana_node_allocate(MANA_NODE_F2I);
-		new_node->type = mana_type_get(MANA_DATA_TYPE_INT);
-		new_node->left = node;
+		new_node = mana_node_allocate(NODE_F2I);
+		new_node->type = mana_type_get(SYMBOL_DATA_TYPE_INT);
+		new_node->left = self;
 	}
+
 	return new_node;
 }
 
-mana_node* mana_node_cast(mana_type_description* type, mana_node* node)
+node_entry* mana_node_cast(type_description* type, node_entry* self)
 {
-	switch ((node->type)->tcons)
+	switch ((self->type)->tcons)
 	{
-	case MANA_DATA_TYPE_CHAR:
-	case MANA_DATA_TYPE_SHORT:
-	case MANA_DATA_TYPE_INT:
-		if (type->tcons == MANA_DATA_TYPE_FLOAT)
+	case SYMBOL_DATA_TYPE_CHAR:
+	case SYMBOL_DATA_TYPE_SHORT:
+	case SYMBOL_DATA_TYPE_INT:
+		if (type->tcons == SYMBOL_DATA_TYPE_FLOAT)
 		{
-			if (node->id == MANA_NODE_CONST)
+			if (self->id == NODE_CONST)
 			{
-				node->real = (float)node->digit;
-				node->type = mana_type_get(MANA_DATA_TYPE_FLOAT);
+				self->real = (float)self->digit;
+				self->type = mana_type_get(SYMBOL_DATA_TYPE_FLOAT);
 			}
 			else {
-				node = mana_node_create_cast(mana_type_get(MANA_DATA_TYPE_FLOAT), node);
+				self = mana_node_create_cast(mana_type_get(SYMBOL_DATA_TYPE_FLOAT), self);
 			}
 		}
 		break;
 
-	case MANA_DATA_TYPE_FLOAT:
+	case SYMBOL_DATA_TYPE_FLOAT:
 		switch (type->tcons)
 		{
-		case MANA_DATA_TYPE_CHAR:
-		case MANA_DATA_TYPE_SHORT:
-		case MANA_DATA_TYPE_INT:
-			if (node->id == MANA_NODE_CONST)
+		case SYMBOL_DATA_TYPE_CHAR:
+		case SYMBOL_DATA_TYPE_SHORT:
+		case SYMBOL_DATA_TYPE_INT:
+			if (self->id == NODE_CONST)
 			{
-				node->digit = (int32_t)node->real;
-				node->type = mana_type_get(MANA_DATA_TYPE_INT);
+				self->digit = (int32_t)self->real;
+				self->type = mana_type_get(SYMBOL_DATA_TYPE_INT);
 			}
 			else {
-				node = mana_node_create_cast(mana_type_get(MANA_DATA_TYPE_INT), node);
+				self = mana_node_create_cast(mana_type_get(SYMBOL_DATA_TYPE_INT), self);
 			}
 			break;
 
@@ -495,60 +240,60 @@ mana_node* mana_node_cast(mana_type_description* type, mana_node* node)
 	default:
 		break;
 	}
-	return node;
+	return self;
 }
 
-size_t mana_node_get_memory_size(mana_node* node)
+size_t mana_node_get_memory_size(node_entry* self)
 {
-	switch(node->id)
+	switch(self->id)
 	{
-	case MANA_NODE_CONST:			/* 定数 */
-	case MANA_NODE_IDENTIFIER:		/* 変数 */
+	case NODE_CONST:			/* 定数 */
+	case NODE_IDENTIFIER:		/* 変数 */
 		/* 参照のactorか、actorの実体か判定できるようにする */
-		return node->type->tcons == MANA_DATA_TYPE_ACTOR ? sizeof(void*) : node->type->memory_size;
+		return self->type->tcons == SYMBOL_DATA_TYPE_ACTOR ? sizeof(void*) : self->type->memory_size;
 
-	case MANA_NODE_ARRAY:			/* variable[argument] = */
-	case MANA_NODE_MEMBER_VARIABLE:			/* X.variable */
-	case MANA_NODE_NEG:			/* ±符号反転 */
-		return node->type->tcons == MANA_DATA_TYPE_ACTOR ? sizeof(void*) : node->type->memory_size;
-/*		return mana_node_get_memory_size(node->left);	*/
+	case NODE_ARRAY:			/* variable[argument] = */
+	case NODE_MEMBER_VARIABLE:			/* X.variable */
+	case NODE_NEG:			/* ±符号反転 */
+		return self->type->tcons == SYMBOL_DATA_TYPE_ACTOR ? sizeof(void*) : self->type->memory_size;
+/*		return mana_node_get_memory_size(self->left);	*/
 
-	case MANA_NODE_SELF:			/* self (actor) */
-	case MANA_NODE_PRIORITY:		/* runlevel (integer) */
+	case NODE_SELF:			/* self (actor) */
+	case NODE_PRIORITY:		/* runlevel (integer) */
 		return sizeof(int32_t*);
 
-	case MANA_NODE_ASSIGN:			/* = */
-	case MANA_NODE_CALL_ARGUMENT:		/* 呼び出し側引数 */
-	case MANA_NODE_CALL:			/* 関数呼び出し */
-	case MANA_NODE_ADD:			/* 加算 */
-	case MANA_NODE_SUB:			/* 減算 */
-	case MANA_NODE_MUL:			/* 乗算 */
-	case MANA_NODE_DIV:			/* 除算 */
-	case MANA_NODE_REM:			/* 余剰 */
-	case MANA_NODE_POW:			/* べき乗 */
-	case MANA_NODE_NOT:			/* ~ */
-	case MANA_NODE_LNOT:			/* ! */
-	case MANA_NODE_AND:			/* & */
-	case MANA_NODE_OR:				/* | */
-	case MANA_NODE_XOR:			/* ^ */
-	case MANA_NODE_LSH:			/* << */
-	case MANA_NODE_RSH:			/* >> */
-	case MANA_NODE_LS:				/* < */
-	case MANA_NODE_LE:				/* <= */
-	case MANA_NODE_EQ:				/* == */
-	case MANA_NODE_NE:				/* != */
-	case MANA_NODE_GE:				/* >= */
-	case MANA_NODE_GT:				/* > */
-	case MANA_NODE_STRING:			/* 文字列 */
-	case MANA_NODE_I2F:			/* 整数から実数へ変換 */
-	case MANA_NODE_F2I:			/* 実数から整数へ変換 */
-	case MANA_NODE_LOR:			/* || */
-	case MANA_NODE_LAND:			/* && */
-	case MANA_NODE_SENDER:			/* sender (actor) */
-	case MANA_NODE_EXPRESSION_IF:	/* 三項演算子 '?' */
+	case NODE_ASSIGN:			/* = */
+	case NODE_CALL_ARGUMENT:		/* 呼び出し側引数 */
+	case NODE_CALL:			/* 関数呼び出し */
+	case NODE_ADD:			/* 加算 */
+	case NODE_SUB:			/* 減算 */
+	case NODE_MUL:			/* 乗算 */
+	case NODE_DIV:			/* 除算 */
+	case NODE_REM:			/* 余剰 */
+	case NODE_POW:			/* べき乗 */
+	case NODE_NOT:			/* ~ */
+	case NODE_LNOT:			/* ! */
+	case NODE_AND:			/* & */
+	case NODE_OR:				/* | */
+	case NODE_XOR:			/* ^ */
+	case NODE_LSH:			/* << */
+	case NODE_RSH:			/* >> */
+	case NODE_LS:				/* < */
+	case NODE_LE:				/* <= */
+	case NODE_EQ:				/* == */
+	case NODE_NE:				/* != */
+	case NODE_GE:				/* >= */
+	case NODE_GT:				/* > */
+	case NODE_STRING:			/* 文字列 */
+	case NODE_I2F:			/* 整数から実数へ変換 */
+	case NODE_F2I:			/* 実数から整数へ変換 */
+	case NODE_LOR:			/* || */
+	case NODE_LAND:			/* && */
+	case NODE_SENDER:			/* sender (actor) */
+	case NODE_EXPRESSION_IF:	/* 三項演算子 '?' */
 	default:
 #if 1
-		return node->type->memory_size;
+		return self->type->memory_size;
 #else
 		mana_compile_error("illigal node type detect");
 		return 0;
@@ -578,7 +323,7 @@ static void mana_node_dump_format_(FILE* file, const char* format, ...)
 	mana_node_dump_format_flag_ = true;
 }
 
-static void mana_node_dump_(FILE* file, const mana_node* node)
+static void mana_node_dump_(FILE* file, const node_entry* self)
 {
 	static char* name[] = {
 		"NEWLINE",
@@ -672,67 +417,67 @@ static void mana_node_dump_(FILE* file, const mana_node* node)
 	};
 
 #if defined(_DEBUG)
-	mana_node_dump_format_(file, "\"magic\": \"%s\"", node->magic);
+	mana_node_dump_format_(file, "\"magic\": \"%s\"", self->magic);
 #endif
 
-	if (node->id < sizeof(name) / sizeof(name[0]))
+	if (self->id < sizeof(name) / sizeof(name[0]))
 	{
-		mana_node_dump_format_(file, "\"name\": \"%s\"", name[node->id]);
+		mana_node_dump_format_(file, "\"name\": \"%s\"", name[self->id]);
 	}
 	else
 	{
-		mana_node_dump_format_(file, "\"name\": \"%d\"", node->id);
+		mana_node_dump_format_(file, "\"name\": \"%d\"", self->id);
 	}
 
-	if (node->string)
-		mana_node_dump_format_(file, "\"string\": \"%s\"", node->string);
-	if (node->type)
-		mana_node_dump_format_(file, "\"type\": \"%s\"", node->type->name);
+	if (self->string)
+		mana_node_dump_format_(file, "\"string\": \"%s\"", self->string);
+	if (self->type)
+		mana_node_dump_format_(file, "\"type\": \"%s\"", self->type->name);
 
-	if (node->left)
+	if (self->left)
 	{
 		mana_node_dump_format_(file, "\"left\": {\n");
 		mana_node_dump_format_flag_ = false;
-		mana_node_dump_(file, node->left);
+		mana_node_dump_(file, self->left);
 		fprintf(file, "}\n");
 	}
-	if (node->right)
+	if (self->right)
 	{
 		mana_node_dump_format_(file, "\"right\": {\n");
 		mana_node_dump_format_flag_ = false;
-		mana_node_dump_(file, node->right);
+		mana_node_dump_(file, self->right);
 		fprintf(file, "}\n");
 	}
-	if (node->body)
+	if (self->body)
 	{
 		mana_node_dump_format_(file, "\"body\": {\n");
 		mana_node_dump_format_flag_ = false;
-		mana_node_dump_(file, node->body);
+		mana_node_dump_(file, self->body);
 		fprintf(file, "}\n");
 	}
-	if (node->next)
+	if (self->next)
 	{
 		mana_node_dump_format_(file, "\"next\": {\n");
 		mana_node_dump_format_flag_ = false;
-		mana_node_dump_(file, node->next);
+		mana_node_dump_(file, self->next);
 		fprintf(file, "}\n");
 	}
 }
 
-void mana_node_dump(const mana_node* node)
+void mana_node_dump(const node_entry* self)
 {
 	FILE* file;
 #if defined(__STDC_WANT_SECURE_LIB__)
-	if (fopen_s(&file, "mana_node.json", "wt") == 0)
+	if (fopen_s(&file, "node_entry.json", "wt") == 0)
 #else
-	file = fopen("mana_node.json", "wt");
+	file = fopen("node_entry.json", "wt");
 	if (file)
 #endif
 	{
-		if (node)
+		if (self)
 		{
 			fputc('{', file);
-			mana_node_dump_(file, node);
+			mana_node_dump_(file, self);
 			fputc('}', file);
 		}
 		fclose(file);

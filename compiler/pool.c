@@ -1,12 +1,12 @@
-/*
- * mana (compiler)
- *
- * @file	mana_pool.c
- * @brief	文字列格納に関するソースファイル
- * @detail	このファイルは文字列を高速に参照するためのハッシュに関係するソースファイルです。
- * @author	Shun Moriya
- * @date	2003-
- */
+/*!
+mana (compiler)
+
+@file	pool.c
+@brief	文字列格納に関するソースファイル
+@detail	このファイルは文字列を高速に参照するためのハッシュに関係するソースファイルです。
+@author	Shun Moriya
+@date	2003-
+*/
 
 #if !defined(___MANA_MALLOC_H___)
 #include "../library/mana_malloc.h"

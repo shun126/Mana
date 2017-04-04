@@ -5,7 +5,7 @@
 # @file		version.rb
 # @brief	バージョン情報に関するスクリプトファイル
 # @detail	このファイルはバージョン情報に関するスクリプトファイルです。
-# @author	Shun Moriya <shun@mnu.sakura.ne.jp>
+# @author	Shun Moriya
 # @date		2003-
 #/
 
@@ -25,15 +25,16 @@ minor_version = json["MINOR_VERSION"]
 
 File.open("version.h", "w") do |file|
 	body = <<EOS
-/*
- * mana (compiler)
- *
- * @file	mana_version.h
- * @brief	バージョン情報に関するヘッダーファイル
- * @detail	このファイルはバージョン情報に関するヘッダーファイルです。
- * @author	Shun Moriya <shun@mnu.sakura.ne.jp>
- * @date	2003-
- */
+/*!
+mana (compiler)
+
+@file	version.h
+@brief	バージョン情報に関するヘッダーファイル
+@detail	このファイルはバージョン情報に関するヘッダーファイルです。
+		version.rbにより自動生成されるので注意して下さい
+@author	Shun Moriya
+@date	2003-
+*/
 
 #if !defined(___VERSION_H___)
 #define ___VERSION_H___

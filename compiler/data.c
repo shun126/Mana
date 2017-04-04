@@ -1,12 +1,12 @@
-/*
- * mana (compiler)
- *
- * @file	mana_data.c
- * @brief	データセクションに関するソースファイル
- * @detail	このファイルはデータセクションに関係するソースファイルです。
- * @author	Shun Moriya
- * @date	2003-
- */
+/*!
+mana (compiler)
+
+@file	data.c
+@brief	データセクションに関するソースファイル
+@detail	このファイルはデータセクションに関係するソースファイルです。
+@author	Shun Moriya
+@date	2003-
+*/
 
 #if !defined(___MANA_INFO_H___)
 #include "../library/mana_info.h"
@@ -14,7 +14,7 @@
 #if !defined(___MANA_MALLOC_H___)
 #include "../library/mana_malloc.h"
 #endif
-#if !defined(___MANA_DATA_H___)
+#if !defined(___SYMBOL_DATA_H___)
 #include "data.h"
 #endif
 #include <stdio.h>

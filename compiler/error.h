@@ -1,4 +1,4 @@
-/*
+/*!
 mana (compiler)
 
 @file	error.h
@@ -29,7 +29,7 @@ extern void mana_linker_warning(const char* format, ...);
 extern void mana_fatal(const char* format, ...);
 extern void mana_fatal_no_memory(void);
 
-extern void yyerror(char* message);
+extern void yyerror(const char* message);
 
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)
 }

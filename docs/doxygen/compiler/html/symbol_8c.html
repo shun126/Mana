@@ -1,0 +1,386 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.12"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>mana: symbol.c ファイル</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">mana
+   &#160;<span id="projectnumber">0.9.6</span>
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.8.12 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'検索');
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','検索');
+  $(document).ready(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#define-members">マクロ定義</a> &#124;
+<a href="#func-members">関数</a> &#124;
+<a href="#var-members">変数</a>  </div>
+  <div class="headertitle">
+<div class="title">symbol.c ファイル</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>レジスタ割り当てに関するソースファイル  このファイルはレジスタ割り当てに関するソースファイルです。  
+<a href="#details">[詳解]</a></p>
+<div class="textblock"><code>#include &quot;<a class="el" href="generator_8h_source.html">generator.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="code_8h_source.html">code.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="data_8h_source.html">data.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="error_8h_source.html">error.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="linker_8h_source.html">linker.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="main_8h_source.html">main.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="node_8h_source.html">node.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="register_8h_source.html">register.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="symbol_8h_source.html">symbol.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="type_8h_source.html">type.h</a>&quot;</code><br />
+<code>#include &lt;assert.h&gt;</code><br />
+<code>#include &lt;string.h&gt;</code><br />
+</div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+マクロ定義</h2></td></tr>
+<tr class="memitem:a856662cb2c8645c950990a6677c1cde6"><td class="memItemLeft" align="right" valign="top"><a id="a856662cb2c8645c950990a6677c1cde6"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>MANA_SYMBOL_BLOCK_TABLE_SIZE</b>&#160;&#160;&#160;(256)</td></tr>
+<tr class="separator:a856662cb2c8645c950990a6677c1cde6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68c980a5c6882fe996b5a6eecb1530ce"><td class="memItemLeft" align="right" valign="top"><a id="a68c980a5c6882fe996b5a6eecb1530ce"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>MANA_SYMBOL_HASHTABLE_SIZE</b>&#160;&#160;&#160;(1021)</td></tr>
+<tr class="separator:a68c980a5c6882fe996b5a6eecb1530ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf1c90786a87aff7bb9632ecc7c6ba52"><td class="memItemLeft" align="right" valign="top"><a id="abf1c90786a87aff7bb9632ecc7c6ba52"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>MANA_SYMBOL_IS_ACTOR_OR_STRUCTER_OPENED</b>()&#160;&#160;&#160;(mana_symbol_actor_or_structure_level &gt; 0)</td></tr>
+<tr class="separator:abf1c90786a87aff7bb9632ecc7c6ba52"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab357059f158989e8f818cd39d74d6e95"><td class="memItemLeft" align="right" valign="top"><a id="ab357059f158989e8f818cd39d74d6e95"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>MANA_SYMBOL_IS_FUNCTION_OPENED</b>()&#160;&#160;&#160;(mana_symbol_is_function_opened)</td></tr>
+<tr class="separator:ab357059f158989e8f818cd39d74d6e95"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+関数</h2></td></tr>
+<tr class="memitem:a4c49c25966690535d2c6339e6c461065"><td class="memItemLeft" align="right" valign="top"><a id="a4c49c25966690535d2c6339e6c461065"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_initialize</b> (void)</td></tr>
+<tr class="separator:a4c49c25966690535d2c6339e6c461065"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7bd65b3350a84779feb1ada79d202e38"><td class="memItemLeft" align="right" valign="top"><a id="a7bd65b3350a84779feb1ada79d202e38"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_finalize</b> (void)</td></tr>
+<tr class="separator:a7bd65b3350a84779feb1ada79d202e38"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0bc949ccfe4db8e2d9e3d89d2985697a"><td class="memItemLeft" align="right" valign="top"><a id="a0bc949ccfe4db8e2d9e3d89d2985697a"></a>
+int32_t&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_is_valid_variable</b> (<a class="el" href="structmana__symbol__entry.html">mana_symbol_entry</a> *symbol)</td></tr>
+<tr class="separator:a0bc949ccfe4db8e2d9e3d89d2985697a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02d2a7df84ae8ca6d215acede812f985"><td class="memItemLeft" align="right" valign="top"><a id="a02d2a7df84ae8ca6d215acede812f985"></a>
+int32_t&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_get_static_memory_address</b> ()</td></tr>
+<tr class="separator:a02d2a7df84ae8ca6d215acede812f985"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c5423afa5b4c1b6b981d77425c2a1ef"><td class="memItemLeft" align="right" valign="top"><a id="a4c5423afa5b4c1b6b981d77425c2a1ef"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_set_static_memory_address</b> (const int32_t size)</td></tr>
+<tr class="separator:a4c5423afa5b4c1b6b981d77425c2a1ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b3e323de10ea07873d18bdccf748656"><td class="memItemLeft" align="right" valign="top"><a id="a2b3e323de10ea07873d18bdccf748656"></a>
+int32_t&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_get_global_memory_address</b> ()</td></tr>
+<tr class="separator:a2b3e323de10ea07873d18bdccf748656"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd3e68003d940391ae4fc53ae4b9e967"><td class="memItemLeft" align="right" valign="top"><a id="acd3e68003d940391ae4fc53ae4b9e967"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_set_global_memory_address</b> (const int32_t size)</td></tr>
+<tr class="separator:acd3e68003d940391ae4fc53ae4b9e967"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8cb290a17e849e61745b98f813782ca"><td class="memItemLeft" align="right" valign="top"><a id="af8cb290a17e849e61745b98f813782ca"></a>
+int32_t&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_open_block</b> (const bool reset_max_frame_memory_address)</td></tr>
+<tr class="separator:af8cb290a17e849e61745b98f813782ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a34c9069a2cd33bc5b2b4c00779e5b282"><td class="memItemLeft" align="right" valign="top"><a id="a34c9069a2cd33bc5b2b4c00779e5b282"></a>
+int32_t&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_close_block</b> (void)</td></tr>
+<tr class="separator:a34c9069a2cd33bc5b2b4c00779e5b282"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f3183b5d590f5e19c2561dc66a05fd9"><td class="memItemLeft" align="right" valign="top"><a id="a8f3183b5d590f5e19c2561dc66a05fd9"></a>
+<a class="el" href="structmana__symbol__entry.html">mana_symbol_entry</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_get_head_symbol</b> (void)</td></tr>
+<tr class="separator:a8f3183b5d590f5e19c2561dc66a05fd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ede2d7d9ee6df693f6049933a739a04"><td class="memItemLeft" align="right" valign="top"><a id="a6ede2d7d9ee6df693f6049933a739a04"></a>
+<a class="el" href="structmana__symbol__entry.html">mana_symbol_entry</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_lookup</b> (const char *name)</td></tr>
+<tr class="separator:a6ede2d7d9ee6df693f6049933a739a04"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa423e178db1ff120113d1f7c0e8a7bc2"><td class="memItemLeft" align="right" valign="top"><a id="aa423e178db1ff120113d1f7c0e8a7bc2"></a>
+<a class="el" href="structmana__symbol__entry.html">mana_symbol_entry</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_lookup_or_create_dummy</b> (const char *name)</td></tr>
+<tr class="separator:aa423e178db1ff120113d1f7c0e8a7bc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a674905a7190b7383fea97e4a170af36a"><td class="memItemLeft" align="right" valign="top"><a id="a674905a7190b7383fea97e4a170af36a"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_destroy</b> (const char *name)</td></tr>
+<tr class="separator:a674905a7190b7383fea97e4a170af36a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8d3efab78ed5c42596ff70bce5516a7"><td class="memItemLeft" align="right" valign="top"><a id="aa8d3efab78ed5c42596ff70bce5516a7"></a>
+<a class="el" href="structmana__symbol__entry.html">mana_symbol_entry</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_create_alias</b> (const char *name, const char *filename)</td></tr>
+<tr class="separator:aa8d3efab78ed5c42596ff70bce5516a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a70a9fb5abc94ba9e167f20c80a442704"><td class="memItemLeft" align="right" valign="top"><a id="a70a9fb5abc94ba9e167f20c80a442704"></a>
+<a class="el" href="structmana__symbol__entry.html">mana_symbol_entry</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_create_const_int</b> (const char *name, const int32_t value)</td></tr>
+<tr class="separator:a70a9fb5abc94ba9e167f20c80a442704"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af372e9e2e382b4cab70d665ff0393f86"><td class="memItemLeft" align="right" valign="top"><a id="af372e9e2e382b4cab70d665ff0393f86"></a>
+<a class="el" href="structmana__symbol__entry.html">mana_symbol_entry</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_create_const_float</b> (const char *name, const float value)</td></tr>
+<tr class="separator:af372e9e2e382b4cab70d665ff0393f86"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38a60a68be83c1b68de4a5e8c5808aed"><td class="memItemLeft" align="right" valign="top"><a id="a38a60a68be83c1b68de4a5e8c5808aed"></a>
+<a class="el" href="structmana__symbol__entry.html">mana_symbol_entry</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_create_const_string</b> (const char *name, const char *value)</td></tr>
+<tr class="separator:a38a60a68be83c1b68de4a5e8c5808aed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95acd4ee61e118cf607839b7e3c2f0f9"><td class="memItemLeft" align="right" valign="top"><a id="a95acd4ee61e118cf607839b7e3c2f0f9"></a>
+<a class="el" href="structmana__symbol__entry.html">mana_symbol_entry</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_create_identification</b> (const char *name, <a class="el" href="structmana__type__description.html">mana_type_description</a> *type, const bool static_variable)</td></tr>
+<tr class="separator:a95acd4ee61e118cf607839b7e3c2f0f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac1795dbc36b3fdc842162181580575b1"><td class="memItemLeft" align="right" valign="top"><a id="ac1795dbc36b3fdc842162181580575b1"></a>
+<a class="el" href="structmana__symbol__entry.html">mana_symbol_entry</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_create_label</b> (const char *name)</td></tr>
+<tr class="separator:ac1795dbc36b3fdc842162181580575b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aceea7262cda64e2795a338f9b4cce46d"><td class="memItemLeft" align="right" valign="top"><a id="aceea7262cda64e2795a338f9b4cce46d"></a>
+<a class="el" href="structmana__symbol__entry.html">mana_symbol_entry</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_create_function</b> (const char *name)</td></tr>
+<tr class="separator:aceea7262cda64e2795a338f9b4cce46d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a908ec9c54a2f811fc73077d9eeb69fed"><td class="memItemLeft" align="right" valign="top"><a id="a908ec9c54a2f811fc73077d9eeb69fed"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_open_function</b> (<a class="el" href="structmana__node.html">mana_node</a> *node, const bool is_action)</td></tr>
+<tr class="separator:a908ec9c54a2f811fc73077d9eeb69fed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a21ddedd8b63c3e15a154fb66145c31"><td class="memItemLeft" align="right" valign="top"><a id="a7a21ddedd8b63c3e15a154fb66145c31"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_close_function</b> (<a class="el" href="structmana__node.html">mana_node</a> *node, const bool is_action)</td></tr>
+<tr class="separator:a7a21ddedd8b63c3e15a154fb66145c31"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6fb442a2c8a93748613972219166041f"><td class="memItemLeft" align="right" valign="top"><a id="a6fb442a2c8a93748613972219166041f"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_begin_native_function_registration</b> ()</td></tr>
+<tr class="separator:a6fb442a2c8a93748613972219166041f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ea40bd705280781124947c9ad7f9b21"><td class="memItemLeft" align="right" valign="top"><a id="a7ea40bd705280781124947c9ad7f9b21"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_commit_native_function_registration</b> (<a class="el" href="structmana__symbol__entry.html">mana_symbol_entry</a> *function, <a class="el" href="structmana__type__description.html">mana_type_description</a> *type)</td></tr>
+<tr class="separator:a7ea40bd705280781124947c9ad7f9b21"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7630cade891a01e1a9897a288547cc29"><td class="memItemLeft" align="right" valign="top"><a id="a7630cade891a01e1a9897a288547cc29"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_open_structure</b> (void)</td></tr>
+<tr class="separator:a7630cade891a01e1a9897a288547cc29"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e4998bec9cbf29f18e7154cedab4883"><td class="memItemLeft" align="right" valign="top"><a id="a1e4998bec9cbf29f18e7154cedab4883"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_close_structure</b> (const char *name)</td></tr>
+<tr class="separator:a1e4998bec9cbf29f18e7154cedab4883"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5c3df4e69f2a2329a3a6295baa632af"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="symbol_8c.html#ae5c3df4e69f2a2329a3a6295baa632af">mana_symbol_begin_registration_actor</a> (<a class="el" href="structmana__symbol__entry.html">mana_symbol_entry</a> *symbol)</td></tr>
+<tr class="separator:ae5c3df4e69f2a2329a3a6295baa632af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa0f85f362c7f776c511754337f2cc9fd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="symbol_8c.html#aa0f85f362c7f776c511754337f2cc9fd">mana_symbol_commit_registration_actor</a> (const char *name, const char *parent, <a class="el" href="structmana__type__description.html">mana_type_description</a> *td, const bool phantom)</td></tr>
+<tr class="separator:aa0f85f362c7f776c511754337f2cc9fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02c6472195d21565c627493417a64e08"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="symbol_8c.html#a02c6472195d21565c627493417a64e08">mana_symbol_open_actor</a> (const char *name)</td></tr>
+<tr class="separator:a02c6472195d21565c627493417a64e08"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a340fdeb5afc1068850eb6e1afdd3a512"><td class="memItemLeft" align="right" valign="top"><a id="a340fdeb5afc1068850eb6e1afdd3a512"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_close_actor</b> ()</td></tr>
+<tr class="separator:a340fdeb5afc1068850eb6e1afdd3a512"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a34993a42a50672fdd6d8d55aaaee4e8f"><td class="memItemLeft" align="right" valign="top"><a id="a34993a42a50672fdd6d8d55aaaee4e8f"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_begin_registration_module</b> (<a class="el" href="structmana__symbol__entry.html">mana_symbol_entry</a> *symbol)</td></tr>
+<tr class="separator:a34993a42a50672fdd6d8d55aaaee4e8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6f3e1651fd833c207ad4c74082930d3"><td class="memItemLeft" align="right" valign="top"><a id="ad6f3e1651fd833c207ad4c74082930d3"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_commit_registration_module</b> (const char *name)</td></tr>
+<tr class="separator:ad6f3e1651fd833c207ad4c74082930d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a697a77e90f31c6e8598849ee2ce83aa5"><td class="memItemLeft" align="right" valign="top"><a id="a697a77e90f31c6e8598849ee2ce83aa5"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_open_module</b> (<a class="el" href="structmana__symbol__entry.html">mana_symbol_entry</a> *symbol)</td></tr>
+<tr class="separator:a697a77e90f31c6e8598849ee2ce83aa5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3bf2c939a36cecc904eb81bd37c685a1"><td class="memItemLeft" align="right" valign="top"><a id="a3bf2c939a36cecc904eb81bd37c685a1"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_close_module</b> (const char *name)</td></tr>
+<tr class="separator:a3bf2c939a36cecc904eb81bd37c685a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a37400c365479f2f205ecb39e2c5f33b3"><td class="memItemLeft" align="right" valign="top"><a id="a37400c365479f2f205ecb39e2c5f33b3"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_extend_module</b> (const char *name)</td></tr>
+<tr class="separator:a37400c365479f2f205ecb39e2c5f33b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76af5fccfbae6167b5b5df53c9de26f8"><td class="memItemLeft" align="right" valign="top"><a id="a76af5fccfbae6167b5b5df53c9de26f8"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_set_type</b> (const char *name, <a class="el" href="structmana__type__description.html">mana_type_description</a> *type)</td></tr>
+<tr class="separator:a76af5fccfbae6167b5b5df53c9de26f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5664880da478850de91fa85a6982b9d"><td class="memItemLeft" align="right" valign="top"><a id="ac5664880da478850de91fa85a6982b9d"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_add_request</b> (uint8_t opcode, <a class="el" href="structmana__node.html">mana_node</a> *level, <a class="el" href="structmana__node.html">mana_node</a> *actor, const char *action)</td></tr>
+<tr class="separator:ac5664880da478850de91fa85a6982b9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8fe501bbc6b5277312a63e53ea6b7182"><td class="memItemLeft" align="right" valign="top"><a id="a8fe501bbc6b5277312a63e53ea6b7182"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_add_join</b> (<a class="el" href="structmana__node.html">mana_node</a> *level, <a class="el" href="structmana__node.html">mana_node</a> *actor)</td></tr>
+<tr class="separator:a8fe501bbc6b5277312a63e53ea6b7182"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e7bb757250cdf9e022f42a4a8a1482f"><td class="memItemLeft" align="right" valign="top"><a id="a0e7bb757250cdf9e022f42a4a8a1482f"></a>
+int32_t&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_get_number_of_actors</b> (void)</td></tr>
+<tr class="separator:a0e7bb757250cdf9e022f42a4a8a1482f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5db30df5298815171c943af68f10f8a8"><td class="memItemLeft" align="right" valign="top"><a id="a5db30df5298815171c943af68f10f8a8"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_allocate_memory</b> (<a class="el" href="structmana__symbol__entry.html">mana_symbol_entry</a> *symbol, <a class="el" href="structmana__type__description.html">mana_type_description</a> *type, <a class="el" href="symbol_8h.html#a07db5263c95c80e1a7d8a29b3d7faab8">mana_symbol_memory_type_id</a> parameter)</td></tr>
+<tr class="separator:a5db30df5298815171c943af68f10f8a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0c2e2fe1e7669dca5d97f086906c864"><td class="memItemLeft" align="right" valign="top"><a id="af0c2e2fe1e7669dca5d97f086906c864"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_check_undefine</b> (void)</td></tr>
+<tr class="separator:af0c2e2fe1e7669dca5d97f086906c864"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8db107338967a6a4f1780b727223a1ea"><td class="memItemLeft" align="right" valign="top"><a id="a8db107338967a6a4f1780b727223a1ea"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_print_header</b> (void)</td></tr>
+<tr class="separator:a8db107338967a6a4f1780b727223a1ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a305f742e02239303cb8441c9be7a8836"><td class="memItemLeft" align="right" valign="top"><a id="a305f742e02239303cb8441c9be7a8836"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_print_footer</b> (const char *name, <a class="el" href="structmana__type__description.html">mana_type_description</a> *type)</td></tr>
+<tr class="separator:a305f742e02239303cb8441c9be7a8836"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a6f03dc4943c9d58445f35c59bddfc5"><td class="memItemLeft" align="right" valign="top"><a id="a9a6f03dc4943c9d58445f35c59bddfc5"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_print_entry</b> (<a class="el" href="structmana__symbol__entry.html">mana_symbol_entry</a> *symbol, <a class="el" href="structmana__type__description.html">mana_type_description</a> *type)</td></tr>
+<tr class="separator:a9a6f03dc4943c9d58445f35c59bddfc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6cd57d74dbec27ff4840a2ddb499ca4c"><td class="memItemLeft" align="right" valign="top"><a id="a6cd57d74dbec27ff4840a2ddb499ca4c"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_print_dummy_global_variable</b> (size_t size)</td></tr>
+<tr class="separator:a6cd57d74dbec27ff4840a2ddb499ca4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa233944905fc36e441d0909b1d6ad2d4"><td class="memItemLeft" align="right" valign="top"><a id="aa233944905fc36e441d0909b1d6ad2d4"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_write_actor_infomation</b> (mana_stream *stream)</td></tr>
+<tr class="separator:aa233944905fc36e441d0909b1d6ad2d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76e710998b576c5f536b95dcb0ac09e2"><td class="memItemLeft" align="right" valign="top"><a id="a76e710998b576c5f536b95dcb0ac09e2"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_dump</b> (FILE *fp)</td></tr>
+<tr class="separator:a76e710998b576c5f536b95dcb0ac09e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad601fd0afc5b467d16be55dbcd421fee"><td class="memItemLeft" align="right" valign="top"><a id="ad601fd0afc5b467d16be55dbcd421fee"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_dump_function_symbol_from_address</b> (FILE *log, const int32_t address)</td></tr>
+<tr class="separator:ad601fd0afc5b467d16be55dbcd421fee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+変数</h2></td></tr>
+<tr class="memitem:aac2273f8369eb8630614721c90c60756"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="symbol_8c.html#aac2273f8369eb8630614721c90c60756">mana_symbol_frame_size_list</a></td></tr>
+<tr class="separator:aac2273f8369eb8630614721c90c60756"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7092258a202421d99a2738fb7da244d"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="symbol_8c.html#aa7092258a202421d99a2738fb7da244d">mana_symbol_return_address_list</a></td></tr>
+<tr class="separator:aa7092258a202421d99a2738fb7da244d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
+<div class="textblock"><p>レジスタ割り当てに関するソースファイル  このファイルはレジスタ割り当てに関するソースファイルです。 </p>
+<p>mana (compiler)</p>
+<dl class="section author"><dt>著者</dt><dd>Shun Moriya </dd></dl>
+<dl class="section date"><dt>日付</dt><dd>2003- </dd></dl>
+</div><h2 class="groupheader">関数詳解</h2>
+<a id="ae5c3df4e69f2a2329a3a6295baa632af"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae5c3df4e69f2a2329a3a6295baa632af">&sect;&nbsp;</a></span>mana_symbol_begin_registration_actor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_symbol_begin_registration_actor </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__symbol__entry.html">mana_symbol_entry</a> *&#160;</td>
+          <td class="paramname"><em>symbol</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>アクターシンボルの登録を開始します </p><dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">symbol</td><td>NULLならば新規作成 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aa0f85f362c7f776c511754337f2cc9fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa0f85f362c7f776c511754337f2cc9fd">&sect;&nbsp;</a></span>mana_symbol_commit_registration_actor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_symbol_commit_registration_actor </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>parent</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structmana__type__description.html">mana_type_description</a> *&#160;</td>
+          <td class="paramname"><em>td</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>phantom</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>アクターシンボルの登録を確定します </p>
+
+</div>
+</div>
+<a id="a02c6472195d21565c627493417a64e08"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a02c6472195d21565c627493417a64e08">&sect;&nbsp;</a></span>mana_symbol_open_actor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_symbol_open_actor </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>アクターのシンボル登録を開始します </p><dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">symbol</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">変数詳解</h2>
+<a id="aac2273f8369eb8630614721c90c60756"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aac2273f8369eb8630614721c90c60756">&sect;&nbsp;</a></span>mana_symbol_frame_size_list</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int32_t mana_symbol_frame_size_list</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>action,functionのフレームサイズリスト </p>
+
+</div>
+</div>
+<a id="aa7092258a202421d99a2738fb7da244d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa7092258a202421d99a2738fb7da244d">&sect;&nbsp;</a></span>mana_symbol_return_address_list</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int32_t mana_symbol_return_address_list</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>action,functionのリターンアドレスリスト </p>
+
+</div>
+</div>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+2017年04月04日(火) 22時58分52秒作成 - mana / 構成:  &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.12
+</small></address>
+</body>
+</html>

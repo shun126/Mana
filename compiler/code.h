@@ -1,7 +1,7 @@
-/*
+/*!
 mana (compiler)
 
-@file	mana_code.h
+@file	code.h
 @brief	命令セクションに関するヘッダーファイル
 @detail	このファイルは命令セクションに関係するヘッダーファイルです。
 @author	Shun Moriya

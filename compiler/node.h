@@ -1,15 +1,15 @@
-/*
- * mana (compiler)
- *
- * @file	mana_node.c
- * @brief	意味解析ノードに関するヘッダーファイル
- * @detail	このファイルは意味解析ノードに関係するヘッダーファイルです。
- * @author	Shun Moriya
- * @date	2003-
- */
+/*!
+mana (compiler)
 
-#if !defined(___MANA_NODE_H___)
-#define ___MANA_NODE_H___
+@file	node.h
+@brief	意味解析ノードに関するヘッダーファイル
+@detail	このファイルは意味解析ノードに関係するヘッダーファイルです。
+@author	Shun Moriya
+@date	2003-
+*/
+
+#if !defined(___NODE_H___)
+#define ___NODE_H___
 
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)
 extern "C" {
@@ -23,9 +23,9 @@ extern "C" {
 #endif
 
 #if defined(_DEBUG)
-#define MANA_NODE_CHECK(NODE, MAGIC)	(strcmp(NODE->magic, MAGIC) == 0)
+#define NODE_CHECK(NODE, MAGIC)	(strcmp(NODE->magic, MAGIC) == 0)
 #else
-#define MANA_NODE_CHECK(NODE, MAGIC)	(false)
+#define NODE_CHECK(NODE, MAGIC)	(false)
 #endif
 
 /*!
@@ -43,14 +43,14 @@ extern void mana_node_finalize(void);
 @param[in]	org		元になるノードオブジェクト
 @return				複製したノードオブジェクト
 */
-extern mana_node* mana_node_clone(mana_node*);
+extern node_entry* mana_node_clone(const node_entry* org);
 
 /*!
 ノード作成
 @param[in]	id		ノードタイプ番号
 @return				ノードオブジェクト
 */
-extern mana_node* mana_node_allocate(const mana_node_type_id id);
+extern node_entry* mana_node_allocate(const node_id id);
 
 /*!
 ノードを作成します
@@ -60,20 +60,48 @@ extern mana_node* mana_node_allocate(const mana_node_type_id id);
 @param[in]	body	ノードオブジェクト
 @return		ノードオブジェクト
 */
-extern mana_node* mana_node_create_node(const mana_node_type_id id, mana_node* left, mana_node* right, mana_node* body);
+extern node_entry* mana_node_create_node(const node_id id, node_entry* left, node_entry* right, node_entry* body);
 
-extern mana_node* mana_node_create_digit(int32_t);
-extern mana_node* mana_node_create_real(float);
-extern mana_node* mana_node_create_string(char* string);
-extern mana_node* mana_node_create_type(mana_type_description* type, const char* identifier);
+/*!
+整数ノードを作成します
+@param[in]	digit	整数
+@return				ノードオブジェクト
+*/
+extern node_entry* mana_node_create_digit(const int32_t digit);
 
-extern mana_node* mana_node_create_declare_function(mana_node* left, const char* identifier, mana_node* argument_count, mana_node* body);
-extern mana_node* mana_node_create_declare_native_function(mana_node* left, const char* identifier, mana_node* argument_count, mana_node* body);
+/*!
+実数ノードを作成します
+@param[in]	real	実数
+@return				ノードオブジェクト
+*/
+extern node_entry* mana_node_create_real(const float real);
 
-extern mana_node* mana_node_create_allocate(int32_t size, mana_node* left);
-extern mana_node* mana_node_create_request(mana_node* left, mana_node* right, const char* action);
+/*!
+文字列ノードを作成します
+@param[in]	string	文字列
+@return		ノードオブジェクト
+*/
+extern node_entry* mana_node_create_string(const char* string);
 
-extern mana_node* mana_node_create_declarator(const char* identifier, mana_node* left);
+/*!
+関数宣言ノードを作成します
+@param[in]	left
+@param[in]	identifier, 
+@param[in]	argument_count
+@param[in]	body
+@return		ノードオブジェクト
+*/
+extern node_entry* mana_node_create_declare_function(node_entry* left, const char* identifier, node_entry* argument_count, node_entry* body);
+
+/*!
+ネイティブ関数宣言ノードを作成します
+@param[in]	left
+@param[in]	identifier,
+@param[in]	argument_count
+@param[in]	body
+@return		ノードオブジェクト
+*/
+extern node_entry* mana_node_create_declare_native_function(node_entry* left, const char* identifier, node_entry* argument_count, node_entry* body);
 
 /*!
 型キャストノードを挿入します
@@ -81,19 +109,20 @@ extern mana_node* mana_node_create_declarator(const char* identifier, mana_node*
 @param[in]	node	ノードオブジェクト
 @return				ノードオブジェクト
 */
-extern mana_node* mana_node_cast(mana_type_description* type, mana_node* node);
+extern node_entry* mana_node_cast(type_description* type, node_entry* node);
 
 /*!
 メモリサイズを取得します
 @param[in]	node	ノードオブジェクト
 @return				メモリサイズ
 */
-extern size_t mana_node_get_memory_size(mana_node* node);
+extern size_t mana_node_get_memory_size(node_entry* node);
 
-
-
-
-extern void mana_node_dump(const mana_node* node);
+/*!
+ノードをダンプします
+@param[-in]	node	親ノードオブジェクト
+*/
+extern void mana_node_dump(const node_entry* node);
 
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)
 }

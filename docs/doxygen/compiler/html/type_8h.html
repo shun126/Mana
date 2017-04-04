@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.12"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>mana: type.h ファイル</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">mana
+   &#160;<span id="projectnumber">0.9.6</span>
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.8.12 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'検索');
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','検索');
+  $(document).ready(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#define-members">マクロ定義</a> &#124;
+<a href="#func-members">関数</a> &#124;
+<a href="#var-members">変数</a>  </div>
+  <div class="headertitle">
+<div class="title">type.h ファイル</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>型情報に関するヘッダーファイル  このファイルは型情報に関係するヘッダーファイルです。  
+<a href="#details">[詳解]</a></p>
+<div class="textblock"><code>#include &lt;stdio.h&gt;</code><br />
+<code>#include &quot;mana_symbol.h&quot;</code><br />
+</div>
+<p><a href="type_8h_source.html">[ソースコード]</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+マクロ定義</h2></td></tr>
+<tr class="memitem:a5d0bc0839a3e412a97618907a9f455d1"><td class="memItemLeft" align="right" valign="top"><a id="a5d0bc0839a3e412a97618907a9f455d1"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>CBSZ</b>&#160;&#160;&#160;sizeof(int8_t)</td></tr>
+<tr class="separator:a5d0bc0839a3e412a97618907a9f455d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada0b1634f64f4565866af8d583f6c69f"><td class="memItemLeft" align="right" valign="top"><a id="ada0b1634f64f4565866af8d583f6c69f"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>BBSZ</b>&#160;&#160;&#160;sizeof(uint8_t)</td></tr>
+<tr class="separator:ada0b1634f64f4565866af8d583f6c69f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae6b73961fa90761fd4b5972df1cede5"><td class="memItemLeft" align="right" valign="top"><a id="aae6b73961fa90761fd4b5972df1cede5"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>SBSZ</b>&#160;&#160;&#160;sizeof(int16_t)</td></tr>
+<tr class="separator:aae6b73961fa90761fd4b5972df1cede5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe85251c17938dcf411258eb2b62b2a4"><td class="memItemLeft" align="right" valign="top"><a id="afe85251c17938dcf411258eb2b62b2a4"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>IBSZ</b>&#160;&#160;&#160;sizeof(int32_t)</td></tr>
+<tr class="separator:afe85251c17938dcf411258eb2b62b2a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5267a25d9112bed8c32cbb6b6c2113f3"><td class="memItemLeft" align="right" valign="top"><a id="a5267a25d9112bed8c32cbb6b6c2113f3"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>LBSZ</b>&#160;&#160;&#160;sizeof(int64_t)</td></tr>
+<tr class="separator:a5267a25d9112bed8c32cbb6b6c2113f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af324bb0871507715b0272b0b99245abd"><td class="memItemLeft" align="right" valign="top"><a id="af324bb0871507715b0272b0b99245abd"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>FBSZ</b>&#160;&#160;&#160;sizeof(float)</td></tr>
+<tr class="separator:af324bb0871507715b0272b0b99245abd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac14aa8596120294ae005aa46a6e3354d"><td class="memItemLeft" align="right" valign="top"><a id="ac14aa8596120294ae005aa46a6e3354d"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>DBSZ</b>&#160;&#160;&#160;sizeof(double)</td></tr>
+<tr class="separator:ac14aa8596120294ae005aa46a6e3354d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+関数</h2></td></tr>
+<tr class="memitem:a886e461376b0f1ff52a1077e981cb54e"><td class="memItemLeft" align="right" valign="top"><a id="a886e461376b0f1ff52a1077e981cb54e"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_type_initialize</b> (void)</td></tr>
+<tr class="separator:a886e461376b0f1ff52a1077e981cb54e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ac2990c9a5a4dea13b2c210b3ae188e"><td class="memItemLeft" align="right" valign="top"><a id="a4ac2990c9a5a4dea13b2c210b3ae188e"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_type_finalize</b> (void)</td></tr>
+<tr class="separator:a4ac2990c9a5a4dea13b2c210b3ae188e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c04fe7eb35364d74ace19f39630f114"><td class="memItemLeft" align="right" valign="top"><a id="a9c04fe7eb35364d74ace19f39630f114"></a>
+<a class="el" href="structmana__type__description.html">mana_type_description</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>mana_type_get</b> (<a class="el" href="symbol_8h.html#a28d2f43e32a8ad1a0f7cd43fd04b0156">mana_symbol_data_type_id</a>)</td></tr>
+<tr class="separator:a9c04fe7eb35364d74ace19f39630f114"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2ec2487918afd7bc27907693de0333a"><td class="memItemLeft" align="right" valign="top"><a id="ac2ec2487918afd7bc27907693de0333a"></a>
+<a class="el" href="structmana__type__description.html">mana_type_description</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>mana_type_create</b> (<a class="el" href="symbol_8h.html#a28d2f43e32a8ad1a0f7cd43fd04b0156">mana_symbol_data_type_id</a>, <a class="el" href="structmana__type__description.html">mana_type_description</a> *, <a class="el" href="structmana__type__description.html">mana_type_description</a> *)</td></tr>
+<tr class="separator:ac2ec2487918afd7bc27907693de0333a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa2cf0e244483500719d7737f6be3f4a8"><td class="memItemLeft" align="right" valign="top"><a id="aa2cf0e244483500719d7737f6be3f4a8"></a>
+<a class="el" href="structmana__type__description.html">mana_type_description</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>mana_type_create_reference</b> (<a class="el" href="structmana__type__description.html">mana_type_description</a> *)</td></tr>
+<tr class="separator:aa2cf0e244483500719d7737f6be3f4a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a69281d88d3e75668d9d1e020bb64d9ef"><td class="memItemLeft" align="right" valign="top"><a id="a69281d88d3e75668d9d1e020bb64d9ef"></a>
+<a class="el" href="structmana__type__description.html">mana_type_description</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>mana_type_create_array</b> (int32_t)</td></tr>
+<tr class="separator:a69281d88d3e75668d9d1e020bb64d9ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:addbb1a2b44b977ee985072361ba03470"><td class="memItemLeft" align="right" valign="top"><a id="addbb1a2b44b977ee985072361ba03470"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_type_set_array</b> (<a class="el" href="structmana__type__description.html">mana_type_description</a> *, <a class="el" href="structmana__type__description.html">mana_type_description</a> *)</td></tr>
+<tr class="separator:addbb1a2b44b977ee985072361ba03470"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a58cefc4366dc30b210cb9c27a5fea51f"><td class="memItemLeft" align="right" valign="top"><a id="a58cefc4366dc30b210cb9c27a5fea51f"></a>
+int32_t&#160;</td><td class="memItemRight" valign="bottom"><b>mana_type_compare</b> (<a class="el" href="structmana__type__description.html">mana_type_description</a> *, <a class="el" href="structmana__type__description.html">mana_type_description</a> *)</td></tr>
+<tr class="separator:a58cefc4366dc30b210cb9c27a5fea51f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae68528cfc280079ca8d0dcb265ca560a"><td class="memItemLeft" align="right" valign="top"><a id="ae68528cfc280079ca8d0dcb265ca560a"></a>
+int32_t&#160;</td><td class="memItemRight" valign="bottom"><b>mana_type_compatible</b> (<a class="el" href="structmana__type__description.html">mana_type_description</a> *, <a class="el" href="structmana__type__description.html">mana_type_description</a> *)</td></tr>
+<tr class="separator:ae68528cfc280079ca8d0dcb265ca560a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8896785080238013645fc04e56f7e2b0"><td class="memItemLeft" align="right" valign="top"><a id="a8896785080238013645fc04e56f7e2b0"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_type_print</b> (FILE *, <a class="el" href="structmana__type__description.html">mana_type_description</a> *)</td></tr>
+<tr class="separator:a8896785080238013645fc04e56f7e2b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+変数</h2></td></tr>
+<tr class="memitem:a3283621c1ca155136304ea1509a37cd8"><td class="memItemLeft" align="right" valign="top"><a id="a3283621c1ca155136304ea1509a37cd8"></a>
+<a class="el" href="structmana__type__description.html">mana_type_description</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>mana_type_actor</b></td></tr>
+<tr class="separator:a3283621c1ca155136304ea1509a37cd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1086efa3cc04daf23ca2d5c00ddd3e2"><td class="memItemLeft" align="right" valign="top"><a id="ad1086efa3cc04daf23ca2d5c00ddd3e2"></a>
+<a class="el" href="structmana__type__description.html">mana_type_description</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>mana_type_string</b></td></tr>
+<tr class="separator:ad1086efa3cc04daf23ca2d5c00ddd3e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac097e50c3b8a1da35571bb206c174243"><td class="memItemLeft" align="right" valign="top"><a id="ac097e50c3b8a1da35571bb206c174243"></a>
+<a class="el" href="structmana__type__description.html">mana_type_description</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>mana_type_pointer</b></td></tr>
+<tr class="separator:ac097e50c3b8a1da35571bb206c174243"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
+<div class="textblock"><p>型情報に関するヘッダーファイル  このファイルは型情報に関係するヘッダーファイルです。 </p>
+<p>mana (compiler)</p>
+<dl class="section author"><dt>著者</dt><dd>Shun Moriya </dd></dl>
+<dl class="section date"><dt>日付</dt><dd>2003- </dd></dl>
+</div></div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+2017年04月04日(火) 22時58分52秒作成 - mana / 構成:  &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.12
+</small></address>
+</body>
+</html>
