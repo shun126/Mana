@@ -1,0 +1,278 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.12"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>mana: resolver.h ファイル</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">mana
+   &#160;<span id="projectnumber">0.9.6</span>
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.8.12 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'検索');
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','検索');
+  $(document).ready(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#func-members">関数</a>  </div>
+  <div class="headertitle">
+<div class="title">resolver.h ファイル</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>シンボルの解決に関係するヘッダーファイル  シンボルの解決に関係するヘッダーファイルです。  
+<a href="#details">[詳解]</a></p>
+<div class="textblock"><code>#include &quot;<a class="el" href="symbol_8h_source.html">symbol.h</a>&quot;</code><br />
+</div>
+<p><a href="resolver_8h_source.html">[ソースコード]</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+関数</h2></td></tr>
+<tr class="memitem:a93ecb4a6c13192a01962620ffeb095ee"><td class="memItemLeft" align="right" valign="top"><a id="a93ecb4a6c13192a01962620ffeb095ee"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_resolver_set_current_file_infomation</b> (<a class="el" href="structmana__node.html">mana_node</a> *self)</td></tr>
+<tr class="separator:a93ecb4a6c13192a01962620ffeb095ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8af88ba5e2f703cc64e02d5097e5835"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="resolver_8h.html#ab8af88ba5e2f703cc64e02d5097e5835">mana_resolver_search_symbol_from_name</a> (<a class="el" href="structmana__node.html">mana_node</a> *node)</td></tr>
+<tr class="separator:ab8af88ba5e2f703cc64e02d5097e5835"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7db30187c58521fe70af9a57c83bbfa5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="resolver_8h.html#a7db30187c58521fe70af9a57c83bbfa5">mana_resolver_resolve_type_description</a> (<a class="el" href="structmana__node.html">mana_node</a> *node)</td></tr>
+<tr class="separator:a7db30187c58521fe70af9a57c83bbfa5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af22848f18dc2ee5970cbe37aba91f357"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmana__type__description.html">mana_type_description</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="resolver_8h.html#af22848f18dc2ee5970cbe37aba91f357">mana_resolver_resolve_variable_size</a> (<a class="el" href="structmana__node.html">mana_node</a> *node)</td></tr>
+<tr class="separator:af22848f18dc2ee5970cbe37aba91f357"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22f512c49bf482f5b85f04ca2b12b4a4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="resolver_8h.html#a22f512c49bf482f5b85f04ca2b12b4a4">mana_resolver_resolve_declarator</a> (<a class="el" href="structmana__node.html">mana_node</a> *node, const bool static_variable)</td></tr>
+<tr class="separator:a22f512c49bf482f5b85f04ca2b12b4a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a134265773badafd3314b4a712f2a0490"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="resolver_8h.html#a134265773badafd3314b4a712f2a0490">mana_resolver_resolve_variable_description</a> (<a class="el" href="structmana__node.html">mana_node</a> *node, const <a class="el" href="symbol_8h.html#a07db5263c95c80e1a7d8a29b3d7faab8">mana_symbol_memory_type_id</a> memory_type_id, const bool static_variable)</td></tr>
+<tr class="separator:a134265773badafd3314b4a712f2a0490"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a5d6278899f020aabf8e07c99a6f146"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="resolver_8h.html#a4a5d6278899f020aabf8e07c99a6f146">mana_resolver_resolve_type_from_child_node</a> (<a class="el" href="structmana__node.html">mana_node</a> *node)</td></tr>
+<tr class="separator:a4a5d6278899f020aabf8e07c99a6f146"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
+<div class="textblock"><p>シンボルの解決に関係するヘッダーファイル  シンボルの解決に関係するヘッダーファイルです。 </p>
+<p>mana (compiler)</p>
+<dl class="section author"><dt>著者</dt><dd>Shun Moriya </dd></dl>
+<dl class="section date"><dt>日付</dt><dd>2017- </dd></dl>
+</div><h2 class="groupheader">関数詳解</h2>
+<a id="a22f512c49bf482f5b85f04ca2b12b4a4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22f512c49bf482f5b85f04ca2b12b4a4">&sect;&nbsp;</a></span>mana_resolver_resolve_declarator()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_resolver_resolve_declarator </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__node.html">mana_node</a> *&#160;</td>
+          <td class="paramname"><em>node</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>static_variable</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>mana_symbol_create_identificationを呼び出し mana_symbolをnewしてnodeに設定します </p><dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">node</td><td>MANA_NODE_DECLARATORノード </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a7db30187c58521fe70af9a57c83bbfa5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7db30187c58521fe70af9a57c83bbfa5">&sect;&nbsp;</a></span>mana_resolver_resolve_type_description()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_resolver_resolve_type_description </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__node.html">mana_node</a> *&#160;</td>
+          <td class="paramname"><em>node</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>nodeに登録されたtypeが無ければシンボルを検索してそのtypeをnodeに設定します </p><dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">node</td><td>MANA_NODE_TYPE_DESCRIPTIONノード </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a4a5d6278899f020aabf8e07c99a6f146"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a5d6278899f020aabf8e07c99a6f146">&sect;&nbsp;</a></span>mana_resolver_resolve_type_from_child_node()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_resolver_resolve_type_from_child_node </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__node.html">mana_node</a> *&#160;</td>
+          <td class="paramname"><em>node</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>子ノードから型を継承する </p><dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">node</td><td>ノード </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a134265773badafd3314b4a712f2a0490"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a134265773badafd3314b4a712f2a0490">&sect;&nbsp;</a></span>mana_resolver_resolve_variable_description()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_resolver_resolve_variable_description </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__node.html">mana_node</a> *&#160;</td>
+          <td class="paramname"><em>node</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="symbol_8h.html#a07db5263c95c80e1a7d8a29b3d7faab8">mana_symbol_memory_type_id</a>&#160;</td>
+          <td class="paramname"><em>memory_type_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>static_variable</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>両辺のMANA_NODE_TYPE_DESCRIPTIONとMANA_NODE_DECLARATORを解決して mana_symbol_allocate_memoryを使ってメモリを割り当てます </p><dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">node</td><td>MANA_NODE_DECLARE_VARIABLEノード </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="af22848f18dc2ee5970cbe37aba91f357"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af22848f18dc2ee5970cbe37aba91f357">&sect;&nbsp;</a></span>mana_resolver_resolve_variable_size()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structmana__type__description.html">mana_type_description</a>* mana_resolver_resolve_variable_size </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__node.html">mana_node</a> *&#160;</td>
+          <td class="paramname"><em>node</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>mana_type_create_arrayを使って配列の型をnewします </p><dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">node</td><td>MANA_NODE_VARIABLE_SIZEノード </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>配列mana_type_description </dd></dl>
+
+</div>
+</div>
+<a id="ab8af88ba5e2f703cc64e02d5097e5835"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab8af88ba5e2f703cc64e02d5097e5835">&sect;&nbsp;</a></span>mana_resolver_search_symbol_from_name()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mana_resolver_search_symbol_from_name </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmana__node.html">mana_node</a> *&#160;</td>
+          <td class="paramname"><em>node</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>mana_symbol_lookupを呼び出しmana_symbolを検索してnodeに設定します </p><dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">node</td><td>MANA_NODE_IDENTIFIERノード </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+2017年04月04日(火) 22時58分52秒作成 - mana / 構成:  &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.12
+</small></address>
+</body>
+</html>

@@ -1,4 +1,4 @@
-/*
+/*!
 mana (compiler)
 
 @file	lexer.h
