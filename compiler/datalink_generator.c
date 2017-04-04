@@ -1,23 +1,27 @@
-/*
- * mana (compiler)
- *
- * @file	mana_datalink_generator.c
- * @brief	データセクションに関するソースファイル
- * @detail	このファイルはデータセクションに関係するソースファイルです。
- * @author	Shun Moriya
- * @date	2003-
- */
+/*!
+mana (compiler)
 
-#if !defined(___MANA_MAIN_H___)
-#include "main.h"
-#endif
+@file	datalink_generator.c
+@brief	データセクションに関するソースファイル
+@detail	このファイルはデータセクションに関係するソースファイルです。
+@author	Shun Moriya
+@date	2003-
+*/
+
 #if !defined(___MANA_DATALINK_GENERATOR_H___)
 #include "datalink_generator.h"
+#endif
+#if !defined(___MANA_ERROR_H___)
+#include "error.h"
 #endif
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+
+#if !defined(MANA_NIL)
+#define MANA_NIL 0
+#endif
 
 typedef struct mana_datalink_generator_file_entry
 {
