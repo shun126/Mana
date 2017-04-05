@@ -81,7 +81,7 @@ static void rcopy(char* dp, const char* sp, const char* ep)
 }
 
 /* reverse find */
-static char* rfind(const char* sp, const char* ep, const int32_t c)
+static char* rfind(const char* sp, char* ep, const int32_t c)
 {
 	while(*ep != (int8_t)c)
 	{
@@ -151,7 +151,7 @@ void _splitpath(const char* sptr, char* drive, char* dir, char* file, char* ext)
 
 char* _fullpath(char* out, const char* in, const size_t size)
 {
-	char* result = realpatzh(in, NULL);
+	char* result = realpath(in, NULL);
 	if (result)
 		strncpy(out, result, size);
 	free(result);
