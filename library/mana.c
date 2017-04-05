@@ -180,7 +180,7 @@ bool mana_load_program(mana* self, void* program, int32_t auto_release)
 
 	if((intptr_t)program % MANA_DATALINK_STANDARD_ALIGNMENT_SIZE)
 	{
-		MANA_WARNING("The program address is NOT aligned on %d-byte boundaries.\n", MANA_DATALINK_STANDARD_ALIGNMENT_SIZE);
+		MANA_WARNING("The program address is NOT aligned on %u-byte boundaries.\n", MANA_DATALINK_STANDARD_ALIGNMENT_SIZE);
 		goto ABORT;
 	}
 
@@ -231,63 +231,15 @@ bool mana_load_program(mana* self, void* program, int32_t auto_release)
 		program_counter = 0;
 		while(program_counter < self->file_header->size_of_instruction_pool)
 		{
-			uint8_t opecode = self->instruction_pool[program_counter];
-			switch(opecode)
+			if (self->instruction_pool[program_counter] == MANA_IL_CALL)
 			{
-			case MANA_IL_BEQ:
-			case MANA_IL_BNE:
-			case MANA_IL_BRA:
-			case MANA_IL_BSR:
-			case MANA_IL_COMPARE_EQ_INTEGER:
-			case MANA_IL_COMPARE_NE_INTEGER:
-			case MANA_IL_COMPARE_GE_INTEGER:
-			case MANA_IL_COMPARE_GT_INTEGER:
-			case MANA_IL_COMPARE_LE_INTEGER:
-			case MANA_IL_COMPARE_LS_INTEGER:
-			case MANA_IL_COMPARE_EQ_FLOAT:
-			case MANA_IL_COMPARE_NE_FLOAT:
-			case MANA_IL_COMPARE_GE_FLOAT:
-			case MANA_IL_COMPARE_GT_FLOAT:
-			case MANA_IL_COMPARE_LE_FLOAT:
-			case MANA_IL_COMPARE_LS_FLOAT:
-			case MANA_IL_COMPARE_EQ_DATA:
-			case MANA_IL_COMPARE_NE_DATA:
-			case MANA_IL_COMPARE_GE_DATA:
-			case MANA_IL_COMPARE_GT_DATA:
-			case MANA_IL_COMPARE_LE_DATA:
-			case MANA_IL_COMPARE_LS_DATA:
+				const char* name = mana_get_string(self, &self->instruction_pool[program_counter + 1]);
+				mana_external_funtion_type* function = mana_hash_get(&mana_external_function_hash, name);
+				if (function == NULL)
 				{
-#if 0
-					uint8_t* address = self->instruction_pool + mana_get_integer(self, &self->instruction_pool[program_counter + 1]);
-					self->instruction_pool[program_counter+4] = (uint8_t)(((uint32_t)address) >> 24);
-					self->instruction_pool[program_counter+3] = (uint8_t)(((uint32_t)address) >> 16);
-					self->instruction_pool[program_counter+2] = (uint8_t)(((uint32_t)address) >> 8);
-					self->instruction_pool[program_counter+1] = (uint8_t)(((uint32_t)address));
-#endif
+					MANA_WARNING("An external function called %s is not found.\n", name);
+					goto ABORT;
 				}
-				break;
-
-			case MANA_IL_CALL:
-				{
-					const char* name = mana_get_string(self, &self->instruction_pool[program_counter + 1]);
-
-					mana_external_funtion_type* function = mana_hash_get(&mana_external_function_hash, name);
-					if(function)
-					{
-#if defined(NDEBUG)
-						self->instruction_pool[program_counter+4] = (uint8_t)((uint32_t)function >> 24);
-						self->instruction_pool[program_counter+3] = (uint8_t)((uint32_t)function >> 16);
-						self->instruction_pool[program_counter+2] = (uint8_t)((uint32_t)function >> 8);
-						self->instruction_pool[program_counter+1] = (uint8_t)((uint32_t)function);
-#endif
-					}
-					else
-					{
-						MANA_WARNING("An external function called %s is not found.\n", name);
-						goto ABORT;
-					}
-				}
-				break;
 			}
 			program_counter += mana_get_instruction_size(&self->instruction_pool[program_counter]);
 		}
