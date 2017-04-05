@@ -129,44 +129,8 @@ void mana_symbol_initialize(void)
 	}
 }
 
-static void mana_symbol_finalize_recursive(symbol_entry* symbol)
-{
-	while (symbol)
-	{
-		if (symbol->type)
-		{
-			switch (symbol->type->tcons)
-			{
-			case SYMBOL_DATA_TYPE_ACTOR:
-			case SYMBOL_DATA_TYPE_MODULE:
-			case SYMBOL_DATA_TYPE_STRUCT:
-				if (symbol->class_type == SYMBOL_CLASS_TYPE_TYPEDEF)
-				{
-					if (symbol->type->component)
-					{
-						mana_symbol_finalize_recursive((symbol_entry*)symbol->type->component);
-					}
-				}
-				break;
-
-			default:
-				break;
-			}
-		}
-
-		mana_symbol_finalize_recursive(symbol->parameter_list);
-
-		symbol_entry* next = symbol->next;
-		MANA_TRACE("DELETE:%s\n", symbol->magic);
-		mana_free(symbol);
-		symbol = next;
-	}
-}
-
 void mana_symbol_finalize(void)
 {
-	//mana_symbol_finalize_recursive(mana_symbol_block_table[0].head);
-
 	symbol_entry* self = mana_symbol_root_pointer;
 	while (self)
 	{
@@ -667,7 +631,7 @@ void mana_symbol_close_function(node_entry* node, const bool is_action)
 	}
 	else
 	{
-		MANA_VERIFY(node->symbol->type, "type description is null pointer");
+		MANA_VERIFY_MESSAGE(node->symbol->type, "type description is null pointer");
 		if (node->symbol->type->tcons != SYMBOL_DATA_TYPE_VOID)
 		{
 			if (!node->symbol->used)
@@ -1436,7 +1400,7 @@ bool mana_symbol_write_actor_infomation(mana_stream* stream)
 
 	for(symbol = mana_symbol_block_table[0].head; symbol; symbol = symbol->next)
 	{
-		MANA_VERIFY(symbol->type, "Null pointer error in mana_symbol_write_actor_infomation");
+		MANA_VERIFY_MESSAGE(symbol->type, "Null pointer error in mana_symbol_write_actor_infomation");
 		switch(symbol->type->tcons)
 		{
 		case SYMBOL_DATA_TYPE_ACTOR:
@@ -1574,6 +1538,9 @@ void mana_symbol_dump_function_symbol_from_address(FILE* log, const int32_t addr
 					}
 				}
 			}
+			break;
+
+		default:
 			break;
 		}
 	}

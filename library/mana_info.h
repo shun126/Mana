@@ -316,7 +316,12 @@ extern const char* mana_get_instruction_text(const char* data, const void* progr
 #define MANA_BUG(m) { printf("%s(%d): BUG!: %s\n", __FILE__, __LINE__, m); abort(); }
 #endif
 /*! 値の真偽を調べ、偽なら強制終了 */
-#define MANA_VERIFY(EXP, ...) \
+#define MANA_VERIFY(EXP) \
+if(!(EXP)){ \
+	MANA_PRINT("%s(%d): (%s)\n", __FILE__, __LINE__, #EXP); \
+	abort(); \
+}
+#define MANA_VERIFY_MESSAGE(EXP, ...) \
 if(!(EXP)){ \
 	MANA_PRINT("%s(%d): ", __FILE__, __LINE__); \
 	MANA_PRINT(__VA_ARGS__); \

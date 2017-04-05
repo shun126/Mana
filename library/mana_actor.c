@@ -469,18 +469,12 @@ static void mana_actor_cmd_call(mana_actor* actor)
 	int32_t last_interrupt_level = actor->interrupt_level;
 
 	/* 外部関数の実行 */
-	mana_external_funtion_type* function;
-
-#if defined(NDEBUG)
-	function = (mana_external_funtion_type*)mana_get_unsigned_integer(actor->parent, (const uint8_t*)(actor->pc + 1));
-#else
 	const char* name = mana_actor_get_string_from_memory(actor, actor->pc + 1);
-	function = mana_hash_get(&mana_external_function_hash, name);
+	mana_external_funtion_type* function = mana_hash_get(&mana_external_function_hash, name);
 	if(!function)
 	{
 		MANA_ERROR("An external function called %s was not found.\n", name);
 	}
-#endif
 	MANA_ASSERT(function);
 
 	function(actor);
@@ -1668,8 +1662,6 @@ bool mana_async_call(mana_actor* self, const int32_t level, const char* action, 
  */
 bool mana_actor_request(mana_actor* self, const int32_t level, const char* action, mana_actor* sender)
 {
-	uint32_t address;
-
 	MANA_ASSERT(self);
 
 	if(level < 0 || level >= MANA_ACTOR_MAX_INTERRUPT_LEVEL)
@@ -1705,7 +1697,7 @@ bool mana_actor_request(mana_actor* self, const int32_t level, const char* actio
 		return false;
 	}
 
-	address = mana_actor_get_action(self, action);
+	uintptr_t address = mana_actor_get_action(self, action);
 	if(address == ~0)
 	{
 		MANA_TRACE("MANA: level %d, %s::%s request failed. reason: not found\n",
@@ -1944,20 +1936,18 @@ const char* mana_actor_get_name(mana_actor* self)
  * @param[in]	action	アクションの名前
  * @return		アクションのプログラムアドレス。0なら失敗
  */
-uint32_t mana_actor_get_action(mana_actor* self, const char* action)
+uintptr_t mana_actor_get_action(mana_actor* self, const char* action)
 {
-	const void* address;
-
 	MANA_ASSERT(self);
 
 	if(!mana_hash_test(&self->actions, action))
 		return (uint32_t)(~0);
 
-	address = mana_hash_get(&self->actions, action);
+	const void* address = mana_hash_get(&self->actions, action);
 	if(address == NULL)
 		return (uint32_t)(~0);
 
-	return (uint32_t)(address);
+	return (uintptr_t)(address);
 }
 
 /*!

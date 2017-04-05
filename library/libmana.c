@@ -223,11 +223,11 @@ void mana_generate_unique_name(char* name, const size_t size)
 			goto EXIT;
 
 		{
-			char* s = (char*)&mana_generate_unique_name_count;
+			uint8_t* s = (uint8_t*)&mana_generate_unique_name_count;
 
 			for(; i < sizeof(mana_generate_unique_name_count) * 2; i += 2)
 			{
-				char value = *s++;
+				uint8_t value = *s++;
 
 				if(i >= size - 1)
 					break;
@@ -239,7 +239,7 @@ void mana_generate_unique_name(char* name, const size_t size)
 				*text++ = table[value];
 				if((size_t)(text - name) >= size)
 					goto EXIT;
-		}
+			}
 
 			mana_generate_unique_name_count++;
 		}

@@ -50,6 +50,10 @@ mana (compiler)
 
 #define MAX_NEST_LEVEL	(16)
 
+#if !defined(_MSC_VER)
+#define _chdir	chdir
+#endif
+
 /*!
  * include file environment stack
  */
