@@ -85,27 +85,6 @@ void mana_generator_add_event(const char* name, mana_generator_event_funtion_typ
 	mana_hash_set(mana_generator_object.event_hash, name, function);
 }
 
-
-/*!
-ˆø”‚Ì”‚ðŽæ“¾‚µ‚Ü‚·iÄ‹AŒÄ‚Ño‚µj
-@param	count	ˆø”‚Ì”Ô†
-@param	param	ˆø”‚Ìsymbol_entry
-@param	arg		ˆø”‚Ìnode_entry
-@return	ˆø”‚Ì”
-*/
-static int32_t mana_generator_count_declaration_argument(int32_t count, node_entry* arg)
-{
-	if (arg)
-	{
-		if (arg->id == NODE_DECLARE_ARGUMENT)
-		{
-			count = mana_generator_count_declaration_argument(count, arg->right);
-		}
-		count++;
-	}
-	return count;
-}
-
 ////////////////////////////////////////////////////////////////////////////////
 // ˆÈ‰º‚Í ƒVƒ“ƒ{ƒ‹‚ð‰ðŒˆ‚µ‚Â‚ÂƒR[ƒh‚ðo—Í‚µ‚é ŠÖ”ŒS
 ////////////////////////////////////////////////////////////////////////////////
@@ -251,7 +230,7 @@ static void mana_generator_return(symbol_entry* func, node_entry* tree)
 		const int32_t in_depth = mana_symbol_open_block(false);
 		mana_generator_genearte_code(tree->left, true);
 		const int32_t out_depth = mana_symbol_close_block();
-		MANA_VERIFY(in_depth == out_depth, "ƒuƒƒbƒN‚Ì[‚³‚ªˆê’v‚µ‚Ü‚¹‚ñ in:%d out:%d", in_depth, out_depth);
+		MANA_VERIFY_MESSAGE(in_depth == out_depth, "ƒuƒƒbƒN‚Ì[‚³‚ªˆê’v‚µ‚Ü‚¹‚ñ in:%d out:%d", in_depth, out_depth);
 	}
 
 	/* ŠÖ”‚ÌÅŒã‚ÉƒWƒƒƒ“ƒv */
@@ -274,7 +253,7 @@ static void mana_generator_rollback(node_entry* tree)
 		const int32_t in_depth = mana_symbol_open_block(false);
 		mana_generator_genearte_code(tree, true);
 		const int32_t out_depth = mana_symbol_close_block();
-		MANA_VERIFY(in_depth == out_depth, "ƒuƒƒbƒN‚Ì[‚³‚ªˆê’v‚µ‚Ü‚¹‚ñ in:%d out:%d", in_depth, out_depth);
+		MANA_VERIFY_MESSAGE(in_depth == out_depth, "ƒuƒƒbƒN‚Ì[‚³‚ªˆê’v‚µ‚Ü‚¹‚ñ in:%d out:%d", in_depth, out_depth);
 	}
 	mana_code_set_opecode(MANA_IL_ROLLBACK);
 }
@@ -467,7 +446,7 @@ static int32_t mana_generator_condition(node_entry* tree, int32_t match)
 	const int32_t in_depth = mana_symbol_open_block(false);
 	mana_generator_condition_core(tree);
 	const int32_t out_depth = mana_symbol_close_block();
-	MANA_VERIFY(in_depth == out_depth, "ƒuƒƒbƒN‚Ì[‚³‚ªˆê’v‚µ‚Ü‚¹‚ñ in:%d out:%d", in_depth, out_depth);
+	MANA_VERIFY_MESSAGE(in_depth == out_depth, "ƒuƒƒbƒN‚Ì[‚³‚ªˆê’v‚µ‚Ü‚¹‚ñ in:%d out:%d", in_depth, out_depth);
 
 	return mana_code_set_opecode_and_operand(match ? MANA_IL_BEQ : MANA_IL_BNE, -1);
 }
@@ -591,7 +570,7 @@ void mana_generator_expression(node_entry* tree, int32_t enable_assign)
 	}
 
 	const int32_t out_depth = mana_symbol_close_block();
-	MANA_VERIFY(in_depth == out_depth, "ƒuƒƒbƒN‚Ì[‚³‚ªˆê’v‚µ‚Ü‚¹‚ñ in:%d out:%d", in_depth, out_depth);
+	MANA_VERIFY_MESSAGE(in_depth == out_depth, "ƒuƒƒbƒN‚Ì[‚³‚ªˆê’v‚µ‚Ü‚¹‚ñ in:%d out:%d", in_depth, out_depth);
 }
 
 
@@ -792,7 +771,7 @@ DO_RECURSIVE:
 			mana_generator_genearte_code(self->right, enable_load);
 
 			const int32_t out_depth = mana_symbol_close_block();
-			MANA_VERIFY(in_depth == out_depth, "ƒuƒƒbƒN‚Ì[‚³‚ªˆê’v‚µ‚Ü‚¹‚ñ in:%d out:%d", in_depth, out_depth);
+			MANA_VERIFY_MESSAGE(in_depth == out_depth, "ƒuƒƒbƒN‚Ì[‚³‚ªˆê’v‚µ‚Ü‚¹‚ñ in:%d out:%d", in_depth, out_depth);
 		}
 		MANA_ASSERT(self->body == NULL);
 		break;

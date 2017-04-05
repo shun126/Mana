@@ -230,7 +230,7 @@ int32_t mana_code_set_opecode_and_two_operands(uint8_t code, int32_t address, in
  */
 void mana_code_replace_opecode(int32_t address, uint8_t code)
 {
-	MANA_VERIFY(address >= 0 && address < mana_code_get_size(), "Out of range");
+	MANA_VERIFY_MESSAGE(address >= 0 && address < mana_code_get_size(), "Out of range");
 	mana_code_buffer.buffer[address].code = code;
 }
 
@@ -240,7 +240,7 @@ void mana_code_replace_opecode(int32_t address, uint8_t code)
  */
 void mana_code_replace_address(int32_t address, int32_t new_address)
 {
-	MANA_VERIFY(address >= 0 && address < mana_code_get_size(), "Out of range");
+	MANA_VERIFY_MESSAGE(address >= 0 && address < mana_code_get_size(), "Out of range");
 
 	mana_code_buffer.buffer[address+0].code = (uint8_t)(new_address >> 24);
 	mana_code_buffer.buffer[address+1].code = (uint8_t)(new_address >> 16);
@@ -258,7 +258,7 @@ void mana_code_replace_all(int32_t address, int32_t new_address)
 	{
 		int32_t next_address;
 
-		MANA_VERIFY(address >= 0 && address < mana_code_get_size(), "Out of range");
+		MANA_VERIFY_MESSAGE(address >= 0 && address < mana_code_get_size(), "Out of range");
 
 		next_address = mana_code_buffer.buffer[address].address;
 		mana_code_buffer.buffer[address+0].address = -1;
@@ -330,7 +330,7 @@ void* mana_code_get_buffer(void)
  */
 uint8_t mana_code_getcode(int32_t address)
 {
-	MANA_VERIFY(address >= 0 && address < mana_code_get_size(), "Out of range");
+	MANA_VERIFY_MESSAGE(address >= 0 && address < mana_code_get_size(), "Out of range");
 	return mana_code_buffer.buffer[address].code;
 }
 

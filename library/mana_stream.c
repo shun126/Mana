@@ -11,13 +11,15 @@
  * @date	2003-
  */
 
-#if !defined(___MANA_MALLOC_H___)
-#include "mana_malloc.h"
-#endif
 #if !defined(___MANA_STREAM_H___)
 #include "mana_stream.h"
 #endif
-#include <assert.h>
+#if !defined(___MANA_INFO_H___)
+#include "mana_info.h"
+#endif
+#if !defined(___MANA_MALLOC_H___)
+#include "mana_malloc.h"
+#endif
 #include <stdio.h>
 #include <string.h>
 
@@ -50,7 +52,7 @@ void mana_stream_destroy(mana_stream* self)
  */
 static void mana_stream_resize_buffer(mana_stream* self, const size_t size)
 {
-	assert(self);
+	MANA_ASSERT(self);
 
 	if(self->allocated_size < self->used_size + size)
 	{
@@ -67,7 +69,7 @@ int32_t mana_stream_load(mana_stream* self, const char* filename)
 	FILE* infile;
 	int32_t result = 0;
 
-	assert(self);
+	MANA_ASSERT(self);
 
 #if __STDC_WANT_SECURE_LIB__
 	if(fopen_s(&infile, filename, "rb") == 0)
@@ -102,7 +104,7 @@ int32_t mana_stream_save(mana_stream* self, const char* filename)
 	FILE* outfile;
 	int32_t result = 0;
 
-	assert(self);
+	MANA_ASSERT(self);
 
 #if __STDC_WANT_SECURE_LIB__
 	if(fopen_s(&outfile, filename, "wb") == 0)
@@ -124,7 +126,7 @@ int32_t mana_stream_save(mana_stream* self, const char* filename)
  */
 void* mana_stream_get_buffer(const mana_stream* self)
 {
-	assert(self);
+	MANA_ASSERT(self);
 
 	return self->buffer;
 }
@@ -148,7 +150,7 @@ void* mana_stream_index_at(const mana_stream* self, const size_t index)
  */
 size_t mana_stream_get_allocated_size(const mana_stream* self)
 {
-	assert(self);
+	MANA_ASSERT(self);
 
 	return self->allocated_size;
 }
@@ -159,7 +161,7 @@ size_t mana_stream_get_allocated_size(const mana_stream* self)
  */
 size_t mana_stream_get_used_size(const mana_stream* self)
 {
-	assert(self);
+	MANA_ASSERT(self);
 
 	return self->used_size;
 }
@@ -170,7 +172,7 @@ size_t mana_stream_get_used_size(const mana_stream* self)
  */
 void mana_stream_push_char(mana_stream* self, const int8_t value)
 {
-	assert(self);
+	MANA_ASSERT(self);
 
 	mana_stream_push_data(self, &value, sizeof(value));
 }
@@ -181,7 +183,7 @@ void mana_stream_push_char(mana_stream* self, const int8_t value)
  */
 void mana_stream_push_short(mana_stream* self, const int16_t value)
 {
-	assert(self);
+	MANA_ASSERT(self);
 
 	mana_stream_push_data(self, &value, sizeof(value));
 }
@@ -192,7 +194,7 @@ void mana_stream_push_short(mana_stream* self, const int16_t value)
  */
 void mana_stream_push_integer(mana_stream* self, const int32_t value)
 {
-	assert(self);
+	MANA_ASSERT(self);
 
 	mana_stream_push_data(self, &value, sizeof(value));
 }
@@ -203,7 +205,7 @@ void mana_stream_push_integer(mana_stream* self, const int32_t value)
  */
 void mana_stream_push_unsigned_char(mana_stream* self, const uint8_t value)
 {
-	assert(self);
+	MANA_ASSERT(self);
 
 	mana_stream_push_data(self, &value, sizeof(value));
 }
@@ -214,7 +216,7 @@ void mana_stream_push_unsigned_char(mana_stream* self, const uint8_t value)
  */
 void mana_stream_push_unsigned_short(mana_stream* self, const uint16_t value)
 {
-	assert(self);
+	MANA_ASSERT(self);
 
 	mana_stream_push_data(self, &value, sizeof(value));
 }
@@ -225,7 +227,7 @@ void mana_stream_push_unsigned_short(mana_stream* self, const uint16_t value)
  */
 void mana_stream_push_unsigned_integer(mana_stream* self, const uint32_t value)
 {
-	assert(self);
+	MANA_ASSERT(self);
 
 	mana_stream_push_data(self, &value, sizeof(value));
 }
@@ -236,7 +238,7 @@ void mana_stream_push_unsigned_integer(mana_stream* self, const uint32_t value)
  */
 void mana_stream_push_float(mana_stream* self, const float value)
 {
-	assert(self);
+	MANA_ASSERT(self);
 
 	mana_stream_push_data(self, &value, sizeof(value));
 }
@@ -249,7 +251,7 @@ void mana_stream_push_string(mana_stream* self, const char* text)
 {
 	size_t size;
 
-	assert(self && text);
+	MANA_ASSERT(self && text);
 
 	size = strlen(text) + 1;
 
@@ -271,7 +273,7 @@ void mana_stream_push_string(mana_stream* self, const char* text)
  */
 void mana_stream_push_data(mana_stream* self, const void* pointer, const size_t size)
 {
-	assert(self);
+	MANA_ASSERT(self);
 
 	if(pointer)
 	{
@@ -288,7 +290,7 @@ void mana_stream_push_data(mana_stream* self, const void* pointer, const size_t 
  */
 void mana_stream_rewind(mana_stream* self)
 {
-	assert(self);
+	MANA_ASSERT(self);
 
 	self->pointer = 0;
 }
@@ -394,7 +396,7 @@ void mana_stream_pop_string(mana_stream* self, char* pointer, const size_t size)
 {
 	size_t length, copy_length;
 
-	assert(self && self->used_size >= self->pointer);
+	MANA_ASSERT(self && self->used_size >= self->pointer);
 
 	length = copy_length = strlen(&self->buffer[self->pointer]) + 1;
 
@@ -414,8 +416,8 @@ void mana_stream_pop_string(mana_stream* self, char* pointer, const size_t size)
  */
 void mana_stream_pop_data(mana_stream* self, void* pointer, const size_t size)
 {
-	assert(self && self->used_size >= self->pointer);
-	assert(pointer);
+	MANA_ASSERT(self && self->used_size >= self->pointer);
+	MANA_ASSERT(pointer);
 
 	memcpy(pointer, &self->buffer[self->pointer], size);
 
@@ -523,7 +525,7 @@ void mana_stream_get_string(const mana_stream* self, char* pointer, const size_t
 {
 	size_t copy_length;
 
-	assert(self && self->used_size >= self->pointer);
+	MANA_ASSERT(self && self->used_size >= self->pointer);
 
 	copy_length = strlen(&self->buffer[self->pointer]) + 1;
 
@@ -539,7 +541,7 @@ void mana_stream_get_string(const mana_stream* self, char* pointer, const size_t
  */
 const char* mana_stream_get_string_pointer(const mana_stream* self)
 {
-	assert(self && self->used_size >= self->pointer);
+	MANA_ASSERT(self && self->used_size >= self->pointer);
 
 	return &self->buffer[self->pointer];
 }
@@ -550,7 +552,7 @@ const char* mana_stream_get_string_pointer(const mana_stream* self)
  */
 size_t mana_stream_get_string_length(const mana_stream* self)
 {
-	assert(self && self->used_size >= self->pointer);
+	MANA_ASSERT(self && self->used_size >= self->pointer);
 
 	return strlen(&self->buffer[self->pointer]);
 }
@@ -563,8 +565,8 @@ size_t mana_stream_get_string_length(const mana_stream* self)
  */
 void mana_stream_get_data(const mana_stream* self, void* pointer, const size_t size)
 {
-	assert(self && self->used_size >= self->pointer);
-	assert(pointer);
+	MANA_ASSERT(self && self->used_size >= self->pointer);
+	MANA_ASSERT(pointer);
 
 	memcpy(pointer, &self->buffer[self->pointer], size);
 }
@@ -577,7 +579,7 @@ void mana_steram_seek(mana_stream* self, const int32_t offset)
 {
 	size_t pointer;
 
-	assert(self);
+	MANA_ASSERT(self);
 
 	pointer = (size_t)((long)self->pointer + (long)offset);
 	if(pointer >= self->used_size)
@@ -608,7 +610,7 @@ void mana_stream_mark(mana_stream* self)
 {
 	uint16_t CRC;
 
-	assert(self);
+	MANA_ASSERT(self);
 
 	CRC = crc((uint8_t*)self->buffer, self->used_size);
 	mana_stream_push_unsigned_short(self, CRC);
@@ -622,13 +624,13 @@ void mana_stream_check(mana_stream* self)
 	size_t pointer1;
 	size_t pointer2;
 
-	assert(self);
+	MANA_VERIFY(self);
 
 	CRC1 = crc((uint8_t*)self->buffer, self->pointer);
 	CRC2 = mana_stream_pop_unsigned_short(self);
-	assert(CRC1 == CRC2);
+	MANA_VERIFY(CRC1 == CRC2);
 
 	pointer1 = self->pointer;
 	pointer2 = mana_stream_pop_unsigned_integer(self);
-	assert(pointer1 == pointer2);
+	MANA_VERIFY(pointer1 == pointer2);
 }

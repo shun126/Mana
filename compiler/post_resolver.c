@@ -227,7 +227,7 @@ DO_RECURSIVE:
 			mana_post_resolver_resolve(node->left);
 			mana_post_resolver_resolve(node->right);
 			const int32_t out_depth = mana_symbol_close_block();
-			MANA_VERIFY(in_depth == out_depth, "ƒuƒƒbƒN‚Ì[‚³‚ªˆê’v‚µ‚Ü‚¹‚ñ in:%d out:%d", in_depth, out_depth);
+			MANA_VERIFY_MESSAGE(in_depth == out_depth, "ƒuƒƒbƒN‚Ì[‚³‚ªˆê’v‚µ‚Ü‚¹‚ñ in:%d out:%d", in_depth, out_depth);
 		}
 		MANA_ASSERT(node->body == NULL);
 		break;

@@ -63,11 +63,9 @@ extern "C" {
 #endif
 
 #if !defined(_MSC_VER)
-#define _chdir	chdir
-#define _getcwd	getcwd
-extern void _makepath(char* , char* , char* , char* , char* );
-extern void _splitpath(char* , char* , char* , char* , char* );
-extern char* _fullpath(char* , char* , int32_t);
+extern void _makepath(char* path, const char* drive, const char* dir, const char* file, const char* ext);
+extern void _splitpath(const char* sptr, char* drive, char* dir, char* file, char* ext);
+extern char* _fullpath(char* out, const char* in, const size_t size);
 #endif
 
 #include <assert.h>
