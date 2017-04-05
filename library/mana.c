@@ -180,7 +180,7 @@ bool mana_load_program(mana* self, void* program, int32_t auto_release)
 
 	if((intptr_t)program % MANA_DATALINK_STANDARD_ALIGNMENT_SIZE)
 	{
-		MANA_WARNING("The program address is NOT aligned on %u-byte boundaries.\n", MANA_DATALINK_STANDARD_ALIGNMENT_SIZE);
+		MANA_WARNING("The program address is NOT aligned on %lu-byte boundaries.\n", (long unsigned int)MANA_DATALINK_STANDARD_ALIGNMENT_SIZE);
 		goto ABORT;
 	}
 

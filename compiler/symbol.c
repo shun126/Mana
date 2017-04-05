@@ -129,44 +129,8 @@ void mana_symbol_initialize(void)
 	}
 }
 
-static void mana_symbol_finalize_recursive(symbol_entry* symbol)
-{
-	while (symbol)
-	{
-		if (symbol->type)
-		{
-			switch (symbol->type->tcons)
-			{
-			case SYMBOL_DATA_TYPE_ACTOR:
-			case SYMBOL_DATA_TYPE_MODULE:
-			case SYMBOL_DATA_TYPE_STRUCT:
-				if (symbol->class_type == SYMBOL_CLASS_TYPE_TYPEDEF)
-				{
-					if (symbol->type->component)
-					{
-						mana_symbol_finalize_recursive((symbol_entry*)symbol->type->component);
-					}
-				}
-				break;
-
-			default:
-				break;
-			}
-		}
-
-		mana_symbol_finalize_recursive(symbol->parameter_list);
-
-		symbol_entry* next = symbol->next;
-		MANA_TRACE("DELETE:%s\n", symbol->magic);
-		mana_free(symbol);
-		symbol = next;
-	}
-}
-
 void mana_symbol_finalize(void)
 {
-	//mana_symbol_finalize_recursive(mana_symbol_block_table[0].head);
-
 	symbol_entry* self = mana_symbol_root_pointer;
 	while (self)
 	{
