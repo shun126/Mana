@@ -73,7 +73,7 @@ FILE* mana_variable_header_file;
 
 #if !defined(_MSC_VER)
 /* range copy */
-static void rcopy(char* dp, char* sp, char* ep)
+static void rcopy(char* dp, const char* sp, const char* ep)
 {
 	while(sp < ep)
 		*dp ++ = *sp ++;
@@ -81,7 +81,7 @@ static void rcopy(char* dp, char* sp, char* ep)
 }
 
 /* reverse find */
-static char* rfind(char* sp, char* ep, int32_t c)
+static char* rfind(const char* sp, const char* ep, const int32_t c)
 {
 	while(*ep != (int8_t)c)
 	{
@@ -92,7 +92,7 @@ static char* rfind(char* sp, char* ep, int32_t c)
 	return ep;
 }
 
-void _makepath(char* path, char* drive, char* dir, char* file, char* ext)
+void _makepath(char* path, const char* drive, const char* dir, const char* file, const char* ext)
 {
 	strcpy(path, drive);
 	strcat(path, dir);
@@ -100,7 +100,7 @@ void _makepath(char* path, char* drive, char* dir, char* file, char* ext)
 	strcat(path, ext);
 }
 
-void _splitpath(char* sptr, char* drive, char* dir, char* file, char* ext)
+void _splitpath(const char* sptr, char* drive, char* dir, char* file, char* ext)
 {
 	char* tptr;
 	char* aptr;
@@ -149,9 +149,12 @@ void _splitpath(char* sptr, char* drive, char* dir, char* file, char* ext)
 	}
 }
 
-char* _fullpath(char* out, char* in, int32_t size)
+char* _fullpath(char* out, const char* in, const size_t size)
 {
-	realpath(in, out);
+	char* result = realpatzh(in, NULL);
+	if (result)
+		strncpy(out, result, size);
+	free(result);
 	return out;
 }
 
