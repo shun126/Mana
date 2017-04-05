@@ -667,7 +667,7 @@ void mana_symbol_close_function(node_entry* node, const bool is_action)
 	}
 	else
 	{
-		MANA_VERIFY(node->symbol->type, "type description is null pointer");
+		MANA_VERIFY_MESSAGE(node->symbol->type, "type description is null pointer");
 		if (node->symbol->type->tcons != SYMBOL_DATA_TYPE_VOID)
 		{
 			if (!node->symbol->used)
@@ -1436,7 +1436,7 @@ bool mana_symbol_write_actor_infomation(mana_stream* stream)
 
 	for(symbol = mana_symbol_block_table[0].head; symbol; symbol = symbol->next)
 	{
-		MANA_VERIFY(symbol->type, "Null pointer error in mana_symbol_write_actor_infomation");
+		MANA_VERIFY_MESSAGE(symbol->type, "Null pointer error in mana_symbol_write_actor_infomation");
 		switch(symbol->type->tcons)
 		{
 		case SYMBOL_DATA_TYPE_ACTOR:
@@ -1574,6 +1574,9 @@ void mana_symbol_dump_function_symbol_from_address(FILE* log, const int32_t addr
 					}
 				}
 			}
+			break;
+
+		default:
 			break;
 		}
 	}
