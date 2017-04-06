@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['string',['string',['../structmana__symbol__entry.html#ae1adbce218e7a9d09164012443191d24',1,'mana_symbol_entry::string()'],['../structmana__node.html#ae1adbce218e7a9d09164012443191d24',1,'mana_node::string()']]],
-  ['symbol',['symbol',['../structmana__node.html#a08772bf2cd9e6acc877eeaaf7e6ad24d',1,'mana_node']]]
+  ['real',['real',['../structnode__entry.html#a06ed4269b34924d748f2f77b17db7d21',1,'node_entry']]],
+  ['right',['right',['../structnode__entry.html#a87a134088eed1d858ab760394524d5ef',1,'node_entry']]]
 ];

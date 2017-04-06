@@ -105,24 +105,18 @@ $(function() {
 <tr class="memitem:aeae2b8bdffa644dc57a4832349178b61"><td class="memItemLeft" align="right" valign="top"><a id="aeae2b8bdffa644dc57a4832349178b61"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>_MAX_EXT</b>&#160;&#160;&#160;256</td></tr>
 <tr class="separator:aeae2b8bdffa644dc57a4832349178b61"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5254d32a8a74ce52c21f47ed91d7344d"><td class="memItemLeft" align="right" valign="top"><a id="a5254d32a8a74ce52c21f47ed91d7344d"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>_chdir</b>&#160;&#160;&#160;chdir</td></tr>
-<tr class="separator:a5254d32a8a74ce52c21f47ed91d7344d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a300f297d84aa903d52cc236608f854c3"><td class="memItemLeft" align="right" valign="top"><a id="a300f297d84aa903d52cc236608f854c3"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>_getcwd</b>&#160;&#160;&#160;getcwd</td></tr>
-<tr class="separator:a300f297d84aa903d52cc236608f854c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 関数</h2></td></tr>
-<tr class="memitem:ab4f661bb0a40cac75b8128dd66f2e8b9"><td class="memItemLeft" align="right" valign="top"><a id="ab4f661bb0a40cac75b8128dd66f2e8b9"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>_makepath</b> (char *, char *, char *, char *, char *)</td></tr>
-<tr class="separator:ab4f661bb0a40cac75b8128dd66f2e8b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa481d39c46386a39d9e9e8fb0b458fff"><td class="memItemLeft" align="right" valign="top"><a id="aa481d39c46386a39d9e9e8fb0b458fff"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>_splitpath</b> (char *, char *, char *, char *, char *)</td></tr>
-<tr class="separator:aa481d39c46386a39d9e9e8fb0b458fff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aba6249548965f861d0dee3c345850712"><td class="memItemLeft" align="right" valign="top"><a id="aba6249548965f861d0dee3c345850712"></a>
-char *&#160;</td><td class="memItemRight" valign="bottom"><b>_fullpath</b> (char *, char *, int32_t)</td></tr>
-<tr class="separator:aba6249548965f861d0dee3c345850712"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa82fc07af1d3ae21e3d6de12129ae978"><td class="memItemLeft" align="right" valign="top"><a id="aa82fc07af1d3ae21e3d6de12129ae978"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>_makepath</b> (char *path, const char *drive, const char *dir, const char *file, const char *ext)</td></tr>
+<tr class="separator:aa82fc07af1d3ae21e3d6de12129ae978"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af881c2abd1384a5d81524535ac48c994"><td class="memItemLeft" align="right" valign="top"><a id="af881c2abd1384a5d81524535ac48c994"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>_splitpath</b> (const char *sptr, char *drive, char *dir, char *file, char *ext)</td></tr>
+<tr class="separator:af881c2abd1384a5d81524535ac48c994"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a90baab589ebe9455b841df0ce1fb00d4"><td class="memItemLeft" align="right" valign="top"><a id="a90baab589ebe9455b841df0ce1fb00d4"></a>
+char *&#160;</td><td class="memItemRight" valign="bottom"><b>_fullpath</b> (char *out, const char *in, const size_t size)</td></tr>
+<tr class="separator:a90baab589ebe9455b841df0ce1fb00d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a847a2de5c1c28c9d7055a2b89ed7dad7"><td class="memItemLeft" align="right" valign="top"><a id="a847a2de5c1c28c9d7055a2b89ed7dad7"></a>
 int32_t&#160;</td><td class="memItemRight" valign="bottom"><b>yyparse</b> (void)</td></tr>
 <tr class="separator:a847a2de5c1c28c9d7055a2b89ed7dad7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -211,7 +205,7 @@ FILE *&#160;</td><td class="memItemRight" valign="bottom"><b>yyout</b></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-2017年04月04日(火) 22時58分52秒作成 - mana / 構成:  &#160;<a href="http://www.doxygen.org/index.html">
+2017年04月07日(金) 02時45分39秒作成 - mana / 構成:  &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.12
 </small></address>

@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['tcons',['tcons',['../structmana__type__description.html#ab75fbd4fd4a3195a1b7a8bea628525af',1,'mana_type_description']]],
-  ['type',['type',['../structmana__symbol__entry.html#add84735f4654ed5831ddd268b26099e4',1,'mana_symbol_entry::type()'],['../structmana__node.html#add84735f4654ed5831ddd268b26099e4',1,'mana_node::type()']]]
+  ['string',['string',['../structsymbol__entry.html#ae1adbce218e7a9d09164012443191d24',1,'symbol_entry::string()'],['../structnode__entry.html#ae1adbce218e7a9d09164012443191d24',1,'node_entry::string()']]],
+  ['symbol',['symbol',['../structnode__entry.html#a03f0f5408c817c255dec8990869c20b0',1,'node_entry']]]
 ];
