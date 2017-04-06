@@ -75,7 +75,7 @@ $(function() {
 <code>#include &quot;<a class="el" href="jump_8h_source.html">jump.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="linker_8h_source.html">linker.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="main_8h_source.html">main.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="node_8h_source.html">node.h</a>&quot;</code><br />
+<code>#include &quot;self.h&quot;</code><br />
 <code>#include &quot;<a class="el" href="register_8h_source.html">register.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="type_8h_source.html">type.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="resolver_8h_source.html">resolver.h</a>&quot;</code><br />
@@ -93,12 +93,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gene
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="generator_8c.html#a86d7c4467fdd91df9e42cbc07d273d40">mana_generator_finalize</a> (void)</td></tr>
 <tr class="memdesc:a86d7c4467fdd91df9e42cbc07d273d40"><td class="mdescLeft">&#160;</td><td class="mdescRight">終了 <br /></td></tr>
 <tr class="separator:a86d7c4467fdd91df9e42cbc07d273d40"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5b934fe387e893f114bd81fb4f09a163"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="generator_8c.html#a5b934fe387e893f114bd81fb4f09a163">mana_generator_add_event</a> (const char *name, <a class="el" href="generator_8h.html#a00175c6b444916197f7c4987edd5f77e">mana_generator_event_funtion_type</a> function)</td></tr>
+<tr class="memitem:a5b934fe387e893f114bd81fb4f09a163"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="generator_8c.html#a5b934fe387e893f114bd81fb4f09a163">mana_generator_add_event</a> (const char *name, <a class="el" href="generator_8h.html#ae83b4a7024f72f2928db4c97189fec65">mana_generator_event_funtion_type</a> function)</td></tr>
 <tr class="separator:a5b934fe387e893f114bd81fb4f09a163"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6bb2521a058a0671843b53d572dcc1b3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="generator_8c.html#a6bb2521a058a0671843b53d572dcc1b3">mana_generator_expression</a> (<a class="el" href="structmana__node.html">mana_node</a> *tree, int32_t enable_assign)</td></tr>
-<tr class="separator:a6bb2521a058a0671843b53d572dcc1b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5e14ccb8a7af3971341ed247fc92b097"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="generator_8c.html#a5e14ccb8a7af3971341ed247fc92b097">mana_generator_genearte_code</a> (<a class="el" href="structmana__node.html">mana_node</a> *node, int32_t enable_load)</td></tr>
-<tr class="separator:a5e14ccb8a7af3971341ed247fc92b097"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4344282366c1cca69c6bf018ba43c3be"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="generator_8c.html#a4344282366c1cca69c6bf018ba43c3be">mana_generator_expression</a> (<a class="el" href="structnode__entry.html">node_entry</a> *tree, int32_t enable_assign)</td></tr>
+<tr class="separator:a4344282366c1cca69c6bf018ba43c3be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ea62a5d49bc8714944baa91ec9436c6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="generator_8c.html#a5ea62a5d49bc8714944baa91ec9436c6">mana_generator_genearte_code</a> (<a class="el" href="structnode__entry.html">node_entry</a> *self, int32_t enable_load)</td></tr>
+<tr class="separator:a5ea62a5d49bc8714944baa91ec9436c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
 <div class="textblock"><p>コンパイルセクションに関するソースファイル  このファイルはコンパイルセクションに関係するソースファイルです。 </p>
@@ -121,7 +121,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gene
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="generator_8h.html#a00175c6b444916197f7c4987edd5f77e">mana_generator_event_funtion_type</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="generator_8h.html#ae83b4a7024f72f2928db4c97189fec65">mana_generator_event_funtion_type</a>&#160;</td>
           <td class="paramname"><em>function</em>&#160;</td>
         </tr>
         <tr>
@@ -141,8 +141,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gene
 
 </div>
 </div>
-<a id="a6bb2521a058a0671843b53d572dcc1b3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6bb2521a058a0671843b53d572dcc1b3">&sect;&nbsp;</a></span>mana_generator_expression()</h2>
+<a id="a4344282366c1cca69c6bf018ba43c3be"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4344282366c1cca69c6bf018ba43c3be">&sect;&nbsp;</a></span>mana_generator_expression()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -150,7 +150,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gene
         <tr>
           <td class="memname">void mana_generator_expression </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structmana__node.html">mana_node</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="structnode__entry.html">node_entry</a> *&#160;</td>
           <td class="paramname"><em>tree</em>, </td>
         </tr>
         <tr>
@@ -168,7 +168,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gene
 </div><div class="memdoc">
 <p>式の評価 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
-    <tr><td class="paramname">tree</td><td>式のmana_node </td></tr>
+    <tr><td class="paramname">tree</td><td>式のnode_entry </td></tr>
     <tr><td class="paramname">enable_assign</td><td>trueならば代入式、falseならばそれ以外 </td></tr>
   </table>
   </dd>
@@ -176,8 +176,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gene
 
 </div>
 </div>
-<a id="a5e14ccb8a7af3971341ed247fc92b097"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5e14ccb8a7af3971341ed247fc92b097">&sect;&nbsp;</a></span>mana_generator_genearte_code()</h2>
+<a id="a5ea62a5d49bc8714944baa91ec9436c6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ea62a5d49bc8714944baa91ec9436c6">&sect;&nbsp;</a></span>mana_generator_genearte_code()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -185,8 +185,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gene
         <tr>
           <td class="memname">void mana_generator_genearte_code </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structmana__node.html">mana_node</a> *&#160;</td>
-          <td class="paramname"><em>node</em>, </td>
+          <td class="paramtype"><a class="el" href="structnode__entry.html">node_entry</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -203,7 +203,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gene
 </div><div class="memdoc">
 <p>ノードを辿りながら中間言語に翻訳します </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
-    <tr><td class="paramname">node</td><td>ノード </td></tr>
+    <tr><td class="paramname">self</td><td>ノード </td></tr>
     <tr><td class="paramname">enable_load</td><td>trueならばload命令は有効、falseならばload命令は無効 </td></tr>
   </table>
   </dd>
@@ -214,7 +214,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gene
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-2017年04月04日(火) 22時58分52秒作成 - mana / 構成:  &#160;<a href="http://www.doxygen.org/index.html">
+2017年04月07日(金) 02時45分39秒作成 - mana / 構成:  &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.12
 </small></address>
