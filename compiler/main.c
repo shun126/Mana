@@ -207,16 +207,16 @@ int32_t mana_generator(void)
 {
 	int32_t result = 0;
 
-	mana_datalink_generator_initialize();
-	mana_code_initialize();
-	mana_data_initialzie();
+	datalink_generator_initialize();
+	code_initialize();
+	data_initialzie();
 	mana_jump_initialize();
 	mana_node_initialize();
 	mana_register_initialzie();
 	mana_symbol_initialize();
 	mana_type_initialize();
 
-	mana_generator_initialize();
+	generator_initialize();
 	mana_pre_resolver_initialize();
 	mana_linker_initialize();
 
@@ -274,14 +274,14 @@ int32_t mana_generator(void)
 					fprintf(log, "\n\n");
 				}
 				{
-					int32_t size = mana_code_get_size();
+					int32_t size = code_get_size();
 					void* buffer = mana_malloc(size);
 					if(buffer)
 					{
-						char* data = mana_data_get_buffer();
+						char* data = data_get_buffer();
 						int32_t i = 0;
 
-						mana_code_copy(buffer);
+						code_copy(buffer);
 						while(i < size)
 						{
 							mana_symbol_dump_function_symbol_from_address(log, i);
@@ -307,13 +307,13 @@ int32_t mana_generator(void)
 		memcpy(&header.header, MANA_SIGNATURE, sizeof(header.header));
 		header.major_version = MANA_MAJOR_VERSION;
 		header.minor_version = MANA_MINOR_VERSION;
-		if(mana_datalink_generator_get_number_of_files() > 0)
+		if(datalink_generator_get_number_of_files() > 0)
 			header.flag |= MANA_HEADER_FLAG_RESOURCE;
 		if(mana_is_big_endian())
 			header.flag |= MANA_HEADER_FLAG_BIG_ENDIAN;
 		header.number_of_actors = mana_symbol_get_number_of_actors();
-		header.size_of_constant_pool = mana_data_get_size();
-		header.size_of_instruction_pool = mana_code_get_size();
+		header.size_of_constant_pool = data_get_size();
+		header.size_of_instruction_pool = code_get_size();
 		header.size_of_static_memory = mana_symbol_get_static_memory_address();
 		header.size_of_global_memory = mana_symbol_get_global_memory_address();
 		header.random_seed_number = (uint32_t)time(NULL);
@@ -326,23 +326,22 @@ int32_t mana_generator(void)
 			goto ESCAPE;
 		}
 		
-		mana_data_write(stream);
+		data_write(stream);
 
-		mana_code_write(stream);
+		code_write(stream);
 
-		if(mana_datalink_generator_get_number_of_files() > 0)
+		if(datalink_generator_get_number_of_files() > 0)
 		{
-			size_t position = mana_stream_get_used_size(stream) % MANA_DATALINK_ALIGNMENT_SIZE;
+			size_t position = mana_stream_get_used_size(stream);
 			if(position > 0)
 			{
 				srand((unsigned)time(NULL));
-				position = MANA_DATALINK_ALIGNMENT_SIZE - position;
 				for(size_t i = 0; i < position; i ++)
 				{
-					mana_stream_push_unsigned_char(stream, (uint8_t)rand());
+					mana_stream_push_unsigned_char(stream, (const uint8_t)rand());
 				}
 			}
-			if(! mana_datalink_generator_write_data(stream))
+			if(! datalink_generator_write_data(stream))
 			{
 				result = 1;
 				goto ESCAPE;
@@ -373,16 +372,16 @@ ESCAPE:
 
 	mana_stream_destroy(stream);
 
-	mana_datalink_generator_finalize();
-	mana_code_finalize();
-	mana_data_finalize();
+	datalink_generator_finalize();
+	code_finalize();
+	data_finalize();
 	mana_jump_finalize();
 	mana_node_finalize();
 	mana_register_finalize();
 	mana_symbol_finalize();
 	mana_type_finalize();
 
-	mana_generator_finalize();
+	generator_finalize();
 	mana_pre_resolver_finalize();
 	mana_linker_finalize();
 
