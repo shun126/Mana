@@ -58,6 +58,6 @@ void mana_linker_resolve_address()
 	for(const mana_linker_call_list* self = mana_linker_call_list_root_pointer; self; self = self->next)
 	{
 		// TODO:シンボルのアドレスが解決していない可能性が残るので対処をお願いします。
-		mana_code_replace_address(self->code_address, self->symbol->address);
+		code_replace_address(self->code_address, self->symbol->address);
 	}
 }

@@ -7,10 +7,15 @@ actor TestActor1
 {
 	action init
 	{
+		print("TestActor1::init\n");
 	}
 
 	action main
 	{
+		print("TestActor1::main\n");
+
+		short array[10];
+		test_sort(array, 10);
 	}
 }
 

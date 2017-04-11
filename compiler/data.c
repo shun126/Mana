@@ -20,80 +20,77 @@ mana (compiler)
 #include <stdio.h>
 #include <string.h>
 
-typedef struct mana_data_list
+// データリスト
+typedef struct data_list
 {
-	uint32_t address;				/*!< address */
-	struct mana_data_list* next;	/*!< next mana_data_list block address */
-} mana_data_list;
+	uint32_t address;			//!< address
+	struct data_list* next;		//!< next data_list block address
+} data_list;
 
-typedef struct mana_data
+//! データクラス
+typedef struct data_entry
 {
-	mana_data_list* constant;		/*!< Constant list top address */
-	char* buffer;					/*!< Constant pool data address */
-	uint32_t used_size;				/*!< Constant pool size */
-	uint32_t allocated_size;		/*!< Allocated size */
-} mana_data;
+	data_list* constant;		//!< Constant list top address
+	char* buffer;				//!< Constant pool data address
+	uint32_t used_size;			//!< Constant pool size
+	uint32_t allocated_size;	//!< Allocated size
+} data_entry;
 
-static mana_data mana_data_buffer;
+static data_entry data_instance;
 
-/*!
- */
-void mana_data_initialzie(void)
+void data_initialzie(void)
 {
-	mana_data_buffer.constant = NULL;
-	mana_data_buffer.buffer = NULL;
-	mana_data_buffer.used_size = 0;
-	mana_data_buffer.allocated_size = 0;
+	data_instance.constant = NULL;
+	data_instance.buffer = NULL;
+	data_instance.used_size = 0;
+	data_instance.allocated_size = 0;
 }
 
-/*!
- */
-void mana_data_finalize(void)
+void data_finalize(void)
 {
-	mana_data_list* list;
-	list = mana_data_buffer.constant;
+	data_list* list;
+	list = data_instance.constant;
 	while(list)
 	{
-		mana_data_list* next;
+		data_list* next;
 		next = list->next;
 		mana_free(list);
 		list = next;
 	}
-	mana_data_buffer.constant = NULL;
-	if(mana_data_buffer.buffer)
+	data_instance.constant = NULL;
+	if(data_instance.buffer)
 	{
-		mana_free(mana_data_buffer.buffer);
-		mana_data_buffer.buffer = NULL;
+		mana_free(data_instance.buffer);
+		data_instance.buffer = NULL;
 	}
-	mana_data_buffer.allocated_size = 0;
-	mana_data_buffer.used_size = 0;
+	data_instance.allocated_size = 0;
+	data_instance.used_size = 0;
+}
+
+char* data_get_buffer(void)
+{
+	return data_instance.buffer;
+}
+
+uint32_t data_get_size(void)
+{
+	return data_instance.used_size;
 }
 
 /*!
- * @return	データセクションバッファのアドレス
- */
-char* mana_data_get_buffer(void)
-{
-	return mana_data_buffer.buffer;
-}
-
-/*!
- * @return	データセクションのサイズ
- */
-uint32_t mana_data_get_size(void)
-{
-	return mana_data_buffer.used_size;
-}
-
-static mana_data_list* mana_data_find(const char* text)
+検索
+@param[in]	text	文字列
+@return		data_listのアドレス
+*/
+static data_list* data_find(const char* text)
 {
 	if(text)
 	{
-		mana_data_list* list;
-		list = mana_data_buffer.constant;
+		data_list* list;
+		list = data_instance.constant;
 		while(list)
 		{
-			if(strcmp((const char*)&mana_data_buffer.buffer[list->address], (const char*)text) == 0)
+			if(strcmp((const char*)&data_instance.buffer[list->address], (const char*)text) == 0)
 				return list;
 			list = list->next;
 		}
@@ -101,61 +98,48 @@ static mana_data_list* mana_data_find(const char* text)
 	return NULL;
 }
 
-/*!
- * @param[in]	text	テキスト
- * @return		オフセットアドレス
- */
-uint32_t mana_data_get(const char* text)
+uint32_t data_get(const char* text)
 {
-	mana_data_list* list;
-	list = mana_data_find(text);
+	data_list* list;
+	list = data_find(text);
 	return list == NULL ? (uint32_t)-1 : list->address;
 }
 
-/*!
- * @param[in]	text	テキスト
- * @return		オフセットアドレス
- */
-uint32_t mana_data_set(const char* text)
+uint32_t data_set(const char* text)
 {
-	mana_data_list* list = mana_data_find(text);
+	data_list* list = data_find(text);
 	if(list == NULL)
 	{
-		list = (mana_data_list*)mana_calloc(1, sizeof(mana_data_list));
+		list = (data_list*)mana_calloc(1, sizeof(data_list));
 		if(list == NULL)
 		{
-			mana_data_finalize();
+			data_finalize();
 			/* error message */
 			return (uint32_t)~0;
 		}
 		uint32_t length = strlen(text) + 1;
-		if(mana_data_buffer.used_size + length >= mana_data_buffer.allocated_size)
+		if(data_instance.used_size + length >= data_instance.allocated_size)
 		{
-			mana_data_buffer.allocated_size += (mana_data_buffer.used_size + length + 4096);
-			mana_data_buffer.buffer = (char*)mana_realloc(mana_data_buffer.buffer, mana_data_buffer.allocated_size);
-			if(mana_data_buffer.buffer == NULL)
+			data_instance.allocated_size += (data_instance.used_size + length + 4096);
+			data_instance.buffer = (char*)mana_realloc(data_instance.buffer, data_instance.allocated_size);
+			if(data_instance.buffer == NULL)
 			{
-				mana_data_finalize();
+				data_finalize();
 				/* error message */
 				return (uint32_t)~0;
 			}
 		}
-		memcpy(mana_data_buffer.buffer + mana_data_buffer.used_size, text, length);
-		list->address = mana_data_buffer.used_size;
-		list->next = mana_data_buffer.constant;
-		mana_data_buffer.constant = list;
-		mana_data_buffer.used_size += length;
+		memcpy(data_instance.buffer + data_instance.used_size, text, length);
+		list->address = data_instance.used_size;
+		list->next = data_instance.constant;
+		data_instance.constant = list;
+		data_instance.used_size += length;
 	}
 	return list->address;
 }
 
-/*!
- * @param[out]	file		ファイル識別子
- * @retval		true	出力成功
- * @retval		false	出力失敗
- */
-uint32_t mana_data_write(mana_stream* stream)
+bool data_write(mana_stream* stream)
 {
-	mana_stream_push_data(stream, mana_data_buffer.buffer, mana_data_buffer.used_size);
-	return 0;
+	mana_stream_push_data(stream, data_instance.buffer, data_instance.used_size);
+	return true;
 }

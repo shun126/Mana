@@ -5,8 +5,15 @@ Copyright (c) 2003 Shun Moriya <shun@mnu.sakura.ne.jp>
 
 native int nativeFunction(int a0, float a1);
 
+int callTest(char a, short b, int c, float d)
+{
+	return callTest(a, b, c, d);
+}
+
 void assignmentTest(float value)
 {
+	char c = 0b0001_1000;
+
 	TestStruct1 hoge[2];
 	hoge[1].realValue = 1.5;
 
@@ -134,11 +141,12 @@ float functionCallingTest()
 
 int test_sort(short array[10], int size)
 {
-	//print("before\n");
+	print("before\n");
+	print("size:%d\n", size);
 	for(int i = 0; i < size; i++)
 	{
 		array[i] = size - i;
-		//print("%d: %d\n", i, array[i]);
+		print("%d: %d\n", i, array[i]);
 	}
 
 	int count = 0;
@@ -158,10 +166,10 @@ int test_sort(short array[10], int size)
 		count++;
 	}while(!finish);
 
-	//print("after\n");
+	print("after\n");
 	for(int i = 0; i < size; i++)
 	{
-		//print("%d: %d\n", i, array[i]);
+		print("%d: %d\n", i, array[i]);
 	}
 
 	return count;

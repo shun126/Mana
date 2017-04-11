@@ -528,18 +528,18 @@ void mana_symbol_open_function(node_entry* node, const bool is_action)
 	}
 
 	/* シンボルの設定 */
-	function->address = mana_code_get_pc();
+	function->address = code_get_pc();
 	function->etc = is_action;
 
 	mana_symbol_function_block_level = mana_symbol_block_level;
 
 	/* frame bufferの確保する命令を発行 */
-	mana_symbol_frame_size_list = mana_code_set_opecode_and_operand(MANA_IL_ALLOCATE, -1);
+	mana_symbol_frame_size_list = code_set_opecode_and_operand(MANA_IL_ALLOCATE, -1);
 
 	if (!function->etc)
 	{
 		/* return addressをframe bufferに保存する命令を発行 */
-		mana_code_set_opecode(MANA_IL_SAVE_RETURN_ADDRESS);
+		code_set_opecode(MANA_IL_SAVE_RETURN_ADDRESS);
 	}
 
 	/* returnのジャンプ先リンクを初期化 */
@@ -548,34 +548,34 @@ void mana_symbol_open_function(node_entry* node, const bool is_action)
 	/* パラメータの設定 */
 	for (symbol_entry* symbol = function->parameter_list; symbol; symbol = symbol->next)
 	{
-		mana_code_set_opecode_and_operand(MANA_IL_LOAD_FRAME_ADDRESS, symbol->address);
+		code_set_opecode_and_operand(MANA_IL_LOAD_FRAME_ADDRESS, symbol->address);
 
 		switch ((symbol->type)->tcons)
 		{
 		case SYMBOL_DATA_TYPE_CHAR:
-			mana_code_set_opecode(MANA_IL_STORE_CHAR);
+			code_set_opecode(MANA_IL_STORE_CHAR);
 			break;
 
 		case SYMBOL_DATA_TYPE_SHORT:
-			mana_code_set_opecode(MANA_IL_STORE_SHORT);
+			code_set_opecode(MANA_IL_STORE_SHORT);
 			break;
 
 		case SYMBOL_DATA_TYPE_INT:
-			mana_code_set_opecode(MANA_IL_STORE_INTEGER);
+			code_set_opecode(MANA_IL_STORE_INTEGER);
 			break;
 
 		case SYMBOL_DATA_TYPE_FLOAT:
-			mana_code_set_opecode(MANA_IL_STORE_FLOAT);
+			code_set_opecode(MANA_IL_STORE_FLOAT);
 			break;
 
 		case SYMBOL_DATA_TYPE_ACTOR:
-			mana_code_set_opecode(MANA_IL_STORE_INTEGER);
+			code_set_opecode(MANA_IL_STORE_INTEGER);
 			break;
 
 		default:
 			if ((symbol->type)->memory_size <= 0)
 				mana_compile_error("missing size information on parameter");
-			mana_code_set_opecode_and_operand(MANA_IL_STORE_DATA, (symbol->type)->memory_size);
+			code_set_opecode_and_operand(MANA_IL_STORE_DATA, (symbol->type)->memory_size);
 			break;
 		}
 	}
@@ -586,7 +586,7 @@ void mana_symbol_open_function(node_entry* node, const bool is_action)
 void mana_symbol_close_function(node_entry* node, const bool is_action)
 {
 	if (is_action)
-		mana_data_set(node->string);
+		data_set(node->string);
 
 	/* gotoのジャンプ先を更新 */
 	{
@@ -601,33 +601,33 @@ void mana_symbol_close_function(node_entry* node, const bool is_action)
 				if (symbol->address < 0)
 					mana_compile_error("label '%s' used but not defined", symbol->name);
 
-				mana_code_replace_all(symbol->etc, symbol->address);
+				code_replace_all(symbol->etc, symbol->address);
 			}
 		}
 	}
 
 	/* returnのジャンプ先を更新 */
-	mana_code_replace_all(mana_symbol_return_address_list, mana_code_get_pc());
+	code_replace_all(mana_symbol_return_address_list, code_get_pc());
 
 	/* 直後のジャンプは削除 */
 	if (mana_symbol_return_address_list >= 0)
 	{
-		mana_code_reduce(5/*int32_t pebble_get_instruction_size(uint8_t* program)*/);
+		code_reduce(5/*int32_t pebble_get_instruction_size(uint8_t* program)*/);
 	}
 
 	if (!node->symbol->etc)
 	{
 		/* return addressをレジスタに復帰する命令を発行 */
-		mana_code_set_opecode(MANA_IL_LOAD_RETURN_ADDRESS);
+		code_set_opecode(MANA_IL_LOAD_RETURN_ADDRESS);
 	}
 
 	/* free命令の発行 */
-	mana_symbol_frame_size_list = mana_code_set_opecode_and_operand(MANA_IL_FREE, mana_symbol_frame_size_list);
+	mana_symbol_frame_size_list = code_set_opecode_and_operand(MANA_IL_FREE, mana_symbol_frame_size_list);
 
 	/* return命令の発行 */
 	if (MANA_SYMBOL_IS_ACTOR_OR_STRUCTER_OPENED())
 	{
-		mana_code_set_opecode((uint8_t)MANA_IL_RETURN_FROM_ACTION);
+		code_set_opecode((uint8_t)MANA_IL_RETURN_FROM_ACTION);
 	}
 	else
 	{
@@ -637,7 +637,7 @@ void mana_symbol_close_function(node_entry* node, const bool is_action)
 			if (!node->symbol->used)
 				mana_compile_error("meaningless return value specification");
 		}
-		mana_code_set_opecode((uint8_t)MANA_IL_RETURN_FROM_FUNCTION);
+		code_set_opecode((uint8_t)MANA_IL_RETURN_FROM_FUNCTION);
 	}
 
 	/*
@@ -649,7 +649,7 @@ void mana_symbol_close_function(node_entry* node, const bool is_action)
 	*/
 	mana_symbol_close_block();
 	mana_symbol_is_function_opened = false;
-	mana_code_replace_all(mana_symbol_frame_size_list,
+	code_replace_all(mana_symbol_frame_size_list,
 		mana_symbol_align_size(mana_symbol_max_local_memory_address, FBSZ));
 }
 
@@ -820,7 +820,7 @@ void mana_symbol_commit_registration_actor(const char* name, const char* parent,
 		}
 	}
 
-	mana_data_set(name);
+	data_set(name);
 
 	if (parent)
 	{
@@ -965,7 +965,7 @@ void mana_symbol_commit_registration_module(const char* name)
 {
 	type_description* type;
 
-	mana_data_set(name);
+	data_set(name);
 
 	/* symbol_entry*をtype_description*として代入しています
 	* 参照先でsymbol_entry*にキャストしています。
@@ -1062,15 +1062,15 @@ void mana_symbol_set_type(const char* name, type_description* type)
 /* request */
 void mana_symbol_add_request(uint8_t opcode, node_entry* level, node_entry* actor, const char* action)
 {
-	mana_generator_expression(level, false);
+	//mana_generator_expression(level, false);
 
 	if(actor && actor->type)
 	{
 		switch(actor->type->tcons)
 		{
 		case SYMBOL_DATA_TYPE_ACTOR:
-			mana_generator_expression(actor, false);
-			mana_code_set_opecode_and_operand(opcode, mana_data_set(action));
+			generator_expression(actor, false);
+			code_set_opecode_and_operand(opcode, data_set(action));
 			return;
 
 		case SYMBOL_DATA_TYPE_REFERENCE:
@@ -1090,8 +1090,8 @@ void mana_symbol_add_request(uint8_t opcode, node_entry* level, node_entry* acto
 				default:
 					goto ABORT;
 				}
-				mana_generator_expression(actor, false);
-				mana_code_set_opecode_and_operand(opcode, mana_data_set(action));
+				generator_expression(actor, false);
+				code_set_opecode_and_operand(opcode, data_set(action));
 				return;
 			}
 
@@ -1114,9 +1114,9 @@ void mana_symbol_add_join(node_entry* level, node_entry* actor)
 				break;
 
 		case SYMBOL_DATA_TYPE_ACTOR:
-			mana_generator_expression(actor, false);
-			mana_generator_expression(level, false);
-			mana_code_set_opecode(MANA_IL_JOIN);
+			generator_expression(actor, false);
+			generator_expression(level, false);
+			code_set_opecode(MANA_IL_JOIN);
 			return;
 
 		default:
@@ -1353,7 +1353,7 @@ static int32_t mana_symbol_write_actor_infomation_data(mana_stream* stream, symb
 	}
 
 	memset(&actor_info, 0, sizeof(actor_info));
-	actor_info.name = mana_data_get(symbol->name);
+	actor_info.name = data_get(symbol->name);
 	actor_info.number_of_actions = (uint16_t)number_of_actions;
 	actor_info.number_of_instances = (uint8_t)number_of_elements;
 	actor_info.variable_size = type->memory_size;
@@ -1378,7 +1378,7 @@ static int32_t mana_symbol_write_actor_infomation_data(mana_stream* stream, symb
 			mana_action_info_header action_info;
 
 			memset(&action_info, 0, sizeof(action_info));
-			action_info.name = mana_data_get(component_symbol->name);
+			action_info.name = data_get(component_symbol->name);
 			action_info.address = component_symbol->address;
 
 			if(action_info.name == (uint32_t)-1)

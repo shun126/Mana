@@ -15,35 +15,39 @@ mana (compiler)
 #include "error.h"
 #endif
 #include <ctype.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+
+#define MANA_DATALINK_ALIGNMENT_SIZE	0x10
 
 #if !defined(MANA_NIL)
 #define MANA_NIL 0
 #endif
 
-typedef struct mana_datalink_generator_file_entry
+// データリンクリスト
+typedef struct datalink_generator_entry
 {
 	char* file_name;
 	size_t file_size;
 	size_t padding_size;
-	struct mana_datalink_generator_file_entry* next;
-} mana_datalink_generator_file_entry;
+	struct datalink_generator_entry* next;
+} datalink_generator_entry;
 
-static size_t mana_datalink_generator_number_of_files = 0;
-static mana_datalink_generator_file_entry* mana_datalink_generator_file_entry_root = NULL;
+static size_t number_of_files = 0;
+static datalink_generator_entry* instance = NULL;
 
 /*!
  * get last entry
- * @return	last mana_datalink_generator_file_entry pointer
+ * @return	last datalink_generator_entry pointer
  */
-static mana_datalink_generator_file_entry* mana_datalink_generator_get_last_entry(void)
+static datalink_generator_entry* datalink_generator_get_last_entry(void)
 {
-	if(mana_datalink_generator_file_entry_root)
+	if(instance)
 	{
-		mana_datalink_generator_file_entry* last_entry;
-		for(last_entry = mana_datalink_generator_file_entry_root; last_entry->next != NULL; last_entry = last_entry->next)
+		datalink_generator_entry* last_entry;
+		for(last_entry = instance; last_entry->next != NULL; last_entry = last_entry->next)
 			;
 		return last_entry;
 	}
@@ -53,50 +57,35 @@ static mana_datalink_generator_file_entry* mana_datalink_generator_get_last_entr
 	}
 }
 
-/*!
- * initialize datalink object
- */
-void mana_datalink_generator_initialize(void)
+void datalink_generator_initialize(void)
 {
-	mana_datalink_generator_finalize();
+	datalink_generator_finalize();
 }
 
-/*!
- * finalize datalink object
- */
-void mana_datalink_generator_finalize(void)
+void datalink_generator_finalize(void)
 {
-	mana_datalink_generator_file_entry* entry = mana_datalink_generator_file_entry_root;
+	datalink_generator_entry* entry = instance;
 	while(entry)
 	{
-		mana_datalink_generator_file_entry* next = entry->next;
+		datalink_generator_entry* next = entry->next;
 		if(entry->file_name)
 			mana_free(entry->file_name);
 		mana_free(entry);
 		entry = next;
 	}
-	mana_datalink_generator_file_entry_root = NULL;
-	mana_datalink_generator_number_of_files = 0;
+	instance = NULL;
+	number_of_files = 0;
 }
 
-/*!
- * get data count in datalink
- * @return	data count
- */
-size_t mana_datalink_generator_get_number_of_files(void)
+size_t datalink_generator_get_number_of_files(void)
 {
-	return mana_datalink_generator_number_of_files;
+	return number_of_files;
 }
 
-/*!
- * append data
- * @param[in]	file_name	file name
- * @return		index number. error if return value is negative.
- */
-int32_t mana_datalink_generator_append(const char* file_name)
+int32_t datalink_generator_append(const char* file_name)
 {
 	FILE* file;
-	mana_datalink_generator_file_entry* entry;
+	datalink_generator_entry* entry;
 	size_t alignment_size = MANA_DATALINK_ALIGNMENT_SIZE;
 	size_t string_length;
 
@@ -108,7 +97,7 @@ int32_t mana_datalink_generator_append(const char* file_name)
 
 	string_length = strlen(file_name) + 1;
 
-	entry = mana_calloc(sizeof(mana_datalink_generator_file_entry), 1);
+	entry = mana_calloc(sizeof(datalink_generator_entry), 1);
 	entry->file_name = mana_malloc(string_length);
 
 #if defined(__STDC_WANT_SECURE_LIB__)
@@ -129,7 +118,7 @@ int32_t mana_datalink_generator_append(const char* file_name)
 	}
 	else
 	{
-		mana_datalink_generator_file_entry* last_entry;
+		datalink_generator_entry* last_entry;
 		size_t index;
 
 		fseek(file, 0L, SEEK_END);
@@ -140,41 +129,35 @@ int32_t mana_datalink_generator_append(const char* file_name)
 
 		if(alignment_size != MANA_DATALINK_ALIGNMENT_SIZE)
 		{
-			last_entry = mana_datalink_generator_get_last_entry();
+			last_entry = datalink_generator_get_last_entry();
 			if(last_entry)
 			{
 				last_entry->padding_size = ((last_entry->file_size + (alignment_size - 1)) / alignment_size * alignment_size) - last_entry->file_size;
 			}
 		}
-		last_entry = mana_datalink_generator_get_last_entry();
+		last_entry = datalink_generator_get_last_entry();
 		if(last_entry)
 			last_entry->next = entry;
 		else
-			mana_datalink_generator_file_entry_root = entry;
+			instance = entry;
 
-		index = mana_datalink_generator_number_of_files;
-		mana_datalink_generator_number_of_files++;
+		index = number_of_files;
+		number_of_files++;
 		return (int32_t)index;
 	}
 }
 
-/*!
- * write datalink file
- * @param[in]	file	file descriptor
- * @retval		TRUE	success
- * @retval		FALSE	write failed
- */
-int32_t mana_datalink_generator_write_data(mana_stream* stream)
+bool datalink_generator_write_data(mana_stream* stream)
 {
-	mana_datalink_generator_file_entry* entry;
+	datalink_generator_entry* entry;
 	mana_datalink_file_header header;
 	size_t file_size;
 	size_t header_size;
 
 	srand( (unsigned)time( NULL ) );
 
-	header.total_data_size = mana_datalink_generator_get_number_of_files();
-	header.number_of_datas = mana_datalink_generator_get_number_of_files();
+	header.total_data_size = datalink_generator_get_number_of_files();
+	header.number_of_datas = datalink_generator_get_number_of_files();
 	mana_stream_push_data(stream, &header, sizeof(header));
 	/*
 	{
@@ -184,7 +167,7 @@ int32_t mana_datalink_generator_write_data(mana_stream* stream)
 	*/
 
 	file_size = 0;
-	for(entry = mana_datalink_generator_file_entry_root; entry != NULL; entry = entry->next)
+	for(entry = instance; entry != NULL; entry = entry->next)
 	{
 		mana_datalink_info_header entry_header;
 
@@ -203,7 +186,7 @@ int32_t mana_datalink_generator_write_data(mana_stream* stream)
 		file_size += entry->file_size + entry->padding_size;
 	}
 
-	header_size = (mana_datalink_generator_get_number_of_files() * sizeof(mana_datalink_info_header)
+	header_size = (datalink_generator_get_number_of_files() * sizeof(mana_datalink_info_header)
 		+ sizeof(mana_datalink_file_header)) % MANA_DATALINK_ALIGNMENT_SIZE;
 	if(header_size > 0)
 	{
@@ -214,7 +197,7 @@ int32_t mana_datalink_generator_write_data(mana_stream* stream)
 			mana_stream_push_unsigned_char(stream, (uint8_t)rand());
 	}
 
-	for(entry = mana_datalink_generator_file_entry_root; entry != NULL; entry = entry->next)
+	for(entry = instance; entry != NULL; entry = entry->next)
 	{
 		FILE* in;
 
@@ -233,7 +216,7 @@ int32_t mana_datalink_generator_write_data(mana_stream* stream)
 		{
 			fclose(in);
 			printf("memory allocation failed\n");
-			return 1;
+			return false;
 		}
 
 		if(fread(program, 1, entry->file_size, in) != entry->file_size)
@@ -241,7 +224,7 @@ int32_t mana_datalink_generator_write_data(mana_stream* stream)
 			fclose(in);
 			free(program);
 			printf("file read failed: %s\n", entry->file_name);
-			return 1;
+			return false;
 		}
 
 		fclose(in);

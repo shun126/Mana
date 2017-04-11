@@ -1134,7 +1134,7 @@ static void mana_actor_cmd_print(mana_actor* actor)
 		{
 			if(*format == '%')
 			{
-				if(counter >= number_of_arguments)
+				if(counter > number_of_arguments)
 				{
 					message[message_pointer++] = '\n';
 					break;

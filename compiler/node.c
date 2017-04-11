@@ -128,7 +128,7 @@ node_entry* mana_node_create_real(const float real)
 node_entry* mana_node_create_string(const char* string)
 {
 	node_entry* new_node = mana_node_allocate(NODE_STRING);
-	new_node->digit = mana_data_set(string);
+	new_node->digit = data_set(string);
 	new_node->type = mana_type_string;
 	return new_node;
 }
