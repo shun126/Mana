@@ -12,14 +12,32 @@ mana (compiler)
 #define ___MANA_DATALINK_GENERATOR_H___
 
 #include <libmana.h>
-#include <stdio.h>
 
-#define MANA_DATALINK_ALIGNMENT_SIZE	0x10
+//! initialize datalink object
+extern void datalink_generator_initialize(void);
 
-extern void mana_datalink_generator_initialize(void);
-extern void mana_datalink_generator_finalize(void);
-extern size_t mana_datalink_generator_get_number_of_files(void);
-extern int32_t mana_datalink_generator_append(const char* file_name);
-extern int32_t mana_datalink_generator_write_data(mana_stream* stream);
+//! finalize datalink object
+extern void datalink_generator_finalize(void);
+
+/*!
+get data count in datalink
+ @return	data count
+*/
+extern size_t datalink_generator_get_number_of_files(void);
+
+/*!
+append data
+@param[in]	file_name	file name
+@return		index number. error if return value is negative.
+*/
+extern int32_t datalink_generator_append(const char* file_name);
+
+/*!
+write datalink file
+@param[in]	file	file descriptor
+@retval		TRUE	success
+@retval		FALSE	write failed
+*/
+extern bool datalink_generator_write_data(mana_stream* stream);
 
 #endif

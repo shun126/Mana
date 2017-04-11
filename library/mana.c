@@ -310,8 +310,8 @@ bool mana_load_program(mana* self, void* program, int32_t auto_release)
 
 	/* 全アクターの initとmain アクションを実行 */
 	mana_restart(self);
-	mana_request_all(self, 0, "main", NULL);
 	mana_request_all(self, 1, "init", NULL);
+	mana_request_all(self, 0, "main", NULL);
 
 	return true;
 

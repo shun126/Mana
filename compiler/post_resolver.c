@@ -817,7 +817,7 @@ DO_RECURSIVE:
 		case SYMBOL_CLASS_TYPE_ALIAS:
 			if (!node->symbol->used)
 			{
-				node->symbol->address = mana_datalink_generator_append(node->symbol->string);
+				node->symbol->address = datalink_generator_append(node->symbol->string);
 				node->symbol->type = mana_type_get(SYMBOL_DATA_TYPE_INT);
 				node->symbol->used = 1;
 			}
