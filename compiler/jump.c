@@ -91,7 +91,7 @@ void mana_jump_open_chain(mana_jump_chain_status status)
 	mana_jump_chain_table[mana_jump_chain_table_pointer].status = status;
 	mana_jump_chain_table[mana_jump_chain_table_pointer].break_chain = -1;
 	mana_jump_chain_table[mana_jump_chain_table_pointer].continue_chain = -1;
-	mana_jump_chain_table[mana_jump_chain_table_pointer].start_address = mana_code_get_pc();
+	mana_jump_chain_table[mana_jump_chain_table_pointer].start_address = code_get_pc();
 }
 
 /*!
@@ -137,9 +137,9 @@ int32_t mana_jump_continue(int32_t new_pc)
  */
 void mana_jump_close_continue_only(void)
 {
-	mana_code_replace_all(
+	code_replace_all(
 		mana_jump_chain_table[mana_jump_chain_table_pointer].continue_chain,
-		mana_code_get_pc()
+		code_get_pc()
 	);
 	mana_jump_chain_table[mana_jump_chain_table_pointer].continue_chain = -1;
 }
@@ -148,13 +148,13 @@ void mana_jump_close_continue_only(void)
  */
 void mana_jump_close_chain(void)
 {
-	mana_code_replace_all(
+	code_replace_all(
 		mana_jump_chain_table[mana_jump_chain_table_pointer].continue_chain,
 		mana_jump_chain_table[mana_jump_chain_table_pointer].start_address
 	);
-	mana_code_replace_all(
+	code_replace_all(
 		mana_jump_chain_table[mana_jump_chain_table_pointer].break_chain,
-		mana_code_get_pc()
+		code_get_pc()
 	);
 	mana_jump_chain_table_pointer --;
 }
@@ -183,7 +183,7 @@ void mana_jump_switch_case(node_entry* node)
 			;
 		if(p >= mana_jump_switch_entry_stack_pointer)
 		{
-			mana_jump_switch_entry_stack_pointer->address = mana_code_get_pc();
+			mana_jump_switch_entry_stack_pointer->address = code_get_pc();
 			mana_jump_switch_entry_stack_pointer++;
 		}
 		else
@@ -199,7 +199,7 @@ void mana_jump_switch_default(void)
 {
 	if(mana_jump_switch_stack_pointer > 0 && mana_jump_switch_stack[mana_jump_switch_stack_pointer].default_address < 0)
 	{
-		mana_jump_switch_stack[mana_jump_switch_stack_pointer].default_address = mana_code_get_pc();
+		mana_jump_switch_stack[mana_jump_switch_stack_pointer].default_address = code_get_pc();
 	}
 	else
 	{
@@ -223,25 +223,25 @@ void mana_jump_switch_build(void)
 		case SYMBOL_DATA_TYPE_SHORT:
 		case SYMBOL_DATA_TYPE_INT:
 		case SYMBOL_DATA_TYPE_ACTOR:
-			mana_code_set_opecode(MANA_IL_DUPLICATE);
-			mana_generator_expression(p->node, false);
-			mana_code_set_opecode(MANA_IL_COMPARE_EQ_INTEGER);
-			mana_code_set_opecode_and_operand(MANA_IL_BNE, p->address);
+			code_set_opecode(MANA_IL_DUPLICATE);
+			generator_expression(p->node, false);
+			code_set_opecode(MANA_IL_COMPARE_EQ_INTEGER);
+			code_set_opecode_and_operand(MANA_IL_BNE, p->address);
 			break;
 
 		case SYMBOL_DATA_TYPE_FLOAT:
-			mana_code_set_opecode(MANA_IL_DUPLICATE);
-			mana_generator_expression(p->node, false);
-			mana_code_set_opecode(MANA_IL_COMPARE_EQ_FLOAT);
-			mana_code_set_opecode_and_operand(MANA_IL_BNE, p->address);
+			code_set_opecode(MANA_IL_DUPLICATE);
+			generator_expression(p->node, false);
+			code_set_opecode(MANA_IL_COMPARE_EQ_FLOAT);
+			code_set_opecode_and_operand(MANA_IL_BNE, p->address);
 			break;
 
 		case SYMBOL_DATA_TYPE_STRUCT:
 			size = p->node->type->memory_size;
-			mana_code_set_opecode_and_operand(MANA_IL_DUPLICATE_DATA, size);
-			mana_generator_expression(p->node, false);
-			mana_code_set_opecode_and_operand(MANA_IL_COMPARE_EQ_DATA, size);
-			mana_code_set_opecode_and_operand(MANA_IL_BNE, p->address);
+			code_set_opecode_and_operand(MANA_IL_DUPLICATE_DATA, size);
+			generator_expression(p->node, false);
+			code_set_opecode_and_operand(MANA_IL_COMPARE_EQ_DATA, size);
+			code_set_opecode_and_operand(MANA_IL_BNE, p->address);
 			break;
 
 		default:
@@ -252,7 +252,7 @@ void mana_jump_switch_build(void)
 
 	if(mana_jump_switch_stack[mana_jump_switch_stack_pointer].default_address > 0)
 	{
-		mana_code_set_opecode_and_operand(MANA_IL_BRA, mana_jump_switch_stack[mana_jump_switch_stack_pointer].default_address);
+		code_set_opecode_and_operand(MANA_IL_BRA, mana_jump_switch_stack[mana_jump_switch_stack_pointer].default_address);
 	}
 
 	mana_jump_switch_entry_stack_pointer = mana_jump_switch_stack[mana_jump_switch_stack_pointer].stack_pointer;
@@ -269,11 +269,11 @@ void mana_jump_close_switch(void)
 	case SYMBOL_DATA_TYPE_INT:
 	case SYMBOL_DATA_TYPE_FLOAT:
 	case SYMBOL_DATA_TYPE_ACTOR:
-		mana_code_set_opecode(MANA_IL_REMOVE);
+		code_set_opecode(MANA_IL_REMOVE);
 		break;
 
 	case SYMBOL_DATA_TYPE_STRUCT:
-		mana_code_set_opecode_and_operand(MANA_IL_REMOVE_DATA, mana_jump_switch_stack[mana_jump_switch_stack_pointer].type->memory_size);
+		code_set_opecode_and_operand(MANA_IL_REMOVE_DATA, mana_jump_switch_stack[mana_jump_switch_stack_pointer].type->memory_size);
 		break;
 
 	default:
