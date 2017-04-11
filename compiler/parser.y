@@ -102,7 +102,7 @@ program			: line
 					{
 						mana_node_dump($1);
 						mana_pre_resolver_resolve($1);
-						mana_generator_genearte_code($1, true);
+						generator_genearte_code($1, true);
 						mana_linker_resolve_address();
 					}
 				;
@@ -151,7 +151,24 @@ allocate_declarations
 
 declaration		: variable_decl
 				| variable_decl '=' expression
-					{ $$ = $1; }
+					{
+						MANA_ASSERT($1->right);
+						MANA_ASSERT($1->right->string);
+						MANA_ASSERT($1->next == NULL);
+
+						node_entry* node = mana_node_create_node(NODE_IDENTIFIER, NULL, NULL, NULL);
+						node->string = $1->right->string;
+						$1->next = node;
+
+						$$ = mana_node_create_node(NODE_ASSIGN, $1, $3, NULL);
+
+						/*
+						if($2->class_type != MANA_CLASS_TYPE_VARIABLE_LOCAL)
+							mana_compile_error("can initialize variable in local space only");
+						mana_symbol_allocate_memory($2, $1, MANA_MEMORY_TYPE_NORMAL);
+						mana_linker_expression(mana_node_create_node(MANA_NODE_TYPE_ASSIGN, mana_node_create_leaf($2->name), $4), MANA_TRUE);
+						*/
+					}
 				| tDEFINE tIDENTIFIER tDIGIT
 					{ $$ = mana_node_create_node(NODE_DEFINE_CONSTANT, NULL, NULL, NULL); $$->string = $2; $$->digit = $3; }
 				| tDEFINE tIDENTIFIER tREAL
@@ -243,6 +260,14 @@ statement		: tIF '(' expression ')' statement
 					}
 				| tFOR '(' variable_decl '=' expression ';' expression ';' expression ')' statement
 					{
+						MANA_ASSERT($3->right);
+						MANA_ASSERT($3->right->string);
+						MANA_ASSERT($3->next == NULL);
+
+						node_entry* node = mana_node_create_node(NODE_IDENTIFIER, NULL, NULL, NULL);
+						node->string = $3->right->string;
+						$3->next = node;
+
 						$$ = mana_node_create_node(NODE_BLOCK,
 							mana_node_create_node(NODE_ASSIGN, $3, $5, NULL),
 							mana_node_create_node(NODE_FOR, $7, $9, $11),
