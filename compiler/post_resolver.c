@@ -155,9 +155,9 @@ DO_RECURSIVE:
 	case NODE_DECLARE_STRUCT:
 		/*
 		TODO:ローカルスコープ内で宣言された時のみ有効にして下さい
-		mana_symbol_open_structure();
+		symbol_open_structure();
 		mana_post_resolver_resolve(node->left);
-		mana_symbol_close_structure(node->string);
+		symbol_close_structure(node->string);
 		*/
 		MANA_ASSERT(node->right == NULL);
 		MANA_ASSERT(node->body == NULL);
@@ -193,7 +193,7 @@ DO_RECURSIVE:
 		// 変数宣言に関するノード									
 	case NODE_DECLARATOR:
 		if(node->symbol == NULL)
-			node->symbol = mana_symbol_create_variable(node->string, NULL, false);
+			node->symbol = symbol_create_variable(node->string, NULL, false);
 		mana_post_resolver_resolve(node->left);
 		MANA_ASSERT(node->right == NULL);
 		MANA_ASSERT(node->body == NULL);
@@ -223,10 +223,10 @@ DO_RECURSIVE:
 		// ブロックを伴う制御に関するノード
 	case NODE_BLOCK:
 		{
-			const int32_t in_depth = mana_symbol_open_block(false);
+			const int32_t in_depth = symbol_open_block(false);
 			mana_post_resolver_resolve(node->left);
 			mana_post_resolver_resolve(node->right);
-			const int32_t out_depth = mana_symbol_close_block();
+			const int32_t out_depth = symbol_close_block();
 			MANA_VERIFY_MESSAGE(in_depth == out_depth, "ブロックの深さが一致しません in:%d out:%d", in_depth, out_depth);
 		}
 		MANA_ASSERT(node->body == NULL);
@@ -836,19 +836,19 @@ DO_RECURSIVE:
 			break;
 
 		case SYMBOL_CLASS_TYPE_VARIABLE_STATIC:
-			mana_symbol_is_valid_variable(node->symbol);
+			symbol_is_valid_variable(node->symbol);
 			break;
 
 		case SYMBOL_CLASS_TYPE_VARIABLE_GLOBAL:
-			mana_symbol_is_valid_variable(node->symbol);
+			symbol_is_valid_variable(node->symbol);
 			break;
 
 		case SYMBOL_CLASS_TYPE_VARIABLE_ACTOR:
-			mana_symbol_is_valid_variable(node->symbol);
+			symbol_is_valid_variable(node->symbol);
 			break;
 
 		case SYMBOL_CLASS_TYPE_VARIABLE_LOCAL:
-			mana_symbol_is_valid_variable(node->symbol);
+			symbol_is_valid_variable(node->symbol);
 			break;
 
 		case SYMBOL_CLASS_TYPE_TYPEDEF:
