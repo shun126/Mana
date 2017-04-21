@@ -94,14 +94,14 @@ $(function() {
 <tr class="separator:a86859d4ec0b756d7a42dea3b787917b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa7f5456426c43f5b4111462e19f299bc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__frame_8h.html#aa7f5456426c43f5b4111462e19f299bc">mana_frame_destroy</a> (<a class="el" href="structmana__frame.html">mana_frame</a> *self)</td></tr>
 <tr class="separator:aa7f5456426c43f5b4111462e19f299bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7264d869315b09930f19563cfac4f3ac"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__frame_8h.html#a7264d869315b09930f19563cfac4f3ac">mana_frame_serialize</a> (const <a class="el" href="structmana__frame.html">mana_frame</a> *self, <a class="el" href="structmana__stream.html">mana_stream</a> *stream)</td></tr>
-<tr class="separator:a7264d869315b09930f19563cfac4f3ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a20b3598727971e2709320127715fd21a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__frame_8h.html#a20b3598727971e2709320127715fd21a">mana_frame_deserialize</a> (<a class="el" href="structmana__frame.html">mana_frame</a> *self, <a class="el" href="structmana__stream.html">mana_stream</a> *stream)</td></tr>
-<tr class="separator:a20b3598727971e2709320127715fd21a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaec22d4ee3a4324539a209441df52686"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__frame_8h.html#aaec22d4ee3a4324539a209441df52686">mana_frame_initialize</a> (<a class="el" href="structmana__frame.html">mana_frame</a> *self)</td></tr>
 <tr class="separator:aaec22d4ee3a4324539a209441df52686"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac71a355ed2a960812b60b7a4691c573d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__frame_8h.html#ac71a355ed2a960812b60b7a4691c573d">mana_frame_initialize_with_size</a> (<a class="el" href="structmana__frame.html">mana_frame</a> *self, const size_t size)</td></tr>
 <tr class="separator:ac71a355ed2a960812b60b7a4691c573d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7264d869315b09930f19563cfac4f3ac"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__frame_8h.html#a7264d869315b09930f19563cfac4f3ac">mana_frame_serialize</a> (const <a class="el" href="structmana__frame.html">mana_frame</a> *self, <a class="el" href="structmana__stream.html">mana_stream</a> *stream)</td></tr>
+<tr class="separator:a7264d869315b09930f19563cfac4f3ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20b3598727971e2709320127715fd21a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__frame_8h.html#a20b3598727971e2709320127715fd21a">mana_frame_deserialize</a> (<a class="el" href="structmana__frame.html">mana_frame</a> *self, <a class="el" href="structmana__stream.html">mana_stream</a> *stream)</td></tr>
+<tr class="separator:a20b3598727971e2709320127715fd21a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2ed3f7780b45083867e3915f20e124f5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__frame_8h.html#a2ed3f7780b45083867e3915f20e124f5">mana_frame_finalize</a> (<a class="el" href="structmana__frame.html">mana_frame</a> *self)</td></tr>
 <tr class="separator:a2ed3f7780b45083867e3915f20e124f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab9b82994466c2cc4d83be4456a23dad7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__frame_8h.html#ab9b82994466c2cc4d83be4456a23dad7">mana_frame_clear</a> (<a class="el" href="structmana__frame.html">mana_frame</a> *self)</td></tr>
@@ -168,8 +168,7 @@ $(function() {
         </tr>
       </table>
 </div><div class="memdoc">
-<p>フレームバッファの確保</p>
-<dl class="params"><dt>引数</dt><dd>
+<p>フレームバッファの確保 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクト </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>追加サイズ </td></tr>
@@ -194,8 +193,7 @@ $(function() {
         </tr>
       </table>
 </div><div class="memdoc">
-<p><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクトのクリア</p>
-<dl class="params"><dt>引数</dt><dd>
+<p><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクトのクリア </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクト </td></tr>
   </table>
@@ -229,8 +227,7 @@ $(function() {
         </tr>
       </table>
 </div><div class="memdoc">
-<p>フレームバッファを比較</p>
-<dl class="params"><dt>引数</dt><dd>
+<p>フレームバッファを比較 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクト </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">other</td><td><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクト </td></tr>
@@ -262,9 +259,8 @@ $(function() {
         </tr>
       </table>
 </div><div class="memdoc">
-<p><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクトの生成</p>
-<dl class="section return"><dt>戻り値</dt><dd><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクト </dd></dl>
-<dl class="section warning"><dt>警告</dt><dd>void <a class="el" href="mana__frame_8c.html#aaec22d4ee3a4324539a209441df52686">mana_frame_initialize(mana_frame* self)</a>を呼ぶ必要はありません。 </dd></dl>
+<p><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクトの生成 </p><dl class="section return"><dt>戻り値</dt><dd><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクト </dd></dl>
+<dl class="section warning"><dt>警告</dt><dd>void <a class="el" href="mana__frame_8h.html#aaec22d4ee3a4324539a209441df52686">mana_frame_initialize(mana_frame* self)</a>を呼ぶ必要はありません。 </dd></dl>
 
 </div>
 </div>
@@ -283,15 +279,14 @@ $(function() {
         </tr>
       </table>
 </div><div class="memdoc">
-<p><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクトの生成</p>
-<dl class="params"><dt>引数</dt><dd>
+<p><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクトの生成 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>確保サイズ </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>戻り値</dt><dd><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクト </dd></dl>
-<dl class="section warning"><dt>警告</dt><dd>void <a class="el" href="mana__frame_8c.html#ac71a355ed2a960812b60b7a4691c573d">mana_frame_initialize_with_size(mana_frame* self, size_t size)</a>を呼ぶ必要はありません。 </dd></dl>
+<dl class="section warning"><dt>警告</dt><dd>void <a class="el" href="mana__frame_8h.html#ac71a355ed2a960812b60b7a4691c573d">mana_frame_initialize_with_size(mana_frame* self, size_t size)</a>を呼ぶ必要はありません。 </dd></dl>
 
 </div>
 </div>
@@ -320,8 +315,7 @@ $(function() {
         </tr>
       </table>
 </div><div class="memdoc">
-<p><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクトのデシリアライズ</p>
-<dl class="params"><dt>引数</dt><dd>
+<p><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクトのデシリアライズ </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクト </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">stream</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
@@ -346,14 +340,13 @@ $(function() {
         </tr>
       </table>
 </div><div class="memdoc">
-<p><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクトの破棄</p>
-<dl class="params"><dt>引数</dt><dd>
+<p><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクトの破棄 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクト </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section warning"><dt>警告</dt><dd>void <a class="el" href="mana__frame_8c.html#a2ed3f7780b45083867e3915f20e124f5">mana_frame_finalize(mana_frame* self)</a>を呼ぶ必要はありません。 </dd></dl>
+<dl class="section warning"><dt>警告</dt><dd>void <a class="el" href="mana__frame_8h.html#a2ed3f7780b45083867e3915f20e124f5">mana_frame_finalize(mana_frame* self)</a>を呼ぶ必要はありません。 </dd></dl>
 
 </div>
 </div>
@@ -372,8 +365,7 @@ $(function() {
         </tr>
       </table>
 </div><div class="memdoc">
-<p><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクトの開放</p>
-<dl class="params"><dt>引数</dt><dd>
+<p><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクトの開放 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクト </td></tr>
   </table>
@@ -407,8 +399,7 @@ $(function() {
         </tr>
       </table>
 </div><div class="memdoc">
-<p>フレームバッファのアドレスを取得</p>
-<dl class="params"><dt>引数</dt><dd>
+<p>フレームバッファのアドレスを取得 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクト </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">index</td><td>フレームポインタへのオフセット値 </td></tr>
@@ -434,8 +425,7 @@ $(function() {
         </tr>
       </table>
 </div><div class="memdoc">
-<p>フレームバッファのサイズを取得</p>
-<dl class="params"><dt>引数</dt><dd>
+<p>フレームバッファのサイズを取得 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクト </td></tr>
   </table>
@@ -460,8 +450,7 @@ $(function() {
         </tr>
       </table>
 </div><div class="memdoc">
-<p><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクトの初期化</p>
-<dl class="params"><dt>引数</dt><dd>
+<p><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクトの初期化 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクト </td></tr>
   </table>
@@ -495,8 +484,7 @@ $(function() {
         </tr>
       </table>
 </div><div class="memdoc">
-<p><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクトの初期化</p>
-<dl class="params"><dt>引数</dt><dd>
+<p><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクトの初期化 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクト </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>確保サイズ </td></tr>
@@ -531,8 +519,7 @@ $(function() {
         </tr>
       </table>
 </div><div class="memdoc">
-<p>フレームバッファの開放</p>
-<dl class="params"><dt>引数</dt><dd>
+<p>フレームバッファの開放 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクト </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>開放サイズ </td></tr>
@@ -567,8 +554,7 @@ $(function() {
         </tr>
       </table>
 </div><div class="memdoc">
-<p><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクトのシリアライズ</p>
-<dl class="params"><dt>引数</dt><dd>
+<p><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクトのシリアライズ </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクト </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">stream</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
@@ -603,8 +589,7 @@ $(function() {
         </tr>
       </table>
 </div><div class="memdoc">
-<p>フレームバッファのサイズを設定</p>
-<dl class="params"><dt>引数</dt><dd>
+<p>フレームバッファのサイズを設定 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクト </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>フレームバッファのサイズ/フレームポインタ </td></tr>
@@ -617,7 +602,7 @@ $(function() {
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-2017年04月07日(金) 02時45分40秒作成 - libmana / 構成:  &#160;<a href="http://www.doxygen.org/index.html">
+2017年04月22日(土) 01時27分01秒作成 - libmana / 構成:  &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.12
 </small></address>
