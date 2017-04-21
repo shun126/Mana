@@ -213,7 +213,7 @@ int32_t mana_generator(void)
 	mana_jump_initialize();
 	mana_node_initialize();
 	mana_register_initialzie();
-	mana_symbol_initialize();
+	symbol_initialize();
 	mana_type_initialize();
 
 	generator_initialize();
@@ -270,7 +270,7 @@ int32_t mana_generator(void)
 			{
 				{
 					fprintf(log, "Symbol Table\n\n");
-					mana_symbol_dump(log);
+					symbol_dump(log);
 					fprintf(log, "\n\n");
 				}
 				{
@@ -284,7 +284,7 @@ int32_t mana_generator(void)
 						code_copy(buffer);
 						while(i < size)
 						{
-							mana_symbol_dump_function_symbol_from_address(log, i);
+							symbol_dump_function_symbol_from_address(log, i);
 
 							const char* text = mana_get_instruction_text(data, buffer, i);
 							fprintf(log, "%s\n", text);
@@ -300,7 +300,7 @@ int32_t mana_generator(void)
 			}
 		}
 
-		mana_symbol_check_undefine();
+		symbol_check_undefine();
 
 
 		memset(&header, 0, sizeof(mana_file_header));
@@ -311,16 +311,16 @@ int32_t mana_generator(void)
 			header.flag |= MANA_HEADER_FLAG_RESOURCE;
 		if(mana_is_big_endian())
 			header.flag |= MANA_HEADER_FLAG_BIG_ENDIAN;
-		header.number_of_actors = mana_symbol_get_number_of_actors();
+		header.number_of_actors = symbol_get_number_of_actors();
 		header.size_of_constant_pool = data_get_size();
 		header.size_of_instruction_pool = code_get_size();
-		header.size_of_static_memory = mana_symbol_get_static_memory_address();
-		header.size_of_global_memory = mana_symbol_get_global_memory_address();
+		header.size_of_static_memory = symbol_get_static_memory_address();
+		header.size_of_global_memory = symbol_get_global_memory_address();
 		header.random_seed_number = (uint32_t)time(NULL);
 
 		mana_stream_push_data(stream, &header, sizeof(header));
 
-		if(! mana_symbol_write_actor_infomation(stream))
+		if(! symbol_write_actor_infomation(stream))
 		{
 			result = 1;
 			goto ESCAPE;
@@ -378,7 +378,7 @@ ESCAPE:
 	mana_jump_finalize();
 	mana_node_finalize();
 	mana_register_finalize();
-	mana_symbol_finalize();
+	symbol_finalize();
 	mana_type_finalize();
 
 	generator_finalize();
