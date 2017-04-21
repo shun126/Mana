@@ -77,6 +77,9 @@ $(function() {
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 マクロ定義</h2></td></tr>
+<tr class="memitem:a0c5e4ba56cfc603238624b181c4c8232"><td class="memItemLeft" align="right" valign="top"><a id="a0c5e4ba56cfc603238624b181c4c8232"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>MANA_STACK_ALLOCATE_PAGE_SIZE</b>&#160;&#160;&#160;(8)</td></tr>
+<tr class="separator:a0c5e4ba56cfc603238624b181c4c8232"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af26cf6c5f9667aeb2cf42d01386bc9b2"><td class="memItemLeft" align="right" valign="top"><a id="af26cf6c5f9667aeb2cf42d01386bc9b2"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>MANA_STACK_ALLOCATE_BEGIN</b>(s)&#160;&#160;&#160;{																						¥</td></tr>
 <tr class="separator:af26cf6c5f9667aeb2cf42d01386bc9b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -89,9 +92,6 @@ $(function() {
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 関数</h2></td></tr>
-<tr class="memitem:ab242b60da0f3a5464945a5b30453a9ab"><td class="memItemLeft" align="right" valign="top"><a id="ab242b60da0f3a5464945a5b30453a9ab"></a>
-¥&#160;</td><td class="memItemRight" valign="bottom"><b>assert</b> (s % sizeof(self-&gt;buffer)==0)</td></tr>
-<tr class="separator:ab242b60da0f3a5464945a5b30453a9ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a02e97fb37569c7ccca0ac3062842489b"><td class="memItemLeft" align="right" valign="top"><a id="a02e97fb37569c7ccca0ac3062842489b"></a>
 ¥&#160;</td><td class="memItemRight" valign="bottom"><b>if</b> (allocate_size &gt;=self-&gt;allocated_size)</td></tr>
 <tr class="separator:a02e97fb37569c7ccca0ac3062842489b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -170,10 +170,10 @@ $(function() {
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 変数</h2></td></tr>
 <tr class="memitem:aba6bf8fbae5fd8f48403a35e935ddf09"><td class="memItemLeft" align="right" valign="top"><a id="aba6bf8fbae5fd8f48403a35e935ddf09"></a>
-size_t&#160;</td><td class="memItemRight" valign="bottom"><b>allocate_size</b> = self-&gt;used_size + (s / sizeof(self-&gt;buffer))</td></tr>
+size_t&#160;</td><td class="memItemRight" valign="bottom"><b>allocate_size</b> = self-&gt;used_size + ((s + sizeof(self-&gt;buffer) - 1) / sizeof(self-&gt;buffer))</td></tr>
 <tr class="separator:aba6bf8fbae5fd8f48403a35e935ddf09"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a652d87cc99d1a78b448618fbe62ef47c"><td class="memItemLeft" align="right" valign="top"><a id="a652d87cc99d1a78b448618fbe62ef47c"></a>
-self&#160;</td><td class="memItemRight" valign="bottom"><b>used_size</b> = (s / sizeof(self-&gt;buffer))</td></tr>
+self&#160;</td><td class="memItemRight" valign="bottom"><b>used_size</b> = ((s + sizeof(self-&gt;buffer) - 1) / sizeof(self-&gt;buffer))</td></tr>
 <tr class="separator:a652d87cc99d1a78b448618fbe62ef47c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
@@ -197,7 +197,7 @@ self&#160;</td><td class="memItemRight" valign="bottom"><b>used_size</b> = (s / 
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p><a class="el" href="structmana__stack.html" title="mana_stackクラス mana_stackクラスはスタックを表しています。 ">mana_stack</a> オブジェクトのクリア </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stack.html" title="mana_stackクラス mana_stackクラスはスタックを表しています。 ">mana_stack</a> オブジェクト </td></tr>
   </table>
@@ -231,7 +231,7 @@ self&#160;</td><td class="memItemRight" valign="bottom"><b>used_size</b> = (s / 
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p>スタックを比較 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクト </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">other</td><td><a class="el" href="structmana__frame.html" title="mana_frameクラス mana_frameクラスはフレームバッファを表しています。 ">mana_frame</a> オブジェクト </td></tr>
@@ -263,8 +263,8 @@ self&#160;</td><td class="memItemRight" valign="bottom"><b>used_size</b> = (s / 
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>戻り値</dt><dd><a class="el" href="structmana__stack.html" title="mana_stackクラス mana_stackクラスはスタックを表しています。 ">mana_stack</a> オブジェクト </dd></dl>
-<dl class="section warning"><dt>警告</dt><dd>void <a class="el" href="mana__stack_8c.html#af6ae3f7025312f4c912dfdae6e176334">mana_stack_initialize(mana_stack* self)</a>を呼ぶ必要はありません。 </dd></dl>
+<p><a class="el" href="structmana__stack.html" title="mana_stackクラス mana_stackクラスはスタックを表しています。 ">mana_stack</a> オブジェクトの生成 </p><dl class="section return"><dt>戻り値</dt><dd><a class="el" href="structmana__stack.html" title="mana_stackクラス mana_stackクラスはスタックを表しています。 ">mana_stack</a> オブジェクト </dd></dl>
+<dl class="section warning"><dt>警告</dt><dd>void <a class="el" href="mana__stack_8h.html#af6ae3f7025312f4c912dfdae6e176334">mana_stack_initialize(mana_stack* self)</a>を呼ぶ必要はありません。 </dd></dl>
 
 </div>
 </div>
@@ -283,14 +283,14 @@ self&#160;</td><td class="memItemRight" valign="bottom"><b>used_size</b> = (s / 
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p><a class="el" href="structmana__stack.html" title="mana_stackクラス mana_stackクラスはスタックを表しています。 ">mana_stack</a> オブジェクトの生成 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>確保サイズ </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>戻り値</dt><dd><a class="el" href="structmana__stack.html" title="mana_stackクラス mana_stackクラスはスタックを表しています。 ">mana_stack</a> オブジェクト </dd></dl>
-<dl class="section warning"><dt>警告</dt><dd>void <a class="el" href="mana__stack_8c.html#a41498337f60c6c64e59ea25136f2aaad">mana_stack_initialize_with_size(mana_stack* self, size_t size)</a>を呼ぶ必要はありません。 </dd></dl>
+<dl class="section warning"><dt>警告</dt><dd>void <a class="el" href="mana__stack_8h.html#a41498337f60c6c64e59ea25136f2aaad">mana_stack_initialize_with_size(mana_stack* self, size_t size)</a>を呼ぶ必要はありません。 </dd></dl>
 
 </div>
 </div>
@@ -319,7 +319,7 @@ self&#160;</td><td class="memItemRight" valign="bottom"><b>used_size</b> = (s / 
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p><a class="el" href="structmana__stack.html" title="mana_stackクラス mana_stackクラスはスタックを表しています。 ">mana_stack</a> オブジェクトのデシリアライズ </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stack.html" title="mana_stackクラス mana_stackクラスはスタックを表しています。 ">mana_stack</a> オブジェクト </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">stream</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
@@ -344,13 +344,13 @@ self&#160;</td><td class="memItemRight" valign="bottom"><b>used_size</b> = (s / 
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p><a class="el" href="structmana__stack.html" title="mana_stackクラス mana_stackクラスはスタックを表しています。 ">mana_stack</a> オブジェクトの破棄 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stack.html" title="mana_stackクラス mana_stackクラスはスタックを表しています。 ">mana_stack</a> オブジェクト </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section warning"><dt>警告</dt><dd>void <a class="el" href="mana__stack_8c.html#a6667c0d4c9508599bdacad38cb83fb3b">mana_stack_finalize(mana_stack* self)</a>を呼ぶ必要はありません。 </dd></dl>
+<dl class="section warning"><dt>警告</dt><dd>void <a class="el" href="mana__stack_8h.html#a6667c0d4c9508599bdacad38cb83fb3b">mana_stack_finalize(mana_stack* self)</a>を呼ぶ必要はありません。 </dd></dl>
 
 </div>
 </div>
@@ -369,7 +369,7 @@ self&#160;</td><td class="memItemRight" valign="bottom"><b>used_size</b> = (s / 
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p><a class="el" href="structmana__stack.html" title="mana_stackクラス mana_stackクラスはスタックを表しています。 ">mana_stack</a> オブジェクトのコピー </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stack.html" title="mana_stackクラス mana_stackクラスはスタックを表しています。 ">mana_stack</a> オブジェクト </td></tr>
   </table>
@@ -393,7 +393,7 @@ self&#160;</td><td class="memItemRight" valign="bottom"><b>used_size</b> = (s / 
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p><a class="el" href="structmana__stack.html" title="mana_stackクラス mana_stackクラスはスタックを表しています。 ">mana_stack</a> オブジェクトの開放 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stack.html" title="mana_stackクラス mana_stackクラスはスタックを表しています。 ">mana_stack</a> オブジェクト </td></tr>
   </table>
@@ -427,7 +427,7 @@ self&#160;</td><td class="memItemRight" valign="bottom"><b>used_size</b> = (s / 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>スタックのアドレスを取得します。 void* mana_stack_get_pointer(mana_stack* self, size_t index) はスタックに格納されたポインタを取得する点が違います。 </p><dl class="params"><dt>引数</dt><dd>
+<p>アドレスを取得 スタックのアドレスを取得します。 void* mana_stack_get_pointer(mana_stack* self, size_t index)はスタックに格納されたポインタを取得する点が違います。 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stack.html" title="mana_stackクラス mana_stackクラスはスタックを表しています。 ">mana_stack</a> オブジェクト </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">index</td><td>スタックポインタへのオフセット値 </td></tr>
@@ -463,7 +463,7 @@ self&#160;</td><td class="memItemRight" valign="bottom"><b>used_size</b> = (s / 
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p>整数を取得 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stack.html" title="mana_stackクラス mana_stackクラスはスタックを表しています。 ">mana_stack</a> オブジェクト </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">index</td><td>スタックポインタへのオフセット値 </td></tr>
@@ -499,7 +499,7 @@ self&#160;</td><td class="memItemRight" valign="bottom"><b>used_size</b> = (s / 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>スタックに格納されたポインタを取得します。 void* mana_stack_get_address(mana_stack* self, size_t index) はスタックのアドレスを取得する点が違います。 </p><dl class="params"><dt>引数</dt><dd>
+<p>ポインタを取得 スタックに格納されたポインタを取得します。 void* mana_stack_get_address(mana_stack* self, size_t index)はスタックのアドレスを取得する点が違います。 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stack.html" title="mana_stackクラス mana_stackクラスはスタックを表しています。 ">mana_stack</a> オブジェクト </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">index</td><td>スタックポインタへのオフセット値 </td></tr>
@@ -535,7 +535,7 @@ self&#160;</td><td class="memItemRight" valign="bottom"><b>used_size</b> = (s / 
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p>実数を取得 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stack.html" title="mana_stackクラス mana_stackクラスはスタックを表しています。 ">mana_stack</a> オブジェクト </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">index</td><td>スタックポインタへのオフセット値 </td></tr>
@@ -561,7 +561,7 @@ self&#160;</td><td class="memItemRight" valign="bottom"><b>used_size</b> = (s / 
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p>スタックのサイズを取得 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stack.html" title="mana_stackクラス mana_stackクラスはスタックを表しています。 ">mana_stack</a> オブジェクト </td></tr>
   </table>
@@ -596,7 +596,7 @@ self&#160;</td><td class="memItemRight" valign="bottom"><b>used_size</b> = (s / 
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p>文字列を取得 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stack.html" title="mana_stackクラス mana_stackクラスはスタックを表しています。 ">mana_stack</a> オブジェクト </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">index</td><td>スタックポインタへのオフセット値 </td></tr>
@@ -622,7 +622,7 @@ self&#160;</td><td class="memItemRight" valign="bottom"><b>used_size</b> = (s / 
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p><a class="el" href="structmana__stack.html" title="mana_stackクラス mana_stackクラスはスタックを表しています。 ">mana_stack</a> オブジェクトの初期化 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stack.html" title="mana_stackクラス mana_stackクラスはスタックを表しています。 ">mana_stack</a> オブジェクト </td></tr>
   </table>
@@ -656,7 +656,7 @@ self&#160;</td><td class="memItemRight" valign="bottom"><b>used_size</b> = (s / 
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p><a class="el" href="structmana__stack.html" title="mana_stackクラス mana_stackクラスはスタックを表しています。 ">mana_stack</a> オブジェクトの初期化 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stack.html" title="mana_stackクラス mana_stackクラスはスタックを表しています。 ">mana_stack</a> オブジェクト </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>確保サイズ </td></tr>
@@ -681,7 +681,7 @@ self&#160;</td><td class="memItemRight" valign="bottom"><b>used_size</b> = (s / 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>スタックのアドレスをポップします。 void* <a class="el" href="mana__stack_8c.html#a0deadd1124bff78c7a562039a9dea366">mana_stack_pop_pointer(mana_stack* self)</a> はスタックに格納されたポインタをポップする点が違います。 </p><dl class="params"><dt>引数</dt><dd>
+<p>アドレスをポップ スタックのアドレスをポップします。 void* <a class="el" href="mana__stack_8h.html#a0deadd1124bff78c7a562039a9dea366">mana_stack_pop_pointer(mana_stack* self)</a>はスタックに格納されたポインタをポップする点が違います。 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stack.html" title="mana_stackクラス mana_stackクラスはスタックを表しています。 ">mana_stack</a> オブジェクト </td></tr>
   </table>
@@ -722,7 +722,7 @@ self&#160;</td><td class="memItemRight" valign="bottom"><b>used_size</b> = (s / 
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p>データをポップ </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stack.html" title="mana_stackクラス mana_stackクラスはスタックを表しています。 ">mana_stack</a> オブジェクト </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">buffer</td><td>ポップしたデータの先頭アドレス </td></tr>
@@ -748,7 +748,7 @@ self&#160;</td><td class="memItemRight" valign="bottom"><b>used_size</b> = (s / 
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p>整数をポップ </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stack.html" title="mana_stackクラス mana_stackクラスはスタックを表しています。 ">mana_stack</a> オブジェクト </td></tr>
   </table>
@@ -773,7 +773,7 @@ self&#160;</td><td class="memItemRight" valign="bottom"><b>used_size</b> = (s / 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>スタックに格納されたポインタをポップします。 void* <a class="el" href="mana__stack_8c.html#a50e0f42e8e24fe007f93e70bdb322238">mana_stack_pop_address(mana_stack* self)</a> はスタックのアドレスをポップする点が違います。 </p><dl class="params"><dt>引数</dt><dd>
+<p>ポインタをポップ スタックに格納されたポインタをポップします。 void* <a class="el" href="mana__stack_8h.html#a50e0f42e8e24fe007f93e70bdb322238">mana_stack_pop_address(mana_stack* self)</a>はスタックのアドレスをポップする点が違います。 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stack.html" title="mana_stackクラス mana_stackクラスはスタックを表しています。 ">mana_stack</a> オブジェクト </td></tr>
   </table>
@@ -798,7 +798,7 @@ self&#160;</td><td class="memItemRight" valign="bottom"><b>used_size</b> = (s / 
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p>実数をポップ </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stack.html" title="mana_stackクラス mana_stackクラスはスタックを表しています。 ">mana_stack</a> オブジェクト </td></tr>
   </table>
@@ -823,7 +823,7 @@ self&#160;</td><td class="memItemRight" valign="bottom"><b>used_size</b> = (s / 
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p>文字列をポップ </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stack.html" title="mana_stackクラス mana_stackクラスはスタックを表しています。 ">mana_stack</a> オブジェクト </td></tr>
   </table>
@@ -864,7 +864,7 @@ self&#160;</td><td class="memItemRight" valign="bottom"><b>used_size</b> = (s / 
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p>データをプッシュ </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stack.html" title="mana_stackクラス mana_stackクラスはスタックを表しています。 ">mana_stack</a> オブジェクト </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">buffer</td><td>プッシュするデータの先頭アドレス </td></tr>
@@ -900,7 +900,7 @@ self&#160;</td><td class="memItemRight" valign="bottom"><b>used_size</b> = (s / 
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p>整数をプッシュ </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stack.html" title="mana_stackクラス mana_stackクラスはスタックを表しています。 ">mana_stack</a> オブジェクト </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>プッシュする値 </td></tr>
@@ -935,7 +935,7 @@ self&#160;</td><td class="memItemRight" valign="bottom"><b>used_size</b> = (s / 
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p>ポインタをプッシュ </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stack.html" title="mana_stackクラス mana_stackクラスはスタックを表しています。 ">mana_stack</a> オブジェクト </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">pointer</td><td>プッシュする値 </td></tr>
@@ -970,7 +970,7 @@ self&#160;</td><td class="memItemRight" valign="bottom"><b>used_size</b> = (s / 
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p>実数をプッシュ </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stack.html" title="mana_stackクラス mana_stackクラスはスタックを表しています。 ">mana_stack</a> オブジェクト </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>プッシュする値 </td></tr>
@@ -1005,7 +1005,7 @@ self&#160;</td><td class="memItemRight" valign="bottom"><b>used_size</b> = (s / 
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p>文字列をプッシュ </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stack.html" title="mana_stackクラス mana_stackクラスはスタックを表しています。 ">mana_stack</a> オブジェクト </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">string</td><td>プッシュする文字列 </td></tr>
@@ -1040,7 +1040,7 @@ self&#160;</td><td class="memItemRight" valign="bottom"><b>used_size</b> = (s / 
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p>スタックポインタを移動 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stack.html" title="mana_stackクラス mana_stackクラスはスタックを表しています。 ">mana_stack</a> オブジェクト </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>削除するサイズ </td></tr>
@@ -1075,7 +1075,7 @@ self&#160;</td><td class="memItemRight" valign="bottom"><b>used_size</b> = (s / 
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p><a class="el" href="structmana__stack.html" title="mana_stackクラス mana_stackクラスはスタックを表しています。 ">mana_stack</a> オブジェクトのシリアライズ </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stack.html" title="mana_stackクラス mana_stackクラスはスタックを表しています。 ">mana_stack</a> オブジェクト </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">stream</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
@@ -1116,7 +1116,7 @@ self&#160;</td><td class="memItemRight" valign="bottom"><b>used_size</b> = (s / 
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p>整数を設定 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stack.html" title="mana_stackクラス mana_stackクラスはスタックを表しています。 ">mana_stack</a> オブジェクト </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">index</td><td>スタックポインタへのオフセット値 </td></tr>
@@ -1158,7 +1158,7 @@ self&#160;</td><td class="memItemRight" valign="bottom"><b>used_size</b> = (s / 
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p>ポインタを設定 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stack.html" title="mana_stackクラス mana_stackクラスはスタックを表しています。 ">mana_stack</a> オブジェクト </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">index</td><td>スタックポインタへのオフセット値 </td></tr>
@@ -1200,7 +1200,7 @@ self&#160;</td><td class="memItemRight" valign="bottom"><b>used_size</b> = (s / 
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p>実数を設定 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stack.html" title="mana_stackクラス mana_stackクラスはスタックを表しています。 ">mana_stack</a> オブジェクト </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">index</td><td>スタックポインタへのオフセット値 </td></tr>
@@ -1236,7 +1236,7 @@ self&#160;</td><td class="memItemRight" valign="bottom"><b>used_size</b> = (s / 
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p>スタックのサイズを設定 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stack.html" title="mana_stackクラス mana_stackクラスはスタックを表しています。 ">mana_stack</a> オブジェクト </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>スタックのサイズ/スタックポインタ </td></tr>
@@ -1277,7 +1277,7 @@ self&#160;</td><td class="memItemRight" valign="bottom"><b>used_size</b> = (s / 
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p>文字列を設定 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stack.html" title="mana_stackクラス mana_stackクラスはスタックを表しています。 ">mana_stack</a> オブジェクト </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">index</td><td>スタックポインタへのオフセット値 </td></tr>
@@ -1291,7 +1291,7 @@ self&#160;</td><td class="memItemRight" valign="bottom"><b>used_size</b> = (s / 
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-2017年04月07日(金) 02時45分40秒作成 - libmana / 構成:  &#160;<a href="http://www.doxygen.org/index.html">
+2017年04月22日(土) 01時27分02秒作成 - libmana / 構成:  &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.12
 </small></address>

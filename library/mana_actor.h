@@ -202,7 +202,7 @@ extern void mana_actor_restart(mana_actor* self);
 extern const char* mana_actor_get_name(mana_actor* self);
 
 /*! アクションのプログラム開始アドレスを取得 */
-extern uintptr_t mana_actor_get_action(mana_actor* self, const char* name);
+extern uint32_t mana_actor_get_action(mana_actor* self, const char* name);
 
 /*! 汎用カウンターを取得 */
 extern int32_t mana_actor_get_counter(mana_actor* self);

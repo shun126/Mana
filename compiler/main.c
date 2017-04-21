@@ -311,6 +311,9 @@ int32_t mana_generator(void)
 			header.flag |= MANA_HEADER_FLAG_RESOURCE;
 		if(mana_is_big_endian())
 			header.flag |= MANA_HEADER_FLAG_BIG_ENDIAN;
+#if UINTPTR_MAX == UINT64_MAX
+		header.flag |= MANA_HEADER_FLAG_64BIT;
+#endif
 		header.number_of_actors = symbol_get_number_of_actors();
 		header.size_of_constant_pool = data_get_size();
 		header.size_of_instruction_pool = code_get_size();

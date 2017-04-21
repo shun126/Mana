@@ -14,12 +14,16 @@ int callTest(char a, short b, int c, float d)
 	}
 	else
 	{
+		functionCallingTest();
+		expressionTest();
 		return 0;
 	}
 }
 
 void assignmentTest(float value)
 {
+	print("assignmentTest\n");
+
 	char c = 0b0001_1000;
 
 	TestStruct1 hoge[2];
@@ -47,6 +51,8 @@ void assignmentTest(float value)
 
 void expressionTest()
 {
+	print("expressionTest\n");
+
 	float f;
 	int i;
 
@@ -76,6 +82,8 @@ void expressionTest()
 
 void statementTest()
 {
+	print("statementTest\n");
+
 	if(true)
 	{
 		int i;
@@ -139,7 +147,7 @@ void statementTest()
 
 float functionCallingTest()
 {
-	assignmentTest(0);
+	print("functionCallingTest\n");
 
 	int value;
 	assignmentTest(value);
