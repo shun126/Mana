@@ -75,128 +75,91 @@ $(function() {
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 マクロ定義</h2></td></tr>
-<tr class="memitem:a146cb67ea9afbc1e15edf428bdd1c392"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#a146cb67ea9afbc1e15edf428bdd1c392">MANA_CODE_ALLOCATE_PAGE_SIZE</a>&#160;&#160;&#160;(4096)</td></tr>
+<tr class="memitem:a146cb67ea9afbc1e15edf428bdd1c392"><td class="memItemLeft" align="right" valign="top"><a id="a146cb67ea9afbc1e15edf428bdd1c392"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#a146cb67ea9afbc1e15edf428bdd1c392">MANA_CODE_ALLOCATE_PAGE_SIZE</a>&#160;&#160;&#160;(4096)</td></tr>
+<tr class="memdesc:a146cb67ea9afbc1e15edf428bdd1c392"><td class="mdescLeft">&#160;</td><td class="mdescRight">命令セクションのページサイズ <br /></td></tr>
 <tr class="separator:a146cb67ea9afbc1e15edf428bdd1c392"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 型定義</h2></td></tr>
-<tr class="memitem:a034eb95325ffbd87f17f53eb94983852"><td class="memItemLeft" align="right" valign="top">typedef struct mana_code_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#a034eb95325ffbd87f17f53eb94983852">mana_code_type</a></td></tr>
-<tr class="separator:a034eb95325ffbd87f17f53eb94983852"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a336acbe6fcf47be659b7ac69bc24aff5"><td class="memItemLeft" align="right" valign="top">typedef struct mana_code&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#a336acbe6fcf47be659b7ac69bc24aff5">mana_code</a></td></tr>
-<tr class="separator:a336acbe6fcf47be659b7ac69bc24aff5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9abc9493b99ee784f8f3c7d3e96daafb"><td class="memItemLeft" align="right" valign="top"><a id="a9abc9493b99ee784f8f3c7d3e96daafb"></a>
+typedef struct code_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#a9abc9493b99ee784f8f3c7d3e96daafb">code_type</a></td></tr>
+<tr class="memdesc:a9abc9493b99ee784f8f3c7d3e96daafb"><td class="mdescLeft">&#160;</td><td class="mdescRight">命令タイプ <br /></td></tr>
+<tr class="separator:a9abc9493b99ee784f8f3c7d3e96daafb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af6bb0db0725ac1055201afa67284852d"><td class="memItemLeft" align="right" valign="top"><a id="af6bb0db0725ac1055201afa67284852d"></a>
+typedef struct code_entry&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#af6bb0db0725ac1055201afa67284852d">code_entry</a></td></tr>
+<tr class="memdesc:af6bb0db0725ac1055201afa67284852d"><td class="mdescLeft">&#160;</td><td class="mdescRight">命令セクション <br /></td></tr>
+<tr class="separator:af6bb0db0725ac1055201afa67284852d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 関数</h2></td></tr>
-<tr class="memitem:ac39007992e5498048dbbc63c52d9853b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#ac39007992e5498048dbbc63c52d9853b">mana_code_initialize</a> (void)</td></tr>
-<tr class="separator:ac39007992e5498048dbbc63c52d9853b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab82897e8c2008d71edde6bf3549cbccb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#ab82897e8c2008d71edde6bf3549cbccb">mana_code_finalize</a> (void)</td></tr>
-<tr class="separator:ab82897e8c2008d71edde6bf3549cbccb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8d948f46ed45296c9a59a0f59a87d9f0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#a8d948f46ed45296c9a59a0f59a87d9f0">mana_code_reduce</a> (size_t size)</td></tr>
-<tr class="separator:a8d948f46ed45296c9a59a0f59a87d9f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a83d7dc55c30e99562ec2e1738165d5ee"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#a83d7dc55c30e99562ec2e1738165d5ee">mana_code_set_char</a> (int8_t value)</td></tr>
-<tr class="separator:a83d7dc55c30e99562ec2e1738165d5ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aab98e2bf163b7b6815a1897036d7dc2b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#aab98e2bf163b7b6815a1897036d7dc2b">mana_code_set_short</a> (int16_t value)</td></tr>
-<tr class="separator:aab98e2bf163b7b6815a1897036d7dc2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae388a43456c39009127a5e88a6aa9bdf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#ae388a43456c39009127a5e88a6aa9bdf">mana_code_set_integer</a> (int32_t value)</td></tr>
-<tr class="separator:ae388a43456c39009127a5e88a6aa9bdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab4ecd0554c59a952ad8a18b7713487fb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#ab4ecd0554c59a952ad8a18b7713487fb">mana_code_set_unsigned_char</a> (uint8_t value)</td></tr>
-<tr class="separator:ab4ecd0554c59a952ad8a18b7713487fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a711581938a18e6ebac2f2adb842f8fa7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#a711581938a18e6ebac2f2adb842f8fa7">mana_code_set_unsigned_short</a> (uint16_t value)</td></tr>
-<tr class="separator:a711581938a18e6ebac2f2adb842f8fa7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2e1f2a830d6f7ace70364a7ea49abb87"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#a2e1f2a830d6f7ace70364a7ea49abb87">mana_code_set_unsigned_integer</a> (uint32_t value)</td></tr>
-<tr class="separator:a2e1f2a830d6f7ace70364a7ea49abb87"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a34441393d6193fef7aba23d9e845a664"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#a34441393d6193fef7aba23d9e845a664">mana_code_set_float</a> (float value)</td></tr>
-<tr class="separator:a34441393d6193fef7aba23d9e845a664"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7a0f5f6d0e179ccffaf22eadf4defb13"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#a7a0f5f6d0e179ccffaf22eadf4defb13">mana_code_set_opecode</a> (uint8_t code)</td></tr>
-<tr class="separator:a7a0f5f6d0e179ccffaf22eadf4defb13"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3dd6711768028fa013fbfdb7c4a114a3"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#a3dd6711768028fa013fbfdb7c4a114a3">mana_code_set_opecode_and_operand</a> (uint8_t code, int32_t address)</td></tr>
-<tr class="separator:a3dd6711768028fa013fbfdb7c4a114a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad5028ba8eb966ef0325789d14403c4a5"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#ad5028ba8eb966ef0325789d14403c4a5">mana_code_set_opecode_and_two_operands</a> (uint8_t code, int32_t address, int32_t size)</td></tr>
-<tr class="separator:ad5028ba8eb966ef0325789d14403c4a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6ccf262f307d26494603957b462ca59e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#a6ccf262f307d26494603957b462ca59e">mana_code_replace_opecode</a> (int32_t address, uint8_t code)</td></tr>
-<tr class="separator:a6ccf262f307d26494603957b462ca59e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeb54fc7244ac1982a063fc6abaa5e81f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#aeb54fc7244ac1982a063fc6abaa5e81f">mana_code_replace_address</a> (int32_t address, int32_t new_address)</td></tr>
-<tr class="separator:aeb54fc7244ac1982a063fc6abaa5e81f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a691a1fb35ccd3a40e08e79cac1f6efd6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#a691a1fb35ccd3a40e08e79cac1f6efd6">mana_code_replace_all</a> (int32_t address, int32_t new_address)</td></tr>
-<tr class="separator:a691a1fb35ccd3a40e08e79cac1f6efd6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a18806563796ab145aa49582f1960132d"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#a18806563796ab145aa49582f1960132d">mana_code_write</a> (mana_stream *stream)</td></tr>
-<tr class="separator:a18806563796ab145aa49582f1960132d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae58fe02c6b63ad82ba62e6ada49a5389"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#ae58fe02c6b63ad82ba62e6ada49a5389">mana_code_copy</a> (void *buffer)</td></tr>
-<tr class="separator:ae58fe02c6b63ad82ba62e6ada49a5389"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7d7ca7f5236ed6faea7b677f84c266bb"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#a7d7ca7f5236ed6faea7b677f84c266bb">mana_code_get_pc</a> (void)</td></tr>
-<tr class="separator:a7d7ca7f5236ed6faea7b677f84c266bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a32ca3007f641f6c4a47757385bc32815"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#a32ca3007f641f6c4a47757385bc32815">mana_code_get_size</a> (void)</td></tr>
-<tr class="separator:a32ca3007f641f6c4a47757385bc32815"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a37328b9fe93456c09dcb6bcdeca4631a"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#a37328b9fe93456c09dcb6bcdeca4631a">mana_code_get_buffer</a> (void)</td></tr>
-<tr class="separator:a37328b9fe93456c09dcb6bcdeca4631a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af30f010b45dac823c3c2d394ee3d5a57"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#af30f010b45dac823c3c2d394ee3d5a57">mana_code_getcode</a> (int32_t address)</td></tr>
-<tr class="separator:af30f010b45dac823c3c2d394ee3d5a57"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac9b1be98e3df3348b9e7ddae724dbc4f"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#ac9b1be98e3df3348b9e7ddae724dbc4f">mana_code_get_integer</a> (int32_t address)</td></tr>
-<tr class="separator:ac9b1be98e3df3348b9e7ddae724dbc4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aba64dd622f57bbc8497ba254f9df19f8"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#aba64dd622f57bbc8497ba254f9df19f8">mana_code_get_float</a> (int32_t address)</td></tr>
-<tr class="separator:aba64dd622f57bbc8497ba254f9df19f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a610d54983d4a0aab5fe7cb5105ffca22"><td class="memItemLeft" align="right" valign="top"><a id="a610d54983d4a0aab5fe7cb5105ffca22"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#a610d54983d4a0aab5fe7cb5105ffca22">code_initialize</a> (void)</td></tr>
+<tr class="memdesc:a610d54983d4a0aab5fe7cb5105ffca22"><td class="mdescLeft">&#160;</td><td class="mdescRight">命令セクション管理関数を初期化 <br /></td></tr>
+<tr class="separator:a610d54983d4a0aab5fe7cb5105ffca22"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49818ff221f3883e7fc60e6f5401f3cf"><td class="memItemLeft" align="right" valign="top"><a id="a49818ff221f3883e7fc60e6f5401f3cf"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#a49818ff221f3883e7fc60e6f5401f3cf">code_finalize</a> (void)</td></tr>
+<tr class="memdesc:a49818ff221f3883e7fc60e6f5401f3cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">命令セクション管理関数を終了 <br /></td></tr>
+<tr class="separator:a49818ff221f3883e7fc60e6f5401f3cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0aa6cf19fef049e35ca3cb3bc09eced"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#af0aa6cf19fef049e35ca3cb3bc09eced">code_reduce</a> (const size_t size)</td></tr>
+<tr class="separator:af0aa6cf19fef049e35ca3cb3bc09eced"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0fd7ef3f52ef0ffed3c0f90c27c4cd8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#ae0fd7ef3f52ef0ffed3c0f90c27c4cd8">code_set_char</a> (const int8_t value)</td></tr>
+<tr class="separator:ae0fd7ef3f52ef0ffed3c0f90c27c4cd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b5020d53062e91c385f0cd61bd63299"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#a5b5020d53062e91c385f0cd61bd63299">code_set_short</a> (const int16_t value)</td></tr>
+<tr class="separator:a5b5020d53062e91c385f0cd61bd63299"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a52260b43602ed5755d1b19ad44121bc8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#a52260b43602ed5755d1b19ad44121bc8">code_set_integer</a> (const int32_t value)</td></tr>
+<tr class="separator:a52260b43602ed5755d1b19ad44121bc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac35bf66e15dd8871dd472ce934ee476f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#ac35bf66e15dd8871dd472ce934ee476f">code_set_unsigned_char</a> (const uint8_t value)</td></tr>
+<tr class="separator:ac35bf66e15dd8871dd472ce934ee476f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0118d181841ad5b7ba7bb9057cb6f27b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#a0118d181841ad5b7ba7bb9057cb6f27b">code_set_unsigned_short</a> (const uint16_t value)</td></tr>
+<tr class="separator:a0118d181841ad5b7ba7bb9057cb6f27b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab3c7ad45e8b0b09ac1cfe20d09dbd223"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#ab3c7ad45e8b0b09ac1cfe20d09dbd223">code_set_unsigned_integer</a> (const uint32_t value)</td></tr>
+<tr class="separator:ab3c7ad45e8b0b09ac1cfe20d09dbd223"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aacc88c1c377619a5533fb6d1e0577f07"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#aacc88c1c377619a5533fb6d1e0577f07">code_set_float</a> (const float value)</td></tr>
+<tr class="separator:aacc88c1c377619a5533fb6d1e0577f07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af17dcb2316157316158f89b4b915acaf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#af17dcb2316157316158f89b4b915acaf">code_set_opecode</a> (const uint8_t code)</td></tr>
+<tr class="separator:af17dcb2316157316158f89b4b915acaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e20935f388151589bcb41c50dddab47"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#a4e20935f388151589bcb41c50dddab47">code_set_opecode_and_operand</a> (const uint8_t code, const int32_t address)</td></tr>
+<tr class="separator:a4e20935f388151589bcb41c50dddab47"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d2254e319d04f4b3763a0559990909e"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#a1d2254e319d04f4b3763a0559990909e">code_set_opecode_and_two_operands</a> (const uint8_t code, const int32_t address, const int32_t size)</td></tr>
+<tr class="separator:a1d2254e319d04f4b3763a0559990909e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abeda207e40d6bd1d5d545414080864cf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#abeda207e40d6bd1d5d545414080864cf">code_replace_opecode</a> (const int32_t address, const uint8_t code)</td></tr>
+<tr class="separator:abeda207e40d6bd1d5d545414080864cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8be6898e233dbfce0d606816ddc6aa8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#ac8be6898e233dbfce0d606816ddc6aa8">code_replace_address</a> (const int32_t address, const int32_t new_address)</td></tr>
+<tr class="separator:ac8be6898e233dbfce0d606816ddc6aa8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ec4a49b2f0093dcd42c82aeeb4bcc34"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#a5ec4a49b2f0093dcd42c82aeeb4bcc34">code_replace_all</a> (const int32_t base_address, const int32_t new_address)</td></tr>
+<tr class="separator:a5ec4a49b2f0093dcd42c82aeeb4bcc34"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a429332eacc203f0dfece594d3f59db13"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#a429332eacc203f0dfece594d3f59db13">code_write</a> (mana_stream *stream)</td></tr>
+<tr class="separator:a429332eacc203f0dfece594d3f59db13"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a676d1510fec9c0a58e95b204c846de18"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#a676d1510fec9c0a58e95b204c846de18">code_copy</a> (void *buffer)</td></tr>
+<tr class="separator:a676d1510fec9c0a58e95b204c846de18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a3c2f1356f415799da18b7e7f64d80c"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#a6a3c2f1356f415799da18b7e7f64d80c">code_get_pc</a> (void)</td></tr>
+<tr class="separator:a6a3c2f1356f415799da18b7e7f64d80c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa49d1508089e305e0c7dc83ac884bc63"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#aa49d1508089e305e0c7dc83ac884bc63">code_get_size</a> (void)</td></tr>
+<tr class="separator:aa49d1508089e305e0c7dc83ac884bc63"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad000b26f2e370f42936f4e4d2587d6ac"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#ad000b26f2e370f42936f4e4d2587d6ac">code_get_buffer</a> (void)</td></tr>
+<tr class="separator:ad000b26f2e370f42936f4e4d2587d6ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7abad7cf8000dbdda1e74030aff22952"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#a7abad7cf8000dbdda1e74030aff22952">code_getcode</a> (const int32_t address)</td></tr>
+<tr class="separator:a7abad7cf8000dbdda1e74030aff22952"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a131071beee75c23ce443ea398c8e58eb"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#a131071beee75c23ce443ea398c8e58eb">code_get_integer</a> (const int32_t address)</td></tr>
+<tr class="separator:a131071beee75c23ce443ea398c8e58eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab48bcd09bd4079db21a9193d9c69527e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="code_8c.html#ab48bcd09bd4079db21a9193d9c69527e">code_get_float</a> (const int32_t address)</td></tr>
+<tr class="separator:ab48bcd09bd4079db21a9193d9c69527e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
 <div class="textblock"><p>命令セクションに関するソースファイル  このファイルは命令セクションに関係するソースファイルです。 </p>
 <p>mana (compiler)</p>
 <dl class="section author"><dt>著者</dt><dd>Shun Moriya </dd></dl>
 <dl class="section date"><dt>日付</dt><dd>2003- </dd></dl>
-</div><h2 class="groupheader">マクロ定義詳解</h2>
-<a id="a146cb67ea9afbc1e15edf428bdd1c392"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a146cb67ea9afbc1e15edf428bdd1c392">&sect;&nbsp;</a></span>MANA_CODE_ALLOCATE_PAGE_SIZE</h2>
+</div><h2 class="groupheader">関数詳解</h2>
+<a id="a676d1510fec9c0a58e95b204c846de18"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a676d1510fec9c0a58e95b204c846de18">&sect;&nbsp;</a></span>code_copy()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define MANA_CODE_ALLOCATE_PAGE_SIZE&#160;&#160;&#160;(4096)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>命令セクションのページサイズ </p>
-
-</div>
-</div>
-<h2 class="groupheader">型定義詳解</h2>
-<a id="a336acbe6fcf47be659b7ac69bc24aff5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a336acbe6fcf47be659b7ac69bc24aff5">&sect;&nbsp;</a></span>mana_code</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef struct mana_code  mana_code</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>命令セクション </p>
-
-</div>
-</div>
-<a id="a034eb95325ffbd87f17f53eb94983852"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a034eb95325ffbd87f17f53eb94983852">&sect;&nbsp;</a></span>mana_code_type</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef struct mana_code_type  mana_code_type</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>命令タイプ </p>
-
-</div>
-</div>
-<h2 class="groupheader">関数詳解</h2>
-<a id="ae58fe02c6b63ad82ba62e6ada49a5389"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae58fe02c6b63ad82ba62e6ada49a5389">&sect;&nbsp;</a></span>mana_code_copy()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int32_t mana_code_copy </td>
+          <td class="memname">int32_t code_copy </td>
           <td>(</td>
           <td class="paramtype">void *&#160;</td>
           <td class="paramname"><em>buffer</em></td><td>)</td>
@@ -204,7 +167,7 @@ $(function() {
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p>命令セクションをメモリへ出力 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[out]</td><td class="paramname">file</td><td>ファイル識別子 </td></tr>
   </table>
@@ -214,14 +177,14 @@ $(function() {
 
 </div>
 </div>
-<a id="ab82897e8c2008d71edde6bf3549cbccb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab82897e8c2008d71edde6bf3549cbccb">&sect;&nbsp;</a></span>mana_code_finalize()</h2>
+<a id="ad000b26f2e370f42936f4e4d2587d6ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad000b26f2e370f42936f4e4d2587d6ac">&sect;&nbsp;</a></span>code_get_buffer()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void mana_code_finalize </td>
+          <td class="memname">void* code_get_buffer </td>
           <td>(</td>
           <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
@@ -229,45 +192,26 @@ $(function() {
         </tr>
       </table>
 </div><div class="memdoc">
-<p>命令セクション管理関数を終了 </p>
+<p>命令セクションバッファのアドレスを取得 </p><dl class="section return"><dt>戻り値</dt><dd>命令セクションバッファのアドレス </dd></dl>
 
 </div>
 </div>
-<a id="a37328b9fe93456c09dcb6bcdeca4631a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a37328b9fe93456c09dcb6bcdeca4631a">&sect;&nbsp;</a></span>mana_code_get_buffer()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void* mana_code_get_buffer </td>
-          <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<dl class="section return"><dt>戻り値</dt><dd>命令セクションバッファのアドレス </dd></dl>
-
-</div>
-</div>
-<a id="aba64dd622f57bbc8497ba254f9df19f8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aba64dd622f57bbc8497ba254f9df19f8">&sect;&nbsp;</a></span>mana_code_get_float()</h2>
+<a id="ab48bcd09bd4079db21a9193d9c69527e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab48bcd09bd4079db21a9193d9c69527e">&sect;&nbsp;</a></span>code_get_float()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">float mana_code_get_float </td>
+          <td class="memname">float code_get_float </td>
           <td>(</td>
-          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramtype">const int32_t&#160;</td>
           <td class="paramname"><em>address</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p>float型数値を命令セクションから取得 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">address</td><td>アドレス </td></tr>
   </table>
@@ -277,22 +221,22 @@ $(function() {
 
 </div>
 </div>
-<a id="ac9b1be98e3df3348b9e7ddae724dbc4f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac9b1be98e3df3348b9e7ddae724dbc4f">&sect;&nbsp;</a></span>mana_code_get_integer()</h2>
+<a id="a131071beee75c23ce443ea398c8e58eb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a131071beee75c23ce443ea398c8e58eb">&sect;&nbsp;</a></span>code_get_integer()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int32_t mana_code_get_integer </td>
+          <td class="memname">int32_t code_get_integer </td>
           <td>(</td>
-          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramtype">const int32_t&#160;</td>
           <td class="paramname"><em>address</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p>int32_t型数値を命令セクションから取得 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">address</td><td>アドレス </td></tr>
   </table>
@@ -302,14 +246,14 @@ $(function() {
 
 </div>
 </div>
-<a id="a7d7ca7f5236ed6faea7b677f84c266bb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7d7ca7f5236ed6faea7b677f84c266bb">&sect;&nbsp;</a></span>mana_code_get_pc()</h2>
+<a id="a6a3c2f1356f415799da18b7e7f64d80c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a3c2f1356f415799da18b7e7f64d80c">&sect;&nbsp;</a></span>code_get_pc()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int32_t mana_code_get_pc </td>
+          <td class="memname">int32_t code_get_pc </td>
           <td>(</td>
           <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
@@ -317,18 +261,18 @@ $(function() {
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>戻り値</dt><dd>命令セクションのサイズ </dd></dl>
+<p>命令セクションのサイズを取得 </p><dl class="section return"><dt>戻り値</dt><dd>命令セクションのサイズ </dd></dl>
 
 </div>
 </div>
-<a id="a32ca3007f641f6c4a47757385bc32815"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a32ca3007f641f6c4a47757385bc32815">&sect;&nbsp;</a></span>mana_code_get_size()</h2>
+<a id="aa49d1508089e305e0c7dc83ac884bc63"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa49d1508089e305e0c7dc83ac884bc63">&sect;&nbsp;</a></span>code_get_size()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int32_t mana_code_get_size </td>
+          <td class="memname">int32_t code_get_size </td>
           <td>(</td>
           <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
@@ -336,26 +280,26 @@ $(function() {
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>戻り値</dt><dd>命令セクションのサイズ </dd></dl>
+<p>命令セクションのサイズを取得 </p><dl class="section return"><dt>戻り値</dt><dd>命令セクションのサイズ </dd></dl>
 
 </div>
 </div>
-<a id="af30f010b45dac823c3c2d394ee3d5a57"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af30f010b45dac823c3c2d394ee3d5a57">&sect;&nbsp;</a></span>mana_code_getcode()</h2>
+<a id="a7abad7cf8000dbdda1e74030aff22952"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7abad7cf8000dbdda1e74030aff22952">&sect;&nbsp;</a></span>code_getcode()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint8_t mana_code_getcode </td>
+          <td class="memname">uint8_t code_getcode </td>
           <td>(</td>
-          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramtype">const int32_t&#160;</td>
           <td class="paramname"><em>address</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p>オペコードを取得 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">address</td><td>アドレス </td></tr>
   </table>
@@ -365,41 +309,22 @@ $(function() {
 
 </div>
 </div>
-<a id="ac39007992e5498048dbbc63c52d9853b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac39007992e5498048dbbc63c52d9853b">&sect;&nbsp;</a></span>mana_code_initialize()</h2>
+<a id="af0aa6cf19fef049e35ca3cb3bc09eced"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af0aa6cf19fef049e35ca3cb3bc09eced">&sect;&nbsp;</a></span>code_reduce()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void mana_code_initialize </td>
+          <td class="memname">void code_reduce </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>命令セクション管理関数を初期化 </p>
-
-</div>
-</div>
-<a id="a8d948f46ed45296c9a59a0f59a87d9f0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8d948f46ed45296c9a59a0f59a87d9f0">&sect;&nbsp;</a></span>mana_code_reduce()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void mana_code_reduce </td>
-          <td>(</td>
-          <td class="paramtype">size_t&#160;</td>
+          <td class="paramtype">const size_t&#160;</td>
           <td class="paramname"><em>size</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p>命令セクションを縮小 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>縮小するサイズ </td></tr>
   </table>
@@ -408,22 +333,22 @@ $(function() {
 
 </div>
 </div>
-<a id="aeb54fc7244ac1982a063fc6abaa5e81f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aeb54fc7244ac1982a063fc6abaa5e81f">&sect;&nbsp;</a></span>mana_code_replace_address()</h2>
+<a id="ac8be6898e233dbfce0d606816ddc6aa8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac8be6898e233dbfce0d606816ddc6aa8">&sect;&nbsp;</a></span>code_replace_address()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void mana_code_replace_address </td>
+          <td class="memname">void code_replace_address </td>
           <td>(</td>
-          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramtype">const int32_t&#160;</td>
           <td class="paramname"><em>address</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramtype">const int32_t&#160;</td>
           <td class="paramname"><em>new_address</em>&#160;</td>
         </tr>
         <tr>
@@ -433,7 +358,7 @@ $(function() {
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p>オペコードに関係付けられたアドレスを置換 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">address</td><td>アドレス </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">new_address</td><td>置き換えるアドレス </td></tr>
@@ -443,22 +368,22 @@ $(function() {
 
 </div>
 </div>
-<a id="a691a1fb35ccd3a40e08e79cac1f6efd6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a691a1fb35ccd3a40e08e79cac1f6efd6">&sect;&nbsp;</a></span>mana_code_replace_all()</h2>
+<a id="a5ec4a49b2f0093dcd42c82aeeb4bcc34"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ec4a49b2f0093dcd42c82aeeb4bcc34">&sect;&nbsp;</a></span>code_replace_all()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void mana_code_replace_all </td>
+          <td class="memname">void code_replace_all </td>
           <td>(</td>
-          <td class="paramtype">int32_t&#160;</td>
-          <td class="paramname"><em>address</em>, </td>
+          <td class="paramtype">const int32_t&#160;</td>
+          <td class="paramname"><em>base_address</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramtype">const int32_t&#160;</td>
           <td class="paramname"><em>new_address</em>&#160;</td>
         </tr>
         <tr>
@@ -468,9 +393,9 @@ $(function() {
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p>オペコードに関係付けられたアドレスを辿って置換 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">address</td><td>アドレス </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">base_address</td><td>アドレス </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">new_address</td><td>置き換えるアドレス </td></tr>
   </table>
   </dd>
@@ -478,22 +403,22 @@ $(function() {
 
 </div>
 </div>
-<a id="a6ccf262f307d26494603957b462ca59e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6ccf262f307d26494603957b462ca59e">&sect;&nbsp;</a></span>mana_code_replace_opecode()</h2>
+<a id="abeda207e40d6bd1d5d545414080864cf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abeda207e40d6bd1d5d545414080864cf">&sect;&nbsp;</a></span>code_replace_opecode()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void mana_code_replace_opecode </td>
+          <td class="memname">void code_replace_opecode </td>
           <td>(</td>
-          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramtype">const int32_t&#160;</td>
           <td class="paramname"><em>address</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramtype">const uint8_t&#160;</td>
           <td class="paramname"><em>code</em>&#160;</td>
         </tr>
         <tr>
@@ -503,7 +428,7 @@ $(function() {
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p>オペコードを置換 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">address</td><td>アドレス </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">code</td><td>オペコード </td></tr>
@@ -513,22 +438,22 @@ $(function() {
 
 </div>
 </div>
-<a id="a83d7dc55c30e99562ec2e1738165d5ee"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a83d7dc55c30e99562ec2e1738165d5ee">&sect;&nbsp;</a></span>mana_code_set_char()</h2>
+<a id="ae0fd7ef3f52ef0ffed3c0f90c27c4cd8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae0fd7ef3f52ef0ffed3c0f90c27c4cd8">&sect;&nbsp;</a></span>code_set_char()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void mana_code_set_char </td>
+          <td class="memname">void code_set_char </td>
           <td>(</td>
-          <td class="paramtype">int8_t&#160;</td>
+          <td class="paramtype">const int8_t&#160;</td>
           <td class="paramname"><em>value</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p>int8_t型数値を命令セクションに設定 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>値 </td></tr>
   </table>
@@ -537,22 +462,22 @@ $(function() {
 
 </div>
 </div>
-<a id="a34441393d6193fef7aba23d9e845a664"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a34441393d6193fef7aba23d9e845a664">&sect;&nbsp;</a></span>mana_code_set_float()</h2>
+<a id="aacc88c1c377619a5533fb6d1e0577f07"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aacc88c1c377619a5533fb6d1e0577f07">&sect;&nbsp;</a></span>code_set_float()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void mana_code_set_float </td>
+          <td class="memname">void code_set_float </td>
           <td>(</td>
-          <td class="paramtype">float&#160;</td>
+          <td class="paramtype">const float&#160;</td>
           <td class="paramname"><em>value</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p>float型数値を命令セクションに設定 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>値 </td></tr>
   </table>
@@ -561,22 +486,22 @@ $(function() {
 
 </div>
 </div>
-<a id="ae388a43456c39009127a5e88a6aa9bdf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae388a43456c39009127a5e88a6aa9bdf">&sect;&nbsp;</a></span>mana_code_set_integer()</h2>
+<a id="a52260b43602ed5755d1b19ad44121bc8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a52260b43602ed5755d1b19ad44121bc8">&sect;&nbsp;</a></span>code_set_integer()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void mana_code_set_integer </td>
+          <td class="memname">void code_set_integer </td>
           <td>(</td>
-          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramtype">const int32_t&#160;</td>
           <td class="paramname"><em>value</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p>int32_t型数値を命令セクションに設定 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>値 </td></tr>
   </table>
@@ -585,22 +510,22 @@ $(function() {
 
 </div>
 </div>
-<a id="a7a0f5f6d0e179ccffaf22eadf4defb13"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7a0f5f6d0e179ccffaf22eadf4defb13">&sect;&nbsp;</a></span>mana_code_set_opecode()</h2>
+<a id="af17dcb2316157316158f89b4b915acaf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af17dcb2316157316158f89b4b915acaf">&sect;&nbsp;</a></span>code_set_opecode()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void mana_code_set_opecode </td>
+          <td class="memname">void code_set_opecode </td>
           <td>(</td>
-          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramtype">const uint8_t&#160;</td>
           <td class="paramname"><em>code</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p>オペコードを命令セクションに設定 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">code</td><td>オペコード </td></tr>
   </table>
@@ -609,22 +534,22 @@ $(function() {
 
 </div>
 </div>
-<a id="a3dd6711768028fa013fbfdb7c4a114a3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3dd6711768028fa013fbfdb7c4a114a3">&sect;&nbsp;</a></span>mana_code_set_opecode_and_operand()</h2>
+<a id="a4e20935f388151589bcb41c50dddab47"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4e20935f388151589bcb41c50dddab47">&sect;&nbsp;</a></span>code_set_opecode_and_operand()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int32_t mana_code_set_opecode_and_operand </td>
+          <td class="memname">int32_t code_set_opecode_and_operand </td>
           <td>(</td>
-          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramtype">const uint8_t&#160;</td>
           <td class="paramname"><em>code</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramtype">const int32_t&#160;</td>
           <td class="paramname"><em>address</em>&#160;</td>
         </tr>
         <tr>
@@ -634,7 +559,7 @@ $(function() {
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p>オペコードとオペランドを命令セクションに設定 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">code</td><td>オペコード </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">address</td><td>オペランド </td></tr>
@@ -644,28 +569,28 @@ $(function() {
 
 </div>
 </div>
-<a id="ad5028ba8eb966ef0325789d14403c4a5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad5028ba8eb966ef0325789d14403c4a5">&sect;&nbsp;</a></span>mana_code_set_opecode_and_two_operands()</h2>
+<a id="a1d2254e319d04f4b3763a0559990909e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d2254e319d04f4b3763a0559990909e">&sect;&nbsp;</a></span>code_set_opecode_and_two_operands()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int32_t mana_code_set_opecode_and_two_operands </td>
+          <td class="memname">int32_t code_set_opecode_and_two_operands </td>
           <td>(</td>
-          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramtype">const uint8_t&#160;</td>
           <td class="paramname"><em>code</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramtype">const int32_t&#160;</td>
           <td class="paramname"><em>address</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramtype">const int32_t&#160;</td>
           <td class="paramname"><em>size</em>&#160;</td>
         </tr>
         <tr>
@@ -679,29 +604,29 @@ $(function() {
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">code</td><td>オペコード </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">address</td><td>第一オペランド </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>第二オペランド </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>第二オペランド オペコードと二つのオペランドを命令セクションに設定 </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="aab98e2bf163b7b6815a1897036d7dc2b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aab98e2bf163b7b6815a1897036d7dc2b">&sect;&nbsp;</a></span>mana_code_set_short()</h2>
+<a id="a5b5020d53062e91c385f0cd61bd63299"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5b5020d53062e91c385f0cd61bd63299">&sect;&nbsp;</a></span>code_set_short()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void mana_code_set_short </td>
+          <td class="memname">void code_set_short </td>
           <td>(</td>
-          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramtype">const int16_t&#160;</td>
           <td class="paramname"><em>value</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p>int16_t型数値を命令セクションに設定 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>値 </td></tr>
   </table>
@@ -710,22 +635,22 @@ $(function() {
 
 </div>
 </div>
-<a id="ab4ecd0554c59a952ad8a18b7713487fb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab4ecd0554c59a952ad8a18b7713487fb">&sect;&nbsp;</a></span>mana_code_set_unsigned_char()</h2>
+<a id="ac35bf66e15dd8871dd472ce934ee476f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac35bf66e15dd8871dd472ce934ee476f">&sect;&nbsp;</a></span>code_set_unsigned_char()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void mana_code_set_unsigned_char </td>
+          <td class="memname">void code_set_unsigned_char </td>
           <td>(</td>
-          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramtype">const uint8_t&#160;</td>
           <td class="paramname"><em>value</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p>uint8_t型数値を命令セクションに設定 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>値 </td></tr>
   </table>
@@ -734,22 +659,22 @@ $(function() {
 
 </div>
 </div>
-<a id="a2e1f2a830d6f7ace70364a7ea49abb87"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2e1f2a830d6f7ace70364a7ea49abb87">&sect;&nbsp;</a></span>mana_code_set_unsigned_integer()</h2>
+<a id="ab3c7ad45e8b0b09ac1cfe20d09dbd223"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab3c7ad45e8b0b09ac1cfe20d09dbd223">&sect;&nbsp;</a></span>code_set_unsigned_integer()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void mana_code_set_unsigned_integer </td>
+          <td class="memname">void code_set_unsigned_integer </td>
           <td>(</td>
-          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramtype">const uint32_t&#160;</td>
           <td class="paramname"><em>value</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p>uint32_t型数値を命令セクションに設定 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>値 </td></tr>
   </table>
@@ -758,22 +683,22 @@ $(function() {
 
 </div>
 </div>
-<a id="a711581938a18e6ebac2f2adb842f8fa7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a711581938a18e6ebac2f2adb842f8fa7">&sect;&nbsp;</a></span>mana_code_set_unsigned_short()</h2>
+<a id="a0118d181841ad5b7ba7bb9057cb6f27b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0118d181841ad5b7ba7bb9057cb6f27b">&sect;&nbsp;</a></span>code_set_unsigned_short()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void mana_code_set_unsigned_short </td>
+          <td class="memname">void code_set_unsigned_short </td>
           <td>(</td>
-          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramtype">const uint16_t&#160;</td>
           <td class="paramname"><em>value</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p>uint16_t型数値を命令セクションに設定 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>値 </td></tr>
   </table>
@@ -782,14 +707,14 @@ $(function() {
 
 </div>
 </div>
-<a id="a18806563796ab145aa49582f1960132d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a18806563796ab145aa49582f1960132d">&sect;&nbsp;</a></span>mana_code_write()</h2>
+<a id="a429332eacc203f0dfece594d3f59db13"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a429332eacc203f0dfece594d3f59db13">&sect;&nbsp;</a></span>code_write()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int32_t mana_code_write </td>
+          <td class="memname">bool code_write </td>
           <td>(</td>
           <td class="paramtype">mana_stream *&#160;</td>
           <td class="paramname"><em>stream</em></td><td>)</td>
@@ -797,7 +722,7 @@ $(function() {
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>引数</dt><dd>
+<p>命令セクションをファイルへ出力 </p><dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[out]</td><td class="paramname">file</td><td>ファイル識別子 </td></tr>
   </table>
@@ -816,7 +741,7 @@ $(function() {
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-2017年04月07日(金) 02時45分39秒作成 - mana / 構成:  &#160;<a href="http://www.doxygen.org/index.html">
+2017年04月22日(土) 01時27分00秒作成 - mana / 構成:  &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.12
 </small></address>

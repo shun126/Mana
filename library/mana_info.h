@@ -45,8 +45,8 @@ mana_file_header :: flag
 | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |
   |   |   |   |   |   |   |   |
   |   |   |   |   |   |   |   +---	MANA_HEADER_FLAG_RESOURCE
-  |   |   |   |   |   |   +-------	MANA_HEADER_FLAG_BIG_ENDIAN
-  |   |   |   |   |   +-----------
+  |   |   |   |   |   |   +-------	MANA_HEADER_FLAG_64BIT
+  |   |   |   |   |   +-----------  MANA_HEADER_FLAG_BIG_ENDIAN
   |   |   |   |   +---------------
   |   |   |   +-------------------
   |   |   +-----------------------
@@ -54,8 +54,9 @@ mana_file_header :: flag
   +-------------------------------	MANA_HEADER_FLAG_COMPILED
 */
 #define MANA_HEADER_FLAG_RESOURCE	0x01			/*!< フラグ：リソースセクションあり */
-#define MANA_HEADER_FLAG_BIG_ENDIAN	0x02			/*!< フラグ：ビックエンディアンでコンパイルされた */
-#define MANA_HEADER_FLAG_COMPILED	0x07			/*!< フラグ：コンパイル済み */
+#define MANA_HEADER_FLAG_64BIT		0x02			/*!< フラグ：64ビットでコンパイルされた */
+#define MANA_HEADER_FLAG_BIG_ENDIAN	0x04			/*!< フラグ：ビックエンディアンでコンパイルされた */
+#define MANA_HEADER_FLAG_COMPILED	0x80			/*!< フラグ：コンパイル済み */
 
 	uint32_t number_of_actors;					/*!< アクター数 */
 	uint32_t size_of_constant_pool;				/*!< 定数セクションサイズ */

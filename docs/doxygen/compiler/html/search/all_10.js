@@ -5,6 +5,7 @@ var searchData=
   ['symbol',['symbol',['../structnode__entry.html#a03f0f5408c817c255dec8990869c20b0',1,'node_entry']]],
   ['symbol_2ec',['symbol.c',['../symbol_8c.html',1,'']]],
   ['symbol_2eh',['symbol.h',['../symbol_8h.html',1,'']]],
+  ['symbol_5fbegin_5fregistration_5factor',['symbol_begin_registration_actor',['../symbol_8c.html#a1eeb656d7e986fc057852875f64b6266',1,'symbol_begin_registration_actor(symbol_entry *symbol):&#160;symbol.c'],['../symbol_8h.html#a1eeb656d7e986fc057852875f64b6266',1,'symbol_begin_registration_actor(symbol_entry *symbol):&#160;symbol.c']]],
   ['symbol_5fclass_5ftype_5falias',['SYMBOL_CLASS_TYPE_ALIAS',['../symbol_8h.html#ac966e6ff5ed0179227e454718bd65b43a2fdd28d8c1fe70333a57ee164e2ae38d',1,'symbol.h']]],
   ['symbol_5fclass_5ftype_5fconstant_5ffloat',['SYMBOL_CLASS_TYPE_CONSTANT_FLOAT',['../symbol_8h.html#ac966e6ff5ed0179227e454718bd65b43acaa9143aecd8edc253212b5213d9683d',1,'symbol.h']]],
   ['symbol_5fclass_5ftype_5fconstant_5fint',['SYMBOL_CLASS_TYPE_CONSTANT_INT',['../symbol_8h.html#ac966e6ff5ed0179227e454718bd65b43a439c0796b6855877139ef0a833f65f0e',1,'symbol.h']]],
@@ -21,6 +22,7 @@ var searchData=
   ['symbol_5fclass_5ftype_5fvariable_5fglobal',['SYMBOL_CLASS_TYPE_VARIABLE_GLOBAL',['../symbol_8h.html#ac966e6ff5ed0179227e454718bd65b43a3a74bc5479d7784e2deb8c243edc2409',1,'symbol.h']]],
   ['symbol_5fclass_5ftype_5fvariable_5flocal',['SYMBOL_CLASS_TYPE_VARIABLE_LOCAL',['../symbol_8h.html#ac966e6ff5ed0179227e454718bd65b43a5de4228d5583ce99113add5186ad5f54',1,'symbol.h']]],
   ['symbol_5fclass_5ftype_5fvariable_5fstatic',['SYMBOL_CLASS_TYPE_VARIABLE_STATIC',['../symbol_8h.html#ac966e6ff5ed0179227e454718bd65b43ac5296bd4af019e8967cc589b9ca99855',1,'symbol.h']]],
+  ['symbol_5fcommit_5fregistration_5factor',['symbol_commit_registration_actor',['../symbol_8c.html#a8e0eecb05d4391c026b9254b662482f2',1,'symbol_commit_registration_actor(const char *name, const char *parent, type_description *td, const bool phantom):&#160;symbol.c'],['../symbol_8h.html#a8e0eecb05d4391c026b9254b662482f2',1,'symbol_commit_registration_actor(const char *name, const char *parent, type_description *td, const bool phantom):&#160;symbol.c']]],
   ['symbol_5fdata_5ftype_5factor',['SYMBOL_DATA_TYPE_ACTOR',['../symbol_8h.html#a93c82f06f70c771733269b303a70a498a97ec0b5d2a8ca92db066edbbd03d0d74',1,'symbol.h']]],
   ['symbol_5fdata_5ftype_5farray',['SYMBOL_DATA_TYPE_ARRAY',['../symbol_8h.html#a93c82f06f70c771733269b303a70a498a3438233bd412029d7dbaf4c5bdd785d4',1,'symbol.h']]],
   ['symbol_5fdata_5ftype_5fchar',['SYMBOL_DATA_TYPE_CHAR',['../symbol_8h.html#a93c82f06f70c771733269b303a70a498ad8d039130102b36164b985bdd3de6897',1,'symbol.h']]],
@@ -36,5 +38,8 @@ var searchData=
   ['symbol_5fdata_5ftype_5fstruct',['SYMBOL_DATA_TYPE_STRUCT',['../symbol_8h.html#a93c82f06f70c771733269b303a70a498add2154190b8d132bdc75c963ee0a0f22',1,'symbol.h']]],
   ['symbol_5fdata_5ftype_5fvoid',['SYMBOL_DATA_TYPE_VOID',['../symbol_8h.html#a93c82f06f70c771733269b303a70a498a605078ee72bced569a00d8f9f33afed3',1,'symbol.h']]],
   ['symbol_5fentry',['symbol_entry',['../structsymbol__entry.html',1,'']]],
-  ['symbol_5fmemory_5ftype_5fid',['symbol_memory_type_id',['../symbol_8h.html#a94bf374ff27fbbee3730e27bf67f0b91',1,'symbol.h']]]
+  ['symbol_5fframe_5fsize_5flist',['symbol_frame_size_list',['../symbol_8c.html#a5e68fdd96a6098cee10fb8d3fd082e85',1,'symbol_frame_size_list():&#160;symbol.c'],['../symbol_8h.html#a5e68fdd96a6098cee10fb8d3fd082e85',1,'symbol_frame_size_list():&#160;symbol.c']]],
+  ['symbol_5fmemory_5ftype_5fid',['symbol_memory_type_id',['../symbol_8h.html#a94bf374ff27fbbee3730e27bf67f0b91',1,'symbol.h']]],
+  ['symbol_5fopen_5factor',['symbol_open_actor',['../symbol_8c.html#ac4bccd3dcf10703187881e57e6385d88',1,'symbol_open_actor(const char *name):&#160;symbol.c'],['../symbol_8h.html#ac4bccd3dcf10703187881e57e6385d88',1,'symbol_open_actor(const char *name):&#160;symbol.c']]],
+  ['symbol_5freturn_5faddress_5flist',['symbol_return_address_list',['../symbol_8c.html#a96ae1099578eb807a35fe7268cede0de',1,'symbol_return_address_list():&#160;symbol.c'],['../symbol_8h.html#a96ae1099578eb807a35fe7268cede0de',1,'symbol_return_address_list():&#160;symbol.c']]]
 ];

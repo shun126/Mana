@@ -1,15 +1,15 @@
 /*!
- * mana (library)
- *
- * @file	mana_stack.c
- * @brief	mana_stackクラスに関するソースファイル
- * @detail
- * このファイルはmana_stackクラスに関係するソースファイルです。
- * mana_stackクラスはmana_actorクラスのスタック操作を行ないます。
- *
- * @author	Shun Moriya
- * @date	2003-
- */
+mana (library)
+
+@file	mana_stack.c
+@brief	mana_stackクラスに関するソースファイル
+@detail
+このファイルはmana_stackクラスに関係するソースファイルです。
+mana_stackクラスはmana_actorクラスのスタック操作を行ないます。
+
+@author	Shun Moriya
+@date	2003-
+*/
 
 #if !defined(___MANA_MALLOC_H___)
 #include "mana_malloc.h"
@@ -20,30 +20,26 @@
 #include <assert.h>
 #include <string.h>
 
+// メモリ確保時のページサイズ
+#define MANA_STACK_ALLOCATE_PAGE_SIZE (8)
+
 #define MANA_STACK_ALLOCATE_BEGIN(s) {																						\
-	size_t allocate_size = self->used_size + (s / sizeof(self->buffer));													\
-	assert(s % sizeof(self->buffer) == 0);																					\
+	size_t allocate_size = self->used_size + ((s + sizeof(self->buffer) - 1) / sizeof(self->buffer));						\
 	if(allocate_size >= self->allocated_size){																				\
-		self->allocated_size = allocate_size + 32;																			\
+		self->allocated_size = allocate_size + MANA_STACK_ALLOCATE_PAGE_SIZE;												\
 		self->buffer.void_pointer = mana_realloc(self->buffer.void_pointer, self->allocated_size * sizeof(self->buffer));	\
 	}
 
 #define MANA_STACK_ALLOCATE_END(s)																							\
-	self->used_size += (s / sizeof(self->buffer));																			\
-	assert(s % sizeof(self->buffer) == 0);																					\
+	self->used_size += ((s + sizeof(self->buffer) - 1) / sizeof(self->buffer));												\
 	assert(self->used_size < self->allocated_size);																			\
 }
 
 #define MANA_STACK_RELEASE(s) {																								\
-	self->used_size -= (s / sizeof(self->buffer));																			\
-	assert(s % sizeof(self->buffer) == 0);																					\
+	self->used_size -= ((s + sizeof(self->buffer) - 1) / sizeof(self->buffer));												\
 	assert(self->used_size < self->allocated_size);																			\
 }
 
-/*!
- * @return	mana_stack オブジェクト
- * @warning	void mana_stack_initialize(mana_stack* self)を呼ぶ必要はありません。
- */
 mana_stack* mana_stack_create(void)
 {
 	mana_stack* self = mana_malloc(sizeof(mana_stack));
@@ -51,11 +47,6 @@ mana_stack* mana_stack_create(void)
 	return self;
 }
 
-/*!
- * @param[in]	size	確保サイズ
- * @return		mana_stack オブジェクト
- * @warning		void mana_stack_initialize_with_size(mana_stack* self, size_t size)を呼ぶ必要はありません。
- */
 mana_stack* mana_stack_create_with_size(const size_t size)
 {
 	mana_stack* self = mana_malloc(sizeof(mana_stack));
@@ -63,10 +54,6 @@ mana_stack* mana_stack_create_with_size(const size_t size)
 	return self;
 }
 
-/*!
- * @param[in]	self	mana_stack オブジェクト
- * @warning		void mana_stack_finalize(mana_stack* self)を呼ぶ必要はありません。
- */
 void mana_stack_destroy(mana_stack* self)
 {
 	if(self)
@@ -76,39 +63,29 @@ void mana_stack_destroy(mana_stack* self)
 	}
 }
 
-/*!
- * @param[in]	self	mana_stack オブジェクト
- */
 void mana_stack_initialize(mana_stack* self)
 {
 	assert(self);
-	assert(sizeof(int32_t) == sizeof(void*));
-	assert(sizeof(float) == sizeof(void*));
-	assert(sizeof(char*) == sizeof(void*));
+	//assert(sizeof(int32_t) == sizeof(void*));
+	//assert(sizeof(float) == sizeof(void*));
+	//assert(sizeof(char*) == sizeof(void*));
 
 	self->allocated_size = self->used_size = 0;
 	self->buffer.void_pointer = NULL;
 }
 
-/*!
- * @param[in]	self	mana_stack オブジェクト
- * @param[in]	size	確保サイズ
- */
 void mana_stack_initialize_with_size(mana_stack* self, const size_t size)
 {
 	assert(self);
-	assert(sizeof(int32_t) == sizeof(void*));
-	assert(sizeof(float) == sizeof(void*));
-	assert(sizeof(char*) == sizeof(void*));
+	//assert(sizeof(int32_t) == sizeof(void*));
+	//assert(sizeof(float) == sizeof(void*));
+	//assert(sizeof(char*) == sizeof(void*));
 
 	self->allocated_size = size;
 	self->used_size = 0;
 	self->buffer.void_pointer = mana_malloc(size);
 }
 
-/*!
- * @param[in]	self	mana_stack オブジェクト
- */
 void mana_stack_finalize(mana_stack* self)
 {
 	assert(self);
@@ -117,36 +94,25 @@ void mana_stack_finalize(mana_stack* self)
 	self->buffer.void_pointer = NULL;
 }
 
-/*!
- * @param[in]	self	mana_stack オブジェクト
- * @param[out]	stream	mana_stream オブジェクト
- */
 void mana_stack_serialize(const mana_stack* self, mana_stream* stream)
 {
 	assert(self && stream);
 
-	mana_stream_push_integer(stream, self->used_size);
+	mana_stream_push_size(stream, self->used_size);
 	mana_stream_push_data(stream, self->buffer.void_pointer, self->used_size);
 }
 
-/*!
- * @param[in]	self	mana_stack オブジェクト
- * @param[in]	stream	mana_stream オブジェクト
- */
 void mana_stack_deserialize(mana_stack* self, mana_stream* stream)
 {
 	assert(self && stream);
 
-	self->used_size = (size_t)mana_stream_pop_integer(stream);
+	self->used_size = mana_stream_pop_size(stream);
 	self->allocated_size = self->used_size + 1;
 	self->buffer.void_pointer = mana_realloc(self->buffer.void_pointer, self->allocated_size);
 
 	mana_stream_pop_data(stream, self->buffer.void_pointer, self->used_size);
 }
 
-/*!
- * @param[in]	self	mana_stack オブジェクト
- */
 void mana_stack_clear(mana_stack* self)
 {
 	if(self)
@@ -155,18 +121,11 @@ void mana_stack_clear(mana_stack* self)
 	}
 }
 
-/*!
- * @param[in]	self	mana_stack オブジェクト
- */
 void mana_stack_duplicate(mana_stack* self)
 {
 	mana_stack_push_pointer(self, mana_stack_get_pointer(self, 0));
 }
 
-/*!
- * @param[in]	self	mana_stack オブジェクト
- * @param[in]	size	削除するサイズ
- */
 void mana_stack_remove(mana_stack* self, const size_t size)
 {
 	if(self)
@@ -176,10 +135,6 @@ void mana_stack_remove(mana_stack* self, const size_t size)
 	}
 }
 
-/*!
- * @param[in]	self	mana_stack オブジェクト
- * @param[in]	value	プッシュする値
- */
 void mana_stack_push_integer(mana_stack* self, const int32_t value)
 {
 	if(self)
@@ -190,10 +145,6 @@ void mana_stack_push_integer(mana_stack* self, const int32_t value)
 	}
 }
 
-/*!
- * @param[in]	self	mana_stack オブジェクト
- * @param[in]	value	プッシュする値
- */
 void mana_stack_push_real(mana_stack* self, const float value)
 {
 	if(self)
@@ -204,10 +155,6 @@ void mana_stack_push_real(mana_stack* self, const float value)
 	}
 }
 
-/*!
- * @param[in]	self	mana_stack オブジェクト
- * @param[in]	string	プッシュする文字列
- */
 void mana_stack_push_string(mana_stack* self, const char* string)
 {
 	if(self)
@@ -218,10 +165,6 @@ void mana_stack_push_string(mana_stack* self, const char* string)
 	}
 }
 
-/*!
- * @param[in]	self	mana_stack オブジェクト
- * @param[in]	pointer	プッシュする値
- */
 void mana_stack_push_pointer(mana_stack* self, void* pointer)
 {
 	if(self)
@@ -232,11 +175,6 @@ void mana_stack_push_pointer(mana_stack* self, void* pointer)
 	}
 }
 
-/*!
- * @param[in]	self	mana_stack オブジェクト
- * @param[in]	buffer	プッシュするデータの先頭アドレス
- * @param[in]	size	プッシュするデータのサイズ
- */
 void mana_stack_push_data(mana_stack* self, const void* buffer, const size_t size)
 {
 	if(self)
@@ -247,10 +185,6 @@ void mana_stack_push_data(mana_stack* self, const void* buffer, const size_t siz
 	}
 }
 
-/*!
- * @param[in]	self	mana_stack オブジェクト
- * @return		ポップした値
- */
 int32_t mana_stack_pop_integer(mana_stack* self)
 {
 	if(self)
@@ -264,10 +198,6 @@ int32_t mana_stack_pop_integer(mana_stack* self)
 	}
 }
 
-/*!
- * @param[in]	self	mana_stack オブジェクト
- * @return		ポップした値
- */
 float mana_stack_pop_real(mana_stack* self)
 {
 	if(self)
@@ -281,10 +211,6 @@ float mana_stack_pop_real(mana_stack* self)
 	}
 }
 
-/*!
- * @param[in]	self	mana_stack オブジェクト
- * @return		ポップした値
- */
 const char* mana_stack_pop_string(mana_stack* self)
 {
 	if(self)
@@ -298,13 +224,6 @@ const char* mana_stack_pop_string(mana_stack* self)
 	}
 }
 
-/*!
- * スタックに格納されたポインタをポップします。
- * void* mana_stack_pop_address(mana_stack* self)
- * はスタックのアドレスをポップする点が違います。
- * @param[in]	self	mana_stack オブジェクト
- * @return		ポップした値
- */
 void* mana_stack_pop_pointer(mana_stack* self)
 {
 	if(self)
@@ -318,13 +237,6 @@ void* mana_stack_pop_pointer(mana_stack* self)
 	}
 }
 
-/*!
- * スタックのアドレスをポップします。
- * void* mana_stack_pop_pointer(mana_stack* self)
- * はスタックに格納されたポインタをポップする点が違います。
- * @param[in]	self	mana_stack オブジェクト
- * @return		ポップした値
- */
 void* mana_stack_pop_address(mana_stack* self)
 {
 	if(self)
@@ -338,11 +250,6 @@ void* mana_stack_pop_address(mana_stack* self)
 	}
 }
 
-/*!
- * @param[in]	self	mana_stack オブジェクト
- * @param[out]	buffer	ポップしたデータの先頭アドレス
- * @param[out]	size	ポップしたデータのサイズ
- */
 void mana_stack_pop_data(mana_stack* self, void* buffer, const size_t size)
 {
 	if(self)
@@ -352,11 +259,6 @@ void mana_stack_pop_data(mana_stack* self, void* buffer, const size_t size)
 	}
 }
 
-/*!
- * @param[in]	self	mana_stack オブジェクト
- * @param[in]	index	スタックポインタへのオフセット値
- * @return		値
- */
 int32_t mana_stack_get_integer(const mana_stack* self, const size_t index)
 {
 	if(self)
@@ -371,11 +273,6 @@ int32_t mana_stack_get_integer(const mana_stack* self, const size_t index)
 	}
 }
 
-/*!
- * @param[in]	self	mana_stack オブジェクト
- * @param[in]	index	スタックポインタへのオフセット値
- * @return		値
- */
 float mana_stack_get_real(const mana_stack* self, const size_t index)
 {
 	if(self)
@@ -390,11 +287,6 @@ float mana_stack_get_real(const mana_stack* self, const size_t index)
 	}
 }
 
-/*!
- * @param[in]	self	mana_stack オブジェクト
- * @param[in]	index	スタックポインタへのオフセット値
- * @return		文字列
- */
 const char* mana_stack_get_string(const mana_stack* self, const size_t index)
 {
 	if(self)
@@ -409,14 +301,6 @@ const char* mana_stack_get_string(const mana_stack* self, const size_t index)
 	}
 }
 
-/*!
- * スタックに格納されたポインタを取得します。
- * void* mana_stack_get_address(mana_stack* self, size_t index)
- * はスタックのアドレスを取得する点が違います。
- * @param[in]	self	mana_stack オブジェクト
- * @param[in]	index	スタックポインタへのオフセット値
- * @return		値
- */
 void* mana_stack_get_pointer(const mana_stack* self, const size_t index)
 {
 	if(self)
@@ -431,14 +315,6 @@ void* mana_stack_get_pointer(const mana_stack* self, const size_t index)
 	}
 }
 
-/*!
- * スタックのアドレスを取得します。
- * void* mana_stack_get_pointer(mana_stack* self, size_t index)
- * はスタックに格納されたポインタを取得する点が違います。
- * @param[in]	self	mana_stack オブジェクト
- * @param[in]	index	スタックポインタへのオフセット値
- * @return		アドレス
- */
 void* mana_stack_get_address(const mana_stack* self, const size_t index)
 {
 	if(self)
@@ -453,11 +329,6 @@ void* mana_stack_get_address(const mana_stack* self, const size_t index)
 	}
 }
 
-/*!
- * @param[in]	self	mana_stack オブジェクト
- * @param[in]	index	スタックポインタへのオフセット値
- * @param[in]	integer	値
- */
 void mana_stack_set_integer(mana_stack* self, const size_t index, const int32_t integer)
 {
 	if(self)
@@ -468,11 +339,6 @@ void mana_stack_set_integer(mana_stack* self, const size_t index, const int32_t 
 	}
 }
 
-/*!
- * @param[in]	self	mana_stack オブジェクト
- * @param[in]	index	スタックポインタへのオフセット値
- * @param[in]	real	値
- */
 void mana_stack_set_real(mana_stack* self, const size_t index, const float real)
 {
 	if(self)
@@ -483,11 +349,6 @@ void mana_stack_set_real(mana_stack* self, const size_t index, const float real)
 	}
 }
 
-/*!
- * @param[in]	self	mana_stack オブジェクト
- * @param[in]	index	スタックポインタへのオフセット値
- * @param[in]	string	文字列
- */
 void mana_stack_set_string(mana_stack* self, const size_t index, const char* string)
 {
 	if(self)
@@ -498,11 +359,6 @@ void mana_stack_set_string(mana_stack* self, const size_t index, const char* str
 	}
 }
 
-/*!
- * @param[in]	self	mana_stack オブジェクト
- * @param[in]	index	スタックポインタへのオフセット値
- * @param[in]	pointer	ポインタ
- */
 void mana_stack_set_pointer(mana_stack* self, const size_t index, void* pointer)
 {
 	if(self)
@@ -513,19 +369,11 @@ void mana_stack_set_pointer(mana_stack* self, const size_t index, void* pointer)
 	}
 }
 
-/*!
- * @param[in]	self	mana_stack オブジェクト
- * @return		スタックのサイズ/スタックポインタ
- */
 size_t mana_stack_get_size(const mana_stack* self)
 {
 	return self ? self->used_size : 0;
 }
 
-/*!
- * @param[in]	self	mana_stack オブジェクト
- * @param[in]	size	スタックのサイズ/スタックポインタ
- */
 void mana_stack_set_size(mana_stack* self, const size_t size)
 {
 	if(self)
@@ -534,12 +382,6 @@ void mana_stack_set_size(mana_stack* self, const size_t size)
 	}
 }
 
-/*!
- * @param[in]	self	mana_frame オブジェクト
- * @param[in]	other	mana_frame オブジェクト
- * @retval		== 0	同一の内容
- * @retval		!= 0	異なる内容
- */
 int32_t mana_stack_compare(const mana_stack* self, const mana_stack* other)
 {
 	if(self == NULL)
