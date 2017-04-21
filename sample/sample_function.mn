@@ -7,7 +7,15 @@ native int nativeFunction(int a0, float a1);
 
 int callTest(char a, short b, int c, float d)
 {
-	return callTest(a, b, c, d);
+	if(a < 5)
+	{
+		print("%d %d %d %f\n", a, b, c, d);
+		return callTest(a + 1, b, c, d);
+	}
+	else
+	{
+		return 0;
+	}
 }
 
 void assignmentTest(float value)

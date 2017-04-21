@@ -227,15 +227,14 @@ static void generator_return(symbol_entry* func, node_entry* tree)
 		mana_type_compatible(type, tree->left->type);
 
 		/* ƒm[ƒh‚Ì•]‰¿ */
-		const int32_t in_depth = mana_symbol_open_block(false);
+		const int32_t in_depth = symbol_open_block(false);
 		generator_genearte_code(tree->left, true);
-		const int32_t out_depth = mana_symbol_close_block();
+		const int32_t out_depth = symbol_close_block();
 		MANA_VERIFY_MESSAGE(in_depth == out_depth, "ƒuƒƒbƒN‚Ì[‚³‚ªˆê’v‚µ‚Ü‚¹‚ñ in:%d out:%d", in_depth, out_depth);
 	}
 
 	/* ŠÖ”‚ÌÅŒã‚ÉƒWƒƒƒ“ƒv */
-	mana_symbol_return_address_list = code_set_opecode_and_operand(
-		MANA_IL_BRA, mana_symbol_return_address_list);
+	symbol_return_address_list = code_set_opecode_and_operand(MANA_IL_BRA, symbol_return_address_list);
 
 	/* ŠÖ”‚ðŽg—p‚µ‚½ƒtƒ‰ƒO‚ð—§‚Ä‚é */
 	func->used = true;
@@ -250,9 +249,9 @@ static void generator_rollback(node_entry* tree)
 	if (tree)
 	{
 		/* ƒm[ƒh‚Ì•]‰¿ */
-		const int32_t in_depth = mana_symbol_open_block(false);
+		const int32_t in_depth = symbol_open_block(false);
 		generator_genearte_code(tree, true);
-		const int32_t out_depth = mana_symbol_close_block();
+		const int32_t out_depth = symbol_close_block();
 		MANA_VERIFY_MESSAGE(in_depth == out_depth, "ƒuƒƒbƒN‚Ì[‚³‚ªˆê’v‚µ‚Ü‚¹‚ñ in:%d out:%d", in_depth, out_depth);
 	}
 	code_set_opecode(MANA_IL_ROLLBACK);
@@ -450,9 +449,9 @@ static int32_t generator_condition(node_entry* tree, int32_t match)
 	//generator_automatic_cast(tree);
 
 	/* ”»•ÊŽ®‚Ì•]‰¿ */
-	const int32_t in_depth = mana_symbol_open_block(false);
+	const int32_t in_depth = symbol_open_block(false);
 	generator_condition_core(tree);
-	const int32_t out_depth = mana_symbol_close_block();
+	const int32_t out_depth = symbol_close_block();
 	MANA_VERIFY_MESSAGE(in_depth == out_depth, "ƒuƒƒbƒN‚Ì[‚³‚ªˆê’v‚µ‚Ü‚¹‚ñ in:%d out:%d", in_depth, out_depth);
 
 	return code_set_opecode_and_operand(match ? MANA_IL_BEQ : MANA_IL_BNE, -1);
@@ -537,7 +536,7 @@ void generator_expression(node_entry* tree, int32_t enable_assign)
 
 	//generator_resolve_symbol(tree);
 
-	const int32_t in_depth = mana_symbol_open_block(false);
+	const int32_t in_depth = symbol_open_block(false);
 
 	if (enable_assign)
 	{
@@ -576,7 +575,7 @@ void generator_expression(node_entry* tree, int32_t enable_assign)
 		}
 	}
 
-	const int32_t out_depth = mana_symbol_close_block();
+	const int32_t out_depth = symbol_close_block();
 	MANA_VERIFY_MESSAGE(in_depth == out_depth, "ƒuƒƒbƒN‚Ì[‚³‚ªˆê’v‚µ‚Ü‚¹‚ñ in:%d out:%d", in_depth, out_depth);
 }
 
@@ -630,10 +629,10 @@ DO_RECURSIVE:
 		// \‘¢‚ÉŠÖ‚·‚éƒm[ƒh									
 	case NODE_DECLARE_ACTOR:
 		{
-			mana_actor_symbol_entry_pointer = mana_symbol_lookup(self->string);
-			mana_symbol_open_actor(self->string);
+			mana_actor_symbol_entry_pointer = symbol_lookup(self->string);
+			symbol_open_actor(self->string);
 			generator_genearte_code(self->left, enable_load);
-			mana_symbol_close_actor();
+			symbol_close_actor();
 			mana_actor_symbol_entry_pointer = NULL;
 		}
 		MANA_ASSERT(self->right == NULL);
@@ -648,10 +647,10 @@ DO_RECURSIVE:
 
 	case NODE_DECLARE_MODULE:
 		{
-			mana_actor_symbol_entry_pointer = mana_symbol_lookup(self->string);
-			mana_symbol_open_module(mana_actor_symbol_entry_pointer);
+			mana_actor_symbol_entry_pointer = symbol_lookup(self->string);
+			symbol_open_module(mana_actor_symbol_entry_pointer);
 			generator_genearte_code(self->left, enable_load);
-			mana_symbol_close_module(self->string);
+			symbol_close_module(self->string);
 			mana_actor_symbol_entry_pointer = NULL;
 		}
 		MANA_ASSERT(self->right == NULL);
@@ -660,10 +659,10 @@ DO_RECURSIVE:
 
 	case NODE_DECLARE_PHANTOM:
 		{
-			mana_actor_symbol_entry_pointer = mana_symbol_lookup(self->string);
-			mana_symbol_open_actor(self->string);
+			mana_actor_symbol_entry_pointer = symbol_lookup(self->string);
+			symbol_open_actor(self->string);
 			generator_genearte_code(self->left, enable_load);
-			mana_symbol_close_actor();
+			symbol_close_actor();
 			mana_actor_symbol_entry_pointer = NULL;
 		}
 		MANA_ASSERT(self->right == NULL);
@@ -682,12 +681,12 @@ DO_RECURSIVE:
 	case NODE_DECLARE_ACTION:
 		{
 			self->type = mana_type_get(SYMBOL_DATA_TYPE_VOID);
-			mana_function_symbol_entry_pointer = mana_symbol_lookup(self->string);
-			mana_symbol_open_function(self, true);
-		
-			generator_genearte_code(self->left, enable_load);
-			
-			mana_symbol_close_function(self, true);
+			mana_function_symbol_entry_pointer = symbol_lookup(self->string);
+			{
+				symbol_open_function(self, true);
+				generator_genearte_code(self->left, enable_load);
+				symbol_close_function(self, true);
+			}
 			mana_function_symbol_entry_pointer = NULL;
 		}
 		MANA_ASSERT(self->right == NULL);
@@ -705,20 +704,23 @@ DO_RECURSIVE:
 			// ŠÖ”‚Ì–ß‚è’l‚ð•]‰¿
 			generator_genearte_code(self->left, enable_load);
 			// ƒVƒ“ƒ{ƒ‹‚ÌŒŸõ‚ÆŒ^‚Ì’è‹`
-			self->symbol = mana_function_symbol_entry_pointer = mana_symbol_lookup(self->string);
+			self->symbol = mana_function_symbol_entry_pointer = symbol_lookup(self->string);
 
-			mana_symbol_open_block(false);
+			// ˆø”‚Ìˆ×‚ÉƒXƒR[ƒv‚ð•ª‚¯‚é
+			symbol_open_block(false);
+			{
+				// ˆø”‚ð“o˜^
+				symbol_open_function(self, false);
 
-			// ŠÖ”‚Ìˆø”‚ð“o˜^
-			mana_symbol_open_function(self, false);
+				mana_pre_resolver_resolve(self->right);
+				self->symbol->parameter_list = symbol_get_head_symbol();
 
-			mana_pre_resolver_resolve(self->right);
-			self->symbol->parameter_list = mana_symbol_get_head_symbol();
+				symbol_open_function2(self->symbol);
 
-			generator_genearte_code(self->body, enable_load);
-			mana_symbol_close_function(self, false);
-
-			mana_symbol_close_block();
+				generator_genearte_code(self->body, enable_load);
+				symbol_close_function(self, false);
+			}
+			symbol_close_block();
 
 			mana_function_symbol_entry_pointer = NULL;
 		}
@@ -739,7 +741,7 @@ DO_RECURSIVE:
 		break;
 
 	case NODE_DECLARE_VARIABLE:
-		//mana_symbol_allocate_memory(self->right->symbol, self->left->type, MEMORY_TYPE_NORMAL);
+		//symbol_allocate_memory(self->right->symbol, self->left->type, MEMORY_TYPE_NORMAL);
 		// self->left
 		// self->right
 		MANA_ASSERT(self->body == NULL);
@@ -748,7 +750,7 @@ DO_RECURSIVE:
 		generator_genearte_code(self->left, enable_load); // NODE_TYPE_DESCRIPTION
 		generator_genearte_code(self->right, enable_load);// NODE_DECLARATOR
 		if(self->right->symbol->class_type == SYMBOL_CLASS_TYPE_VARIABLE_LOCAL)
-		mana_symbol_allocate_memory(self->right->symbol, self->left->type, MEMORY_TYPE_NORMAL);
+		symbol_allocate_memory(self->right->symbol, self->left->type, MEMORY_TYPE_NORMAL);
 		*/
 		break;
 
@@ -769,7 +771,7 @@ DO_RECURSIVE:
 		// ƒuƒƒbƒN‚ð”º‚¤§Œä‚ÉŠÖ‚·‚éƒm[ƒh
 	case NODE_BLOCK:
 		{
-			const int32_t in_depth = mana_symbol_open_block(false);
+			const int32_t in_depth = symbol_open_block(false);
 
 			mana_post_resolver_resolve(self->left);
 			generator_genearte_code(self->left, enable_load);
@@ -777,7 +779,7 @@ DO_RECURSIVE:
 			mana_post_resolver_resolve(self->right);
 			generator_genearte_code(self->right, enable_load);
 
-			const int32_t out_depth = mana_symbol_close_block();
+			const int32_t out_depth = symbol_close_block();
 			MANA_VERIFY_MESSAGE(in_depth == out_depth, "ƒuƒƒbƒN‚Ì[‚³‚ªˆê’v‚µ‚Ü‚¹‚ñ in:%d out:%d", in_depth, out_depth);
 		}
 		MANA_ASSERT(self->body == NULL);
@@ -826,7 +828,7 @@ DO_RECURSIVE:
 	case NODE_FOR:
 		/* 'for(type variable = expression' ‚ÌŒ`Ž® */
 		{
-			//mana_symbol_allocate_memory($2, $1, MEMORY_TYPE_NORMAL);
+			//symbol_allocate_memory($2, $1, MEMORY_TYPE_NORMAL);
 			//generator_expression(mana_node_create_node(NODE_TYPE_ASSIGN, mana_node_create_leaf($2->name), $4), true);
 			mana_jump_open_chain(MANA_JUMP_CHAIN_STATE_FOR);
 			//$$ = code_get_pc();
@@ -848,7 +850,7 @@ DO_RECURSIVE:
 		MANA_ASSERT(self->right == NULL);
 		MANA_ASSERT(self->body == NULL);
 		{
-			symbol_entry* symbol = mana_symbol_create_label(self->string);
+			symbol_entry* symbol = symbol_create_label(self->string);
 			symbol->etc = code_set_opecode_and_operand(MANA_IL_BRA, symbol->etc);
 		}
 		break;
@@ -880,7 +882,7 @@ DO_RECURSIVE:
 		MANA_ASSERT(self->right == NULL);
 		MANA_ASSERT(self->body == NULL);
 		{
-			symbol_entry* symbol = mana_symbol_create_label(self->string);
+			symbol_entry* symbol = symbol_create_label(self->string);
 			symbol->address = code_get_pc();
 		}
 		break;
@@ -964,7 +966,7 @@ DO_RECURSIVE:
 
 	case NODE_JOIN:
 		//generator_resolve_symbol(self);
-		mana_symbol_add_join(self->left, self->right);
+		symbol_add_join(self->left, self->right);
 		MANA_ASSERT(self->body == NULL);
 		break;
 
@@ -982,7 +984,7 @@ DO_RECURSIVE:
 		break;
 
 	case NODE_REQUEST:
-		mana_symbol_add_request(MANA_IL_REQ, self->left, self->right, self->string);
+		symbol_add_request(MANA_IL_REQ, self->left, self->right, self->string);
 		MANA_ASSERT(self->body == NULL);
 		break;
 

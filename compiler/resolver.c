@@ -34,7 +34,7 @@ void mana_resolver_search_symbol_from_name(node_entry* self)
 
 	if (self->symbol == NULL)
 	{
-		self->symbol = mana_symbol_lookup(self->string);
+		self->symbol = symbol_lookup(self->string);
 		if (self->symbol)
 		{
 			if (self->type == NULL)
@@ -54,7 +54,7 @@ void mana_resolver_resolve_type_description(node_entry* self)
 
 	if (self->type == NULL)
 	{
-		self->symbol = mana_symbol_lookup(self->string);
+		self->symbol = symbol_lookup(self->string);
 		if (self->symbol)
 		{
 			self->type = self->symbol->type;
@@ -78,7 +78,7 @@ void mana_resolver_resolve_declarator(node_entry* self, const bool static_variab
 	if (self->left && self->left->id == NODE_VARIABLE_SIZE)
 		type = mana_resolver_resolve_variable_size(self->left);
 
-	self->symbol = mana_symbol_create_variable(self->string, type, static_variable);
+	self->symbol = symbol_create_variable(self->string, type, static_variable);
 }
 
 type_description* mana_resolver_resolve_variable_size(node_entry* self)
@@ -91,7 +91,7 @@ type_description* mana_resolver_resolve_variable_size(node_entry* self)
 
 	if (self->string)
 	{
-		symbol_entry* symbol = mana_symbol_lookup(self->string);
+		symbol_entry* symbol = symbol_lookup(self->string);
 		if (symbol)
 		{
 			if (symbol->class_type == SYMBOL_CLASS_TYPE_CONSTANT_INT)
@@ -134,8 +134,8 @@ void mana_resolver_resolve_variable_description(node_entry* self, const symbol_m
 	mana_resolver_resolve_declarator(self->right, static_variable);	// NODE_DECLARATOR
 
 	//if (self->right->symbol->class_type == SYMBOL_CLASS_TYPE_VARIABLE_LOCAL)
-	mana_symbol_allocate_memory(self->right->symbol, self->left->type, memory_type_id);
-	//mana_symbol_allocate_memory(self->right->symbol, self->left->type, MEMORY_TYPE_PARAMETER);
+	symbol_allocate_memory(self->right->symbol, self->left->type, memory_type_id);
+	//symbol_allocate_memory(self->right->symbol, self->left->type, MEMORY_TYPE_PARAMETER);
 }
 
 void mana_resolver_resolve_type_from_child_node(node_entry* self)

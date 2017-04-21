@@ -8,6 +8,7 @@ actor TestActor1
 	action init
 	{
 		print("TestActor1::init\n");
+		callTest(1, 2, 3, 4.0);
 	}
 
 	action main
