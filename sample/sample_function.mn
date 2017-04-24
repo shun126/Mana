@@ -7,6 +7,7 @@ native int nativeFunction(int a0, float a1);
 
 int callTest(char a, short b, int c, float d)
 {
+hoge();
 	if(a < 5)
 	{
 		print("%d %d %d %f\n", a, b, c, d);
