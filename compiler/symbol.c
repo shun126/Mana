@@ -280,7 +280,7 @@ symbol_entry* symbol_lookup_or_create_dummy(const char* name)
 		mana_compile_error("reference to undeclared identifier '%s'", name);
 
 		symbol = symbol_create_entry(name, SYMBOL_CLASS_TYPE_VARIABLE_LOCAL, 0);
-		symbol->type = mana_type_get(SYMBOL_DATA_TYPE_INT);
+		symbol->type = type_get(SYMBOL_DATA_TYPE_INT);
 	}
 	return symbol;
 }
@@ -343,11 +343,11 @@ symbol_entry* symbol_create_alias(const char* name, const char* filename)
 		mana_compile_error("duplicated declaration '%s'", name);
 
 	symbol = symbol_create_entry(name, SYMBOL_CLASS_TYPE_ALIAS, -1);
-	symbol->type = mana_type_get(SYMBOL_DATA_TYPE_INT);
+	symbol->type = type_get(SYMBOL_DATA_TYPE_INT);
 
 	if(_fullpath(path, filename, sizeof(path)))
 	{
-		symbol->string = mana_pool_set(path);
+		symbol->string = pool_set(path);
 	}else{
 		mana_compile_error("unable to open \"%s\"", filename);
 		symbol->string = filename;
@@ -363,7 +363,7 @@ symbol_entry* symbol_create_const_int(const char* name, const int32_t value)
 		mana_compile_error("duplicated declaration '%s'", name);
 
 	symbol = symbol_create_entry(name, SYMBOL_CLASS_TYPE_CONSTANT_INT, value);
-	symbol->type = mana_type_get(SYMBOL_DATA_TYPE_INT);
+	symbol->type = type_get(SYMBOL_DATA_TYPE_INT);
 
 	if(mana_variable_header_file)
 	{
@@ -380,7 +380,7 @@ symbol_entry* symbol_create_const_float(const char* name, const float value)
 		mana_compile_error("duplicated declaration '%s'", name);
 
 	symbol = symbol_create(name, SYMBOL_CLASS_TYPE_CONSTANT_FLOAT);
-	symbol->type = mana_type_get(SYMBOL_DATA_TYPE_FLOAT);
+	symbol->type = type_get(SYMBOL_DATA_TYPE_FLOAT);
 	symbol->hloat = value;
 
 	if(mana_variable_header_file)
@@ -399,7 +399,7 @@ symbol_entry* symbol_create_const_string(const char* name, const char* value)
 
 	symbol = symbol_create(name, SYMBOL_CLASS_TYPE_CONSTANT_STRING);
 	symbol->string = value;
-	symbol->type = mana_type_string;
+	symbol->type = type_string;
 
 	if(mana_variable_header_file)
 	{
@@ -520,7 +520,7 @@ void symbol_open_function(node_entry* node, const bool is_action)
 	}
 
 	/* レジスタ割り当て処理をクリア */
-	mana_register_clear();
+	register_clear();
 
 	if (function->class_type == SYMBOL_CLASS_TYPE_NEW_SYMBOL)
 	{
@@ -732,7 +732,7 @@ void symbol_close_structure(const char* name)
 	type = (type_description*)symbol_block_table[symbol_block_level].head;
 
 	/* 2) create new type description */
-	type = mana_type_create(SYMBOL_DATA_TYPE_STRUCT, type, NULL);
+	type = type_create(SYMBOL_DATA_TYPE_STRUCT, type, NULL);
 	type->name = name;
 	type->alignment_memory_size = max_sligment_size;
 
@@ -842,7 +842,7 @@ void symbol_commit_registration_actor(const char* name, const char* parent, type
 	* 参照先でsymbol_entry*にキャストしています。
 	* TODO:危険なのでちゃんとメンバーを追加しましょう
 	*/
-	type = mana_type_create(SYMBOL_DATA_TYPE_ACTOR,
+	type = type_create(SYMBOL_DATA_TYPE_ACTOR,
 		(type_description*)(symbol_block_table[symbol_block_level].head), parent_type);
 	type->name = name;
 	type->alignment_memory_size = IBSZ;
@@ -978,7 +978,7 @@ void symbol_commit_registration_module(const char* name)
 	* TODO:危険なのでちゃんとメンバーを追加しましょう
 	*/
 	type = (type_description*)(symbol_block_table[symbol_block_level].head);
-	type = mana_type_create(SYMBOL_DATA_TYPE_MODULE, type, NULL);
+	type = type_create(SYMBOL_DATA_TYPE_MODULE, type, NULL);
 	type->name = name;
 	type->alignment_memory_size = IBSZ;
 
@@ -1172,7 +1172,7 @@ void symbol_allocate_memory(symbol_entry* symbol, type_description* type, symbol
 	if(type->tcons == SYMBOL_DATA_TYPE_INCOMPLETE || type->tcons == SYMBOL_DATA_TYPE_VOID)
 	{
 		mana_compile_error("incomplete type name or void is used for declraration");
-		type = mana_type_get(SYMBOL_DATA_TYPE_INT);
+		type = type_get(SYMBOL_DATA_TYPE_INT);
 	}
 
 	if(mana_variable_header_file)
@@ -1189,7 +1189,7 @@ void symbol_allocate_memory(symbol_entry* symbol, type_description* type, symbol
 	}
 	else
 	{														/* 配列型の変数の処理 */
-		mana_type_set_array(symbol->type, type);			/* 配列型リストの設定 */
+		type_set_array(symbol->type, type);			/* 配列型リストの設定 */
 		type = symbol->type;
 	}
 
@@ -1451,7 +1451,7 @@ ESCAPE:
 
 /*****************************************************************************/
 /* dump */
-static void mana_type_dump_core(FILE* fp, const type_description* type)
+static void type_dump_core(FILE* fp, const type_description* type)
 {
 	if (type)
 	{
@@ -1460,7 +1460,7 @@ static void mana_type_dump_core(FILE* fp, const type_description* type)
 			type->tcons != SYMBOL_DATA_TYPE_MODULE &&
 			type->tcons != SYMBOL_DATA_TYPE_STRUCT)
 		{
-			mana_type_dump_core(fp, type->component);
+			type_dump_core(fp, type->component);
 		}
 	}
 }
@@ -1481,7 +1481,7 @@ static void symbol_dump_core(FILE* fp, const int32_t level, const symbol_entry* 
 #endif
 
 		if(symbol->type)
-			mana_type_dump_core(fp, symbol->type);
+			type_dump_core(fp, symbol->type);
 
 		fputc('\n', fp);
 
