@@ -73,8 +73,8 @@ extern char* _fullpath(char* out, const char* in, const size_t size);
 #include <stdlib.h>
 
 extern int32_t yyparse(void);
-extern void mana_parser_initialize(void);
-extern void mana_parser_finalize(void);
+extern void parser_initialize(void);
+extern void parser_finalize(void);
 
 
 

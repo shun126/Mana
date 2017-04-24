@@ -94,16 +94,16 @@ void generator_add_event(const char* name, generator_event_funtion_type function
 */
 static void generator_resolve_load(node_entry* self)
 {
-	//	mana_register_entity* register_entity;
+	//	register_entity* register_entity;
 
 	MANA_ASSERT(self);
 	MANA_ASSERT(self->type);
 #if 0
 	/* TODO:ƒeƒXƒg */
-	register_entity = mana_register_allocate(self->symbol, self->symbol->address);
+	register_entity = register_allocate(self->symbol, self->symbol->address);
 	if (register_entity == NULL)
 	{
-		mana_register_entity* register_entity = mana_register_allocate(self->symbol, self->symbol->address);
+		register_entity* register_entity = register_allocate(self->symbol, self->symbol->address);
 		if (register_entity == NULL)
 		{
 			/* Š„‚è“–‚Ä‚éƒŒƒWƒXƒ^‚ª–³‚¢ê‡‚Íspill‚ðs‚¤ */
@@ -134,7 +134,7 @@ static void generator_resolve_load(node_entry* self)
 		break;
 
 	case SYMBOL_DATA_TYPE_ACTOR:
-		if (self->type == mana_type_get(SYMBOL_DATA_TYPE_ACTOR))
+		if (self->type == type_get(SYMBOL_DATA_TYPE_ACTOR))
 			code_set_opecode(MANA_IL_LOAD_REFFRENCE);
 		else
 			code_set_opecode_and_operand(MANA_IL_PUSH_ACTOR, data_set(self->type->name));
@@ -221,10 +221,10 @@ static void generator_return(symbol_entry* func, node_entry* tree)
 	else
 	{
 		/* Ž©“®ƒLƒƒƒXƒg */
-		tree->left = mana_node_cast(type, tree->left);
+		tree->left = node_cast(type, tree->left);
 
 		/* Œ^‚ÌŒŸØ */
-		mana_type_compatible(type, tree->left->type);
+		type_compatible(type, tree->left->type);
 
 		/* ƒm[ƒh‚Ì•]‰¿ */
 		const int32_t in_depth = symbol_open_block(false);
@@ -276,14 +276,14 @@ static int32_t generate_argument(int32_t count, symbol_entry* param, node_entry*
 			{
 				MANA_ASSERT(arg->left);
 				if (arg->left->id == NODE_IDENTIFIER)
-					mana_resolver_search_symbol_from_name(arg->left);
+					resolver_search_symbol_from_name(arg->left);
 
 				// Žqƒm[ƒh‚©‚çŒ^‚ðŒp³‚·‚é
-				mana_resolver_resolve_type_from_child_node(arg);
+				resolver_resolve_type_from_child_node(arg);
 			}
 		}
-		arg = mana_node_cast(param->type, arg);
-		mana_type_compatible(param->type, arg->type);
+		arg = node_cast(param->type, arg);
+		type_compatible(param->type, arg->type);
 		//generator_genearte_code(arg, true);
 		generator_genearte_code((arg->id == NODE_CALL_ARGUMENT) ? arg->left : arg, true);
 	}
@@ -308,7 +308,7 @@ static int32_t generator_call_argument_size(int32_t address, symbol_entry* param
 		if (arg->id == NODE_CALL_ARGUMENT)
 			arg = arg->left;
 
-		address += (mana_node_get_memory_size(arg) + (sizeof(int32_t) - 1)) / sizeof(int32_t);
+		address += (node_get_memory_size(arg) + (sizeof(int32_t) - 1)) / sizeof(int32_t);
 	}
 	return address;
 }
@@ -330,7 +330,7 @@ static int32_t generator_call_argument(int32_t address, symbol_entry* param, nod
 
 		if (arg->id == NODE_CALL_ARGUMENT)
 			arg = arg->left;
-		address -= (mana_node_get_memory_size(arg) + (sizeof(int32_t) - 1)) / sizeof(int32_t);
+		address -= (node_get_memory_size(arg) + (sizeof(int32_t) - 1)) / sizeof(int32_t);
 	}
 	return address;
 }
@@ -587,7 +587,7 @@ void generator_genearte_code(node_entry* self, int32_t enable_load)
 		return;
 
 DO_RECURSIVE:
-	mana_resolver_set_current_file_infomation(self);
+	resolver_set_current_file_infomation(self);
 
 	switch (self->id)
 	{
@@ -673,14 +673,14 @@ DO_RECURSIVE:
 		// self->left
 		MANA_ASSERT(self->right == NULL);
 		MANA_ASSERT(self->body == NULL);
-		mana_post_resolver_resolve(self);
+		post_resolver_resolve(self);
 		break;
 
 		///////////////////////////////////////////////////////////////////////
 		// ŠÖ”éŒ¾‚ÉŠÖ‚·‚éƒm[ƒh									
 	case NODE_DECLARE_ACTION:
 		{
-			self->type = mana_type_get(SYMBOL_DATA_TYPE_VOID);
+			self->type = type_get(SYMBOL_DATA_TYPE_VOID);
 			mana_function_symbol_entry_pointer = symbol_lookup(self->string);
 			{
 				symbol_open_function(self, true);
@@ -712,7 +712,7 @@ DO_RECURSIVE:
 				// ˆø”‚ð“o˜^
 				symbol_open_function(self, false);
 
-				mana_pre_resolver_resolve(self->right);
+				pre_resolver_resolve(self->right);
 				self->symbol->parameter_list = symbol_get_head_symbol();
 
 				symbol_open_function2(self->symbol);
@@ -745,7 +745,7 @@ DO_RECURSIVE:
 		// self->left
 		// self->right
 		MANA_ASSERT(self->body == NULL);
-		//mana_resolver_resolve_variable_description(self, MEMORY_TYPE_NORMAL);
+		//resolver_resolve_variable_description(self, MEMORY_TYPE_NORMAL);
 		/*
 		generator_genearte_code(self->left, enable_load); // NODE_TYPE_DESCRIPTION
 		generator_genearte_code(self->right, enable_load);// NODE_DECLARATOR
@@ -758,7 +758,7 @@ DO_RECURSIVE:
 		MANA_ASSERT(self->left == NULL);
 		MANA_ASSERT(self->right == NULL);
 		MANA_ASSERT(self->body == NULL);
-		//mana_resolver_resolve_type_description(self);
+		//resolver_resolve_type_description(self);
 		break;
 
 	case NODE_VARIABLE_SIZE:
@@ -773,10 +773,10 @@ DO_RECURSIVE:
 		{
 			const int32_t in_depth = symbol_open_block(false);
 
-			mana_post_resolver_resolve(self->left);
+			post_resolver_resolve(self->left);
 			generator_genearte_code(self->left, enable_load);
 
-			mana_post_resolver_resolve(self->right);
+			post_resolver_resolve(self->right);
 			generator_genearte_code(self->right, enable_load);
 
 			const int32_t out_depth = symbol_close_block();
@@ -829,7 +829,7 @@ DO_RECURSIVE:
 		/* 'for(type variable = expression' ‚ÌŒ`Ž® */
 		{
 			//symbol_allocate_memory($2, $1, MEMORY_TYPE_NORMAL);
-			//generator_expression(mana_node_create_node(NODE_TYPE_ASSIGN, mana_node_create_leaf($2->name), $4), true);
+			//generator_expression(node_create_node(NODE_TYPE_ASSIGN, node_create_leaf($2->name), $4), true);
 			mana_jump_open_chain(MANA_JUMP_CHAIN_STATE_FOR);
 			//$$ = code_get_pc();
 
@@ -1140,9 +1140,12 @@ DO_RECURSIVE:
 	case NODE_CALL:
 		// ŠÖ”AƒAƒNƒVƒ‡ƒ“‚ðŒÄ‚Ñ‚Ü‚·
 		//generator_resolve_symbol(self);
-		mana_resolver_search_symbol_from_name(self);
-		//generator_genearte_code(self->right, enable_load);
-		generator_call(self);
+		// resolver_search_symbol_from_name(self)
+		if (self->symbol)
+		{
+			//generator_genearte_code(self->right, enable_load);
+			generator_call(self);
+		}
 		break;
 
 	case NODE_CALL_ARGUMENT:
@@ -1268,7 +1271,7 @@ DO_RECURSIVE:
 		MANA_ASSERT(self->right == NULL);
 		{
 			//generator_resolve_symbol(self->left);
-			/////mana_resolver_search_symbol_from_name(self);
+			/////resolver_search_symbol_from_name(self);
 
 			type_description* type = self->left->type;
 			if (type)
@@ -1350,11 +1353,11 @@ DO_RECURSIVE:
 			self->digit = self->left->type->memory_size;
 
 			if (self->digit <= max_char && self->digit >= min_char)
-				self->type = mana_type_get(SYMBOL_DATA_TYPE_CHAR);
+				self->type = type_get(SYMBOL_DATA_TYPE_CHAR);
 			else if (self->digit <= max_short && self->digit >= min_short)
-				self->type = mana_type_get(SYMBOL_DATA_TYPE_SHORT);
+				self->type = type_get(SYMBOL_DATA_TYPE_SHORT);
 			else
-				self->type = mana_type_get(SYMBOL_DATA_TYPE_INT);
+				self->type = type_get(SYMBOL_DATA_TYPE_INT);
 		}
 		MANA_ASSERT(self->right == NULL);
 		MANA_ASSERT(self->body == NULL);
@@ -1412,7 +1415,7 @@ DO_RECURSIVE:
 	}
 
 	// Žqƒm[ƒh‚©‚çŒ^‚ðŒp³‚·‚é
-	mana_resolver_resolve_type_from_child_node(self);
+	resolver_resolve_type_from_child_node(self);
 
 	if (self->next)
 	{

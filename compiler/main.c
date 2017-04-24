@@ -211,13 +211,13 @@ int32_t mana_generator(void)
 	code_initialize();
 	data_initialzie();
 	mana_jump_initialize();
-	mana_node_initialize();
-	mana_register_initialzie();
+	node_initialize();
+	register_initialzie();
 	symbol_initialize();
-	mana_type_initialize();
+	type_initialize();
 
 	generator_initialize();
-	mana_pre_resolver_initialize();
+	pre_resolver_initialize();
 	mana_linker_initialize();
 
 	if(mana_variable_header_file)
@@ -226,7 +226,7 @@ int32_t mana_generator(void)
 		fprintf(mana_variable_header_file, "#define ___MANA_GLOBAL_H___\n");
 		fprintf(mana_variable_header_file, "typedef struct mana_global\n{\n");
 	}
-	result = mana_lexer_initialize(mana_input_filename);
+	result = lexer_initialize(mana_input_filename);
 	if(result)
 	{
 		result = (yyparse() != 0 || yynerrs != 0);
@@ -379,16 +379,16 @@ ESCAPE:
 	code_finalize();
 	data_finalize();
 	mana_jump_finalize();
-	mana_node_finalize();
-	mana_register_finalize();
+	node_finalize();
+	register_finalize();
 	symbol_finalize();
-	mana_type_finalize();
+	type_finalize();
 
 	generator_finalize();
-	mana_pre_resolver_finalize();
+	pre_resolver_finalize();
 	mana_linker_finalize();
 
-	mana_lexer_finalize();
+	lexer_finalize();
 
 	return result;
 }
