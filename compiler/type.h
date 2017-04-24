@@ -28,22 +28,22 @@ extern "C" {
 #define FBSZ sizeof(float)
 #define DBSZ sizeof(double)
 
-extern void mana_type_initialize(void);
-extern void mana_type_finalize(void);
+extern void type_initialize(void);
+extern void type_finalize(void);
 
-extern type_description* mana_type_get(symbol_data_type_id);
-extern type_description* mana_type_create(symbol_data_type_id, type_description*, type_description*);
-extern type_description* mana_type_create_reference(type_description*);
-extern type_description* mana_type_create_array(int32_t);
+extern type_description* type_get(symbol_data_type_id);
+extern type_description* type_create(symbol_data_type_id, type_description*, type_description*);
+extern type_description* type_create_reference(type_description*);
+extern type_description* type_create_array(int32_t);
 
-extern void mana_type_set_array(type_description*, type_description*);
-extern int32_t mana_type_compare(type_description*, type_description*);
-extern int32_t mana_type_compatible(type_description*, type_description*);
-extern void mana_type_print(FILE*, type_description*);
+extern void type_set_array(type_description*, type_description*);
+extern int32_t type_compare(type_description*, type_description*);
+extern int32_t type_compatible(type_description*, type_description*);
+extern void type_print(FILE*, type_description*);
 
-extern type_description* mana_type_actor;
-extern type_description* mana_type_string;
-extern type_description* mana_type_pointer;
+extern type_description* type_actor;
+extern type_description* type_string;
+extern type_description* type_pointer;
 
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)
 }

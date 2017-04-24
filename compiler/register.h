@@ -15,20 +15,20 @@ mana (compiler)
 #include "symbol.h"
 #endif
 
-typedef struct mana_register_entity
+typedef struct register_entity
 {
 	symbol_entry* symbol;
 	size_t address;
 	int8_t number;
-}mana_register_entity;
+}register_entity;
 
-extern void mana_register_initialzie(void);
-extern void mana_register_finalize(void);
-extern void mana_register_clear(void);
+extern void register_initialzie(void);
+extern void register_finalize(void);
+extern void register_clear(void);
 
-extern mana_register_entity* mana_register_find(symbol_entry* symbol);
+extern register_entity* register_find(symbol_entry* symbol);
 
-extern mana_register_entity* mana_register_allocate(symbol_entry* symbol, size_t address);
-extern void mana_register_release(mana_register_entity* entity);
+extern register_entity* register_allocate(symbol_entry* symbol, size_t address);
+extern void register_release(register_entity* entity);
 
 #endif

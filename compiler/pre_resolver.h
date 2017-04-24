@@ -20,22 +20,22 @@ extern "C" {
 #endif
 
 //! ‰Šú‰»
-extern void mana_pre_resolver_initialize(void);
+extern void pre_resolver_initialize(void);
 
 //! I—¹
-extern void mana_pre_resolver_finalize(void);
+extern void pre_resolver_finalize(void);
 
 /*!
 qƒm[ƒh‚©‚çŒ^‚ğŒp³‚·‚é
 @param[in]	node	ƒm[ƒh
 */
-extern void mana_resolver_resolve_type_from_child_node(node_entry* node);
+extern void resolver_resolve_type_from_child_node(node_entry* node);
 
 /*!
 ƒm[ƒh‚ğ’H‚è‚È‚ª‚çƒVƒ“ƒ{ƒ‹î•ñ‚ğ“o˜^‚µ‚Ü‚·i‚½‚¾‚µ’†ŠÔŒ¾Œê‚É‘Î‚µ‚Ä•]‰¿‚µ‚Ü‚¹‚ñj
 @param	node	ƒm[ƒh
 */
-extern void mana_pre_resolver_resolve(node_entry* node);
+extern void pre_resolver_resolve(node_entry* node);
 
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)
 }

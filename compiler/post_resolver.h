@@ -24,7 +24,7 @@ extern "C" {
 @param	node	ノード
 @note	mana_generator_genearte_code内のactionまたはfunctionノードからのみ呼び出される
 */
-extern void mana_post_resolver_resolve(node_entry* node);
+extern void post_resolver_resolve(node_entry* node);
 
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)
 }
