@@ -807,57 +807,62 @@ DO_RECURSIVE:
 		MANA_ASSERT(node->right == NULL);
 		MANA_ASSERT(node->body == NULL);
 
-		resolver_search_symbol_from_name(node);
-
-		if (node->symbol)
-			node->type = node->symbol->type;
-
-		switch (node->symbol->class_type)
+		if (resolver_search_symbol_from_name(node))
 		{
-		case SYMBOL_CLASS_TYPE_ALIAS:
-			if (!node->symbol->used)
+			if (node->symbol)
+				node->type = node->symbol->type;
+
+			switch (node->symbol->class_type)
 			{
-				node->symbol->address = datalink_generator_append(node->symbol->string);
+			case SYMBOL_CLASS_TYPE_ALIAS:
+				if (!node->symbol->used)
+				{
+					node->symbol->address = datalink_generator_append(node->symbol->string);
+					node->symbol->type = type_get(SYMBOL_DATA_TYPE_INT);
+					node->symbol->used = 1;
+				}
+				break;
+
+			case SYMBOL_CLASS_TYPE_CONSTANT_INT:
 				node->symbol->type = type_get(SYMBOL_DATA_TYPE_INT);
-				node->symbol->used = 1;
+				break;
+
+			case SYMBOL_CLASS_TYPE_CONSTANT_FLOAT:
+				node->symbol->type = type_get(SYMBOL_DATA_TYPE_FLOAT);
+				break;
+
+			case SYMBOL_CLASS_TYPE_CONSTANT_STRING:
+				node->symbol->type = type_string;
+				break;
+
+			case SYMBOL_CLASS_TYPE_VARIABLE_STATIC:
+				symbol_is_valid_variable(node->symbol);
+				break;
+
+			case SYMBOL_CLASS_TYPE_VARIABLE_GLOBAL:
+				symbol_is_valid_variable(node->symbol);
+				break;
+
+			case SYMBOL_CLASS_TYPE_VARIABLE_ACTOR:
+				symbol_is_valid_variable(node->symbol);
+				break;
+
+			case SYMBOL_CLASS_TYPE_VARIABLE_LOCAL:
+				symbol_is_valid_variable(node->symbol);
+				break;
+
+			case SYMBOL_CLASS_TYPE_TYPEDEF:
+				break;
+
+			case SYMBOL_CLASS_TYPE_NEW_SYMBOL:
+			default:
+				mana_compile_error("illigal data type");
+				break;
 			}
-			break;
-
-		case SYMBOL_CLASS_TYPE_CONSTANT_INT:
-			node->symbol->type = type_get(SYMBOL_DATA_TYPE_INT);
-			break;
-
-		case SYMBOL_CLASS_TYPE_CONSTANT_FLOAT:
-			node->symbol->type = type_get(SYMBOL_DATA_TYPE_FLOAT);
-			break;
-
-		case SYMBOL_CLASS_TYPE_CONSTANT_STRING:
-			node->symbol->type = type_string;
-			break;
-
-		case SYMBOL_CLASS_TYPE_VARIABLE_STATIC:
-			symbol_is_valid_variable(node->symbol);
-			break;
-
-		case SYMBOL_CLASS_TYPE_VARIABLE_GLOBAL:
-			symbol_is_valid_variable(node->symbol);
-			break;
-
-		case SYMBOL_CLASS_TYPE_VARIABLE_ACTOR:
-			symbol_is_valid_variable(node->symbol);
-			break;
-
-		case SYMBOL_CLASS_TYPE_VARIABLE_LOCAL:
-			symbol_is_valid_variable(node->symbol);
-			break;
-
-		case SYMBOL_CLASS_TYPE_TYPEDEF:
-			break;
-
-		case SYMBOL_CLASS_TYPE_NEW_SYMBOL:
-		default:
-			mana_compile_error("illigal data type");
-			break;
+		}
+		else
+		{
+			int i = 0;
 		}
 		break;
 
