@@ -2,8 +2,8 @@
 mana (compiler)
 
 @file	datalink_generator.c
-@brief	ƒf[ƒ^ƒZƒNƒVƒ‡ƒ“‚ÉŠÖ‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹
-@detail	‚±‚Ìƒtƒ@ƒCƒ‹‚Íƒf[ƒ^ƒZƒNƒVƒ‡ƒ“‚ÉŠÖŒW‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹‚Å‚·B
+@brief	ãƒ‡ãƒ¼ã‚¿ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã«é–¢ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«
+@detail	ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯ãƒ‡ãƒ¼ã‚¿ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã«é–¢ä¿‚ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
 @author	Shun Moriya
 @date	2003-
 */
@@ -26,7 +26,7 @@ mana (compiler)
 #define MANA_NIL 0
 #endif
 
-// ƒf[ƒ^ƒŠƒ“ƒNƒŠƒXƒg
+// ãƒ‡ãƒ¼ã‚¿ãƒªãƒ³ã‚¯ãƒªã‚¹ãƒˆ
 typedef struct datalink_generator_entry
 {
 	char* file_name;
