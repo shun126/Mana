@@ -2,8 +2,8 @@
 mana (compiler)
 
 @file	data.c
-@brief	ƒf[ƒ^ƒZƒNƒVƒ‡ƒ“‚ÉŠÖ‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹
-@detail	‚±‚Ìƒtƒ@ƒCƒ‹‚Íƒf[ƒ^ƒZƒNƒVƒ‡ƒ“‚ÉŠÖŒW‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹‚Å‚·B
+@brief	ãƒ‡ãƒ¼ã‚¿ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã«é–¢ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«
+@detail	ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯ãƒ‡ãƒ¼ã‚¿ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã«é–¢ä¿‚ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
 @author	Shun Moriya
 @date	2003-
 */
@@ -20,14 +20,14 @@ mana (compiler)
 #include <stdio.h>
 #include <string.h>
 
-// ƒf[ƒ^ƒŠƒXƒg
+// ãƒ‡ãƒ¼ã‚¿ãƒªã‚¹ãƒˆ
 typedef struct data_list
 {
 	uint32_t address;			//!< address
 	struct data_list* next;		//!< next data_list block address
 } data_list;
 
-//! ƒf[ƒ^ƒNƒ‰ƒX
+//! ãƒ‡ãƒ¼ã‚¿ã‚¯ãƒ©ã‚¹
 typedef struct data_entry
 {
 	data_list* constant;		//!< Constant list top address
@@ -78,9 +78,9 @@ uint32_t data_get_size(void)
 }
 
 /*!
-ŒŸõ
-@param[in]	text	•¶š—ñ
-@return		data_list‚ÌƒAƒhƒŒƒX
+æ¤œç´¢
+@param[in]	text	æ–‡å­—åˆ—
+@return		data_listã®ã‚¢ãƒ‰ãƒ¬ã‚¹
 */
 static data_list* data_find(const char* text)
 {

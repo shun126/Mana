@@ -2,8 +2,8 @@
 mana (compiler)
 
 @file	resolver.c
-@brief	ƒVƒ“ƒ{ƒ‹‚Ì‰ðŒˆ‚ÉŠÖŒW‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹
-@detail	ƒVƒ“ƒ{ƒ‹‚Ì‰ðŒˆ‚ÉŠÖŒW‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹‚Å‚·B
+@brief	ã‚·ãƒ³ãƒœãƒ«ã®è§£æ±ºã«é–¢ä¿‚ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«
+@detail	ã‚·ãƒ³ãƒœãƒ«ã®è§£æ±ºã«é–¢ä¿‚ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
 @author	Shun Moriya
 @date	2017-
 */
@@ -142,22 +142,22 @@ void mana_resolver_resolve_type_from_child_node(node_entry* self)
 {
 	MANA_ASSERT(self);
 
-	// Ž©•ª‚ÌŒ^‚ª“o˜^‚³‚ê‚Ä‚¢‚È‚¢
+	// è‡ªåˆ†ã®åž‹ãŒç™»éŒ²ã•ã‚Œã¦ã„ãªã„
 	if (self->type == NULL)
 	{
-		// ƒVƒ“ƒ{ƒ‹‚ª“o˜^‚³‚ê‚Ä‚¢‚é‚È‚çAƒVƒ“ƒ{ƒ‹‚ÌŒ^‚ðŒp³‚·‚é
+		// ã‚·ãƒ³ãƒœãƒ«ãŒç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ãªã‚‰ã€ã‚·ãƒ³ãƒœãƒ«ã®åž‹ã‚’ç¶™æ‰¿ã™ã‚‹
 		if (self->symbol && self->symbol->type)
 		{
 			self->type = self->symbol->type;
 		}
 		else if (self->left)
 		{
-			// ¶•Ó‚ÌŒ^‚ª“o˜^‚³‚ê‚Ä‚¢‚é‚È‚çA¶•Ó‚ÌŒ^‚ðŒp³‚·‚é
+			// å·¦è¾ºã®åž‹ãŒç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ãªã‚‰ã€å·¦è¾ºã®åž‹ã‚’ç¶™æ‰¿ã™ã‚‹
 			if (self->left->type)
 			{
 				self->type = self->left->type;
 			}
-			// ¶•Ó‚ÌƒVƒ“ƒ{ƒ‹‚ª“o˜^‚³‚ê‚Ä‚¢‚é‚È‚çA¶•Ó‚ÌƒVƒ“ƒ{ƒ‹‚ÌŒ^‚ðŒp³‚·‚é
+			// å·¦è¾ºã®ã‚·ãƒ³ãƒœãƒ«ãŒç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ãªã‚‰ã€å·¦è¾ºã®ã‚·ãƒ³ãƒœãƒ«ã®åž‹ã‚’ç¶™æ‰¿ã™ã‚‹
 			else if (self->left->symbol && self->left->symbol->type)
 			{
 				self->type = self->left->symbol->type;

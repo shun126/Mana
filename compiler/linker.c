@@ -2,8 +2,8 @@
 mana (compiler)
 
 @file	linker.c
-@brief	�����N�Ɋւ���\�[�X�t�@�C��
-@detail	���̃t�@�C���̓����N�Ɋ֌W����\�[�X�t�@�C���ł��B
+@brief	リンクに関するソースファイル
+@detail	このファイルはリンクに関係するソースファイルです。
 @author	Shun Moriya
 @date	2003-
 */
@@ -57,7 +57,7 @@ void mana_linker_resolve_address()
 {
 	for(const mana_linker_call_list* self = mana_linker_call_list_root_pointer; self; self = self->next)
 	{
-		// TODO:�V���{���̃A�h���X���������Ă��Ȃ��\�����c��̂őΏ������肢���܂��B
+		// TODO:シンボルのアドレスが解決していない可能性が残るので対処をお願いします。
 		code_replace_address(self->code_address, self->symbol->address);
 	}
 }

@@ -2,11 +2,11 @@
  * mana (library)
  *
  * @file	mana_actor.c
- * @brief	mana_actorƒNƒ‰ƒX‚ÉŠÖ‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹
+ * @brief	mana_actorã‚¯ãƒ©ã‚¹ã«é–¢ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«
  * @detail
- * ‚±‚Ìƒtƒ@ƒCƒ‹‚Ímana_actorƒNƒ‰ƒX‚ÉŠÖŒW‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹‚Å‚·B
- * mana_actorƒNƒ‰ƒX‚ÍXV‚âƒŠƒNƒGƒXƒg‚È‚Ç‚Ì§ŒäAŠO•”ŠÖ”‚ÌŒÄ‚Ño‚µ‚È‚Ç‚Ì
- * ÀsŠÂ‹«‚ğ•\‚µ‚Ä‚¢‚Ü‚·B
+ * ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯mana_actorã‚¯ãƒ©ã‚¹ã«é–¢ä¿‚ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
+ * mana_actorã‚¯ãƒ©ã‚¹ã¯æ›´æ–°ã‚„ãƒªã‚¯ã‚¨ã‚¹ãƒˆãªã©ã®åˆ¶å¾¡ã€å¤–éƒ¨é–¢æ•°ã®å‘¼ã³å‡ºã—ãªã©ã®
+ * å®Ÿè¡Œç’°å¢ƒã‚’è¡¨ã—ã¦ã„ã¾ã™ã€‚
  *
  * @author	Shun Moriya
  * @date	2003-
@@ -47,9 +47,9 @@ static mana_actor_callback* mana_actor_rollback_callback = NULL;
 static float mana_actor_delta_time = FLT_MAX;
 
 /*!
- * @param[in]	ƒvƒƒOƒ‰ƒ€—Ìˆæ‚©‚ç‚PƒoƒCƒg•ª‚Ì”’l‚ğæ“¾‚µ‚Ü‚·
- * @param[in]	ƒvƒƒOƒ‰ƒ€ƒAƒhƒŒƒX
- * @return		ƒvƒƒOƒ‰ƒ€—Ìˆæã‚Ì‚PƒoƒCƒg•ª‚Ì”’l
+ * @param[in]	ãƒ—ãƒ­ã‚°ãƒ©ãƒ é ˜åŸŸã‹ã‚‰ï¼‘ãƒã‚¤ãƒˆåˆ†ã®æ•°å€¤ã‚’å–å¾—ã—ã¾ã™
+ * @param[in]	ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚¢ãƒ‰ãƒ¬ã‚¹
+ * @return		ãƒ—ãƒ­ã‚°ãƒ©ãƒ é ˜åŸŸä¸Šã®ï¼‘ãƒã‚¤ãƒˆåˆ†ã®æ•°å€¤
  */
 static int8_t mana_actor_get_char_from_memory(const mana_actor* self, const uint32_t address)
 {
@@ -60,9 +60,9 @@ static int8_t mana_actor_get_char_from_memory(const mana_actor* self, const uint
 }
 
 /*!
- * @param[in]	ƒvƒƒOƒ‰ƒ€—Ìˆæ‚©‚ç‚PƒoƒCƒg•ª‚Ì”’l‚ğæ“¾‚µ‚Ü‚·
- * @param[in]	ƒvƒƒOƒ‰ƒ€ƒAƒhƒŒƒX
- * @return		ƒvƒƒOƒ‰ƒ€—Ìˆæã‚Ì‚PƒoƒCƒg•ª‚Ì”’l
+ * @param[in]	ãƒ—ãƒ­ã‚°ãƒ©ãƒ é ˜åŸŸã‹ã‚‰ï¼‘ãƒã‚¤ãƒˆåˆ†ã®æ•°å€¤ã‚’å–å¾—ã—ã¾ã™
+ * @param[in]	ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚¢ãƒ‰ãƒ¬ã‚¹
+ * @return		ãƒ—ãƒ­ã‚°ãƒ©ãƒ é ˜åŸŸä¸Šã®ï¼‘ãƒã‚¤ãƒˆåˆ†ã®æ•°å€¤
  */
 static uint8_t mana_actor_get_unsigned_char_from_memory(const mana_actor* self, const uint32_t address)
 {
@@ -70,9 +70,9 @@ static uint8_t mana_actor_get_unsigned_char_from_memory(const mana_actor* self, 
 }
 
 /*!
- * @param[in]	ƒvƒƒOƒ‰ƒ€—Ìˆæ‚©‚ç‚QƒoƒCƒg•ª‚Ì”’l‚ğæ“¾‚µ‚Ü‚·
- * @param[in]	ƒvƒƒOƒ‰ƒ€ƒAƒhƒŒƒX
- * @return		ƒvƒƒOƒ‰ƒ€—Ìˆæã‚Ì‚QƒoƒCƒg•ª‚Ì”’l
+ * @param[in]	ãƒ—ãƒ­ã‚°ãƒ©ãƒ é ˜åŸŸã‹ã‚‰ï¼’ãƒã‚¤ãƒˆåˆ†ã®æ•°å€¤ã‚’å–å¾—ã—ã¾ã™
+ * @param[in]	ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚¢ãƒ‰ãƒ¬ã‚¹
+ * @return		ãƒ—ãƒ­ã‚°ãƒ©ãƒ é ˜åŸŸä¸Šã®ï¼’ãƒã‚¤ãƒˆåˆ†ã®æ•°å€¤
  */
 static uint16_t mana_actor_get_unsigned_short_from_memory(const mana_actor* self, const uint32_t address)
 {
@@ -99,9 +99,9 @@ static uint16_t mana_actor_get_unsigned_short_from_memory(const mana_actor* self
 }
 
 /*!
- * @param[in]	ƒvƒƒOƒ‰ƒ€—Ìˆæ‚©‚ç‚QƒoƒCƒg•ª‚Ì”’l‚ğæ“¾‚µ‚Ü‚·
- * @param[in]	ƒvƒƒOƒ‰ƒ€ƒAƒhƒŒƒX
- * @return		ƒvƒƒOƒ‰ƒ€—Ìˆæã‚Ì‚QƒoƒCƒg•ª‚Ì”’l
+ * @param[in]	ãƒ—ãƒ­ã‚°ãƒ©ãƒ é ˜åŸŸã‹ã‚‰ï¼’ãƒã‚¤ãƒˆåˆ†ã®æ•°å€¤ã‚’å–å¾—ã—ã¾ã™
+ * @param[in]	ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚¢ãƒ‰ãƒ¬ã‚¹
+ * @return		ãƒ—ãƒ­ã‚°ãƒ©ãƒ é ˜åŸŸä¸Šã®ï¼’ãƒã‚¤ãƒˆåˆ†ã®æ•°å€¤
  */
 static int16_t mana_actor_get_short_from_memory(const mana_actor* self, const uint32_t address)
 {
@@ -109,9 +109,9 @@ static int16_t mana_actor_get_short_from_memory(const mana_actor* self, const ui
 }
 
 /*!
- * @param[in]	ƒvƒƒOƒ‰ƒ€—Ìˆæ‚©‚ç‚SƒoƒCƒg•ª‚Ì”’l‚ğæ“¾‚µ‚Ü‚·
- * @param[in]	ƒvƒƒOƒ‰ƒ€ƒAƒhƒŒƒX
- * @return		ƒvƒƒOƒ‰ƒ€—Ìˆæã‚Ì‚SƒoƒCƒg•ª‚Ì”’l
+ * @param[in]	ãƒ—ãƒ­ã‚°ãƒ©ãƒ é ˜åŸŸã‹ã‚‰ï¼”ãƒã‚¤ãƒˆåˆ†ã®æ•°å€¤ã‚’å–å¾—ã—ã¾ã™
+ * @param[in]	ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚¢ãƒ‰ãƒ¬ã‚¹
+ * @return		ãƒ—ãƒ­ã‚°ãƒ©ãƒ é ˜åŸŸä¸Šã®ï¼”ãƒã‚¤ãƒˆåˆ†ã®æ•°å€¤
  */
 static uint32_t mana_actor_get_unsigned_integer_from_memory(const mana_actor* self, const uint32_t address)
 {
@@ -142,9 +142,9 @@ static uint32_t mana_actor_get_unsigned_integer_from_memory(const mana_actor* se
 }
 
 /*!
- * @param[in]	ƒvƒƒOƒ‰ƒ€—Ìˆæ‚©‚ç‚SƒoƒCƒg•ª‚Ì”’l‚ğæ“¾‚µ‚Ü‚·
- * @param[in]	ƒvƒƒOƒ‰ƒ€ƒAƒhƒŒƒX
- * @return		ƒvƒƒOƒ‰ƒ€—Ìˆæã‚Ì‚SƒoƒCƒg•ª‚Ì”’l
+ * @param[in]	ãƒ—ãƒ­ã‚°ãƒ©ãƒ é ˜åŸŸã‹ã‚‰ï¼”ãƒã‚¤ãƒˆåˆ†ã®æ•°å€¤ã‚’å–å¾—ã—ã¾ã™
+ * @param[in]	ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚¢ãƒ‰ãƒ¬ã‚¹
+ * @return		ãƒ—ãƒ­ã‚°ãƒ©ãƒ é ˜åŸŸä¸Šã®ï¼”ãƒã‚¤ãƒˆåˆ†ã®æ•°å€¤
  */
 static int32_t mana_actor_get_integer_from_memory(const mana_actor* self, const uint32_t address)
 {
@@ -152,9 +152,9 @@ static int32_t mana_actor_get_integer_from_memory(const mana_actor* self, const 
 }
 
 /*!
- * @param[in]	ƒvƒƒOƒ‰ƒ€—Ìˆæ‚©‚ç’P§“x•‚“®¬”‚ğæ“¾‚µ‚Ü‚·
- * @param[in]	ƒvƒƒOƒ‰ƒ€ƒAƒhƒŒƒX
- * @return		ƒvƒƒOƒ‰ƒ€—Ìˆæã‚Ì’P§“x•‚“®¬”
+ * @param[in]	ãƒ—ãƒ­ã‚°ãƒ©ãƒ é ˜åŸŸã‹ã‚‰å˜åˆ¶åº¦æµ®å‹•å°æ•°ã‚’å–å¾—ã—ã¾ã™
+ * @param[in]	ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚¢ãƒ‰ãƒ¬ã‚¹
+ * @return		ãƒ—ãƒ­ã‚°ãƒ©ãƒ é ˜åŸŸä¸Šã®å˜åˆ¶åº¦æµ®å‹•å°æ•°
  */
 static float mana_actor_get_float_from_memory(const mana_actor* self, const uint32_t address)
 {
@@ -185,10 +185,10 @@ static float mana_actor_get_float_from_memory(const mana_actor* self, const uint
 }
 
 /*!
- * ƒvƒƒOƒ‰ƒ€—Ìˆæ‚©‚çƒIƒtƒZƒbƒg‚ğæ“¾ŒãA•¶š—ñ—Ìˆæ‚©‚ç•¶š‚ğæ“¾‚µ‚Ü‚·
- * @param[in]	mana_actor ƒIƒuƒWƒFƒNƒg
- * @param[in]	ƒvƒƒOƒ‰ƒ€ƒAƒhƒŒƒX
- * @return	•¶š—ñ‚Ö‚Ìƒ|ƒCƒ“ƒ^
+ * ãƒ—ãƒ­ã‚°ãƒ©ãƒ é ˜åŸŸã‹ã‚‰ã‚ªãƒ•ã‚»ãƒƒãƒˆã‚’å–å¾—å¾Œã€æ–‡å­—åˆ—é ˜åŸŸã‹ã‚‰æ–‡å­—ã‚’å–å¾—ã—ã¾ã™
+ * @param[in]	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚¢ãƒ‰ãƒ¬ã‚¹
+ * @return	æ–‡å­—åˆ—ã¸ã®ãƒã‚¤ãƒ³ã‚¿
  */
 static char* mana_actor_get_string_from_memory(const mana_actor* self, const uint32_t address)
 {
@@ -206,10 +206,10 @@ static char* mana_actor_get_string_from_memory(const mana_actor* self, const uin
 
 #if 0
 /*!
- * •¶š—ñ—Ìˆæ‚©‚ç•¶š‚ğæ“¾‚µ‚Ü‚·
- * @param[in]	mana_actor ƒIƒuƒWƒFƒNƒg
- * @param[in]	ƒvƒƒOƒ‰ƒ€ƒAƒhƒŒƒX
- * @return	•¶š—ñ‚Ö‚Ìƒ|ƒCƒ“ƒ^
+ * æ–‡å­—åˆ—é ˜åŸŸã‹ã‚‰æ–‡å­—ã‚’å–å¾—ã—ã¾ã™
+ * @param[in]	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚¢ãƒ‰ãƒ¬ã‚¹
+ * @return	æ–‡å­—åˆ—ã¸ã®ãƒã‚¤ãƒ³ã‚¿
  */
 static char* mana_actor_get_string_from_data(const mana_actor* self, const uint32_t address)
 {
@@ -221,9 +221,9 @@ static char* mana_actor_get_string_from_data(const mana_actor* self, const uint3
 #endif
 
 /*!
- * ƒIƒyƒR[ƒh‚ğæ“¾
- * @param	address		ƒvƒƒOƒ‰ƒ€ƒAƒhƒŒƒX
- * @return	ƒIƒyƒR[ƒh
+ * ã‚ªãƒšã‚³ãƒ¼ãƒ‰ã‚’å–å¾—
+ * @param	address		ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚¢ãƒ‰ãƒ¬ã‚¹
+ * @return	ã‚ªãƒšã‚³ãƒ¼ãƒ‰
  */
 static int32_t mana_actor_get_opecode(const mana_actor* self, const uint32_t address)
 {
@@ -468,7 +468,7 @@ static void mana_actor_cmd_call(mana_actor* actor)
 	uint32_t last_pc = actor->pc;
 	int32_t last_interrupt_level = actor->interrupt_level;
 
-	/* ŠO•”ŠÖ”‚ÌÀs */
+	/* å¤–éƒ¨é–¢æ•°ã®å®Ÿè¡Œ */
 	const char* name = mana_actor_get_string_from_memory(actor, actor->pc + 1);
 	mana_external_funtion_type* function = mana_hash_get(&mana_external_function_hash, name);
 	if(!function)
@@ -479,7 +479,7 @@ static void mana_actor_cmd_call(mana_actor* actor)
 
 	function(actor);
 
-	/* ŠO•”ŠÖ”‚ÌI—¹ */
+	/* å¤–éƒ¨é–¢æ•°ã®çµ‚äº† */
 	if(mana_actor_is_running(actor))
 	{
 		if(!mana_actor_is_repeat(actor))
@@ -488,10 +488,10 @@ static void mana_actor_cmd_call(mana_actor* actor)
 			int32_t nNumberOfArguments = mana_actor_get_argument_count_by_address(actor, last_pc);
 			int32_t nSizeOfArguments   = mana_actor_get_argument_size(actor, last_pc);
 
-			/* ƒXƒ^ƒbƒN‚É“ü‚Á‚Ä‚¢‚éƒpƒ‰ƒ[ƒ^‚ğpop‚·‚é */
+			/* ã‚¹ã‚¿ãƒƒã‚¯ã«å…¥ã£ã¦ã„ã‚‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’popã™ã‚‹ */
 			mana_stack_remove(&actor->stack, nSizeOfArguments);
 
-			/* –ß‚è’l‚ª‚ ‚é‚È‚çA–ß‚è’l‚ğpush */
+			/* æˆ»ã‚Šå€¤ãŒã‚ã‚‹ãªã‚‰ã€æˆ»ã‚Šå€¤ã‚’push */
 			if(bHasReturnValue)
 			{
 				switch(actor->return_value.size)
@@ -524,7 +524,7 @@ static void mana_actor_cmd_call(mana_actor* actor)
 				}
 			}
 
-			/* ŠO•”ŠÖ”“à‚ÅreqŒn‚Ì–½—ß‚ªÀs‚³‚ê‚½ê‡AƒXƒ^ƒbƒN‚Ìó‘Ô‚ğC³‚·‚é */
+			/* å¤–éƒ¨é–¢æ•°å†…ã§reqç³»ã®å‘½ä»¤ãŒå®Ÿè¡Œã•ã‚ŒãŸå ´åˆã€ã‚¹ã‚¿ãƒƒã‚¯ã®çŠ¶æ…‹ã‚’ä¿®æ­£ã™ã‚‹ */
 			if(actor->interrupt_level > last_interrupt_level)
 			{
 				actor->interrupt[last_interrupt_level].address = last_pc + 4 + 2 + 2 + 1 + (nNumberOfArguments * sizeof(int16_t));
@@ -1202,7 +1202,7 @@ static void mana_actor_cmd_print(mana_actor* actor)
 	mana_stack_remove(&actor->stack, number_of_arguments);
 }
 
-/*! “à•”–½—ßƒWƒƒƒ“ƒvƒe[ƒuƒ‹ */
+/*! å†…éƒ¨å‘½ä»¤ã‚¸ãƒ£ãƒ³ãƒ—ãƒ†ãƒ¼ãƒ–ãƒ« */
 static void (*m_afnIntermediateLanguage[MANA_IL_MAX_SIZE])(mana_actor*) = {
 	/* thread */
 	&mana_actor_cmd_restart,						/* 00 */
@@ -1343,9 +1343,9 @@ static void mana_actor_initialize(mana_actor* self)
 }
 
 /*!
- * @param[in]	parent			mana ƒIƒuƒWƒFƒNƒg
- * @param[in]	variable_size	ƒAƒNƒ^[•Ï”‚ÌƒTƒCƒY
- * @return		mana_actor ƒIƒuƒWƒFƒNƒg
+ * @param[in]	parent			mana ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	variable_size	ã‚¢ã‚¯ã‚¿ãƒ¼å¤‰æ•°ã®ã‚µã‚¤ã‚º
+ * @return		mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 mana_actor* mana_actor_create(mana* parent, const size_t variable_size)
 {
@@ -1366,8 +1366,8 @@ mana_actor* mana_actor_create(mana* parent, const size_t variable_size)
 }
 
 /*!
- * @param[in]	actor	ƒRƒs[Œ³‚Ìmana_actor ƒIƒuƒWƒFƒNƒg
- * @return		mana_actor ƒIƒuƒWƒFƒNƒg
+ * @param[in]	actor	ã‚³ãƒ”ãƒ¼å…ƒã®mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @return		mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 mana_actor* mana_actor_clone(mana_actor* actor)
 {
@@ -1392,7 +1392,7 @@ mana_actor* mana_actor_clone(mana_actor* actor)
 }
 
 /*!
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 void mana_actor_destroy(mana_actor* self)
 {
@@ -1400,12 +1400,12 @@ void mana_actor_destroy(mana_actor* self)
 	{
 		int32_t i;
 
-		/* “Ç‚İ‚İ’†‚Édelete‚³‚ê‚½H */
+		/* èª­ã¿è¾¼ã¿ä¸­ã«deleteã•ã‚ŒãŸï¼Ÿ */
 		for(i = 0 ; i < MANA_ACTOR_MAX_INTERRUPT_LEVEL; i++)
 		{
 			mana_interrupt* interrupt = &self->interrupt[i];
 
-			/* ƒtƒ@ƒCƒ‹ƒGƒ“ƒgƒŠ‚Ìíœ */
+			/* ãƒ•ã‚¡ã‚¤ãƒ«ã‚¨ãƒ³ãƒˆãƒªã®å‰Šé™¤ */
 			if(mana_async_file_callback && interrupt->file_callback_parameter)
 			{
 				mana_async_file_callback(MANA_FILE_COMMAND_CLOSE, interrupt->file_callback_parameter);
@@ -1423,8 +1423,8 @@ void mana_actor_destroy(mana_actor* self)
 }
 
 /*!
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
- * @param[out]	stream	mana_stream ƒIƒuƒWƒFƒNƒg
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[out]	stream	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 void mana_actor_serialize(mana_actor* self, mana_stream* stream)
 {
@@ -1471,8 +1471,8 @@ void mana_actor_serialize(mana_actor* self, mana_stream* stream)
 }
 
 /*!
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
- * @param[in]	stream	mana_stream ƒIƒuƒWƒFƒNƒg
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	stream	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 void mana_actor_deserialize(mana_actor* self, mana_stream* stream)
 {
@@ -1518,11 +1518,11 @@ void mana_actor_deserialize(mana_actor* self, mana_stream* stream)
 }
 
 /*!
- * ŠO•”ŠÖ”“à‚©‚çŒÄ‚Î‚ê‚é–‚ğ‘z’è‚µ‚Ä‚¢‚Ü‚·B
- * bool mana_run(mana* self, float second)‚Ìsecond‚Ì’l‚ªæ“¾‚Å‚«‚é‚Ì‚ÅA
- * ŠeŠO•”ŠÖ”‚ÅŒo‰ß‚µ‚½ŠÔ‚ª•K—v‚È‚Ég‚Á‚Ä‚­‚¾‚³‚¢B
+ * å¤–éƒ¨é–¢æ•°å†…ã‹ã‚‰å‘¼ã°ã‚Œã‚‹äº‹ã‚’æƒ³å®šã—ã¦ã„ã¾ã™ã€‚
+ * bool mana_run(mana* self, float second)ã®secondã®å€¤ãŒå–å¾—ã§ãã‚‹ã®ã§ã€
+ * å„å¤–éƒ¨é–¢æ•°ã§çµŒéã—ãŸæ™‚é–“ãŒå¿…è¦ãªæ™‚ã«ä½¿ã£ã¦ãã ã•ã„ã€‚
  *
- * @return		Œo‰ßŠÔ
+ * @return		çµŒéæ™‚é–“
  */
 float mana_actor_get_delta_time(void)
 {
@@ -1530,8 +1530,8 @@ float mana_actor_get_delta_time(void)
 }
 
 /*!
- * bool mana_run(mana* self, float second)‚Ìsecond‚ğİ’è‚µ‚Ä‚¢‚Ü‚·B
- * @param[in]	second	Œo‰ßŠÔ(•b)
+ * bool mana_run(mana* self, float second)ã®secondã‚’è¨­å®šã—ã¦ã„ã¾ã™ã€‚
+ * @param[in]	second	çµŒéæ™‚é–“(ç§’)
  */
 void mana_actor_set_delta_time(float second)
 {
@@ -1539,9 +1539,9 @@ void mana_actor_set_delta_time(float second)
 }
 
 /*!
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
- * @retval		true	Às’†
- * @retval		false	’â~
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @retval		true	å®Ÿè¡Œä¸­
+ * @retval		false	åœæ­¢
  */
 int32_t mana_actor_run(mana_actor* self)
 {
@@ -1586,17 +1586,17 @@ int32_t mana_actor_run(mana_actor* self)
 }
 
 /*!
- * ƒAƒNƒVƒ‡ƒ“I—¹‚Ü‚ÅÀs‚µ‚Ü‚·B
+ * ã‚¢ã‚¯ã‚·ãƒ§ãƒ³çµ‚äº†ã¾ã§å®Ÿè¡Œã—ã¾ã™ã€‚
  * bool mana_async_call(mana_actor* self, int32_t level, char* action, mana_actor* sender)
- * ‚Æˆá‚¢‘¼‚ÌƒAƒNƒ^[‚à•À—ñ“®ì‚µ‚Ü‚·B
- * ƒAƒNƒVƒ‡ƒ“‚ªI—¹‚µ‚È‚¢‚Ædead lock‚·‚é‚Ì‚Å’ˆÓ‚µ‚Ä‚­‚¾‚³‚¢B
+ * ã¨é•ã„ä»–ã®ã‚¢ã‚¯ã‚¿ãƒ¼ã‚‚ä¸¦åˆ—å‹•ä½œã—ã¾ã™ã€‚
+ * ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ãŒçµ‚äº†ã—ãªã„ã¨dead lockã™ã‚‹ã®ã§æ³¨æ„ã—ã¦ãã ã•ã„ã€‚
  *
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
- * @param[in]	level	—Dæ“x(‚‚¢‚Ù‚Ç—Dæ)
- * @param[in]	action	ƒAƒNƒVƒ‡ƒ“–¼
- * @param[in]	sender	ƒŠƒNƒGƒXƒgŒ³ƒAƒNƒ^[
- * @retval		true	Às¬Œ÷
- * @retval		false	Às¸”s
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	level	å„ªå…ˆåº¦(é«˜ã„ã»ã©å„ªå…ˆ)
+ * @param[in]	action	ã‚¢ã‚¯ã‚·ãƒ§ãƒ³å
+ * @param[in]	sender	ãƒªã‚¯ã‚¨ã‚¹ãƒˆå…ƒã‚¢ã‚¯ã‚¿ãƒ¼
+ * @retval		true	å®Ÿè¡ŒæˆåŠŸ
+ * @retval		false	å®Ÿè¡Œå¤±æ•—
  */
 bool mana_sync_call(mana_actor* self, const int32_t level, const char* action, mana_actor* sender)
 {
@@ -1619,18 +1619,18 @@ bool mana_sync_call(mana_actor* self, const int32_t level, const char* action, m
 }
 
 /*!
- * ƒAƒNƒVƒ‡ƒ“I—¹‚Ü‚ÅÀs‚µ‚Ü‚·B
+ * ã‚¢ã‚¯ã‚·ãƒ§ãƒ³çµ‚äº†ã¾ã§å®Ÿè¡Œã—ã¾ã™ã€‚
  * bool mana_sync_call(mana_actor* self, int32_t level, char* action, mana_actor* sender)
- * ‚Æˆá‚¢‘¼‚ÌƒAƒNƒ^[‚Í’â~‚µ‚Ü‚·B
- * ƒAƒNƒVƒ‡ƒ“‚ªI—¹‚µ‚È‚¢‚Ædead lock‚·‚é‚Ì‚Å’ˆÓ‚µ‚Ä‚­‚¾‚³‚¢B
- * ‚Ü‚½A‘¼‚ÌƒAƒNƒ^[‚Éˆ—‚ªˆÚ‚ç‚È‚¢‚Ì‚Åreqws‚È‚Ç‚Ì–½—ß‚Ídead lock‚·‚é‚Ì‚Å’ˆÓ‚µ‚Ä‚­‚¾‚³‚¢B
+ * ã¨é•ã„ä»–ã®ã‚¢ã‚¯ã‚¿ãƒ¼ã¯åœæ­¢ã—ã¾ã™ã€‚
+ * ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ãŒçµ‚äº†ã—ãªã„ã¨dead lockã™ã‚‹ã®ã§æ³¨æ„ã—ã¦ãã ã•ã„ã€‚
+ * ã¾ãŸã€ä»–ã®ã‚¢ã‚¯ã‚¿ãƒ¼ã«å‡¦ç†ãŒç§»ã‚‰ãªã„ã®ã§reqwsãªã©ã®å‘½ä»¤ã¯dead lockã™ã‚‹ã®ã§æ³¨æ„ã—ã¦ãã ã•ã„ã€‚
  *
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
- * @param[in]	level	—Dæ“x(‚‚¢‚Ù‚Ç—Dæ)
- * @param[in]	action	ƒAƒNƒVƒ‡ƒ“–¼
- * @param[in]	sender	ƒŠƒNƒGƒXƒgŒ³ƒAƒNƒ^[
- * @retval		true	Às¬Œ÷
- * @retval		false	Às¸”s
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	level	å„ªå…ˆåº¦(é«˜ã„ã»ã©å„ªå…ˆ)
+ * @param[in]	action	ã‚¢ã‚¯ã‚·ãƒ§ãƒ³å
+ * @param[in]	sender	ãƒªã‚¯ã‚¨ã‚¹ãƒˆå…ƒã‚¢ã‚¯ã‚¿ãƒ¼
+ * @retval		true	å®Ÿè¡ŒæˆåŠŸ
+ * @retval		false	å®Ÿè¡Œå¤±æ•—
  */
 bool mana_async_call(mana_actor* self, const int32_t level, const char* action, mana_actor* sender)
 {
@@ -1653,12 +1653,12 @@ bool mana_async_call(mana_actor* self, const int32_t level, const char* action, 
 }
 
 /*!
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
- * @param[in]	level	—Dæ“x(‚‚¢‚Ù‚Ç—Dæ)
- * @param[in]	action	ƒAƒNƒVƒ‡ƒ“–¼
- * @param[in]	sender	ƒŠƒNƒGƒXƒgŒ³ƒAƒNƒ^[
- * @retval		true	ƒŠƒNƒGƒXƒg¬Œ÷
- * @retval		false	ƒŠƒNƒGƒXƒg¸”s
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	level	å„ªå…ˆåº¦(é«˜ã„ã»ã©å„ªå…ˆ)
+ * @param[in]	action	ã‚¢ã‚¯ã‚·ãƒ§ãƒ³å
+ * @param[in]	sender	ãƒªã‚¯ã‚¨ã‚¹ãƒˆå…ƒã‚¢ã‚¯ã‚¿ãƒ¼
+ * @retval		true	ãƒªã‚¯ã‚¨ã‚¹ãƒˆæˆåŠŸ
+ * @retval		false	ãƒªã‚¯ã‚¨ã‚¹ãƒˆå¤±æ•—
  */
 bool mana_actor_request(mana_actor* self, const int32_t level, const char* action, mana_actor* sender)
 {
@@ -1720,42 +1720,42 @@ bool mana_actor_request(mana_actor* self, const int32_t level, const char* actio
 		MANA_TRACE("Mana:request: level %d %s (%08x) succeed\n", level, action, address);
 	}
 
-	/* Às‚·‚éƒAƒNƒVƒ‡ƒ“–¼‚ğ‹L˜^ */
+	/* å®Ÿè¡Œã™ã‚‹ã‚¢ã‚¯ã‚·ãƒ§ãƒ³åã‚’è¨˜éŒ² */
 	self->interrupt[level].action_name = action;
 #endif
 
 	if(level >= self->interrupt_level)
 	{
-		/* ƒR[ƒ‹ƒoƒbƒNŠÖ”‚ğŒÄ‚Ñ‚Ü‚· */
+		/* ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°ã‚’å‘¼ã³ã¾ã™ */
 		if(mana_actor_request_callback)
 			mana_actor_request_callback(self, self->request_callback_parameter);
 
-		/* Œ»İ‚æ‚è‚à‚‚¢—Dæ“x(‚‚¢‚Ù‚Ç—Dæ)‚Ìê‡A‚·‚®‚ÉŠ„‚è‚Ş */
+		/* ç¾åœ¨ã‚ˆã‚Šã‚‚é«˜ã„å„ªå…ˆåº¦(é«˜ã„ã»ã©å„ªå…ˆ)ã®å ´åˆã€ã™ãã«å‰²ã‚Šè¾¼ã‚€ */
 		mana_actor_again(self);
 
-		/* Œ»İ‚ÌFP‚ÆSP‚ğ•Û‘¶‚µ‚Ü‚· */
+		/* ç¾åœ¨ã®FPã¨SPã‚’ä¿å­˜ã—ã¾ã™ */
 		self->interrupt[level].frame_pointer = mana_frame_get_size(&self->frame);
 		self->interrupt[level].stack_pointer = mana_stack_get_size(&self->stack);
 
-		/* Œ»İ‚ÌƒvƒƒOƒ‰ƒ€ƒJƒEƒ“ƒ^‚ğ•Û‘¶‚µ‚Ü‚· */
+		/* ç¾åœ¨ã®ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚«ã‚¦ãƒ³ã‚¿ã‚’ä¿å­˜ã—ã¾ã™ */
 		self->interrupt[self->interrupt_level].address = self->pc;
 
-		/* V‚µ‚¢—Dæ“x(‚‚¢‚Ù‚Ç—Dæ)‚ÆƒvƒƒOƒ‰ƒ€ƒJƒEƒ“ƒ^‚ğİ’è‚µ‚Ü‚· */
+		/* æ–°ã—ã„å„ªå…ˆåº¦(é«˜ã„ã»ã©å„ªå…ˆ)ã¨ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚«ã‚¦ãƒ³ã‚¿ã‚’è¨­å®šã—ã¾ã™ */
 		self->interrupt_level = (uint8_t)level;
 		self->pc = address;
 
-		/* Ÿ‚ÌTick‚ÅƒvƒƒOƒ‰ƒ€ƒJƒEƒ“ƒ^‚ği‚ß‚È‚¢ˆ— */
+		/* æ¬¡ã®Tickã§ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚«ã‚¦ãƒ³ã‚¿ã‚’é€²ã‚ãªã„å‡¦ç† */
 		self->interrupt[self->interrupt_level].flag |= MANA_INTERRUPT_FLAG_REPEAT;
 	}
 	else
 	{
-		/* Œ»İ‚æ‚è‚à’á‚¢—Dæ“x(‚‚¢‚Ù‚Ç—Dæ)‚Ìê‡AŒ»İ‚ÌƒAƒNƒVƒ‡ƒ“I—¹Œã‚ÉÀs */
+		/* ç¾åœ¨ã‚ˆã‚Šã‚‚ä½ã„å„ªå…ˆåº¦(é«˜ã„ã»ã©å„ªå…ˆ)ã®å ´åˆã€ç¾åœ¨ã®ã‚¢ã‚¯ã‚·ãƒ§ãƒ³çµ‚äº†å¾Œã«å®Ÿè¡Œ */
 
-		/* Œ»İ‚Ì—Dæ“x(‚‚¢‚Ù‚Ç—Dæ)‚É“ü‚Á‚½‚Æ‚«‚ÌFP‚ÆSP‚ğ•Û‘¶‚µ‚Ü‚· */
+		/* ç¾åœ¨ã®å„ªå…ˆåº¦(é«˜ã„ã»ã©å„ªå…ˆ)ã«å…¥ã£ãŸã¨ãã®FPã¨SPã‚’ä¿å­˜ã—ã¾ã™ */
 		self->interrupt[level].frame_pointer = self->interrupt[self->interrupt_level].frame_pointer;
 		self->interrupt[level].stack_pointer = self->interrupt[self->interrupt_level].stack_pointer;
 
-		/* Ÿ‚ÌTick‚ÅƒvƒƒOƒ‰ƒ€ƒJƒEƒ“ƒ^‚ği‚ß‚éˆ— */
+		/* æ¬¡ã®Tickã§ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚«ã‚¦ãƒ³ã‚¿ã‚’é€²ã‚ã‚‹å‡¦ç† */
 		self->interrupt[level].flag &= ~MANA_INTERRUPT_FLAG_REPEAT;
 	}
 
@@ -1765,9 +1765,9 @@ bool mana_actor_request(mana_actor* self, const int32_t level, const char* actio
 }
 
 /*!
- * ƒAƒNƒVƒ‡ƒ“‚ğI—¹‚µ‚Äw’è—Dæ“x‚Ü‚ÅŠÒŒ³‚µ‚Ü‚·
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
- * @param[in]	level	ŠÒŒ³‚·‚é—Dæ“x
+ * ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã‚’çµ‚äº†ã—ã¦æŒ‡å®šå„ªå…ˆåº¦ã¾ã§é‚„å…ƒã—ã¾ã™
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	level	é‚„å…ƒã™ã‚‹å„ªå…ˆåº¦
  */
 void mana_actor_rollback(mana_actor* self, int32_t level)
 {
@@ -1777,48 +1777,48 @@ void mana_actor_rollback(mana_actor* self, int32_t level)
 
 	MANA_ASSERT(self);
 
-	/* ”ñ“¯Šúƒ‚[ƒh‚É•ÏX */
+	/* éåŒæœŸãƒ¢ãƒ¼ãƒ‰ã«å¤‰æ›´ */
 	mana_actor_set_synchronized(self, false);
 
-	/* ƒŠƒNƒGƒXƒg‚ªI—¹‚µ‚½‚±‚Æ‚ğsender‚É’Ê’m‚·‚é */
+	/* ãƒªã‚¯ã‚¨ã‚¹ãƒˆãŒçµ‚äº†ã—ãŸã“ã¨ã‚’senderã«é€šçŸ¥ã™ã‚‹ */
 	if(self->interrupt[self->interrupt_level].sender)
 	{
 		mana_actor_again(self->interrupt[self->interrupt_level].sender);
 		self->interrupt[self->interrupt_level].sender = NULL;
 	}
 
-	/* ƒtƒ@ƒCƒ‹“Ç‚İ‚İ’†‚È‚ç‚Î‰ğ•ú */
+	/* ãƒ•ã‚¡ã‚¤ãƒ«èª­ã¿è¾¼ã¿ä¸­ãªã‚‰ã°è§£æ”¾ */
 	if(mana_async_file_callback && self->interrupt[self->interrupt_level].file_callback_parameter)
 	{
 		mana_async_file_callback(MANA_FILE_COMMAND_CLOSE, self->interrupt[self->interrupt_level].file_callback_parameter);
 		self->interrupt[self->interrupt_level].file_callback_parameter = NULL;
 	}
 
-	/* —Dæ“xŠJ•ú */
+	/* å„ªå…ˆåº¦é–‹æ”¾ */
 	self->interrupt[self->interrupt_level].address = (uint32_t)~0;
 
 #if !defined(NDEBUG)
-	/* Às’†‚ÌƒAƒNƒVƒ‡ƒ“–¼‚ğÁ‹ */
+	/* å®Ÿè¡Œä¸­ã®ã‚¢ã‚¯ã‚·ãƒ§ãƒ³åã‚’æ¶ˆå» */
 	self->interrupt[self->interrupt_level].action_name = NULL;
 #endif
 
-	/* SyncCall’†‚©æ“¾ */
+	/* SyncCallä¸­ã‹å–å¾— */
 	in_sync_call = self->interrupt[self->interrupt_level].flag & MANA_INTERRUPT_FLAG_IS_IN_SYNC_CALL;
 	if(in_sync_call)
 	{
 		self->interrupt[self->interrupt_level].flag &= ~MANA_INTERRUPT_FLAG_IS_IN_SYNC_CALL;
 	}
 
-	/* FP‚ÆSP‚ğæ“¾ */
+	/* FPã¨SPã‚’å–å¾— */
 	frame_pointer = self->interrupt[self->interrupt_level].frame_pointer;
 	stack_pointer = self->interrupt[self->interrupt_level].stack_pointer;
 
-	/* ƒƒOo—Í */
+	/* ãƒ­ã‚°å‡ºåŠ› */
 	/*
 	MANA_TRACE("mana_actor::Rollback: %d, %s\n", interrupt_level, GetName());
 	*/
 
-	/* —Dæ“x(‚‚¢‚Ù‚Ç—Dæ)‚ªw’è‚³‚ê‚Ä‚¢‚é‚È‚ç‚ÎA‹­§“I‚Éw’è—Dæ“x‚Ü‚Å–ß‚é */
+	/* å„ªå…ˆåº¦(é«˜ã„ã»ã©å„ªå…ˆ)ãŒæŒ‡å®šã•ã‚Œã¦ã„ã‚‹ãªã‚‰ã°ã€å¼·åˆ¶çš„ã«æŒ‡å®šå„ªå…ˆåº¦ã¾ã§æˆ»ã‚‹ */
 	current_level = self->interrupt_level - 1;
 	if(current_level > level)
 	{
@@ -1826,10 +1826,10 @@ void mana_actor_rollback(mana_actor* self, int32_t level)
 		{
 			mana_interrupt* interrupt = &self->interrupt[current_level];
 
-			/* —Dæ“xŠJ•ú */
+			/* å„ªå…ˆåº¦é–‹æ”¾ */
 			interrupt->address = (uint32_t)~0;
 
-			/* ƒtƒ@ƒCƒ‹ƒGƒ“ƒgƒŠ‚Ìíœ */
+			/* ãƒ•ã‚¡ã‚¤ãƒ«ã‚¨ãƒ³ãƒˆãƒªã®å‰Šé™¤ */
 			if(mana_async_file_callback && interrupt->file_callback_parameter)
 			{
 				MANA_TRACE("mana_actor_rollback: %d: waitting for file loading\n", current_level);
@@ -1838,11 +1838,11 @@ void mana_actor_rollback(mana_actor* self, int32_t level)
 				interrupt->file_callback_parameter = NULL;
 			}
 
-			/* ƒtƒŒ[ƒ€ƒ|ƒCƒ“ƒ^‚ÆƒXƒ^ƒbƒNƒ|ƒCƒ“ƒ^‚ğæ“¾ */
+			/* ãƒ•ãƒ¬ãƒ¼ãƒ ãƒã‚¤ãƒ³ã‚¿ã¨ã‚¹ã‚¿ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿ã‚’å–å¾— */
 			frame_pointer = interrupt->frame_pointer;
 			stack_pointer = interrupt->stack_pointer;
 
-			/* ƒR[ƒ‹ƒoƒbƒNŠÖ”‚ğŒÄ‚Ñ‚Ü‚· */
+			/* ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°ã‚’å‘¼ã³ã¾ã™ */
 			if(mana_actor_rollback_callback)
 				mana_actor_rollback_callback(self, self->rollback_callback_parameter);
 
@@ -1850,30 +1850,30 @@ void mana_actor_rollback(mana_actor* self, int32_t level)
 		}
 	}
 
-	/* FP‚ÆSP‚ğ•œŒ³‚µ‚Ü‚· */
+	/* FPã¨SPã‚’å¾©å…ƒã—ã¾ã™ */
 	mana_frame_set_size(&self->frame, frame_pointer);
 	mana_stack_set_size(&self->stack, stack_pointer);
 
-	/* ’†’f‚³‚ê‚½ƒAƒNƒVƒ‡ƒ“‚ÌÄŠJ */
+	/* ä¸­æ–­ã•ã‚ŒãŸã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã®å†é–‹ */
 	while(current_level >= 0)
 	{
 		mana_interrupt* interrupt = &self->interrupt[current_level];
 		if(interrupt->address != ~0)
 		{
-			/* ’†’f‚µ‚Ä‚¢‚½êŠ‚©‚ç•œ‹A‚³‚¹‚Ü‚· */
+			/* ä¸­æ–­ã—ã¦ã„ãŸå ´æ‰€ã‹ã‚‰å¾©å¸°ã•ã›ã¾ã™ */
 			self->pc = interrupt->address;
 
-			/* ƒR[ƒ‹ƒoƒbƒNŠÖ”‚ğŒÄ‚Ñ‚Ü‚· */
+			/* ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°ã‚’å‘¼ã³ã¾ã™ */
 			if(mana_actor_rollback_callback)
 				mana_actor_rollback_callback(self, self->rollback_callback_parameter);
 
-			/* —Dæ“x(‚‚¢‚Ù‚Ç—Dæ)•ÏX */
+			/* å„ªå…ˆåº¦(é«˜ã„ã»ã©å„ªå…ˆ)å¤‰æ›´ */
 			self->interrupt_level = (uint8_t)current_level;
 
-			/* Ÿ‰ñ‚ÌTick‚ÅƒvƒƒOƒ‰ƒ€ƒJƒEƒ“ƒ^[‚ğ‰ÁZ‚µ‚È‚¢ */
+			/* æ¬¡å›ã®Tickã§ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚«ã‚¦ãƒ³ã‚¿ãƒ¼ã‚’åŠ ç®—ã—ãªã„ */
 			self->interrupt[self->interrupt_level].flag |= MANA_INTERRUPT_FLAG_REPEAT;
 
-			/* SyncCall’†‚È‚ç‚ÎTick‚ğ”²‚¯‚é */
+			/* SyncCallä¸­ãªã‚‰ã°Tickã‚’æŠœã‘ã‚‹ */
 			if(in_sync_call)
 				mana_actor_yield(self);
 
@@ -1889,12 +1889,12 @@ void mana_actor_rollback(mana_actor* self, int32_t level)
 		current_level--;
 	}
 
-	/* Às‰Â”\‚ÈƒAƒNƒVƒ‡ƒ“‚ª–³‚¢‚Ì‚ÅAƒAƒNƒ^[‚Í’â~‚·‚é */
+	/* å®Ÿè¡Œå¯èƒ½ãªã‚¢ã‚¯ã‚·ãƒ§ãƒ³ãŒç„¡ã„ã®ã§ã€ã‚¢ã‚¯ã‚¿ãƒ¼ã¯åœæ­¢ã™ã‚‹ */
 	mana_actor_restart(self);
 }
 
 /*!
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 void mana_actor_restart(mana_actor* self)
 {
@@ -1918,10 +1918,10 @@ void mana_actor_restart(mana_actor* self)
 }
 
 /*!
- * Às‘¬“x‚Í’x‚¢‚Ì‚Å’ˆÓ‚ª•K—v
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
- * @retval		!= NULL			ƒAƒNƒ^[‚Ì–¼‘O
- * @retval		== NULL			ŒŸõ¸”s
+ * å®Ÿè¡Œé€Ÿåº¦ã¯é…ã„ã®ã§æ³¨æ„ãŒå¿…è¦
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @retval		!= NULL			ã‚¢ã‚¯ã‚¿ãƒ¼ã®åå‰
+ * @retval		== NULL			æ¤œç´¢å¤±æ•—
  */
 const char* mana_actor_get_name(mana_actor* self)
 {
@@ -1931,10 +1931,10 @@ const char* mana_actor_get_name(mana_actor* self)
 }
 
 /*!
- * Às‘¬“x‚Í’x‚¢‚Ì‚Å’ˆÓ‚ª•K—v
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
- * @param[in]	action	ƒAƒNƒVƒ‡ƒ“‚Ì–¼‘O
- * @return		ƒAƒNƒVƒ‡ƒ“‚ÌƒvƒƒOƒ‰ƒ€ƒAƒhƒŒƒXB0‚È‚ç¸”s
+ * å®Ÿè¡Œé€Ÿåº¦ã¯é…ã„ã®ã§æ³¨æ„ãŒå¿…è¦
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	action	ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã®åå‰
+ * @return		ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã®ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚¢ãƒ‰ãƒ¬ã‚¹ã€‚0ãªã‚‰å¤±æ•—
  */
 uintptr_t mana_actor_get_action(mana_actor* self, const char* action)
 {
@@ -1951,9 +1951,9 @@ uintptr_t mana_actor_get_action(mana_actor* self, const char* action)
 }
 
 /*!
- * ”Ä—pƒJƒEƒ“ƒ^[‚Í—Dæ“x–ˆ‚Éİ’è‚Å‚«‚Ü‚·
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
- * @return		”Ä—pƒJƒEƒ“ƒ^[
+ * æ±ç”¨ã‚«ã‚¦ãƒ³ã‚¿ãƒ¼ã¯å„ªå…ˆåº¦æ¯ã«è¨­å®šã§ãã¾ã™
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @return		æ±ç”¨ã‚«ã‚¦ãƒ³ã‚¿ãƒ¼
  */
 int32_t mana_actor_get_counter(mana_actor* self)
 {
@@ -1963,9 +1963,9 @@ int32_t mana_actor_get_counter(mana_actor* self)
 }
 
 /*!
- * ”Ä—pƒJƒEƒ“ƒ^[‚Í—Dæ“x–ˆ‚Éİ’è‚Å‚«‚Ü‚·
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
- * @param[in]	counter	”Ä—pƒJƒEƒ“ƒ^[
+ * æ±ç”¨ã‚«ã‚¦ãƒ³ã‚¿ãƒ¼ã¯å„ªå…ˆåº¦æ¯ã«è¨­å®šã§ãã¾ã™
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	counter	æ±ç”¨ã‚«ã‚¦ãƒ³ã‚¿ãƒ¼
  */
 void mana_actor_set_counter(mana_actor* self, const int32_t counter)
 {
@@ -1975,10 +1975,10 @@ void mana_actor_set_counter(mana_actor* self, const int32_t counter)
 }
 
 /*!
- * ŠO•”ŠÖ”‚ÉÏ‚Ü‚ê‚½ˆø”‚Ì”‚ğæ“¾‚µ‚Ü‚·
- * @warning 	ŠO•”ŠÖ”ˆÈŠO‚©‚çŒÄ‚Ño‚µ‹Ö~
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
- * @return		ˆø”‚Ì”
+ * å¤–éƒ¨é–¢æ•°ã«ç©ã¾ã‚ŒãŸå¼•æ•°ã®æ•°ã‚’å–å¾—ã—ã¾ã™
+ * @warning 	å¤–éƒ¨é–¢æ•°ä»¥å¤–ã‹ã‚‰å‘¼ã³å‡ºã—ç¦æ­¢
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @return		å¼•æ•°ã®æ•°
  */
 int32_t mana_actor_get_argument_count(mana_actor* self)
 {
@@ -1988,10 +1988,10 @@ int32_t mana_actor_get_argument_count(mana_actor* self)
 }
 
 /*!
- * ŠO•”ŠÖ”‚ÉÏ‚Ü‚ê‚½ˆø”‚Ì”‚ğæ“¾‚µ‚Ü‚·
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
- * @param[in]	address	ƒvƒƒOƒ‰ƒ€ƒAƒhƒŒƒX
- * @return		ˆø”‚Ì”
+ * å¤–éƒ¨é–¢æ•°ã«ç©ã¾ã‚ŒãŸå¼•æ•°ã®æ•°ã‚’å–å¾—ã—ã¾ã™
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	address	ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚¢ãƒ‰ãƒ¬ã‚¹
+ * @return		å¼•æ•°ã®æ•°
  */
 int32_t mana_actor_get_argument_count_by_address(mana_actor* self, const uint32_t address)
 {
@@ -1999,10 +1999,10 @@ int32_t mana_actor_get_argument_count_by_address(mana_actor* self, const uint32_
 }
 
 /*!
- * ŠO•”ŠÖ”‚ÉÏ‚Ü‚ê‚½ˆø”‚Ìƒ[ƒhƒTƒCƒY‚ğæ“¾‚µ‚Ü‚·
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
- * @param[in]	address	ƒvƒƒOƒ‰ƒ€ƒAƒhƒŒƒX
- * @return		ŠO•”ŠÖ”‚ÉÏ‚Ü‚ê‚½ˆø”‚Ìƒ[ƒhƒTƒCƒY
+ * å¤–éƒ¨é–¢æ•°ã«ç©ã¾ã‚ŒãŸå¼•æ•°ã®ãƒ¯ãƒ¼ãƒ‰ã‚µã‚¤ã‚ºã‚’å–å¾—ã—ã¾ã™
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	address	ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚¢ãƒ‰ãƒ¬ã‚¹
+ * @return		å¤–éƒ¨é–¢æ•°ã«ç©ã¾ã‚ŒãŸå¼•æ•°ã®ãƒ¯ãƒ¼ãƒ‰ã‚µã‚¤ã‚º
  */
 int32_t mana_actor_get_argument_size(mana_actor* self, const uint32_t address)
 {
@@ -2010,11 +2010,11 @@ int32_t mana_actor_get_argument_size(mana_actor* self, const uint32_t address)
 }
 
 /*!
- * @warning 	ŠO•”ŠÖ”ˆÈŠO‚©‚çŒÄ‚Ño‚µ‹Ö~
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
- * @param[in]	address	ƒvƒƒOƒ‰ƒ€ƒAƒhƒŒƒX
- * @retval		true	–ß‚è’l‚ ‚è
- * @retval		false	–ß‚è’l‚È‚µ
+ * @warning 	å¤–éƒ¨é–¢æ•°ä»¥å¤–ã‹ã‚‰å‘¼ã³å‡ºã—ç¦æ­¢
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	address	ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚¢ãƒ‰ãƒ¬ã‚¹
+ * @retval		true	æˆ»ã‚Šå€¤ã‚ã‚Š
+ * @retval		false	æˆ»ã‚Šå€¤ãªã—
  */
 bool mana_actor_has_return_value(mana_actor* self, const uint32_t address)
 {
@@ -2022,10 +2022,10 @@ bool mana_actor_has_return_value(mana_actor* self, const uint32_t address)
 }
 
 /*!
- * @warning 	ŠO•”ŠÖ”ˆÈŠO‚©‚çŒÄ‚Ño‚µ‹Ö~
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
- * @param[in]	value	ˆø”‚Ì”Ô†
- * @return		ˆø”‚Ì’l
+ * @warning 	å¤–éƒ¨é–¢æ•°ä»¥å¤–ã‹ã‚‰å‘¼ã³å‡ºã—ç¦æ­¢
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	value	å¼•æ•°ã®ç•ªå·
+ * @return		å¼•æ•°ã®å€¤
  */
 int32_t mana_actor_get_parameter_integer(mana_actor* self, const int32_t value)
 {
@@ -2039,10 +2039,10 @@ int32_t mana_actor_get_parameter_integer(mana_actor* self, const int32_t value)
 }
 
 /*!
- * @warning 	ŠO•”ŠÖ”ˆÈŠO‚©‚çŒÄ‚Ño‚µ‹Ö~
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
- * @param[in]	value	ˆø”‚Ì”Ô†
- * @return		ˆø”‚Ì’l
+ * @warning 	å¤–éƒ¨é–¢æ•°ä»¥å¤–ã‹ã‚‰å‘¼ã³å‡ºã—ç¦æ­¢
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	value	å¼•æ•°ã®ç•ªå·
+ * @return		å¼•æ•°ã®å€¤
  */
 float mana_actor_get_parameter_float(mana_actor* self, const int32_t value)
 {
@@ -2055,10 +2055,10 @@ float mana_actor_get_parameter_float(mana_actor* self, const int32_t value)
 }
 
 /*!
- * @warning 	ŠO•”ŠÖ”ˆÈŠO‚©‚çŒÄ‚Ño‚µ‹Ö~
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
- * @param[in]	value	ˆø”‚Ì”Ô†
- * @return		ˆø”‚Ì’l
+ * @warning 	å¤–éƒ¨é–¢æ•°ä»¥å¤–ã‹ã‚‰å‘¼ã³å‡ºã—ç¦æ­¢
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	value	å¼•æ•°ã®ç•ªå·
+ * @return		å¼•æ•°ã®å€¤
  */
 const char* mana_actor_get_parameter_string(mana_actor* self, const int32_t value)
 {
@@ -2071,10 +2071,10 @@ const char* mana_actor_get_parameter_string(mana_actor* self, const int32_t valu
 }
 
 /*!
- * @warning 	ŠO•”ŠÖ”ˆÈŠO‚©‚çŒÄ‚Ño‚µ‹Ö~
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
- * @param[in]	value	ˆø”‚Ì”Ô†
- * @return		ˆø”‚Ì’l
+ * @warning 	å¤–éƒ¨é–¢æ•°ä»¥å¤–ã‹ã‚‰å‘¼ã³å‡ºã—ç¦æ­¢
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	value	å¼•æ•°ã®ç•ªå·
+ * @return		å¼•æ•°ã®å€¤
  */
 mana_actor* mana_actor_get_parameter_actor(mana_actor* self, const int32_t value)
 {
@@ -2082,10 +2082,10 @@ mana_actor* mana_actor_get_parameter_actor(mana_actor* self, const int32_t value
 }
 
 /*!
- * @warning 	ŠO•”ŠÖ”ˆÈŠO‚©‚çŒÄ‚Ño‚µ‹Ö~
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
- * @param[in]	value	ˆø”‚Ì”Ô†
- * @return		ˆø”‚Ì’l
+ * @warning 	å¤–éƒ¨é–¢æ•°ä»¥å¤–ã‹ã‚‰å‘¼ã³å‡ºã—ç¦æ­¢
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	value	å¼•æ•°ã®ç•ªå·
+ * @return		å¼•æ•°ã®å€¤
  */
 void* mana_actor_get_parameter_pointer(mana_actor* self, const int32_t value)
 {
@@ -2098,10 +2098,10 @@ void* mana_actor_get_parameter_pointer(mana_actor* self, const int32_t value)
 }
 
 /*!
- * @warning 	ŠO•”ŠÖ”ˆÈŠO‚©‚çŒÄ‚Ño‚µ‹Ö~
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
- * @param[in]	value	ˆø”‚Ì”Ô†
- * @return		ˆø”‚Ì’l
+ * @warning 	å¤–éƒ¨é–¢æ•°ä»¥å¤–ã‹ã‚‰å‘¼ã³å‡ºã—ç¦æ­¢
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	value	å¼•æ•°ã®ç•ªå·
+ * @return		å¼•æ•°ã®å€¤
  */
 void* mana_actor_get_parameter_address(mana_actor* self, const int32_t value)
 {
@@ -2114,9 +2114,9 @@ void* mana_actor_get_parameter_address(mana_actor* self, const int32_t value)
 }
 
 /*!
- * @warning 	ŠO•”ŠÖ”ˆÈŠO‚©‚çŒÄ‚Ño‚µ‹Ö~
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
- * @param[in]	value	–ß‚è’l
+ * @warning 	å¤–éƒ¨é–¢æ•°ä»¥å¤–ã‹ã‚‰å‘¼ã³å‡ºã—ç¦æ­¢
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	value	æˆ»ã‚Šå€¤
  */
 void mana_actor_set_return_integer(mana_actor* self, const int32_t value)
 {
@@ -2127,9 +2127,9 @@ void mana_actor_set_return_integer(mana_actor* self, const int32_t value)
 }
 
 /*!
- * @warning 	ŠO•”ŠÖ”ˆÈŠO‚©‚çŒÄ‚Ño‚µ‹Ö~
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
- * @param[in]	value	–ß‚è’l
+ * @warning 	å¤–éƒ¨é–¢æ•°ä»¥å¤–ã‹ã‚‰å‘¼ã³å‡ºã—ç¦æ­¢
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	value	æˆ»ã‚Šå€¤
  */
 void mana_actor_set_return_float(mana_actor* self, const float value)
 {
@@ -2140,9 +2140,9 @@ void mana_actor_set_return_float(mana_actor* self, const float value)
 }
 
 /*!
- * @warning 	ŠO•”ŠÖ”ˆÈŠO‚©‚çŒÄ‚Ño‚µ‹Ö~
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
- * @param[in]	value	–ß‚è’l
+ * @warning 	å¤–éƒ¨é–¢æ•°ä»¥å¤–ã‹ã‚‰å‘¼ã³å‡ºã—ç¦æ­¢
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	value	æˆ»ã‚Šå€¤
  */
 void mana_actor_set_return_string(mana_actor* self, const char* string)
 {
@@ -2153,9 +2153,9 @@ void mana_actor_set_return_string(mana_actor* self, const char* string)
 }
 
 /*!
- * @warning 	ŠO•”ŠÖ”ˆÈŠO‚©‚çŒÄ‚Ño‚µ‹Ö~
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
- * @param[in]	value	–ß‚è’l
+ * @warning 	å¤–éƒ¨é–¢æ•°ä»¥å¤–ã‹ã‚‰å‘¼ã³å‡ºã—ç¦æ­¢
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	value	æˆ»ã‚Šå€¤
  */
 void mana_actor_set_return_actor(mana_actor* self, mana_actor* actor)
 {
@@ -2166,9 +2166,9 @@ void mana_actor_set_return_actor(mana_actor* self, mana_actor* actor)
 }
 
 /*!
- * @warning 	ŠO•”ŠÖ”ˆÈŠO‚©‚çŒÄ‚Ño‚µ‹Ö~
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
- * @param[in]	value	–ß‚è’l
+ * @warning 	å¤–éƒ¨é–¢æ•°ä»¥å¤–ã‹ã‚‰å‘¼ã³å‡ºã—ç¦æ­¢
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	value	æˆ»ã‚Šå€¤
  */
 void mana_actor_set_return_pointer(mana_actor* self, void* pointer)
 {
@@ -2179,10 +2179,10 @@ void mana_actor_set_return_pointer(mana_actor* self, void* pointer)
 }
 
 /*!
- * @warning 	ŠO•”ŠÖ”ˆÈŠO‚©‚çŒÄ‚Ño‚µ‹Ö~
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
- * @param[in]	value	–ß‚è’l
- * @param[in]	size	–ß‚è’l‚ÌƒTƒCƒY
+ * @warning 	å¤–éƒ¨é–¢æ•°ä»¥å¤–ã‹ã‚‰å‘¼ã³å‡ºã—ç¦æ­¢
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	value	æˆ»ã‚Šå€¤
+ * @param[in]	size	æˆ»ã‚Šå€¤ã®ã‚µã‚¤ã‚º
  */
 void mana_actor_set_return_data(mana_actor* self, const void* pointer, const int32_t size)
 {
@@ -2202,8 +2202,8 @@ void mana_actor_set_return_data(mana_actor* self, const void* pointer, const int
 
 #if !defined(NDEBUG)
 /*!
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
- * @return		Às’†‚ÌƒAƒNƒVƒ‡ƒ“–¼
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @return		å®Ÿè¡Œä¸­ã®ã‚¢ã‚¯ã‚·ãƒ§ãƒ³å
  */
 const char* mana_actor_get_action_name(const mana_actor* self)
 {
@@ -2217,9 +2217,9 @@ const char* mana_actor_get_action_name(const mana_actor* self)
 }
 
 /*!
- * @warning 	ŠO•”ŠÖ”ˆÈŠO‚©‚çŒÄ‚Ño‚µ‹Ö~
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
- * @return		ŠO•”ŠÖ”–¼
+ * @warning 	å¤–éƒ¨é–¢æ•°ä»¥å¤–ã‹ã‚‰å‘¼ã³å‡ºã—ç¦æ­¢
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @return		å¤–éƒ¨é–¢æ•°å
  */
 const char* mana_actor_get_function_name(const mana_actor* self)
 {
@@ -2230,9 +2230,9 @@ const char* mana_actor_get_function_name(const mana_actor* self)
 #endif
 
 /*!
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
- * @param[in]	action	ƒAƒNƒVƒ‡ƒ“–¼
- * @param[in]	address	ƒvƒƒOƒ‰ƒ€ƒAƒhƒŒƒX
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	action	ã‚¢ã‚¯ã‚·ãƒ§ãƒ³å
+ * @param[in]	address	ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚¢ãƒ‰ãƒ¬ã‚¹
  */
 void mana_actor_set_action(mana_actor* self, const char* action, uint8_t* address)
 {
@@ -2242,8 +2242,8 @@ void mana_actor_set_action(mana_actor* self, const char* action, uint8_t* addres
 }
 
 /*!
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
- * @return		mana ƒIƒuƒWƒFƒNƒg
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @return		mana ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 mana* mana_actor_get_parent(const mana_actor* self)
 {
@@ -2253,9 +2253,9 @@ mana* mana_actor_get_parent(const mana_actor* self)
 }
 
 /*!
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
- * @retval		false	‰Šú‰»Š®—¹
- * @retval		true	‰Šú‰»’†
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @retval		false	åˆæœŸåŒ–å®Œäº†
+ * @retval		true	åˆæœŸåŒ–ä¸­
  */
 bool mana_actor_is_init(const mana_actor* self)
 {
@@ -2265,9 +2265,9 @@ bool mana_actor_is_init(const mana_actor* self)
 }
 
 /*!
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
- * @retval		true	ÄÀs‚ª•K—v
- * @retval		false	ÄÀs‚Í•s—v
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @retval		true	å†å®Ÿè¡ŒãŒå¿…è¦
+ * @retval		false	å†å®Ÿè¡Œã¯ä¸è¦
  */
 bool mana_actor_is_repeat(const mana_actor* self)
 {
@@ -2277,9 +2277,9 @@ bool mana_actor_is_repeat(const mana_actor* self)
 }
 
 /*!
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
- * @retval		true	Às’†
- * @retval		false	’â~
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @retval		true	å®Ÿè¡Œä¸­
+ * @retval		false	åœæ­¢
  */
 bool mana_actor_is_running(const mana_actor* self)
 {
@@ -2292,9 +2292,9 @@ bool mana_actor_is_running(const mana_actor* self)
 }
 
 /*!
- * Às‚ğ’†’f‚µ‚ÄŸ‚ÌƒtƒŒ[ƒ€‚ÉÄÀs‚µ‚Ü‚·B
- * @param[in]	self				mana_actor ƒIƒuƒWƒFƒNƒg
- * @param[in]	initial_complete	‰Šú‰»Š®—¹ƒtƒ‰ƒO
+ * å®Ÿè¡Œã‚’ä¸­æ–­ã—ã¦æ¬¡ã®ãƒ•ãƒ¬ãƒ¼ãƒ ã«å†å®Ÿè¡Œã—ã¾ã™ã€‚
+ * @param[in]	self				mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	initial_complete	åˆæœŸåŒ–å®Œäº†ãƒ•ãƒ©ã‚°
  */
 void mana_actor_repeat(mana_actor* self, const bool initial_complete)
 {
@@ -2308,9 +2308,9 @@ void mana_actor_repeat(mana_actor* self, const bool initial_complete)
 }
 
 /*!
- * “¯ˆêƒtƒŒ[ƒ€’†‚ÉÄÀs‚µ‚Ü‚·B
- * ‚Ü‚½Avoid mana_actor_repeat(mana_actor* self, bool initial_complete)‚Æˆá‚¢’†’f‚Í‚µ‚Ü‚¹‚ñB
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
+ * åŒä¸€ãƒ•ãƒ¬ãƒ¼ãƒ ä¸­ã«å†å®Ÿè¡Œã—ã¾ã™ã€‚
+ * ã¾ãŸã€void mana_actor_repeat(mana_actor* self, bool initial_complete)ã¨é•ã„ä¸­æ–­ã¯ã—ã¾ã›ã‚“ã€‚
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 void mana_actor_again(mana_actor* self)
 {
@@ -2321,9 +2321,9 @@ void mana_actor_again(mana_actor* self)
 }
 
 /*!
- * void mana_actor_stop(mana_actor* self)‚ÍƒŠƒNƒGƒXƒg‚ğó‚¯•t‚¯‚Ü‚·‚ªA
- * void mana_actor_halt(mana_actor* self)‚ÍƒŠƒNƒGƒXƒg‚àó‚¯‚Â‚ß‚Ü‚¹‚ñB
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
+ * void mana_actor_stop(mana_actor* self)ã¯ãƒªã‚¯ã‚¨ã‚¹ãƒˆã‚’å—ã‘ä»˜ã‘ã¾ã™ãŒã€
+ * void mana_actor_halt(mana_actor* self)ã¯ãƒªã‚¯ã‚¨ã‚¹ãƒˆã‚‚å—ã‘ã¤ã‚ã¾ã›ã‚“ã€‚
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 void mana_actor_halt(mana_actor* self)
 {
@@ -2338,9 +2338,9 @@ void mana_actor_halt(mana_actor* self)
 }
 
 /*!
- * void mana_actor_halt(mana_actor* self)‚ÍƒŠƒNƒGƒXƒg‚ğó‚¯•t‚¯‚Ü‚¹‚ñ‚ªA
- * void mana_actor_stop(mana_actor* self)‚ÍÀs’â~‚Ì‚İs‚È‚¢‚Ü‚·B
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
+ * void mana_actor_halt(mana_actor* self)ã¯ãƒªã‚¯ã‚¨ã‚¹ãƒˆã‚’å—ã‘ä»˜ã‘ã¾ã›ã‚“ãŒã€
+ * void mana_actor_stop(mana_actor* self)ã¯å®Ÿè¡Œåœæ­¢ã®ã¿è¡Œãªã„ã¾ã™ã€‚
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 void mana_actor_stop(mana_actor* self)
 {
@@ -2350,7 +2350,7 @@ void mana_actor_stop(mana_actor* self)
 }
 
 /*!
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 void mana_actor_yield(mana_actor* self)
 {
@@ -2360,8 +2360,8 @@ void mana_actor_yield(mana_actor* self)
 }
 
 /*!
- * ƒŠƒNƒGƒXƒg‚ğó‚¯•t‚¯‚Ü‚·
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
+ * ãƒªã‚¯ã‚¨ã‚¹ãƒˆã‚’å—ã‘ä»˜ã‘ã¾ã™
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 void mana_actor_comply(mana_actor* self)
 {
@@ -2371,8 +2371,8 @@ void mana_actor_comply(mana_actor* self)
 }
 
 /*!
- * ƒŠƒNƒGƒXƒg‚ğó‚¯•t‚¯‚Ü‚¹‚ñ
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
+ * ãƒªã‚¯ã‚¨ã‚¹ãƒˆã‚’å—ã‘ä»˜ã‘ã¾ã›ã‚“
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 void mana_actor_refuse(mana_actor* self)
 {
@@ -2382,8 +2382,8 @@ void mana_actor_refuse(mana_actor* self)
 }
 
 /*!
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
- * @return		Œ»İ‚Ì—Dæ“x
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @return		ç¾åœ¨ã®å„ªå…ˆåº¦
  */
 int32_t mana_actor_get_interrupt_level(mana_actor* self)
 {
@@ -2393,9 +2393,9 @@ int32_t mana_actor_get_interrupt_level(mana_actor* self)
 }
 
 /*!
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
- * @retval		true	“¯Šú’†
- * @retval		false	”ñ“¯Šú’†
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @retval		true	åŒæœŸä¸­
+ * @retval		false	éåŒæœŸä¸­
  */
 bool mana_actor_is_synchronized(mana_actor* self)
 {
@@ -2405,10 +2405,10 @@ bool mana_actor_is_synchronized(mana_actor* self)
 }
 
 /*!
- * @param[in]	self			mana_actor ƒIƒuƒWƒFƒNƒg
+ * @param[in]	self			mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  * @param[in]	synchronized
- * - true‚È‚ç‚Î“¯ŠúÀs
- * - false‚È‚ç‚Î”ñ“¯ŠúÀs
+ * - trueãªã‚‰ã°åŒæœŸå®Ÿè¡Œ
+ * - falseãªã‚‰ã°éåŒæœŸå®Ÿè¡Œ
  */
 void mana_actor_set_synchronized(mana_actor* self, bool synchronized)
 {
@@ -2421,11 +2421,11 @@ void mana_actor_set_synchronized(mana_actor* self, bool synchronized)
 }
 
 /*!
- * @param[in]	self			mana_actor ƒIƒuƒWƒFƒNƒg
- * @param[in]	level			—Dæ“x
+ * @param[in]	self			mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	level			å„ªå…ˆåº¦
  * @param[in]	synchronized
- * - true‚È‚ç‚Î“¯ŠúÀs
- * - false‚È‚ç‚Î”ñ“¯ŠúÀs
+ * - trueãªã‚‰ã°åŒæœŸå®Ÿè¡Œ
+ * - falseãªã‚‰ã°éåŒæœŸå®Ÿè¡Œ
  */
 void mana_actor_set_synchronized_with_level(mana_actor* self, int32_t level, bool synchronized)
 {
@@ -2439,10 +2439,10 @@ void mana_actor_set_synchronized_with_level(mana_actor* self, int32_t level, boo
 }
 
 /*!
- * @param[in]	self		mana_actor ƒIƒuƒWƒFƒNƒg
- * @param[in]	resouce_id	ƒŠƒ\[ƒX”Ô†
- * @param[out]	buffer		ƒf[ƒ^ƒAƒhƒŒƒX
- * @param[out]	size		ƒf[ƒ^ƒTƒCƒY
+ * @param[in]	self		mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	resouce_id	ãƒªã‚½ãƒ¼ã‚¹ç•ªå·
+ * @param[out]	buffer		ãƒ‡ãƒ¼ã‚¿ã‚¢ãƒ‰ãƒ¬ã‚¹
+ * @param[out]	size		ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º
  */
 void mana_actor_get_data(const mana_actor* self, const int32_t resouce_id, const void** buffer, size_t* size)
 {
@@ -2454,7 +2454,7 @@ void mana_actor_get_data(const mana_actor* self, const int32_t resouce_id, const
 }
 
 /*!
- * @return	ƒtƒ@ƒCƒ‹ƒR[ƒ‹ƒoƒbƒNŠÖ”
+ * @return	ãƒ•ã‚¡ã‚¤ãƒ«ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
  */
 mana_actor_file_callback* mana_actor_get_file_callback(void)
 {
@@ -2462,7 +2462,7 @@ mana_actor_file_callback* mana_actor_get_file_callback(void)
 }
 
 /*!
- * @param[in]	function	ƒtƒ@ƒCƒ‹ƒR[ƒ‹ƒoƒbƒNŠÖ”
+ * @param[in]	function	ãƒ•ã‚¡ã‚¤ãƒ«ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
  */
 void mana_actor_set_file_callback(mana_actor_file_callback* function)
 {
@@ -2470,9 +2470,9 @@ void mana_actor_set_file_callback(mana_actor_file_callback* function)
 }
 
 /*!
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
- * @param[in]	level	—Dæ“x
- * @return		ƒtƒ@ƒCƒ‹ƒR[ƒ‹ƒoƒbƒNƒpƒ‰ƒ[ƒ^[
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	level	å„ªå…ˆåº¦
+ * @return		ãƒ•ã‚¡ã‚¤ãƒ«ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼
  */
 void* mana_actor_get_file_callback_parameter(mana_actor* self, int32_t level)
 {
@@ -2483,9 +2483,9 @@ void* mana_actor_get_file_callback_parameter(mana_actor* self, int32_t level)
 }
 
 /*!
- * @param[in]	self		mana_actor ƒIƒuƒWƒFƒNƒg
- * @param[in]	level		—Dæ“x
- * @param[in]	parameter	ƒtƒ@ƒCƒ‹ƒR[ƒ‹ƒoƒbƒNƒpƒ‰ƒ[ƒ^[
+ * @param[in]	self		mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	level		å„ªå…ˆåº¦
+ * @param[in]	parameter	ãƒ•ã‚¡ã‚¤ãƒ«ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼
  */
 void mana_actor_set_file_callback_parameter(mana_actor* self, int32_t level, void* parameter)
 {
@@ -2496,7 +2496,7 @@ void mana_actor_set_file_callback_parameter(mana_actor* self, int32_t level, voi
 }
 
 /*!
- * @param[in]	function	ƒŠƒNƒGƒXƒgƒR[ƒ‹ƒoƒbƒNŠÖ”
+ * @param[in]	function	ãƒªã‚¯ã‚¨ã‚¹ãƒˆã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
  */
 void mana_actor_set_request_callback(mana_actor_callback* function)
 {
@@ -2504,8 +2504,8 @@ void mana_actor_set_request_callback(mana_actor_callback* function)
 }
 
 /*!
- * @param[in]	self		mana_actor ƒIƒuƒWƒFƒNƒg
- * @param[in]	parameter	ƒŠƒNƒGƒXƒgƒR[ƒ‹ƒoƒbƒNƒpƒ‰ƒ[ƒ^[
+ * @param[in]	self		mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	parameter	ãƒªã‚¯ã‚¨ã‚¹ãƒˆã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼
  */
 void mana_actor_set_request_callback_parameter(mana_actor* self, void* parameter)
 {
@@ -2515,7 +2515,7 @@ void mana_actor_set_request_callback_parameter(mana_actor* self, void* parameter
 }
 
 /*!
- * @param[in]	function	ƒ[ƒ‹ƒoƒbƒNƒR[ƒ‹ƒoƒbƒNŠÖ”
+ * @param[in]	function	ãƒ­ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
  */
 void mana_actor_set_rollback_callback(mana_actor_callback* function)
 {
@@ -2523,8 +2523,8 @@ void mana_actor_set_rollback_callback(mana_actor_callback* function)
 }
 
 /*!
- * @param[in]	function	ƒ[ƒ‹ƒoƒbƒNƒR[ƒ‹ƒoƒbƒNŠÖ”
- * @param[in]	parameter	ƒ[ƒ‹ƒoƒbƒNƒR[ƒ‹ƒoƒbƒNƒpƒ‰ƒ[ƒ^[
+ * @param[in]	function	ãƒ­ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
+ * @param[in]	parameter	ãƒ­ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼
  */
 void mana_actor_set_rollback_callback_parameter(mana_actor* self, void* parameter)
 {
@@ -2534,8 +2534,8 @@ void mana_actor_set_rollback_callback_parameter(mana_actor* self, void* paramete
 }
 
 /*!
- * @param[in]	self	mana_actor ƒIƒuƒWƒFƒNƒg
- * @return		ƒ†[ƒU[ƒf[ƒ^[
+ * @param[in]	self	mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @return		ãƒ¦ãƒ¼ã‚¶ãƒ¼ãƒ‡ãƒ¼ã‚¿ãƒ¼
  */
 uint32_t mana_actor_get_user_data(const mana_actor* self)
 {
@@ -2545,8 +2545,8 @@ uint32_t mana_actor_get_user_data(const mana_actor* self)
 }
 
 /*!
- * @param[in]	self		mana_actor ƒIƒuƒWƒFƒNƒg
- * @param[in]	user_data	ƒ†[ƒU[ƒf[ƒ^[
+ * @param[in]	self		mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	user_data	ãƒ¦ãƒ¼ã‚¶ãƒ¼ãƒ‡ãƒ¼ã‚¿ãƒ¼
  */
 void mana_actor_set_user_data(mana_actor* self, uint32_t user_data)
 {
@@ -2556,8 +2556,8 @@ void mana_actor_set_user_data(mana_actor* self, uint32_t user_data)
 }
 
 /*!
- * @param[in]	self		mana_actor ƒIƒuƒWƒFƒNƒg
- * @return		ƒ†[ƒU[ƒ|ƒCƒ“ƒ^[
+ * @param[in]	self		mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @return		ãƒ¦ãƒ¼ã‚¶ãƒ¼ãƒã‚¤ãƒ³ã‚¿ãƒ¼
  */
 void* mana_actor_get_user_pointer(const mana_actor* self)
 {
@@ -2567,8 +2567,8 @@ void* mana_actor_get_user_pointer(const mana_actor* self)
 }
 
 /*!
- * @param[in]	self			mana_actor ƒIƒuƒWƒFƒNƒg
- * @param[in]	user_pointer	ƒ†[ƒU[ƒ|ƒCƒ“ƒ^[
+ * @param[in]	self			mana_actor ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	user_pointer	ãƒ¦ãƒ¼ã‚¶ãƒ¼ãƒã‚¤ãƒ³ã‚¿ãƒ¼
  */
 void mana_actor_set_user_pointer(mana_actor* self, void* user_pointer)
 {
