@@ -211,13 +211,13 @@ int32_t mana_generator(void)
 	code_initialize();
 	data_initialzie();
 	mana_jump_initialize();
-	mana_node_initialize();
-	mana_register_initialzie();
-	mana_symbol_initialize();
-	mana_type_initialize();
+	node_initialize();
+	register_initialzie();
+	symbol_initialize();
+	type_initialize();
 
 	generator_initialize();
-	mana_pre_resolver_initialize();
+	pre_resolver_initialize();
 	mana_linker_initialize();
 
 	if(mana_variable_header_file)
@@ -226,7 +226,7 @@ int32_t mana_generator(void)
 		fprintf(mana_variable_header_file, "#define ___MANA_GLOBAL_H___\n");
 		fprintf(mana_variable_header_file, "typedef struct mana_global\n{\n");
 	}
-	result = mana_lexer_initialize(mana_input_filename);
+	result = lexer_initialize(mana_input_filename);
 	if(result)
 	{
 		result = (yyparse() != 0 || yynerrs != 0);
@@ -270,7 +270,7 @@ int32_t mana_generator(void)
 			{
 				{
 					fprintf(log, "Symbol Table\n\n");
-					mana_symbol_dump(log);
+					symbol_dump(log);
 					fprintf(log, "\n\n");
 				}
 				{
@@ -284,7 +284,7 @@ int32_t mana_generator(void)
 						code_copy(buffer);
 						while(i < size)
 						{
-							mana_symbol_dump_function_symbol_from_address(log, i);
+							symbol_dump_function_symbol_from_address(log, i);
 
 							const char* text = mana_get_instruction_text(data, buffer, i);
 							fprintf(log, "%s\n", text);
@@ -300,7 +300,7 @@ int32_t mana_generator(void)
 			}
 		}
 
-		mana_symbol_check_undefine();
+		symbol_check_undefine();
 
 
 		memset(&header, 0, sizeof(mana_file_header));
@@ -311,16 +311,19 @@ int32_t mana_generator(void)
 			header.flag |= MANA_HEADER_FLAG_RESOURCE;
 		if(mana_is_big_endian())
 			header.flag |= MANA_HEADER_FLAG_BIG_ENDIAN;
-		header.number_of_actors = mana_symbol_get_number_of_actors();
+#if UINTPTR_MAX == UINT64_MAX
+		header.flag |= MANA_HEADER_FLAG_64BIT;
+#endif
+		header.number_of_actors = symbol_get_number_of_actors();
 		header.size_of_constant_pool = data_get_size();
 		header.size_of_instruction_pool = code_get_size();
-		header.size_of_static_memory = mana_symbol_get_static_memory_address();
-		header.size_of_global_memory = mana_symbol_get_global_memory_address();
+		header.size_of_static_memory = symbol_get_static_memory_address();
+		header.size_of_global_memory = symbol_get_global_memory_address();
 		header.random_seed_number = (uint32_t)time(NULL);
 
 		mana_stream_push_data(stream, &header, sizeof(header));
 
-		if(! mana_symbol_write_actor_infomation(stream))
+		if(! symbol_write_actor_infomation(stream))
 		{
 			result = 1;
 			goto ESCAPE;
@@ -376,16 +379,16 @@ ESCAPE:
 	code_finalize();
 	data_finalize();
 	mana_jump_finalize();
-	mana_node_finalize();
-	mana_register_finalize();
-	mana_symbol_finalize();
-	mana_type_finalize();
+	node_finalize();
+	register_finalize();
+	symbol_finalize();
+	type_finalize();
 
 	generator_finalize();
-	mana_pre_resolver_finalize();
+	pre_resolver_finalize();
 	mana_linker_finalize();
 
-	mana_lexer_finalize();
+	lexer_finalize();
 
 	return result;
 }
