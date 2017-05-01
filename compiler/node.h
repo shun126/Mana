@@ -31,26 +31,26 @@ extern "C" {
 /*!
 ノードの初期化
 */
-extern void mana_node_initialize(void);
+extern void node_initialize(void);
 
 /*!
 ノードの終了
 */
-extern void mana_node_finalize(void);
+extern void node_finalize(void);
 
 /*!
 ノードを複製します
 @param[in]	org		元になるノードオブジェクト
 @return				複製したノードオブジェクト
 */
-extern node_entry* mana_node_clone(const node_entry* org);
+extern node_entry* node_clone(const node_entry* org);
 
 /*!
 ノード作成
 @param[in]	id		ノードタイプ番号
 @return				ノードオブジェクト
 */
-extern node_entry* mana_node_allocate(const node_id id);
+extern node_entry* node_allocate(const node_id id);
 
 /*!
 ノードを作成します
@@ -60,28 +60,28 @@ extern node_entry* mana_node_allocate(const node_id id);
 @param[in]	body	ノードオブジェクト
 @return		ノードオブジェクト
 */
-extern node_entry* mana_node_create_node(const node_id id, node_entry* left, node_entry* right, node_entry* body);
+extern node_entry* node_create_node(const node_id id, node_entry* left, node_entry* right, node_entry* body);
 
 /*!
 整数ノードを作成します
 @param[in]	digit	整数
 @return				ノードオブジェクト
 */
-extern node_entry* mana_node_create_digit(const int32_t digit);
+extern node_entry* node_create_digit(const int32_t digit);
 
 /*!
 実数ノードを作成します
 @param[in]	real	実数
 @return				ノードオブジェクト
 */
-extern node_entry* mana_node_create_real(const float real);
+extern node_entry* node_create_real(const float real);
 
 /*!
 文字列ノードを作成します
 @param[in]	string	文字列
 @return		ノードオブジェクト
 */
-extern node_entry* mana_node_create_string(const char* string);
+extern node_entry* node_create_string(const char* string);
 
 /*!
 関数宣言ノードを作成します
@@ -91,7 +91,7 @@ extern node_entry* mana_node_create_string(const char* string);
 @param[in]	body
 @return		ノードオブジェクト
 */
-extern node_entry* mana_node_create_declare_function(node_entry* left, const char* identifier, node_entry* argument_count, node_entry* body);
+extern node_entry* node_create_declare_function(node_entry* left, const char* identifier, node_entry* argument_count, node_entry* body);
 
 /*!
 ネイティブ関数宣言ノードを作成します
@@ -101,7 +101,7 @@ extern node_entry* mana_node_create_declare_function(node_entry* left, const cha
 @param[in]	body
 @return		ノードオブジェクト
 */
-extern node_entry* mana_node_create_declare_native_function(node_entry* left, const char* identifier, node_entry* argument_count, node_entry* body);
+extern node_entry* node_create_declare_native_function(node_entry* left, const char* identifier, node_entry* argument_count, node_entry* body);
 
 /*!
 型キャストノードを挿入します
@@ -109,20 +109,20 @@ extern node_entry* mana_node_create_declare_native_function(node_entry* left, co
 @param[in]	node	ノードオブジェクト
 @return				ノードオブジェクト
 */
-extern node_entry* mana_node_cast(type_description* type, node_entry* node);
+extern node_entry* node_cast(type_description* type, node_entry* node);
 
 /*!
 メモリサイズを取得します
 @param[in]	node	ノードオブジェクト
 @return				メモリサイズ
 */
-extern size_t mana_node_get_memory_size(node_entry* node);
+extern size_t node_get_memory_size(node_entry* node);
 
 /*!
 ノードをダンプします
 @param[-in]	node	親ノードオブジェクト
 */
-extern void mana_node_dump(const node_entry* node);
+extern void node_dump(const node_entry* node);
 
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)
 }

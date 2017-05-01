@@ -1460,7 +1460,7 @@ void mana_actor_serialize(mana_actor* self, mana_stream* stream)
 		mana_stream_mark(stream);
 	}
 
-	mana_stream_push_unsigned_integer(stream, self->variable_size);
+	mana_stream_push_size(stream, self->variable_size);
 	mana_stream_push_data(stream, self->variable, self->variable_size);
 	mana_stream_push_integer(stream, self->pc);
 
@@ -1505,7 +1505,7 @@ void mana_actor_deserialize(mana_actor* self, mana_stream* stream)
 		mana_stream_check(stream);
 	}
 
-	self->variable_size = mana_stream_pop_unsigned_integer(stream);
+	self->variable_size = mana_stream_pop_size(stream);
 	self->variable = mana_malloc(self->variable_size);
 	mana_stream_pop_data(stream, self->variable, self->variable_size);
 
@@ -1697,7 +1697,7 @@ bool mana_actor_request(mana_actor* self, const int32_t level, const char* actio
 		return false;
 	}
 
-	uintptr_t address = mana_actor_get_action(self, action);
+	uint32_t address = mana_actor_get_action(self, action);
 	if(address == ~0)
 	{
 		MANA_TRACE("MANA: level %d, %s::%s request failed. reason: not found\n",
@@ -1936,18 +1936,15 @@ const char* mana_actor_get_name(mana_actor* self)
  * @param[in]	action	アクションの名前
  * @return		アクションのプログラムアドレス。0なら失敗
  */
-uintptr_t mana_actor_get_action(mana_actor* self, const char* action)
+uint32_t mana_actor_get_action(mana_actor* self, const char* action)
 {
 	MANA_ASSERT(self);
 
 	if(!mana_hash_test(&self->actions, action))
 		return (uint32_t)(~0);
 
-	const void* address = mana_hash_get(&self->actions, action);
-	if(address == NULL)
-		return (uint32_t)(~0);
-
-	return (uintptr_t)(address);
+	const uint32_t address = (uint32_t)mana_hash_get(&self->actions, action);
+	return (address == 0) ? (uint32_t)(~0) : address;
 }
 
 /*!

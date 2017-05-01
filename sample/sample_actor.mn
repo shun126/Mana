@@ -1,13 +1,17 @@
 /*
 mana (script)
-Copyright (c) 2003 Shun Moriya <shun@mnu.sakura.ne.jp>
+Copyright (c) 2003 Shun Moriya
 */
 
+// actor declarations
 actor TestActor1
 {
+	int digitVariableInActor;
+
 	action init
 	{
 		print("TestActor1::init\n");
+		callTest(1, 2, 3, 4.0);
 	}
 
 	action main
@@ -16,42 +20,11 @@ actor TestActor1
 
 		short array[10];
 		test_sort(array, 10);
-	}
-}
 
-/*
-// actor declarations
-actor TestActor
-{
-	int digitVariableInActor;
-
-	// actor defines
-	action init
-	{
-		short array[10];
-		print("test_sort: %d\n", test_sort(array, 10));
-
-		int localVariableInAction;
-		float arrayTest[10];
-
-		test();
-		test_switch_while();
-
-		staticDigitValue = 1;
-
-		pointer p;
-		pointer q;
-		p = getUserPointer();
-		q = p;
-		setUserPointer(p);
-	}
-
-	action main
-	{
-//		request(1, OtherTestActor::talk);	// Forward declaration
-//		request(2, OtherTestActor, "talk");	// Forward declaration
-		request(5, self::talk);
+		request(1, OtherTestActor::talk);
+		print("TestActor1:section1\n");
 		join(0, OtherTestActor);
+		print("TestActor1:section2\n");
 	}
 
 	action talk
@@ -59,12 +32,22 @@ actor TestActor
 		vec2 test;
 		//test.x = 0;
 		print("Nin hao!\n");
+
+		pointer p;
+		pointer q;
+		p = getUserPointer();
+		q = p;
+		setUserPointer(p);
 	}
 }
 
 module Battler
 {
 	action init
+	{
+	}
+
+	action dead
 	{
 	}
 }
@@ -92,4 +75,3 @@ phantom Phantom
 	{
 	}
 }
-*/
