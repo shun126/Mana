@@ -2,8 +2,8 @@
 mana (compiler)
 
 @file	code.c
-@brief	–½—ßƒZƒNƒVƒ‡ƒ“‚ÉŠÖ‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹
-@detail	‚±‚Ìƒtƒ@ƒCƒ‹‚Í–½—ßƒZƒNƒVƒ‡ƒ“‚ÉŠÖŒW‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹‚Å‚·B
+@brief	å‘½ä»¤ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã«é–¢ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«
+@detail	ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯å‘½ä»¤ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã«é–¢ä¿‚ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
 @author	Shun Moriya
 @date	2003-
 */
@@ -15,22 +15,22 @@ mana (compiler)
 #include "main.h"
 #endif
 
-//! –½—ßƒZƒNƒVƒ‡ƒ“‚Ìƒy[ƒWƒTƒCƒY
+//! å‘½ä»¤ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã®ãƒšãƒ¼ã‚¸ã‚µã‚¤ã‚º
 #define MANA_CODE_ALLOCATE_PAGE_SIZE	(4096)
 
-//! –½—ßƒ^ƒCƒv
+//! å‘½ä»¤ã‚¿ã‚¤ãƒ—
 typedef struct code_type
 {
-	int32_t address;		//!< ƒAƒhƒŒƒX
-	uint8_t code;			//!< –½—ßƒR[ƒh
+	int32_t address;		//!< ã‚¢ãƒ‰ãƒ¬ã‚¹
+	uint8_t code;			//!< å‘½ä»¤ã‚³ãƒ¼ãƒ‰
 } code_type;
 
-//! –½—ßƒZƒNƒVƒ‡ƒ“
+//! å‘½ä»¤ã‚»ã‚¯ã‚·ãƒ§ãƒ³
 typedef struct code_entry
 {
-	code_type* buffer;		//!< –½—ßƒ^ƒCƒvƒoƒbƒtƒ@[
-	int32_t used_size;		//!< –½—ßƒ^ƒCƒvƒoƒbƒtƒ@[g—pƒTƒCƒY
-	int32_t allocated_size;	//!< –½—ßƒ^ƒCƒvƒoƒbƒtƒ@[Šm•ÛƒTƒCƒY
+	code_type* buffer;		//!< å‘½ä»¤ã‚¿ã‚¤ãƒ—ãƒãƒƒãƒ•ã‚¡ãƒ¼
+	int32_t used_size;		//!< å‘½ä»¤ã‚¿ã‚¤ãƒ—ãƒãƒƒãƒ•ã‚¡ãƒ¼ä½¿ç”¨ã‚µã‚¤ã‚º
+	int32_t allocated_size;	//!< å‘½ä»¤ã‚¿ã‚¤ãƒ—ãƒãƒƒãƒ•ã‚¡ãƒ¼ç¢ºä¿ã‚µã‚¤ã‚º
 } code_entry;
 
 static code_entry code_entry_instance;
@@ -66,11 +66,11 @@ void code_reduce(const size_t size)
 }
 
 /*!
-–½—ßƒZƒNƒVƒ‡ƒ“‚É’l‚ğİ’è‚µ‚Ü‚·
+å‘½ä»¤ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã«å€¤ã‚’è¨­å®šã—ã¾ã™
 
-@param[in]	code	ƒIƒyƒR[ƒh
-@param[in]	address	ƒIƒyƒR[ƒh‚ÉŠÖŒW•t‚¯‚éƒAƒhƒŒƒX
-@return		İ’è‚µ‚½ƒAƒhƒŒƒX
+@param[in]	code	ã‚ªãƒšã‚³ãƒ¼ãƒ‰
+@param[in]	address	ã‚ªãƒšã‚³ãƒ¼ãƒ‰ã«é–¢ä¿‚ä»˜ã‘ã‚‹ã‚¢ãƒ‰ãƒ¬ã‚¹
+@return		è¨­å®šã—ãŸã‚¢ãƒ‰ãƒ¬ã‚¹
 */
 static int32_t code_set(const uint8_t code, const int32_t address)
 {

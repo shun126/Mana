@@ -2,8 +2,8 @@
 mana (compiler)
 
 @file	jump.c
-@brief	break,continue,goto‚È‚Ç‚ÌƒWƒƒƒ“ƒv‚ÉŠÖ‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹
-@detail	‚±‚Ìƒtƒ@ƒCƒ‹‚Íbreak,continue,goto‚È‚ÇƒWƒƒƒ“ƒv‚ÉŠÖŒW‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹‚Å‚·B
+@brief	break,continue,gotoãªã©ã®ã‚¸ãƒ£ãƒ³ãƒ—ã«é–¢ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«
+@detail	ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯break,continue,gotoãªã©ã‚¸ãƒ£ãƒ³ãƒ—ã«é–¢ä¿‚ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
 @author	Shun Moriya
 @date	2003-
 */
@@ -27,43 +27,43 @@ mana (compiler)
 #include "linker.h"
 #endif
 
-#define MANA_JUMP_CHAIN_TABLE_SIZE			(20)	/*!< ƒWƒƒƒ“ƒvƒ`ƒFƒCƒ“ƒe[ƒuƒ‹ƒTƒCƒY */
-#define MANA_JUMP_SWITCH_ENTRY_STACK_SIZE	(256)	/*!< switch‚ÌÅ‘åƒlƒXƒgƒŒƒxƒ‹ */
-#define MANA_JUMP_SWITCH_STACK_SIZE			(256)	/*!< switch‚ÌÅ‘åƒlƒXƒgƒŒƒxƒ‹ */
+#define MANA_JUMP_CHAIN_TABLE_SIZE			(20)	/*!< ã‚¸ãƒ£ãƒ³ãƒ—ãƒã‚§ã‚¤ãƒ³ãƒ†ãƒ¼ãƒ–ãƒ«ã‚µã‚¤ã‚º */
+#define MANA_JUMP_SWITCH_ENTRY_STACK_SIZE	(256)	/*!< switchã®æœ€å¤§ãƒã‚¹ãƒˆãƒ¬ãƒ™ãƒ« */
+#define MANA_JUMP_SWITCH_STACK_SIZE			(256)	/*!< switchã®æœ€å¤§ãƒã‚¹ãƒˆãƒ¬ãƒ™ãƒ« */
 
-/*! ƒWƒƒƒ“ƒvƒ`ƒFƒCƒ“ƒe[ƒuƒ‹ */
+/*! ã‚¸ãƒ£ãƒ³ãƒ—ãƒã‚§ã‚¤ãƒ³ãƒ†ãƒ¼ãƒ–ãƒ« */
 static struct mana_jump_chain_table
 {
-	mana_jump_chain_status status;				/*!< ƒWƒƒƒ“ƒvƒ`ƒFƒCƒ“‚Ìó‘Ô */
-	int32_t break_chain;						/*!< breakƒ`ƒFƒCƒ“‚ÌˆÊ’u */
-	int32_t continue_chain;						/*!< continueƒ`ƒFƒCƒ“‚ÌˆÊ’u */
-	int32_t start_address;						/*!< ƒuƒƒbƒNŠJnˆÊ’u */
+	mana_jump_chain_status status;				/*!< ã‚¸ãƒ£ãƒ³ãƒ—ãƒã‚§ã‚¤ãƒ³ã®çŠ¶æ…‹ */
+	int32_t break_chain;						/*!< breakãƒã‚§ã‚¤ãƒ³ã®ä½ç½® */
+	int32_t continue_chain;						/*!< continueãƒã‚§ã‚¤ãƒ³ã®ä½ç½® */
+	int32_t start_address;						/*!< ãƒ–ãƒ­ãƒƒã‚¯é–‹å§‹ä½ç½® */
 } mana_jump_chain_table[MANA_JUMP_CHAIN_TABLE_SIZE];
 
-static int32_t mana_jump_chain_table_pointer;	/*!< mana_jump_chain_table ‚ÌˆÊ’u */
+static int32_t mana_jump_chain_table_pointer;	/*!< mana_jump_chain_table ã®ä½ç½® */
 
-/*! switchƒuƒƒbƒN“à‚ÌƒGƒ“ƒgƒŠ[ */
+/*! switchãƒ–ãƒ­ãƒƒã‚¯å†…ã®ã‚¨ãƒ³ãƒˆãƒªãƒ¼ */
 typedef struct mana_jump_switch_entry
 {
-	node_entry* node;							/*!< expression‚ğ•\‚· node_entry */
-	int32_t address;							/*!< ƒAƒhƒŒƒX */
+	node_entry* node;							/*!< expressionã‚’è¡¨ã™ node_entry */
+	int32_t address;							/*!< ã‚¢ãƒ‰ãƒ¬ã‚¹ */
 } mana_jump_switch_entry;
 
-/*! switchƒuƒƒbƒN“à‚ÌƒGƒ“ƒgƒŠ[ƒXƒ^ƒbƒN */
+/*! switchãƒ–ãƒ­ãƒƒã‚¯å†…ã®ã‚¨ãƒ³ãƒˆãƒªãƒ¼ã‚¹ã‚¿ãƒƒã‚¯ */
 mana_jump_switch_entry mana_jump_switch_entry_stack[MANA_JUMP_SWITCH_ENTRY_STACK_SIZE];
 
-/*! switchƒuƒƒbƒN“à‚ÌƒGƒ“ƒgƒŠ[ƒXƒ^ƒbƒNƒ|ƒCƒ“ƒ^[ */
+/*! switchãƒ–ãƒ­ãƒƒã‚¯å†…ã®ã‚¨ãƒ³ãƒˆãƒªãƒ¼ã‚¹ã‚¿ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿ãƒ¼ */
 mana_jump_switch_entry* mana_jump_switch_entry_stack_pointer;
 
-/*! switchƒuƒƒbƒNƒXƒ^ƒbƒN */
+/*! switchãƒ–ãƒ­ãƒƒã‚¯ã‚¹ã‚¿ãƒƒã‚¯ */
 struct mana_jump_switch_stack
 {
-	mana_jump_switch_entry*	stack_pointer;		/*!< switchƒuƒƒbƒN“à‚ÌƒGƒ“ƒgƒŠ[ƒXƒ^ƒbƒN */
+	mana_jump_switch_entry*	stack_pointer;		/*!< switchãƒ–ãƒ­ãƒƒã‚¯å†…ã®ã‚¨ãƒ³ãƒˆãƒªãƒ¼ã‚¹ã‚¿ãƒƒã‚¯ */
 	type_description* type;				/*!< type_description */
-	int32_t default_address;					/*!< @biref default‚Ö‚ÌƒAƒhƒŒƒX */
+	int32_t default_address;					/*!< @biref defaultã¸ã®ã‚¢ãƒ‰ãƒ¬ã‚¹ */
 } mana_jump_switch_stack[MANA_JUMP_SWITCH_STACK_SIZE];
 
-/*! switchƒuƒƒbƒNƒXƒ^ƒbƒNƒ|ƒCƒ“ƒ^[ */
+/*! switchãƒ–ãƒ­ãƒƒã‚¯ã‚¹ã‚¿ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿ãƒ¼ */
 int32_t mana_jump_switch_stack_pointer;
 
 /*!
@@ -95,8 +95,8 @@ void mana_jump_open_chain(mana_jump_chain_status status)
 }
 
 /*!
- * @param[in]	new_pc	V‚µ‚¢ƒWƒƒƒ“ƒvæ
- * @return		Œ³‚ÌƒWƒƒƒ“ƒvæ
+ * @param[in]	new_pc	æ–°ã—ã„ã‚¸ãƒ£ãƒ³ãƒ—å…ˆ
+ * @return		å…ƒã®ã‚¸ãƒ£ãƒ³ãƒ—å…ˆ
  */
 int32_t mana_jump_break(int32_t new_pc)
 {
@@ -113,8 +113,8 @@ int32_t mana_jump_break(int32_t new_pc)
 }
 
 /*!
- * @param[in]	new_pc	V‚µ‚¢ƒWƒƒƒ“ƒvæ
- * @return		Œ³‚ÌƒWƒƒƒ“ƒvæ
+ * @param[in]	new_pc	æ–°ã—ã„ã‚¸ãƒ£ãƒ³ãƒ—å…ˆ
+ * @return		å…ƒã®ã‚¸ãƒ£ãƒ³ãƒ—å…ˆ
  */
 int32_t mana_jump_continue(int32_t new_pc)
 {
@@ -171,7 +171,7 @@ void mana_jump_open_switch(type_description* type)
 }
 
 /*!
- * @param[in]	node	case‚Å”äŠr‚·‚éexpression‚ğ•\‚·node_entry
+ * @param[in]	node	caseã§æ¯”è¼ƒã™ã‚‹expressionã‚’è¡¨ã™node_entry
  */
 void mana_jump_switch_case(node_entry* node)
 {

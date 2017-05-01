@@ -2,8 +2,8 @@
  * mana (library)
  *
  * @file	mana_function.c
- * @brief	mana‚Ì‘g‚İ‚İŠÖ”ŠÖŒW‚Ìƒ\[ƒXƒtƒ@ƒCƒ‹
- * @detail	‚±‚Ìƒtƒ@ƒCƒ‹‚Ímana‚Ì‘g‚İ‚İŠÖ”ŠÖŒW‚Ìƒ\[ƒXƒtƒ@ƒCƒ‹‚Å‚·B
+ * @brief	manaã®çµ„ã¿è¾¼ã¿é–¢æ•°é–¢ä¿‚ã®ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«
+ * @detail	ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯manaã®çµ„ã¿è¾¼ã¿é–¢æ•°é–¢ä¿‚ã®ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
  * @author	Shun Moriya
  * @date	2003-
  */
@@ -170,7 +170,7 @@ static void mana_function_find_actor(mana_actor* actor)
 }
 
 /*!
- * ‘g‚İ‚İŠÖ”(debug,wait,rand,frand,sin,cos,atan2,tan,angleMod,sqrt,findActor)‚ğ“o˜^‚µ‚Ü‚·
+ * çµ„ã¿è¾¼ã¿é–¢æ•°(debug,wait,rand,frand,sin,cos,atan2,tan,angleMod,sqrt,findActor)ã‚’ç™»éŒ²ã—ã¾ã™
  */
 void mana_function_initialize(void)
 {

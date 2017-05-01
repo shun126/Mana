@@ -2,11 +2,11 @@
  * mana (library)
  *
  * @file	mana_lzss.h
- * @brief	LZSSに関するヘッダファイル
+ * @brief	LZSS縺ｫ髢｢縺吶ｋ繝倥ャ繝繝輔ぃ繧､繝ｫ
  * @detail
  * LZSS - Lempel-Ziv sliding window compression
- * 技術評論社 C言語による最新アルゴリズム辞典 から
- * ウィンドウバッファを使用しない方法に改変しました
+ * 謚陦楢ｩ戊ｫ也､ｾ C險隱槭↓繧医ｋ譛譁ｰ繧｢繝ｫ繧ｴ繝ｪ繧ｺ繝霎槫�ｸ 縺九ｉ
+ * 繧ｦ繧｣繝ｳ繝峨え繝舌ャ繝輔ぃ繧剃ｽｿ逕ｨ縺励↑縺�譁ｹ豕輔↓謾ｹ螟峨＠縺ｾ縺励◆
  *
  * @author	Shun Moriya
  * @date	2003-

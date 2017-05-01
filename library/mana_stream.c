@@ -2,10 +2,10 @@
  * mana (library)
  *
  * @file	mana_stream.c
- * @brief	mana_streamƒNƒ‰ƒX‚ÉŠÖ‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹
+ * @brief	mana_streamã‚¯ãƒ©ã‚¹ã«é–¢ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«
  * @detail
- * ‚±‚Ìƒtƒ@ƒCƒ‹‚Ímana_streamƒNƒ‰ƒX‚ÉŠÖŒW‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹‚Å‚·B
- * mana_streamƒNƒ‰ƒX‚Íƒƒ‚ƒŠƒXƒgƒŠ[ƒ~ƒ“ƒO‚ÉŠÖ‚·‚é‘€ì‚ğs‚È‚¢‚Ü‚·B
+ * ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯mana_streamã‚¯ãƒ©ã‚¹ã«é–¢ä¿‚ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
+ * mana_streamã‚¯ãƒ©ã‚¹ã¯ãƒ¡ãƒ¢ãƒªã‚¹ãƒˆãƒªãƒ¼ãƒŸãƒ³ã‚°ã«é–¢ã™ã‚‹æ“ä½œã‚’è¡Œãªã„ã¾ã™ã€‚
  *
  * @author	Shun Moriya
  * @date	2003-
@@ -23,11 +23,11 @@
 #include <stdio.h>
 #include <string.h>
 
-/* ƒƒ‚ƒŠŠm•Û‚Ìƒy[ƒWƒTƒCƒY */
+/* ãƒ¡ãƒ¢ãƒªç¢ºä¿æ™‚ã®ãƒšãƒ¼ã‚¸ã‚µã‚¤ã‚º */
 #define MANA_STREAM_ALLOCATE_PAGE_SIZE (0x1000)
 
 /*!
- * @return	mana_stream ƒIƒuƒWƒFƒNƒg
+ * @return	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 mana_stream* mana_stream_create()
 {
@@ -35,7 +35,7 @@ mana_stream* mana_stream_create()
 }
 
 /*!
- * @param[in]	self	mana_stream ƒIƒuƒWƒFƒNƒg
+ * @param[in]	self	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 void mana_stream_destroy(mana_stream* self)
 {
@@ -47,8 +47,8 @@ void mana_stream_destroy(mana_stream* self)
 }
 
 /*!
- * @param[in]	self	mana_stream ƒIƒuƒWƒFƒNƒg
- * @param[in]	size	V‚½‚ÉŠm•Û‚·‚éƒTƒCƒY
+ * @param[in]	self	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	size	æ–°ãŸã«ç¢ºä¿ã™ã‚‹ã‚µã‚¤ã‚º
  */
 static void mana_stream_resize_buffer(mana_stream* self, const size_t size)
 {
@@ -63,7 +63,7 @@ static void mana_stream_resize_buffer(mana_stream* self, const size_t size)
 	}
 }
 
-/* ƒtƒ@ƒCƒ‹‚©‚çƒf[ƒ^‚ğ“Ç‚İ‚Ş */
+/* ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã‚€ */
 int32_t mana_stream_load(mana_stream* self, const char* filename)
 {
 	FILE* infile;
@@ -98,7 +98,7 @@ int32_t mana_stream_load(mana_stream* self, const char* filename)
 	return result;
 }
 
-/* ƒtƒ@ƒCƒ‹‚Öƒf[ƒ^‚ğ‘‚«‚Ş */
+/* ãƒ•ã‚¡ã‚¤ãƒ«ã¸ãƒ‡ãƒ¼ã‚¿ã‚’æ›¸ãè¾¼ã‚€ */
 int32_t mana_stream_save(mana_stream* self, const char* filename)
 {
 	FILE* outfile;
@@ -121,8 +121,8 @@ int32_t mana_stream_save(mana_stream* self, const char* filename)
 }
 
 /*!
- * @param[in]	self	mana_stream ƒIƒuƒWƒFƒNƒg
- * @return		ƒoƒbƒtƒ@[‚Ìæ“ªƒAƒhƒŒƒX
+ * @param[in]	self	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @return		ãƒãƒƒãƒ•ã‚¡ãƒ¼ã®å…ˆé ­ã‚¢ãƒ‰ãƒ¬ã‚¹
  */
 void* mana_stream_get_buffer(const mana_stream* self)
 {
@@ -132,9 +132,9 @@ void* mana_stream_get_buffer(const mana_stream* self)
 }
 
 /*!
- * @param[in]	self	mana_stream ƒIƒuƒWƒFƒNƒg
- * @param[in]	index	ƒCƒ“ƒfƒbƒNƒX”Ô†
- * @return		ƒoƒbƒtƒ@[‚ÌƒAƒhƒŒƒX
+ * @param[in]	self	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	index	ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ç•ªå·
+ * @return		ãƒãƒƒãƒ•ã‚¡ãƒ¼ã®ã‚¢ãƒ‰ãƒ¬ã‚¹
  */
 void* mana_stream_index_at(const mana_stream* self, const size_t index)
 {
@@ -145,8 +145,8 @@ void* mana_stream_index_at(const mana_stream* self, const size_t index)
 }
 
 /*!
- * @param[in]	self	mana_stream ƒIƒuƒWƒFƒNƒg
- * @return		ƒoƒbƒtƒ@[‚ÌŠm•ÛÏ‚İƒTƒCƒY
+ * @param[in]	self	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @return		ãƒãƒƒãƒ•ã‚¡ãƒ¼ã®ç¢ºä¿æ¸ˆã¿ã‚µã‚¤ã‚º
  */
 size_t mana_stream_get_allocated_size(const mana_stream* self)
 {
@@ -156,8 +156,8 @@ size_t mana_stream_get_allocated_size(const mana_stream* self)
 }
 
 /*!
- * @param[in]	self	mana_stream ƒIƒuƒWƒFƒNƒg
- * @return		ƒoƒbƒtƒ@[‚Ìg—p’†ƒTƒCƒY
+ * @param[in]	self	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @return		ãƒãƒƒãƒ•ã‚¡ãƒ¼ã®ä½¿ç”¨ä¸­ã‚µã‚¤ã‚º
  */
 size_t mana_stream_get_used_size(const mana_stream* self)
 {
@@ -167,8 +167,8 @@ size_t mana_stream_get_used_size(const mana_stream* self)
 }
 
 /*!
- * @param[in]	self	mana_stream ƒIƒuƒWƒFƒNƒg
- * @param[in]	value	’l
+ * @param[in]	self	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	value	å€¤
  */
 void mana_stream_push_char(mana_stream* self, const int8_t value)
 {
@@ -178,8 +178,8 @@ void mana_stream_push_char(mana_stream* self, const int8_t value)
 }
 
 /*!
- * @param[in]	self	mana_stream ƒIƒuƒWƒFƒNƒg
- * @param[in]	value	’l
+ * @param[in]	self	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	value	å€¤
  */
 void mana_stream_push_short(mana_stream* self, const int16_t value)
 {
@@ -189,8 +189,8 @@ void mana_stream_push_short(mana_stream* self, const int16_t value)
 }
 
 /*!
- * @param[in]	self	mana_stream ƒIƒuƒWƒFƒNƒg
- * @param[in]	value	’l
+ * @param[in]	self	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	value	å€¤
  */
 void mana_stream_push_integer(mana_stream* self, const int32_t value)
 {
@@ -200,8 +200,8 @@ void mana_stream_push_integer(mana_stream* self, const int32_t value)
 }
 
 /*!
- * @param[in]	self	mana_stream ƒIƒuƒWƒFƒNƒg
- * @param[in]	value	’l
+ * @param[in]	self	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	value	å€¤
  */
 void mana_stream_push_unsigned_char(mana_stream* self, const uint8_t value)
 {
@@ -211,8 +211,8 @@ void mana_stream_push_unsigned_char(mana_stream* self, const uint8_t value)
 }
 
 /*!
- * @param[in]	self	mana_stream ƒIƒuƒWƒFƒNƒg
- * @param[in]	value	’l
+ * @param[in]	self	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	value	å€¤
  */
 void mana_stream_push_unsigned_short(mana_stream* self, const uint16_t value)
 {
@@ -222,8 +222,8 @@ void mana_stream_push_unsigned_short(mana_stream* self, const uint16_t value)
 }
 
 /*!
- * @param[in]	self	mana_stream ƒIƒuƒWƒFƒNƒg
- * @param[in]	value	’l
+ * @param[in]	self	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	value	å€¤
  */
 void mana_stream_push_unsigned_integer(mana_stream* self, const uint32_t value)
 {
@@ -233,8 +233,8 @@ void mana_stream_push_unsigned_integer(mana_stream* self, const uint32_t value)
 }
 
 /*!
- * @param[in]	self	mana_stream ƒIƒuƒWƒFƒNƒg
- * @param[in]	value	’l
+ * @param[in]	self	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	value	å€¤
  */
 void mana_stream_push_float(mana_stream* self, const float value)
 {
@@ -244,8 +244,8 @@ void mana_stream_push_float(mana_stream* self, const float value)
 }
 
 /*!
- * @param[in]	self	mana_stream ƒIƒuƒWƒFƒNƒg
- * @param[in]	text	•¶š—ñ
+ * @param[in]	self	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	text	æ–‡å­—åˆ—
  */
 void mana_stream_push_string(mana_stream* self, const char* text)
 {
@@ -267,9 +267,9 @@ void mana_stream_push_string(mana_stream* self, const char* text)
 }
 
 /*!
- * @param[in]	self	mana_stream ƒIƒuƒWƒFƒNƒg
- * @param[in]	pointer	ƒf[ƒ^‚Ìæ“ªƒAƒhƒŒƒX
- * @param[in]	size	ƒf[ƒ^‚ÌƒTƒCƒY
+ * @param[in]	self	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	pointer	ãƒ‡ãƒ¼ã‚¿ã®å…ˆé ­ã‚¢ãƒ‰ãƒ¬ã‚¹
+ * @param[in]	size	ãƒ‡ãƒ¼ã‚¿ã®ã‚µã‚¤ã‚º
  */
 void mana_stream_push_data(mana_stream* self, const void* pointer, const size_t size)
 {
@@ -286,7 +286,7 @@ void mana_stream_push_data(mana_stream* self, const void* pointer, const size_t 
 }
 
 /*!
- * @param[in]	self	mana_stream ƒIƒuƒWƒFƒNƒg
+ * @param[in]	self	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 void mana_stream_rewind(mana_stream* self)
 {
@@ -296,8 +296,8 @@ void mana_stream_rewind(mana_stream* self)
 }
 
 /*!
- * @param[in]	self	mana_stream ƒIƒuƒWƒFƒNƒg
- * @return		’l
+ * @param[in]	self	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @return		å€¤
  */
 int8_t mana_stream_pop_char(mana_stream* self)
 {
@@ -309,8 +309,8 @@ int8_t mana_stream_pop_char(mana_stream* self)
 }
 
 /*!
- * @param[in]	self	mana_stream ƒIƒuƒWƒFƒNƒg
- * @return		’l
+ * @param[in]	self	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @return		å€¤
  */
 int16_t mana_stream_pop_short(mana_stream* self)
 {
@@ -322,8 +322,8 @@ int16_t mana_stream_pop_short(mana_stream* self)
 }
 
 /*!
- * @param[in]	self	mana_stream ƒIƒuƒWƒFƒNƒg
- * @return		’l
+ * @param[in]	self	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @return		å€¤
  */
 int32_t mana_stream_pop_integer(mana_stream* self)
 {
@@ -335,8 +335,8 @@ int32_t mana_stream_pop_integer(mana_stream* self)
 }
 
 /*!
- * @param[in]	self	mana_stream ƒIƒuƒWƒFƒNƒg
- * @return		’l
+ * @param[in]	self	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @return		å€¤
  */
 uint8_t mana_stream_pop_unsigned_char(mana_stream* self)
 {
@@ -348,8 +348,8 @@ uint8_t mana_stream_pop_unsigned_char(mana_stream* self)
 }
 
 /*!
- * @param[in]	self	mana_stream ƒIƒuƒWƒFƒNƒg
- * @return		’l
+ * @param[in]	self	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @return		å€¤
  */
 uint16_t mana_stream_pop_unsigned_short(mana_stream* self)
 {
@@ -361,8 +361,8 @@ uint16_t mana_stream_pop_unsigned_short(mana_stream* self)
 }
 
 /*!
- * @param[in]	self	mana_stream ƒIƒuƒWƒFƒNƒg
- * @return		’l
+ * @param[in]	self	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @return		å€¤
  */
 uint32_t mana_stream_pop_unsigned_integer(mana_stream* self)
 {
@@ -374,8 +374,8 @@ uint32_t mana_stream_pop_unsigned_integer(mana_stream* self)
 }
 
 /*!
- * @param[in]	self	mana_stream ƒIƒuƒWƒFƒNƒg
- * @return		’l
+ * @param[in]	self	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @return		å€¤
  */
 float mana_stream_pop_float(mana_stream* self)
 {
@@ -387,10 +387,10 @@ float mana_stream_pop_float(mana_stream* self)
 }
 
 /*!
- * @param[in]	self	mana_stream ƒIƒuƒWƒFƒNƒg
- * @param[out]	pointer	ƒ|ƒbƒvæ‚Ìƒoƒbƒtƒ@æ“ªƒAƒhƒŒƒX
- * @param[out]	size	ƒ|ƒbƒvæ‚Ìƒoƒbƒtƒ@‚ÌƒTƒCƒY
- * @return		•¶š—ñ
+ * @param[in]	self	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[out]	pointer	ãƒãƒƒãƒ—å…ˆã®ãƒãƒƒãƒ•ã‚¡å…ˆé ­ã‚¢ãƒ‰ãƒ¬ã‚¹
+ * @param[out]	size	ãƒãƒƒãƒ—å…ˆã®ãƒãƒƒãƒ•ã‚¡ã®ã‚µã‚¤ã‚º
+ * @return		æ–‡å­—åˆ—
  */
 void mana_stream_pop_string(mana_stream* self, char* pointer, const size_t size)
 {
@@ -409,10 +409,10 @@ void mana_stream_pop_string(mana_stream* self, char* pointer, const size_t size)
 }
 
 /*!
- * @param[in]	self	mana_stream ƒIƒuƒWƒFƒNƒg
- * @param[out]	pointer	ƒ|ƒbƒvæ‚Ìƒoƒbƒtƒ@æ“ªƒAƒhƒŒƒX
- * @param[out]	size	ƒ|ƒbƒv‚·‚éƒf[ƒ^‚ÌƒTƒCƒY
- * @return		•¶š—ñ
+ * @param[in]	self	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[out]	pointer	ãƒãƒƒãƒ—å…ˆã®ãƒãƒƒãƒ•ã‚¡å…ˆé ­ã‚¢ãƒ‰ãƒ¬ã‚¹
+ * @param[out]	size	ãƒãƒƒãƒ—ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ã®ã‚µã‚¤ã‚º
+ * @return		æ–‡å­—åˆ—
  */
 void mana_stream_pop_data(mana_stream* self, void* pointer, const size_t size)
 {
@@ -425,8 +425,8 @@ void mana_stream_pop_data(mana_stream* self, void* pointer, const size_t size)
 }
 
 /*!
- * @param[in]	self	mana_stream ƒIƒuƒWƒFƒNƒg
- * @return		’l
+ * @param[in]	self	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @return		å€¤
  */
 int8_t mana_stream_get_char(const mana_stream* self)
 {
@@ -438,8 +438,8 @@ int8_t mana_stream_get_char(const mana_stream* self)
 }
 
 /*!
- * @param[in]	self	mana_stream ƒIƒuƒWƒFƒNƒg
- * @return		’l
+ * @param[in]	self	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @return		å€¤
  */
 int16_t mana_stream_get_short(const mana_stream* self)
 {
@@ -451,8 +451,8 @@ int16_t mana_stream_get_short(const mana_stream* self)
 }
 
 /*!
- * @param[in]	self	mana_stream ƒIƒuƒWƒFƒNƒg
- * @return		’l
+ * @param[in]	self	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @return		å€¤
  */
 int32_t mana_stream_get_integer(const mana_stream* self)
 {
@@ -464,8 +464,8 @@ int32_t mana_stream_get_integer(const mana_stream* self)
 }
 
 /*!
- * @param[in]	self	mana_stream ƒIƒuƒWƒFƒNƒg
- * @return		’l
+ * @param[in]	self	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @return		å€¤
  */
 uint8_t mana_stream_get_unsigned_char(const mana_stream* self)
 {
@@ -477,8 +477,8 @@ uint8_t mana_stream_get_unsigned_char(const mana_stream* self)
 }
 
 /*!
- * @param[in]	self	mana_stream ƒIƒuƒWƒFƒNƒg
- * @return		’l
+ * @param[in]	self	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @return		å€¤
  */
 uint16_t mana_stream_get_unsigned_short(const mana_stream* self)
 {
@@ -490,8 +490,8 @@ uint16_t mana_stream_get_unsigned_short(const mana_stream* self)
 }
 
 /*!
- * @param[in]	self	mana_stream ƒIƒuƒWƒFƒNƒg
- * @return		’l
+ * @param[in]	self	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @return		å€¤
  */
 uint32_t mana_stream_get_unsigned_integer(const mana_stream* self)
 {
@@ -503,8 +503,8 @@ uint32_t mana_stream_get_unsigned_integer(const mana_stream* self)
 }
 
 /*!
- * @param[in]	self	mana_stream ƒIƒuƒWƒFƒNƒg
- * @return		’l
+ * @param[in]	self	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @return		å€¤
  */
 float mana_stream_get_float(const mana_stream* self)
 {
@@ -516,10 +516,10 @@ float mana_stream_get_float(const mana_stream* self)
 }
 
 /*!
- * @param[in]	self	mana_stream ƒIƒuƒWƒFƒNƒg
- * @param[out]	pointer	ƒ|ƒbƒvæ‚Ìƒoƒbƒtƒ@æ“ªƒAƒhƒŒƒX
- * @param[out]	size	ƒ|ƒbƒvæ‚Ìƒoƒbƒtƒ@‚ÌƒTƒCƒY
- * @return		•¶š—ñ
+ * @param[in]	self	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[out]	pointer	ãƒãƒƒãƒ—å…ˆã®ãƒãƒƒãƒ•ã‚¡å…ˆé ­ã‚¢ãƒ‰ãƒ¬ã‚¹
+ * @param[out]	size	ãƒãƒƒãƒ—å…ˆã®ãƒãƒƒãƒ•ã‚¡ã®ã‚µã‚¤ã‚º
+ * @return		æ–‡å­—åˆ—
  */
 void mana_stream_get_string(const mana_stream* self, char* pointer, const size_t size)
 {
@@ -536,8 +536,8 @@ void mana_stream_get_string(const mana_stream* self, char* pointer, const size_t
 }
 
 /*!
- * @param[in]	self	mana_stream ƒIƒuƒWƒFƒNƒg
- * @return		•¶š—ñ‚ÌƒAƒhƒŒƒX
+ * @param[in]	self	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @return		æ–‡å­—åˆ—ã®ã‚¢ãƒ‰ãƒ¬ã‚¹
  */
 const char* mana_stream_get_string_pointer(const mana_stream* self)
 {
@@ -547,8 +547,8 @@ const char* mana_stream_get_string_pointer(const mana_stream* self)
 }
 
 /*!
- * @param[in]	self	mana_stream ƒIƒuƒWƒFƒNƒg
- * @return		•¶š—ñ‚Ì’·‚³
+ * @param[in]	self	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @return		æ–‡å­—åˆ—ã®é•·ã•
  */
 size_t mana_stream_get_string_length(const mana_stream* self)
 {
@@ -558,10 +558,10 @@ size_t mana_stream_get_string_length(const mana_stream* self)
 }
 
 /*!
- * @param[in]	self	mana_stream ƒIƒuƒWƒFƒNƒg
- * @param[out]	pointer	ƒ|ƒbƒvæ‚Ìƒoƒbƒtƒ@æ“ªƒAƒhƒŒƒX
- * @param[out]	size	ƒ|ƒbƒv‚·‚éƒf[ƒ^‚ÌƒTƒCƒY
- * @return		•¶š—ñ
+ * @param[in]	self	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[out]	pointer	ãƒãƒƒãƒ—å…ˆã®ãƒãƒƒãƒ•ã‚¡å…ˆé ­ã‚¢ãƒ‰ãƒ¬ã‚¹
+ * @param[out]	size	ãƒãƒƒãƒ—ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ã®ã‚µã‚¤ã‚º
+ * @return		æ–‡å­—åˆ—
  */
 void mana_stream_get_data(const mana_stream* self, void* pointer, const size_t size)
 {
@@ -572,8 +572,8 @@ void mana_stream_get_data(const mana_stream* self, void* pointer, const size_t s
 }
 
 /*!
- * @param[in]	self	mana_stream ƒIƒuƒWƒFƒNƒg
- * @param[in]	offset	ƒIƒtƒZƒbƒg
+ * @param[in]	self	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	offset	ã‚ªãƒ•ã‚»ãƒƒãƒˆ
  */
 void mana_steram_seek(mana_stream* self, const int32_t offset)
 {
