@@ -2,8 +2,8 @@
 mana (compiler)
 
 @file	pre_resolver.h
-@brief	\•¶–Ø•]‰¿‚ÉŠÖ‚·‚éƒwƒbƒ_ƒtƒ@ƒCƒ‹
-@detail	‚±‚Ìƒtƒ@ƒCƒ‹‚Í\•¶–Ø•]‰¿‚ÉŠÖŒW‚·‚éƒwƒbƒ_ƒtƒ@ƒCƒ‹‚Å‚·B
+@brief	æ§‹æ–‡æœ¨è©•ä¾¡ã«é–¢ã™ã‚‹ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ«
+@detail	ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯æ§‹æ–‡æœ¨è©•ä¾¡ã«é–¢ä¿‚ã™ã‚‹ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
 @author	Shun Moriya
 @date	2017-
 */
@@ -19,21 +19,21 @@ mana (compiler)
 extern "C" {
 #endif
 
-//! ‰Šú‰»
+//! åˆæœŸåŒ–
 extern void mana_pre_resolver_initialize(void);
 
-//! I—¹
+//! çµ‚äº†
 extern void mana_pre_resolver_finalize(void);
 
 /*!
-qƒm[ƒh‚©‚çŒ^‚ğŒp³‚·‚é
-@param[in]	node	ƒm[ƒh
+å­ãƒãƒ¼ãƒ‰ã‹ã‚‰å‹ã‚’ç¶™æ‰¿ã™ã‚‹
+@param[in]	node	ãƒãƒ¼ãƒ‰
 */
 extern void mana_resolver_resolve_type_from_child_node(node_entry* node);
 
 /*!
-ƒm[ƒh‚ğ’H‚è‚È‚ª‚çƒVƒ“ƒ{ƒ‹î•ñ‚ğ“o˜^‚µ‚Ü‚·i‚½‚¾‚µ’†ŠÔŒ¾Œê‚É‘Î‚µ‚Ä•]‰¿‚µ‚Ü‚¹‚ñj
-@param	node	ƒm[ƒh
+ãƒãƒ¼ãƒ‰ã‚’è¾¿ã‚ŠãªãŒã‚‰ã‚·ãƒ³ãƒœãƒ«æƒ…å ±ã‚’ç™»éŒ²ã—ã¾ã™ï¼ˆãŸã ã—ä¸­é–“è¨€èªã«å¯¾ã—ã¦è©•ä¾¡ã—ã¾ã›ã‚“ï¼‰
+@param	node	ãƒãƒ¼ãƒ‰
 */
 extern void mana_pre_resolver_resolve(node_entry* node);
 

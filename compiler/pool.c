@@ -2,8 +2,8 @@
 mana (compiler)
 
 @file	pool.c
-@brief	•¶š—ñŠi”[‚ÉŠÖ‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹
-@detail	‚±‚Ìƒtƒ@ƒCƒ‹‚Í•¶š—ñ‚ğ‚‘¬‚ÉQÆ‚·‚é‚½‚ß‚ÌƒnƒbƒVƒ…‚ÉŠÖŒW‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹‚Å‚·B
+@brief	æ–‡å­—åˆ—æ ¼ç´ã«é–¢ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«
+@detail	ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯æ–‡å­—åˆ—ã‚’é«˜é€Ÿã«å‚ç…§ã™ã‚‹ãŸã‚ã®ãƒãƒƒã‚·ãƒ¥ã«é–¢ä¿‚ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
 @author	Shun Moriya
 @date	2016-
 */
@@ -25,18 +25,18 @@ mana (compiler)
 /*! String hash table type */
 typedef struct mana_pool_string_hash_table
 {
-	char* name;									/*!< •¶š—ñ */
-	int32_t length;									/*!< •¶š—ñ‚Ì’·‚³ */
-	struct mana_pool_string_hash_table* next;	/*!< Ÿ‚Ìmana_pool_string_hash_table */
+	char* name;									/*!< æ–‡å­—åˆ— */
+	int32_t length;									/*!< æ–‡å­—åˆ—ã®é•·ã• */
+	struct mana_pool_string_hash_table* next;	/*!< æ¬¡ã®mana_pool_string_hash_table */
 } mana_pool_string_hash_table;
 
 /*! String hash table */
 static mana_pool_string_hash_table *s_mana_pool_hash_table[MANA_POOL_HASH_TABLE_SIZE];
 
 /*!
- * @brief		ƒnƒbƒVƒ…’l‚ğæ“¾
- * @param[in]	string		•¶š—ñ
- * @return		ƒnƒbƒVƒ…’l
+ * @brief		ãƒãƒƒã‚·ãƒ¥å€¤ã‚’å–å¾—
+ * @param[in]	string		æ–‡å­—åˆ—
+ * @return		ãƒãƒƒã‚·ãƒ¥å€¤
  */
 static int32_t mana_pool_get_hash_value(char* string)
 {
@@ -54,7 +54,7 @@ static int32_t mana_pool_get_hash_value(char* string)
 }
 
 #if 0
-// ƒnƒbƒVƒ…ƒL[‚ğì‚é
+// ãƒãƒƒã‚·ãƒ¥ã‚­ãƒ¼ã‚’ä½œã‚‹
 GzUInt32 hashstr(const char* str, size_t len)
 {
 	GzUInt32 h	= len;
@@ -104,11 +104,11 @@ void mana_pool_finalize(void)
 }
 
 /*!
- * @param[in]	string	•¶š—ñ
+ * @param[in]	string	æ–‡å­—åˆ—
  * @return
- * •¶š—ñ‚ÌƒAƒhƒŒƒXB
- * d•¡‚µ‚Ä‚¢‚½ê‡‚Íİ’èÏ‚İ‚Ì•¶š—ñ‚ÌƒAƒhƒŒƒX‚ª•Ô‚éB
- * İ’è¸”s‚Ìê‡‚ÍNULL‚ª•Ô‚éB
+ * æ–‡å­—åˆ—ã®ã‚¢ãƒ‰ãƒ¬ã‚¹ã€‚
+ * é‡è¤‡ã—ã¦ã„ãŸå ´åˆã¯è¨­å®šæ¸ˆã¿ã®æ–‡å­—åˆ—ã®ã‚¢ãƒ‰ãƒ¬ã‚¹ãŒè¿”ã‚‹ã€‚
+ * è¨­å®šå¤±æ•—ã®å ´åˆã¯NULLãŒè¿”ã‚‹ã€‚
  */
 char* mana_pool_set(char* string)
 {

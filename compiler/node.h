@@ -2,8 +2,8 @@
 mana (compiler)
 
 @file	node.h
-@brief	ˆÓ–¡‰ğÍƒm[ƒh‚ÉŠÖ‚·‚éƒwƒbƒ_[ƒtƒ@ƒCƒ‹
-@detail	‚±‚Ìƒtƒ@ƒCƒ‹‚ÍˆÓ–¡‰ğÍƒm[ƒh‚ÉŠÖŒW‚·‚éƒwƒbƒ_[ƒtƒ@ƒCƒ‹‚Å‚·B
+@brief	æ„å‘³è§£æãƒãƒ¼ãƒ‰ã«é–¢ã™ã‚‹ãƒ˜ãƒƒãƒ€ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«
+@detail	ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯æ„å‘³è§£æãƒãƒ¼ãƒ‰ã«é–¢ä¿‚ã™ã‚‹ãƒ˜ãƒƒãƒ€ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
 @author	Shun Moriya
 @date	2016-
 */
@@ -29,98 +29,98 @@ extern "C" {
 #endif
 
 /*!
-ƒm[ƒh‚Ì‰Šú‰»
+ãƒãƒ¼ãƒ‰ã®åˆæœŸåŒ–
 */
 extern void mana_node_initialize(void);
 
 /*!
-ƒm[ƒh‚ÌI—¹
+ãƒãƒ¼ãƒ‰ã®çµ‚äº†
 */
 extern void mana_node_finalize(void);
 
 /*!
-ƒm[ƒh‚ğ•¡»‚µ‚Ü‚·
-@param[in]	org		Œ³‚É‚È‚éƒm[ƒhƒIƒuƒWƒFƒNƒg
-@return				•¡»‚µ‚½ƒm[ƒhƒIƒuƒWƒFƒNƒg
+ãƒãƒ¼ãƒ‰ã‚’è¤‡è£½ã—ã¾ã™
+@param[in]	org		å…ƒã«ãªã‚‹ãƒãƒ¼ãƒ‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+@return				è¤‡è£½ã—ãŸãƒãƒ¼ãƒ‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 */
 extern node_entry* mana_node_clone(const node_entry* org);
 
 /*!
-ƒm[ƒhì¬
-@param[in]	id		ƒm[ƒhƒ^ƒCƒv”Ô†
-@return				ƒm[ƒhƒIƒuƒWƒFƒNƒg
+ãƒãƒ¼ãƒ‰ä½œæˆ
+@param[in]	id		ãƒãƒ¼ãƒ‰ã‚¿ã‚¤ãƒ—ç•ªå·
+@return				ãƒãƒ¼ãƒ‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 */
 extern node_entry* mana_node_allocate(const node_id id);
 
 /*!
-ƒm[ƒh‚ğì¬‚µ‚Ü‚·
-@param[in]	id		ƒm[ƒhƒ^ƒCƒv”Ô†
-@param[in]	left	¶•Óƒm[ƒhƒIƒuƒWƒFƒNƒg
-@param[in]	right	‰E•Óƒm[ƒhƒIƒuƒWƒFƒNƒg
-@param[in]	body	ƒm[ƒhƒIƒuƒWƒFƒNƒg
-@return		ƒm[ƒhƒIƒuƒWƒFƒNƒg
+ãƒãƒ¼ãƒ‰ã‚’ä½œæˆã—ã¾ã™
+@param[in]	id		ãƒãƒ¼ãƒ‰ã‚¿ã‚¤ãƒ—ç•ªå·
+@param[in]	left	å·¦è¾ºãƒãƒ¼ãƒ‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+@param[in]	right	å³è¾ºãƒãƒ¼ãƒ‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+@param[in]	body	ãƒãƒ¼ãƒ‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+@return		ãƒãƒ¼ãƒ‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 */
 extern node_entry* mana_node_create_node(const node_id id, node_entry* left, node_entry* right, node_entry* body);
 
 /*!
-®”ƒm[ƒh‚ğì¬‚µ‚Ü‚·
-@param[in]	digit	®”
-@return				ƒm[ƒhƒIƒuƒWƒFƒNƒg
+æ•´æ•°ãƒãƒ¼ãƒ‰ã‚’ä½œæˆã—ã¾ã™
+@param[in]	digit	æ•´æ•°
+@return				ãƒãƒ¼ãƒ‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 */
 extern node_entry* mana_node_create_digit(const int32_t digit);
 
 /*!
-À”ƒm[ƒh‚ğì¬‚µ‚Ü‚·
-@param[in]	real	À”
-@return				ƒm[ƒhƒIƒuƒWƒFƒNƒg
+å®Ÿæ•°ãƒãƒ¼ãƒ‰ã‚’ä½œæˆã—ã¾ã™
+@param[in]	real	å®Ÿæ•°
+@return				ãƒãƒ¼ãƒ‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 */
 extern node_entry* mana_node_create_real(const float real);
 
 /*!
-•¶š—ñƒm[ƒh‚ğì¬‚µ‚Ü‚·
-@param[in]	string	•¶š—ñ
-@return		ƒm[ƒhƒIƒuƒWƒFƒNƒg
+æ–‡å­—åˆ—ãƒãƒ¼ãƒ‰ã‚’ä½œæˆã—ã¾ã™
+@param[in]	string	æ–‡å­—åˆ—
+@return		ãƒãƒ¼ãƒ‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 */
 extern node_entry* mana_node_create_string(const char* string);
 
 /*!
-ŠÖ”éŒ¾ƒm[ƒh‚ğì¬‚µ‚Ü‚·
+é–¢æ•°å®£è¨€ãƒãƒ¼ãƒ‰ã‚’ä½œæˆã—ã¾ã™
 @param[in]	left
 @param[in]	identifier, 
 @param[in]	argument_count
 @param[in]	body
-@return		ƒm[ƒhƒIƒuƒWƒFƒNƒg
+@return		ãƒãƒ¼ãƒ‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 */
 extern node_entry* mana_node_create_declare_function(node_entry* left, const char* identifier, node_entry* argument_count, node_entry* body);
 
 /*!
-ƒlƒCƒeƒBƒuŠÖ”éŒ¾ƒm[ƒh‚ğì¬‚µ‚Ü‚·
+ãƒã‚¤ãƒ†ã‚£ãƒ–é–¢æ•°å®£è¨€ãƒãƒ¼ãƒ‰ã‚’ä½œæˆã—ã¾ã™
 @param[in]	left
 @param[in]	identifier,
 @param[in]	argument_count
 @param[in]	body
-@return		ƒm[ƒhƒIƒuƒWƒFƒNƒg
+@return		ãƒãƒ¼ãƒ‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 */
 extern node_entry* mana_node_create_declare_native_function(node_entry* left, const char* identifier, node_entry* argument_count, node_entry* body);
 
 /*!
-Œ^ƒLƒƒƒXƒgƒm[ƒh‚ğ‘}“ü‚µ‚Ü‚·
-@param[in]	type	ƒLƒƒƒXƒg‚·‚éŒ^
-@param[in]	node	ƒm[ƒhƒIƒuƒWƒFƒNƒg
-@return				ƒm[ƒhƒIƒuƒWƒFƒNƒg
+å‹ã‚­ãƒ£ã‚¹ãƒˆãƒãƒ¼ãƒ‰ã‚’æŒ¿å…¥ã—ã¾ã™
+@param[in]	type	ã‚­ãƒ£ã‚¹ãƒˆã™ã‚‹å‹
+@param[in]	node	ãƒãƒ¼ãƒ‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+@return				ãƒãƒ¼ãƒ‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 */
 extern node_entry* mana_node_cast(type_description* type, node_entry* node);
 
 /*!
-ƒƒ‚ƒŠƒTƒCƒY‚ğæ“¾‚µ‚Ü‚·
-@param[in]	node	ƒm[ƒhƒIƒuƒWƒFƒNƒg
-@return				ƒƒ‚ƒŠƒTƒCƒY
+ãƒ¡ãƒ¢ãƒªã‚µã‚¤ã‚ºã‚’å–å¾—ã—ã¾ã™
+@param[in]	node	ãƒãƒ¼ãƒ‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+@return				ãƒ¡ãƒ¢ãƒªã‚µã‚¤ã‚º
 */
 extern size_t mana_node_get_memory_size(node_entry* node);
 
 /*!
-ƒm[ƒh‚ğƒ_ƒ“ƒv‚µ‚Ü‚·
-@param[-in]	node	eƒm[ƒhƒIƒuƒWƒFƒNƒg
+ãƒãƒ¼ãƒ‰ã‚’ãƒ€ãƒ³ãƒ—ã—ã¾ã™
+@param[-in]	node	è¦ªãƒãƒ¼ãƒ‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 */
 extern void mana_node_dump(const node_entry* node);
 

@@ -2,8 +2,8 @@
 mana (compiler)
 
 @file	error.c
-@brief	�G���[��x���Ɋ֌W����\�[�X�t�@�C��
-@detail	���̃t�@�C���̓G���[��x���Ɋ֌W����\�[�X�t�@�C���ł��B
+@brief	エラーや警告に関係するソースファイル
+@detail	このファイルはエラーや警告に関係するソースファイルです。
 @author	Shun Moriya
 @date	2016-
 */

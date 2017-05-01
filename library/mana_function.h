@@ -2,8 +2,8 @@
  * mana (library)
  *
  * @file	mana_function.h
- * @brief	mana�̑g�ݍ��݊֐��֌W�̃w�b�_�[�t�@�C��
- * @detail	���̃t�@�C����mana�̑g�ݍ��݊֐��֌W�̃w�b�_�[�t�@�C���ł��B
+ * @brief	manaの組み込み関数関係のヘッダーファイル
+ * @detail	このファイルはmanaの組み込み関数関係のヘッダーファイルです。
  * @author	Shun Moriya
  * @date	2016-
  */
@@ -15,31 +15,31 @@
 extern "C" {
 #endif
 
-/*! �g�ݍ��݌^vec2���` */
+/*! 組み込み型vec2を定義 */
 typedef struct mana_vec2
 {
 	float x, y;
 }mana_vec2;
 
-/*! �g�ݍ��݌^vec3���` */
+/*! 組み込み型vec3を定義 */
 typedef struct mana_vec3
 {
 	float x, y, z;
 }mana_vec3;
 
-/*! �g�ݍ��݌^vec4���` */
+/*! 組み込み型vec4を定義 */
 typedef struct mana_vec4
 {
 	float x, y, z, w;
 }mana_vec4;
 
-/*! �g�ݍ��݌^color���` */
+/*! 組み込み型colorを定義 */
 typedef struct mana_color
 {
 	float r, g, b, a;
 }mana_color;
 
-/*! �g�ݍ��݊֐��������� */
+/*! 組み込み関数を初期化 */
 void mana_function_initialize(void);
 
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)

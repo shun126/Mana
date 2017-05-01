@@ -2,8 +2,8 @@
 mana (compiler)
 
 @file	linker.h
-@brief	�����N�Ɋւ���w�b�_�t�@�C��
-@detail	���̃t�@�C���̓����N�Ɋ֌W����w�b�_�t�@�C���ł��B
+@brief	リンクに関するヘッダファイル
+@detail	このファイルはリンクに関係するヘッダファイルです。
 @author	Shun Moriya
 @date	2016-
 */

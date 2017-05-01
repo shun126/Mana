@@ -2,8 +2,8 @@
 mana (compiler)
 
 @file	main.h
-@brief	���C�����[�v�Ɋւ���w�b�_�t�@�C��
-@detail	���̃t�@�C���̓��C�����[�v�Ɋ֌W����w�b�_�t�@�C���ł��B
+@brief	メインループに関するヘッダファイル
+@detail	このファイルはメインループに関係するヘッダファイルです。
 @author	Shun Moriya
 @date	2016-
 */

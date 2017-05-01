@@ -2,12 +2,12 @@
  * mana (compiler/library)
  *
  * @file	mana_datalink.c
- * @brief	mana_datalinkƒNƒ‰ƒX‚ÉŠÖ‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹
+ * @brief	mana_datalinkã‚¯ãƒ©ã‚¹ã«é–¢ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«
  * @detail
- * ‚±‚Ìƒtƒ@ƒCƒ‹‚Ímana_datalinkƒNƒ‰ƒX‚ÉŠÖŒW‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹‚Å‚·B
- * manaƒRƒ“ƒpƒCƒ‰‚ÍƒXƒNƒŠƒvƒg‚Åaliasw’è‚³‚êA‚©‚ÂQÆ‚³‚ê‚Ä‚¢‚éƒŠƒ\[ƒX‚ğ
- * Œ‹‡‚µ‚Ü‚·B
- * mana_datalinkƒNƒ‰ƒX‚ÍŒ‹‡‚³‚ê‚½ƒf[ƒ^‚ğQÆ‚·‚é‹@”\‚ğ‚Á‚Ä‚¢‚Ü‚·B
+ * ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯mana_datalinkã‚¯ãƒ©ã‚¹ã«é–¢ä¿‚ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
+ * manaã‚³ãƒ³ãƒ‘ã‚¤ãƒ©ã¯ã‚¹ã‚¯ãƒªãƒ—ãƒˆã§aliasæŒ‡å®šã•ã‚Œã€ã‹ã¤å‚ç…§ã•ã‚Œã¦ã„ã‚‹ãƒªã‚½ãƒ¼ã‚¹ã‚’
+ * çµåˆã—ã¾ã™ã€‚
+ * mana_datalinkã‚¯ãƒ©ã‚¹ã¯çµåˆã•ã‚ŒãŸãƒ‡ãƒ¼ã‚¿ã‚’å‚ç…§ã™ã‚‹æ©Ÿèƒ½ã‚’æŒã£ã¦ã„ã¾ã™ã€‚
  *
  * @author	Shun Moriya
  * @date	2016-
@@ -22,8 +22,8 @@
 #include <string.h>
 
 /*!
- * @return	mana_datalink ƒIƒuƒWƒFƒNƒg
- * @warning	void mana_datalink_initialize(mana_datalink* self)‚ğŒÄ‚Ô•K—v‚Í‚ ‚è‚Ü‚¹‚ñB
+ * @return	mana_datalink ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @warning	void mana_datalink_initialize(mana_datalink* self)ã‚’å‘¼ã¶å¿…è¦ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚
  */
 mana_datalink* mana_datalink_create(void)
 {
@@ -33,8 +33,8 @@ mana_datalink* mana_datalink_create(void)
 }
 
 /*!
- * @param[in]	self	mana_datalink ƒIƒuƒWƒFƒNƒg
- * @warning		void mana_datalink_finalize(mana_datalink* self)‚ğŒÄ‚Ô•K—v‚Í‚ ‚è‚Ü‚¹‚ñB
+ * @param[in]	self	mana_datalink ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @warning		void mana_datalink_finalize(mana_datalink* self)ã‚’å‘¼ã¶å¿…è¦ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚
  */
 void mana_datalink_destroy(mana_datalink* self)
 {
@@ -43,7 +43,7 @@ void mana_datalink_destroy(mana_datalink* self)
 }
 
 /*!
- * @param[in]	self	mana_datalink ƒIƒuƒWƒFƒNƒg
+ * @param[in]	self	mana_datalink ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 void mana_datalink_initialize(mana_datalink* self)
 {
@@ -54,7 +54,7 @@ void mana_datalink_initialize(mana_datalink* self)
 }
 
 /*!
- * @param[in]	self	mana_datalink ƒIƒuƒWƒFƒNƒg
+ * @param[in]	self	mana_datalink ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 void mana_datalink_finalize(mana_datalink* self)
 {
@@ -65,9 +65,9 @@ void mana_datalink_finalize(mana_datalink* self)
 }
 
 /*!
- * @param[in]	self	mana_datalink ƒIƒuƒWƒFƒNƒg
- * @param[in]	buffer	mana_datalinkƒtƒ@ƒCƒ‹ƒf[ƒ^
- * @warning		ƒf[ƒ^‚ÍQÆ‚³‚ê‚é‚¾‚¯‚È‚Ì‚ÅAQÆ’†‚ÍŠJ•ú‚µ‚È‚¢‚Å‚­‚¾‚³‚¢B
+ * @param[in]	self	mana_datalink ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	buffer	mana_datalinkãƒ•ã‚¡ã‚¤ãƒ«ãƒ‡ãƒ¼ã‚¿
+ * @warning		ãƒ‡ãƒ¼ã‚¿ã¯å‚ç…§ã•ã‚Œã‚‹ã ã‘ãªã®ã§ã€å‚ç…§ä¸­ã¯é–‹æ”¾ã—ãªã„ã§ãã ã•ã„ã€‚
  */
 void mana_datalink_load(mana_datalink* self, const void* buffer)
 {
@@ -88,7 +88,7 @@ void mana_datalink_load(mana_datalink* self, const void* buffer)
 }
 
 /*!
- * @param[in]	self	mana_datalink ƒIƒuƒWƒFƒNƒg
+ * @param[in]	self	mana_datalink ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 void mana_datalink_release(mana_datalink* self)
 {
@@ -101,8 +101,8 @@ void mana_datalink_release(mana_datalink* self)
 }
 
 /*!
- * @param[in]	self	mana_datalink ƒIƒuƒWƒFƒNƒg
- * @return		datalinkƒtƒ@ƒCƒ‹“à‚Ìƒf[ƒ^”
+ * @param[in]	self	mana_datalink ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @return		datalinkãƒ•ã‚¡ã‚¤ãƒ«å†…ã®ãƒ‡ãƒ¼ã‚¿æ•°
  */
 int32_t mana_datalink_get_number_of_datas(const mana_datalink* self)
 {
@@ -110,8 +110,8 @@ int32_t mana_datalink_get_number_of_datas(const mana_datalink* self)
 }
 
 /*!
- * @param[in]	self	mana_datalink ƒIƒuƒWƒFƒNƒg
- * @return		ƒf[ƒ^‚ÌƒTƒCƒY
+ * @param[in]	self	mana_datalink ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @return		ãƒ‡ãƒ¼ã‚¿ã®ã‚µã‚¤ã‚º
  */
 int32_t mana_datalink_get_data_size(const mana_datalink* self, const int32_t index)
 {
@@ -119,8 +119,8 @@ int32_t mana_datalink_get_data_size(const mana_datalink* self, const int32_t ind
 }
 
 /*!
- * @param[in]	self	mana_datalink ƒIƒuƒWƒFƒNƒg
- * @return		ƒf[ƒ^‚ÌƒAƒhƒŒƒX
+ * @param[in]	self	mana_datalink ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @return		ãƒ‡ãƒ¼ã‚¿ã®ã‚¢ãƒ‰ãƒ¬ã‚¹
  */
 const void* mana_datalink_get_data(const mana_datalink* self, const int32_t index)
 {

@@ -2,8 +2,8 @@
  * mana (compiler/library)
  *
  * @file	mana_info.c
- * @brief	mana�R���p�C����mana���C�u�����ŋ��ʗ��p����\�[�X�t�@�C��
- * @detail	���̃t�@�C����mana�R���p�C����mana���C�u�����ŋ��ʗ��p����\�[�X�t�@�C���ł��B
+ * @brief	manaコンパイラとmanaライブラリで共通利用するソースファイル
+ * @detail	このファイルはmanaコンパイラとmanaライブラリで共通利用するソースファイルです。
  * @author	Shun Moriya
  * @date	2016-
  */
@@ -33,7 +33,7 @@
 static uint32_t mana_random_seed = (uint32_t)(19720126);
 
 /*!
- * @param[in]	seed	�����̎�
+ * @param[in]	seed	乱数の種
  */
 extern void mana_srand(const uint32_t seed)
 {
@@ -41,7 +41,7 @@ extern void mana_srand(const uint32_t seed)
 }
 
 /*!
- * @return	�����i0����32767�j
+ * @return	乱数（0から32767）
  */
 int32_t mana_rand(void)
 {
@@ -50,8 +50,8 @@ int32_t mana_rand(void)
 }
 
 /*!
- * @retval	!= 0	�r�b�N�G���f�B�A��
- * @retval	== 0	���g���G���f�B�A��
+ * @retval	!= 0	ビックエンディアン
+ * @retval	== 0	リトルエンディアン
  */
 int32_t mana_is_big_endian(void)
 {
@@ -61,8 +61,8 @@ int32_t mana_is_big_endian(void)
 }
 
 /*!
- * @param[in]	value	�l
- * @return		�X���b�v���ꂽ�l
+ * @param[in]	value	値
+ * @return		スワップされた値
  */
 int16_t mana_swap_endian_short(const int16_t value)
 {
@@ -70,8 +70,8 @@ int16_t mana_swap_endian_short(const int16_t value)
 }
 
 /*!
- * @param[in]	value	�l
- * @return		�X���b�v���ꂽ�l
+ * @param[in]	value	値
+ * @return		スワップされた値
  */
 uint16_t mana_swap_endian_unsigned_short(const uint16_t value)
 {
@@ -79,8 +79,8 @@ uint16_t mana_swap_endian_unsigned_short(const uint16_t value)
 }
 
 /*!
- * @param[in]	value	�l
- * @return		�X���b�v���ꂽ�l
+ * @param[in]	value	値
+ * @return		スワップされた値
  */
 int32_t mana_swap_endian_integer(const int32_t value)
 {
@@ -88,8 +88,8 @@ int32_t mana_swap_endian_integer(const int32_t value)
 }
 
 /*!
- * @param[in]	value	�l
- * @return		�X���b�v���ꂽ�l
+ * @param[in]	value	値
+ * @return		スワップされた値
  */
 uint32_t mana_swap_endian_unsigned_integer(const uint32_t value)
 {
@@ -97,8 +97,8 @@ uint32_t mana_swap_endian_unsigned_integer(const uint32_t value)
 }
 
 /*!
- * @param[in]	value	�l
- * @return		�X���b�v���ꂽ�l
+ * @param[in]	value	値
+ * @return		スワップされた値
  */
 float mana_swap_endian_float(const float value)
 {
@@ -106,7 +106,7 @@ float mana_swap_endian_float(const float value)
 }
 
 /*!
- * @param[in]	format	printf�Ɠ��l�̏���
+ * @param[in]	format	printfと同様の書式
  */
 void mana_print_debug(const char* format, ...)
 {
@@ -141,10 +141,10 @@ void mana_print_debug(const char* format, ...)
 }
 
 /*!
- * @param[in]	text		������
- * @param[in]	pattern		�������镶����
- * @retval		>= 0		���������ʒu�i�擪����̃I�t�Z�b�g�l�j
- * @retval		<  0		������Ȃ�����
+ * @param[in]	text		文字列
+ * @param[in]	pattern		検索する文字列
+ * @retval		>= 0		見つかった位置（先頭からのオフセット値）
+ * @retval		<  0		見つからなかった
  */
 int32_t mana_string_find(const int8_t text[], const int8_t pattern[])
 {
@@ -174,7 +174,7 @@ int32_t mana_string_find(const int8_t text[], const int8_t pattern[])
 }
 
 /*!
- * @return	�}�C�N���b
+ * @return	マイクロ秒
  */
 uint64_t mana_get_micro_secound(void)
 {
@@ -192,8 +192,8 @@ uint64_t mana_get_micro_secound(void)
 }
 
 /*!
- * @param[in]	filename	�t�@�C����
- * @return		�t�@�C���T�C�Y
+ * @param[in]	filename	ファイル名
+ * @return		ファイルサイズ
  */
 long mana_get_file_size(const char* filename)
 {
@@ -215,11 +215,11 @@ long mana_get_file_size(const char* filename)
 }
 
 /*!
- * @param[out]	�ǂݍ��܂ꂽ�o�b�t�@
- * @param[out]	�ǂݍ��܂ꂽ�T�C�Y
- * @param[in]	�t�@�C����
- * @retval	!= 0	�ǂݍ��ݐ���
- * @retval	== 0	�ǂݍ��ݎ��s
+ * @param[out]	読み込まれたバッファ
+ * @param[out]	読み込まれたサイズ
+ * @param[in]	ファイル名
+ * @retval	!= 0	読み込み成功
+ * @retval	== 0	読み込み失敗
  */
 int32_t mana_read(void** buffer, size_t* size, const char* filename)
 {
@@ -260,12 +260,12 @@ int32_t mana_read(void** buffer, size_t* size, const char* filename)
 }
 
 /*!
- * @param[in]	program	���߃Z�N�V�������̃A�h���X
- * @return		�I�y�R�[�h�ƃI�y�����h�̘a
+ * @param[in]	program	命令セクション内のアドレス
+ * @return		オペコードとオペランドの和
  */
 int32_t mana_get_instruction_size(const uint8_t* program)
 {
-	/* �ŏI�I�ɂ͔z��ɂ��悤 */
+	/* 最終的には配列にしよう */
 
 #define SIZE_OF_POINTER	sizeof(uint32_t)
 
@@ -495,12 +495,12 @@ static void* get_data(void* program, int32_t address, void* buffer)
 */
 
 /*!
- * @param[in]	data	�f�[�^�Z�N�V�����擪�A�h���X
- * @param[in]	program	���߃Z�N�V�������̃A�h���X
- * @param[in]	address	���߃Z�N�V�������̃v���O�����J�E���^
- * @return		�I�y�R�[�h�ƃI�y�����h�̕�����B������͋��ʗ̈���g���̂ŁA
+ * @param[in]	data	データセクション先頭アドレス
+ * @param[in]	program	命令セクション内のアドレス
+ * @param[in]	address	命令セクション内のプログラムカウンタ
+ * @return		オペコードとオペランドの文字列。文字列は共通領域を使うので、
  * char* mana_get_instruction_text(char* data, void* program, int32_t address)
- * ���Ăяo���Ə㏑������܂��B
+ * を呼び出すと上書きされます。
  */
 const char* mana_get_instruction_text(const char* data, const void* program, const int32_t address)
 {

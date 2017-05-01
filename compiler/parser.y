@@ -3,8 +3,8 @@
 mana (compiler)
 
 @file	parser.y
-@brief	ˆÓ–¡‰ðÍ‚ÉŠÖ‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹
-@detail	‚±‚Ìƒtƒ@ƒCƒ‹‚ÍˆÓ–¡‰ðÍƒm[ƒh‚ÉŠÖŒW‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹‚Å‚·B
+@brief	æ„å‘³è§£æžã«é–¢ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«
+@detail	ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯æ„å‘³è§£æžãƒŽãƒ¼ãƒ‰ã«é–¢ä¿‚ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
 @author	Shun Moriya
 @date	2016-
 */
@@ -173,9 +173,9 @@ declaration		: variable_decl
 					{ $$ = mana_node_create_node(NODE_DEFINE_CONSTANT, NULL, NULL, NULL); $$->string = $2; $$->digit = $3; }
 				| tDEFINE tIDENTIFIER tREAL
 					{ $$ = mana_node_create_node(NODE_DEFINE_CONSTANT, NULL, NULL, NULL); $$->string = $2; $$->real = $3; }
-				| tDEFINE tIDENTIFIER '-' tDIGIT	/* ƒvƒŠƒvƒƒZƒbƒT‚ðì‚é—\’è */
+				| tDEFINE tIDENTIFIER '-' tDIGIT	/* ãƒ—ãƒªãƒ—ãƒ­ã‚»ãƒƒã‚µã‚’ä½œã‚‹äºˆå®š */
 					{ $$ = mana_node_create_node(NODE_DEFINE_CONSTANT, NULL, NULL, NULL); $$->string = $2; $$->digit = -$4; }
-				| tDEFINE tIDENTIFIER '-' tREAL		/* ƒvƒŠƒvƒƒZƒbƒT‚ðì‚é—\’è */
+				| tDEFINE tIDENTIFIER '-' tREAL		/* ãƒ—ãƒªãƒ—ãƒ­ã‚»ãƒƒã‚µã‚’ä½œã‚‹äºˆå®š */
 					{ $$ = mana_node_create_node(NODE_DEFINE_CONSTANT, NULL, NULL, NULL); $$->string = $2; $$->real = -$4; }
 				| tDEFINE tIDENTIFIER tSTRING
 					{ $$ = mana_node_create_node(NODE_DEFINE_CONSTANT, NULL, NULL, NULL); $$->string = $3; }

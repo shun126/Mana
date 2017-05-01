@@ -2,10 +2,10 @@
  * mana (library)
  *
  * @file	mana_stack.h
- * @brief	mana_stackƒNƒ‰ƒX‚ÉŠÖ‚·‚éƒwƒbƒ_[ƒtƒ@ƒCƒ‹
+ * @brief	mana_stackã‚¯ãƒ©ã‚¹ã«é–¢ã™ã‚‹ãƒ˜ãƒƒãƒ€ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«
  * @detail
- * ‚±‚Ìƒtƒ@ƒCƒ‹‚Ímana_stackƒNƒ‰ƒX‚ÉŠÖŒW‚·‚éƒwƒbƒ_[ƒtƒ@ƒCƒ‹‚Å‚·B
- * mana_stackƒNƒ‰ƒX‚Ímana_actorƒNƒ‰ƒX‚ÌƒXƒ^ƒbƒN‘€ì‚ğs‚È‚¢‚Ü‚·B
+ * ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯mana_stackã‚¯ãƒ©ã‚¹ã«é–¢ä¿‚ã™ã‚‹ãƒ˜ãƒƒãƒ€ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
+ * mana_stackã‚¯ãƒ©ã‚¹ã¯mana_actorã‚¯ãƒ©ã‚¹ã®ã‚¹ã‚¿ãƒƒã‚¯æ“ä½œã‚’è¡Œãªã„ã¾ã™ã€‚
  *
  * @author	Shun Moriya
  * @date	2016-
@@ -23,127 +23,127 @@ extern "C" {
 #endif
 
 /*!
- * @brief	mana_stackƒNƒ‰ƒX
- * mana_stackƒNƒ‰ƒX‚ÍƒXƒ^ƒbƒN‚ğ•\‚µ‚Ä‚¢‚Ü‚·B
+ * @brief	mana_stackã‚¯ãƒ©ã‚¹
+ * mana_stackã‚¯ãƒ©ã‚¹ã¯ã‚¹ã‚¿ãƒƒã‚¯ã‚’è¡¨ã—ã¦ã„ã¾ã™ã€‚
  *
- * C++‚Å‚¢‚¤‚Æ‚±‚ë‚Ìƒƒ“ƒo[•Ï”‚Å‚·‚ªACŒ¾Œê‚È‚Ì‚Å‘S‚Äpublic‚É‚È‚Á‚Ä‚¢‚Ü‚·B
- * ‘€ì—p‚ÌŠÖ”‚ğ—pˆÓ‚µ‚Ä‚¢‚é‚Ì‚ÅA‚»‚ê‚ç‚ÌŠÖ”‚ğ—˜—p‚µ‚Ä‘€ì‚µ‚Ä‚­‚¾‚³‚¢B
+ * C++ã§ã„ã†ã¨ã“ã‚ã®ãƒ¡ãƒ³ãƒãƒ¼å¤‰æ•°ã§ã™ãŒã€Cè¨€èªãªã®ã§å…¨ã¦publicã«ãªã£ã¦ã„ã¾ã™ã€‚
+ * æ“ä½œç”¨ã®é–¢æ•°ã‚’ç”¨æ„ã—ã¦ã„ã‚‹ã®ã§ã€ãã‚Œã‚‰ã®é–¢æ•°ã‚’åˆ©ç”¨ã—ã¦æ“ä½œã—ã¦ãã ã•ã„ã€‚
  */
 typedef struct mana_stack
 {
-	/*! ƒoƒbƒtƒ@ */
+	/*! ãƒãƒƒãƒ•ã‚¡ */
 	union
 	{
-		const char** string_handle;	/*!< •¶š—ñƒnƒ“ƒhƒ‹ */
-		void** void_handle;			/*!< ƒf[ƒ^ƒnƒ“ƒhƒ‹ */
-		float* float_pointer;		/*!< À”ƒ|ƒCƒ“ƒ^ */
-		int32_t* integer_pointer;	/*!< ®”ƒ|ƒCƒ“ƒ^ */
-		void* void_pointer;			/*!< ƒf[ƒ^ƒ|ƒCƒ“ƒ^ */
+		const char** string_handle;	/*!< æ–‡å­—åˆ—ãƒãƒ³ãƒ‰ãƒ« */
+		void** void_handle;			/*!< ãƒ‡ãƒ¼ã‚¿ãƒãƒ³ãƒ‰ãƒ« */
+		float* float_pointer;		/*!< å®Ÿæ•°ãƒã‚¤ãƒ³ã‚¿ */
+		int32_t* integer_pointer;	/*!< æ•´æ•°ãƒã‚¤ãƒ³ã‚¿ */
+		void* void_pointer;			/*!< ãƒ‡ãƒ¼ã‚¿ãƒã‚¤ãƒ³ã‚¿ */
 	}buffer;
-	size_t allocated_size;			/*!< Šm•ÛÏ‚İƒTƒCƒY */
-	size_t used_size;				/*!< g—pÏ‚İƒTƒCƒY(ƒXƒ^ƒbƒNƒ|ƒCƒ“ƒ^) */
+	size_t allocated_size;			/*!< ç¢ºä¿æ¸ˆã¿ã‚µã‚¤ã‚º */
+	size_t used_size;				/*!< ä½¿ç”¨æ¸ˆã¿ã‚µã‚¤ã‚º(ã‚¹ã‚¿ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿) */
 }mana_stack;
 
-/*! mana_stack ƒIƒuƒWƒFƒNƒg‚Ì¶¬ */
+/*! mana_stack ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç”Ÿæˆ */
 extern mana_stack* mana_stack_create(void);
 
-/*! mana_stack ƒIƒuƒWƒFƒNƒg‚Ì¶¬ */
+/*! mana_stack ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç”Ÿæˆ */
 extern mana_stack* mana_stack_create_with_size(const size_t size);
 
-/*! mana_stack ƒIƒuƒWƒFƒNƒg‚Ì”jŠü */
+/*! mana_stack ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç ´æ£„ */
 extern void mana_stack_destroy(mana_stack* self);
 
-/*! mana_stack ƒIƒuƒWƒFƒNƒg‚ÌƒVƒŠƒAƒ‰ƒCƒY */
+/*! mana_stack ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚º */
 extern void mana_stack_serialize(const mana_stack* self, mana_stream* stream);
 
-/*! mana_stack ƒIƒuƒWƒFƒNƒg‚ÌƒfƒVƒŠƒAƒ‰ƒCƒY */
+/*! mana_stack ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ãƒ‡ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚º */
 extern void mana_stack_deserialize(mana_stack* self, mana_stream* stream);
 
-/*! mana_stack ƒIƒuƒWƒFƒNƒg‚Ì‰Šú‰» */
+/*! mana_stack ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®åˆæœŸåŒ– */
 extern void mana_stack_initialize(mana_stack* self);
 
-/*! mana_stack ƒIƒuƒWƒFƒNƒg‚Ì‰Šú‰» */
+/*! mana_stack ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®åˆæœŸåŒ– */
 extern void mana_stack_initialize_with_size(mana_stack* self, const size_t size);
 
-/*! mana_stack ƒIƒuƒWƒFƒNƒg‚ÌŠJ•ú */
+/*! mana_stack ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®é–‹æ”¾ */
 extern void mana_stack_finalize(mana_stack* self);
 
-/*! mana_stack ƒIƒuƒWƒFƒNƒg‚ÌƒNƒŠƒA */
+/*! mana_stack ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚¯ãƒªã‚¢ */
 extern void mana_stack_clear(mana_stack* self);
 
-/*! mana_stack ƒIƒuƒWƒFƒNƒg‚ÌƒRƒs[ */
+/*! mana_stack ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚³ãƒ”ãƒ¼ */
 extern void mana_stack_duplicate(mana_stack* self);
 
-/*! ƒXƒ^ƒbƒNƒ|ƒCƒ“ƒ^‚ğˆÚ“® */
+/*! ã‚¹ã‚¿ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿ã‚’ç§»å‹• */
 extern void mana_stack_remove(mana_stack* self, const size_t size);
 
-/*! ®”‚ğƒvƒbƒVƒ… */
+/*! æ•´æ•°ã‚’ãƒ—ãƒƒã‚·ãƒ¥ */
 extern void mana_stack_push_integer(mana_stack* self, const int32_t value);
 
-/*! À”‚ğƒvƒbƒVƒ… */
+/*! å®Ÿæ•°ã‚’ãƒ—ãƒƒã‚·ãƒ¥ */
 extern void mana_stack_push_real(mana_stack* self, const float value);
 
-/*! •¶š—ñ‚ğƒvƒbƒVƒ… */
+/*! æ–‡å­—åˆ—ã‚’ãƒ—ãƒƒã‚·ãƒ¥ */
 extern void mana_stack_push_string(mana_stack* self, const char* string);
 
-/*! ƒ|ƒCƒ“ƒ^‚ğƒvƒbƒVƒ… */
+/*! ãƒã‚¤ãƒ³ã‚¿ã‚’ãƒ—ãƒƒã‚·ãƒ¥ */
 extern void mana_stack_push_pointer(mana_stack* self, void* pointer);
 
-/*! ƒf[ƒ^‚ğƒvƒbƒVƒ… */
+/*! ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ—ãƒƒã‚·ãƒ¥ */
 extern void mana_stack_push_data(mana_stack* self, const void* buffer, const size_t size);
 
-/*! ®”‚ğƒ|ƒbƒv */
+/*! æ•´æ•°ã‚’ãƒãƒƒãƒ— */
 extern int32_t mana_stack_pop_integer(mana_stack* self);
 
-/*! À”‚ğƒ|ƒbƒv */
+/*! å®Ÿæ•°ã‚’ãƒãƒƒãƒ— */
 extern float mana_stack_pop_real(mana_stack* self);
 
-/*! •¶š—ñ‚ğƒ|ƒbƒv */
+/*! æ–‡å­—åˆ—ã‚’ãƒãƒƒãƒ— */
 extern const char* mana_stack_pop_string(mana_stack* self);
 
-/*! ƒ|ƒCƒ“ƒ^‚ğƒ|ƒbƒv */
+/*! ãƒã‚¤ãƒ³ã‚¿ã‚’ãƒãƒƒãƒ— */
 extern void* mana_stack_pop_pointer(mana_stack* self);
 
-/*! ƒAƒhƒŒƒX‚ğƒ|ƒbƒv */
+/*! ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’ãƒãƒƒãƒ— */
 extern void* mana_stack_pop_address(mana_stack* self);
 
-/*! ƒf[ƒ^‚ğƒ|ƒbƒv */
+/*! ãƒ‡ãƒ¼ã‚¿ã‚’ãƒãƒƒãƒ— */
 extern void mana_stack_pop_data(mana_stack* self, void* buffer, const size_t size);
 
-/*! ®”‚ğæ“¾ */
+/*! æ•´æ•°ã‚’å–å¾— */
 extern int32_t mana_stack_get_integer(const mana_stack* self, const size_t index);
 
-/*! À”‚ğæ“¾ */
+/*! å®Ÿæ•°ã‚’å–å¾— */
 extern float mana_stack_get_real(const mana_stack* self, const size_t index);
 
-/*! •¶š—ñ‚ğæ“¾ */
+/*! æ–‡å­—åˆ—ã‚’å–å¾— */
 extern const char* mana_stack_get_string(const mana_stack* self, const size_t index);
 
-/*! ƒ|ƒCƒ“ƒ^‚ğæ“¾ */
+/*! ãƒã‚¤ãƒ³ã‚¿ã‚’å–å¾— */
 extern void* mana_stack_get_pointer(const mana_stack* self, const size_t index);
 
-/*! ƒAƒhƒŒƒX‚ğæ“¾ */
+/*! ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å–å¾— */
 extern void* mana_stack_get_address(const mana_stack* self, const size_t index);
 
-/*! ®”‚ğİ’è */
+/*! æ•´æ•°ã‚’è¨­å®š */
 extern void mana_stack_set_integer(mana_stack* self, const size_t index, const int32_t integer);
 
-/*! À”‚ğİ’è */
+/*! å®Ÿæ•°ã‚’è¨­å®š */
 extern void mana_stack_set_real(mana_stack* self, const size_t index, const float real);
 
-/*! •¶š—ñ‚ğİ’è */
+/*! æ–‡å­—åˆ—ã‚’è¨­å®š */
 extern void mana_stack_set_string(mana_stack* self, const size_t index, const char* string);
 
-/*! ƒ|ƒCƒ“ƒ^‚ğİ’è */
+/*! ãƒã‚¤ãƒ³ã‚¿ã‚’è¨­å®š */
 extern void mana_stack_set_pointer(mana_stack* self, const size_t index, void* pointer);
 
-/*! ƒXƒ^ƒbƒN‚ÌƒTƒCƒY‚ğæ“¾ */
+/*! ã‚¹ã‚¿ãƒƒã‚¯ã®ã‚µã‚¤ã‚ºã‚’å–å¾— */
 extern size_t mana_stack_get_size(const mana_stack* self);
 
-/*! ƒXƒ^ƒbƒN‚ÌƒTƒCƒY‚ğİ’è */
+/*! ã‚¹ã‚¿ãƒƒã‚¯ã®ã‚µã‚¤ã‚ºã‚’è¨­å®š */
 extern void mana_stack_set_size(mana_stack* self, const size_t size);
 
-/*! ƒXƒ^ƒbƒN‚ğ”äŠr */
+/*! ã‚¹ã‚¿ãƒƒã‚¯ã‚’æ¯”è¼ƒ */
 extern int32_t mana_stack_compare(const mana_stack* self, const mana_stack* other);
 
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)

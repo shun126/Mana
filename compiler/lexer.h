@@ -2,8 +2,8 @@
 mana (compiler)
 
 @file	lexer.h
-@brief	�����͂Ɋ֌W����w�b�_�[�t�@�C��
-@detail	���̃t�@�C���͎����͂Ɋ֌W����w�b�_�[�t�@�C���ł��B
+@brief	字句解析に関係するヘッダーファイル
+@detail	このファイルは字句解析に関係するヘッダーファイルです。
 @author	Shun Moriya
 @date	2016-
 */

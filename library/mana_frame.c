@@ -2,11 +2,11 @@
  * mana (library)
  *
  * @file	mana_frame.c
- * @brief	mana_frameƒNƒ‰ƒX‚ÉŠÖ‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹
+ * @brief	mana_frameã‚¯ãƒ©ã‚¹ã«é–¢ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«
  * @detail
- * ‚±‚Ìƒtƒ@ƒCƒ‹‚Ímana_frameƒNƒ‰ƒX‚ÉŠÖŒW‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹‚Å‚·B
- * mana_frameƒNƒ‰ƒX‚Ímana_actorƒNƒ‰ƒX‚Ìƒ[ƒJƒ‹•Ï”‚Ì‘€ì‚ğs‚È‚¢‚Ü‚·B
- * –{—ˆ‚ÍƒXƒ^ƒbƒN‚Å‘€ì‚µ‚½‚Ù‚¤‚ª—Ç‚¢‚Ì‚©‚à‚µ‚ê‚Ü‚¹‚ñ‚ªc
+ * ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯mana_frameã‚¯ãƒ©ã‚¹ã«é–¢ä¿‚ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
+ * mana_frameã‚¯ãƒ©ã‚¹ã¯mana_actorã‚¯ãƒ©ã‚¹ã®ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°ã®æ“ä½œã‚’è¡Œãªã„ã¾ã™ã€‚
+ * æœ¬æ¥ã¯ã‚¹ã‚¿ãƒƒã‚¯ã§æ“ä½œã—ãŸã»ã†ãŒè‰¯ã„ã®ã‹ã‚‚ã—ã‚Œã¾ã›ã‚“ãŒâ€¦
  *
  * @author	Shun Moriya
  * @date	2016-
@@ -24,8 +24,8 @@
 #define MANA_FRAME_PAGE_SIZE (256)
 
 /*!
- * @return	mana_frame ƒIƒuƒWƒFƒNƒg
- * @warning	void mana_frame_initialize(mana_frame* self)‚ğŒÄ‚Ô•K—v‚Í‚ ‚è‚Ü‚¹‚ñB
+ * @return	mana_frame ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @warning	void mana_frame_initialize(mana_frame* self)ã‚’å‘¼ã¶å¿…è¦ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚
  */
 mana_frame* mana_frame_create(void)
 {
@@ -35,9 +35,9 @@ mana_frame* mana_frame_create(void)
 }
 
 /*!
- * @param[in]	size	Šm•ÛƒTƒCƒY
- * @return		mana_frame ƒIƒuƒWƒFƒNƒg
- * @warning		void mana_frame_initialize_with_size(mana_frame* self, size_t size)‚ğŒÄ‚Ô•K—v‚Í‚ ‚è‚Ü‚¹‚ñB
+ * @param[in]	size	ç¢ºä¿ã‚µã‚¤ã‚º
+ * @return		mana_frame ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @warning		void mana_frame_initialize_with_size(mana_frame* self, size_t size)ã‚’å‘¼ã¶å¿…è¦ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚
  */
 mana_frame* mana_frame_create_with_size(const size_t size)
 {
@@ -47,8 +47,8 @@ mana_frame* mana_frame_create_with_size(const size_t size)
 }
 
 /*!
- * @param[in]	self	mana_frame ƒIƒuƒWƒFƒNƒg
- * @warning		void mana_frame_finalize(mana_frame* self)‚ğŒÄ‚Ô•K—v‚Í‚ ‚è‚Ü‚¹‚ñB
+ * @param[in]	self	mana_frame ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @warning		void mana_frame_finalize(mana_frame* self)ã‚’å‘¼ã¶å¿…è¦ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚
  */
 void mana_frame_destroy(mana_frame* self)
 {
@@ -60,7 +60,7 @@ void mana_frame_destroy(mana_frame* self)
 }
 
 /*!
- * @param[in]	self	mana_frame ƒIƒuƒWƒFƒNƒg
+ * @param[in]	self	mana_frame ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 void mana_frame_initialize(mana_frame* self)
 {
@@ -69,8 +69,8 @@ void mana_frame_initialize(mana_frame* self)
 }
 
 /*!
- * @param[in]	self	mana_frame ƒIƒuƒWƒFƒNƒg
- * @param[in]	size	Šm•ÛƒTƒCƒY
+ * @param[in]	self	mana_frame ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	size	ç¢ºä¿ã‚µã‚¤ã‚º
  */
 void mana_frame_initialize_with_size(mana_frame* self, const size_t size)
 {
@@ -80,7 +80,7 @@ void mana_frame_initialize_with_size(mana_frame* self, const size_t size)
 }
 
 /*!
- * @param[in]	self	mana_frame ƒIƒuƒWƒFƒNƒg
+ * @param[in]	self	mana_frame ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 void mana_frame_finalize(mana_frame* self)
 {
@@ -91,8 +91,8 @@ void mana_frame_finalize(mana_frame* self)
 }
 
 /*!
- * @param[in]	self	mana_frame ƒIƒuƒWƒFƒNƒg
- * @param[out]	stream	mana_stream ƒIƒuƒWƒFƒNƒg
+ * @param[in]	self	mana_frame ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[out]	stream	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 void mana_frame_serialize(const mana_frame* self, mana_stream* stream)
 {
@@ -103,8 +103,8 @@ void mana_frame_serialize(const mana_frame* self, mana_stream* stream)
 }
 
 /*!
- * @param[in]	self	mana_frame ƒIƒuƒWƒFƒNƒg
- * @param[in]	stream	mana_stream ƒIƒuƒWƒFƒNƒg
+ * @param[in]	self	mana_frame ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	stream	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 void mana_frame_deserialize(mana_frame* self, mana_stream* stream)
 {
@@ -117,7 +117,7 @@ void mana_frame_deserialize(mana_frame* self, mana_stream* stream)
 }
 
 /*!
- * @param[in]	self	mana_frame ƒIƒuƒWƒFƒNƒg
+ * @param[in]	self	mana_frame ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 void mana_frame_clear(mana_frame* self)
 {
@@ -128,8 +128,8 @@ void mana_frame_clear(mana_frame* self)
 }
 
 /*!
- * @param[in]	self	mana_frame ƒIƒuƒWƒFƒNƒg
- * @param[in]	size	’Ç‰ÁƒTƒCƒY
+ * @param[in]	self	mana_frame ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	size	è¿½åŠ ã‚µã‚¤ã‚º
  */
 void mana_frame_allocate(mana_frame* self, const size_t size)
 {
@@ -147,8 +147,8 @@ void mana_frame_allocate(mana_frame* self, const size_t size)
 }
 
 /*!
- * @param[in]	self	mana_frame ƒIƒuƒWƒFƒNƒg
- * @param[in]	size	ŠJ•úƒTƒCƒY
+ * @param[in]	self	mana_frame ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	size	é–‹æ”¾ã‚µã‚¤ã‚º
  */
 void mana_frame_release(mana_frame* self, const size_t size)
 {
@@ -159,9 +159,9 @@ void mana_frame_release(mana_frame* self, const size_t size)
 }
 
 /*!
- * @param[in]	self	mana_frame ƒIƒuƒWƒFƒNƒg
- * @param[in]	index	ƒtƒŒ[ƒ€ƒ|ƒCƒ“ƒ^‚Ö‚ÌƒIƒtƒZƒbƒg’l
- * @return		ƒAƒhƒŒƒX
+ * @param[in]	self	mana_frame ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	index	ãƒ•ãƒ¬ãƒ¼ãƒ ãƒã‚¤ãƒ³ã‚¿ã¸ã®ã‚ªãƒ•ã‚»ãƒƒãƒˆå€¤
+ * @return		ã‚¢ãƒ‰ãƒ¬ã‚¹
  */
 void* mana_frame_get_address(const mana_frame* self, const size_t index)
 {
@@ -169,8 +169,8 @@ void* mana_frame_get_address(const mana_frame* self, const size_t index)
 }
 
 /*!
- * @param[in]	self	mana_frame ƒIƒuƒWƒFƒNƒg
- * @return		ƒtƒŒ[ƒ€ƒoƒbƒtƒ@‚ÌƒTƒCƒY/ƒtƒŒ[ƒ€ƒ|ƒCƒ“ƒ^
+ * @param[in]	self	mana_frame ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @return		ãƒ•ãƒ¬ãƒ¼ãƒ ãƒãƒƒãƒ•ã‚¡ã®ã‚µã‚¤ã‚º/ãƒ•ãƒ¬ãƒ¼ãƒ ãƒã‚¤ãƒ³ã‚¿
  */
 size_t mana_frame_get_size(const mana_frame* self)
 {
@@ -178,8 +178,8 @@ size_t mana_frame_get_size(const mana_frame* self)
 }
 
 /*!
- * @param[in]	self	mana_frame ƒIƒuƒWƒFƒNƒg
- * @param[in]	size	ƒtƒŒ[ƒ€ƒoƒbƒtƒ@‚ÌƒTƒCƒY/ƒtƒŒ[ƒ€ƒ|ƒCƒ“ƒ^
+ * @param[in]	self	mana_frame ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	size	ãƒ•ãƒ¬ãƒ¼ãƒ ãƒãƒƒãƒ•ã‚¡ã®ã‚µã‚¤ã‚º/ãƒ•ãƒ¬ãƒ¼ãƒ ãƒã‚¤ãƒ³ã‚¿
  */
 void mana_frame_set_size(mana_frame* self, const size_t size)
 {
@@ -192,10 +192,10 @@ void mana_frame_set_size(mana_frame* self, const size_t size)
 }
 
 /*!
- * @param[in]	self	mana_frame ƒIƒuƒWƒFƒNƒg
- * @param[in]	other	mana_frame ƒIƒuƒWƒFƒNƒg
- * @retval		== 0	“¯ˆê‚Ì“à—e
- * @retval		!= 0	ˆÙ‚È‚é“à—e
+ * @param[in]	self	mana_frame ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	other	mana_frame ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @retval		== 0	åŒä¸€ã®å†…å®¹
+ * @retval		!= 0	ç•°ãªã‚‹å†…å®¹
  */
 int32_t mana_frame_compare(const mana_frame* self, const mana_frame* other)
 {

@@ -2,8 +2,8 @@
 mana (compiler)
 
 @file	type.h
-@brief	�^���Ɋւ���w�b�_�[�t�@�C��
-@detail	���̃t�@�C���͌^���Ɋ֌W����w�b�_�[�t�@�C���ł��B
+@brief	型情報に関するヘッダーファイル
+@detail	このファイルは型情報に関係するヘッダーファイルです。
 @author	Shun Moriya
 @date	2016-
 */
