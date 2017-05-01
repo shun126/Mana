@@ -2,8 +2,8 @@
  * mana (compiler/library)
  *
  * @file	mana_malloc.c
- * @brief	manaƒ‰ƒCƒuƒ‰ƒŠ“à‚Å‹¤’Ê—˜—p‚³‚ê‚éƒƒ‚ƒŠŠÇ—‚ÉŠÖ‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹
- * @detail	‚±‚Ìƒtƒ@ƒCƒ‹‚Ímanaƒ‰ƒCƒuƒ‰ƒŠ“à‚Å‹¤’Ê—˜—p‚³‚ê‚éƒƒ‚ƒŠŠÇ—‚ÉŠÖ‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹‚Å‚·B
+ * @brief	manaãƒ©ã‚¤ãƒ–ãƒ©ãƒªå†…ã§å…±é€šåˆ©ç”¨ã•ã‚Œã‚‹ãƒ¡ãƒ¢ãƒªç®¡ç†ã«é–¢ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«
+ * @detail	ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯manaãƒ©ã‚¤ãƒ–ãƒ©ãƒªå†…ã§å…±é€šåˆ©ç”¨ã•ã‚Œã‚‹ãƒ¡ãƒ¢ãƒªç®¡ç†ã«é–¢ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
  * @author	Shun Moriya
  * @date	2003-
  */
@@ -14,7 +14,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/*! ƒƒ‚ƒŠƒuƒƒbƒN‚ÌŠm•Û‚ÉŽ¸”s‚µ‚½Žž‚ÌƒGƒ‰[”Ô† */
+/*! ãƒ¡ãƒ¢ãƒªãƒ–ãƒ­ãƒƒã‚¯ã®ç¢ºä¿ã«å¤±æ•—ã—ãŸæ™‚ã®ã‚¨ãƒ©ãƒ¼ç•ªå· */
 #define MANA_MALLOC_NO_MEMORY_ERROR_CODE (1000)
 
 static mana_malloc_function malloc_function = NULL;
@@ -23,7 +23,7 @@ static mana_realloc_function realloc_function = NULL;
 static mana_free_function free_function = NULL;
 
 /*!
- * @param[in]	function	ƒƒ‚ƒŠƒuƒƒbƒN‚ÌŠm•ÛŠÖ”
+ * @param[in]	function	ãƒ¡ãƒ¢ãƒªãƒ–ãƒ­ãƒƒã‚¯ã®ç¢ºä¿é–¢æ•°
  */
 void mana_set_malloc_function(mana_malloc_function function)
 {
@@ -31,7 +31,7 @@ void mana_set_malloc_function(mana_malloc_function function)
 }
 
 /*!
- * @param[in]	function	ƒƒ‚ƒŠƒuƒƒbƒN‚ðŠm•ÛŒã‰Šú‰»ŠÖ”
+ * @param[in]	function	ãƒ¡ãƒ¢ãƒªãƒ–ãƒ­ãƒƒã‚¯ã‚’ç¢ºä¿å¾ŒåˆæœŸåŒ–é–¢æ•°
  */
 void mana_set_calloc_function(mana_calloc_function function)
 {
@@ -39,7 +39,7 @@ void mana_set_calloc_function(mana_calloc_function function)
 }
 
 /*!
- * @param[in]	function	ƒƒ‚ƒŠƒuƒƒbƒN‚ÌÄŠm•ÛŠÖ”‚Ì“o˜^
+ * @param[in]	function	ãƒ¡ãƒ¢ãƒªãƒ–ãƒ­ãƒƒã‚¯ã®å†ç¢ºä¿é–¢æ•°ã®ç™»éŒ²
  */
 void mana_set_realloc_function(mana_realloc_function function)
 {
@@ -47,7 +47,7 @@ void mana_set_realloc_function(mana_realloc_function function)
 }
 
 /*!
- * @param[in]	function	ƒƒ‚ƒŠƒuƒƒbƒN‚ÌŠJ•úŠÖ”‚Ì“o˜^
+ * @param[in]	function	ãƒ¡ãƒ¢ãƒªãƒ–ãƒ­ãƒƒã‚¯ã®é–‹æ”¾é–¢æ•°ã®ç™»éŒ²
  */
 void mana_set_free_function(mana_free_function function)
 {
@@ -55,8 +55,8 @@ void mana_set_free_function(mana_free_function function)
 }
 
 /*!
- * @param[in]	size	Šm•Û‚·‚éƒƒ‚ƒŠƒuƒƒbƒNƒTƒCƒY
- * @return		ƒƒ‚ƒŠƒuƒƒbƒNƒAƒhƒŒƒX
+ * @param[in]	size	ç¢ºä¿ã™ã‚‹ãƒ¡ãƒ¢ãƒªãƒ–ãƒ­ãƒƒã‚¯ã‚µã‚¤ã‚º
+ * @return		ãƒ¡ãƒ¢ãƒªãƒ–ãƒ­ãƒƒã‚¯ã‚¢ãƒ‰ãƒ¬ã‚¹
  */
 void* mana_malloc(const size_t size)
 {
@@ -70,9 +70,9 @@ void* mana_malloc(const size_t size)
 }
 
 /*!
- * @param[in]	size	Šm•Û‚·‚éƒƒ‚ƒŠƒuƒƒbƒNƒTƒCƒY
- * @param[in]	count	Šm•Û‚·‚éƒƒ‚ƒŠƒuƒƒbƒN‚Ì”
- * @return		ƒƒ‚ƒŠƒuƒƒbƒNƒAƒhƒŒƒX
+ * @param[in]	size	ç¢ºä¿ã™ã‚‹ãƒ¡ãƒ¢ãƒªãƒ–ãƒ­ãƒƒã‚¯ã‚µã‚¤ã‚º
+ * @param[in]	count	ç¢ºä¿ã™ã‚‹ãƒ¡ãƒ¢ãƒªãƒ–ãƒ­ãƒƒã‚¯ã®æ•°
+ * @return		ãƒ¡ãƒ¢ãƒªãƒ–ãƒ­ãƒƒã‚¯ã‚¢ãƒ‰ãƒ¬ã‚¹
  */
 void* mana_calloc(const size_t size, const size_t count)
 {
@@ -86,9 +86,9 @@ void* mana_calloc(const size_t size, const size_t count)
 }
 
 /*!
- * @param[in]	buffer	•ÏX‚·‚éƒƒ‚ƒŠƒuƒƒbƒNƒAƒhƒŒƒX
- * @param[in]	size	Šm•Û‚·‚éƒƒ‚ƒŠƒuƒƒbƒNƒTƒCƒY
- * @return		ƒƒ‚ƒŠƒuƒƒbƒNƒAƒhƒŒƒX
+ * @param[in]	buffer	å¤‰æ›´ã™ã‚‹ãƒ¡ãƒ¢ãƒªãƒ–ãƒ­ãƒƒã‚¯ã‚¢ãƒ‰ãƒ¬ã‚¹
+ * @param[in]	size	ç¢ºä¿ã™ã‚‹ãƒ¡ãƒ¢ãƒªãƒ–ãƒ­ãƒƒã‚¯ã‚µã‚¤ã‚º
+ * @return		ãƒ¡ãƒ¢ãƒªãƒ–ãƒ­ãƒƒã‚¯ã‚¢ãƒ‰ãƒ¬ã‚¹
  */
 void* mana_realloc(void* buffer, const size_t size)
 {
@@ -104,7 +104,7 @@ void* mana_realloc(void* buffer, const size_t size)
 }
 
 /*!
- * @param[in]	buffer	ŠJ•ú‚·‚éƒƒ‚ƒŠƒuƒƒbƒNƒAƒhƒŒƒX
+ * @param[in]	buffer	é–‹æ”¾ã™ã‚‹ãƒ¡ãƒ¢ãƒªãƒ–ãƒ­ãƒƒã‚¯ã‚¢ãƒ‰ãƒ¬ã‚¹
  */
 void mana_free(void* buffer)
 {

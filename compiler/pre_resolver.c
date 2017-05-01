@@ -2,8 +2,8 @@
 mana (compiler)
 
 @file	pre_resolver.c
-@brief	\•¶–Ø•]‰¿‚ÉŠÖ‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹
-@detail	‚±‚Ìƒtƒ@ƒCƒ‹‚Í\•¶–Ø•]‰¿‚ÉŠÖŒW‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹‚Å‚·B
+@brief	æ§‹æ–‡æœ¨è©•ä¾¡ã«é–¢ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«
+@detail	ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯æ§‹æ–‡æœ¨è©•ä¾¡ã«é–¢ä¿‚ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
 @author	Shun Moriya
 @date	2017-
 */
@@ -196,11 +196,11 @@ void mana_pre_resolver_finalize(void)
 }
 
 /*!
-ˆø”‚Ì”‚ðŽæ“¾‚µ‚Ü‚·iÄ‹AŒÄ‚Ño‚µj
-@param	count	ˆø”‚Ì”Ô†
-@param	param	ˆø”‚Ìsymbol_entry
-@param	node	ˆø”‚Ìnode_entry
-@return	ˆø”‚Ì”
+å¼•æ•°ã®æ•°ã‚’å–å¾—ã—ã¾ã™ï¼ˆå†å¸°å‘¼ã³å‡ºã—ï¼‰
+@param	count	å¼•æ•°ã®ç•ªå·
+@param	param	å¼•æ•°ã®symbol_entry
+@param	node	å¼•æ•°ã®node_entry
+@return	å¼•æ•°ã®æ•°
 */
 static int32_t get_argument_count(const int32_t count, const node_entry* node)
 {
@@ -224,16 +224,16 @@ DO_RECURSIVE:
 
 	switch (node->id)
 	{
-		// “Á‚Éˆ—‚ðs‚í‚È‚¢ƒm[ƒh
+		// ç‰¹ã«å‡¦ç†ã‚’è¡Œã‚ãªã„ãƒŽãƒ¼ãƒ‰
 	case NODE_IDENTIFIER:
 		MANA_ASSERT(node->left == NULL);
 		MANA_ASSERT(node->right == NULL);
 		MANA_ASSERT(node->body == NULL);
-		// TODO:post_resolver‚ÆŠm”F‚µ‚Ä‰º‚³‚¢
+		// TODO:post_resolverã¨ç¢ºèªã—ã¦ä¸‹ã•ã„
 		mana_resolver_search_symbol_from_name(node);
 		break;
 
-		// ’è”’è‹`‚ÉŠÖ‚·‚éƒm[ƒh									
+		// å®šæ•°å®šç¾©ã«é–¢ã™ã‚‹ãƒŽãƒ¼ãƒ‰									
 	case NODE_DEFINE_ALIAS:
 		MANA_ASSERT(node->left == NULL);
 		MANA_ASSERT(node->right == NULL);
@@ -255,7 +255,7 @@ DO_RECURSIVE:
 		mana_symbol_destroy(node->string);
 		break;
 
-		// ƒƒ‚ƒŠƒŒƒCƒAƒEƒg‚ÉŠÖ‚·‚éƒm[ƒh									
+		// ãƒ¡ãƒ¢ãƒªãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆã«é–¢ã™ã‚‹ãƒŽãƒ¼ãƒ‰									
 	case NODE_DECLARE_ALLOCATE:
 		{
 			const int32_t mana_allocated_size = mana_symbol_get_static_memory_address() + node->digit;
@@ -280,7 +280,7 @@ DO_RECURSIVE:
 		MANA_ASSERT(node->body == NULL);
 		break;
 
-		// \‘¢‚ÉŠÖ‚·‚éƒm[ƒh
+		// æ§‹é€ ã«é–¢ã™ã‚‹ãƒŽãƒ¼ãƒ‰
 	case NODE_DECLARE_ACTOR:
 		{
 			mana_symbol_begin_registration_actor(mana_symbol_lookup(node->string));
@@ -326,7 +326,7 @@ DO_RECURSIVE:
 		MANA_ASSERT(node->body == NULL);
 		break;
 
-		// ŠÖ”éŒ¾‚ÉŠÖ‚·‚éƒm[ƒh									
+		// é–¢æ•°å®£è¨€ã«é–¢ã™ã‚‹ãƒŽãƒ¼ãƒ‰									
 	case NODE_DECLARE_ACTION:
 		{
 			MANA_ASSERT(node->symbol == NULL);
@@ -347,12 +347,12 @@ DO_RECURSIVE:
 	case NODE_DECLARE_FUNCTION:
 		{
 			MANA_ASSERT(node->symbol == NULL);
-			// ŠÖ”‚Ì–ß‚è’l‚ð•]‰¿
+			// é–¢æ•°ã®æˆ»ã‚Šå€¤ã‚’è©•ä¾¡
 			mana_pre_resolver_resolve(node->left);
-			// ƒVƒ“ƒ{ƒ‹‚Ìì¬‚ÆŒ^‚Ì’è‹`
+			// ã‚·ãƒ³ãƒœãƒ«ã®ä½œæˆã¨åž‹ã®å®šç¾©
 			node->symbol = mana_symbol_create_function(node->string);
 			node->symbol->type = node->left->type;
-			// ƒVƒ“ƒ{ƒ‹‚Éˆø”‚Ì”‚ð“o˜^
+			// ã‚·ãƒ³ãƒœãƒ«ã«å¼•æ•°ã®æ•°ã‚’ç™»éŒ²
 			node->symbol->number_of_parameters = get_argument_count(0, node->right);
 		}
 		// node->body
@@ -361,7 +361,7 @@ DO_RECURSIVE:
 	case NODE_DECLARE_NATIVE_FUNCTION:
 		{
 			MANA_ASSERT(node->symbol == NULL);
-			// ƒVƒ“ƒ{ƒ‹‚Ìì¬‚ÆŒ^‚Ì’è‹`
+			// ã‚·ãƒ³ãƒœãƒ«ã®ä½œæˆã¨åž‹ã®å®šç¾©
 			node->symbol = mana_symbol_create_function(node->string);
 			mana_symbol_begin_native_function_registration();
 			mana_pre_resolver_resolve(node->left);
@@ -371,7 +371,7 @@ DO_RECURSIVE:
 		}
 		break;
 
-		// •Ï”éŒ¾‚ÉŠÖ‚·‚éƒm[ƒh									
+		// å¤‰æ•°å®£è¨€ã«é–¢ã™ã‚‹ãƒŽãƒ¼ãƒ‰									
 	case NODE_DECLARATOR:
 		MANA_ASSERT(node->symbol == NULL);
 		node->symbol = mana_symbol_create_variable(node->string, NULL, mana_pre_resolver_object.static_block_opend);
@@ -409,10 +409,10 @@ DO_RECURSIVE:
 		break;
 
 		///////////////////////////////////////////////////////////////////////
-		// ˆÈ‰º‚ÍƒVƒ“ƒ{ƒ‹¶¬‚ðs‚í‚È‚¢ƒm[ƒh
+		// ä»¥ä¸‹ã¯ã‚·ãƒ³ãƒœãƒ«ç”Ÿæˆã‚’è¡Œã‚ãªã„ãƒŽãƒ¼ãƒ‰
 		///////////////////////////////////////////////////////////////////////
 
-		// ƒuƒƒbƒN‚ð”º‚¤§Œä‚ÉŠÖ‚·‚éƒm[ƒh
+		// ãƒ–ãƒ­ãƒƒã‚¯ã‚’ä¼´ã†åˆ¶å¾¡ã«é–¢ã™ã‚‹ãƒŽãƒ¼ãƒ‰
 	case NODE_BLOCK:
 	case NODE_BREAK:
 	case NODE_CASE:
@@ -431,7 +431,7 @@ DO_RECURSIVE:
 	case NODE_SWITCH:
 	case NODE_WHILE:
 
-		// •¡”‚Ì–½—ß‚É“WŠJ‚³‚ê‚éƒm[ƒh									
+		// è¤‡æ•°ã®å‘½ä»¤ã«å±•é–‹ã•ã‚Œã‚‹ãƒŽãƒ¼ãƒ‰									
 	case NODE_COMPLY:
 	case NODE_JOIN:
 	case NODE_PRINT:
@@ -441,7 +441,7 @@ DO_RECURSIVE:
 	case NODE_YIELD:
 	case NODE_SIZEOF:
 
-		// ’†ŠÔŒ¾Œê‚Æ‘Î‚É‚È‚éƒm[ƒh
+		// ä¸­é–“è¨€èªžã¨å¯¾ã«ãªã‚‹ãƒŽãƒ¼ãƒ‰
 	case NODE_ARRAY:
 	case NODE_ASSIGN:
 	case NODE_CONST:
@@ -481,12 +481,12 @@ DO_RECURSIVE:
 		MANA_BUG("illigal node detect");
 	}
 
-	// Žqƒm[ƒh‚©‚çŒ^‚ðŒp³‚·‚é
+	// å­ãƒŽãƒ¼ãƒ‰ã‹ã‚‰åž‹ã‚’ç¶™æ‰¿ã™ã‚‹
 	mana_resolver_resolve_type_from_child_node(node);
 
 	if (node->next)
 	{
-		// ––”öÄ‹A‚È‚Ì‚Ågoto‚É‚Äˆ—‚·‚é
+		// æœ«å°¾å†å¸°ãªã®ã§gotoã«ã¦å‡¦ç†ã™ã‚‹
 		//mana_pre_resolver_resolve(node->next);
 		node = node->next;
 		goto DO_RECURSIVE;
