@@ -24,174 +24,174 @@ mana (compiler)
 #include "type.h"
 #endif
 
-static struct mana_pre_resolver_object
+static struct pre_resolver_object
 {
 	bool static_block_opend;
-}mana_pre_resolver_object;
+}pre_resolver_object;
 
-void mana_pre_resolver_initialize(void)
+void pre_resolver_initialize(void)
 {
 	{
 		/* vec2 */
-		mana_symbol_open_structure();
-		mana_symbol_allocate_memory(mana_symbol_create_variable("x", NULL, false), mana_type_get(SYMBOL_DATA_TYPE_FLOAT), MEMORY_TYPE_NORMAL);
-		mana_symbol_allocate_memory(mana_symbol_create_variable("y", NULL, false), mana_type_get(SYMBOL_DATA_TYPE_FLOAT), MEMORY_TYPE_NORMAL);
-		mana_symbol_close_structure("vec2");
+		symbol_open_structure();
+		symbol_allocate_memory(symbol_create_variable("x", NULL, false), type_get(SYMBOL_DATA_TYPE_FLOAT), MEMORY_TYPE_NORMAL);
+		symbol_allocate_memory(symbol_create_variable("y", NULL, false), type_get(SYMBOL_DATA_TYPE_FLOAT), MEMORY_TYPE_NORMAL);
+		symbol_close_structure("vec2");
 
 		/* vec3 */
-		mana_symbol_open_structure();
-		mana_symbol_allocate_memory(mana_symbol_create_variable("x", NULL, false), mana_type_get(SYMBOL_DATA_TYPE_FLOAT), MEMORY_TYPE_NORMAL);
-		mana_symbol_allocate_memory(mana_symbol_create_variable("y", NULL, false), mana_type_get(SYMBOL_DATA_TYPE_FLOAT), MEMORY_TYPE_NORMAL);
-		mana_symbol_allocate_memory(mana_symbol_create_variable("z", NULL, false), mana_type_get(SYMBOL_DATA_TYPE_FLOAT), MEMORY_TYPE_NORMAL);
-		mana_symbol_close_structure("vec3");
+		symbol_open_structure();
+		symbol_allocate_memory(symbol_create_variable("x", NULL, false), type_get(SYMBOL_DATA_TYPE_FLOAT), MEMORY_TYPE_NORMAL);
+		symbol_allocate_memory(symbol_create_variable("y", NULL, false), type_get(SYMBOL_DATA_TYPE_FLOAT), MEMORY_TYPE_NORMAL);
+		symbol_allocate_memory(symbol_create_variable("z", NULL, false), type_get(SYMBOL_DATA_TYPE_FLOAT), MEMORY_TYPE_NORMAL);
+		symbol_close_structure("vec3");
 
 		/* vec4 */
-		mana_symbol_open_structure();
-		mana_symbol_allocate_memory(mana_symbol_create_variable("x", NULL, false), mana_type_get(SYMBOL_DATA_TYPE_FLOAT), MEMORY_TYPE_NORMAL);
-		mana_symbol_allocate_memory(mana_symbol_create_variable("y", NULL, false), mana_type_get(SYMBOL_DATA_TYPE_FLOAT), MEMORY_TYPE_NORMAL);
-		mana_symbol_allocate_memory(mana_symbol_create_variable("z", NULL, false), mana_type_get(SYMBOL_DATA_TYPE_FLOAT), MEMORY_TYPE_NORMAL);
-		mana_symbol_allocate_memory(mana_symbol_create_variable("w", NULL, false), mana_type_get(SYMBOL_DATA_TYPE_FLOAT), MEMORY_TYPE_NORMAL);
-		mana_symbol_close_structure("vec4");
+		symbol_open_structure();
+		symbol_allocate_memory(symbol_create_variable("x", NULL, false), type_get(SYMBOL_DATA_TYPE_FLOAT), MEMORY_TYPE_NORMAL);
+		symbol_allocate_memory(symbol_create_variable("y", NULL, false), type_get(SYMBOL_DATA_TYPE_FLOAT), MEMORY_TYPE_NORMAL);
+		symbol_allocate_memory(symbol_create_variable("z", NULL, false), type_get(SYMBOL_DATA_TYPE_FLOAT), MEMORY_TYPE_NORMAL);
+		symbol_allocate_memory(symbol_create_variable("w", NULL, false), type_get(SYMBOL_DATA_TYPE_FLOAT), MEMORY_TYPE_NORMAL);
+		symbol_close_structure("vec4");
 
 		/* color */
-		mana_symbol_open_structure();
-		mana_symbol_allocate_memory(mana_symbol_create_variable("r", NULL, false), mana_type_get(SYMBOL_DATA_TYPE_FLOAT), MEMORY_TYPE_NORMAL);
-		mana_symbol_allocate_memory(mana_symbol_create_variable("g", NULL, false), mana_type_get(SYMBOL_DATA_TYPE_FLOAT), MEMORY_TYPE_NORMAL);
-		mana_symbol_allocate_memory(mana_symbol_create_variable("b", NULL, false), mana_type_get(SYMBOL_DATA_TYPE_FLOAT), MEMORY_TYPE_NORMAL);
-		mana_symbol_allocate_memory(mana_symbol_create_variable("a", NULL, false), mana_type_get(SYMBOL_DATA_TYPE_FLOAT), MEMORY_TYPE_NORMAL);
-		mana_symbol_close_structure("color");
+		symbol_open_structure();
+		symbol_allocate_memory(symbol_create_variable("r", NULL, false), type_get(SYMBOL_DATA_TYPE_FLOAT), MEMORY_TYPE_NORMAL);
+		symbol_allocate_memory(symbol_create_variable("g", NULL, false), type_get(SYMBOL_DATA_TYPE_FLOAT), MEMORY_TYPE_NORMAL);
+		symbol_allocate_memory(symbol_create_variable("b", NULL, false), type_get(SYMBOL_DATA_TYPE_FLOAT), MEMORY_TYPE_NORMAL);
+		symbol_allocate_memory(symbol_create_variable("a", NULL, false), type_get(SYMBOL_DATA_TYPE_FLOAT), MEMORY_TYPE_NORMAL);
+		symbol_close_structure("color");
 	}
 
 	{
 		symbol_entry* symbol;
 
 		/* int getUerData() */
-		symbol = mana_symbol_create_function("getUserData");
+		symbol = symbol_create_function("getUserData");
 		symbol->number_of_parameters = 0;
-		mana_symbol_begin_native_function_registration();
-		mana_symbol_commit_native_function_registration(symbol, mana_type_get(SYMBOL_DATA_TYPE_INT));
+		symbol_begin_native_function_registration();
+		symbol_commit_native_function_registration(symbol, type_get(SYMBOL_DATA_TYPE_INT));
 
 		/* void setUserData(int data) */
-		symbol = mana_symbol_create_function("setUserData");
+		symbol = symbol_create_function("setUserData");
 		symbol->number_of_parameters = 1;
-		mana_symbol_begin_native_function_registration();
-		mana_symbol_allocate_memory(mana_symbol_create_variable("data", NULL, false), mana_type_get(SYMBOL_DATA_TYPE_INT), MEMORY_TYPE_PARAMETER);
-		mana_symbol_commit_native_function_registration(symbol, mana_type_get(SYMBOL_DATA_TYPE_VOID));
+		symbol_begin_native_function_registration();
+		symbol_allocate_memory(symbol_create_variable("data", NULL, false), type_get(SYMBOL_DATA_TYPE_INT), MEMORY_TYPE_PARAMETER);
+		symbol_commit_native_function_registration(symbol, type_get(SYMBOL_DATA_TYPE_VOID));
 
 		/* pointer getUserPointer() */
-		symbol = mana_symbol_create_function("getUserPointer");
+		symbol = symbol_create_function("getUserPointer");
 		symbol->number_of_parameters = 0;
-		mana_symbol_begin_native_function_registration();
-		mana_symbol_commit_native_function_registration(symbol, mana_type_pointer);
+		symbol_begin_native_function_registration();
+		symbol_commit_native_function_registration(symbol, type_pointer);
 
 		/* void setUserPointer(pointer address) */
-		symbol = mana_symbol_create_function("setUserPointer");
+		symbol = symbol_create_function("setUserPointer");
 		symbol->number_of_parameters = 1;
-		mana_symbol_begin_native_function_registration();
-		mana_symbol_allocate_memory(mana_symbol_create_variable("address", NULL, false), mana_type_pointer, MEMORY_TYPE_PARAMETER);
-		mana_symbol_commit_native_function_registration(symbol, mana_type_get(SYMBOL_DATA_TYPE_VOID));
+		symbol_begin_native_function_registration();
+		symbol_allocate_memory(symbol_create_variable("address", NULL, false), type_pointer, MEMORY_TYPE_PARAMETER);
+		symbol_commit_native_function_registration(symbol, type_get(SYMBOL_DATA_TYPE_VOID));
 
 		/* int debug() */
-		symbol = mana_symbol_create_function("debug");
+		symbol = symbol_create_function("debug");
 		symbol->number_of_parameters = 0;
-		mana_symbol_begin_native_function_registration();
-		mana_symbol_commit_native_function_registration(symbol, mana_type_get(SYMBOL_DATA_TYPE_INT));
+		symbol_begin_native_function_registration();
+		symbol_commit_native_function_registration(symbol, type_get(SYMBOL_DATA_TYPE_INT));
 
 		/* void setTickCount(int count) */
-		symbol = mana_symbol_create_function("setTickCount");
+		symbol = symbol_create_function("setTickCount");
 		symbol->number_of_parameters = 1;
-		mana_symbol_begin_native_function_registration();
-		mana_symbol_allocate_memory(mana_symbol_create_variable("count", NULL, false), mana_type_get(SYMBOL_DATA_TYPE_INT), MEMORY_TYPE_PARAMETER);
-		mana_symbol_commit_native_function_registration(symbol, mana_type_get(SYMBOL_DATA_TYPE_VOID));
+		symbol_begin_native_function_registration();
+		symbol_allocate_memory(symbol_create_variable("count", NULL, false), type_get(SYMBOL_DATA_TYPE_INT), MEMORY_TYPE_PARAMETER);
+		symbol_commit_native_function_registration(symbol, type_get(SYMBOL_DATA_TYPE_VOID));
 
 		/* void wait(float) */
-		symbol = mana_symbol_create_function("wait");
+		symbol = symbol_create_function("wait");
 		symbol->number_of_parameters = 1;
-		mana_symbol_begin_native_function_registration();
-		mana_symbol_allocate_memory(mana_symbol_create_variable("second", NULL, false), mana_type_get(SYMBOL_DATA_TYPE_FLOAT), MEMORY_TYPE_PARAMETER);
-		mana_symbol_commit_native_function_registration(symbol, mana_type_get(SYMBOL_DATA_TYPE_VOID));
+		symbol_begin_native_function_registration();
+		symbol_allocate_memory(symbol_create_variable("second", NULL, false), type_get(SYMBOL_DATA_TYPE_FLOAT), MEMORY_TYPE_PARAMETER);
+		symbol_commit_native_function_registration(symbol, type_get(SYMBOL_DATA_TYPE_VOID));
 
 		/* void waitFrame(int) */
-		symbol = mana_symbol_create_function("waitFrame");
+		symbol = symbol_create_function("waitFrame");
 		symbol->number_of_parameters = 1;
-		mana_symbol_begin_native_function_registration();
-		mana_symbol_allocate_memory(mana_symbol_create_variable("frame", NULL, false), mana_type_get(SYMBOL_DATA_TYPE_INT), MEMORY_TYPE_PARAMETER);
-		mana_symbol_commit_native_function_registration(symbol, mana_type_get(SYMBOL_DATA_TYPE_VOID));
+		symbol_begin_native_function_registration();
+		symbol_allocate_memory(symbol_create_variable("frame", NULL, false), type_get(SYMBOL_DATA_TYPE_INT), MEMORY_TYPE_PARAMETER);
+		symbol_commit_native_function_registration(symbol, type_get(SYMBOL_DATA_TYPE_VOID));
 
 		/* void srand(int count) */
-		symbol = mana_symbol_create_function("srand");
+		symbol = symbol_create_function("srand");
 		symbol->number_of_parameters = 1;
-		mana_symbol_begin_native_function_registration();
-		mana_symbol_allocate_memory(mana_symbol_create_variable("count", NULL, false), mana_type_get(SYMBOL_DATA_TYPE_INT), MEMORY_TYPE_PARAMETER);
-		mana_symbol_commit_native_function_registration(symbol, mana_type_get(SYMBOL_DATA_TYPE_VOID));
+		symbol_begin_native_function_registration();
+		symbol_allocate_memory(symbol_create_variable("count", NULL, false), type_get(SYMBOL_DATA_TYPE_INT), MEMORY_TYPE_PARAMETER);
+		symbol_commit_native_function_registration(symbol, type_get(SYMBOL_DATA_TYPE_VOID));
 
 		/* int rand(int, int) */
-		symbol = mana_symbol_create_function("rand");
+		symbol = symbol_create_function("rand");
 		symbol->number_of_parameters = 2;
-		mana_symbol_begin_native_function_registration();
-		mana_symbol_allocate_memory(mana_symbol_create_variable("min", NULL, false), mana_type_get(SYMBOL_DATA_TYPE_INT), MEMORY_TYPE_PARAMETER);
-		mana_symbol_allocate_memory(mana_symbol_create_variable("max", NULL, false), mana_type_get(SYMBOL_DATA_TYPE_INT), MEMORY_TYPE_PARAMETER);
-		mana_symbol_commit_native_function_registration(symbol, mana_type_get(SYMBOL_DATA_TYPE_INT));
+		symbol_begin_native_function_registration();
+		symbol_allocate_memory(symbol_create_variable("min", NULL, false), type_get(SYMBOL_DATA_TYPE_INT), MEMORY_TYPE_PARAMETER);
+		symbol_allocate_memory(symbol_create_variable("max", NULL, false), type_get(SYMBOL_DATA_TYPE_INT), MEMORY_TYPE_PARAMETER);
+		symbol_commit_native_function_registration(symbol, type_get(SYMBOL_DATA_TYPE_INT));
 
 		/* float frand() */
-		symbol = mana_symbol_create_function("frand");
+		symbol = symbol_create_function("frand");
 		symbol->number_of_parameters = 0;
-		mana_symbol_begin_native_function_registration();
-		mana_symbol_commit_native_function_registration(symbol, mana_type_get(SYMBOL_DATA_TYPE_FLOAT));
+		symbol_begin_native_function_registration();
+		symbol_commit_native_function_registration(symbol, type_get(SYMBOL_DATA_TYPE_FLOAT));
 
 		/* float sin(float) */
-		symbol = mana_symbol_create_function("sin");
+		symbol = symbol_create_function("sin");
 		symbol->number_of_parameters = 1;
-		mana_symbol_begin_native_function_registration();
-		mana_symbol_allocate_memory(mana_symbol_create_variable("degree", NULL, false), mana_type_get(SYMBOL_DATA_TYPE_FLOAT), MEMORY_TYPE_PARAMETER);
-		mana_symbol_commit_native_function_registration(symbol, mana_type_get(SYMBOL_DATA_TYPE_FLOAT));
+		symbol_begin_native_function_registration();
+		symbol_allocate_memory(symbol_create_variable("degree", NULL, false), type_get(SYMBOL_DATA_TYPE_FLOAT), MEMORY_TYPE_PARAMETER);
+		symbol_commit_native_function_registration(symbol, type_get(SYMBOL_DATA_TYPE_FLOAT));
 
 		/* float cos(float) */
-		symbol = mana_symbol_create_function("cos");
+		symbol = symbol_create_function("cos");
 		symbol->number_of_parameters = 1;
-		mana_symbol_begin_native_function_registration();
-		mana_symbol_allocate_memory(mana_symbol_create_variable("degree", NULL, false), mana_type_get(SYMBOL_DATA_TYPE_FLOAT), MEMORY_TYPE_PARAMETER);
-		mana_symbol_commit_native_function_registration(symbol, mana_type_get(SYMBOL_DATA_TYPE_FLOAT));
+		symbol_begin_native_function_registration();
+		symbol_allocate_memory(symbol_create_variable("degree", NULL, false), type_get(SYMBOL_DATA_TYPE_FLOAT), MEMORY_TYPE_PARAMETER);
+		symbol_commit_native_function_registration(symbol, type_get(SYMBOL_DATA_TYPE_FLOAT));
 
 		/* float atan2(float, float) */
-		symbol = mana_symbol_create_function("atan2");
+		symbol = symbol_create_function("atan2");
 		symbol->number_of_parameters = 2;
-		mana_symbol_begin_native_function_registration();
-		mana_symbol_allocate_memory(mana_symbol_create_variable("y", NULL, false), mana_type_get(SYMBOL_DATA_TYPE_FLOAT), MEMORY_TYPE_PARAMETER);
-		mana_symbol_allocate_memory(mana_symbol_create_variable("x", NULL, false), mana_type_get(SYMBOL_DATA_TYPE_FLOAT), MEMORY_TYPE_PARAMETER);
-		mana_symbol_commit_native_function_registration(symbol, mana_type_get(SYMBOL_DATA_TYPE_FLOAT));
+		symbol_begin_native_function_registration();
+		symbol_allocate_memory(symbol_create_variable("y", NULL, false), type_get(SYMBOL_DATA_TYPE_FLOAT), MEMORY_TYPE_PARAMETER);
+		symbol_allocate_memory(symbol_create_variable("x", NULL, false), type_get(SYMBOL_DATA_TYPE_FLOAT), MEMORY_TYPE_PARAMETER);
+		symbol_commit_native_function_registration(symbol, type_get(SYMBOL_DATA_TYPE_FLOAT));
 
 		/* float tan(float) */
-		symbol = mana_symbol_create_function("tan");
+		symbol = symbol_create_function("tan");
 		symbol->number_of_parameters = 1;
-		mana_symbol_begin_native_function_registration();
-		mana_symbol_allocate_memory(mana_symbol_create_variable("degree", NULL, false), mana_type_get(SYMBOL_DATA_TYPE_FLOAT), MEMORY_TYPE_PARAMETER);
-		mana_symbol_commit_native_function_registration(symbol, mana_type_get(SYMBOL_DATA_TYPE_FLOAT));
+		symbol_begin_native_function_registration();
+		symbol_allocate_memory(symbol_create_variable("degree", NULL, false), type_get(SYMBOL_DATA_TYPE_FLOAT), MEMORY_TYPE_PARAMETER);
+		symbol_commit_native_function_registration(symbol, type_get(SYMBOL_DATA_TYPE_FLOAT));
 
 		/* float angleMod(float) */
-		symbol = mana_symbol_create_function("angleMod");
+		symbol = symbol_create_function("angleMod");
 		symbol->number_of_parameters = 1;
-		mana_symbol_begin_native_function_registration();
-		mana_symbol_allocate_memory(mana_symbol_create_variable("degree", NULL, false), mana_type_get(SYMBOL_DATA_TYPE_FLOAT), MEMORY_TYPE_PARAMETER);
-		mana_symbol_commit_native_function_registration(symbol, mana_type_get(SYMBOL_DATA_TYPE_FLOAT));
+		symbol_begin_native_function_registration();
+		symbol_allocate_memory(symbol_create_variable("degree", NULL, false), type_get(SYMBOL_DATA_TYPE_FLOAT), MEMORY_TYPE_PARAMETER);
+		symbol_commit_native_function_registration(symbol, type_get(SYMBOL_DATA_TYPE_FLOAT));
 
 		/* float sqrt(float) */
-		symbol = mana_symbol_create_function("sqrt");
+		symbol = symbol_create_function("sqrt");
 		symbol->number_of_parameters = 1;
-		mana_symbol_begin_native_function_registration();
-		mana_symbol_allocate_memory(mana_symbol_create_variable("degree", NULL, false), mana_type_get(SYMBOL_DATA_TYPE_FLOAT), MEMORY_TYPE_PARAMETER);
-		mana_symbol_commit_native_function_registration(symbol, mana_type_get(SYMBOL_DATA_TYPE_FLOAT));
+		symbol_begin_native_function_registration();
+		symbol_allocate_memory(symbol_create_variable("degree", NULL, false), type_get(SYMBOL_DATA_TYPE_FLOAT), MEMORY_TYPE_PARAMETER);
+		symbol_commit_native_function_registration(symbol, type_get(SYMBOL_DATA_TYPE_FLOAT));
 
 		/* actor getActor(string) */
-		symbol = mana_symbol_create_function("getActor");
+		symbol = symbol_create_function("getActor");
 		symbol->number_of_parameters = 1;
-		mana_symbol_begin_native_function_registration();
-		mana_symbol_allocate_memory(mana_symbol_create_variable("name", NULL, false), mana_type_string, MEMORY_TYPE_PARAMETER);
-		mana_symbol_commit_native_function_registration(symbol, mana_type_get(SYMBOL_DATA_TYPE_ACTOR));
+		symbol_begin_native_function_registration();
+		symbol_allocate_memory(symbol_create_variable("name", NULL, false), type_string, MEMORY_TYPE_PARAMETER);
+		symbol_commit_native_function_registration(symbol, type_get(SYMBOL_DATA_TYPE_ACTOR));
 	}
 }
 
-void mana_pre_resolver_finalize(void)
+void pre_resolver_finalize(void)
 {
 }
 
@@ -214,13 +214,13 @@ static int32_t get_argument_count(const int32_t count, const node_entry* node)
 }
 
 
-void mana_pre_resolver_resolve(node_entry* node)
+void pre_resolver_resolve(node_entry* node)
 {
 	if (node == NULL)
 		return;
 
 DO_RECURSIVE:
-	mana_resolver_set_current_file_infomation(node);
+	resolver_set_current_file_infomation(node);
 
 	switch (node->id)
 	{
@@ -230,7 +230,7 @@ DO_RECURSIVE:
 		MANA_ASSERT(node->right == NULL);
 		MANA_ASSERT(node->body == NULL);
 		// TODO:post_resolverと確認して下さい
-		mana_resolver_search_symbol_from_name(node);
+		resolver_search_symbol_from_name(node);
 		break;
 
 		// 定数定義に関するノード									
@@ -238,44 +238,44 @@ DO_RECURSIVE:
 		MANA_ASSERT(node->left == NULL);
 		MANA_ASSERT(node->right == NULL);
 		MANA_ASSERT(node->body == NULL);
-		mana_symbol_create_alias(node->string, node->string);
+		symbol_create_alias(node->string, node->string);
 		break;
 
 	case NODE_DEFINE_CONSTANT:
 		MANA_ASSERT(node->left == NULL);
 		MANA_ASSERT(node->right == NULL);
 		MANA_ASSERT(node->body == NULL);
-		mana_symbol_create_const_int(node->string, node->digit);
+		symbol_create_const_int(node->string, node->digit);
 		break;
 
 	case NODE_UNDEFINE_CONSTANT:
 		MANA_ASSERT(node->left == NULL);
 		MANA_ASSERT(node->right == NULL);
 		MANA_ASSERT(node->body == NULL);
-		mana_symbol_destroy(node->string);
+		symbol_destroy(node->string);
 		break;
 
 		// メモリレイアウトに関するノード									
 	case NODE_DECLARE_ALLOCATE:
 		{
-			const int32_t mana_allocated_size = mana_symbol_get_static_memory_address() + node->digit;
+			const int32_t mana_allocated_size = symbol_get_static_memory_address() + node->digit;
 
-			mana_pre_resolver_resolve(node->left);
+			pre_resolver_resolve(node->left);
 
-			const int32_t address = mana_symbol_get_static_memory_address();
+			const int32_t address = symbol_get_static_memory_address();
 			if (address >= mana_allocated_size)
 				mana_compile_error("static variable range over");
 
-			mana_symbol_set_static_memory_address(mana_allocated_size);
+			symbol_set_static_memory_address(mana_allocated_size);
 		}
 		MANA_ASSERT(node->right == NULL);
 		MANA_ASSERT(node->body == NULL);
 		break;
 
 	case NODE_DECLARE_STATIC:
-		mana_pre_resolver_object.static_block_opend = true;
-		mana_pre_resolver_resolve(node->left);
-		mana_pre_resolver_object.static_block_opend = false;
+		pre_resolver_object.static_block_opend = true;
+		pre_resolver_resolve(node->left);
+		pre_resolver_object.static_block_opend = false;
 		MANA_ASSERT(node->right == NULL);
 		MANA_ASSERT(node->body == NULL);
 		break;
@@ -283,9 +283,9 @@ DO_RECURSIVE:
 		// 構造に関するノード
 	case NODE_DECLARE_ACTOR:
 		{
-			mana_symbol_begin_registration_actor(mana_symbol_lookup(node->string));
-			mana_pre_resolver_resolve(node->left);
-			mana_symbol_commit_registration_actor(node->string, NULL, NULL, false);
+			symbol_begin_registration_actor(symbol_lookup(node->string));
+			pre_resolver_resolve(node->left);
+			symbol_commit_registration_actor(node->string, NULL, NULL, false);
 		}
 		MANA_ASSERT(node->right == NULL);
 		MANA_ASSERT(node->body == NULL);
@@ -295,14 +295,14 @@ DO_RECURSIVE:
 		MANA_ASSERT(node->left == NULL);
 		MANA_ASSERT(node->right == NULL);
 		MANA_ASSERT(node->body == NULL);
-		mana_symbol_extend_module(node->string);
+		symbol_extend_module(node->string);
 		break;
 
 	case NODE_DECLARE_MODULE:
 		{
-			mana_symbol_begin_registration_module(mana_symbol_lookup(node->string));
-			mana_pre_resolver_resolve(node->left);
-			mana_symbol_commit_registration_module(node->string);
+			symbol_begin_registration_module(symbol_lookup(node->string));
+			pre_resolver_resolve(node->left);
+			symbol_commit_registration_module(node->string);
 		}
 		MANA_ASSERT(node->right == NULL);
 		MANA_ASSERT(node->body == NULL);
@@ -310,18 +310,18 @@ DO_RECURSIVE:
 
 	case NODE_DECLARE_PHANTOM:
 		{
-			mana_symbol_begin_registration_actor(mana_symbol_lookup(node->string));
-			mana_pre_resolver_resolve(node->left);
-			mana_symbol_commit_registration_actor(node->string, NULL, NULL, true);
+			symbol_begin_registration_actor(symbol_lookup(node->string));
+			pre_resolver_resolve(node->left);
+			symbol_commit_registration_actor(node->string, NULL, NULL, true);
 		}
 		MANA_ASSERT(node->right == NULL);
 		MANA_ASSERT(node->body == NULL);
 		break;
 
 	case NODE_DECLARE_STRUCT:
-		mana_symbol_open_structure();
-		mana_pre_resolver_resolve(node->left);
-		mana_symbol_close_structure(node->string);
+		symbol_open_structure();
+		pre_resolver_resolve(node->left);
+		symbol_close_structure(node->string);
 		MANA_ASSERT(node->right == NULL);
 		MANA_ASSERT(node->body == NULL);
 		break;
@@ -330,8 +330,8 @@ DO_RECURSIVE:
 	case NODE_DECLARE_ACTION:
 		{
 			MANA_ASSERT(node->symbol == NULL);
-			node->symbol = mana_symbol_create_function(node->string);
-			node->symbol->type = mana_type_get(SYMBOL_DATA_TYPE_VOID);
+			node->symbol = symbol_create_function(node->string);
+			node->symbol->type = type_get(SYMBOL_DATA_TYPE_VOID);
 		}
 		// node->left
 		MANA_ASSERT(node->right == NULL);
@@ -339,8 +339,8 @@ DO_RECURSIVE:
 		break;
 
 	case NODE_DECLARE_ARGUMENT:
-		mana_resolver_resolve_variable_description(node->left, MEMORY_TYPE_PARAMETER, mana_pre_resolver_object.static_block_opend);
-		mana_pre_resolver_resolve(node->right);
+		resolver_resolve_variable_description(node->left, MEMORY_TYPE_PARAMETER, pre_resolver_object.static_block_opend);
+		pre_resolver_resolve(node->right);
 		MANA_ASSERT(node->body == NULL);
 		break;
 
@@ -348,9 +348,9 @@ DO_RECURSIVE:
 		{
 			MANA_ASSERT(node->symbol == NULL);
 			// 関数の戻り値を評価
-			mana_pre_resolver_resolve(node->left);
+			pre_resolver_resolve(node->left);
 			// シンボルの作成と型の定義
-			node->symbol = mana_symbol_create_function(node->string);
+			node->symbol = symbol_create_function(node->string);
 			node->symbol->type = node->left->type;
 			// シンボルに引数の数を登録
 			node->symbol->number_of_parameters = get_argument_count(0, node->right);
@@ -362,26 +362,26 @@ DO_RECURSIVE:
 		{
 			MANA_ASSERT(node->symbol == NULL);
 			// シンボルの作成と型の定義
-			node->symbol = mana_symbol_create_function(node->string);
-			mana_symbol_begin_native_function_registration();
-			mana_pre_resolver_resolve(node->left);
-			mana_pre_resolver_resolve(node->right);
+			node->symbol = symbol_create_function(node->string);
+			symbol_begin_native_function_registration();
+			pre_resolver_resolve(node->left);
+			pre_resolver_resolve(node->right);
 			node->symbol->number_of_parameters = get_argument_count(0, node->right);
-			mana_symbol_commit_native_function_registration(node->symbol, node->left->type);
+			symbol_commit_native_function_registration(node->symbol, node->left->type);
 		}
 		break;
 
 		// 変数宣言に関するノード									
 	case NODE_DECLARATOR:
 		MANA_ASSERT(node->symbol == NULL);
-		node->symbol = mana_symbol_create_variable(node->string, NULL, mana_pre_resolver_object.static_block_opend);
+		node->symbol = symbol_create_variable(node->string, NULL, pre_resolver_object.static_block_opend);
 		// node->left
 		MANA_ASSERT(node->right == NULL);
 		MANA_ASSERT(node->body == NULL);
 		break;
 
 	case NODE_DECLARE_VARIABLE:
-		mana_resolver_resolve_variable_description(node, MEMORY_TYPE_NORMAL, mana_pre_resolver_object.static_block_opend);
+		resolver_resolve_variable_description(node, MEMORY_TYPE_NORMAL, pre_resolver_object.static_block_opend);
 		MANA_ASSERT(node->left && node->left->id == NODE_TYPE_DESCRIPTION);
 		MANA_ASSERT(node->right && node->right->id == NODE_DECLARATOR);
 		MANA_ASSERT(node->body == NULL);
@@ -391,7 +391,7 @@ DO_RECURSIVE:
 		MANA_ASSERT(node->left == NULL);
 		MANA_ASSERT(node->right == NULL);
 		MANA_ASSERT(node->body == NULL);
-		mana_resolver_resolve_type_description(node);
+		resolver_resolve_type_description(node);
 		break;
 
 	case NODE_VARIABLE_SIZE:
@@ -400,7 +400,7 @@ DO_RECURSIVE:
 		MANA_ASSERT(node->body == NULL);
 		if (node->string)
 		{
-			symbol_entry* symbol = mana_symbol_lookup(node->string);
+			symbol_entry* symbol = symbol_lookup(node->string);
 			if (symbol)
 				node->digit = symbol->address;
 			else
@@ -482,12 +482,12 @@ DO_RECURSIVE:
 	}
 
 	// 子ノードから型を継承する
-	mana_resolver_resolve_type_from_child_node(node);
+	resolver_resolve_type_from_child_node(node);
 
 	if (node->next)
 	{
 		// 末尾再帰なのでgotoにて処理する
-		//mana_pre_resolver_resolve(node->next);
+		//pre_resolver_resolve(node->next);
 		node = node->next;
 		goto DO_RECURSIVE;
 	}
