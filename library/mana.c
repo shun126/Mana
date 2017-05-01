@@ -180,7 +180,7 @@ bool mana_load_program(mana* self, void* program, int32_t auto_release)
 
 	if((intptr_t)program % MANA_DATALINK_STANDARD_ALIGNMENT_SIZE)
 	{
-		MANA_WARNING("The program address is NOT aligned on %lu-byte boundaries.\n", (long unsigned int)MANA_DATALINK_STANDARD_ALIGNMENT_SIZE);
+		MANA_WARNING("The program address is NOT aligned on %lu-byte boundaries.\n", (int64_t)MANA_DATALINK_STANDARD_ALIGNMENT_SIZE);
 		goto ABORT;
 	}
 
@@ -194,6 +194,18 @@ bool mana_load_program(mana* self, void* program, int32_t auto_release)
 	{
 		MANA_WARNING("file version error.\n");
 		goto ABORT;
+	}
+	{
+#if UINTPTR_MAX == UINT64_MAX
+		const uint8_t flag = MANA_HEADER_FLAG_64BIT;
+#else
+		const uint8_t flag = 0;
+#endif
+		if ((self->file_header->flag & MANA_HEADER_FLAG_64BIT) != flag)
+		{
+			MANA_WARNING("different bit size by compiled.\n");
+			goto ABORT;
+		}
 	}
 
 	/* スタティック変数領域を確保します */
