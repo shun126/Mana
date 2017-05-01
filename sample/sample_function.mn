@@ -1,17 +1,29 @@
 /*
 mana (script)
-Copyright (c) 2003 Shun Moriya <shun@mnu.sakura.ne.jp>
+Copyright (c) 2003 Shun Moriya
 */
 
 native int nativeFunction(int a0, float a1);
 
 int callTest(char a, short b, int c, float d)
 {
-	return callTest(a, b, c, d);
+	if(a < 5)
+	{
+		print("%d %d %d %f\n", a, b, c, d);
+		return callTest(a + 1, b, c, d);
+	}
+	else
+	{
+		functionCallingTest();
+		expressionTest();
+		return 0;
+	}
 }
 
 void assignmentTest(float value)
 {
+	print("assignmentTest\n");
+
 	char c = 0b0001_1000;
 
 	TestStruct1 hoge[2];
@@ -39,6 +51,8 @@ void assignmentTest(float value)
 
 void expressionTest()
 {
+	print("expressionTest\n");
+
 	float f;
 	int i;
 
@@ -68,6 +82,8 @@ void expressionTest()
 
 void statementTest()
 {
+	print("statementTest\n");
+
 	if(true)
 	{
 		int i;
@@ -131,7 +147,7 @@ void statementTest()
 
 float functionCallingTest()
 {
-	assignmentTest(0);
+	print("functionCallingTest\n");
 
 	int value;
 	assignmentTest(value);
