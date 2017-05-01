@@ -4,9 +4,7 @@ body{
 	padding: 0px;
 	font-family: 'Times New Roman', serif;
 	line-height: 1.166;
-	background-color: #cccccc;
-	background-image: url(bg_grad.png);
-	background-attachment: fixed;
+	background: linear-gradient(#107070, #002000 ) fixed;
 }
 
 a{
