@@ -2,8 +2,8 @@
  * mana (library)
  *
  * @file	mana_array.c
- * @brief	mana_arrayƒNƒ‰ƒX‚ÉŠÖ‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹
- * @detail	‚±‚Ìƒtƒ@ƒCƒ‹‚Ímana_arrayƒNƒ‰ƒX‚ÉŠÖŒW‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹‚Å‚·B
+ * @brief	mana_arrayã‚¯ãƒ©ã‚¹ã«é–¢ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«
+ * @detail	ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯mana_arrayã‚¯ãƒ©ã‚¹ã«é–¢ä¿‚ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
  * @author	Shun Moriya
  * @date	2003-
  */
@@ -18,9 +18,9 @@
 #include <string.h>
 
 /*!
- * @param[in]	size	Šm•ÛƒTƒCƒY
- * @return		mana_array ƒIƒuƒWƒFƒNƒg
- * @warning		void mana_array_initialize(mana_array* self, size_t size)‚ğŒÄ‚Ô•K—v‚Í‚ ‚è‚Ü‚¹‚ñB
+ * @param[in]	size	ç¢ºä¿ã‚µã‚¤ã‚º
+ * @return		mana_array ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @warning		void mana_array_initialize(mana_array* self, size_t size)ã‚’å‘¼ã¶å¿…è¦ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚
  */
 mana_array* mana_array_create(const size_t size)
 {
@@ -30,8 +30,8 @@ mana_array* mana_array_create(const size_t size)
 }
 
 /*!
- * @param[in]	self	mana_array ƒIƒuƒWƒFƒNƒg
- * @warning		void mana_array_finalize(mana_array* self)‚ğŒÄ‚Ô•K—v‚Í‚ ‚è‚Ü‚¹‚ñB
+ * @param[in]	self	mana_array ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @warning		void mana_array_finalize(mana_array* self)ã‚’å‘¼ã¶å¿…è¦ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚
  */
 void mana_array_destroy(mana_array* self)
 {
@@ -43,8 +43,8 @@ void mana_array_destroy(mana_array* self)
 }
 
 /*!
- * @param[in]	self	mana_array ƒIƒuƒWƒFƒNƒg
- * @param[in]	size	Šm•ÛƒTƒCƒY
+ * @param[in]	self	mana_array ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	size	ç¢ºä¿ã‚µã‚¤ã‚º
  */
 void mana_array_initialize(mana_array* self, const size_t size)
 {
@@ -57,7 +57,7 @@ void mana_array_initialize(mana_array* self, const size_t size)
 }
 
 /*!
- * @param[in]	self	mana_array ƒIƒuƒWƒFƒNƒg
+ * @param[in]	self	mana_array ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 void mana_array_finalize(mana_array* self)
 {
@@ -69,8 +69,8 @@ void mana_array_finalize(mana_array* self)
 }
 
 /*!
- * @param[in]	self	mana_array ƒIƒuƒWƒFƒNƒg
- * @param[out]	stream	mana_stream ƒIƒuƒWƒFƒNƒg
+ * @param[in]	self	mana_array ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[out]	stream	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 void mana_array_serialize(const mana_array* self, mana_stream* stream)
 {
@@ -82,8 +82,8 @@ void mana_array_serialize(const mana_array* self, mana_stream* stream)
 }
 
 /*!
- * @param[in]	self	mana_array ƒIƒuƒWƒFƒNƒg
- * @param[in]	stream	mana_stream ƒIƒuƒWƒFƒNƒg
+ * @param[in]	self	mana_array ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	stream	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 void mana_array_deserialize(mana_array* self, mana_stream* stream)
 {
@@ -100,7 +100,7 @@ void mana_array_deserialize(mana_array* self, mana_stream* stream)
 }
 
 /*!
- * @param[in]	self	mana_array ƒIƒuƒWƒFƒNƒg
+ * @param[in]	self	mana_array ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 void mana_array_clear(mana_array* self)
 {
@@ -113,9 +113,9 @@ void mana_array_clear(mana_array* self)
 }
 
 /*!
- * @param[in]	self	mana_array ƒIƒuƒWƒFƒNƒg
- * @param[in]	index	”z—ñ”Ô†
- * @return		ƒ|ƒCƒ“ƒ^[
+ * @param[in]	self	mana_array ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	index	é…åˆ—ç•ªå·
+ * @return		ãƒã‚¤ãƒ³ã‚¿ãƒ¼
  */
 void* mana_array_get(const mana_array* self, const size_t index)
 {
@@ -125,9 +125,9 @@ void* mana_array_get(const mana_array* self, const size_t index)
 }
 
 /*!
- * @param[in]	self	mana_array ƒIƒuƒWƒFƒNƒg
- * @param[in]	index	”z—ñ”Ô†
- * @param[in]	pointer	ƒ|ƒCƒ“ƒ^[
+ * @param[in]	self	mana_array ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	index	é…åˆ—ç•ªå·
+ * @param[in]	pointer	ãƒã‚¤ãƒ³ã‚¿ãƒ¼
  */
 void mana_array_set(mana_array* self, const size_t index, const void* pointer)
 {
@@ -146,8 +146,8 @@ void mana_array_set(mana_array* self, const size_t index, const void* pointer)
 }
 
 /*!
- * @param[in]	self	mana_array ƒIƒuƒWƒFƒNƒg
- * @return		ƒtƒŒ[ƒ€ƒoƒbƒtƒ@‚ÌƒTƒCƒY/ƒtƒŒ[ƒ€ƒ|ƒCƒ“ƒ^
+ * @param[in]	self	mana_array ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @return		ãƒ•ãƒ¬ãƒ¼ãƒ ãƒãƒƒãƒ•ã‚¡ã®ã‚µã‚¤ã‚º/ãƒ•ãƒ¬ãƒ¼ãƒ ãƒã‚¤ãƒ³ã‚¿
  */
 size_t mana_array_get_size(const mana_array* self)
 {
@@ -156,8 +156,8 @@ size_t mana_array_get_size(const mana_array* self)
 }
 
 /*!
- * @param[in]	self	mana_array ƒIƒuƒWƒFƒNƒg
- * @param[in]	pointer	ƒ|ƒCƒ“ƒ^[
+ * @param[in]	self	mana_array ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	pointer	ãƒã‚¤ãƒ³ã‚¿ãƒ¼
  */
 void mana_array_append(mana_array* self, const void* pointer)
 {
@@ -171,8 +171,8 @@ void mana_array_append(mana_array* self, const void* pointer)
 }
 
 /*!
- * @param[in]	self	mana_array ƒIƒuƒWƒFƒNƒg
- * @param[in]	size	ƒTƒCƒY
+ * @param[in]	self	mana_array ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	size	ã‚µã‚¤ã‚º
  */
 void mana_array_resize(mana_array* self, const size_t size)
 {
@@ -193,10 +193,10 @@ void mana_array_resize(mana_array* self, const size_t size)
 }
 
 /*!
- * @param[in]	self	mana_array ƒIƒuƒWƒFƒNƒg
- * @param[in]	other	mana_array ƒIƒuƒWƒFƒNƒg
- * @retval		== 0	“¯ˆê‚Ì“à—e
- * @retval		!= 0	ˆÙ‚È‚é“à—e
+ * @param[in]	self	mana_array ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	other	mana_array ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @retval		== 0	åŒä¸€ã®å†…å®¹
+ * @retval		!= 0	ç•°ãªã‚‹å†…å®¹
  */
 int32_t mana_array_compare(const mana_array* self, const mana_array* other)
 {

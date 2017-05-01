@@ -1,0 +1,499 @@
+{"name": "DEFINE_CONSTANT","string": "Digit1","next": {
+"name": "DEFINE_CONSTANT","string": "Digit2","next": {
+"name": "DEFINE_CONSTANT","string": "Real1","next": {
+"name": "DEFINE_CONSTANT","string": "Real2","next": {
+"name": "DECLARE_ALIAS","string": "MotionFile","next": {
+"name": "DECLARE_STRUCT","string": "TestStruct1","type": "float","left": {
+"name": "VARIABLE_DECLARATION","type": "float","left": {
+"name": "TYPE_DESCRIPTION","type": "float"}
+,"right": {
+"name": "DECLARATOR","string": "realValue"}
+,"next": {
+"name": "VARIABLE_DECLARATION","type": "int32_t","left": {
+"name": "TYPE_DESCRIPTION","type": "int32_t"}
+,"right": {
+"name": "DECLARATOR","string": "digitValue"}
+,"next": {
+"name": "VARIABLE_DECLARATION","type": "string","left": {
+"name": "TYPE_DESCRIPTION","type": "string"}
+,"right": {
+"name": "DECLARATOR","string": "stringValue"}
+,"next": {
+"name": "VARIABLE_DECLARATION","type": "actor","left": {
+"name": "TYPE_DESCRIPTION","type": "actor"}
+,"right": {
+"name": "DECLARATOR","string": "actorValue"}
+}
+}
+}
+}
+,"next": {
+"name": "DECLARE_STRUCT","string": "TestStruct2","type": "float","left": {
+"name": "VARIABLE_DECLARATION","type": "float","left": {
+"name": "TYPE_DESCRIPTION","type": "float"}
+,"right": {
+"name": "DECLARATOR","string": "realValue"}
+}
+,"next": {
+"name": "VARIABLE_DECLARATION","type": "float","left": {
+"name": "TYPE_DESCRIPTION","type": "float"}
+,"right": {
+"name": "DECLARATOR","string": "realValue"}
+,"next": {
+"name": "VARIABLE_DECLARATION","type": "int32_t","left": {
+"name": "TYPE_DESCRIPTION","type": "int32_t"}
+,"right": {
+"name": "DECLARATOR","string": "digitValue"}
+,"next": {
+"name": "DECLARE_ALLOCATE","left": {
+"name": "VARIABLE_DECLARATION","left": {
+"name": "TYPE_DESCRIPTION","string": "TestStruct1"}
+,"right": {
+"name": "DECLARATOR","string": "structValue"}
+}
+,"next": {
+"name": "DECLARE_STATIC","type": "int32_t","left": {
+"name": "VARIABLE_DECLARATION","type": "int32_t","left": {
+"name": "TYPE_DESCRIPTION","type": "int32_t"}
+,"right": {
+"name": "DECLARATOR","string": "staticDigitValue"}
+}
+,"next": {
+"name": "DECLARE_STATIC","type": "float","left": {
+"name": "DECLARE_ALLOCATE","type": "float","left": {
+"name": "VARIABLE_DECLARATION","type": "float","left": {
+"name": "TYPE_DESCRIPTION","type": "float"}
+,"right": {
+"name": "DECLARATOR","string": "staticRealValue"}
+}
+}
+,"next": {
+"name": "DECLARE_NATIVE_FUNCTION","string": "nativeFunction","left": {
+"name": "TYPE_DESCRIPTION","type": "int32_t"}
+,"next": {
+"name": "DECLARE_FUNCTION","string": "test","left": {
+"name": "TYPE_DESCRIPTION","type": "void"}
+,"right": {
+"name": "BLOCK","type": "int16_t","left": {
+"name": "VARIABLE_DECLARATION","type": "int16_t","left": {
+"name": "TYPE_DESCRIPTION","type": "int16_t"}
+,"right": {
+"name": "DECLARATOR","string": "array","left": {
+"name": "NEWLINE"}
+}
+,"next": {
+"name": "CALL","string": "test_switch_while"}
+}
+}
+,"next": {
+"name": "DECLARE_FUNCTION","string": "test_sort","left": {
+"name": "TYPE_DESCRIPTION","type": "int32_t"}
+,"right": {
+"name": "BLOCK","left": {
+"name": "BLOCK","right": {
+"name": "FOR","left": {
+"name": "LS","left": {
+"name": "IDENTIFIER","string": "i"}
+,"right": {
+"name": "IDENTIFIER","string": "size"}
+}
+,"right": {
+"name": "ASSIGN","left": {
+"name": "IDENTIFIER","string": "i"}
+,"right": {
+"name": "ADD","left": {
+"name": "IDENTIFIER","string": "i"}
+,"right": {
+"name": "CONST","type": "int8_t"}
+}
+}
+,"next": {
+"name": "BLOCK","left": {
+"name": "ASSIGN","left": {
+"name": "ARRAY","left": {
+"name": "IDENTIFIER","string": "array"}
+,"right": {
+"name": "IDENTIFIER","string": "i"}
+}
+,"right": {
+"name": "SUB","left": {
+"name": "IDENTIFIER","string": "size"}
+,"right": {
+"name": "IDENTIFIER","string": "i"}
+}
+}
+}
+}
+,"next": {
+"name": "VARIABLE_DECLARATION","type": "int32_t","left": {
+"name": "TYPE_DESCRIPTION","type": "int32_t"}
+,"right": {
+"name": "DECLARATOR","string": "count"}
+,"next": {
+"name": "VARIABLE_DECLARATION","type": "int32_t","left": {
+"name": "TYPE_DESCRIPTION","type": "int32_t"}
+,"right": {
+"name": "DECLARATOR","string": "finish"}
+,"next": {
+"name": "DO","left": {
+"name": "LNOT","left": {
+"name": "IDENTIFIER","string": "finish"}
+}
+,"right": {
+"name": "BLOCK","left": {
+"name": "ASSIGN","left": {
+"name": "IDENTIFIER","string": "finish"}
+,"right": {
+"name": "CONST","type": "int8_t"}
+,"next": {
+"name": "BLOCK","right": {
+"name": "FOR","left": {
+"name": "LS","left": {
+"name": "IDENTIFIER","string": "i"}
+,"right": {
+"name": "SUB","left": {
+"name": "IDENTIFIER","string": "size"}
+,"right": {
+"name": "CONST","type": "int8_t"}
+}
+}
+,"right": {
+"name": "ASSIGN","left": {
+"name": "IDENTIFIER","string": "i"}
+,"right": {
+"name": "ADD","left": {
+"name": "IDENTIFIER","string": "i"}
+,"right": {
+"name": "CONST","type": "int8_t"}
+}
+}
+,"next": {
+"name": "BLOCK","left": {
+"name": "IF","left": {
+"name": "GT","left": {
+"name": "ARRAY","left": {
+"name": "IDENTIFIER","string": "array"}
+,"right": {
+"name": "IDENTIFIER","string": "i"}
+}
+,"right": {
+"name": "ARRAY","left": {
+"name": "IDENTIFIER","string": "array"}
+,"right": {
+"name": "ADD","left": {
+"name": "IDENTIFIER","string": "i"}
+,"right": {
+"name": "CONST","type": "int8_t"}
+}
+}
+}
+,"right": {
+"name": "BLOCK","type": "int16_t","left": {
+"name": "VARIABLE_DECLARATION","type": "int16_t","left": {
+"name": "TYPE_DESCRIPTION","type": "int16_t"}
+,"right": {
+"name": "DECLARATOR","string": "tmp"}
+,"next": {
+"name": "ASSIGN","left": {
+"name": "ARRAY","left": {
+"name": "IDENTIFIER","string": "array"}
+,"right": {
+"name": "IDENTIFIER","string": "i"}
+}
+,"right": {
+"name": "ARRAY","left": {
+"name": "IDENTIFIER","string": "array"}
+,"right": {
+"name": "ADD","left": {
+"name": "IDENTIFIER","string": "i"}
+,"right": {
+"name": "CONST","type": "int8_t"}
+}
+}
+,"next": {
+"name": "ASSIGN","left": {
+"name": "ARRAY","left": {
+"name": "IDENTIFIER","string": "array"}
+,"right": {
+"name": "ADD","left": {
+"name": "IDENTIFIER","string": "i"}
+,"right": {
+"name": "CONST","type": "int8_t"}
+}
+}
+,"right": {
+"name": "IDENTIFIER","string": "tmp"}
+,"next": {
+"name": "ASSIGN","left": {
+"name": "IDENTIFIER","string": "finish"}
+,"right": {
+"name": "CONST","type": "int8_t"}
+}
+}
+}
+}
+}
+}
+}
+}
+,"next": {
+"name": "ASSIGN","left": {
+"name": "IDENTIFIER","string": "count"}
+,"right": {
+"name": "ADD","left": {
+"name": "IDENTIFIER","string": "count"}
+,"right": {
+"name": "CONST","type": "int8_t"}
+}
+}
+}
+}
+}
+,"next": {
+"name": "BLOCK","right": {
+"name": "FOR","left": {
+"name": "LS","left": {
+"name": "IDENTIFIER","string": "i"}
+,"right": {
+"name": "IDENTIFIER","string": "size"}
+}
+,"right": {
+"name": "ASSIGN","left": {
+"name": "IDENTIFIER","string": "i"}
+,"right": {
+"name": "ADD","left": {
+"name": "IDENTIFIER","string": "i"}
+,"right": {
+"name": "CONST","type": "int8_t"}
+}
+}
+,"next": {
+"name": "BLOCK"}
+}
+,"next": {
+"name": "RETURN","left": {
+"name": "IDENTIFIER","string": "count"}
+}
+}
+}
+}
+}
+}
+}
+,"next": {
+"name": "DECLARE_FUNCTION","string": "test_switch_while","left": {
+"name": "TYPE_DESCRIPTION","type": "void"}
+,"right": {
+"name": "BLOCK","type": "int32_t","left": {
+"name": "VARIABLE_DECLARATION","type": "int32_t","left": {
+"name": "TYPE_DESCRIPTION","type": "int32_t"}
+,"right": {
+"name": "DECLARATOR","string": "count"}
+,"next": {
+"name": "WHILE","left": {
+"name": "IDENTIFIER","string": "count"}
+,"right": {
+"name": "BLOCK","left": {
+"name": "SWITCH","left": {
+"name": "IDENTIFIER","string": "count"}
+,"right": {
+"name": "DEFAULT","next": {
+"name": "CASE","type": "int8_t","left": {
+"name": "CONST","type": "int8_t"}
+,"right": {
+"name": "BREAK"}
+,"next": {
+"name": "CASE","type": "int8_t","left": {
+"name": "CONST","type": "int8_t"}
+,"right": {
+"name": "BREAK"}
+,"next": {
+"name": "CASE","type": "int8_t","left": {
+"name": "CONST","type": "int8_t"}
+,"right": {
+"name": "BREAK"}
+}
+}
+}
+}
+,"next": {
+"name": "ASSIGN","left": {
+"name": "IDENTIFIER","string": "count"}
+,"right": {
+"name": "SUB","left": {
+"name": "IDENTIFIER","string": "count"}
+,"right": {
+"name": "CONST","type": "int8_t"}
+}
+}
+}
+}
+}
+}
+}
+,"next": {
+"name": "DECLARE_ACTOR","string": "TestActor","type": "int32_t","left": {
+"name": "VARIABLE_DECLARATION","type": "int32_t","left": {
+"name": "TYPE_DESCRIPTION","type": "int32_t"}
+,"right": {
+"name": "DECLARATOR","string": "digitVariableInActor"}
+,"next": {
+"name": "DECLARE_ACTION","string": "init","type": "int16_t","left": {
+"name": "BLOCK","type": "int16_t","left": {
+"name": "VARIABLE_DECLARATION","type": "int16_t","left": {
+"name": "TYPE_DESCRIPTION","type": "int16_t"}
+,"right": {
+"name": "DECLARATOR","string": "array","left": {
+"name": "NEWLINE"}
+}
+,"next": {
+"name": "VARIABLE_DECLARATION","type": "int32_t","left": {
+"name": "TYPE_DESCRIPTION","type": "int32_t"}
+,"right": {
+"name": "DECLARATOR","string": "localVariableInAction"}
+,"next": {
+"name": "VARIABLE_DECLARATION","type": "float","left": {
+"name": "TYPE_DESCRIPTION","type": "float"}
+,"right": {
+"name": "DECLARATOR","string": "arrayTest","left": {
+"name": "NEWLINE"}
+}
+,"next": {
+"name": "CALL","string": "test_switch_while","next": {
+"name": "ASSIGN","left": {
+"name": "IDENTIFIER","string": "staticDigitValue"}
+,"right": {
+"name": "CONST","type": "int8_t"}
+,"next": {
+"name": "VARIABLE_DECLARATION","type": "pointer","left": {
+"name": "TYPE_DESCRIPTION","type": "pointer"}
+,"right": {
+"name": "DECLARATOR","string": "p"}
+,"next": {
+"name": "VARIABLE_DECLARATION","type": "pointer","left": {
+"name": "TYPE_DESCRIPTION","type": "pointer"}
+,"right": {
+"name": "DECLARATOR","string": "q"}
+,"next": {
+"name": "ASSIGN","left": {
+"name": "IDENTIFIER","string": "p"}
+,"right": {
+"name": "CALL","string": "getUserPointer"}
+,"next": {
+"name": "ASSIGN","left": {
+"name": "IDENTIFIER","string": "q"}
+,"right": {
+"name": "IDENTIFIER","string": "p"}
+,"next": {
+"name": "CALL","string": "setUserPointer","left": {
+"name": "IDENTIFIER","string": "p"}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+,"next": {
+"name": "DECLARE_ACTION","string": "main","type": "int8_t","left": {
+"name": "BLOCK","type": "int8_t","left": {
+"name": "REQUEST","type": "int8_t","left": {
+"name": "CONST","type": "int8_t"}
+,"right": {
+"name": "SELF","type": "actor"}
+,"next": {
+"name": "JOIN","type": "int8_t","left": {
+"name": "CONST","type": "int8_t"}
+,"right": {
+"name": "IDENTIFIER","string": "OtherTestActor"}
+}
+}
+}
+,"next": {
+"name": "DECLARE_ACTION","string": "talk","left": {
+"name": "BLOCK","left": {
+"name": "VARIABLE_DECLARATION","left": {
+"name": "TYPE_DESCRIPTION","string": "vec2"}
+,"right": {
+"name": "DECLARATOR","string": "test"}
+,"next": {
+"name": "ASSIGN","left": {
+"name": "MEMBER_VARIABLE","string": "x","left": {
+"name": "IDENTIFIER","string": "test"}
+}
+,"right": {
+"name": "CONST","type": "int8_t"}
+}
+}
+}
+}
+}
+}
+}
+,"next": {
+"name": "DECLARE_MODULE","string": "Battler","left": {
+"name": "DECLARE_ACTION","string": "init","left": {
+"name": "BLOCK"}
+}
+,"next": {
+"name": "DECLARE_ACTOR","string": "OtherTestActor","left": {
+"name": "DECLARE_EXTEND","string": "Battler","next": {
+"name": "DECLARE_ACTION","string": "talk","left": {
+"name": "BLOCK","left": {
+"name": "VARIABLE_DECLARATION","left": {
+"name": "TYPE_DESCRIPTION","string": "vec2"}
+,"right": {
+"name": "DECLARATOR","string": "test"}
+,"next": {
+"name": "VARIABLE_DECLARATION","type": "float","left": {
+"name": "TYPE_DESCRIPTION","type": "float"}
+,"right": {
+"name": "DECLARATOR","string": "f"}
+,"next": {
+"name": "ASSIGN","left": {
+"name": "IDENTIFIER","string": "f"}
+,"right": {
+"name": "MEMBER_VARIABLE","string": "x","left": {
+"name": "IDENTIFIER","string": "test"}
+}
+,"next": {
+"name": "YIELD","next": {
+"name": "CALL","string": "getUserData"}
+}
+}
+}
+}
+}
+}
+}
+,"next": {
+"name": "DECLARE_PHANTOM","string": "Phantom","left": {
+"name": "DECLARE_EXTEND","string": "Battler","next": {
+"name": "DECLARE_ACTION","string": "init","left": {
+"name": "BLOCK"}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}

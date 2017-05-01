@@ -2,8 +2,8 @@
  * mana (library)
  *
  * @file	mana_array.h
- * @brief	mana_arrayƒNƒ‰ƒX‚ÉŠÖ‚·‚éƒwƒbƒ_[ƒtƒ@ƒCƒ‹
- * @detail	‚±‚Ìƒtƒ@ƒCƒ‹‚Ímana_arrayƒNƒ‰ƒX‚ÉŠÖŒW‚·‚éƒwƒbƒ_[ƒtƒ@ƒCƒ‹‚Å‚·B
+ * @brief	mana_arrayã‚¯ãƒ©ã‚¹ã«é–¢ã™ã‚‹ãƒ˜ãƒƒãƒ€ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«
+ * @detail	ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯mana_arrayã‚¯ãƒ©ã‚¹ã«é–¢ä¿‚ã™ã‚‹ãƒ˜ãƒƒãƒ€ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
  * @author	Shun Moriya
  * @date	2003-
  */
@@ -20,56 +20,56 @@ extern "C" {
 #endif
 
 /*!
- * @brief	ƒNƒ‰ƒX
- * mana_arrayƒNƒ‰ƒX‚ÍƒtƒŒ[ƒ€ƒoƒbƒtƒ@‚ğ•\‚µ‚Ä‚¢‚Ü‚·B
+ * @brief	ã‚¯ãƒ©ã‚¹
+ * mana_arrayã‚¯ãƒ©ã‚¹ã¯ãƒ•ãƒ¬ãƒ¼ãƒ ãƒãƒƒãƒ•ã‚¡ã‚’è¡¨ã—ã¦ã„ã¾ã™ã€‚
  *
- * C++‚Å‚¢‚¤‚Æ‚±‚ë‚Ìƒƒ“ƒo[•Ï”‚Å‚·‚ªACŒ¾Œê‚È‚Ì‚Å‘S‚Äpublic‚É‚È‚Á‚Ä‚¢‚Ü‚·B
- * ‘€ì—p‚ÌŠÖ”‚ğ—pˆÓ‚µ‚Ä‚¢‚é‚Ì‚ÅA‚»‚ê‚ç‚ÌŠÖ”‚ğ—˜—p‚µ‚Ä‘€ì‚µ‚Ä‚­‚¾‚³‚¢B
+ * C++ã§ã„ã†ã¨ã“ã‚ã®ãƒ¡ãƒ³ãƒãƒ¼å¤‰æ•°ã§ã™ãŒã€Cè¨€èªãªã®ã§å…¨ã¦publicã«ãªã£ã¦ã„ã¾ã™ã€‚
+ * æ“ä½œç”¨ã®é–¢æ•°ã‚’ç”¨æ„ã—ã¦ã„ã‚‹ã®ã§ã€ãã‚Œã‚‰ã®é–¢æ•°ã‚’åˆ©ç”¨ã—ã¦æ“ä½œã—ã¦ãã ã•ã„ã€‚
  */
 typedef struct mana_array
 {
-	void** handle;			/*!< ƒoƒbƒtƒ@ */
-	size_t allocated_size;	/*!< Šm•ÛÏ‚İƒTƒCƒY */
-	size_t used_size;		/*!< g—pÏ‚İƒTƒCƒY */
+	void** handle;			/*!< ãƒãƒƒãƒ•ã‚¡ */
+	size_t allocated_size;	/*!< ç¢ºä¿æ¸ˆã¿ã‚µã‚¤ã‚º */
+	size_t used_size;		/*!< ä½¿ç”¨æ¸ˆã¿ã‚µã‚¤ã‚º */
 }mana_array;
 
-/*! mana_array ƒIƒuƒWƒFƒNƒg‚Ì¶¬ */
+/*! mana_array ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç”Ÿæˆ */
 extern mana_array* mana_array_create(const size_t size);
 
-/*! mana_array ƒIƒuƒWƒFƒNƒg‚Ì”jŠü */
+/*! mana_array ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç ´æ£„ */
 extern void mana_array_destroy(mana_array* self);
 
-/*! mana_array ƒIƒuƒWƒFƒNƒg‚ÌƒVƒŠƒAƒ‰ƒCƒY */
+/*! mana_array ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚º */
 extern void mana_array_serialize(const mana_array* self, mana_stream* stream);
 
-/*! mana_array ƒIƒuƒWƒFƒNƒg‚ÌƒfƒVƒŠƒAƒ‰ƒCƒY */
+/*! mana_array ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ãƒ‡ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚º */
 extern void mana_array_deserialize(mana_array* self, mana_stream* stream);
 
-/*! mana_array ƒIƒuƒWƒFƒNƒg‚Ì‰Šú‰» */
+/*! mana_array ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®åˆæœŸåŒ– */
 extern void mana_array_initialize(mana_array* self, const size_t size);
 
-/*! mana_array ƒIƒuƒWƒFƒNƒg‚ÌŠJ•ú */
+/*! mana_array ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®é–‹æ”¾ */
 extern void mana_array_finalize(mana_array* self);
 
-/*! ”z—ñ‚ğƒNƒŠƒA */
+/*! é…åˆ—ã‚’ã‚¯ãƒªã‚¢ */
 extern void mana_array_clear(mana_array* self);
 
-/*! ”z—ñ‚ğQÆ */
+/*! é…åˆ—ã‚’å‚ç…§ */
 extern void* mana_array_get(const mana_array* self, const size_t index);
 
-/*! ”z—ñ‚Éƒ|ƒCƒ“ƒ^[‚ğİ’è */
+/*! é…åˆ—ã«ãƒã‚¤ãƒ³ã‚¿ãƒ¼ã‚’è¨­å®š */
 extern void mana_array_set(mana_array* self, const size_t index, const void* pointer);
 
-/*! ”z—ñ‚ÌƒTƒCƒY‚ğæ“¾ */
+/*! é…åˆ—ã®ã‚µã‚¤ã‚ºã‚’å–å¾— */
 extern size_t mana_array_get_size(const mana_array* self);
 
-/*! ”z—ñ‚Éƒ|ƒCƒ“ƒ^[‚ğ’Ç‰Á */
+/*! é…åˆ—ã«ãƒã‚¤ãƒ³ã‚¿ãƒ¼ã‚’è¿½åŠ  */
 extern void mana_array_append(mana_array* self, const void* pointer);
 
-/*! ”z—ñ‚ÌƒTƒCƒY‚ğ•ÏX */
+/*! é…åˆ—ã®ã‚µã‚¤ã‚ºã‚’å¤‰æ›´ */
 extern void mana_array_resize(mana_array* self, const size_t size);
 
-/*! ”z—ñ‚ğ”äŠr */
+/*! é…åˆ—ã‚’æ¯”è¼ƒ */
 extern int32_t mana_array_compare(const mana_array* self, const mana_array* other);
 
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)

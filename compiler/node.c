@@ -2,8 +2,8 @@
 mana (compiler)
 
 @file	node.c
-@brief	ˆÓ–¡‰ðÍƒm[ƒh‚ÉŠÖ‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹
-@detail	‚±‚Ìƒtƒ@ƒCƒ‹‚ÍˆÓ–¡‰ðÍƒm[ƒh‚ÉŠÖŒW‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹‚Å‚·B
+@brief	æ„å‘³è§£æžãƒŽãƒ¼ãƒ‰ã«é–¢ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«
+@detail	ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯æ„å‘³è§£æžãƒŽãƒ¼ãƒ‰ã«é–¢ä¿‚ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
 @author	Shun Moriya
 @date	2003-
 */
@@ -41,8 +41,8 @@ void mana_node_finalize(void)
 }
 
 /*!
-ƒm[ƒh¶¬Žž‚Ì‰Šú‰»
-@param[in]	self	ƒm[ƒhƒIƒuƒWƒFƒNƒg
+ãƒŽãƒ¼ãƒ‰ç”Ÿæˆæ™‚ã®åˆæœŸåŒ–
+@param[in]	self	ãƒŽãƒ¼ãƒ‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 */
 static void node_constructor(node_entry* self)
 {
@@ -168,10 +168,10 @@ node_entry* mana_node_create_declare_native_function(node_entry* left, const cha
 }
 
 /*!
-ƒLƒƒƒXƒgƒm[ƒh‚ðì¬‚µ‚Ü‚·
-@param[in]	type	ƒLƒƒƒXƒg‚·‚éŒ^
-@param[in]	self	ƒm[ƒhƒIƒuƒWƒFƒNƒg
-@return				ƒm[ƒhƒIƒuƒWƒFƒNƒg
+ã‚­ãƒ£ã‚¹ãƒˆãƒŽãƒ¼ãƒ‰ã‚’ä½œæˆã—ã¾ã™
+@param[in]	type	ã‚­ãƒ£ã‚¹ãƒˆã™ã‚‹åž‹
+@param[in]	self	ãƒŽãƒ¼ãƒ‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+@return				ãƒŽãƒ¼ãƒ‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 */
 static node_entry* mana_node_create_cast(type_description* type, node_entry* self)
 {
@@ -247,14 +247,14 @@ size_t mana_node_get_memory_size(node_entry* self)
 {
 	switch(self->id)
 	{
-	case NODE_CONST:			/* ’è” */
-	case NODE_IDENTIFIER:		/* •Ï” */
-		/* ŽQÆ‚Ìactor‚©Aactor‚ÌŽÀ‘Ì‚©”»’è‚Å‚«‚é‚æ‚¤‚É‚·‚é */
+	case NODE_CONST:			/* å®šæ•° */
+	case NODE_IDENTIFIER:		/* å¤‰æ•° */
+		/* å‚ç…§ã®actorã‹ã€actorã®å®Ÿä½“ã‹åˆ¤å®šã§ãã‚‹ã‚ˆã†ã«ã™ã‚‹ */
 		return self->type->tcons == SYMBOL_DATA_TYPE_ACTOR ? sizeof(void*) : self->type->memory_size;
 
 	case NODE_ARRAY:			/* variable[argument] = */
 	case NODE_MEMBER_VARIABLE:			/* X.variable */
-	case NODE_NEG:			/* }•„†”½“] */
+	case NODE_NEG:			/* Â±ç¬¦å·åè»¢ */
 		return self->type->tcons == SYMBOL_DATA_TYPE_ACTOR ? sizeof(void*) : self->type->memory_size;
 /*		return mana_node_get_memory_size(self->left);	*/
 
@@ -263,14 +263,14 @@ size_t mana_node_get_memory_size(node_entry* self)
 		return sizeof(int32_t*);
 
 	case NODE_ASSIGN:			/* = */
-	case NODE_CALL_ARGUMENT:		/* ŒÄ‚Ño‚µ‘¤ˆø” */
-	case NODE_CALL:			/* ŠÖ”ŒÄ‚Ño‚µ */
-	case NODE_ADD:			/* ‰ÁŽZ */
-	case NODE_SUB:			/* Œ¸ŽZ */
-	case NODE_MUL:			/* æŽZ */
-	case NODE_DIV:			/* œŽZ */
-	case NODE_REM:			/* —]è */
-	case NODE_POW:			/* ‚×‚«æ */
+	case NODE_CALL_ARGUMENT:		/* å‘¼ã³å‡ºã—å´å¼•æ•° */
+	case NODE_CALL:			/* é–¢æ•°å‘¼ã³å‡ºã— */
+	case NODE_ADD:			/* åŠ ç®— */
+	case NODE_SUB:			/* æ¸›ç®— */
+	case NODE_MUL:			/* ä¹—ç®— */
+	case NODE_DIV:			/* é™¤ç®— */
+	case NODE_REM:			/* ä½™å‰° */
+	case NODE_POW:			/* ã¹ãä¹— */
 	case NODE_NOT:			/* ~ */
 	case NODE_LNOT:			/* ! */
 	case NODE_AND:			/* & */
@@ -284,13 +284,13 @@ size_t mana_node_get_memory_size(node_entry* self)
 	case NODE_NE:				/* != */
 	case NODE_GE:				/* >= */
 	case NODE_GT:				/* > */
-	case NODE_STRING:			/* •¶Žš—ñ */
-	case NODE_I2F:			/* ®”‚©‚çŽÀ”‚Ö•ÏŠ· */
-	case NODE_F2I:			/* ŽÀ”‚©‚ç®”‚Ö•ÏŠ· */
+	case NODE_STRING:			/* æ–‡å­—åˆ— */
+	case NODE_I2F:			/* æ•´æ•°ã‹ã‚‰å®Ÿæ•°ã¸å¤‰æ› */
+	case NODE_F2I:			/* å®Ÿæ•°ã‹ã‚‰æ•´æ•°ã¸å¤‰æ› */
 	case NODE_LOR:			/* || */
 	case NODE_LAND:			/* && */
 	case NODE_SENDER:			/* sender (actor) */
-	case NODE_EXPRESSION_IF:	/* ŽO€‰‰ŽZŽq '?' */
+	case NODE_EXPRESSION_IF:	/* ä¸‰é …æ¼”ç®—å­ '?' */
 	default:
 #if 1
 		return self->type->memory_size;
@@ -331,18 +331,18 @@ static void mana_node_dump_(FILE* file, const node_entry* self)
 		"ARRAY",								/*!< variable[argument] = */
 		"ASSIGN",								/*!< = */
 		"MEMOP",								/*!< X.variable */
-		"CALL_ARGUMENT",							/*!< ŒÄ‚Ño‚µ‘¤ˆø” */
-		"DECLARE_ARGUMENT",							/*!< ŒÄ‚Ño‚µ‘¤ˆø” */
-		"CONST",								/*!< ’è” */
-		"VARIABLE",							/*!< •Ï” */
-		"CALL",								/*!< ŠÖ”ŒÄ‚Ño‚µ */
-		"ADD",									/*!< ‰ÁŽZ */
-		"SUB",									/*!< Œ¸ŽZ */
-		"MUL",									/*!< æŽZ */
-		"DIV",									/*!< œŽZ */
-		"REM",									/*!< —]è */
-		"NEG",									/*!< }•„†”½“] */
-		"POW",									/*!< ‚×‚«æ */
+		"CALL_ARGUMENT",							/*!< å‘¼ã³å‡ºã—å´å¼•æ•° */
+		"DECLARE_ARGUMENT",							/*!< å‘¼ã³å‡ºã—å´å¼•æ•° */
+		"CONST",								/*!< å®šæ•° */
+		"VARIABLE",							/*!< å¤‰æ•° */
+		"CALL",								/*!< é–¢æ•°å‘¼ã³å‡ºã— */
+		"ADD",									/*!< åŠ ç®— */
+		"SUB",									/*!< æ¸›ç®— */
+		"MUL",									/*!< ä¹—ç®— */
+		"DIV",									/*!< é™¤ç®— */
+		"REM",									/*!< ä½™å‰° */
+		"NEG",									/*!< Â±ç¬¦å·åè»¢ */
+		"POW",									/*!< ã¹ãä¹— */
 		"NOT",									/*!< ~ */
 		"AND",									/*!< & */
 		"OR",									/*!< | */
@@ -355,27 +355,27 @@ static void mana_node_dump_(FILE* file, const node_entry* self)
 		"NE",									/*!< != */
 		"GE",									/*!< >= */
 		"GT",									/*!< > */
-		"STRING",								/*!< •¶Žš—ñ */
-		"I2F",									/*!< ®”‚©‚çŽÀ”‚Ö•ÏŠ· */
-		"F2I",									/*!< ŽÀ”‚©‚ç®”‚Ö•ÏŠ· */
+		"STRING",								/*!< æ–‡å­—åˆ— */
+		"I2F",									/*!< æ•´æ•°ã‹ã‚‰å®Ÿæ•°ã¸å¤‰æ› */
+		"F2I",									/*!< å®Ÿæ•°ã‹ã‚‰æ•´æ•°ã¸å¤‰æ› */
 		"LOR",									/*!< || */
 		"LAND",								/*!< && */
 		"LNOT",								/*!< ! */
 		"HALT",								/*!< halt */
 		"YIELD",								/*!< yield */
 		"REQUEST",								/*!< req */
-		"COMPLY",								/*!< comply (req‹–‰Â) */
-		"REFUSE",								/*!< refuse (req‹‘”Û) */
+		"COMPLY",								/*!< comply (reqè¨±å¯) */
+		"REFUSE",								/*!< refuse (reqæ‹’å¦) */
 		"JOIN",								/*!< join */
 		"SENDER",								/*!< sender (actor) */
 		"SELF",								/*!< self (actor) */
 		"PRIORITY",							/*!< priority (integer) */
-		"EXPRESSION_IF",						/*!< ŽO€‰‰ŽZŽq '?' */
+		"EXPRESSION_IF",						/*!< ä¸‰é …æ¼”ç®—å­ '?' */
 		"PRINT",								/*!< print */
 		"RETURN",								/*!< return */
 		"ROLLBACK",							/*!< rollback */
 
-		"BLOCK",								/*!< ƒuƒƒbƒN */
+		"BLOCK",								/*!< ãƒ–ãƒ­ãƒƒã‚¯ */
 		"IF",									/*!< if */
 		"SWITCH",								/*!< switch */
 		"CASE",								/*!< case */
@@ -397,7 +397,7 @@ static void mana_node_dump_(FILE* file, const node_entry* self)
 		"VARIABLE_DECLARATION",
 		"SIZEOF",
 
-		"DECLARE_ACTOR",						//!< ƒAƒNƒ^[‚ÌéŒ¾
+		"DECLARE_ACTOR",						//!< ã‚¢ã‚¯ã‚¿ãƒ¼ã®å®£è¨€
 		"DECLARE_PHANTOM",
 		"DECLARE_MODULE",
 		"DECLARE_STRUCT",

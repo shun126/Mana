@@ -2,8 +2,8 @@
 mana (compiler)
 
 @file	register.c
-@brief	ƒŒƒWƒXƒ^Š„‚è“–‚Ä‚ÉŠÖ‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹
-@detail	‚±‚Ìƒtƒ@ƒCƒ‹‚ÍŒ^î•ñ‚ÉŠÖŒW‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹‚Å‚·B
+@brief	ãƒ¬ã‚¸ã‚¹ã‚¿å‰²ã‚Šå½“ã¦ã«é–¢ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«
+@detail	ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯å‹æƒ…å ±ã«é–¢ä¿‚ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
 @author	Shun Moriya
 @date	2003-
 */
@@ -60,7 +60,7 @@ mana_register_entity* mana_register_find(symbol_entry* symbol)
 	return NULL;
 }
 
-/* TODO:–³–¼ƒŒƒWƒXƒ^‚Ì“o˜^‚ª•K—v
+/* TODO:ç„¡åãƒ¬ã‚¸ã‚¹ã‚¿ã®ç™»éŒ²ãŒå¿…è¦
 */
 
 mana_register_entity* mana_register_allocate(symbol_entry* symbol, size_t address)

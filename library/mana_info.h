@@ -2,8 +2,8 @@
  * mana (library)
  *
  * @file	mana_info.h
- * @brief	manaƒRƒ“ƒpƒCƒ‰‚Æmanaƒ‰ƒCƒuƒ‰ƒŠ‚Å‹¤’Ê—˜—p‚·‚éƒwƒbƒ_[ƒtƒ@ƒCƒ‹
- * @detail	‚±‚Ìƒtƒ@ƒCƒ‹‚ÍmanaƒRƒ“ƒpƒCƒ‰‚Æmanaƒ‰ƒCƒuƒ‰ƒŠ‚Å‹¤’Ê—˜—p‚·‚éƒwƒbƒ_[ƒtƒ@ƒCƒ‹‚Å‚·B
+ * @brief	manaã‚³ãƒ³ãƒ‘ã‚¤ãƒ©ã¨manaãƒ©ã‚¤ãƒ–ãƒ©ãƒªã§å…±é€šåˆ©ç”¨ã™ã‚‹ãƒ˜ãƒƒãƒ€ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«
+ * @detail	ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯manaã‚³ãƒ³ãƒ‘ã‚¤ãƒ©ã¨manaãƒ©ã‚¤ãƒ–ãƒ©ãƒªã§å…±é€šåˆ©ç”¨ã™ã‚‹ãƒ˜ãƒƒãƒ€ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
  * @author	Shun Moriya
  * @date	2003-
  */
@@ -21,24 +21,24 @@
 extern "C" {
 #endif
 
-#define MANA_SIGNATURE					"MaNa"		/*!< manaƒtƒ@ƒCƒ‹–¼ */
-#define MANA_MAJOR_VERSION				(0)			/*!< manaƒtƒ@ƒCƒ‹‚ÌƒƒWƒƒ[ƒo[ƒWƒ‡ƒ“”Ô† */
-#define MANA_MINOR_VERSION				(12)		/*!< manaƒtƒ@ƒCƒ‹‚Ìƒ}ƒCƒi[ƒo[ƒWƒ‡ƒ“”Ô† */
-#define MANA_ACTOR_MAX_INTERRUPT_LEVEL	(32)		/*!< —Dæ“x” */
-#define MANA_FUNCTION_HASH_SIZE			(127)		/*!< ŠO•”ŠÖ”ƒnƒbƒVƒ…ƒe[ƒuƒ‹ƒTƒCƒY(‘f”‚ªD‚Ü‚µ‚¢) */
-#define MANA_REGISTER_COUNT				(8)			/*!< ƒŒƒWƒXƒ^‚Ì” */
+#define MANA_SIGNATURE					"MaNa"		/*!< manaãƒ•ã‚¡ã‚¤ãƒ«ç½²å */
+#define MANA_MAJOR_VERSION				(0)			/*!< manaãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ¡ã‚¸ãƒ£ãƒ¼ãƒãƒ¼ã‚¸ãƒ§ãƒ³ç•ªå· */
+#define MANA_MINOR_VERSION				(12)		/*!< manaãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒã‚¤ãƒŠãƒ¼ãƒãƒ¼ã‚¸ãƒ§ãƒ³ç•ªå· */
+#define MANA_ACTOR_MAX_INTERRUPT_LEVEL	(32)		/*!< å„ªå…ˆåº¦æ•° */
+#define MANA_FUNCTION_HASH_SIZE			(127)		/*!< å¤–éƒ¨é–¢æ•°ãƒãƒƒã‚·ãƒ¥ãƒ†ãƒ¼ãƒ–ãƒ«ã‚µã‚¤ã‚º(ç´ æ•°ãŒå¥½ã¾ã—ã„) */
+#define MANA_REGISTER_COUNT				(8)			/*!< ãƒ¬ã‚¸ã‚¹ã‚¿ã®æ•° */
 
-/*! @brief	ƒÎ */
+/*! @brief	Ï€ */
 #define MANA_PI (3.1415926535897932384626433832795028841971693993751f)
 
-/*! manaƒtƒ@ƒCƒ‹ƒwƒbƒ_[ */
+/*! manaãƒ•ã‚¡ã‚¤ãƒ«ãƒ˜ãƒƒãƒ€ãƒ¼ */
 typedef struct mana_file_header
 {
-	int8_t header[4];									/*!< –¼ */
-	uint8_t major_version;					/*!< ƒƒWƒƒ[ƒo[ƒWƒ‡ƒ“ */
-	uint8_t minor_version;					/*!< ƒ}ƒCƒi[ƒo[ƒWƒ‡ƒ“ */
-	uint8_t pad;								/*!< ƒpƒfƒBƒ“ƒO */
-	uint8_t flag;								/*!< ƒtƒ‰ƒO */
+	int8_t header[4];									/*!< ç½²å */
+	uint8_t major_version;					/*!< ãƒ¡ã‚¸ãƒ£ãƒ¼ãƒãƒ¼ã‚¸ãƒ§ãƒ³ */
+	uint8_t minor_version;					/*!< ãƒã‚¤ãƒŠãƒ¼ãƒãƒ¼ã‚¸ãƒ§ãƒ³ */
+	uint8_t pad;								/*!< ãƒ‘ãƒ‡ã‚£ãƒ³ã‚° */
+	uint8_t flag;								/*!< ãƒ•ãƒ©ã‚° */
 /*
 mana_file_header :: flag
 
@@ -53,22 +53,22 @@ mana_file_header :: flag
   |   +---------------------------
   +-------------------------------	MANA_HEADER_FLAG_COMPILED
 */
-#define MANA_HEADER_FLAG_RESOURCE	0x01			/*!< ƒtƒ‰ƒOFƒŠƒ\[ƒXƒZƒNƒVƒ‡ƒ“‚ ‚è */
-#define MANA_HEADER_FLAG_BIG_ENDIAN	0x02			/*!< ƒtƒ‰ƒOFƒrƒbƒNƒGƒ“ƒfƒBƒAƒ“‚ÅƒRƒ“ƒpƒCƒ‹‚³‚ê‚½ */
-#define MANA_HEADER_FLAG_COMPILED	0x07			/*!< ƒtƒ‰ƒOFƒRƒ“ƒpƒCƒ‹Ï‚İ */
+#define MANA_HEADER_FLAG_RESOURCE	0x01			/*!< ãƒ•ãƒ©ã‚°ï¼šãƒªã‚½ãƒ¼ã‚¹ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã‚ã‚Š */
+#define MANA_HEADER_FLAG_BIG_ENDIAN	0x02			/*!< ãƒ•ãƒ©ã‚°ï¼šãƒ“ãƒƒã‚¯ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³ã§ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã•ã‚ŒãŸ */
+#define MANA_HEADER_FLAG_COMPILED	0x07			/*!< ãƒ•ãƒ©ã‚°ï¼šã‚³ãƒ³ãƒ‘ã‚¤ãƒ«æ¸ˆã¿ */
 
-	uint32_t number_of_actors;					/*!< ƒAƒNƒ^[” */
-	uint32_t size_of_constant_pool;				/*!< ’è”ƒZƒNƒVƒ‡ƒ“ƒTƒCƒY */
-	uint32_t size_of_instruction_pool;			/*!< –½—ßƒZƒNƒVƒ‡ƒ“ƒTƒCƒY */
-	uint32_t size_of_static_memory;				/*!< ƒXƒ^ƒeƒBƒbƒNƒƒ‚ƒŠƒTƒCƒY */
-	uint32_t size_of_global_memory;				/*!< ƒOƒ[ƒoƒ‹ƒƒ‚ƒŠƒTƒCƒY */
-	uint32_t random_seed_number;				/*!< —”‚Ìí */
+	uint32_t number_of_actors;					/*!< ã‚¢ã‚¯ã‚¿ãƒ¼æ•° */
+	uint32_t size_of_constant_pool;				/*!< å®šæ•°ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã‚µã‚¤ã‚º */
+	uint32_t size_of_instruction_pool;			/*!< å‘½ä»¤ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã‚µã‚¤ã‚º */
+	uint32_t size_of_static_memory;				/*!< ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ãƒ¡ãƒ¢ãƒªã‚µã‚¤ã‚º */
+	uint32_t size_of_global_memory;				/*!< ã‚°ãƒ­ãƒ¼ãƒãƒ«ãƒ¡ãƒ¢ãƒªã‚µã‚¤ã‚º */
+	uint32_t random_seed_number;				/*!< ä¹±æ•°ã®ç¨® */
 }mana_file_header;
 
-/*! manaƒtƒ@ƒCƒ‹“à‚ÌƒAƒNƒ^[î•ñƒwƒbƒ_[ */
+/*! manaãƒ•ã‚¡ã‚¤ãƒ«å†…ã®ã‚¢ã‚¯ã‚¿ãƒ¼æƒ…å ±ãƒ˜ãƒƒãƒ€ãƒ¼ */
 typedef struct mana_actor_info_header
 {
-	uint8_t flag;								/*!< ƒtƒ‰ƒO */
+	uint8_t flag;								/*!< ãƒ•ãƒ©ã‚° */
 /*
 mana_actor_info_header :: flag
 
@@ -83,19 +83,19 @@ mana_actor_info_header :: flag
   |   +---------------------------
   +-------------------------------
 */
-#define MANA_ACTOR_INFO_HEADER_FLAG_PHANTOM	0x01	/*!< ƒtƒ‰ƒOFƒtƒ@ƒ“ƒgƒ€ */
+#define MANA_ACTOR_INFO_HEADER_FLAG_PHANTOM	0x01	/*!< ãƒ•ãƒ©ã‚°ï¼šãƒ•ã‚¡ãƒ³ãƒˆãƒ  */
 
-	uint8_t number_of_instances;				/*!< ƒCƒ“ƒXƒ^ƒ“ƒX”i–¢g—pj */
-	uint16_t number_of_actions;				/*!< ƒAƒNƒVƒ‡ƒ“” */
-	uint32_t name;								/*!< ƒAƒNƒ^[–¼ */
-	uint32_t variable_size;						/*!< ƒCƒ“ƒXƒ^ƒ“ƒX•Ï”ƒTƒCƒY */
+	uint8_t number_of_instances;				/*!< ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹æ•°ï¼ˆæœªä½¿ç”¨ï¼‰ */
+	uint16_t number_of_actions;				/*!< ã‚¢ã‚¯ã‚·ãƒ§ãƒ³æ•° */
+	uint32_t name;								/*!< ã‚¢ã‚¯ã‚¿ãƒ¼å */
+	uint32_t variable_size;						/*!< ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹å¤‰æ•°ã‚µã‚¤ã‚º */
 }mana_actor_info_header;
 
-/*! manaƒtƒ@ƒCƒ‹“à‚ÌƒAƒNƒVƒ‡ƒ“î•ñƒwƒbƒ_[ */
+/*! manaãƒ•ã‚¡ã‚¤ãƒ«å†…ã®ã‚¢ã‚¯ã‚·ãƒ§ãƒ³æƒ…å ±ãƒ˜ãƒƒãƒ€ãƒ¼ */
 typedef struct mana_action_info_header
 {
-	uint32_t name;								/*!< ƒAƒNƒVƒ‡ƒ“–¼ */
-	intptr_t address;							/*!< ƒAƒhƒŒƒX */
+	uint32_t name;								/*!< ã‚¢ã‚¯ã‚·ãƒ§ãƒ³å */
+	intptr_t address;							/*!< ã‚¢ãƒ‰ãƒ¬ã‚¹ */
 }mana_action_info_header;
 
 /*!  */
@@ -226,96 +226,96 @@ enum mana_intermediate_language
 	MANA_IL_MAX_SIZE
 };
 
-/*! —”‚ğ‰Šú‰» */
+/*! ä¹±æ•°ã‚’åˆæœŸåŒ– */
 extern void mana_srand(const uint32_t seed);
 
-/*! —”‚ğæ“¾ */
+/*! ä¹±æ•°ã‚’å–å¾— */
 extern int32_t mana_rand(void);
 
-/*! ‚O‚©‚ç‚P‚Ü‚Å‚Ì—” */
+/*! ï¼ã‹ã‚‰ï¼‘ã¾ã§ã®ä¹±æ•° */
 #define mana_frand()	(((float)rand() & 0x7FFF) / 32767.0f)
 
-/*! Šp“x‚ğƒ‰ƒWƒAƒ“‚É•ÏŠ· */
+/*! è§’åº¦ã‚’ãƒ©ã‚¸ã‚¢ãƒ³ã«å¤‰æ› */
 #define mana_to_radian(degree)	(degree * (MANA_PI / 180.f))
 
-/*! ƒ‰ƒWƒAƒ“‚ğŠp“x‚É•ÏŠ· */
+/*! ãƒ©ã‚¸ã‚¢ãƒ³ã‚’è§’åº¦ã«å¤‰æ› */
 #define mana_to_degree(radian)	(radian * (180.0f / MANA_PI))
 
-/*! ƒƒ‚ƒŠ‚Ìó‘Ôæ“¾ */
+/*! ãƒ¡ãƒ¢ãƒªã®çŠ¶æ…‹å–å¾— */
 extern int32_t mana_is_big_endian(void);
 
-/*! int16_tŒ^‚ÌƒGƒ“ƒfƒBƒAƒ“‚ğ•ÏŠ·‚µ‚Ü‚· */
+/*! int16_tå‹ã®ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³ã‚’å¤‰æ›ã—ã¾ã™ */
 extern int16_t mana_swap_endian_short(const int16_t value);
 
-/*! uint16_tŒ^‚ÌƒGƒ“ƒfƒBƒAƒ“‚ğ•ÏŠ·‚µ‚Ü‚· */
+/*! uint16_tå‹ã®ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³ã‚’å¤‰æ›ã—ã¾ã™ */
 extern uint16_t mana_swap_endian_unsigned_short(const uint16_t value);
 
-/*! int32_tŒ^‚ÌƒGƒ“ƒfƒBƒAƒ“‚ğ•ÏŠ·‚µ‚Ü‚· */
+/*! int32_tå‹ã®ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³ã‚’å¤‰æ›ã—ã¾ã™ */
 extern int32_t mana_swap_endian_integer(const int32_t value);
 
-/*! uint32_tŒ^‚ÌƒGƒ“ƒfƒBƒAƒ“‚ğ•ÏŠ·‚µ‚Ü‚· */
+/*! uint32_tå‹ã®ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³ã‚’å¤‰æ›ã—ã¾ã™ */
 extern uint32_t mana_swap_endian_unsigned_integer(const uint32_t value);
 
-/*! floatŒ^‚ÌƒGƒ“ƒfƒBƒAƒ“‚ğ•ÏŠ·‚µ‚Ü‚· */
+/*! floatå‹ã®ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³ã‚’å¤‰æ›ã—ã¾ã™ */
 extern float mana_swap_endian_float(const float value);
 
-/*! ƒRƒ“ƒ\[ƒ‹‚É•¶š—ñ‚ğo—Í‚µ‚Ü‚· */
+/*! ã‚³ãƒ³ã‚½ãƒ¼ãƒ«ã«æ–‡å­—åˆ—ã‚’å‡ºåŠ›ã—ã¾ã™ */
 extern void mana_print_debug(const char* format, ...);
 
-/*! •¶š—ñ‚Ì’†‚©‚ç•¶š—ñ‚ğŒŸõ */
+/*! æ–‡å­—åˆ—ã®ä¸­ã‹ã‚‰æ–‡å­—åˆ—ã‚’æ¤œç´¢ */
 extern int32_t mana_string_find(const int8_t text[], const int8_t pattern[]);
 
-/*! ƒpƒtƒH[ƒ}ƒ“ƒXî•ñ‚ğƒ}ƒCƒNƒ•b‚Åæ“¾‚µ‚Ü‚· */
+/*! ãƒ‘ãƒ•ã‚©ãƒ¼ãƒãƒ³ã‚¹æƒ…å ±ã‚’ãƒã‚¤ã‚¯ãƒ­ç§’ã§å–å¾—ã—ã¾ã™ */
 extern uint64_t mana_get_micro_secound(void);
 
-/*! ƒtƒ@ƒCƒ‹ƒTƒCƒY‚ğæ“¾ */
+/*! ãƒ•ã‚¡ã‚¤ãƒ«ã‚µã‚¤ã‚ºã‚’å–å¾— */
 extern long mana_get_file_size(const char* filename);
 
-/*! ƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚İ‚Ü‚·(ƒGƒ“ƒfƒBƒAƒ“•ÏŠ·‚É‚Í‘Î‰‚µ‚Ä‚¢‚Ü‚¹‚ñ) */
+/*! ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã¿ã¾ã™(ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³å¤‰æ›ã«ã¯å¯¾å¿œã—ã¦ã„ã¾ã›ã‚“) */
 extern int32_t mana_read(void** buffer, size_t* size, const char* filename);
 
-/*! –½—ß‚ÌƒTƒCƒY‚ğæ“¾ */
+/*! å‘½ä»¤ã®ã‚µã‚¤ã‚ºã‚’å–å¾— */
 extern int32_t mana_get_instruction_size(const uint8_t* program);
 
-/*! ƒIƒyƒR[ƒh‚ÆƒIƒyƒ‰ƒ“ƒh‚Ì•¶š—ñ‚ğæ“¾ */
+/*! ã‚ªãƒšã‚³ãƒ¼ãƒ‰ã¨ã‚ªãƒšãƒ©ãƒ³ãƒ‰ã®æ–‡å­—åˆ—ã‚’å–å¾— */
 extern const char* mana_get_instruction_text(const char* data, const void* program, const int32_t address);
 
 #if defined(_DEBUG)
-/*! ƒRƒ“ƒ\[ƒ‹‚É•¶š—ñ‚ğo—Í */
+/*! ã‚³ãƒ³ã‚½ãƒ¼ãƒ«ã«æ–‡å­—åˆ—ã‚’å‡ºåŠ› */
 #define MANA_PRINT(...)		mana_print_debug(__VA_ARGS__)
-/*! ƒRƒ“ƒ\[ƒ‹‚É•¶š—ñ‚ğo—Í(ƒfƒoƒbƒOƒrƒ‹ƒh‚Ì‚İ) */
+/*! ã‚³ãƒ³ã‚½ãƒ¼ãƒ«ã«æ–‡å­—åˆ—ã‚’å‡ºåŠ›(ãƒ‡ãƒãƒƒã‚°ãƒ“ãƒ«ãƒ‰ã®ã¿) */
 #define MANA_TRACE(...)		mana_print_debug(__VA_ARGS__)
-/*! ƒRƒ“ƒ\[ƒ‹‚É•¶š—ñ‚ğo—Í */
+/*! ã‚³ãƒ³ã‚½ãƒ¼ãƒ«ã«æ–‡å­—åˆ—ã‚’å‡ºåŠ› */
 #define MANA_WARNING(...)	{ mana_print_debug(__VA_ARGS__); }
-/*! ƒRƒ“ƒ\[ƒ‹‚É•¶š—ñ‚ğo—ÍŒã‹­§I—¹ */
+/*! ã‚³ãƒ³ã‚½ãƒ¼ãƒ«ã«æ–‡å­—åˆ—ã‚’å‡ºåŠ›å¾Œå¼·åˆ¶çµ‚äº† */
 #define MANA_ERROR(...)		{ mana_print_debug(__VA_ARGS__); abort(); }
-/*! ’l‚Ì^‹U‚ğ’²‚×A‹U‚È‚çŒx•\¦(ƒfƒoƒbƒOƒrƒ‹ƒh‚Ì‚İ) */
+/*! å€¤ã®çœŸå½ã‚’èª¿ã¹ã€å½ãªã‚‰è­¦å‘Šè¡¨ç¤º(ãƒ‡ãƒãƒƒã‚°ãƒ“ãƒ«ãƒ‰ã®ã¿) */
 #define MANA_CHECK(EXP)		if(!(EXP)){ mana_print_debug("%s: %s(%d)\n", #EXP, __FILE__, __LINE__); }
-/*! ’l‚Ì^‹U‚ğ’²‚×A‹U‚È‚ç‹­§I—¹(ƒfƒoƒbƒOƒrƒ‹ƒh‚Ì‚İ) */
+/*! å€¤ã®çœŸå½ã‚’èª¿ã¹ã€å½ãªã‚‰å¼·åˆ¶çµ‚äº†(ãƒ‡ãƒãƒƒã‚°ãƒ“ãƒ«ãƒ‰ã®ã¿) */
 #define MANA_ASSERT(EXP)	if(!(EXP)){ mana_print_debug("%s: %s(%d)\n", #EXP, __FILE__, __LINE__); abort(); }
-/*! ’l‚Ì^‹U‚ğ’²‚×A‹U‚È‚ç‹­§I—¹(ƒfƒoƒbƒOƒrƒ‹ƒh‚Ì‚İ) */
+/*! å€¤ã®çœŸå½ã‚’èª¿ã¹ã€å½ãªã‚‰å¼·åˆ¶çµ‚äº†(ãƒ‡ãƒãƒƒã‚°ãƒ“ãƒ«ãƒ‰ã®ã¿) */
 #define MANA_ASSERT_MESSAGE(EXP, m) if(!(EXP)){ mana_print_debug("%s: %s(%d): %s\n", #EXP, __FILE__, __LINE__, m); abort(); }
-//! ‹­§I—¹
+//! å¼·åˆ¶çµ‚äº†
 #define MANA_BUG(m) { mana_print_debug("%s(%d): BUG!: %s\n", __FILE__, __LINE__, m); abort(); }
 #else
-/*! ƒRƒ“ƒ\[ƒ‹‚É•¶š—ñ‚ğo—Í */
+/*! ã‚³ãƒ³ã‚½ãƒ¼ãƒ«ã«æ–‡å­—åˆ—ã‚’å‡ºåŠ› */
 #define MANA_PRINT(...)		printf(__VA_ARGS__)
-/*! ƒRƒ“ƒ\[ƒ‹‚É•¶š—ñ‚ğo—Í(ƒfƒoƒbƒOƒrƒ‹ƒh‚Ì‚İ) */
+/*! ã‚³ãƒ³ã‚½ãƒ¼ãƒ«ã«æ–‡å­—åˆ—ã‚’å‡ºåŠ›(ãƒ‡ãƒãƒƒã‚°ãƒ“ãƒ«ãƒ‰ã®ã¿) */
 #define MANA_TRACE(...)		((void)0)
-/*! ƒRƒ“ƒ\[ƒ‹‚É•¶š—ñ‚ğo—Í */
+/*! ã‚³ãƒ³ã‚½ãƒ¼ãƒ«ã«æ–‡å­—åˆ—ã‚’å‡ºåŠ› */
 #define MANA_WARNING(...)	{ printf(__VA_ARGS__); }
-/*! ƒRƒ“ƒ\[ƒ‹‚É•¶š—ñ‚ğo—ÍŒã‹­§I—¹ */
+/*! ã‚³ãƒ³ã‚½ãƒ¼ãƒ«ã«æ–‡å­—åˆ—ã‚’å‡ºåŠ›å¾Œå¼·åˆ¶çµ‚äº† */
 #define MANA_ERROR(...)		{ printf(__VA_ARGS__); abort(); }
-/*! ’l‚Ì^‹U‚ğ’²‚×A‹U‚È‚çŒx•\¦(ƒfƒoƒbƒOƒrƒ‹ƒh‚Ì‚İ) */
+/*! å€¤ã®çœŸå½ã‚’èª¿ã¹ã€å½ãªã‚‰è­¦å‘Šè¡¨ç¤º(ãƒ‡ãƒãƒƒã‚°ãƒ“ãƒ«ãƒ‰ã®ã¿) */
 #define MANA_CHECK(EXP)		((void)0)
-/*! ’l‚Ì^‹U‚ğ’²‚×A‹U‚È‚ç‹­§I—¹(ƒfƒoƒbƒOƒrƒ‹ƒh‚Ì‚İ) */
+/*! å€¤ã®çœŸå½ã‚’èª¿ã¹ã€å½ãªã‚‰å¼·åˆ¶çµ‚äº†(ãƒ‡ãƒãƒƒã‚°ãƒ“ãƒ«ãƒ‰ã®ã¿) */
 #define MANA_ASSERT(EXP)	((void)0)
-/*! ’l‚Ì^‹U‚ğ’²‚×A‹U‚È‚ç‹­§I—¹(ƒfƒoƒbƒOƒrƒ‹ƒh‚Ì‚İ) */
+/*! å€¤ã®çœŸå½ã‚’èª¿ã¹ã€å½ãªã‚‰å¼·åˆ¶çµ‚äº†(ãƒ‡ãƒãƒƒã‚°ãƒ“ãƒ«ãƒ‰ã®ã¿) */
 #define MANA_ASSERT_MESSAGE(EXP, m) ((void)0)
-//! ‹­§I—¹
+//! å¼·åˆ¶çµ‚äº†
 #define MANA_BUG(m) { printf("%s(%d): BUG!: %s\n", __FILE__, __LINE__, m); abort(); }
 #endif
-/*! ’l‚Ì^‹U‚ğ’²‚×A‹U‚È‚ç‹­§I—¹ */
+/*! å€¤ã®çœŸå½ã‚’èª¿ã¹ã€å½ãªã‚‰å¼·åˆ¶çµ‚äº† */
 #define MANA_VERIFY(EXP) \
 if(!(EXP)){ \
 	MANA_PRINT("%s(%d): (%s)\n", __FILE__, __LINE__, #EXP); \

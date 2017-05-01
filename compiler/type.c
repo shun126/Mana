@@ -2,8 +2,8 @@
 mana (compiler)
 
 @file	type.c
-@brief	Œ^î•ñ‚ÉŠÖ‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹
-@detail	‚±‚Ìƒtƒ@ƒCƒ‹‚ÍŒ^î•ñ‚ÉŠÖŒW‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹‚Å‚·B
+@brief	åž‹æƒ…å ±ã«é–¢ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«
+@detail	ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯åž‹æƒ…å ±ã«é–¢ä¿‚ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
 @author	Shun Moriya
 @date	2003-
 */
@@ -60,23 +60,23 @@ void mana_type_initialize(void)
 		mana_type_basic_type_description[i]->alignment_memory_size = mana_base_type_size[i];
 	}
 
-	/* self/sender‰ðŒˆ—p‚Ìƒ_ƒ~[actor 'ŽQÆ' Œ^ */
+	/* self/senderè§£æ±ºç”¨ã®ãƒ€ãƒŸãƒ¼actor 'å‚ç…§' åž‹ */
 	mana_type_actor = mana_type_create(SYMBOL_DATA_TYPE_ACTOR, NULL, NULL);
 	mana_type_actor->alignment_memory_size = sizeof(void*);
 	mana_type_actor->memory_size = sizeof(void*);
 	mana_type_actor->name = "actor";
 
-	/* nil‰ðŒˆ—p‚Ìƒ_ƒ~[nilŒ^ */
+	/* nilè§£æ±ºç”¨ã®ãƒ€ãƒŸãƒ¼nilåž‹ */
 	mana_type_nil = mana_type_create(SYMBOL_DATA_TYPE_NIL, NULL, NULL);
 	mana_type_nil->alignment_memory_size = CBSZ;
 	mana_type_nil->memory_size = CBSZ;
 	mana_type_nil->name = "nil";
 
-	/* stringŒ^ (const char*) */
+	/* stringåž‹ (const char*) */
 	mana_type_string = mana_type_create_reference(mana_type_basic_type_description[SYMBOL_DATA_TYPE_CHAR]);
 	mana_type_string->name = "string";
 
-	/* pointerŒ^(const void*)  */
+	/* pointeråž‹(const void*)  */
 	mana_type_pointer = mana_type_create_reference(mana_type_basic_type_description[SYMBOL_DATA_TYPE_VOID]);
 	mana_type_pointer->name = "pointer";
 }

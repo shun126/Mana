@@ -2,8 +2,8 @@
 mana (compiler)
 
 @file	post_resolver.h
-@brief	ŠÖ”‚Ü‚½‚ÍƒAƒNƒVƒ‡ƒ““à‚ÌƒVƒ“ƒ{ƒ‹‚Ì‰ğŒˆ‚ÉŠÖ‚·‚éƒwƒbƒ_[ƒtƒ@ƒCƒ‹
-@detail	ŠÖ”‚Ü‚½‚ÍƒAƒNƒVƒ‡ƒ““à‚ÌƒVƒ“ƒ{ƒ‹‚Ì‰ğŒˆ‚ÉŠÖŒW‚·‚éƒwƒbƒ_[ƒtƒ@ƒCƒ‹‚Å‚·B
+@brief	é–¢æ•°ã¾ãŸã¯ã‚¢ã‚¯ã‚·ãƒ§ãƒ³å†…ã®ã‚·ãƒ³ãƒœãƒ«ã®è§£æ±ºã«é–¢ã™ã‚‹ãƒ˜ãƒƒãƒ€ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«
+@detail	é–¢æ•°ã¾ãŸã¯ã‚¢ã‚¯ã‚·ãƒ§ãƒ³å†…ã®ã‚·ãƒ³ãƒœãƒ«ã®è§£æ±ºã«é–¢ä¿‚ã™ã‚‹ãƒ˜ãƒƒãƒ€ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
 @author	Shun Moriya
 @date	2017-
 */
@@ -20,9 +20,9 @@ extern "C" {
 #endif
 
 /*!
-ƒm[ƒh‚ğ’H‚è‚È‚ª‚çƒVƒ“ƒ{ƒ‹î•ñ‚ğ“o˜^‚µ‚Ü‚·
-@param	node	ƒm[ƒh
-@note	mana_generator_genearte_code“à‚Ìaction‚Ü‚½‚Ífunctionƒm[ƒh‚©‚ç‚Ì‚İŒÄ‚Ño‚³‚ê‚é
+ãƒãƒ¼ãƒ‰ã‚’è¾¿ã‚ŠãªãŒã‚‰ã‚·ãƒ³ãƒœãƒ«æƒ…å ±ã‚’ç™»éŒ²ã—ã¾ã™
+@param	node	ãƒãƒ¼ãƒ‰
+@note	mana_generator_genearte_codeå†…ã®actionã¾ãŸã¯functionãƒãƒ¼ãƒ‰ã‹ã‚‰ã®ã¿å‘¼ã³å‡ºã•ã‚Œã‚‹
 */
 extern void mana_post_resolver_resolve(node_entry* node);
 

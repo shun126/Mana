@@ -2,10 +2,10 @@
  * mana (library)
  *
  * @file	mana_stream.h
- * @brief	mana_streamƒNƒ‰ƒX‚ÉŠÖ‚·‚éƒwƒbƒ_[ƒtƒ@ƒCƒ‹
+ * @brief	mana_streamã‚¯ãƒ©ã‚¹ã«é–¢ã™ã‚‹ãƒ˜ãƒƒãƒ€ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«
  * @detail
- * ‚±‚Ìƒtƒ@ƒCƒ‹‚Ímana_streamƒNƒ‰ƒX‚ÉŠÖŒW‚·‚éƒwƒbƒ_[ƒtƒ@ƒCƒ‹‚Å‚·B
- * mana_streamƒNƒ‰ƒX‚Íƒƒ‚ƒŠƒXƒgƒŠ[ƒ~ƒ“ƒO‚ÉŠÖ‚·‚é‘€ì‚ğs‚È‚¢‚Ü‚·B
+ * ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯mana_streamã‚¯ãƒ©ã‚¹ã«é–¢ä¿‚ã™ã‚‹ãƒ˜ãƒƒãƒ€ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
+ * mana_streamã‚¯ãƒ©ã‚¹ã¯ãƒ¡ãƒ¢ãƒªã‚¹ãƒˆãƒªãƒ¼ãƒŸãƒ³ã‚°ã«é–¢ã™ã‚‹æ“ä½œã‚’è¡Œãªã„ã¾ã™ã€‚
  *
  * @author	Shun Moriya
  * @date	2003-
@@ -23,142 +23,142 @@ extern "C" {
 #endif
 
 /*!
- * @brief	mana_streamƒNƒ‰ƒX
+ * @brief	mana_streamã‚¯ãƒ©ã‚¹
  *
- * mana_streamƒNƒ‰ƒX‚Íƒƒ‚ƒŠƒXƒgƒŠ[ƒ~ƒ“ƒO‚ğ•\‚µ‚Ä‚¢‚Ü‚·B
+ * mana_streamã‚¯ãƒ©ã‚¹ã¯ãƒ¡ãƒ¢ãƒªã‚¹ãƒˆãƒªãƒ¼ãƒŸãƒ³ã‚°ã‚’è¡¨ã—ã¦ã„ã¾ã™ã€‚
  *
- * C++‚Å‚¢‚¤‚Æ‚±‚ë‚Ìƒƒ“ƒo[•Ï”‚Å‚·‚ªACŒ¾Œê‚È‚Ì‚Å‘S‚Äpublic‚É‚È‚Á‚Ä‚¢‚Ü‚·B
- * ‘€ì—p‚ÌŠÖ”‚ğ—pˆÓ‚µ‚Ä‚¢‚é‚Ì‚ÅA‚»‚ê‚ç‚ÌŠÖ”‚ğ—˜—p‚µ‚Ä‘€ì‚µ‚Ä‚­‚¾‚³‚¢B
+ * C++ã§ã„ã†ã¨ã“ã‚ã®ãƒ¡ãƒ³ãƒãƒ¼å¤‰æ•°ã§ã™ãŒã€Cè¨€èªãªã®ã§å…¨ã¦publicã«ãªã£ã¦ã„ã¾ã™ã€‚
+ * æ“ä½œç”¨ã®é–¢æ•°ã‚’ç”¨æ„ã—ã¦ã„ã‚‹ã®ã§ã€ãã‚Œã‚‰ã®é–¢æ•°ã‚’åˆ©ç”¨ã—ã¦æ“ä½œã—ã¦ãã ã•ã„ã€‚
  */
 typedef struct mana_stream
 {
-	char* buffer;			/*!< ƒoƒbƒtƒ@ */
-	size_t allocated_size;	/*!< Šm•ÛÏ‚İƒTƒCƒY */
-	size_t used_size;		/*!< g—pÏ‚İƒTƒCƒY */
-	size_t pointer;			/*!< ƒ|ƒbƒvæƒIƒtƒZƒbƒgƒAƒhƒŒƒX */
+	char* buffer;			/*!< ãƒãƒƒãƒ•ã‚¡ */
+	size_t allocated_size;	/*!< ç¢ºä¿æ¸ˆã¿ã‚µã‚¤ã‚º */
+	size_t used_size;		/*!< ä½¿ç”¨æ¸ˆã¿ã‚µã‚¤ã‚º */
+	size_t pointer;			/*!< ãƒãƒƒãƒ—å…ˆã‚ªãƒ•ã‚»ãƒƒãƒˆã‚¢ãƒ‰ãƒ¬ã‚¹ */
 }mana_stream;
 
-/*! mana_stream ƒIƒuƒWƒFƒNƒg‚Ì¶¬ */
+/*! mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç”Ÿæˆ */
 extern mana_stream* mana_stream_create(void);
 
-/*! mana_stream ƒIƒuƒWƒFƒNƒg‚Ì”jŠü */
+/*! mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç ´æ£„ */
 extern void mana_stream_destroy(mana_stream* self);
 
-/* ƒtƒ@ƒCƒ‹‚©‚çƒf[ƒ^‚ğ“Ç‚İ‚Ş */
+/* ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã‚€ */
 int32_t mana_stream_load(mana_stream* self, const char* filename);
 
-/* ƒtƒ@ƒCƒ‹‚Öƒf[ƒ^‚ğ‘‚«‚Ş */
+/* ãƒ•ã‚¡ã‚¤ãƒ«ã¸ãƒ‡ãƒ¼ã‚¿ã‚’æ›¸ãè¾¼ã‚€ */
 int32_t mana_stream_save(mana_stream* self, const char* filename);
 
-/*! ƒoƒbƒtƒ@‚Ìæ“ªƒAƒhƒŒƒX‚ğæ“¾ */
+/*! ãƒãƒƒãƒ•ã‚¡ã®å…ˆé ­ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å–å¾— */
 extern void* mana_stream_get_buffer(const mana_stream* self);
 
-/*! ƒoƒbƒtƒ@‚ÌƒAƒhƒŒƒX‚ğæ“¾ */
+/*! ãƒãƒƒãƒ•ã‚¡ã®ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å–å¾— */
 extern void* mana_stream_index_at(const mana_stream* self, const size_t index);
 
-/*! Šm•ÛÏ‚İƒoƒbƒtƒ@ƒTƒCƒY‚ğæ“¾ */
+/*! ç¢ºä¿æ¸ˆã¿ãƒãƒƒãƒ•ã‚¡ã‚µã‚¤ã‚ºã‚’å–å¾— */
 extern size_t mana_stream_get_allocated_size(const mana_stream* self);
 
-/*! g—p‚µ‚Ä‚¢‚éƒoƒbƒtƒ@ƒTƒCƒY‚ğæ“¾ */
+/*! ä½¿ç”¨ã—ã¦ã„ã‚‹ãƒãƒƒãƒ•ã‚¡ã‚µã‚¤ã‚ºã‚’å–å¾— */
 extern size_t mana_stream_get_used_size(const mana_stream* self);
 
-/*! int8_tƒTƒCƒYƒf[ƒ^‚ğƒvƒbƒVƒ… */
+/*! int8_tã‚µã‚¤ã‚ºãƒ‡ãƒ¼ã‚¿ã‚’ãƒ—ãƒƒã‚·ãƒ¥ */
 extern void mana_stream_push_char(mana_stream* self, const int8_t value);
 
-/*! int16_tƒTƒCƒYƒf[ƒ^‚ğƒvƒbƒVƒ… */
+/*! int16_tã‚µã‚¤ã‚ºãƒ‡ãƒ¼ã‚¿ã‚’ãƒ—ãƒƒã‚·ãƒ¥ */
 extern void mana_stream_push_short(mana_stream* self, const int16_t value);
 
-/*! int32_tƒTƒCƒYƒf[ƒ^‚ğƒvƒbƒVƒ… */
+/*! int32_tã‚µã‚¤ã‚ºãƒ‡ãƒ¼ã‚¿ã‚’ãƒ—ãƒƒã‚·ãƒ¥ */
 extern void mana_stream_push_integer(mana_stream* self, const int32_t value);
 
-/*! uint8_tƒTƒCƒYƒf[ƒ^‚ğƒvƒbƒVƒ… */
+/*! uint8_tã‚µã‚¤ã‚ºãƒ‡ãƒ¼ã‚¿ã‚’ãƒ—ãƒƒã‚·ãƒ¥ */
 extern void mana_stream_push_unsigned_char(mana_stream* self, const uint8_t value);
 
-/*! uint16_tƒTƒCƒYƒf[ƒ^‚ğƒvƒbƒVƒ… */
+/*! uint16_tã‚µã‚¤ã‚ºãƒ‡ãƒ¼ã‚¿ã‚’ãƒ—ãƒƒã‚·ãƒ¥ */
 extern void mana_stream_push_unsigned_short(mana_stream* self, const uint16_t value);
 
-/*! uint32_tƒTƒCƒYƒf[ƒ^‚ğƒvƒbƒVƒ… */
+/*! uint32_tã‚µã‚¤ã‚ºãƒ‡ãƒ¼ã‚¿ã‚’ãƒ—ãƒƒã‚·ãƒ¥ */
 extern void mana_stream_push_unsigned_integer(mana_stream* self, const uint32_t value);
 
-/*! floatƒTƒCƒYƒf[ƒ^‚ğƒvƒbƒVƒ… */
+/*! floatã‚µã‚¤ã‚ºãƒ‡ãƒ¼ã‚¿ã‚’ãƒ—ãƒƒã‚·ãƒ¥ */
 extern void mana_stream_push_float(mana_stream* self, const float value);
 
-/*! •¶š—ñ‚ğƒvƒbƒVƒ… */
+/*! æ–‡å­—åˆ—ã‚’ãƒ—ãƒƒã‚·ãƒ¥ */
 extern void mana_stream_push_string(mana_stream* self, const char* text);
 
-/*! ƒf[ƒ^‚ğƒvƒbƒVƒ… */
+/*! ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ—ãƒƒã‚·ãƒ¥ */
 extern void mana_stream_push_data(mana_stream* self, const void* pointer, const size_t size);
 
-/*! popƒ|ƒCƒ“ƒ^‚ğŠª‚«–ß‚· */
+/*! popãƒã‚¤ãƒ³ã‚¿ã‚’å·»ãæˆ»ã™ */
 extern void mana_stream_rewind(mana_stream* self);
 
-/*! int8_tƒTƒCƒYƒf[ƒ^‚ğƒ|ƒbƒv */
+/*! int8_tã‚µã‚¤ã‚ºãƒ‡ãƒ¼ã‚¿ã‚’ãƒãƒƒãƒ— */
 extern int8_t mana_stream_pop_char(mana_stream* self);
 
-/*! int16_tƒTƒCƒYƒf[ƒ^‚ğƒ|ƒbƒv */
+/*! int16_tã‚µã‚¤ã‚ºãƒ‡ãƒ¼ã‚¿ã‚’ãƒãƒƒãƒ— */
 extern int16_t mana_stream_pop_short(mana_stream* self);
 
-/*! int32_tƒTƒCƒYƒf[ƒ^‚ğƒ|ƒbƒv */
+/*! int32_tã‚µã‚¤ã‚ºãƒ‡ãƒ¼ã‚¿ã‚’ãƒãƒƒãƒ— */
 extern int32_t mana_stream_pop_integer(mana_stream* self);
 
-/*! uint8_tƒTƒCƒYƒf[ƒ^‚ğƒ|ƒbƒv */
+/*! uint8_tã‚µã‚¤ã‚ºãƒ‡ãƒ¼ã‚¿ã‚’ãƒãƒƒãƒ— */
 extern uint8_t mana_stream_pop_unsigned_char(mana_stream* self);
 
-/*! uint16_tƒTƒCƒYƒf[ƒ^‚ğƒ|ƒbƒv */
+/*! uint16_tã‚µã‚¤ã‚ºãƒ‡ãƒ¼ã‚¿ã‚’ãƒãƒƒãƒ— */
 extern uint16_t mana_stream_pop_unsigned_short(mana_stream* self);
 
-/*! uint32_tƒTƒCƒYƒf[ƒ^‚ğƒ|ƒbƒv */
+/*! uint32_tã‚µã‚¤ã‚ºãƒ‡ãƒ¼ã‚¿ã‚’ãƒãƒƒãƒ— */
 extern uint32_t mana_stream_pop_unsigned_integer(mana_stream* self);
 
-/*! floatƒTƒCƒYƒf[ƒ^‚ğƒ|ƒbƒv */
+/*! floatã‚µã‚¤ã‚ºãƒ‡ãƒ¼ã‚¿ã‚’ãƒãƒƒãƒ— */
 extern float mana_stream_pop_float(mana_stream* self);
 
-/*! •¶š—ñ‚ğƒ|ƒbƒv */
+/*! æ–‡å­—åˆ—ã‚’ãƒãƒƒãƒ— */
 extern void mana_stream_pop_string(mana_stream* self, char* pointer, const size_t size);
 
-/*! ƒf[ƒ^‚ğƒ|ƒbƒv */
+/*! ãƒ‡ãƒ¼ã‚¿ã‚’ãƒãƒƒãƒ— */
 extern void mana_stream_pop_data(mana_stream* self, void* pointer, const size_t size);
 
-/*! int8_tƒTƒCƒYƒf[ƒ^‚ğæ“¾ */
+/*! int8_tã‚µã‚¤ã‚ºãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
 extern int8_t mana_stream_get_char(const mana_stream* self);
 
-/*! int16_tƒTƒCƒYƒf[ƒ^‚ğæ“¾ */
+/*! int16_tã‚µã‚¤ã‚ºãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
 extern int16_t mana_stream_get_short(const mana_stream* self);
 
-/*! int32_tƒTƒCƒYƒf[ƒ^‚ğæ“¾ */
+/*! int32_tã‚µã‚¤ã‚ºãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
 extern int32_t mana_stream_get_integer(const mana_stream* self);
 
-/*! uint8_tƒTƒCƒYƒf[ƒ^‚ğæ“¾ */
+/*! uint8_tã‚µã‚¤ã‚ºãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
 extern uint8_t mana_stream_get_unsigned_char(const mana_stream* self);
 
-/*! uint16_tƒTƒCƒYƒf[ƒ^‚ğæ“¾ */
+/*! uint16_tã‚µã‚¤ã‚ºãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
 extern uint16_t mana_stream_get_unsigned_short(const mana_stream* self);
 
-/*! uint32_tƒTƒCƒYƒf[ƒ^‚ğæ“¾ */
+/*! uint32_tã‚µã‚¤ã‚ºãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
 extern uint32_t mana_stream_get_unsigned_integer(const mana_stream* self);
 
-/*! floatƒTƒCƒYƒf[ƒ^‚ğæ“¾ */
+/*! floatã‚µã‚¤ã‚ºãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
 extern float mana_stream_get_float(const mana_stream* self);
 
-/*! •¶š—ñ‚ğæ“¾ */
+/*! æ–‡å­—åˆ—ã‚’å–å¾— */
 extern void mana_stream_get_string(const mana_stream* self, char* pointer, const size_t size);
 
-/*! •¶š—ñ‚Ìƒ|ƒCƒ“ƒ^[‚ğæ“¾ */
+/*! æ–‡å­—åˆ—ã®ãƒã‚¤ãƒ³ã‚¿ãƒ¼ã‚’å–å¾— */
 extern const char* mana_stream_get_string_pointer(const mana_stream* self);
 
-/*! •¶š—ñ‚Ì’·‚³‚ğæ“¾ */
+/*! æ–‡å­—åˆ—ã®é•·ã•ã‚’å–å¾— */
 extern size_t mana_stream_get_string_length(const mana_stream* self);
 
-/*! ƒf[ƒ^‚ğæ“¾ */
+/*! ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
 extern void mana_stream_get_data(const mana_stream* self, void* pointer, const size_t size);
 
-/*! QÆƒ|ƒCƒ“ƒ^‚ğˆÚ“®‚µ‚Ü‚· */
+/*! å‚ç…§ãƒã‚¤ãƒ³ã‚¿ã‚’ç§»å‹•ã—ã¾ã™ */
 extern void mana_steram_seek(mana_stream* self, const int32_t offset);
 
-/*! Œ»İ‚Ìƒ|ƒCƒ“ƒ^[‚ğ‹L˜^‚µ‚Ü‚· */
+/*! ç¾åœ¨ã®ãƒã‚¤ãƒ³ã‚¿ãƒ¼ã‚’è¨˜éŒ²ã—ã¾ã™ */
 extern void mana_stream_mark(mana_stream* self);
 
-/*! Œ»İ‚Ìƒ|ƒCƒ“ƒ^[‚ª mana_stream_mark ‚µ‚½ˆÊ’u‚©’²‚×‚Ü‚· */
+/*! ç¾åœ¨ã®ãƒã‚¤ãƒ³ã‚¿ãƒ¼ãŒ mana_stream_mark ã—ãŸä½ç½®ã‹èª¿ã¹ã¾ã™ */
 extern void mana_stream_check(mana_stream* self);
 
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)
