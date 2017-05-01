@@ -20,22 +20,22 @@ extern "C" {
 #endif
 
 //! 初期化
-extern void mana_pre_resolver_initialize(void);
+extern void pre_resolver_initialize(void);
 
 //! 終了
-extern void mana_pre_resolver_finalize(void);
+extern void pre_resolver_finalize(void);
 
 /*!
 子ノードから型を継承する
 @param[in]	node	ノード
 */
-extern void mana_resolver_resolve_type_from_child_node(node_entry* node);
+extern void resolver_resolve_type_from_child_node(node_entry* node);
 
 /*!
 ノードを辿りながらシンボル情報を登録します（ただし中間言語に対して評価しません）
 @param	node	ノード
 */
-extern void mana_pre_resolver_resolve(node_entry* node);
+extern void pre_resolver_resolve(node_entry* node);
 
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)
 }

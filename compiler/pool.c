@@ -23,22 +23,22 @@ mana (compiler)
 #define MANA_POOL_HASH_TABLE_SIZE	(887)
 
 /*! String hash table type */
-typedef struct mana_pool_string_hash_table
+typedef struct pool_string_hash_table
 {
 	char* name;									/*!< 文字列 */
 	int32_t length;									/*!< 文字列の長さ */
-	struct mana_pool_string_hash_table* next;	/*!< 次のmana_pool_string_hash_table */
-} mana_pool_string_hash_table;
+	struct pool_string_hash_table* next;	/*!< 次のpool_string_hash_table */
+} pool_string_hash_table;
 
 /*! String hash table */
-static mana_pool_string_hash_table *s_mana_pool_hash_table[MANA_POOL_HASH_TABLE_SIZE];
+static pool_string_hash_table *s_pool_hash_table[MANA_POOL_HASH_TABLE_SIZE];
 
 /*!
  * @brief		ハッシュ値を取得
  * @param[in]	string		文字列
  * @return		ハッシュ値
  */
-static int32_t mana_pool_get_hash_value(char* string)
+static int32_t pool_get_hash_value(char* string)
 {
 	unsigned h, g;
 
@@ -70,36 +70,36 @@ GzUInt32 hashstr(const char* str, size_t len)
 
 /*!
  */
-void mana_pool_initialize(void)
+void pool_initialize(void)
 {
 	int32_t i;
 
 	for(i = 0; i < MANA_POOL_HASH_TABLE_SIZE; i ++)
 	{
-		s_mana_pool_hash_table[i] = 0;
+		s_pool_hash_table[i] = 0;
 	}
 }
 
 /*!
  */
-void mana_pool_finalize(void)
+void pool_finalize(void)
 {
 	int32_t i;
 
 	for(i = 0; i < MANA_POOL_HASH_TABLE_SIZE; i++)
 	{
-		mana_pool_string_hash_table* hash;
-		hash = s_mana_pool_hash_table[i];
+		pool_string_hash_table* hash;
+		hash = s_pool_hash_table[i];
 		while(hash != 0)
 		{
-			mana_pool_string_hash_table* pNext;
+			pool_string_hash_table* pNext;
 			pNext = hash->next;
 			if(hash->name)
 				mana_free(hash->name);
 			mana_free(hash);
 			hash = pNext;
 		}
-		s_mana_pool_hash_table[i] = 0;
+		s_pool_hash_table[i] = 0;
 	}
 }
 
@@ -110,34 +110,34 @@ void mana_pool_finalize(void)
  * 重複していた場合は設定済みの文字列のアドレスが返る。
  * 設定失敗の場合はNULLが返る。
  */
-char* mana_pool_set(char* string)
+char* pool_set(char* string)
 {
-	mana_pool_string_hash_table* hash;
+	pool_string_hash_table* hash;
 	int32_t hash_value;
 	int32_t length;
 
 	if(string == NULL)
 		return NULL;
 
-	hash_value = mana_pool_get_hash_value(string);
+	hash_value = pool_get_hash_value(string);
 	length = strlen(string);
 
-	for(hash = s_mana_pool_hash_table[hash_value]; hash != 0; hash = hash->next)
+	for(hash = s_pool_hash_table[hash_value]; hash != 0; hash = hash->next)
 	{
 		if((hash->length) == length && strcmp(hash->name, string) == 0)
 		{
 			return hash->name;
 		}
 	}
-	hash = (mana_pool_string_hash_table*)mana_malloc(sizeof(mana_pool_string_hash_table));
+	hash = (pool_string_hash_table*)mana_malloc(sizeof(pool_string_hash_table));
 	if(hash)
 	{
 		hash->name = (char*)mana_malloc(length + 1);
 		if(hash->name)
 		{
 			hash->length = length;
-			hash->next = s_mana_pool_hash_table[hash_value];
-			s_mana_pool_hash_table[hash_value] = hash;
+			hash->next = s_pool_hash_table[hash_value];
+			s_pool_hash_table[hash_value] = hash;
 
 #if defined(__STDC_WANT_SECURE_LIB__)
 			strcpy_s(hash->name, length + 1, string);

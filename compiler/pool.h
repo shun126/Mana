@@ -16,13 +16,13 @@ extern "C" {
 #endif
 
 /*! 文字列格納システムの初期化 */
-extern void mana_pool_initialize(void);
+extern void pool_initialize(void);
 
 /*! 文字列格納システムの終了処理 */
-extern void mana_pool_finalize(void);
+extern void pool_finalize(void);
 
 /*! 文字列格納システムに文字列を設定します */
-extern char* mana_pool_set(char* string);
+extern char* pool_set(char* string);
 
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)
 }

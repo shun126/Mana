@@ -100,8 +100,8 @@ int yynerrs;
 %%
 program			: line
 					{
-						mana_node_dump($1);
-						mana_pre_resolver_resolve($1);
+						node_dump($1);
+						pre_resolver_resolve($1);
 						generator_genearte_code($1, true);
 						mana_linker_resolve_address();
 					}
@@ -119,27 +119,27 @@ declarations	: actor
 				| declaration ';'
 
 				| tNATIVE variable_type tIDENTIFIER '(' arg_decls ')' ';'
-					{ $$ = mana_node_create_declare_native_function($2, $3, $5, NULL); }
+					{ $$ = node_create_declare_native_function($2, $3, $5, NULL); }
 
 				| tALLOCATE tDIGIT '{' allocate_declarations '}' 
-					{ $$ = mana_node_create_node(NODE_DECLARE_ALLOCATE, $4, NULL, NULL); $$->digit = $2; }
+					{ $$ = node_create_node(NODE_DECLARE_ALLOCATE, $4, NULL, NULL); $$->digit = $2; }
 				| tSTATIC '{' allocate_declarations '}'
-					{ $$ = mana_node_create_node(NODE_DECLARE_STATIC, $3, NULL, NULL); }
+					{ $$ = node_create_node(NODE_DECLARE_STATIC, $3, NULL, NULL); }
 				| tSTATIC tALLOCATE tDIGIT '{' allocate_declarations '}'
 					{
 						node_entry* allocate_node;
-						allocate_node = mana_node_create_node(NODE_DECLARE_ALLOCATE, $5, NULL, NULL);
+						allocate_node = node_create_node(NODE_DECLARE_ALLOCATE, $5, NULL, NULL);
 						allocate_node->digit = $3;
-						$$ = mana_node_create_node(NODE_DECLARE_STATIC, allocate_node, NULL, NULL);
+						$$ = node_create_node(NODE_DECLARE_STATIC, allocate_node, NULL, NULL);
 					}
 
 				| tALIAS tIDENTIFIER tSTRING ';'
-					{ $$ = mana_node_create_node(NODE_DEFINE_ALIAS, NULL, NULL, NULL); $$->string = $2; }
+					{ $$ = node_create_node(NODE_DEFINE_ALIAS, NULL, NULL, NULL); $$->string = $2; }
 
 				| tINCLUDE tSTRING ';'
-					{ $$ = NULL; if(! mana_lexer_open($2, false)){ YYABORT; } }
+					{ $$ = NULL; if(! lexer_open($2, false)){ YYABORT; } }
 				| tIMPORT tSTRING ';'
-					{ $$ = NULL; if(! mana_lexer_open($2, true)){ YYABORT; } }
+					{ $$ = NULL; if(! lexer_open($2, true)){ YYABORT; } }
 				;
 
 allocate_declarations
@@ -156,41 +156,41 @@ declaration		: variable_decl
 						MANA_ASSERT($1->right->string);
 						MANA_ASSERT($1->next == NULL);
 
-						node_entry* node = mana_node_create_node(NODE_IDENTIFIER, NULL, NULL, NULL);
+						node_entry* node = node_create_node(NODE_IDENTIFIER, NULL, NULL, NULL);
 						node->string = $1->right->string;
 						$1->next = node;
 
-						$$ = mana_node_create_node(NODE_ASSIGN, $1, $3, NULL);
+						$$ = node_create_node(NODE_ASSIGN, $1, $3, NULL);
 
 						/*
 						if($2->class_type != MANA_CLASS_TYPE_VARIABLE_LOCAL)
 							mana_compile_error("can initialize variable in local space only");
 						mana_symbol_allocate_memory($2, $1, MANA_MEMORY_TYPE_NORMAL);
-						mana_linker_expression(mana_node_create_node(MANA_NODE_TYPE_ASSIGN, mana_node_create_leaf($2->name), $4), MANA_TRUE);
+						mana_linker_expression(node_create_node(MANA_NODE_TYPE_ASSIGN, node_create_leaf($2->name), $4), MANA_TRUE);
 						*/
 					}
 				| tDEFINE tIDENTIFIER tDIGIT
-					{ $$ = mana_node_create_node(NODE_DEFINE_CONSTANT, NULL, NULL, NULL); $$->string = $2; $$->digit = $3; }
+					{ $$ = node_create_node(NODE_DEFINE_CONSTANT, NULL, NULL, NULL); $$->string = $2; $$->digit = $3; }
 				| tDEFINE tIDENTIFIER tREAL
-					{ $$ = mana_node_create_node(NODE_DEFINE_CONSTANT, NULL, NULL, NULL); $$->string = $2; $$->real = $3; }
+					{ $$ = node_create_node(NODE_DEFINE_CONSTANT, NULL, NULL, NULL); $$->string = $2; $$->real = $3; }
 				| tDEFINE tIDENTIFIER '-' tDIGIT	/* プリプロセッサを作る予定 */
-					{ $$ = mana_node_create_node(NODE_DEFINE_CONSTANT, NULL, NULL, NULL); $$->string = $2; $$->digit = -$4; }
+					{ $$ = node_create_node(NODE_DEFINE_CONSTANT, NULL, NULL, NULL); $$->string = $2; $$->digit = -$4; }
 				| tDEFINE tIDENTIFIER '-' tREAL		/* プリプロセッサを作る予定 */
-					{ $$ = mana_node_create_node(NODE_DEFINE_CONSTANT, NULL, NULL, NULL); $$->string = $2; $$->real = -$4; }
+					{ $$ = node_create_node(NODE_DEFINE_CONSTANT, NULL, NULL, NULL); $$->string = $2; $$->real = -$4; }
 				| tDEFINE tIDENTIFIER tSTRING
-					{ $$ = mana_node_create_node(NODE_DEFINE_CONSTANT, NULL, NULL, NULL); $$->string = $3; }
+					{ $$ = node_create_node(NODE_DEFINE_CONSTANT, NULL, NULL, NULL); $$->string = $3; }
 				| tDEFINE tIDENTIFIER tIDENTIFIER
-					{ $$ = mana_node_create_node(NODE_DEFINE_CONSTANT, NULL, NULL, NULL); $$->string = $3; }
+					{ $$ = node_create_node(NODE_DEFINE_CONSTANT, NULL, NULL, NULL); $$->string = $3; }
 				| tUNDEF tIDENTIFIER
-					{ $$ = mana_node_create_node(NODE_UNDEFINE_CONSTANT, NULL, NULL, NULL); $$->string = $2; }
+					{ $$ = node_create_node(NODE_UNDEFINE_CONSTANT, NULL, NULL, NULL); $$->string = $2; }
 				;
 
 actor			: tACTOR tIDENTIFIER '{' actions '}'
-					{ $$ = mana_node_create_node(NODE_DECLARE_ACTOR, $4, NULL, NULL); $$->string = $2; }
+					{ $$ = node_create_node(NODE_DECLARE_ACTOR, $4, NULL, NULL); $$->string = $2; }
 				| tPHANTOM tIDENTIFIER '{' actions '}'
-					{ $$ = mana_node_create_node(NODE_DECLARE_PHANTOM, $4, NULL, NULL); $$->string = $2; }
+					{ $$ = node_create_node(NODE_DECLARE_PHANTOM, $4, NULL, NULL); $$->string = $2; }
 				| tMODULE tIDENTIFIER '{' actions '}'
-					{ $$ = mana_node_create_node(NODE_DECLARE_MODULE, $4, NULL, NULL); $$->string = $2; }
+					{ $$ = node_create_node(NODE_DECLARE_MODULE, $4, NULL, NULL); $$->string = $2; }
 				;
 
 actions			: /* empty */
@@ -200,14 +200,14 @@ actions			: /* empty */
 				;
 
 action			: tACTION tIDENTIFIER block
-					{ $$ = mana_node_create_node(NODE_DECLARE_ACTION, $3, NULL, NULL); $$->string = $2; $$->type = mana_type_get(SYMBOL_DATA_TYPE_VOID); }
+					{ $$ = node_create_node(NODE_DECLARE_ACTION, $3, NULL, NULL); $$->string = $2; $$->type = type_get(SYMBOL_DATA_TYPE_VOID); }
 				| tEXTEND tIDENTIFIER ';'
-					{ $$ = mana_node_create_node(NODE_DECLARE_EXTEND, NULL, NULL, NULL); $$->string = $2; }
+					{ $$ = node_create_node(NODE_DECLARE_EXTEND, NULL, NULL, NULL); $$->string = $2; }
 				| declaration ';'
 				;
 
 struct			: tSTRUCT tIDENTIFIER '{' struct_members '}'
-					{ $$ = mana_node_create_node(NODE_DECLARE_STRUCT, $4, NULL, NULL); $$->string = $2; }
+					{ $$ = node_create_node(NODE_DECLARE_STRUCT, $4, NULL, NULL); $$->string = $2; }
 				;
 
 struct_members	: /* empty */
@@ -220,19 +220,19 @@ struct_member	: variable_decl ';'
 				;
 
 function		: variable_type tIDENTIFIER '(' arg_decls ')' block
-					{ $$ = mana_node_create_declare_function($1, $2, $4, $6); }
+					{ $$ = node_create_declare_function($1, $2, $4, $6); }
 				;
 
 variable_type	: tACTOR2
-					{ $$ = mana_node_create_node(NODE_TYPE_DESCRIPTION, NULL, NULL, NULL); $$->type = mana_type_get(SYMBOL_DATA_TYPE_ACTOR); }
+					{ $$ = node_create_node(NODE_TYPE_DESCRIPTION, NULL, NULL, NULL); $$->type = type_get(SYMBOL_DATA_TYPE_ACTOR); }
 				| tIDENTIFIER
-					{ $$ = mana_node_create_node(NODE_TYPE_DESCRIPTION, NULL, NULL, NULL); $$->string = $1; }
+					{ $$ = node_create_node(NODE_TYPE_DESCRIPTION, NULL, NULL, NULL); $$->string = $1; }
 				| tTYPE
-					{ $$ = mana_node_create_node(NODE_TYPE_DESCRIPTION, NULL, NULL, NULL); $$->type = $1; }
+					{ $$ = node_create_node(NODE_TYPE_DESCRIPTION, NULL, NULL, NULL); $$->type = $1; }
 				;
 
 block			: '{' statements '}'
-					{ $$ = mana_node_create_node(NODE_BLOCK, $2, NULL, NULL); }
+					{ $$ = node_create_node(NODE_BLOCK, $2, NULL, NULL); }
 				;
 
 statements		: /* empty */
@@ -241,20 +241,20 @@ statements		: /* empty */
 					{ if ($1) { $$ = $1; $$->next = $2; } else { $$ = $2; } }
 				;
 statement		: tIF '(' expression ')' statement
-					{ $$ = mana_node_create_node(NODE_IF, $3, $5, NULL); }
+					{ $$ = node_create_node(NODE_IF, $3, $5, NULL); }
 				| tIF '(' expression ')' statement tELSE statement
-					{ $$ = mana_node_create_node(NODE_IF, $3, $5, $7); }
+					{ $$ = node_create_node(NODE_IF, $3, $5, $7); }
 				| tSWITCH '(' expression ')' '{' cases '}'
-					{ $$ = mana_node_create_node(NODE_SWITCH, $3, $6, NULL); }
+					{ $$ = node_create_node(NODE_SWITCH, $3, $6, NULL); }
 				| tWHILE '(' expression ')' statement
-					{ $$ = mana_node_create_node(NODE_WHILE, $3, $5, NULL); }
+					{ $$ = node_create_node(NODE_WHILE, $3, $5, NULL); }
 				| tDO statement tWHILE '(' expression ')' ';'
-					{ $$ = mana_node_create_node(NODE_DO, $2, $5, NULL); }
+					{ $$ = node_create_node(NODE_DO, $2, $5, NULL); }
 				| tFOR '(' expression ';' expression ';' expression ')' statement
 					{
-						$$ = mana_node_create_node(NODE_BLOCK,
+						$$ = node_create_node(NODE_BLOCK,
 							$3,
-							mana_node_create_node(NODE_FOR, $5, $7, $9),
+							node_create_node(NODE_FOR, $5, $7, $9),
 							NULL
 						);
 					}
@@ -264,48 +264,48 @@ statement		: tIF '(' expression ')' statement
 						MANA_ASSERT($3->right->string);
 						MANA_ASSERT($3->next == NULL);
 
-						node_entry* node = mana_node_create_node(NODE_IDENTIFIER, NULL, NULL, NULL);
+						node_entry* node = node_create_node(NODE_IDENTIFIER, NULL, NULL, NULL);
 						node->string = $3->right->string;
 						$3->next = node;
 
-						$$ = mana_node_create_node(NODE_BLOCK,
-							mana_node_create_node(NODE_ASSIGN, $3, $5, NULL),
-							mana_node_create_node(NODE_FOR, $7, $9, $11),
+						$$ = node_create_node(NODE_BLOCK,
+							node_create_node(NODE_ASSIGN, $3, $5, NULL),
+							node_create_node(NODE_FOR, $7, $9, $11),
 							NULL
 						);
 					}
 				| tLOOP statement
-					{ $$ = mana_node_create_node(NODE_LOOP, $2, NULL, NULL); }
+					{ $$ = node_create_node(NODE_LOOP, $2, NULL, NULL); }
 				| tLOCK statement
-					{ $$ = mana_node_create_node(NODE_LOCK, $2, NULL, NULL); }
+					{ $$ = node_create_node(NODE_LOCK, $2, NULL, NULL); }
 				| GOTO tIDENTIFIER ';'
-					{ $$ = mana_node_create_node(NODE_GOTO, NULL, NULL, NULL); $$->string = $2; }
+					{ $$ = node_create_node(NODE_GOTO, NULL, NULL, NULL); $$->string = $2; }
 				| tIDENTIFIER ':'
-					{ $$ = mana_node_create_node(NODE_LABEL, NULL, NULL, NULL); $$->string = $1; }
+					{ $$ = node_create_node(NODE_LABEL, NULL, NULL, NULL); $$->string = $1; }
 				| tRETURN ';'
-					{ $$ = mana_node_create_node(NODE_RETURN, NULL, NULL, NULL); }
+					{ $$ = node_create_node(NODE_RETURN, NULL, NULL, NULL); }
 				| tRETURN expression ';'
-					{ $$ = mana_node_create_node(NODE_RETURN, $2, NULL, NULL); }
+					{ $$ = node_create_node(NODE_RETURN, $2, NULL, NULL); }
 				| tROLLBACK expression ';'
-					{ $$ = mana_node_create_node(NODE_ROLLBACK, $2, NULL, NULL); }
+					{ $$ = node_create_node(NODE_ROLLBACK, $2, NULL, NULL); }
 				| tBREAK ';'
-					{ $$ = mana_node_create_node(NODE_BREAK, NULL, NULL, NULL); }
+					{ $$ = node_create_node(NODE_BREAK, NULL, NULL, NULL); }
 				| tCONTINUE ';'
-					{ $$ = mana_node_create_node(NODE_CONTINUE, NULL, NULL, NULL); }
+					{ $$ = node_create_node(NODE_CONTINUE, NULL, NULL, NULL); }
 				| tHALT '(' ')' ';'
-					{ $$ = mana_node_create_node(NODE_HALT, NULL, NULL, NULL); }
+					{ $$ = node_create_node(NODE_HALT, NULL, NULL, NULL); }
 				| tYIELD '(' ')' ';'
-					{ $$ = mana_node_create_node(NODE_YIELD, NULL, NULL, NULL); }
+					{ $$ = node_create_node(NODE_YIELD, NULL, NULL, NULL); }
 				| tCOMPLY '(' ')' ';'
-					{ $$ = mana_node_create_node(NODE_COMPLY, NULL, NULL, NULL); }
+					{ $$ = node_create_node(NODE_COMPLY, NULL, NULL, NULL); }
 				| tREFUSE '(' ')' ';'
-					{ $$ = mana_node_create_node(NODE_REFUSE, NULL, NULL, NULL); }
+					{ $$ = node_create_node(NODE_REFUSE, NULL, NULL, NULL); }
 				| tPRINT '(' arg_calls ')' ';'
-					{ $$ = mana_node_create_node(NODE_PRINT, $3, NULL, NULL); }
+					{ $$ = node_create_node(NODE_PRINT, $3, NULL, NULL); }
 				| tREQUEST '(' expression ','  expression tDC tIDENTIFIER ')' ';'
-					{ $$ = mana_node_create_node(NODE_REQUEST, $3, $5, NULL); $$->string = $7; }
+					{ $$ = node_create_node(NODE_REQUEST, $3, $5, NULL); $$->string = $7; }
 				| tJOIN '(' expression ','  expression ')' ';'
-					{ $$ = mana_node_create_node(NODE_JOIN, $3, $5, NULL); }
+					{ $$ = node_create_node(NODE_JOIN, $3, $5, NULL); }
 				| block
 				| declaration ';'
 				| expression ';'
@@ -318,142 +318,142 @@ statement		: tIF '(' expression ')' statement
 				;
 
 expression		: left_hand '=' expression
-					{ $$ = mana_node_create_node(NODE_ASSIGN, $1, $3, NULL); }
+					{ $$ = node_create_node(NODE_ASSIGN, $1, $3, NULL); }
 				| expression tAND expression
-					{ $$ = mana_node_create_node(NODE_LAND, $1, $3, NULL); }
+					{ $$ = node_create_node(NODE_LAND, $1, $3, NULL); }
 				| expression tOR expression
-					{ $$ = mana_node_create_node(NODE_LOR, $1, $3, NULL); }
+					{ $$ = node_create_node(NODE_LOR, $1, $3, NULL); }
 				| expression tAADD expression
-					{ $$ = mana_node_create_node(NODE_ASSIGN, $1, mana_node_create_node(NODE_ADD, mana_node_clone($1), $3, NULL), NULL); }
+					{ $$ = node_create_node(NODE_ASSIGN, $1, node_create_node(NODE_ADD, node_clone($1), $3, NULL), NULL); }
 				| expression tASUB expression
-					{ $$ = mana_node_create_node(NODE_ASSIGN, $1, mana_node_create_node(NODE_SUB, mana_node_clone($1), $3, NULL), NULL); }
+					{ $$ = node_create_node(NODE_ASSIGN, $1, node_create_node(NODE_SUB, node_clone($1), $3, NULL), NULL); }
 				| expression tAMUL expression
-					{ $$ = mana_node_create_node(NODE_ASSIGN, $1, mana_node_create_node(NODE_MUL, mana_node_clone($1), $3, NULL), NULL); }
+					{ $$ = node_create_node(NODE_ASSIGN, $1, node_create_node(NODE_MUL, node_clone($1), $3, NULL), NULL); }
 				| expression tADIV expression
-					{ $$ = mana_node_create_node(NODE_ASSIGN, $1, mana_node_create_node(NODE_DIV, mana_node_clone($1), $3, NULL), NULL); }
+					{ $$ = node_create_node(NODE_ASSIGN, $1, node_create_node(NODE_DIV, node_clone($1), $3, NULL), NULL); }
 				| expression tAMOD expression
-					{ $$ = mana_node_create_node(NODE_ASSIGN, $1, mana_node_create_node(NODE_REM, mana_node_clone($1), $3, NULL), NULL); }
+					{ $$ = node_create_node(NODE_ASSIGN, $1, node_create_node(NODE_REM, node_clone($1), $3, NULL), NULL); }
 				| expression tAAND expression
-					{ $$ = mana_node_create_node(NODE_ASSIGN, $1, mana_node_create_node(NODE_AND, mana_node_clone($1), $3, NULL), NULL); }
+					{ $$ = node_create_node(NODE_ASSIGN, $1, node_create_node(NODE_AND, node_clone($1), $3, NULL), NULL); }
 				| expression tAOR expression
-					{ $$ = mana_node_create_node(NODE_ASSIGN, $1, mana_node_create_node(NODE_OR, mana_node_clone($1), $3, NULL), NULL); }
+					{ $$ = node_create_node(NODE_ASSIGN, $1, node_create_node(NODE_OR, node_clone($1), $3, NULL), NULL); }
 				| expression tAXOR expression
-					{ $$ = mana_node_create_node(NODE_ASSIGN, $1, mana_node_create_node(NODE_XOR, mana_node_clone($1), $3, NULL), NULL); }
+					{ $$ = node_create_node(NODE_ASSIGN, $1, node_create_node(NODE_XOR, node_clone($1), $3, NULL), NULL); }
 				| expression tALSHFT expression
-					{ $$ = mana_node_create_node(NODE_ASSIGN, $1, mana_node_create_node(NODE_LSH, mana_node_clone($1), $3, NULL), NULL); }
+					{ $$ = node_create_node(NODE_ASSIGN, $1, node_create_node(NODE_LSH, node_clone($1), $3, NULL), NULL); }
 				| expression tARSHFT expression
-					{ $$ = mana_node_create_node(NODE_ASSIGN, $1, mana_node_create_node(NODE_RSH, mana_node_clone($1), $3, NULL), NULL); }
+					{ $$ = node_create_node(NODE_ASSIGN, $1, node_create_node(NODE_RSH, node_clone($1), $3, NULL), NULL); }
 				| expression '+' expression
-					{ $$ = mana_node_create_node(NODE_ADD, $1, $3, NULL); }
+					{ $$ = node_create_node(NODE_ADD, $1, $3, NULL); }
 				| expression '-' expression
-					{ $$ = mana_node_create_node(NODE_SUB, $1, $3, NULL); }
+					{ $$ = node_create_node(NODE_SUB, $1, $3, NULL); }
 				| expression '*' expression
-					{ $$ = mana_node_create_node(NODE_MUL, $1, $3, NULL); }
+					{ $$ = node_create_node(NODE_MUL, $1, $3, NULL); }
 				| expression '/' expression
-					{ $$ = mana_node_create_node(NODE_DIV, $1, $3, NULL); }
+					{ $$ = node_create_node(NODE_DIV, $1, $3, NULL); }
 				| expression '%' expression
-					{ $$ = mana_node_create_node(NODE_REM, $1, $3, NULL); }
+					{ $$ = node_create_node(NODE_REM, $1, $3, NULL); }
 				| expression tPOW expression
-					{ $$ = mana_node_create_node(NODE_POW, $1, $3, NULL); }
+					{ $$ = node_create_node(NODE_POW, $1, $3, NULL); }
 				| expression '&' expression
-					{ $$ = mana_node_create_node(NODE_AND, $1, $3, NULL); }
+					{ $$ = node_create_node(NODE_AND, $1, $3, NULL); }
 				| expression '|' expression
-					{ $$ = mana_node_create_node(NODE_OR, $1, $3, NULL); }
+					{ $$ = node_create_node(NODE_OR, $1, $3, NULL); }
 				| expression '^' expression
-					{ $$ = mana_node_create_node(NODE_XOR, $1, $3, NULL); }
+					{ $$ = node_create_node(NODE_XOR, $1, $3, NULL); }
 				| expression tLSHFT expression
-					{ $$ = mana_node_create_node(NODE_LSH, $1, $3, NULL); }
+					{ $$ = node_create_node(NODE_LSH, $1, $3, NULL); }
 				| expression tRSHFT expression
-					{ $$ = mana_node_create_node(NODE_RSH, $1, $3, NULL); }
+					{ $$ = node_create_node(NODE_RSH, $1, $3, NULL); }
 				| expression '>' expression
-					{ $$ = mana_node_create_node(NODE_GT, $1, $3, NULL); }
+					{ $$ = node_create_node(NODE_GT, $1, $3, NULL); }
 				| expression tGE expression
-					{ $$ = mana_node_create_node(NODE_GE, $1, $3, NULL); }
+					{ $$ = node_create_node(NODE_GE, $1, $3, NULL); }
 				| expression '<' expression
-					{ $$ = mana_node_create_node(NODE_LS, $1, $3, NULL); }
+					{ $$ = node_create_node(NODE_LS, $1, $3, NULL); }
 				| expression tLE expression
-					{ $$ = mana_node_create_node(NODE_LE, $1, $3, NULL); }
+					{ $$ = node_create_node(NODE_LE, $1, $3, NULL); }
 				| expression tEQ expression
-					{ $$ = mana_node_create_node(NODE_EQ, $1, $3, NULL); }
+					{ $$ = node_create_node(NODE_EQ, $1, $3, NULL); }
 				| expression tNE expression
-					{ $$ = mana_node_create_node(NODE_NE, $1, $3, NULL); }
+					{ $$ = node_create_node(NODE_NE, $1, $3, NULL); }
 				| tINC expression
 					{
-						node_entry* node = mana_node_allocate(NODE_CONST);
+						node_entry* node = node_allocate(NODE_CONST);
 						node->digit = 1;
-						node->type = mana_type_get(SYMBOL_DATA_TYPE_CHAR);
-						$$ = mana_node_create_node(NODE_ASSIGN, $2, mana_node_create_node(NODE_ADD, mana_node_clone($2), node, NULL), NULL);
+						node->type = type_get(SYMBOL_DATA_TYPE_CHAR);
+						$$ = node_create_node(NODE_ASSIGN, $2, node_create_node(NODE_ADD, node_clone($2), node, NULL), NULL);
 					}
 				| tDEC expression
 					{
-						node_entry* node = mana_node_allocate(NODE_CONST);
+						node_entry* node = node_allocate(NODE_CONST);
 						node->digit = 1;
-						node->type = mana_type_get(SYMBOL_DATA_TYPE_CHAR);
-						$$ = mana_node_create_node(NODE_ASSIGN, $2, mana_node_create_node(NODE_SUB, mana_node_clone($2), node, NULL), NULL);
+						node->type = type_get(SYMBOL_DATA_TYPE_CHAR);
+						$$ = node_create_node(NODE_ASSIGN, $2, node_create_node(NODE_SUB, node_clone($2), node, NULL), NULL);
 					}
 				| expression tINC	%prec tUINC
 					{
-						node_entry* node = mana_node_allocate(NODE_CONST);
+						node_entry* node = node_allocate(NODE_CONST);
 						node->digit = 1;
-						node->type = mana_type_get(SYMBOL_DATA_TYPE_CHAR);
-						$$ = mana_node_create_node(NODE_ASSIGN, $1, mana_node_create_node(NODE_ADD, mana_node_clone($1), node, NULL), NULL);
+						node->type = type_get(SYMBOL_DATA_TYPE_CHAR);
+						$$ = node_create_node(NODE_ASSIGN, $1, node_create_node(NODE_ADD, node_clone($1), node, NULL), NULL);
 					}
 				| expression tDEC	%prec tUDEC
 					{
-						node_entry* node = mana_node_allocate(NODE_CONST);
+						node_entry* node = node_allocate(NODE_CONST);
 						node->digit = 1;
-						node->type = mana_type_get(SYMBOL_DATA_TYPE_CHAR);
-						$$ = mana_node_create_node(NODE_ASSIGN, $1, mana_node_create_node(NODE_SUB, mana_node_clone($1), node, NULL), NULL);
+						node->type = type_get(SYMBOL_DATA_TYPE_CHAR);
+						$$ = node_create_node(NODE_ASSIGN, $1, node_create_node(NODE_SUB, node_clone($1), node, NULL), NULL);
 					}
 				| expression '?' expression ':' expression
-					{ $$ = mana_node_create_node(NODE_EXPRESSION_IF, $3, $5, $1); }
+					{ $$ = node_create_node(NODE_EXPRESSION_IF, $3, $5, $1); }
 				| primary
 				;
 
 primary			: '-' expression	%prec tUMINUS
-					{ $$ = mana_node_create_node(NODE_NEG, $2, NULL, NULL); }
+					{ $$ = node_create_node(NODE_NEG, $2, NULL, NULL); }
 				| '+' expression	%prec tUPLUS
 					{ $$ = $2; }
 				| '!' expression
-					{ $$ = mana_node_create_node(NODE_LNOT, $2, NULL, NULL); }
+					{ $$ = node_create_node(NODE_LNOT, $2, NULL, NULL); }
 				| '~' expression
-					{ $$ = mana_node_create_node(NODE_NOT, $2, NULL, NULL); }
+					{ $$ = node_create_node(NODE_NOT, $2, NULL, NULL); }
 				| tSIZEOF '(' variable_type ')'
-					{ $$ = mana_node_create_node(NODE_SIZEOF, $3, NULL, NULL); }
+					{ $$ = node_create_node(NODE_SIZEOF, $3, NULL, NULL); }
 				| tIDENTIFIER '(' arg_calls ')'
-					{ $$ = mana_node_create_node(NODE_CALL, NULL, $3, NULL); $$->string = $1; }
+					{ $$ = node_create_node(NODE_CALL, NULL, $3, NULL); $$->string = $1; }
 				| constant
 				| left_hand
 				;
 
 constant		: tFALSE
-					{ $$ = mana_node_create_digit(0); }
+					{ $$ = node_create_digit(0); }
 				| tTRUE
-					{ $$ = mana_node_create_digit(1); }
+					{ $$ = node_create_digit(1); }
 				| tPRIORITY
-					{ $$ = mana_node_allocate(NODE_PRIORITY); $$->type = mana_type_get(SYMBOL_DATA_TYPE_INT); }
+					{ $$ = node_allocate(NODE_PRIORITY); $$->type = type_get(SYMBOL_DATA_TYPE_INT); }
 				| tSELF
-					{ $$ = mana_node_allocate(NODE_SELF); $$->type = mana_type_get(SYMBOL_DATA_TYPE_ACTOR); $$->etc = 0; }
+					{ $$ = node_allocate(NODE_SELF); $$->type = type_get(SYMBOL_DATA_TYPE_ACTOR); $$->etc = 0; }
 				| tSENDER
-					{ $$ = mana_node_allocate(NODE_SENDER); $$->type = mana_type_get(SYMBOL_DATA_TYPE_ACTOR); }
+					{ $$ = node_allocate(NODE_SENDER); $$->type = type_get(SYMBOL_DATA_TYPE_ACTOR); }
 				| tNIL
-					{ $$ = mana_node_allocate(NODE_CONST); $$->type = mana_type_get(SYMBOL_DATA_TYPE_NIL); }
+					{ $$ = node_allocate(NODE_CONST); $$->type = type_get(SYMBOL_DATA_TYPE_NIL); }
 				| tDIGIT
-					{ $$ = mana_node_create_digit($1); }
+					{ $$ = node_create_digit($1); }
 				| tREAL
-					{ $$ = mana_node_create_real($1); }
+					{ $$ = node_create_real($1); }
 				| tSTRING
-					{ $$ = mana_node_create_string($1); }
+					{ $$ = node_create_string($1); }
 				;
 
 left_hand		: left_hand '.' tIDENTIFIER
-					{ $$ = mana_node_create_node(NODE_MEMBER_VARIABLE, $1, NULL, NULL); $$->string = $3; }
+					{ $$ = node_create_node(NODE_MEMBER_VARIABLE, $1, NULL, NULL); $$->string = $3; }
 				| left_hand '.' tIDENTIFIER '(' arg_calls ')'
-					{ $$ = mana_node_create_node(NODE_MEMBER_FUNCTION, $1, $5, NULL); $$->string = $3; }
+					{ $$ = node_create_node(NODE_MEMBER_FUNCTION, $1, $5, NULL); $$->string = $3; }
 				| left_hand '[' expression ']'
-					{ $$ = mana_node_create_node(NODE_ARRAY, $1, $3, NULL); }
+					{ $$ = node_create_node(NODE_ARRAY, $1, $3, NULL); }
 				| tIDENTIFIER
-					{ $$ = mana_node_create_node(NODE_IDENTIFIER, NULL, NULL, NULL); $$->string = $1; }
+					{ $$ = node_create_node(NODE_IDENTIFIER, NULL, NULL, NULL); $$->string = $1; }
 				| '(' expression ')'
 					{ $$ = $2; }
 				;
@@ -463,36 +463,36 @@ cases			: case
 					{ $$ = $2; $$->next = $1; }
 				;
 case			: tCASE expression ':' statements
-					{ $$ = mana_node_create_node(NODE_CASE, $2, $4, NULL); }
+					{ $$ = node_create_node(NODE_CASE, $2, $4, NULL); }
 				| tDEFAULT ':' statements
-					{ $$ = mana_node_create_node(NODE_DEFAULT, NULL, $3, NULL); }
+					{ $$ = node_create_node(NODE_DEFAULT, NULL, $3, NULL); }
 				;
 
 
 arg_calls		: /* empty */
 					{ $$ = NULL; }
 				| expression
-					{ $$ = mana_node_create_node(NODE_CALL_ARGUMENT, $1, NULL, NULL); }
+					{ $$ = node_create_node(NODE_CALL_ARGUMENT, $1, NULL, NULL); }
 				| expression ',' arg_calls
-					{ $$ = mana_node_create_node(NODE_CALL_ARGUMENT, $1, $3, NULL); }
+					{ $$ = node_create_node(NODE_CALL_ARGUMENT, $1, $3, NULL); }
 				;
 
 arg_decls		: /* empty */
 					{ $$ = NULL; }
 				| variable_decl
-					{ $$ = mana_node_create_node(NODE_DECLARE_ARGUMENT, $1, NULL, NULL); }
+					{ $$ = node_create_node(NODE_DECLARE_ARGUMENT, $1, NULL, NULL); }
 				| arg_decls ',' variable_decl
-					{ $$ = mana_node_create_node(NODE_DECLARE_ARGUMENT, $3, $1, NULL); }
+					{ $$ = node_create_node(NODE_DECLARE_ARGUMENT, $3, $1, NULL); }
 				;
 
 variable_decl	: variable_type declarator
-					{ $$ = mana_node_create_node(NODE_DECLARE_VARIABLE, $1, $2, NULL); }
+					{ $$ = node_create_node(NODE_DECLARE_VARIABLE, $1, $2, NULL); }
 				;
 
 declarator		: tIDENTIFIER
-					{ $$ = mana_node_create_node(NODE_DECLARATOR, NULL, NULL, NULL); $$->string = $1; }
+					{ $$ = node_create_node(NODE_DECLARATOR, NULL, NULL, NULL); $$->string = $1; }
 				| tIDENTIFIER variable_sizes
-					{ $$ = mana_node_create_node(NODE_DECLARATOR, $2, NULL, NULL); $$->string = $1; }
+					{ $$ = node_create_node(NODE_DECLARATOR, $2, NULL, NULL); $$->string = $1; }
 				;
 
 variable_sizes	: variable_size
@@ -500,9 +500,9 @@ variable_sizes	: variable_size
 					{ if ($1) { $$ = $1; $$->left = $2; } else { $$ = $2; } }
 				;
 variable_size	: '[' tDIGIT ']'
-					{ $$ = mana_node_create_node(NODE_VARIABLE_SIZE, NULL, NULL, NULL); $$->digit = $2; }
+					{ $$ = node_create_node(NODE_VARIABLE_SIZE, NULL, NULL, NULL); $$->digit = $2; }
 				| '[' tIDENTIFIER ']'
-					{ $$ = mana_node_create_node(NODE_VARIABLE_SIZE, NULL, NULL, NULL); $$->string = $2; }
+					{ $$ = node_create_node(NODE_VARIABLE_SIZE, NULL, NULL, NULL); $$->string = $2; }
 				;
 %%
 
@@ -513,9 +513,9 @@ variable_size	: '[' tDIGIT ']'
 void yyerror(const char* message)
 {
 #if defined(_MSC_VER)
-	MANA_PRINT("%s(%d): error: %s\n", mana_lexer_get_current_filename(), mana_lexer_get_current_line(), message);
+	MANA_PRINT("%s(%d): error: %s\n", lexer_get_current_filename(), lexer_get_current_line(), message);
 #else
-	MANA_PRINT("%s:%d: error: %s\n", mana_lexer_get_current_filename(), mana_lexer_get_current_line(), message);
+	MANA_PRINT("%s:%d: error: %s\n", lexer_get_current_filename(), lexer_get_current_line(), message);
 #endif
 	yynerrs ++;
 }
@@ -523,13 +523,13 @@ void yyerror(const char* message)
 /*!
  * initialize parser
  */
-void mana_parser_initialize(void)
+void parser_initialize(void)
 {
 }
 
 /*!
  * shutdown parser
  */
-void mana_parser_finalize(void)
+void parser_finalize(void)
 {
 }

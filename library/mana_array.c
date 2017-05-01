@@ -76,8 +76,8 @@ void mana_array_serialize(const mana_array* self, mana_stream* stream)
 {
 	assert(self && stream);
 
-	mana_stream_push_unsigned_integer(stream, self->allocated_size);
-	mana_stream_push_unsigned_integer(stream, self->used_size);
+	mana_stream_push_size(stream, self->allocated_size);
+	mana_stream_push_size(stream, self->used_size);
 	mana_stream_push_data(stream, self->handle, self->used_size * sizeof(void*));
 }
 
@@ -91,8 +91,8 @@ void mana_array_deserialize(mana_array* self, mana_stream* stream)
 
 	mana_array_finalize(self);
 
-	self->allocated_size = (size_t)mana_stream_pop_unsigned_integer(stream);
-	self->used_size = (size_t)mana_stream_pop_unsigned_integer(stream);
+	self->allocated_size = mana_stream_pop_size(stream);
+	self->used_size = mana_stream_pop_size(stream);
 
 	self->handle = mana_malloc(self->used_size * sizeof(void*));
 

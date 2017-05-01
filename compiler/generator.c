@@ -94,16 +94,16 @@ void generator_add_event(const char* name, generator_event_funtion_type function
 */
 static void generator_resolve_load(node_entry* self)
 {
-	//	mana_register_entity* register_entity;
+	//	register_entity* register_entity;
 
 	MANA_ASSERT(self);
 	MANA_ASSERT(self->type);
 #if 0
 	/* TODO:テスト */
-	register_entity = mana_register_allocate(self->symbol, self->symbol->address);
+	register_entity = register_allocate(self->symbol, self->symbol->address);
 	if (register_entity == NULL)
 	{
-		mana_register_entity* register_entity = mana_register_allocate(self->symbol, self->symbol->address);
+		register_entity* register_entity = register_allocate(self->symbol, self->symbol->address);
 		if (register_entity == NULL)
 		{
 			/* 割り当てるレジスタが無い場合はspillを行う */
@@ -134,7 +134,7 @@ static void generator_resolve_load(node_entry* self)
 		break;
 
 	case SYMBOL_DATA_TYPE_ACTOR:
-		if (self->type == mana_type_get(SYMBOL_DATA_TYPE_ACTOR))
+		if (self->type == type_get(SYMBOL_DATA_TYPE_ACTOR))
 			code_set_opecode(MANA_IL_LOAD_REFFRENCE);
 		else
 			code_set_opecode_and_operand(MANA_IL_PUSH_ACTOR, data_set(self->type->name));
@@ -221,21 +221,20 @@ static void generator_return(symbol_entry* func, node_entry* tree)
 	else
 	{
 		/* 自動キャスト */
-		tree->left = mana_node_cast(type, tree->left);
+		tree->left = node_cast(type, tree->left);
 
 		/* 型の検証 */
-		mana_type_compatible(type, tree->left->type);
+		type_compatible(type, tree->left->type);
 
 		/* ノードの評価 */
-		const int32_t in_depth = mana_symbol_open_block(false);
+		const int32_t in_depth = symbol_open_block(false);
 		generator_genearte_code(tree->left, true);
-		const int32_t out_depth = mana_symbol_close_block();
+		const int32_t out_depth = symbol_close_block();
 		MANA_VERIFY_MESSAGE(in_depth == out_depth, "ブロックの深さが一致しません in:%d out:%d", in_depth, out_depth);
 	}
 
 	/* 関数の最後にジャンプ */
-	mana_symbol_return_address_list = code_set_opecode_and_operand(
-		MANA_IL_BRA, mana_symbol_return_address_list);
+	symbol_return_address_list = code_set_opecode_and_operand(MANA_IL_BRA, symbol_return_address_list);
 
 	/* 関数を使用したフラグを立てる */
 	func->used = true;
@@ -250,9 +249,9 @@ static void generator_rollback(node_entry* tree)
 	if (tree)
 	{
 		/* ノードの評価 */
-		const int32_t in_depth = mana_symbol_open_block(false);
+		const int32_t in_depth = symbol_open_block(false);
 		generator_genearte_code(tree, true);
-		const int32_t out_depth = mana_symbol_close_block();
+		const int32_t out_depth = symbol_close_block();
 		MANA_VERIFY_MESSAGE(in_depth == out_depth, "ブロックの深さが一致しません in:%d out:%d", in_depth, out_depth);
 	}
 	code_set_opecode(MANA_IL_ROLLBACK);
@@ -277,14 +276,14 @@ static int32_t generate_argument(int32_t count, symbol_entry* param, node_entry*
 			{
 				MANA_ASSERT(arg->left);
 				if (arg->left->id == NODE_IDENTIFIER)
-					mana_resolver_search_symbol_from_name(arg->left);
+					resolver_search_symbol_from_name(arg->left);
 
 				// 子ノードから型を継承する
-				mana_resolver_resolve_type_from_child_node(arg);
+				resolver_resolve_type_from_child_node(arg);
 			}
 		}
-		arg = mana_node_cast(param->type, arg);
-		mana_type_compatible(param->type, arg->type);
+		arg = node_cast(param->type, arg);
+		type_compatible(param->type, arg->type);
 		//generator_genearte_code(arg, true);
 		generator_genearte_code((arg->id == NODE_CALL_ARGUMENT) ? arg->left : arg, true);
 	}
@@ -309,7 +308,7 @@ static int32_t generator_call_argument_size(int32_t address, symbol_entry* param
 		if (arg->id == NODE_CALL_ARGUMENT)
 			arg = arg->left;
 
-		address += (mana_node_get_memory_size(arg) + (sizeof(int32_t) - 1)) / sizeof(int32_t);
+		address += (node_get_memory_size(arg) + (sizeof(int32_t) - 1)) / sizeof(int32_t);
 	}
 	return address;
 }
@@ -331,7 +330,7 @@ static int32_t generator_call_argument(int32_t address, symbol_entry* param, nod
 
 		if (arg->id == NODE_CALL_ARGUMENT)
 			arg = arg->left;
-		address -= (mana_node_get_memory_size(arg) + (sizeof(int32_t) - 1)) / sizeof(int32_t);
+		address -= (node_get_memory_size(arg) + (sizeof(int32_t) - 1)) / sizeof(int32_t);
 	}
 	return address;
 }
@@ -450,9 +449,9 @@ static int32_t generator_condition(node_entry* tree, int32_t match)
 	//generator_automatic_cast(tree);
 
 	/* 判別式の評価 */
-	const int32_t in_depth = mana_symbol_open_block(false);
+	const int32_t in_depth = symbol_open_block(false);
 	generator_condition_core(tree);
-	const int32_t out_depth = mana_symbol_close_block();
+	const int32_t out_depth = symbol_close_block();
 	MANA_VERIFY_MESSAGE(in_depth == out_depth, "ブロックの深さが一致しません in:%d out:%d", in_depth, out_depth);
 
 	return code_set_opecode_and_operand(match ? MANA_IL_BEQ : MANA_IL_BNE, -1);
@@ -537,7 +536,7 @@ void generator_expression(node_entry* tree, int32_t enable_assign)
 
 	//generator_resolve_symbol(tree);
 
-	const int32_t in_depth = mana_symbol_open_block(false);
+	const int32_t in_depth = symbol_open_block(false);
 
 	if (enable_assign)
 	{
@@ -576,7 +575,7 @@ void generator_expression(node_entry* tree, int32_t enable_assign)
 		}
 	}
 
-	const int32_t out_depth = mana_symbol_close_block();
+	const int32_t out_depth = symbol_close_block();
 	MANA_VERIFY_MESSAGE(in_depth == out_depth, "ブロックの深さが一致しません in:%d out:%d", in_depth, out_depth);
 }
 
@@ -588,7 +587,7 @@ void generator_genearte_code(node_entry* self, int32_t enable_load)
 		return;
 
 DO_RECURSIVE:
-	mana_resolver_set_current_file_infomation(self);
+	resolver_set_current_file_infomation(self);
 
 	switch (self->id)
 	{
@@ -630,10 +629,10 @@ DO_RECURSIVE:
 		// 構造に関するノード									
 	case NODE_DECLARE_ACTOR:
 		{
-			mana_actor_symbol_entry_pointer = mana_symbol_lookup(self->string);
-			mana_symbol_open_actor(self->string);
+			mana_actor_symbol_entry_pointer = symbol_lookup(self->string);
+			symbol_open_actor(self->string);
 			generator_genearte_code(self->left, enable_load);
-			mana_symbol_close_actor();
+			symbol_close_actor();
 			mana_actor_symbol_entry_pointer = NULL;
 		}
 		MANA_ASSERT(self->right == NULL);
@@ -648,10 +647,10 @@ DO_RECURSIVE:
 
 	case NODE_DECLARE_MODULE:
 		{
-			mana_actor_symbol_entry_pointer = mana_symbol_lookup(self->string);
-			mana_symbol_open_module(mana_actor_symbol_entry_pointer);
+			mana_actor_symbol_entry_pointer = symbol_lookup(self->string);
+			symbol_open_module(mana_actor_symbol_entry_pointer);
 			generator_genearte_code(self->left, enable_load);
-			mana_symbol_close_module(self->string);
+			symbol_close_module(self->string);
 			mana_actor_symbol_entry_pointer = NULL;
 		}
 		MANA_ASSERT(self->right == NULL);
@@ -660,10 +659,10 @@ DO_RECURSIVE:
 
 	case NODE_DECLARE_PHANTOM:
 		{
-			mana_actor_symbol_entry_pointer = mana_symbol_lookup(self->string);
-			mana_symbol_open_actor(self->string);
+			mana_actor_symbol_entry_pointer = symbol_lookup(self->string);
+			symbol_open_actor(self->string);
 			generator_genearte_code(self->left, enable_load);
-			mana_symbol_close_actor();
+			symbol_close_actor();
 			mana_actor_symbol_entry_pointer = NULL;
 		}
 		MANA_ASSERT(self->right == NULL);
@@ -674,20 +673,20 @@ DO_RECURSIVE:
 		// self->left
 		MANA_ASSERT(self->right == NULL);
 		MANA_ASSERT(self->body == NULL);
-		mana_post_resolver_resolve(self);
+		post_resolver_resolve(self);
 		break;
 
 		///////////////////////////////////////////////////////////////////////
 		// 関数宣言に関するノード									
 	case NODE_DECLARE_ACTION:
 		{
-			self->type = mana_type_get(SYMBOL_DATA_TYPE_VOID);
-			mana_function_symbol_entry_pointer = mana_symbol_lookup(self->string);
-			mana_symbol_open_function(self, true);
-		
-			generator_genearte_code(self->left, enable_load);
-			
-			mana_symbol_close_function(self, true);
+			self->type = type_get(SYMBOL_DATA_TYPE_VOID);
+			mana_function_symbol_entry_pointer = symbol_lookup(self->string);
+			{
+				symbol_open_function(self, true);
+				generator_genearte_code(self->left, enable_load);
+				symbol_close_function(self, true);
+			}
 			mana_function_symbol_entry_pointer = NULL;
 		}
 		MANA_ASSERT(self->right == NULL);
@@ -705,20 +704,23 @@ DO_RECURSIVE:
 			// 関数の戻り値を評価
 			generator_genearte_code(self->left, enable_load);
 			// シンボルの検索と型の定義
-			self->symbol = mana_function_symbol_entry_pointer = mana_symbol_lookup(self->string);
+			self->symbol = mana_function_symbol_entry_pointer = symbol_lookup(self->string);
 
-			mana_symbol_open_block(false);
+			// 引数の為にスコープを分ける
+			symbol_open_block(false);
+			{
+				// 引数を登録
+				symbol_open_function(self, false);
 
-			// 関数の引数を登録
-			mana_symbol_open_function(self, false);
+				pre_resolver_resolve(self->right);
+				self->symbol->parameter_list = symbol_get_head_symbol();
 
-			mana_pre_resolver_resolve(self->right);
-			self->symbol->parameter_list = mana_symbol_get_head_symbol();
+				symbol_open_function2(self->symbol);
 
-			generator_genearte_code(self->body, enable_load);
-			mana_symbol_close_function(self, false);
-
-			mana_symbol_close_block();
+				generator_genearte_code(self->body, enable_load);
+				symbol_close_function(self, false);
+			}
+			symbol_close_block();
 
 			mana_function_symbol_entry_pointer = NULL;
 		}
@@ -739,16 +741,16 @@ DO_RECURSIVE:
 		break;
 
 	case NODE_DECLARE_VARIABLE:
-		//mana_symbol_allocate_memory(self->right->symbol, self->left->type, MEMORY_TYPE_NORMAL);
+		//symbol_allocate_memory(self->right->symbol, self->left->type, MEMORY_TYPE_NORMAL);
 		// self->left
 		// self->right
 		MANA_ASSERT(self->body == NULL);
-		//mana_resolver_resolve_variable_description(self, MEMORY_TYPE_NORMAL);
+		//resolver_resolve_variable_description(self, MEMORY_TYPE_NORMAL);
 		/*
 		generator_genearte_code(self->left, enable_load); // NODE_TYPE_DESCRIPTION
 		generator_genearte_code(self->right, enable_load);// NODE_DECLARATOR
 		if(self->right->symbol->class_type == SYMBOL_CLASS_TYPE_VARIABLE_LOCAL)
-		mana_symbol_allocate_memory(self->right->symbol, self->left->type, MEMORY_TYPE_NORMAL);
+		symbol_allocate_memory(self->right->symbol, self->left->type, MEMORY_TYPE_NORMAL);
 		*/
 		break;
 
@@ -756,7 +758,7 @@ DO_RECURSIVE:
 		MANA_ASSERT(self->left == NULL);
 		MANA_ASSERT(self->right == NULL);
 		MANA_ASSERT(self->body == NULL);
-		//mana_resolver_resolve_type_description(self);
+		//resolver_resolve_type_description(self);
 		break;
 
 	case NODE_VARIABLE_SIZE:
@@ -769,15 +771,15 @@ DO_RECURSIVE:
 		// ブロックを伴う制御に関するノード
 	case NODE_BLOCK:
 		{
-			const int32_t in_depth = mana_symbol_open_block(false);
+			const int32_t in_depth = symbol_open_block(false);
 
-			mana_post_resolver_resolve(self->left);
+			post_resolver_resolve(self->left);
 			generator_genearte_code(self->left, enable_load);
 
-			mana_post_resolver_resolve(self->right);
+			post_resolver_resolve(self->right);
 			generator_genearte_code(self->right, enable_load);
 
-			const int32_t out_depth = mana_symbol_close_block();
+			const int32_t out_depth = symbol_close_block();
 			MANA_VERIFY_MESSAGE(in_depth == out_depth, "ブロックの深さが一致しません in:%d out:%d", in_depth, out_depth);
 		}
 		MANA_ASSERT(self->body == NULL);
@@ -826,8 +828,8 @@ DO_RECURSIVE:
 	case NODE_FOR:
 		/* 'for(type variable = expression' の形式 */
 		{
-			//mana_symbol_allocate_memory($2, $1, MEMORY_TYPE_NORMAL);
-			//generator_expression(mana_node_create_node(NODE_TYPE_ASSIGN, mana_node_create_leaf($2->name), $4), true);
+			//symbol_allocate_memory($2, $1, MEMORY_TYPE_NORMAL);
+			//generator_expression(node_create_node(NODE_TYPE_ASSIGN, node_create_leaf($2->name), $4), true);
 			mana_jump_open_chain(MANA_JUMP_CHAIN_STATE_FOR);
 			//$$ = code_get_pc();
 
@@ -848,7 +850,7 @@ DO_RECURSIVE:
 		MANA_ASSERT(self->right == NULL);
 		MANA_ASSERT(self->body == NULL);
 		{
-			symbol_entry* symbol = mana_symbol_create_label(self->string);
+			symbol_entry* symbol = symbol_create_label(self->string);
 			symbol->etc = code_set_opecode_and_operand(MANA_IL_BRA, symbol->etc);
 		}
 		break;
@@ -880,7 +882,7 @@ DO_RECURSIVE:
 		MANA_ASSERT(self->right == NULL);
 		MANA_ASSERT(self->body == NULL);
 		{
-			symbol_entry* symbol = mana_symbol_create_label(self->string);
+			symbol_entry* symbol = symbol_create_label(self->string);
 			symbol->address = code_get_pc();
 		}
 		break;
@@ -964,7 +966,7 @@ DO_RECURSIVE:
 
 	case NODE_JOIN:
 		//generator_resolve_symbol(self);
-		mana_symbol_add_join(self->left, self->right);
+		symbol_add_join(self->left, self->right);
 		MANA_ASSERT(self->body == NULL);
 		break;
 
@@ -982,7 +984,7 @@ DO_RECURSIVE:
 		break;
 
 	case NODE_REQUEST:
-		mana_symbol_add_request(MANA_IL_REQ, self->left, self->right, self->string);
+		symbol_add_request(MANA_IL_REQ, self->left, self->right, self->string);
 		MANA_ASSERT(self->body == NULL);
 		break;
 
@@ -1138,9 +1140,12 @@ DO_RECURSIVE:
 	case NODE_CALL:
 		// 関数、アクションを呼びます
 		//generator_resolve_symbol(self);
-		mana_resolver_search_symbol_from_name(self);
-		//generator_genearte_code(self->right, enable_load);
-		generator_call(self);
+		// resolver_search_symbol_from_name(self)
+		if (self->symbol)
+		{
+			//generator_genearte_code(self->right, enable_load);
+			generator_call(self);
+		}
 		break;
 
 	case NODE_CALL_ARGUMENT:
@@ -1266,7 +1271,7 @@ DO_RECURSIVE:
 		MANA_ASSERT(self->right == NULL);
 		{
 			//generator_resolve_symbol(self->left);
-			/////mana_resolver_search_symbol_from_name(self);
+			/////resolver_search_symbol_from_name(self);
 
 			type_description* type = self->left->type;
 			if (type)
@@ -1348,11 +1353,11 @@ DO_RECURSIVE:
 			self->digit = self->left->type->memory_size;
 
 			if (self->digit <= max_char && self->digit >= min_char)
-				self->type = mana_type_get(SYMBOL_DATA_TYPE_CHAR);
+				self->type = type_get(SYMBOL_DATA_TYPE_CHAR);
 			else if (self->digit <= max_short && self->digit >= min_short)
-				self->type = mana_type_get(SYMBOL_DATA_TYPE_SHORT);
+				self->type = type_get(SYMBOL_DATA_TYPE_SHORT);
 			else
-				self->type = mana_type_get(SYMBOL_DATA_TYPE_INT);
+				self->type = type_get(SYMBOL_DATA_TYPE_INT);
 		}
 		MANA_ASSERT(self->right == NULL);
 		MANA_ASSERT(self->body == NULL);
@@ -1410,7 +1415,7 @@ DO_RECURSIVE:
 	}
 
 	// 子ノードから型を継承する
-	mana_resolver_resolve_type_from_child_node(self);
+	resolver_resolve_type_from_child_node(self);
 
 	if (self->next)
 	{
