@@ -2,8 +2,8 @@
 mana (compiler)
 
 @file	version.h
-@brief	�o�[�W�������Ɋւ���w�b�_�[�t�@�C��
-@detail	���̃t�@�C���̓o�[�W�������Ɋւ���w�b�_�[�t�@�C���ł��B
+@brief	バージョン情報に関するヘッダーファイル
+@detail	このファイルはバージョン情報に関するヘッダーファイルです。
 @author	Shun Moriya <shun@mnu.sakura.ne.jp>
 @date	2003-
 */

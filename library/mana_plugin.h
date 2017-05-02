@@ -2,8 +2,8 @@
  * mana (library)
  *
  * @file	mana_plugin.h
- * @brief	ƒvƒ‰ƒOƒCƒ“ŠÖŒW‚Ìƒwƒbƒ_[ƒtƒ@ƒCƒ‹
- * @detail	‚±‚Ìƒtƒ@ƒCƒ‹‚Íƒvƒ‰ƒOƒCƒ“ŠÖŒW‚Ìƒwƒbƒ_[ƒtƒ@ƒCƒ‹‚Å‚·B
+ * @brief	ãƒ—ãƒ©ã‚°ã‚¤ãƒ³é–¢ä¿‚ã®ãƒ˜ãƒƒãƒ€ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«
+ * @detail	ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯ãƒ—ãƒ©ã‚°ã‚¤ãƒ³é–¢ä¿‚ã®ãƒ˜ãƒƒãƒ€ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
  * @author	Shun Moriya
  * @date	2003-
  */
@@ -17,16 +17,16 @@
 extern "C" {
 #endif
 
-/*! ƒvƒ‰ƒOƒCƒ“ƒVƒXƒeƒ€‚Ì‰Šú‰» */
+/*! ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚·ã‚¹ãƒ†ãƒ ã®åˆæœŸåŒ– */
 extern void mana_plugin_initialize(void);
 
-/*! ƒvƒ‰ƒOƒCƒ“ƒVƒXƒeƒ€‚ÌI—¹ */
+/*! ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚·ã‚¹ãƒ†ãƒ ã®çµ‚äº† */
 extern void mana_plugin_finalize(void);
 
-/*! ƒvƒ‰ƒOƒCƒ“ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚Ş */
+/*! ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã‚€ */
 extern bool mana_plugin_load(const char* file_name);
 
-/*! ƒfƒBƒŒƒNƒgƒŠ“à‚Ìƒvƒ‰ƒOƒCƒ“ƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚Ş */
+/*! ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå†…ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã‚€ */
 extern bool mana_plugin_regist(const char* directory_name);
 
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)

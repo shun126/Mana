@@ -2,12 +2,12 @@
  * mana (compiler/library)
  *
  * @file	mana_datalink.h
- * @brief	mana_datalinkƒNƒ‰ƒX‚ÉŠÖ‚·‚éƒwƒbƒ_[ƒtƒ@ƒCƒ‹
+ * @brief	mana_datalinkã‚¯ãƒ©ã‚¹ã«é–¢ã™ã‚‹ãƒ˜ãƒƒãƒ€ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«
  * @detail
- * ‚±‚Ìƒtƒ@ƒCƒ‹‚Ímana_datalinkƒNƒ‰ƒX‚ÉŠÖŒW‚·‚éƒwƒbƒ_[ƒtƒ@ƒCƒ‹‚Å‚·B
- * manaƒRƒ“ƒpƒCƒ‰‚ÍƒXƒNƒŠƒvƒg‚Åaliasw’è‚³‚êA‚©‚ÂQÆ‚³‚ê‚Ä‚¢‚éƒŠƒ\[ƒX‚ğ
- * Œ‹‡‚µ‚Ü‚·B
- * mana_datalinkƒNƒ‰ƒX‚ÍŒ‹‡‚³‚ê‚½ƒf[ƒ^‚ğQÆ‚·‚é‹@”\‚ğ‚Á‚Ä‚¢‚Ü‚·B
+ * ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯mana_datalinkã‚¯ãƒ©ã‚¹ã«é–¢ä¿‚ã™ã‚‹ãƒ˜ãƒƒãƒ€ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
+ * manaã‚³ãƒ³ãƒ‘ã‚¤ãƒ©ã¯ã‚¹ã‚¯ãƒªãƒ—ãƒˆã§aliasæŒ‡å®šã•ã‚Œã€ã‹ã¤å‚ç…§ã•ã‚Œã¦ã„ã‚‹ãƒªã‚½ãƒ¼ã‚¹ã‚’
+ * çµåˆã—ã¾ã™ã€‚
+ * mana_datalinkã‚¯ãƒ©ã‚¹ã¯çµåˆã•ã‚ŒãŸãƒ‡ãƒ¼ã‚¿ã‚’å‚ç…§ã™ã‚‹æ©Ÿèƒ½ã‚’æŒã£ã¦ã„ã¾ã™ã€‚
  *
  * @author	Shun Moriya
  * @date	2003-
@@ -26,60 +26,60 @@ extern "C" {
 
 #define MANA_DATALINK_STANDARD_ALIGNMENT_SIZE	(sizeof(void*))
 
-/*! datalinkƒtƒ@ƒCƒ‹‚Ìƒwƒbƒ_[ */
+/*! datalinkãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ˜ãƒƒãƒ€ãƒ¼ */
 typedef struct mana_datalink_file_header
 {
-	uint32_t total_data_size;	/*!< ‘S‘ÌƒTƒCƒY */
-	int32_t number_of_datas;			/*!< ƒf[ƒ^‚ÌŒÂ” */
+	uint32_t total_data_size;	/*!< å…¨ä½“ã‚µã‚¤ã‚º */
+	int32_t number_of_datas;			/*!< ãƒ‡ãƒ¼ã‚¿ã®å€‹æ•° */
 } mana_datalink_file_header;
 
-/*! datalinkƒtƒ@ƒCƒ‹“à‚Ìƒf[ƒ^‚Ìî•ñ */
+/*! datalinkãƒ•ã‚¡ã‚¤ãƒ«å†…ã®ãƒ‡ãƒ¼ã‚¿ã®æƒ…å ± */
 typedef struct mana_datalink_info_header
 {
-	uint32_t offset;			/*!< æ“ª‚©‚ç‚ÌƒIƒtƒZƒbƒg */
-	uint32_t size;				/*!< ƒf[ƒ^‚ÌƒTƒCƒY */
+	uint32_t offset;			/*!< å…ˆé ­ã‹ã‚‰ã®ã‚ªãƒ•ã‚»ãƒƒãƒˆ */
+	uint32_t size;				/*!< ãƒ‡ãƒ¼ã‚¿ã®ã‚µã‚¤ã‚º */
 } mana_datalink_info_header;
 
 /*! mana_datalink */
 /*!
- * @brief	mana_datalinkƒNƒ‰ƒX
- * mana_datalinkƒNƒ‰ƒX‚ÍŒ‹‡‚³‚ê‚½ƒf[ƒ^‚ğQÆ‚µ‚Ü‚·B
- * C++‚Å‚¢‚¤‚Æ‚±‚ë‚Ìƒƒ“ƒo[•Ï”‚Å‚·‚ªACŒ¾Œê‚È‚Ì‚Å‘S‚Äpublic‚É‚È‚Á‚Ä‚¢‚Ü‚·B
- * ‘€ì—p‚ÌŠÖ”‚ğ—pˆÓ‚µ‚Ä‚¢‚é‚Ì‚ÅA‚»‚ê‚ç‚ÌŠÖ”‚ğ—˜—p‚µ‚Ä‘€ì‚µ‚Ä‚­‚¾‚³‚¢B
+ * @brief	mana_datalinkã‚¯ãƒ©ã‚¹
+ * mana_datalinkã‚¯ãƒ©ã‚¹ã¯çµåˆã•ã‚ŒãŸãƒ‡ãƒ¼ã‚¿ã‚’å‚ç…§ã—ã¾ã™ã€‚
+ * C++ã§ã„ã†ã¨ã“ã‚ã®ãƒ¡ãƒ³ãƒãƒ¼å¤‰æ•°ã§ã™ãŒã€Cè¨€èªãªã®ã§å…¨ã¦publicã«ãªã£ã¦ã„ã¾ã™ã€‚
+ * æ“ä½œç”¨ã®é–¢æ•°ã‚’ç”¨æ„ã—ã¦ã„ã‚‹ã®ã§ã€ãã‚Œã‚‰ã®é–¢æ•°ã‚’åˆ©ç”¨ã—ã¦æ“ä½œã—ã¦ãã ã•ã„ã€‚
  */
 typedef struct mana_datalink
 {
-	/*! datalinkƒtƒ@ƒCƒ‹‚Ìƒwƒbƒ_[ */
+	/*! datalinkãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ˜ãƒƒãƒ€ãƒ¼ */
 	mana_datalink_info_header* datalink_info_header_pointer;
-	uint8_t* data_pointer;	/*!< ƒf[ƒ^ƒZƒNƒVƒ‡ƒ“æ“ªƒAƒhƒŒƒX */
-	int32_t number_of_entries;			/*!< ƒf[ƒ^‚ÌŒÂ” */
+	uint8_t* data_pointer;	/*!< ãƒ‡ãƒ¼ã‚¿ã‚»ã‚¯ã‚·ãƒ§ãƒ³å…ˆé ­ã‚¢ãƒ‰ãƒ¬ã‚¹ */
+	int32_t number_of_entries;			/*!< ãƒ‡ãƒ¼ã‚¿ã®å€‹æ•° */
 } mana_datalink;
 
-/*! mana_datalink ƒIƒuƒWƒFƒNƒg‚Ì¶¬ */
+/*! mana_datalink ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç”Ÿæˆ */
 extern mana_datalink* mana_datalink_create(void);
 
-/*! mana_datalink ƒIƒuƒWƒFƒNƒg‚Ì”jŠü */
+/*! mana_datalink ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç ´æ£„ */
 extern void mana_datalink_destroy(mana_datalink* self);
 
-/*! mana_datalink ƒIƒuƒWƒFƒNƒg‚Ì‰Šú‰» */
+/*! mana_datalink ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®åˆæœŸåŒ– */
 extern void mana_datalink_initialize(mana_datalink* self);
 
-/*! mana_datalink ƒIƒuƒWƒFƒNƒg‚ÌI—¹‰» */
+/*! mana_datalink ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®çµ‚äº†åŒ– */
 extern void mana_datalink_finalize(mana_datalink* self);
 
-/*! datalinkƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ */
+/*! datalinkãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿ */
 extern void mana_datalink_load(mana_datalink* self, const void* buffer);
 
-/*! datalinkƒtƒ@ƒCƒ‹‚ÌŠJ•ú */
+/*! datalinkãƒ•ã‚¡ã‚¤ãƒ«ã®é–‹æ”¾ */
 extern void mana_datalink_release(mana_datalink* self);
 
-/*! datalinkƒtƒ@ƒCƒ‹“à‚Ìƒf[ƒ^”‚ğæ“¾ */
+/*! datalinkãƒ•ã‚¡ã‚¤ãƒ«å†…ã®ãƒ‡ãƒ¼ã‚¿æ•°ã‚’å–å¾— */
 extern int32_t mana_datalink_get_number_of_datas(const mana_datalink* self);
 
-/*! ƒf[ƒ^‚ÌƒTƒCƒY‚ğæ“¾ */
+/*! ãƒ‡ãƒ¼ã‚¿ã®ã‚µã‚¤ã‚ºã‚’å–å¾— */
 extern int32_t mana_datalink_get_data_size(const mana_datalink* self, const int32_t index);
 
-/*! ƒf[ƒ^‚ÌƒAƒhƒŒƒX‚ğæ“¾ */
+/*! ãƒ‡ãƒ¼ã‚¿ã®ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å–å¾— */
 extern const void* mana_datalink_get_data(const mana_datalink* self, const int32_t index);
 
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)

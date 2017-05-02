@@ -2,8 +2,8 @@
  * mana (library)
  *
  * @file	mana_define.h
- * @brief	manaƒ‰ƒCƒuƒ‰ƒŠ“à‚Å‹¤’Ê—˜—p‚³‚ê‚éƒwƒbƒ_[ƒtƒ@ƒCƒ‹
- * @detail	‚±‚Ìƒtƒ@ƒCƒ‹‚Ímanaƒ‰ƒCƒuƒ‰ƒŠ“à‚Å‹¤’Ê—˜—p‚³‚ê‚éƒwƒbƒ_[ƒtƒ@ƒCƒ‹‚Å‚·B
+ * @brief	manaãƒ©ã‚¤ãƒ–ãƒ©ãƒªå†…ã§å…±é€šåˆ©ç”¨ã•ã‚Œã‚‹ãƒ˜ãƒƒãƒ€ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«
+ * @detail	ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯manaãƒ©ã‚¤ãƒ–ãƒ©ãƒªå†…ã§å…±é€šåˆ©ç”¨ã•ã‚Œã‚‹ãƒ˜ãƒƒãƒ€ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
  * @author	Shun Moriya
  * @date	2003-
  */
@@ -24,25 +24,25 @@ extern "C" {
 #endif
 
 #if defined(NDEBUG)
-/*! ˆø”‚Ì”‚ğ’²‚×Aˆê’v‚µ‚È‚¢ê‡‚Íreturn‚µ‚Ü‚· */
+/*! å¼•æ•°ã®æ•°ã‚’èª¿ã¹ã€ä¸€è‡´ã—ãªã„å ´åˆã¯returnã—ã¾ã™ */
 #define MANA_ASSERT_PARAMETER(P, I) {									\
 	if(mana_actor_get_argument_count(P) != I)							\
 		return;															\
 }
-/*! initƒAƒNƒVƒ‡ƒ“’†‚È‚ç‚Îreturn‚µ‚Ü‚· */
+/*! initã‚¢ã‚¯ã‚·ãƒ§ãƒ³ä¸­ãªã‚‰ã°returnã—ã¾ã™ */
 #define MANA_ASSERT_ILLIGAL_CALL_IN_INIT_ACTION(P) {					\
 	if(mana_is_in_init_action(P->parent)){								\
 		return;															\
 }
 #else
-/*! ˆø”‚Ì”‚ğ’²‚×Aˆê’v‚µ‚È‚¢ê‡‚ÍŒx‚ğ•\¦‚µ‚Äreturn‚µ‚Ü‚· */
+/*! å¼•æ•°ã®æ•°ã‚’èª¿ã¹ã€ä¸€è‡´ã—ãªã„å ´åˆã¯è­¦å‘Šã‚’è¡¨ç¤ºã—ã¦returnã—ã¾ã™ */
 #if 1
 #define MANA_ASSERT_PARAMETER(P, I)										\
 	if(mana_actor_get_argument_count(P) != I){							\
 		 MANA_PRINT("ERROR: %s: function %s number of arguments %d correct%d\n", mana_actor_get_name(P), mana_actor_get_function_name(P), mana_actor_get_argument_count(P), I);\
 		 return;														\
 	}
-/*! initƒAƒNƒVƒ‡ƒ“’†‚È‚ç‚ÎŒx‚ğ•\¦‚µ‚Äreturn‚µ‚Ü‚· */
+/*! initã‚¢ã‚¯ã‚·ãƒ§ãƒ³ä¸­ãªã‚‰ã°è­¦å‘Šã‚’è¡¨ç¤ºã—ã¦returnã—ã¾ã™ */
 #define MANA_ASSERT_CANT_CALL_IN_INIT_ACTION(P)							\
 	if(mana_is_in_init_action(P->parent)){								\
 		MANA_PRINT("ERROR: %s: init action %s can not call\n", mana_actor_get_name(P), mana_actor_get_function_name(P));\
@@ -51,13 +51,13 @@ extern "C" {
 #else
 #define MANA_ASSERT_PARAMETER(P, I)										\
 	if(mana_actor_get_argument_count(P) != I){							\
-		MANA_PRINT("ERROR: %s: ŠÖ”%s‚Ìˆø”‚Ì”‚ª%d‚Å‚·B³‚µ‚¢ˆø”‚Ì”‚Í%d‚Å‚·B\n", mana_actor_get_name(P), mana_actor_get_function_name(P), mana_actor_get_argument_count(P), I);\
+		MANA_PRINT("ERROR: %s: é–¢æ•°%sã®å¼•æ•°ã®æ•°ãŒ%dã§ã™ã€‚æ­£ã—ã„å¼•æ•°ã®æ•°ã¯%dã§ã™ã€‚\n", mana_actor_get_name(P), mana_actor_get_function_name(P), mana_actor_get_argument_count(P), I);\
 		return;														\
 	}
-/*! initƒAƒNƒVƒ‡ƒ“’†‚È‚ç‚ÎŒx‚ğ•\¦‚µ‚Äreturn‚µ‚Ü‚· */
+/*! initã‚¢ã‚¯ã‚·ãƒ§ãƒ³ä¸­ãªã‚‰ã°è­¦å‘Šã‚’è¡¨ç¤ºã—ã¦returnã—ã¾ã™ */
 #define MANA_ASSERT_CANT_CALL_IN_INIT_ACTION(P)							\
 	if(mana_is_in_init_action(P->parent)){								\
-		MANA_PRINT("ERROR: %s: initƒAƒNƒVƒ‡ƒ““à‚Å %s ‚Íg‚¦‚Ü‚¹‚ñB\n", mana_actor_get_name(P), mana_actor_get_function_name(P));\
+		MANA_PRINT("ERROR: %s: initã‚¢ã‚¯ã‚·ãƒ§ãƒ³å†…ã§ %s ã¯ä½¿ãˆã¾ã›ã‚“ã€‚\n", mana_actor_get_name(P), mana_actor_get_function_name(P));\
 		return;															\
 	}
 #endif

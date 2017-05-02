@@ -2,8 +2,8 @@
 mana (compiler)
 
 @file	data.h
-@brief	ƒf[ƒ^ƒZƒNƒVƒ‡ƒ“‚ÉŠÖ‚·‚éƒwƒbƒ_[ƒtƒ@ƒCƒ‹
-@detail	‚±‚Ìƒtƒ@ƒCƒ‹‚Íƒf[ƒ^ƒZƒNƒVƒ‡ƒ“‚ÉŠÖŒW‚·‚éƒwƒbƒ_[ƒtƒ@ƒCƒ‹‚Å‚·B
+@brief	ãƒ‡ãƒ¼ã‚¿ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã«é–¢ã™ã‚‹ãƒ˜ãƒƒãƒ€ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«
+@detail	ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯ãƒ‡ãƒ¼ã‚¿ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã«é–¢ä¿‚ã™ã‚‹ãƒ˜ãƒƒãƒ€ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
 @author	Shun Moriya
 @date	2003-
 */
@@ -17,43 +17,43 @@ extern "C" {
 
 #include <libmana.h>
 
-//! ƒf[ƒ^ƒZƒNƒVƒ‡ƒ“ŠÇ—ŠÖ”‚ğ‰Šú‰»
+//! ãƒ‡ãƒ¼ã‚¿ã‚»ã‚¯ã‚·ãƒ§ãƒ³ç®¡ç†é–¢æ•°ã‚’åˆæœŸåŒ–
 extern void data_initialzie(void);
 
-//! ƒf[ƒ^ƒZƒNƒVƒ‡ƒ“ŠÇ—ŠÖ”‚ğI—¹
+//! ãƒ‡ãƒ¼ã‚¿ã‚»ã‚¯ã‚·ãƒ§ãƒ³ç®¡ç†é–¢æ•°ã‚’çµ‚äº†
 extern void data_finalize(void);
 
 /*!
-ƒf[ƒ^ƒZƒNƒVƒ‡ƒ“ƒoƒbƒtƒ@‚ÌƒAƒhƒŒƒX‚ğæ“¾
-@return	ƒf[ƒ^ƒZƒNƒVƒ‡ƒ“ƒoƒbƒtƒ@‚ÌƒAƒhƒŒƒX
+ãƒ‡ãƒ¼ã‚¿ã‚»ã‚¯ã‚·ãƒ§ãƒ³ãƒãƒƒãƒ•ã‚¡ã®ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å–å¾—
+@return	ãƒ‡ãƒ¼ã‚¿ã‚»ã‚¯ã‚·ãƒ§ãƒ³ãƒãƒƒãƒ•ã‚¡ã®ã‚¢ãƒ‰ãƒ¬ã‚¹
 */
 extern char* data_get_buffer(void);
 
 /*!
-ƒf[ƒ^ƒZƒNƒVƒ‡ƒ“‚ÌƒTƒCƒY‚ğæ“¾
-@return	ƒf[ƒ^ƒZƒNƒVƒ‡ƒ“‚ÌƒTƒCƒY
+ãƒ‡ãƒ¼ã‚¿ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã®ã‚µã‚¤ã‚ºã‚’å–å¾—
+@return	ãƒ‡ãƒ¼ã‚¿ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã®ã‚µã‚¤ã‚º
 */
 extern uint32_t data_get_size(void);
 
 /*!
-ƒeƒLƒXƒgƒf[ƒ^‚ğŒŸõ
-@param[in]	text	ƒeƒLƒXƒg
-@return		ƒIƒtƒZƒbƒgƒAƒhƒŒƒX
+ãƒ†ã‚­ã‚¹ãƒˆãƒ‡ãƒ¼ã‚¿ã‚’æ¤œç´¢
+@param[in]	text	ãƒ†ã‚­ã‚¹ãƒˆ
+@return		ã‚ªãƒ•ã‚»ãƒƒãƒˆã‚¢ãƒ‰ãƒ¬ã‚¹
 */
 extern uint32_t data_get(const char* text);
 
 /*!
-ƒeƒLƒXƒgƒf[ƒ^‚ğİ’è
-@param[in]	text	ƒeƒLƒXƒg
-@return		ƒIƒtƒZƒbƒgƒAƒhƒŒƒX
+ãƒ†ã‚­ã‚¹ãƒˆãƒ‡ãƒ¼ã‚¿ã‚’è¨­å®š
+@param[in]	text	ãƒ†ã‚­ã‚¹ãƒˆ
+@return		ã‚ªãƒ•ã‚»ãƒƒãƒˆã‚¢ãƒ‰ãƒ¬ã‚¹
 */
 extern uint32_t data_set(const char* text);
 
 /*!
-ƒf[ƒ^ƒZƒNƒVƒ‡ƒ“‚ğƒtƒ@ƒCƒ‹‚Öo—Í
-@param[out]	file		ƒtƒ@ƒCƒ‹¯•Êq
-@retval		true	o—Í¬Œ÷
-@retval		false	o—Í¸”s
+ãƒ‡ãƒ¼ã‚¿ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã‚’ãƒ•ã‚¡ã‚¤ãƒ«ã¸å‡ºåŠ›
+@param[out]	file		ãƒ•ã‚¡ã‚¤ãƒ«è­˜åˆ¥å­
+@retval		true	å‡ºåŠ›æˆåŠŸ
+@retval		false	å‡ºåŠ›å¤±æ•—
 */
 extern bool data_write(mana_stream* stream);
 

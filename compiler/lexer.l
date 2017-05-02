@@ -3,8 +3,8 @@
 mana (compiler)
 
 @file	lexer.l
-@brief	š‹å‰ğÍ‚ÉŠÖŒW‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹
-@detail	‚±‚Ìƒtƒ@ƒCƒ‹‚Íš‹å‰ğÍ‚ÉŠÖŒW‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹‚Å‚·B
+@brief	å­—å¥è§£æã«é–¢ä¿‚ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«
+@detail	ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯å­—å¥è§£æã«é–¢ä¿‚ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
 @author	Shun Moriya
 @date	2003-
 */
@@ -57,19 +57,19 @@ mana (compiler)
 /*!
  * include file environment stack
  */
-static struct mana_lexer_status
+static struct lexer_status
 {
 	YY_BUFFER_STATE m_State;
 	char* m_pszName;
 	int32_t m_iLine;
-} mana_lexer_status[MAX_NEST_LEVEL];
+} lexer_status[MAX_NEST_LEVEL];
 
-static int32_t mana_lexer_status_pointer = -1;
-static const char* mana_lexer_filename;
+static int32_t lexer_status_pointer = -1;
+static const char* lexer_filename;
 int32_t yylineno;
 
-static char* mana_lexer_get_string(void);
-static int32_t mana_lexer_from_binary(char*);
+static char* lexer_get_string(void);
+static int32_t lexer_from_binary(char*);
 
 %}
 
@@ -124,13 +124,13 @@ other		.
 <INITIAL>"include"	return tINCLUDE;
 <INITIAL>"import"	return tIMPORT;
 
-<INITIAL>"void"		{ yylval.type = mana_type_get(SYMBOL_DATA_TYPE_VOID); return tTYPE; }
-<INITIAL>"char"		{ yylval.type = mana_type_get(SYMBOL_DATA_TYPE_CHAR); return tTYPE; }
-<INITIAL>"short"	{ yylval.type = mana_type_get(SYMBOL_DATA_TYPE_SHORT); return tTYPE; }
-<INITIAL>"int"		{ yylval.type = mana_type_get(SYMBOL_DATA_TYPE_INT); return tTYPE; }
-<INITIAL>"float"	{ yylval.type = mana_type_get(SYMBOL_DATA_TYPE_FLOAT); return tTYPE; }
-<INITIAL>"string"	{ yylval.type = mana_type_string; return tTYPE; }
-<INITIAL>"pointer"	{ yylval.type = mana_type_pointer; return tTYPE; }
+<INITIAL>"void"		{ yylval.type = type_get(SYMBOL_DATA_TYPE_VOID); return tTYPE; }
+<INITIAL>"char"		{ yylval.type = type_get(SYMBOL_DATA_TYPE_CHAR); return tTYPE; }
+<INITIAL>"short"	{ yylval.type = type_get(SYMBOL_DATA_TYPE_SHORT); return tTYPE; }
+<INITIAL>"int"		{ yylval.type = type_get(SYMBOL_DATA_TYPE_INT); return tTYPE; }
+<INITIAL>"float"	{ yylval.type = type_get(SYMBOL_DATA_TYPE_FLOAT); return tTYPE; }
+<INITIAL>"string"	{ yylval.type = type_string; return tTYPE; }
+<INITIAL>"pointer"	{ yylval.type = type_pointer; return tTYPE; }
 
 <INITIAL>"native"	return tNATIVE;
 <INITIAL>"struct"	return tSTRUCT;
@@ -184,11 +184,11 @@ other		.
 	return tREAL;
 }
 <INITIAL>{id}		{
-	yylval.string = mana_pool_set(yytext);
+	yylval.string = pool_set(yytext);
 	return tIDENTIFIER;
 }
 <INITIAL>{string}	{
-	yylval.string = mana_pool_set(mana_lexer_get_string());
+	yylval.string = pool_set(lexer_get_string());
 	return tSTRING;
 }
 <INITIAL>{other}	{
@@ -215,7 +215,7 @@ other		.
 	{
 		memcpy(filename, &yytext[1], yyleng-2);
 		filename[yyleng-2] = '\0';
-		mana_lexer_filename = filename;
+		lexer_filename = filename;
 	}
 }
 <LINE>\n			BEGIN INITIAL;
@@ -236,7 +236,7 @@ other		.
 }
 
 <BIN>[01_]+			{
-	yylval.digit = mana_lexer_from_binary(yytext);
+	yylval.digit = lexer_from_binary(yytext);
 	BEGIN INITIAL;
 	return tDIGIT;
 }
@@ -251,7 +251,7 @@ other		.
  * get string
  * return	string pointer
  */
-static char* mana_lexer_get_string(void)
+static char* lexer_get_string(void)
 {
 	char *p, *q;
 
@@ -290,13 +290,13 @@ static char* mana_lexer_get_string(void)
  * @param	p		text pointer
  * @return	integer number.
  */
-static int32_t mana_lexer_from_binary(char* p)
+static int32_t lexer_from_binary(char* p)
 {
 	int32_t t0;
 	int32_t t1;
 	char* sp;
 
-	p += 2;		/* '0b'ÃEƒÃ¯âˆ‚Ã©Ã¶Ã³Ã’ÃE£¿Ã‰XÃ‰LÃ‰bÃ‰v */
+	p += 2;		/* '0b'ï¾ƒãƒ»Îµï½¯ç«ã¥ï½©ï¾ƒï½¶ï¾ƒï½³ï¾ƒæ´¥ãƒ»ï½£ï½¿ï¾ƒå©ï¾ƒéµœï¾ƒå¡ï¾ƒç›Š */
 	sp = p;
 
 	t0 = 0;
@@ -333,28 +333,28 @@ static int32_t mana_lexer_from_binary(char* p)
  */
 int32_t yywrap()
 {
-	return mana_lexer_close();
+	return lexer_close();
 }
 
-int32_t mana_lexer_initialize(const char* filename)
+int32_t lexer_initialize(const char* filename)
 {
-	mana_pool_initialize();
-	mana_parser_initialize();
+	pool_initialize();
+	parser_initialize();
 	yylineno = 1;
-	return mana_lexer_open(filename, true);
+	return lexer_open(filename, true);
 }
 
-void mana_lexer_finalize(void)
+void lexer_finalize(void)
 {
-	if(mana_lexer_status_pointer > 0)
+	if(lexer_status_pointer > 0)
 	{
 		while(! yywrap())
 			;
 	}
 	yylex_destroy();
 
-	mana_parser_finalize();
-	mana_pool_finalize();
+	parser_finalize();
+	pool_finalize();
 }
 
 /*!
@@ -363,7 +363,7 @@ void mana_lexer_finalize(void)
  * @retval	true	file already opened
  * @retval	false	not yet
  */
-static int32_t mana_lexer_is_already_opened(const char* path)
+static int32_t lexer_is_already_opened(const char* path)
 {
 	static const char* pathList[2048];
 	static int32_t pathCounter = 0;
@@ -381,7 +381,7 @@ static int32_t mana_lexer_is_already_opened(const char* path)
 	return true;
 }
 
-int32_t mana_lexer_open(const char* filename, const bool check)
+int32_t lexer_open(const char* filename, const bool check)
 {
 	char path[_MAX_PATH];
 	char drive[_MAX_DRIVE];
@@ -408,11 +408,11 @@ int32_t mana_lexer_open(const char* filename, const bool check)
 	}
 #endif
 */
-	full_path = mana_pool_set(path);
+	full_path = pool_set(path);
 
 	if(check)
 	{
-		if(! mana_lexer_is_already_opened(full_path))
+		if(! lexer_is_already_opened(full_path))
 		{
 			return true;
 		}
@@ -427,18 +427,18 @@ int32_t mana_lexer_open(const char* filename, const bool check)
 		mana_compile_error("unable to open \"%s\"", full_path);
 		return false;
 	}
-	if(++mana_lexer_status_pointer >= MAX_NEST_LEVEL)
+	if(++lexer_status_pointer >= MAX_NEST_LEVEL)
 	{
 		mana_compile_error("too many include files");
 		return false;
 	}
-	mana_lexer_status[mana_lexer_status_pointer].m_State = YY_CURRENT_BUFFER;
-	mana_lexer_status[mana_lexer_status_pointer].m_pszName = full_path;
-	mana_lexer_status[mana_lexer_status_pointer].m_iLine = yylineno;
+	lexer_status[lexer_status_pointer].m_State = YY_CURRENT_BUFFER;
+	lexer_status[lexer_status_pointer].m_pszName = full_path;
+	lexer_status[lexer_status_pointer].m_iLine = yylineno;
 
 	yy_switch_to_buffer(yy_create_buffer(yyin, YY_BUF_SIZE));
 
-	mana_lexer_filename = mana_lexer_status[mana_lexer_status_pointer].m_pszName;
+	lexer_filename = lexer_status[lexer_status_pointer].m_pszName;
 	yylineno = 1;
 
 	/* set currect directory */
@@ -454,7 +454,7 @@ int32_t mana_lexer_open(const char* filename, const bool check)
 	return true;
 }
 
-int32_t mana_lexer_close()
+int32_t lexer_close()
 {
 	char path[_MAX_PATH];
 	char drive[_MAX_DRIVE];
@@ -464,25 +464,25 @@ int32_t mana_lexer_close()
 
 	yy_delete_buffer(YY_CURRENT_BUFFER);
 
-	if(mana_lexer_status_pointer <= 0)
+	if(lexer_status_pointer <= 0)
 	{
 		return true;
 	}
 	else
 	{
-		yy_switch_to_buffer(mana_lexer_status[mana_lexer_status_pointer].m_State);
+		yy_switch_to_buffer(lexer_status[lexer_status_pointer].m_State);
 
-		mana_lexer_filename = mana_lexer_status[mana_lexer_status_pointer-1].m_pszName;
-		yylineno = mana_lexer_status[mana_lexer_status_pointer].m_iLine;
+		lexer_filename = lexer_status[lexer_status_pointer-1].m_pszName;
+		yylineno = lexer_status[lexer_status_pointer].m_iLine;
 		
-		mana_lexer_status_pointer --;
+		lexer_status_pointer --;
 
 		/* set currect directory */
 #if defined(__STDC_WANT_SECURE_LIB__)
-		_splitpath_s(mana_lexer_filename, drive, sizeof(drive), dir, sizeof(dir), fname, sizeof(fname), ext, sizeof(ext));
+		_splitpath_s(lexer_filename, drive, sizeof(drive), dir, sizeof(dir), fname, sizeof(fname), ext, sizeof(ext));
 		_makepath_s(path, sizeof(path), drive, dir, "", "");
 #else
-		_splitpath(mana_lexer_filename, drive, dir, fname, ext);
+		_splitpath(lexer_filename, drive, dir, fname, ext);
 		_makepath(path, drive, dir, "", "");
 #endif
 		_chdir(path);
@@ -491,22 +491,22 @@ int32_t mana_lexer_close()
 	}
 }
 
-const char* mana_lexer_get_current_filename(void)
+const char* lexer_get_current_filename(void)
 {
-	return mana_lexer_filename;
+	return lexer_filename;
 }
 
-void mana_lexer_set_current_filename(const char* filename)
+void lexer_set_current_filename(const char* filename)
 {
-	mana_lexer_filename = filename;
+	lexer_filename = filename;
 }
 
-int mana_lexer_get_current_line(void)
+int lexer_get_current_line(void)
 {
 	return yylineno;
 }
 
-void mana_lexer_set_current_line(const int lineno)
+void lexer_set_current_line(const int lineno)
 {
 	yylineno = lineno;
 }

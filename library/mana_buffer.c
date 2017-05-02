@@ -2,10 +2,10 @@
  * mana (library)
  *
  * @file	mana_buffer.c
- * @brief	mana_bufferƒNƒ‰ƒX‚ÉŠÖ‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹
+ * @brief	mana_bufferã‚¯ãƒ©ã‚¹ã«é–¢ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«
  * @detail
- * ‚±‚Ìƒtƒ@ƒCƒ‹‚Ímana_bufferƒNƒ‰ƒX‚ÉŠÖŒW‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹‚Å‚·B
- * mana_streamƒNƒ‰ƒX‚Í‰Â•Ï’·ƒoƒbƒtƒ@‚ÉŠÖ‚·‚é‘€ì‚ğs‚È‚¢‚Ü‚·B
+ * ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯mana_bufferã‚¯ãƒ©ã‚¹ã«é–¢ä¿‚ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
+ * mana_streamã‚¯ãƒ©ã‚¹ã¯å¯å¤‰é•·ãƒãƒƒãƒ•ã‚¡ã«é–¢ã™ã‚‹æ“ä½œã‚’è¡Œãªã„ã¾ã™ã€‚
  *
  * @author	Shun Moriya
  * @date	2003-
@@ -20,7 +20,7 @@
 #include <string.h>
 
 /*!
- * @return	mana_buffer ƒIƒuƒWƒFƒNƒg
+ * @return	mana_buffer ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 mana_buffer* mana_buffer_create()
 {
@@ -28,7 +28,7 @@ mana_buffer* mana_buffer_create()
 }
 
 /*!
- * @param[in]	self	mana_buffer ƒIƒuƒWƒFƒNƒg
+ * @param[in]	self	mana_buffer ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 void mana_buffer_destroy(mana_buffer* self)
 {
@@ -40,8 +40,8 @@ void mana_buffer_destroy(mana_buffer* self)
 }
 
 /*!
- * @param[in]	self	mana_buffer ƒIƒuƒWƒFƒNƒg
- * @return		ƒoƒbƒtƒ@‚Ìæ“ªƒAƒhƒŒƒX
+ * @param[in]	self	mana_buffer ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @return		ãƒãƒƒãƒ•ã‚¡ã®å…ˆé ­ã‚¢ãƒ‰ãƒ¬ã‚¹
  */
 void* mana_buffer_get_buffer(mana_buffer* self)
 {
@@ -49,8 +49,8 @@ void* mana_buffer_get_buffer(mana_buffer* self)
 }
 
 /*!
- * @param[in]	self	mana_buffer ƒIƒuƒWƒFƒNƒg
- * @return		ƒoƒbƒtƒ@[‚ÌŠm•ÛÏ‚İƒTƒCƒY
+ * @param[in]	self	mana_buffer ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @return		ãƒãƒƒãƒ•ã‚¡ãƒ¼ã®ç¢ºä¿æ¸ˆã¿ã‚µã‚¤ã‚º
  */
 size_t mana_buffer_get_allocated_size(mana_buffer* self)
 {
@@ -58,8 +58,8 @@ size_t mana_buffer_get_allocated_size(mana_buffer* self)
 }
 
 /*!
- * @param[in]	self	mana_buffer ƒIƒuƒWƒFƒNƒg
- * @return		ƒoƒbƒtƒ@[‚Ìg—p’†ƒTƒCƒY
+ * @param[in]	self	mana_buffer ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @return		ãƒãƒƒãƒ•ã‚¡ãƒ¼ã®ä½¿ç”¨ä¸­ã‚µã‚¤ã‚º
  */
 size_t mana_buffer_get_used_size(mana_buffer* self)
 {
@@ -67,9 +67,9 @@ size_t mana_buffer_get_used_size(mana_buffer* self)
 }
 
 /*!
- * @param[in]	self	mana_stream ƒIƒuƒWƒFƒNƒg
- * @param[in]	pointer	ƒf[ƒ^‚Ìæ“ªƒAƒhƒŒƒX
- * @param[in]	size	ƒf[ƒ^‚ÌƒTƒCƒY
+ * @param[in]	self	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	pointer	ãƒ‡ãƒ¼ã‚¿ã®å…ˆé ­ã‚¢ãƒ‰ãƒ¬ã‚¹
+ * @param[in]	size	ãƒ‡ãƒ¼ã‚¿ã®ã‚µã‚¤ã‚º
  */
 int32_t mana_buffer_push(mana_buffer* self, const void* pointer, const size_t size)
 {

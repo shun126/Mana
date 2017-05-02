@@ -269,157 +269,154 @@ typedef struct <a class="el" href="structnode__entry.html">node_entry</a>&#160;<
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 関数</h2></td></tr>
-<tr class="memitem:a74db8afacdf8c1126ca1186fcbae71cd"><td class="memItemLeft" align="right" valign="top"><a id="a74db8afacdf8c1126ca1186fcbae71cd"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_initialize</b> (void)</td></tr>
-<tr class="separator:a74db8afacdf8c1126ca1186fcbae71cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a96bea59b535e289f577a15b6029f9c8f"><td class="memItemLeft" align="right" valign="top"><a id="a96bea59b535e289f577a15b6029f9c8f"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_finalize</b> (void)</td></tr>
-<tr class="separator:a96bea59b535e289f577a15b6029f9c8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6f930e502e50a02b7bc738b1c1fc307e"><td class="memItemLeft" align="right" valign="top"><a id="a6f930e502e50a02b7bc738b1c1fc307e"></a>
-int32_t&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_open_block</b> (const bool reset_max_frame_memory_address)</td></tr>
-<tr class="separator:a6f930e502e50a02b7bc738b1c1fc307e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5bf5187c86023a8d9e4951aa45a4db95"><td class="memItemLeft" align="right" valign="top"><a id="a5bf5187c86023a8d9e4951aa45a4db95"></a>
-int32_t&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_close_block</b> (void)</td></tr>
-<tr class="separator:a5bf5187c86023a8d9e4951aa45a4db95"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a38c6fa34c4735bc26403355b14d0c37c"><td class="memItemLeft" align="right" valign="top"><a id="a38c6fa34c4735bc26403355b14d0c37c"></a>
-<a class="el" href="structsymbol__entry.html">symbol_entry</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_get_head_symbol</b> (void)</td></tr>
-<tr class="separator:a38c6fa34c4735bc26403355b14d0c37c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4ce167591362014996a5e8d164905d11"><td class="memItemLeft" align="right" valign="top"><a id="a4ce167591362014996a5e8d164905d11"></a>
-int32_t&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_is_valid_variable</b> (<a class="el" href="structsymbol__entry.html">symbol_entry</a> *)</td></tr>
-<tr class="separator:a4ce167591362014996a5e8d164905d11"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae0752bb4b05676bdec70c42ef40a841d"><td class="memItemLeft" align="right" valign="top"><a id="ae0752bb4b05676bdec70c42ef40a841d"></a>
-int32_t&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_get_static_memory_address</b> ()</td></tr>
-<tr class="separator:ae0752bb4b05676bdec70c42ef40a841d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5468f6eaf2fcc9c68ad90f18c049e649"><td class="memItemLeft" align="right" valign="top"><a id="a5468f6eaf2fcc9c68ad90f18c049e649"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_set_static_memory_address</b> (const int32_t size)</td></tr>
-<tr class="separator:a5468f6eaf2fcc9c68ad90f18c049e649"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1e0d0d6b4ed11819339ca4a539f4f0ba"><td class="memItemLeft" align="right" valign="top"><a id="a1e0d0d6b4ed11819339ca4a539f4f0ba"></a>
-int32_t&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_get_global_memory_address</b> ()</td></tr>
-<tr class="separator:a1e0d0d6b4ed11819339ca4a539f4f0ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af22b8c24450d6c1d6daa0ba627e51628"><td class="memItemLeft" align="right" valign="top"><a id="af22b8c24450d6c1d6daa0ba627e51628"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_set_global_memory_address</b> (const int32_t size)</td></tr>
-<tr class="separator:af22b8c24450d6c1d6daa0ba627e51628"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a06f5a6b364dfed4eaf9f58cf6d1114fd"><td class="memItemLeft" align="right" valign="top"><a id="a06f5a6b364dfed4eaf9f58cf6d1114fd"></a>
-<a class="el" href="structsymbol__entry.html">symbol_entry</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_lookup</b> (const char *name)</td></tr>
-<tr class="separator:a06f5a6b364dfed4eaf9f58cf6d1114fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af3b291cf2ab72490e8a86f0ade80c057"><td class="memItemLeft" align="right" valign="top"><a id="af3b291cf2ab72490e8a86f0ade80c057"></a>
-<a class="el" href="structsymbol__entry.html">symbol_entry</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_lookup_or_create_dummy</b> (const char *name)</td></tr>
-<tr class="separator:af3b291cf2ab72490e8a86f0ade80c057"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a69a59e32e445c0d68e66010271683988"><td class="memItemLeft" align="right" valign="top"><a id="a69a59e32e445c0d68e66010271683988"></a>
-<a class="el" href="structsymbol__entry.html">symbol_entry</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_create_alias</b> (const char *, const char *)</td></tr>
-<tr class="separator:a69a59e32e445c0d68e66010271683988"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab57739601845c679b4236e186642cbb6"><td class="memItemLeft" align="right" valign="top"><a id="ab57739601845c679b4236e186642cbb6"></a>
-<a class="el" href="structsymbol__entry.html">symbol_entry</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_create_const_int</b> (const char *, const int32_t)</td></tr>
-<tr class="separator:ab57739601845c679b4236e186642cbb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acf4bc11a0f0b3754cedebd7300faccc1"><td class="memItemLeft" align="right" valign="top"><a id="acf4bc11a0f0b3754cedebd7300faccc1"></a>
-<a class="el" href="structsymbol__entry.html">symbol_entry</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_create_const_float</b> (const char *, const float)</td></tr>
-<tr class="separator:acf4bc11a0f0b3754cedebd7300faccc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a40793ca27264dd789e449f66fac97f94"><td class="memItemLeft" align="right" valign="top"><a id="a40793ca27264dd789e449f66fac97f94"></a>
-<a class="el" href="structsymbol__entry.html">symbol_entry</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_create_const_string</b> (const char *, const char *)</td></tr>
-<tr class="separator:a40793ca27264dd789e449f66fac97f94"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a49acfbe684e7bde31647a6e70694f9a3"><td class="memItemLeft" align="right" valign="top"><a id="a49acfbe684e7bde31647a6e70694f9a3"></a>
-<a class="el" href="structsymbol__entry.html">symbol_entry</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_create_variable</b> (const char *name, <a class="el" href="structtype__description.html">type_description</a> *type, const bool static_variable)</td></tr>
-<tr class="separator:a49acfbe684e7bde31647a6e70694f9a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af1fafb8e346823504b6503b9624944ea"><td class="memItemLeft" align="right" valign="top"><a id="af1fafb8e346823504b6503b9624944ea"></a>
-<a class="el" href="structsymbol__entry.html">symbol_entry</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_create_label</b> (const char *)</td></tr>
-<tr class="separator:af1fafb8e346823504b6503b9624944ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab5480a0c3510c82aea7b7eccfc5c2150"><td class="memItemLeft" align="right" valign="top"><a id="ab5480a0c3510c82aea7b7eccfc5c2150"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_destroy</b> (const char *name)</td></tr>
-<tr class="separator:ab5480a0c3510c82aea7b7eccfc5c2150"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac73e77927919d8b7cbd6cff84bf33251"><td class="memItemLeft" align="right" valign="top"><a id="ac73e77927919d8b7cbd6cff84bf33251"></a>
-<a class="el" href="structsymbol__entry.html">symbol_entry</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_create_function</b> (const char *name)</td></tr>
-<tr class="separator:ac73e77927919d8b7cbd6cff84bf33251"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a168597d606b549aaa81dd19d74181a5b"><td class="memItemLeft" align="right" valign="top"><a id="a168597d606b549aaa81dd19d74181a5b"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_open_function</b> (<a class="el" href="structnode__entry.html">node_entry</a> *node, const bool is_action)</td></tr>
-<tr class="separator:a168597d606b549aaa81dd19d74181a5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae22127e6faec4a361850b1d7ab4bb079"><td class="memItemLeft" align="right" valign="top"><a id="ae22127e6faec4a361850b1d7ab4bb079"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_open_function2</b> (const <a class="el" href="structsymbol__entry.html">symbol_entry</a> *function)</td></tr>
-<tr class="separator:ae22127e6faec4a361850b1d7ab4bb079"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad628b8454332be7cba805b2e266b38ca"><td class="memItemLeft" align="right" valign="top"><a id="ad628b8454332be7cba805b2e266b38ca"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_close_function</b> (<a class="el" href="structnode__entry.html">node_entry</a> *node, const bool is_action)</td></tr>
-<tr class="separator:ad628b8454332be7cba805b2e266b38ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3258545ca57f06badcb9cbcb475a799b"><td class="memItemLeft" align="right" valign="top"><a id="a3258545ca57f06badcb9cbcb475a799b"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_begin_native_function_registration</b> ()</td></tr>
-<tr class="separator:a3258545ca57f06badcb9cbcb475a799b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abd8f9d4c90d50030015dbc22c770f708"><td class="memItemLeft" align="right" valign="top"><a id="abd8f9d4c90d50030015dbc22c770f708"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_commit_native_function_registration</b> (<a class="el" href="structsymbol__entry.html">symbol_entry</a> *function, <a class="el" href="structtype__description.html">type_description</a> *type)</td></tr>
-<tr class="separator:abd8f9d4c90d50030015dbc22c770f708"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a92fa5ea46b9d9345eb7d298aaa6fec77"><td class="memItemLeft" align="right" valign="top"><a id="a92fa5ea46b9d9345eb7d298aaa6fec77"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_open_structure</b> (void)</td></tr>
-<tr class="separator:a92fa5ea46b9d9345eb7d298aaa6fec77"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a439a42c2941bd695205e6dc053d7935a"><td class="memItemLeft" align="right" valign="top"><a id="a439a42c2941bd695205e6dc053d7935a"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_close_structure</b> (const char *name)</td></tr>
-<tr class="separator:a439a42c2941bd695205e6dc053d7935a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1eeb656d7e986fc057852875f64b6266"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="symbol_8h.html#a1eeb656d7e986fc057852875f64b6266">symbol_begin_registration_actor</a> (<a class="el" href="structsymbol__entry.html">symbol_entry</a> *symbol)</td></tr>
-<tr class="separator:a1eeb656d7e986fc057852875f64b6266"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8e0eecb05d4391c026b9254b662482f2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="symbol_8h.html#a8e0eecb05d4391c026b9254b662482f2">symbol_commit_registration_actor</a> (const char *name, const char *parent, <a class="el" href="structtype__description.html">type_description</a> *td, const bool phantom)</td></tr>
-<tr class="separator:a8e0eecb05d4391c026b9254b662482f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac4bccd3dcf10703187881e57e6385d88"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="symbol_8h.html#ac4bccd3dcf10703187881e57e6385d88">symbol_open_actor</a> (const char *name)</td></tr>
-<tr class="separator:ac4bccd3dcf10703187881e57e6385d88"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a58310eacdda83de682a3d7ae35654ef2"><td class="memItemLeft" align="right" valign="top"><a id="a58310eacdda83de682a3d7ae35654ef2"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_close_actor</b> ()</td></tr>
-<tr class="separator:a58310eacdda83de682a3d7ae35654ef2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a46a3d1291a89aa058b5d99a828f3126f"><td class="memItemLeft" align="right" valign="top"><a id="a46a3d1291a89aa058b5d99a828f3126f"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_begin_registration_module</b> (<a class="el" href="structsymbol__entry.html">symbol_entry</a> *symbol)</td></tr>
-<tr class="separator:a46a3d1291a89aa058b5d99a828f3126f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6aba20967b62c2172cb03ec9fd99b5f7"><td class="memItemLeft" align="right" valign="top"><a id="a6aba20967b62c2172cb03ec9fd99b5f7"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_commit_registration_module</b> (const char *name)</td></tr>
-<tr class="separator:a6aba20967b62c2172cb03ec9fd99b5f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a233d570a902ba0085a95b00e992b55f3"><td class="memItemLeft" align="right" valign="top"><a id="a233d570a902ba0085a95b00e992b55f3"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_open_module</b> (<a class="el" href="structsymbol__entry.html">symbol_entry</a> *symbol)</td></tr>
-<tr class="separator:a233d570a902ba0085a95b00e992b55f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4c57014e5b1241a9a3bb439748af5c9e"><td class="memItemLeft" align="right" valign="top"><a id="a4c57014e5b1241a9a3bb439748af5c9e"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_close_module</b> (const char *name)</td></tr>
-<tr class="separator:a4c57014e5b1241a9a3bb439748af5c9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5ad28114951b54abdb1e189fdd280046"><td class="memItemLeft" align="right" valign="top"><a id="a5ad28114951b54abdb1e189fdd280046"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_extend_module</b> (const char *name)</td></tr>
-<tr class="separator:a5ad28114951b54abdb1e189fdd280046"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aca2059ff044fc086c1f712e16e2439d3"><td class="memItemLeft" align="right" valign="top"><a id="aca2059ff044fc086c1f712e16e2439d3"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_set_type</b> (const char *name, <a class="el" href="structtype__description.html">type_description</a> *type)</td></tr>
-<tr class="separator:aca2059ff044fc086c1f712e16e2439d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3e864c43d789ed955cf026f9a76ad39c"><td class="memItemLeft" align="right" valign="top"><a id="a3e864c43d789ed955cf026f9a76ad39c"></a>
-int32_t&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_get_number_of_actors</b> (void)</td></tr>
-<tr class="separator:a3e864c43d789ed955cf026f9a76ad39c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8757491950da286ad687dcf7f9a0adf6"><td class="memItemLeft" align="right" valign="top"><a id="a8757491950da286ad687dcf7f9a0adf6"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_add_request</b> (uint8_t opcode, <a class="el" href="structnode__entry.html">node_entry</a> *level, <a class="el" href="structnode__entry.html">node_entry</a> *actor, const char *action)</td></tr>
-<tr class="separator:a8757491950da286ad687dcf7f9a0adf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a522d46c4a352807d4b246c2638c8c07d"><td class="memItemLeft" align="right" valign="top"><a id="a522d46c4a352807d4b246c2638c8c07d"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_add_join</b> (<a class="el" href="structnode__entry.html">node_entry</a> *level, <a class="el" href="structnode__entry.html">node_entry</a> *actor)</td></tr>
-<tr class="separator:a522d46c4a352807d4b246c2638c8c07d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7392fe5ac3ba330af7ff909579755326"><td class="memItemLeft" align="right" valign="top"><a id="a7392fe5ac3ba330af7ff909579755326"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_allocate_memory</b> (<a class="el" href="structsymbol__entry.html">symbol_entry</a> *, <a class="el" href="structtype__description.html">type_description</a> *, <a class="el" href="symbol_8h.html#a94bf374ff27fbbee3730e27bf67f0b91">symbol_memory_type_id</a>)</td></tr>
-<tr class="separator:a7392fe5ac3ba330af7ff909579755326"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a62b490e77ef59df49cbb353820f39654"><td class="memItemLeft" align="right" valign="top"><a id="a62b490e77ef59df49cbb353820f39654"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_check_undefine</b> (void)</td></tr>
-<tr class="separator:a62b490e77ef59df49cbb353820f39654"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7d8bb865e6e5f4dc060bb0c2cdcccd52"><td class="memItemLeft" align="right" valign="top"><a id="a7d8bb865e6e5f4dc060bb0c2cdcccd52"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_print_header</b> (void)</td></tr>
-<tr class="separator:a7d8bb865e6e5f4dc060bb0c2cdcccd52"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5d5d01fe25965fa633ca0889a59ab354"><td class="memItemLeft" align="right" valign="top"><a id="a5d5d01fe25965fa633ca0889a59ab354"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_print_footer</b> (const char *, <a class="el" href="structtype__description.html">type_description</a> *)</td></tr>
-<tr class="separator:a5d5d01fe25965fa633ca0889a59ab354"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aefe6e1108dc3170aab710b7e7a0e407c"><td class="memItemLeft" align="right" valign="top"><a id="aefe6e1108dc3170aab710b7e7a0e407c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_print_entry</b> (<a class="el" href="structsymbol__entry.html">symbol_entry</a> *, <a class="el" href="structtype__description.html">type_description</a> *)</td></tr>
-<tr class="separator:aefe6e1108dc3170aab710b7e7a0e407c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5930dfced9d56ed77f63d6ba6e8e853c"><td class="memItemLeft" align="right" valign="top"><a id="a5930dfced9d56ed77f63d6ba6e8e853c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_print_dummy_global_variable</b> (size_t size)</td></tr>
-<tr class="separator:a5930dfced9d56ed77f63d6ba6e8e853c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5586a4b1387b7cb88b7db39fabe9b9b7"><td class="memItemLeft" align="right" valign="top"><a id="a5586a4b1387b7cb88b7db39fabe9b9b7"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_write_actor_infomation</b> (mana_stream *stream)</td></tr>
-<tr class="separator:a5586a4b1387b7cb88b7db39fabe9b9b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa5a71d94da0fc1b63b1d45598a2f84fa"><td class="memItemLeft" align="right" valign="top"><a id="aa5a71d94da0fc1b63b1d45598a2f84fa"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_dump</b> (FILE *)</td></tr>
-<tr class="separator:aa5a71d94da0fc1b63b1d45598a2f84fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a06aebc5ea3c7d929fc5faad40bd57693"><td class="memItemLeft" align="right" valign="top"><a id="a06aebc5ea3c7d929fc5faad40bd57693"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_dump_function_symbol_from_address</b> (FILE *log, const int32_t address)</td></tr>
-<tr class="separator:a06aebc5ea3c7d929fc5faad40bd57693"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c49c25966690535d2c6339e6c461065"><td class="memItemLeft" align="right" valign="top"><a id="a4c49c25966690535d2c6339e6c461065"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_initialize</b> (void)</td></tr>
+<tr class="separator:a4c49c25966690535d2c6339e6c461065"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7bd65b3350a84779feb1ada79d202e38"><td class="memItemLeft" align="right" valign="top"><a id="a7bd65b3350a84779feb1ada79d202e38"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_finalize</b> (void)</td></tr>
+<tr class="separator:a7bd65b3350a84779feb1ada79d202e38"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8cb290a17e849e61745b98f813782ca"><td class="memItemLeft" align="right" valign="top"><a id="af8cb290a17e849e61745b98f813782ca"></a>
+int32_t&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_open_block</b> (const bool reset_max_frame_memory_address)</td></tr>
+<tr class="separator:af8cb290a17e849e61745b98f813782ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a34c9069a2cd33bc5b2b4c00779e5b282"><td class="memItemLeft" align="right" valign="top"><a id="a34c9069a2cd33bc5b2b4c00779e5b282"></a>
+int32_t&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_close_block</b> (void)</td></tr>
+<tr class="separator:a34c9069a2cd33bc5b2b4c00779e5b282"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a351a5f81522fdbfa9d41ad57d4bdf0"><td class="memItemLeft" align="right" valign="top"><a id="a2a351a5f81522fdbfa9d41ad57d4bdf0"></a>
+<a class="el" href="structsymbol__entry.html">symbol_entry</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_get_head_symbol</b> (void)</td></tr>
+<tr class="separator:a2a351a5f81522fdbfa9d41ad57d4bdf0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a867f219dc0d195c71990315e6bbb91d6"><td class="memItemLeft" align="right" valign="top"><a id="a867f219dc0d195c71990315e6bbb91d6"></a>
+int32_t&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_is_valid_variable</b> (<a class="el" href="structsymbol__entry.html">symbol_entry</a> *)</td></tr>
+<tr class="separator:a867f219dc0d195c71990315e6bbb91d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02d2a7df84ae8ca6d215acede812f985"><td class="memItemLeft" align="right" valign="top"><a id="a02d2a7df84ae8ca6d215acede812f985"></a>
+int32_t&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_get_static_memory_address</b> ()</td></tr>
+<tr class="separator:a02d2a7df84ae8ca6d215acede812f985"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c5423afa5b4c1b6b981d77425c2a1ef"><td class="memItemLeft" align="right" valign="top"><a id="a4c5423afa5b4c1b6b981d77425c2a1ef"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_set_static_memory_address</b> (const int32_t size)</td></tr>
+<tr class="separator:a4c5423afa5b4c1b6b981d77425c2a1ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b3e323de10ea07873d18bdccf748656"><td class="memItemLeft" align="right" valign="top"><a id="a2b3e323de10ea07873d18bdccf748656"></a>
+int32_t&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_get_global_memory_address</b> ()</td></tr>
+<tr class="separator:a2b3e323de10ea07873d18bdccf748656"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd3e68003d940391ae4fc53ae4b9e967"><td class="memItemLeft" align="right" valign="top"><a id="acd3e68003d940391ae4fc53ae4b9e967"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_set_global_memory_address</b> (const int32_t size)</td></tr>
+<tr class="separator:acd3e68003d940391ae4fc53ae4b9e967"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a102a1dc9752dbe65147d4e1a4d463f69"><td class="memItemLeft" align="right" valign="top"><a id="a102a1dc9752dbe65147d4e1a4d463f69"></a>
+<a class="el" href="structsymbol__entry.html">symbol_entry</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_lookup</b> (const char *name)</td></tr>
+<tr class="separator:a102a1dc9752dbe65147d4e1a4d463f69"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c8bc0fef90db12b1ec61adf13927d48"><td class="memItemLeft" align="right" valign="top"><a id="a2c8bc0fef90db12b1ec61adf13927d48"></a>
+<a class="el" href="structsymbol__entry.html">symbol_entry</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_lookup_or_create_dummy</b> (const char *name)</td></tr>
+<tr class="separator:a2c8bc0fef90db12b1ec61adf13927d48"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acfde516a8787d5c042398a1f0ab33438"><td class="memItemLeft" align="right" valign="top"><a id="acfde516a8787d5c042398a1f0ab33438"></a>
+<a class="el" href="structsymbol__entry.html">symbol_entry</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_create_alias</b> (const char *, const char *)</td></tr>
+<tr class="separator:acfde516a8787d5c042398a1f0ab33438"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa926831a2ae148d5cdcbb56052b6588f"><td class="memItemLeft" align="right" valign="top"><a id="aa926831a2ae148d5cdcbb56052b6588f"></a>
+<a class="el" href="structsymbol__entry.html">symbol_entry</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_create_const_int</b> (const char *, const int32_t)</td></tr>
+<tr class="separator:aa926831a2ae148d5cdcbb56052b6588f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a746b3240760ec3de2fb152cab72a32e0"><td class="memItemLeft" align="right" valign="top"><a id="a746b3240760ec3de2fb152cab72a32e0"></a>
+<a class="el" href="structsymbol__entry.html">symbol_entry</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_create_const_float</b> (const char *, const float)</td></tr>
+<tr class="separator:a746b3240760ec3de2fb152cab72a32e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1489838544514388fc6999f1fee1407e"><td class="memItemLeft" align="right" valign="top"><a id="a1489838544514388fc6999f1fee1407e"></a>
+<a class="el" href="structsymbol__entry.html">symbol_entry</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_create_const_string</b> (const char *, const char *)</td></tr>
+<tr class="separator:a1489838544514388fc6999f1fee1407e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aff73cacaae3415f3ab124a40bf009e62"><td class="memItemLeft" align="right" valign="top"><a id="aff73cacaae3415f3ab124a40bf009e62"></a>
+<a class="el" href="structsymbol__entry.html">symbol_entry</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_create_variable</b> (const char *name, <a class="el" href="structtype__description.html">type_description</a> *type, const bool static_variable)</td></tr>
+<tr class="separator:aff73cacaae3415f3ab124a40bf009e62"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aab11b3755b150753c3fcbf1c73dc38c1"><td class="memItemLeft" align="right" valign="top"><a id="aab11b3755b150753c3fcbf1c73dc38c1"></a>
+<a class="el" href="structsymbol__entry.html">symbol_entry</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_create_label</b> (const char *)</td></tr>
+<tr class="separator:aab11b3755b150753c3fcbf1c73dc38c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a674905a7190b7383fea97e4a170af36a"><td class="memItemLeft" align="right" valign="top"><a id="a674905a7190b7383fea97e4a170af36a"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_destroy</b> (const char *name)</td></tr>
+<tr class="separator:a674905a7190b7383fea97e4a170af36a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3507e7890baf106f2d36604e180227fd"><td class="memItemLeft" align="right" valign="top"><a id="a3507e7890baf106f2d36604e180227fd"></a>
+<a class="el" href="structsymbol__entry.html">symbol_entry</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_create_function</b> (const char *name)</td></tr>
+<tr class="separator:a3507e7890baf106f2d36604e180227fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b38684a6cd73712546e1c46ee3bb576"><td class="memItemLeft" align="right" valign="top"><a id="a0b38684a6cd73712546e1c46ee3bb576"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_open_function</b> (<a class="el" href="structnode__entry.html">node_entry</a> *node, const bool is_action)</td></tr>
+<tr class="separator:a0b38684a6cd73712546e1c46ee3bb576"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6938f06315824435b01e1fa9e74c4df7"><td class="memItemLeft" align="right" valign="top"><a id="a6938f06315824435b01e1fa9e74c4df7"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_close_function</b> (<a class="el" href="structnode__entry.html">node_entry</a> *node, const bool is_action)</td></tr>
+<tr class="separator:a6938f06315824435b01e1fa9e74c4df7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6fb442a2c8a93748613972219166041f"><td class="memItemLeft" align="right" valign="top"><a id="a6fb442a2c8a93748613972219166041f"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_begin_native_function_registration</b> ()</td></tr>
+<tr class="separator:a6fb442a2c8a93748613972219166041f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3866b0dd5dd25bca9f46ed88d65256f6"><td class="memItemLeft" align="right" valign="top"><a id="a3866b0dd5dd25bca9f46ed88d65256f6"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_commit_native_function_registration</b> (<a class="el" href="structsymbol__entry.html">symbol_entry</a> *function, <a class="el" href="structtype__description.html">type_description</a> *type)</td></tr>
+<tr class="separator:a3866b0dd5dd25bca9f46ed88d65256f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7630cade891a01e1a9897a288547cc29"><td class="memItemLeft" align="right" valign="top"><a id="a7630cade891a01e1a9897a288547cc29"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_open_structure</b> (void)</td></tr>
+<tr class="separator:a7630cade891a01e1a9897a288547cc29"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e4998bec9cbf29f18e7154cedab4883"><td class="memItemLeft" align="right" valign="top"><a id="a1e4998bec9cbf29f18e7154cedab4883"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_close_structure</b> (const char *name)</td></tr>
+<tr class="separator:a1e4998bec9cbf29f18e7154cedab4883"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7bf4223da69fa7517e774b6fb70db03"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="symbol_8h.html#ac7bf4223da69fa7517e774b6fb70db03">mana_symbol_begin_registration_actor</a> (<a class="el" href="structsymbol__entry.html">symbol_entry</a> *symbol)</td></tr>
+<tr class="separator:ac7bf4223da69fa7517e774b6fb70db03"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa38e64c9537b8e1eae10309bac3aa373"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="symbol_8h.html#aa38e64c9537b8e1eae10309bac3aa373">mana_symbol_commit_registration_actor</a> (const char *name, const char *parent, <a class="el" href="structtype__description.html">type_description</a> *td, const bool phantom)</td></tr>
+<tr class="separator:aa38e64c9537b8e1eae10309bac3aa373"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02c6472195d21565c627493417a64e08"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="symbol_8h.html#a02c6472195d21565c627493417a64e08">mana_symbol_open_actor</a> (const char *name)</td></tr>
+<tr class="separator:a02c6472195d21565c627493417a64e08"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a340fdeb5afc1068850eb6e1afdd3a512"><td class="memItemLeft" align="right" valign="top"><a id="a340fdeb5afc1068850eb6e1afdd3a512"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_close_actor</b> ()</td></tr>
+<tr class="separator:a340fdeb5afc1068850eb6e1afdd3a512"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0859f861707feef92885bc397cb1fb3"><td class="memItemLeft" align="right" valign="top"><a id="ad0859f861707feef92885bc397cb1fb3"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_begin_registration_module</b> (<a class="el" href="structsymbol__entry.html">symbol_entry</a> *symbol)</td></tr>
+<tr class="separator:ad0859f861707feef92885bc397cb1fb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6f3e1651fd833c207ad4c74082930d3"><td class="memItemLeft" align="right" valign="top"><a id="ad6f3e1651fd833c207ad4c74082930d3"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_commit_registration_module</b> (const char *name)</td></tr>
+<tr class="separator:ad6f3e1651fd833c207ad4c74082930d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae933db7bd84e97a88709e127ddbd3006"><td class="memItemLeft" align="right" valign="top"><a id="ae933db7bd84e97a88709e127ddbd3006"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_open_module</b> (<a class="el" href="structsymbol__entry.html">symbol_entry</a> *symbol)</td></tr>
+<tr class="separator:ae933db7bd84e97a88709e127ddbd3006"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3bf2c939a36cecc904eb81bd37c685a1"><td class="memItemLeft" align="right" valign="top"><a id="a3bf2c939a36cecc904eb81bd37c685a1"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_close_module</b> (const char *name)</td></tr>
+<tr class="separator:a3bf2c939a36cecc904eb81bd37c685a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a37400c365479f2f205ecb39e2c5f33b3"><td class="memItemLeft" align="right" valign="top"><a id="a37400c365479f2f205ecb39e2c5f33b3"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_extend_module</b> (const char *name)</td></tr>
+<tr class="separator:a37400c365479f2f205ecb39e2c5f33b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a60f9087c836c0333d010b06cf13c818a"><td class="memItemLeft" align="right" valign="top"><a id="a60f9087c836c0333d010b06cf13c818a"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_set_type</b> (const char *name, <a class="el" href="structtype__description.html">type_description</a> *type)</td></tr>
+<tr class="separator:a60f9087c836c0333d010b06cf13c818a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e7bb757250cdf9e022f42a4a8a1482f"><td class="memItemLeft" align="right" valign="top"><a id="a0e7bb757250cdf9e022f42a4a8a1482f"></a>
+int32_t&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_get_number_of_actors</b> (void)</td></tr>
+<tr class="separator:a0e7bb757250cdf9e022f42a4a8a1482f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe9ee3f3c8e6172d09683b190a87e953"><td class="memItemLeft" align="right" valign="top"><a id="afe9ee3f3c8e6172d09683b190a87e953"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_add_request</b> (uint8_t opcode, <a class="el" href="structnode__entry.html">node_entry</a> *level, <a class="el" href="structnode__entry.html">node_entry</a> *actor, const char *action)</td></tr>
+<tr class="separator:afe9ee3f3c8e6172d09683b190a87e953"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a045d69fb22ec4f4bfc35dec7527d66b9"><td class="memItemLeft" align="right" valign="top"><a id="a045d69fb22ec4f4bfc35dec7527d66b9"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_add_join</b> (<a class="el" href="structnode__entry.html">node_entry</a> *level, <a class="el" href="structnode__entry.html">node_entry</a> *actor)</td></tr>
+<tr class="separator:a045d69fb22ec4f4bfc35dec7527d66b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab96cfc34a46b861623d11a4bab202ca7"><td class="memItemLeft" align="right" valign="top"><a id="ab96cfc34a46b861623d11a4bab202ca7"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_allocate_memory</b> (<a class="el" href="structsymbol__entry.html">symbol_entry</a> *, <a class="el" href="structtype__description.html">type_description</a> *, <a class="el" href="symbol_8h.html#a94bf374ff27fbbee3730e27bf67f0b91">symbol_memory_type_id</a>)</td></tr>
+<tr class="separator:ab96cfc34a46b861623d11a4bab202ca7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0c2e2fe1e7669dca5d97f086906c864"><td class="memItemLeft" align="right" valign="top"><a id="af0c2e2fe1e7669dca5d97f086906c864"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_check_undefine</b> (void)</td></tr>
+<tr class="separator:af0c2e2fe1e7669dca5d97f086906c864"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8db107338967a6a4f1780b727223a1ea"><td class="memItemLeft" align="right" valign="top"><a id="a8db107338967a6a4f1780b727223a1ea"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_print_header</b> (void)</td></tr>
+<tr class="separator:a8db107338967a6a4f1780b727223a1ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a226e478563a801bee879428790c09c3a"><td class="memItemLeft" align="right" valign="top"><a id="a226e478563a801bee879428790c09c3a"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_print_footer</b> (const char *, <a class="el" href="structtype__description.html">type_description</a> *)</td></tr>
+<tr class="separator:a226e478563a801bee879428790c09c3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92194cb8b0f861f6bd43ac0910aa40c2"><td class="memItemLeft" align="right" valign="top"><a id="a92194cb8b0f861f6bd43ac0910aa40c2"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_print_entry</b> (<a class="el" href="structsymbol__entry.html">symbol_entry</a> *, <a class="el" href="structtype__description.html">type_description</a> *)</td></tr>
+<tr class="separator:a92194cb8b0f861f6bd43ac0910aa40c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6cd57d74dbec27ff4840a2ddb499ca4c"><td class="memItemLeft" align="right" valign="top"><a id="a6cd57d74dbec27ff4840a2ddb499ca4c"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_print_dummy_global_variable</b> (size_t size)</td></tr>
+<tr class="separator:a6cd57d74dbec27ff4840a2ddb499ca4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa233944905fc36e441d0909b1d6ad2d4"><td class="memItemLeft" align="right" valign="top"><a id="aa233944905fc36e441d0909b1d6ad2d4"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_write_actor_infomation</b> (mana_stream *stream)</td></tr>
+<tr class="separator:aa233944905fc36e441d0909b1d6ad2d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a765a14f4031d28358dcb0a565644dced"><td class="memItemLeft" align="right" valign="top"><a id="a765a14f4031d28358dcb0a565644dced"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_dump</b> (FILE *)</td></tr>
+<tr class="separator:a765a14f4031d28358dcb0a565644dced"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad601fd0afc5b467d16be55dbcd421fee"><td class="memItemLeft" align="right" valign="top"><a id="ad601fd0afc5b467d16be55dbcd421fee"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>mana_symbol_dump_function_symbol_from_address</b> (FILE *log, const int32_t address)</td></tr>
+<tr class="separator:ad601fd0afc5b467d16be55dbcd421fee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 変数</h2></td></tr>
-<tr class="memitem:a5e68fdd96a6098cee10fb8d3fd082e85"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="symbol_8h.html#a5e68fdd96a6098cee10fb8d3fd082e85">symbol_frame_size_list</a></td></tr>
-<tr class="separator:a5e68fdd96a6098cee10fb8d3fd082e85"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a96ae1099578eb807a35fe7268cede0de"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="symbol_8h.html#a96ae1099578eb807a35fe7268cede0de">symbol_return_address_list</a></td></tr>
-<tr class="separator:a96ae1099578eb807a35fe7268cede0de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac2273f8369eb8630614721c90c60756"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="symbol_8h.html#aac2273f8369eb8630614721c90c60756">mana_symbol_frame_size_list</a></td></tr>
+<tr class="separator:aac2273f8369eb8630614721c90c60756"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7092258a202421d99a2738fb7da244d"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="symbol_8h.html#aa7092258a202421d99a2738fb7da244d">mana_symbol_return_address_list</a></td></tr>
+<tr class="separator:aa7092258a202421d99a2738fb7da244d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
 <div class="textblock"><p>レジスタ割り当てに関するヘッダーファイル  このファイルはレジスタ割り当てに関するヘッダーファイルです。 </p>
@@ -670,14 +667,14 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_dump_function_
 </div>
 </div>
 <h2 class="groupheader">関数詳解</h2>
-<a id="a1eeb656d7e986fc057852875f64b6266"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1eeb656d7e986fc057852875f64b6266">&sect;&nbsp;</a></span>symbol_begin_registration_actor()</h2>
+<a id="ac7bf4223da69fa7517e774b6fb70db03"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7bf4223da69fa7517e774b6fb70db03">&sect;&nbsp;</a></span>mana_symbol_begin_registration_actor()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void symbol_begin_registration_actor </td>
+          <td class="memname">void mana_symbol_begin_registration_actor </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structsymbol__entry.html">symbol_entry</a> *&#160;</td>
           <td class="paramname"><em>symbol</em></td><td>)</td>
@@ -694,14 +691,14 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_dump_function_
 
 </div>
 </div>
-<a id="a8e0eecb05d4391c026b9254b662482f2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8e0eecb05d4391c026b9254b662482f2">&sect;&nbsp;</a></span>symbol_commit_registration_actor()</h2>
+<a id="aa38e64c9537b8e1eae10309bac3aa373"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa38e64c9537b8e1eae10309bac3aa373">&sect;&nbsp;</a></span>mana_symbol_commit_registration_actor()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void symbol_commit_registration_actor </td>
+          <td class="memname">void mana_symbol_commit_registration_actor </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>name</em>, </td>
@@ -735,14 +732,14 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_dump_function_
 
 </div>
 </div>
-<a id="ac4bccd3dcf10703187881e57e6385d88"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac4bccd3dcf10703187881e57e6385d88">&sect;&nbsp;</a></span>symbol_open_actor()</h2>
+<a id="a02c6472195d21565c627493417a64e08"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a02c6472195d21565c627493417a64e08">&sect;&nbsp;</a></span>mana_symbol_open_actor()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void symbol_open_actor </td>
+          <td class="memname">void mana_symbol_open_actor </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>name</em></td><td>)</td>
@@ -760,14 +757,14 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_dump_function_
 </div>
 </div>
 <h2 class="groupheader">変数詳解</h2>
-<a id="a5e68fdd96a6098cee10fb8d3fd082e85"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5e68fdd96a6098cee10fb8d3fd082e85">&sect;&nbsp;</a></span>symbol_frame_size_list</h2>
+<a id="aac2273f8369eb8630614721c90c60756"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aac2273f8369eb8630614721c90c60756">&sect;&nbsp;</a></span>mana_symbol_frame_size_list</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int32_t symbol_frame_size_list</td>
+          <td class="memname">int32_t mana_symbol_frame_size_list</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -775,14 +772,14 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_dump_function_
 
 </div>
 </div>
-<a id="a96ae1099578eb807a35fe7268cede0de"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a96ae1099578eb807a35fe7268cede0de">&sect;&nbsp;</a></span>symbol_return_address_list</h2>
+<a id="aa7092258a202421d99a2738fb7da244d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa7092258a202421d99a2738fb7da244d">&sect;&nbsp;</a></span>mana_symbol_return_address_list</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int32_t symbol_return_address_list</td>
+          <td class="memname">int32_t mana_symbol_return_address_list</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -793,7 +790,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>symbol_dump_function_
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-2017年04月22日(土) 01時27分01秒作成 - mana / 構成:  &#160;<a href="http://www.doxygen.org/index.html">
+2017年04月07日(金) 02時45分39秒作成 - mana / 構成:  &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.12
 </small></address>

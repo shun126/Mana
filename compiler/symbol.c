@@ -2,8 +2,8 @@
 mana (compiler)
 
 @file	symbol.c
-@brief	ƒŒƒWƒXƒ^Š„‚è“–‚Ä‚ÉŠÖ‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹
-@detail	‚±‚Ìƒtƒ@ƒCƒ‹‚ÍƒŒƒWƒXƒ^Š„‚è“–‚Ä‚ÉŠÖ‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹‚Å‚·B
+@brief	ãƒ¬ã‚¸ã‚¹ã‚¿å‰²ã‚Šå½“ã¦ã«é–¢ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«
+@detail	ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯ãƒ¬ã‚¸ã‚¹ã‚¿å‰²ã‚Šå½“ã¦ã«é–¢ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
 @author	Shun Moriya
 @date	2003-
 */
@@ -47,35 +47,35 @@ mana (compiler)
 #define MANA_SYMBOL_IS_FUNCTION_OPENED()			(symbol_is_function_opened)
 
 static char* symbol_class_type_id_name[SYMBOL_CLASS_TYPE_NUMBER_OF] = {
-	"new symbol",										/* –¢Š„‚è“–‚ÄŠÖ” */
-	"typedef",											/* Œ^’è‹` */
-	"prototype function",								/* ƒvƒƒgƒ^ƒCƒvŠÖ”éŒ¾ */
-	"function",											/* ŠÖ” */
-	"native function",									/* ŠO•”ŠÖ” */
-	"member function",									/* ƒƒ“ƒo[ŠÖ”(ƒAƒNƒVƒ‡ƒ“) */
-	"static variable",									/* ƒXƒ^ƒeƒBƒbƒN•Ï” */
-	"global variable",									/* ƒOƒ[ƒoƒ‹•Ï” */
-	"instance variable",								/* ƒCƒ“ƒXƒ^ƒ“ƒX•Ï” */
-	"local variable",									/* ƒ[ƒJƒ‹•Ï” */
-	"constant int32_t",										/* ®” */
-	"constant float",									/* ŽÀ” */
-	"constant string",									/* •¶Žš—ñ */
-	"alias",											/* ƒf[ƒ^ŽQÆ */
+	"new symbol",										/* æœªå‰²ã‚Šå½“ã¦é–¢æ•° */
+	"typedef",											/* åž‹å®šç¾© */
+	"prototype function",								/* ãƒ—ãƒ­ãƒˆã‚¿ã‚¤ãƒ—é–¢æ•°å®£è¨€ */
+	"function",											/* é–¢æ•° */
+	"native function",									/* å¤–éƒ¨é–¢æ•° */
+	"member function",									/* ãƒ¡ãƒ³ãƒãƒ¼é–¢æ•°(ã‚¢ã‚¯ã‚·ãƒ§ãƒ³) */
+	"static variable",									/* ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯å¤‰æ•° */
+	"global variable",									/* ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•° */
+	"instance variable",								/* ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹å¤‰æ•° */
+	"local variable",									/* ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•° */
+	"constant int32_t",										/* æ•´æ•° */
+	"constant float",									/* å®Ÿæ•° */
+	"constant string",									/* æ–‡å­—åˆ— */
+	"alias",											/* ãƒ‡ãƒ¼ã‚¿å‚ç…§ */
 };
 
 static char* symbol_data_type_id_name[SYMBOL_DATA_TYPE_NUMBER_OF] = {
-	"void",												/* voidŒ^ */
-	"char",												/* int8_tŒ^ */
-	"short",											/* int16_tŒ^ */
-	"int",												/* int32_tŒ^ */
-	"float",											/* floatŒ^ */
-	"reference",										/* referenceŒ^ */
-	"array",											/* arrayŒ^ */
-	"struct",											/* structŒ^ */
-	"actor",											/* actorŒ^ */
-	"module",											/* moduleŒ^ */
-	"nil",												/* nilŒ^ */
-	"incomplete",										/* éŒ¾‚ª–¢Š®—¹‚ÌŒ^ */
+	"void",												/* voidåž‹ */
+	"char",												/* int8_tåž‹ */
+	"short",											/* int16_tåž‹ */
+	"int",												/* int32_tåž‹ */
+	"float",											/* floatåž‹ */
+	"reference",										/* referenceåž‹ */
+	"array",											/* arrayåž‹ */
+	"struct",											/* structåž‹ */
+	"actor",											/* actoråž‹ */
+	"module",											/* moduleåž‹ */
+	"nil",												/* nilåž‹ */
+	"incomplete",										/* å®£è¨€ãŒæœªå®Œäº†ã®åž‹ */
 };
 
 static struct symbol_block_table
@@ -280,7 +280,7 @@ symbol_entry* symbol_lookup_or_create_dummy(const char* name)
 		mana_compile_error("reference to undeclared identifier '%s'", name);
 
 		symbol = symbol_create_entry(name, SYMBOL_CLASS_TYPE_VARIABLE_LOCAL, 0);
-		symbol->type = mana_type_get(SYMBOL_DATA_TYPE_INT);
+		symbol->type = type_get(SYMBOL_DATA_TYPE_INT);
 	}
 	return symbol;
 }
@@ -343,11 +343,11 @@ symbol_entry* symbol_create_alias(const char* name, const char* filename)
 		mana_compile_error("duplicated declaration '%s'", name);
 
 	symbol = symbol_create_entry(name, SYMBOL_CLASS_TYPE_ALIAS, -1);
-	symbol->type = mana_type_get(SYMBOL_DATA_TYPE_INT);
+	symbol->type = type_get(SYMBOL_DATA_TYPE_INT);
 
 	if(_fullpath(path, filename, sizeof(path)))
 	{
-		symbol->string = mana_pool_set(path);
+		symbol->string = pool_set(path);
 	}else{
 		mana_compile_error("unable to open \"%s\"", filename);
 		symbol->string = filename;
@@ -363,7 +363,7 @@ symbol_entry* symbol_create_const_int(const char* name, const int32_t value)
 		mana_compile_error("duplicated declaration '%s'", name);
 
 	symbol = symbol_create_entry(name, SYMBOL_CLASS_TYPE_CONSTANT_INT, value);
-	symbol->type = mana_type_get(SYMBOL_DATA_TYPE_INT);
+	symbol->type = type_get(SYMBOL_DATA_TYPE_INT);
 
 	if(mana_variable_header_file)
 	{
@@ -380,7 +380,7 @@ symbol_entry* symbol_create_const_float(const char* name, const float value)
 		mana_compile_error("duplicated declaration '%s'", name);
 
 	symbol = symbol_create(name, SYMBOL_CLASS_TYPE_CONSTANT_FLOAT);
-	symbol->type = mana_type_get(SYMBOL_DATA_TYPE_FLOAT);
+	symbol->type = type_get(SYMBOL_DATA_TYPE_FLOAT);
 	symbol->hloat = value;
 
 	if(mana_variable_header_file)
@@ -399,7 +399,7 @@ symbol_entry* symbol_create_const_string(const char* name, const char* value)
 
 	symbol = symbol_create(name, SYMBOL_CLASS_TYPE_CONSTANT_STRING);
 	symbol->string = value;
-	symbol->type = mana_type_string;
+	symbol->type = type_string;
 
 	if(mana_variable_header_file)
 	{
@@ -498,7 +498,7 @@ void symbol_open_function(node_entry* node, const bool is_action)
 		symbol_local_memory_address += sizeof(void*);
 	}
 #if 0
-	// ƒVƒ“ƒ{ƒ‹ƒŠƒXƒg‚Éˆø”ƒVƒ“ƒ{ƒ‹‚ðÄ“o˜^
+	// ã‚·ãƒ³ãƒœãƒ«ãƒªã‚¹ãƒˆã«å¼•æ•°ã‚·ãƒ³ãƒœãƒ«ã‚’å†ç™»éŒ²
 	symbol_block_table[symbol_block_level].head = function->parameter_list;
 
 	for (symbol_entry* symbol = function->parameter_list; symbol; symbol = symbol->next)
@@ -519,30 +519,30 @@ void symbol_open_function(node_entry* node, const bool is_action)
 		mana_compile_error("incomplete data type is used");
 	}
 
-	/* ƒŒƒWƒXƒ^Š„‚è“–‚Äˆ—‚ðƒNƒŠƒA */
-	mana_register_clear();
+	/* ãƒ¬ã‚¸ã‚¹ã‚¿å‰²ã‚Šå½“ã¦å‡¦ç†ã‚’ã‚¯ãƒªã‚¢ */
+	register_clear();
 
 	if (function->class_type == SYMBOL_CLASS_TYPE_NEW_SYMBOL)
 	{
 		function->type = type;
 	}
 
-	/* ƒVƒ“ƒ{ƒ‹‚ÌÝ’è */
+	/* ã‚·ãƒ³ãƒœãƒ«ã®è¨­å®š */
 	function->address = code_get_pc();
 	function->etc = is_action;
 
 	symbol_function_block_level = symbol_block_level;
 
-	/* frame buffer‚ÌŠm•Û‚·‚é–½—ß‚ð”­s */
+	/* frame bufferã®ç¢ºä¿ã™ã‚‹å‘½ä»¤ã‚’ç™ºè¡Œ */
 	symbol_frame_size_list = code_set_opecode_and_operand(MANA_IL_ALLOCATE, -1);
 
 	if (!function->etc)
 	{
-		/* return address‚ðframe buffer‚É•Û‘¶‚·‚é–½—ß‚ð”­s */
+		/* return addressã‚’frame bufferã«ä¿å­˜ã™ã‚‹å‘½ä»¤ã‚’ç™ºè¡Œ */
 		code_set_opecode(MANA_IL_SAVE_RETURN_ADDRESS);
 	}
 
-	/* return‚ÌƒWƒƒƒ“ƒvæƒŠƒ“ƒN‚ð‰Šú‰» */
+	/* returnã®ã‚¸ãƒ£ãƒ³ãƒ—å…ˆãƒªãƒ³ã‚¯ã‚’åˆæœŸåŒ– */
 	symbol_return_address_list = -1;
 
 
@@ -550,8 +550,8 @@ void symbol_open_function(node_entry* node, const bool is_action)
 }
 
 /*
-ŠÖ”‚Ìˆø”‚ðƒtƒŒ[ƒ€ƒoƒbƒtƒ@—Ìˆæ‚ÖƒRƒs[‚·‚éƒR[ƒh‚ðo—Í‚·‚é
-@param[in]	function	ŠÖ”‚ð•\‚·symbol_entry
+é–¢æ•°ã®å¼•æ•°ã‚’ãƒ•ãƒ¬ãƒ¼ãƒ ãƒãƒƒãƒ•ã‚¡é ˜åŸŸã¸ã‚³ãƒ”ãƒ¼ã™ã‚‹ã‚³ãƒ¼ãƒ‰ã‚’å‡ºåŠ›ã™ã‚‹
+@param[in]	function	é–¢æ•°ã‚’è¡¨ã™symbol_entry
 */
 void symbol_open_function2(const symbol_entry* function)
 {
@@ -595,7 +595,7 @@ void symbol_close_function(node_entry* node, const bool is_action)
 	if (is_action)
 		data_set(node->string);
 
-	/* goto‚ÌƒWƒƒƒ“ƒvæ‚ðXV */
+	/* gotoã®ã‚¸ãƒ£ãƒ³ãƒ—å…ˆã‚’æ›´æ–° */
 	{
 		symbol_entry* symbol;
 
@@ -613,10 +613,10 @@ void symbol_close_function(node_entry* node, const bool is_action)
 		}
 	}
 
-	/* return‚ÌƒWƒƒƒ“ƒvæ‚ðXV */
+	/* returnã®ã‚¸ãƒ£ãƒ³ãƒ—å…ˆã‚’æ›´æ–° */
 	code_replace_all(symbol_return_address_list, code_get_pc());
 
-	/* ’¼Œã‚ÌƒWƒƒƒ“ƒv‚Ííœ */
+	/* ç›´å¾Œã®ã‚¸ãƒ£ãƒ³ãƒ—ã¯å‰Šé™¤ */
 	if (symbol_return_address_list >= 0)
 	{
 		//code_reduce(5/*int32_t pebble_get_instruction_size(uint8_t* program)*/);
@@ -624,14 +624,14 @@ void symbol_close_function(node_entry* node, const bool is_action)
 
 	if (!node->symbol->etc)
 	{
-		/* return address‚ðƒŒƒWƒXƒ^‚É•œ‹A‚·‚é–½—ß‚ð”­s */
+		/* return addressã‚’ãƒ¬ã‚¸ã‚¹ã‚¿ã«å¾©å¸°ã™ã‚‹å‘½ä»¤ã‚’ç™ºè¡Œ */
 		code_set_opecode(MANA_IL_LOAD_RETURN_ADDRESS);
 	}
 
-	/* free–½—ß‚Ì”­s */
+	/* freeå‘½ä»¤ã®ç™ºè¡Œ */
 	symbol_frame_size_list = code_set_opecode_and_operand(MANA_IL_FREE, symbol_frame_size_list);
 
-	/* return–½—ß‚Ì”­s */
+	/* returnå‘½ä»¤ã®ç™ºè¡Œ */
 	if (MANA_SYMBOL_IS_ACTOR_OR_STRUCTER_OPENED())
 	{
 		code_set_opecode((uint8_t)MANA_IL_RETURN_FROM_ACTION);
@@ -648,11 +648,11 @@ void symbol_close_function(node_entry* node, const bool is_action)
 	}
 
 	/*
-	* frame buffer‚ÌƒTƒCƒY‚ðXV
+	* frame bufferã®ã‚µã‚¤ã‚ºã‚’æ›´æ–°
 	*
-	* symbol_open_block‚ªsymbol_create_function‚ÅŒÄ‚Î‚ê‚é‚Ì‚Å
-	* symbol_begin_function_registration‚Ésymbol_open_block‚ðŒÄ‚ñ‚Å‚¢‚È‚­‚Ä‚à
-	* ‚±‚±‚Åsymbol_close_block‚ðŒÄ‚Ño‚·•K—v‚ª‚ ‚éB
+	* symbol_open_blockãŒsymbol_create_functionã§å‘¼ã°ã‚Œã‚‹ã®ã§
+	* symbol_begin_function_registrationã«symbol_open_blockã‚’å‘¼ã‚“ã§ã„ãªãã¦ã‚‚
+	* ã“ã“ã§symbol_close_blockã‚’å‘¼ã³å‡ºã™å¿…è¦ãŒã‚ã‚‹ã€‚
 	*/
 	symbol_close_block();
 	symbol_is_function_opened = false;
@@ -715,7 +715,7 @@ void symbol_close_structure(const char* name)
 	type_description* type;
 	int32_t max_sligment_size;
 
-	/* Å‚à‘å‚«‚¢ƒTƒCƒY‚Ìƒ^ƒCƒv‚ÉƒAƒ‰ƒCƒƒ“ƒg‚ð‡‚í‚¹‚é */
+	/* æœ€ã‚‚å¤§ãã„ã‚µã‚¤ã‚ºã®ã‚¿ã‚¤ãƒ—ã«ã‚¢ãƒ©ã‚¤ãƒ¡ãƒ³ãƒˆã‚’åˆã‚ã›ã‚‹ */
 	symbol = symbol_block_table[symbol_block_level].head;
 	max_sligment_size = 0;
 	while(symbol)
@@ -725,14 +725,14 @@ void symbol_close_structure(const char* name)
 		symbol = symbol->next;
 	}
 
-	/* 1) symbol_entry*‚ðtype_description*‚Æ‚µ‚Ä‘ã“ü‚µ‚Ä‚¢‚Ü‚·
-	 * ŽQÆæ‚Åsymbol_entry*‚ÉƒLƒƒƒXƒg‚µ‚Ä‚¢‚Ü‚·B
-	 * TODO:ŠëŒ¯‚È‚Ì‚Å‚¿‚á‚ñ‚Æƒƒ“ƒo[‚ð’Ç‰Á‚µ‚Ü‚µ‚å‚¤
+	/* 1) symbol_entry*ã‚’type_description*ã¨ã—ã¦ä»£å…¥ã—ã¦ã„ã¾ã™
+	 * å‚ç…§å…ˆã§symbol_entry*ã«ã‚­ãƒ£ã‚¹ãƒˆã—ã¦ã„ã¾ã™ã€‚
+	 * TODO:å±é™ºãªã®ã§ã¡ã‚ƒã‚“ã¨ãƒ¡ãƒ³ãƒãƒ¼ã‚’è¿½åŠ ã—ã¾ã—ã‚‡ã†
 	 */
 	type = (type_description*)symbol_block_table[symbol_block_level].head;
 
 	/* 2) create new type description */
-	type = mana_type_create(SYMBOL_DATA_TYPE_STRUCT, type, NULL);
+	type = type_create(SYMBOL_DATA_TYPE_STRUCT, type, NULL);
 	type->name = name;
 	type->alignment_memory_size = max_sligment_size;
 
@@ -778,22 +778,22 @@ void symbol_begin_registration_actor(symbol_entry* symbol)
 		for (type = symbol->type; type->tcons == SYMBOL_DATA_TYPE_ARRAY; type = type->component)
 			;
 
-		// type‚ªactor‚Å‚Í‚È‚¢ê‡A‘±s•s‰Â”\
+		// typeãŒactorã§ã¯ãªã„å ´åˆã€ç¶šè¡Œä¸å¯èƒ½
 		if (type->tcons != SYMBOL_DATA_TYPE_ACTOR && type->tcons != SYMBOL_DATA_TYPE_MODULE)
 		{
 			mana_compile_error("%s is NOT actor!", symbol->name);
 		}
 		else
 		{
-			// symbol_close_block‚Åsymbol_hash_chain_table‚ðŠJ•ú‚·‚é
+			// symbol_close_blockã§symbol_hash_chain_tableã‚’é–‹æ”¾ã™ã‚‹
 			symbol_block_table[symbol_block_level].head = (symbol_entry*)type->component;
 
-			// ƒVƒ“ƒ{ƒ‹ƒŠƒXƒg‚Ì––’[‚©‚çhash‚É“o˜^
+			// ã‚·ãƒ³ãƒœãƒ«ãƒªã‚¹ãƒˆã®æœ«ç«¯ã‹ã‚‰hashã«ç™»éŒ²
 			symbol_open_actor_register_member((symbol_entry*)type->component);
 		}
 	}
 
-	// instance•Ï”ƒTƒCƒY‚ÌÄŒvŽZ
+	// instanceå¤‰æ•°ã‚µã‚¤ã‚ºã®å†è¨ˆç®—
 	symbol_actor_memory_address = (symbol && symbol->type) ? symbol->type->memory_size : 0;
 }
 
@@ -810,10 +810,10 @@ void symbol_commit_registration_actor(const char* name, const char* parent, type
 			;
 		if (type->tcons == SYMBOL_DATA_TYPE_ACTOR)
 		{
-			/* symbol_entry*‚ðtype_description*‚Æ‚µ‚Ä‘ã“ü‚µ‚Ä‚¢‚Ü‚·
-			* ŽQÆæ‚Åsymbol_entry*‚ÉƒLƒƒƒXƒg‚µ‚Ä‚¢‚Ü‚·B
+			/* symbol_entry*ã‚’type_description*ã¨ã—ã¦ä»£å…¥ã—ã¦ã„ã¾ã™
+			* å‚ç…§å…ˆã§symbol_entry*ã«ã‚­ãƒ£ã‚¹ãƒˆã—ã¦ã„ã¾ã™ã€‚
 			*
-			* @TODO	ŠëŒ¯‚È‚Ì‚Å‚¿‚á‚ñ‚Æƒƒ“ƒo[‚ð’Ç‰Á‚µ‚Ü‚µ‚å‚¤
+			* @TODO	å±é™ºãªã®ã§ã¡ã‚ƒã‚“ã¨ãƒ¡ãƒ³ãƒãƒ¼ã‚’è¿½åŠ ã—ã¾ã—ã‚‡ã†
 			*/
 			type->component = (type_description*)(symbol_block_table[symbol_block_level].head);
 
@@ -821,7 +821,7 @@ void symbol_commit_registration_actor(const char* name, const char* parent, type
 			if (type->share.actor.phantom != phantom)
 				mana_compile_error("already declared %s", type->share.actor.phantom ? "a phantom" : "an actor");
 
-			/* @TODO	actor‚ÌéŒ¾‚ª“ñ‚Â‚ ‚éê‡Aƒ[ƒjƒ“ƒO‚ðo‚·H */
+			/* @TODO	actorã®å®£è¨€ãŒäºŒã¤ã‚ã‚‹å ´åˆã€ãƒ¯ãƒ¼ãƒ‹ãƒ³ã‚°ã‚’å‡ºã™ï¼Ÿ */
 			goto SKIP;
 		}
 	}
@@ -838,11 +838,11 @@ void symbol_commit_registration_actor(const char* name, const char* parent, type
 		parent_type = NULL;
 	}
 
-	/* symbol_entry*‚ðtype_description*‚Æ‚µ‚Ä‘ã“ü‚µ‚Ä‚¢‚Ü‚·
-	* ŽQÆæ‚Åsymbol_entry*‚ÉƒLƒƒƒXƒg‚µ‚Ä‚¢‚Ü‚·B
-	* TODO:ŠëŒ¯‚È‚Ì‚Å‚¿‚á‚ñ‚Æƒƒ“ƒo[‚ð’Ç‰Á‚µ‚Ü‚µ‚å‚¤
+	/* symbol_entry*ã‚’type_description*ã¨ã—ã¦ä»£å…¥ã—ã¦ã„ã¾ã™
+	* å‚ç…§å…ˆã§symbol_entry*ã«ã‚­ãƒ£ã‚¹ãƒˆã—ã¦ã„ã¾ã™ã€‚
+	* TODO:å±é™ºãªã®ã§ã¡ã‚ƒã‚“ã¨ãƒ¡ãƒ³ãƒãƒ¼ã‚’è¿½åŠ ã—ã¾ã—ã‚‡ã†
 	*/
-	type = mana_type_create(SYMBOL_DATA_TYPE_ACTOR,
+	type = type_create(SYMBOL_DATA_TYPE_ACTOR,
 		(type_description*)(symbol_block_table[symbol_block_level].head), parent_type);
 	type->name = name;
 	type->alignment_memory_size = IBSZ;
@@ -889,22 +889,22 @@ void symbol_open_actor(const char* name)
 		for (type = symbol->type; type->tcons == SYMBOL_DATA_TYPE_ARRAY; type = type->component)
 			;
 
-		// type‚ªactor‚Å‚Í‚È‚¢ê‡A‘±s•s‰Â”\
+		// typeãŒactorã§ã¯ãªã„å ´åˆã€ç¶šè¡Œä¸å¯èƒ½
 		if (type->tcons != SYMBOL_DATA_TYPE_ACTOR && type->tcons != SYMBOL_DATA_TYPE_MODULE)
 		{
 			mana_compile_error("%s is NOT actor!", symbol->name);
 		}
 		else
 		{
-			// symbol_close_block‚Åsymbol_hash_chain_table‚ðŠJ•ú‚·‚é
+			// symbol_close_blockã§symbol_hash_chain_tableã‚’é–‹æ”¾ã™ã‚‹
 			symbol_block_table[symbol_block_level].head = (symbol_entry*)type->component;
 
-			// ƒVƒ“ƒ{ƒ‹ƒŠƒXƒg‚Ì––’[‚©‚çhash‚É“o˜^
+			// ã‚·ãƒ³ãƒœãƒ«ãƒªã‚¹ãƒˆã®æœ«ç«¯ã‹ã‚‰hashã«ç™»éŒ²
 			symbol_open_actor_register_member((symbol_entry*)type->component);
 		}
 	}
 
-	// instance•Ï”ƒTƒCƒY‚ÌÄŒvŽZ
+	// instanceå¤‰æ•°ã‚µã‚¤ã‚ºã®å†è¨ˆç®—
 	symbol_actor_memory_address = (symbol && symbol->type) ? symbol->type->memory_size : 0;
 }
 
@@ -948,22 +948,22 @@ void symbol_begin_registration_module(symbol_entry* symbol)
 		for (type = symbol->type; type->tcons == SYMBOL_DATA_TYPE_ARRAY; type = type->component)
 			;
 
-		// type‚ªactor‚Å‚Í‚È‚¢ê‡A‘±s•s‰Â”\
+		// typeãŒactorã§ã¯ãªã„å ´åˆã€ç¶šè¡Œä¸å¯èƒ½
 		if (type->tcons != SYMBOL_DATA_TYPE_ACTOR && type->tcons != SYMBOL_DATA_TYPE_MODULE)
 		{
 			mana_compile_error("%s is NOT modeule!", symbol->name);
 		}
 		else
 		{
-			// symbol_close_block‚Åsymbol_hash_chain_table‚ðŠJ•ú‚·‚é
+			// symbol_close_blockã§symbol_hash_chain_tableã‚’é–‹æ”¾ã™ã‚‹
 			symbol_block_table[symbol_block_level].head = (symbol_entry*)type->component;
 
-			// ƒVƒ“ƒ{ƒ‹ƒŠƒXƒg‚Ì––’[‚©‚çhash‚É“o˜^
+			// ã‚·ãƒ³ãƒœãƒ«ãƒªã‚¹ãƒˆã®æœ«ç«¯ã‹ã‚‰hashã«ç™»éŒ²
 			symbol_open_actor_register_member((symbol_entry*)type->component);
 		}
 	}
 
-	// instance•Ï”ƒTƒCƒY‚ÌÄŒvŽZ
+	// instanceå¤‰æ•°ã‚µã‚¤ã‚ºã®å†è¨ˆç®—
 	symbol_actor_memory_address = 0;
 }
 
@@ -973,12 +973,12 @@ void symbol_commit_registration_module(const char* name)
 
 	data_set(name);
 
-	/* symbol_entry*‚ðtype_description*‚Æ‚µ‚Ä‘ã“ü‚µ‚Ä‚¢‚Ü‚·
-	* ŽQÆæ‚Åsymbol_entry*‚ÉƒLƒƒƒXƒg‚µ‚Ä‚¢‚Ü‚·B
-	* TODO:ŠëŒ¯‚È‚Ì‚Å‚¿‚á‚ñ‚Æƒƒ“ƒo[‚ð’Ç‰Á‚µ‚Ü‚µ‚å‚¤
+	/* symbol_entry*ã‚’type_description*ã¨ã—ã¦ä»£å…¥ã—ã¦ã„ã¾ã™
+	* å‚ç…§å…ˆã§symbol_entry*ã«ã‚­ãƒ£ã‚¹ãƒˆã—ã¦ã„ã¾ã™ã€‚
+	* TODO:å±é™ºãªã®ã§ã¡ã‚ƒã‚“ã¨ãƒ¡ãƒ³ãƒãƒ¼ã‚’è¿½åŠ ã—ã¾ã—ã‚‡ã†
 	*/
 	type = (type_description*)(symbol_block_table[symbol_block_level].head);
-	type = mana_type_create(SYMBOL_DATA_TYPE_MODULE, type, NULL);
+	type = type_create(SYMBOL_DATA_TYPE_MODULE, type, NULL);
 	type->name = name;
 	type->alignment_memory_size = IBSZ;
 
@@ -1008,7 +1008,7 @@ void symbol_extend_module(const char* name)
 	{
 		symbol_entry* action_symbol = (symbol_entry*)(symbol->type->component);
 
-		/* ƒVƒ“ƒ{ƒ‹ƒŠƒXƒg‚Ì––’[‚©‚çhash‚É“o˜^ */
+		/* ã‚·ãƒ³ãƒœãƒ«ãƒªã‚¹ãƒˆã®æœ«ç«¯ã‹ã‚‰hashã«ç™»éŒ² */
 		if(action_symbol)
 		{
 			symbol_entry* last_symbol = action_symbol;
@@ -1018,7 +1018,7 @@ void symbol_extend_module(const char* name)
 			}
 			last_symbol->next = symbol_block_table[symbol_block_level].head;
 
-			/* symbol_close_block‚Åsymbol_hash_chain_table‚ðŠJ•ú‚·‚éˆ× */
+			/* symbol_close_blockã§symbol_hash_chain_tableã‚’é–‹æ”¾ã™ã‚‹ç‚º */
 			symbol_block_table[symbol_block_level].head = action_symbol;
 
 			symbol_open_actor_register_member(action_symbol);
@@ -1172,7 +1172,7 @@ void symbol_allocate_memory(symbol_entry* symbol, type_description* type, symbol
 	if(type->tcons == SYMBOL_DATA_TYPE_INCOMPLETE || type->tcons == SYMBOL_DATA_TYPE_VOID)
 	{
 		mana_compile_error("incomplete type name or void is used for declraration");
-		type = mana_type_get(SYMBOL_DATA_TYPE_INT);
+		type = type_get(SYMBOL_DATA_TYPE_INT);
 	}
 
 	if(mana_variable_header_file)
@@ -1180,16 +1180,16 @@ void symbol_allocate_memory(symbol_entry* symbol, type_description* type, symbol
 		symbol_print_entry(symbol, type);
 	}
 
-	if(symbol->type == NULL)								/* ”z—ñŒ^ˆÈŠO‚Ì•Ï” ? */
+	if(symbol->type == NULL)								/* é…åˆ—åž‹ä»¥å¤–ã®å¤‰æ•° ? */
 	{
-		symbol->type = type;								/* Œ^‚ÌÝ’è */
+		symbol->type = type;								/* åž‹ã®è¨­å®š */
 	}
-	else if(symbol->type == type)							/* ƒGƒ‰[‚Ì‰Â”\«‚ª‚ ‚é */
+	else if(symbol->type == type)							/* ã‚¨ãƒ©ãƒ¼ã®å¯èƒ½æ€§ãŒã‚ã‚‹ */
 	{
 	}
 	else
-	{														/* ”z—ñŒ^‚Ì•Ï”‚Ìˆ— */
-		mana_type_set_array(symbol->type, type);			/* ”z—ñŒ^ƒŠƒXƒg‚ÌÝ’è */
+	{														/* é…åˆ—åž‹ã®å¤‰æ•°ã®å‡¦ç† */
+		type_set_array(symbol->type, type);			/* é…åˆ—åž‹ãƒªã‚¹ãƒˆã®è¨­å®š */
 		type = symbol->type;
 	}
 
@@ -1213,7 +1213,7 @@ void symbol_allocate_memory(symbol_entry* symbol, type_description* type, symbol
 			break;
 
 		case SYMBOL_CLASS_TYPE_VARIABLE_LOCAL:
-			/* ƒ[ƒJƒ‹•Ï”‚ÍŒã‚ë‚©‚çŠm•Û‚³‚ê‚éˆ×A‘¼‚Ì•Ï”‚ÆŒvŽZ‚ª”½‘Î‚É‚È‚é‚Ì‚Å’ˆÓ */
+			/* ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°ã¯å¾Œã‚ã‹ã‚‰ç¢ºä¿ã•ã‚Œã‚‹ç‚ºã€ä»–ã®å¤‰æ•°ã¨è¨ˆç®—ãŒåå¯¾ã«ãªã‚‹ã®ã§æ³¨æ„ */
 			symbol->address = symbol_align_size(symbol_local_memory_address, type->alignment_memory_size) + type->memory_size;
 			symbol_local_memory_address = symbol->address;
 			break;
@@ -1228,7 +1228,7 @@ void symbol_allocate_memory(symbol_entry* symbol, type_description* type, symbol
 		mana_compile_error("no storage allocated");
 	}
 
-	/* ‰¼ˆø”‚Ì•\Ž¦‚ÌŠi”[ */
+	/* ä»®å¼•æ•°ã®è¡¨ç¤ºã®æ ¼ç´ */
 	symbol->attrib = parameter;
 }
 
@@ -1451,7 +1451,7 @@ ESCAPE:
 
 /*****************************************************************************/
 /* dump */
-static void mana_type_dump_core(FILE* fp, const type_description* type)
+static void type_dump_core(FILE* fp, const type_description* type)
 {
 	if (type)
 	{
@@ -1460,7 +1460,7 @@ static void mana_type_dump_core(FILE* fp, const type_description* type)
 			type->tcons != SYMBOL_DATA_TYPE_MODULE &&
 			type->tcons != SYMBOL_DATA_TYPE_STRUCT)
 		{
-			mana_type_dump_core(fp, type->component);
+			type_dump_core(fp, type->component);
 		}
 	}
 }
@@ -1481,7 +1481,7 @@ static void symbol_dump_core(FILE* fp, const int32_t level, const symbol_entry* 
 #endif
 
 		if(symbol->type)
-			mana_type_dump_core(fp, symbol->type);
+			type_dump_core(fp, symbol->type);
 
 		fputc('\n', fp);
 

@@ -2,8 +2,8 @@
 mana (compiler)
 
 @file	error.c
-@brief	�G���[��x���Ɋ֌W����\�[�X�t�@�C��
-@detail	���̃t�@�C���̓G���[��x���Ɋ֌W����\�[�X�t�@�C���ł��B
+@brief	エラーや警告に関係するソースファイル
+@detail	このファイルはエラーや警告に関係するソースファイルです。
 @author	Shun Moriya
 @date	2003-
 */
@@ -50,9 +50,9 @@ void mana_compile_warning(const char* format, ...)
 #endif
 
 #if defined(_MSC_VER)
-	MANA_PRINT("%s(%d): warning: %s\n", mana_lexer_get_current_filename(), mana_lexer_get_current_line(), string);
+	MANA_PRINT("%s(%d): warning: %s\n", lexer_get_current_filename(), lexer_get_current_line(), string);
 #else
-	MANA_PRINT("%s%d: warning: %s\n", mana_lexer_get_current_filename(), mana_lexer_get_current_line(), string);
+	MANA_PRINT("%s%d: warning: %s\n", lexer_get_current_filename(), lexer_get_current_line(), string);
 #endif
 }
 

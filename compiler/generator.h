@@ -2,8 +2,8 @@
 mana (compiler)
 
 @file	generator.h
-@brief	ƒRƒ“ƒpƒCƒ‹ƒZƒNƒVƒ‡ƒ“‚ÉŠÖ‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹
-@detail	‚±‚Ìƒtƒ@ƒCƒ‹‚ÍƒRƒ“ƒpƒCƒ‹ƒZƒNƒVƒ‡ƒ“‚ÉŠÖŒW‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹‚Å‚·B
+@brief	ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã«é–¢ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«
+@detail	ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã«é–¢ä¿‚ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
 @author	Shun Moriya
 @date	2017-
 */
@@ -19,25 +19,25 @@ mana (compiler)
 extern "C" {
 #endif
 
-//! NODE_CALLƒm[ƒh‚ğ‰ğŒˆ‚·‚é‚ÉŒÄ‚Î‚ê‚éƒR[ƒ‹ƒoƒbƒNŠÖ”‚ÌŒ^
+//! NODE_CALLãƒãƒ¼ãƒ‰ã‚’è§£æ±ºã™ã‚‹æ™‚ã«å‘¼ã°ã‚Œã‚‹ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°ã®å‹
 typedef node_entry* (generator_event_funtion_type)(node_entry*);
 
-//! ‰Šú‰»
+//! åˆæœŸåŒ–
 extern void generator_initialize(void);
-//! I—¹
+//! çµ‚äº†
 extern void generator_finalize(void);
 
 /*!
-NODE_CALLƒm[ƒh‚ğ‰ğŒˆ‚·‚é‚ÉŒÄ‚Î‚ê‚éƒR[ƒ‹ƒoƒbƒNŠÖ”‚ğ“o˜^‚µ‚Ü‚·
-@param[in]	name		ŠÖ”–¼
-@param[in]	function	ƒR[ƒ‹ƒoƒbƒNŠÖ”
+NODE_CALLãƒãƒ¼ãƒ‰ã‚’è§£æ±ºã™ã‚‹æ™‚ã«å‘¼ã°ã‚Œã‚‹ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°ã‚’ç™»éŒ²ã—ã¾ã™
+@param[in]	name		é–¢æ•°å
+@param[in]	function	ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
 */
 extern void generator_add_event(const char* name, generator_event_funtion_type function);
 
 /*!
-ƒm[ƒh‚ğ’H‚è‚È‚ª‚ç’†ŠÔŒ¾Œê‚É–|–ó‚µ‚Ü‚·
-@param	self			ƒm[ƒh
-@param	enable_load		true‚È‚ç‚Îload–½—ß‚Í—LŒøAfalse‚È‚ç‚Îload–½—ß‚Í–³Œø
+ãƒãƒ¼ãƒ‰ã‚’è¾¿ã‚ŠãªãŒã‚‰ä¸­é–“è¨€èªã«ç¿»è¨³ã—ã¾ã™
+@param	self			ãƒãƒ¼ãƒ‰
+@param	enable_load		trueãªã‚‰ã°loadå‘½ä»¤ã¯æœ‰åŠ¹ã€falseãªã‚‰ã°loadå‘½ä»¤ã¯ç„¡åŠ¹
 */
 extern void generator_genearte_code(node_entry* self, int32_t enable_load);
 

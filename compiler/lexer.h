@@ -2,8 +2,8 @@
 mana (compiler)
 
 @file	lexer.h
-@brief	�����͂Ɋ֌W����w�b�_�[�t�@�C��
-@detail	���̃t�@�C���͎����͂Ɋ֌W����w�b�_�[�t�@�C���ł��B
+@brief	字句解析に関係するヘッダーファイル
+@detail	このファイルは字句解析に関係するヘッダーファイルです。
 @author	Shun Moriya
 @date	2003-
 */
@@ -24,12 +24,12 @@ initialize scanner
 @retval	true		success
 @retval	false		failed
 */
-extern int32_t mana_lexer_initialize(const char* filename);
+extern int32_t lexer_initialize(const char* filename);
 
 /*!
 finalize scanner
 */
-extern void mana_lexer_finalize(void);
+extern void lexer_finalize(void);
 
 /*!
 open file
@@ -38,38 +38,38 @@ open file
 @retval	true		success
 @retval	false		failed
 */
-extern int32_t mana_lexer_open(const char* filename, const bool check);
+extern int32_t lexer_open(const char* filename, const bool check);
 
 /*!
 close file
 @retval	true	scanning complete.
 @retval	false	still need scanning.
 */
-extern int32_t mana_lexer_close(void);
+extern int32_t lexer_close(void);
 
 /*!
 get current file name
 @return	current file name pointer
 */
-extern const char* mana_lexer_get_current_filename(void);
+extern const char* lexer_get_current_filename(void);
 
 /*!
 set current file name
 @param[in]	filename	current file name pointer
 */
-extern void mana_lexer_set_current_filename(const char* filename);
+extern void lexer_set_current_filename(const char* filename);
 
 /*!
 get current line number
 @return	current line number
 */
-extern int mana_lexer_get_current_line(void);
+extern int lexer_get_current_line(void);
 
 /*!
 set current line number
 @param[in]	lineno	current line number
 */
-extern void mana_lexer_set_current_line(const int lineno);
+extern void lexer_set_current_line(const int lineno);
 
 extern int yylex(void);
 

@@ -2,8 +2,8 @@
 mana (compiler)
 
 @file	register.c
-@brief	ƒŒƒWƒXƒ^Š„‚è“–‚Ä‚ÉŠÖ‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹
-@detail	‚±‚Ìƒtƒ@ƒCƒ‹‚ÍŒ^î•ñ‚ÉŠÖŒW‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹‚Å‚·B
+@brief	ãƒ¬ã‚¸ã‚¹ã‚¿å‰²ã‚Šå½“ã¦ã«é–¢ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«
+@detail	ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯å‹æƒ…å ±ã«é–¢ä¿‚ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
 @author	Shun Moriya
 @date	2003-
 */
@@ -15,26 +15,26 @@ mana (compiler)
 #include "register.h"
 #endif
 
-static mana_register_entity entities[MANA_REGISTER_COUNT];
+static register_entity entities[MANA_REGISTER_COUNT];
 
-void mana_register_initialzie(void)
+void register_initialzie(void)
 {
 	int8_t i;
 
 	for(i = 0; i < MANA_REGISTER_COUNT; ++i)
 	{
-		mana_register_entity* entity = &entities[i];
+		register_entity* entity = &entities[i];
 		entity->symbol = NULL;
 		entity->number = i;
 	}
 }
 
-void mana_register_finalize(void)
+void register_finalize(void)
 {
-	mana_register_clear();
+	register_clear();
 }
 
-void mana_register_clear(void)
+void register_clear(void)
 {
 	size_t i;
 
@@ -44,13 +44,13 @@ void mana_register_clear(void)
 	}
 }
 
-mana_register_entity* mana_register_find(symbol_entry* symbol)
+register_entity* register_find(symbol_entry* symbol)
 {
 	size_t i;
 
 	for(i = 0; i < MANA_REGISTER_COUNT; ++i)
 	{
-		mana_register_entity* entity = &entities[i];
+		register_entity* entity = &entities[i];
 		if(entity->symbol == symbol)
 		{
 			return entity;
@@ -60,16 +60,16 @@ mana_register_entity* mana_register_find(symbol_entry* symbol)
 	return NULL;
 }
 
-/* TODO:–³–¼ƒŒƒWƒXƒ^‚Ì“o˜^‚ª•K—v
+/* TODO:ç„¡åãƒ¬ã‚¸ã‚¹ã‚¿ã®ç™»éŒ²ãŒå¿…è¦
 */
 
-mana_register_entity* mana_register_allocate(symbol_entry* symbol, size_t address)
+register_entity* register_allocate(symbol_entry* symbol, size_t address)
 {
 	size_t i;
 
 	for(i = 0; i < MANA_REGISTER_COUNT; ++i)
 	{
-		mana_register_entity* entity = &entities[i];
+		register_entity* entity = &entities[i];
 		if(entity->symbol == NULL)
 		{
 			entity->symbol = symbol;
@@ -86,7 +86,7 @@ mana_register_entity* mana_register_allocate(symbol_entry* symbol, size_t addres
 	return NULL;
 }
 
-void mana_register_release(mana_register_entity* entity)
+void register_release(register_entity* entity)
 {
 	if(entity)
 	{

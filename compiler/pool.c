@@ -2,8 +2,8 @@
 mana (compiler)
 
 @file	pool.c
-@brief	•¶š—ñŠi”[‚ÉŠÖ‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹
-@detail	‚±‚Ìƒtƒ@ƒCƒ‹‚Í•¶š—ñ‚ğ‚‘¬‚ÉQÆ‚·‚é‚½‚ß‚ÌƒnƒbƒVƒ…‚ÉŠÖŒW‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹‚Å‚·B
+@brief	æ–‡å­—åˆ—æ ¼ç´ã«é–¢ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«
+@detail	ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯æ–‡å­—åˆ—ã‚’é«˜é€Ÿã«å‚ç…§ã™ã‚‹ãŸã‚ã®ãƒãƒƒã‚·ãƒ¥ã«é–¢ä¿‚ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
 @author	Shun Moriya
 @date	2003-
 */
@@ -23,22 +23,22 @@ mana (compiler)
 #define MANA_POOL_HASH_TABLE_SIZE	(887)
 
 /*! String hash table type */
-typedef struct mana_pool_string_hash_table
+typedef struct pool_string_hash_table
 {
-	char* name;									/*!< •¶š—ñ */
-	int32_t length;									/*!< •¶š—ñ‚Ì’·‚³ */
-	struct mana_pool_string_hash_table* next;	/*!< Ÿ‚Ìmana_pool_string_hash_table */
-} mana_pool_string_hash_table;
+	char* name;									/*!< æ–‡å­—åˆ— */
+	int32_t length;									/*!< æ–‡å­—åˆ—ã®é•·ã• */
+	struct pool_string_hash_table* next;	/*!< æ¬¡ã®pool_string_hash_table */
+} pool_string_hash_table;
 
 /*! String hash table */
-static mana_pool_string_hash_table *s_mana_pool_hash_table[MANA_POOL_HASH_TABLE_SIZE];
+static pool_string_hash_table *s_pool_hash_table[MANA_POOL_HASH_TABLE_SIZE];
 
 /*!
- * @brief		ƒnƒbƒVƒ…’l‚ğæ“¾
- * @param[in]	string		•¶š—ñ
- * @return		ƒnƒbƒVƒ…’l
+ * @brief		ãƒãƒƒã‚·ãƒ¥å€¤ã‚’å–å¾—
+ * @param[in]	string		æ–‡å­—åˆ—
+ * @return		ãƒãƒƒã‚·ãƒ¥å€¤
  */
-static int32_t mana_pool_get_hash_value(char* string)
+static int32_t pool_get_hash_value(char* string)
 {
 	unsigned h, g;
 
@@ -54,7 +54,7 @@ static int32_t mana_pool_get_hash_value(char* string)
 }
 
 #if 0
-// ƒnƒbƒVƒ…ƒL[‚ğì‚é
+// ãƒãƒƒã‚·ãƒ¥ã‚­ãƒ¼ã‚’ä½œã‚‹
 GzUInt32 hashstr(const char* str, size_t len)
 {
 	GzUInt32 h	= len;
@@ -70,74 +70,74 @@ GzUInt32 hashstr(const char* str, size_t len)
 
 /*!
  */
-void mana_pool_initialize(void)
+void pool_initialize(void)
 {
 	int32_t i;
 
 	for(i = 0; i < MANA_POOL_HASH_TABLE_SIZE; i ++)
 	{
-		s_mana_pool_hash_table[i] = 0;
+		s_pool_hash_table[i] = 0;
 	}
 }
 
 /*!
  */
-void mana_pool_finalize(void)
+void pool_finalize(void)
 {
 	int32_t i;
 
 	for(i = 0; i < MANA_POOL_HASH_TABLE_SIZE; i++)
 	{
-		mana_pool_string_hash_table* hash;
-		hash = s_mana_pool_hash_table[i];
+		pool_string_hash_table* hash;
+		hash = s_pool_hash_table[i];
 		while(hash != 0)
 		{
-			mana_pool_string_hash_table* pNext;
+			pool_string_hash_table* pNext;
 			pNext = hash->next;
 			if(hash->name)
 				mana_free(hash->name);
 			mana_free(hash);
 			hash = pNext;
 		}
-		s_mana_pool_hash_table[i] = 0;
+		s_pool_hash_table[i] = 0;
 	}
 }
 
 /*!
- * @param[in]	string	•¶š—ñ
+ * @param[in]	string	æ–‡å­—åˆ—
  * @return
- * •¶š—ñ‚ÌƒAƒhƒŒƒXB
- * d•¡‚µ‚Ä‚¢‚½ê‡‚Íİ’èÏ‚İ‚Ì•¶š—ñ‚ÌƒAƒhƒŒƒX‚ª•Ô‚éB
- * İ’è¸”s‚Ìê‡‚ÍNULL‚ª•Ô‚éB
+ * æ–‡å­—åˆ—ã®ã‚¢ãƒ‰ãƒ¬ã‚¹ã€‚
+ * é‡è¤‡ã—ã¦ã„ãŸå ´åˆã¯è¨­å®šæ¸ˆã¿ã®æ–‡å­—åˆ—ã®ã‚¢ãƒ‰ãƒ¬ã‚¹ãŒè¿”ã‚‹ã€‚
+ * è¨­å®šå¤±æ•—ã®å ´åˆã¯NULLãŒè¿”ã‚‹ã€‚
  */
-char* mana_pool_set(char* string)
+char* pool_set(char* string)
 {
-	mana_pool_string_hash_table* hash;
+	pool_string_hash_table* hash;
 	int32_t hash_value;
 	int32_t length;
 
 	if(string == NULL)
 		return NULL;
 
-	hash_value = mana_pool_get_hash_value(string);
+	hash_value = pool_get_hash_value(string);
 	length = strlen(string);
 
-	for(hash = s_mana_pool_hash_table[hash_value]; hash != 0; hash = hash->next)
+	for(hash = s_pool_hash_table[hash_value]; hash != 0; hash = hash->next)
 	{
 		if((hash->length) == length && strcmp(hash->name, string) == 0)
 		{
 			return hash->name;
 		}
 	}
-	hash = (mana_pool_string_hash_table*)mana_malloc(sizeof(mana_pool_string_hash_table));
+	hash = (pool_string_hash_table*)mana_malloc(sizeof(pool_string_hash_table));
 	if(hash)
 	{
 		hash->name = (char*)mana_malloc(length + 1);
 		if(hash->name)
 		{
 			hash->length = length;
-			hash->next = s_mana_pool_hash_table[hash_value];
-			s_mana_pool_hash_table[hash_value] = hash;
+			hash->next = s_pool_hash_table[hash_value];
+			s_pool_hash_table[hash_value] = hash;
 
 #if defined(__STDC_WANT_SECURE_LIB__)
 			strcpy_s(hash->name, length + 1, string);

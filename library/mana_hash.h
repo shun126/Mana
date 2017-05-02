@@ -2,10 +2,10 @@
  * mana (compiler/library)
  *
  * @file	mana_hash.h
- * @brief	ƒnƒbƒVƒ…‚ÉŠÖ‚·‚éƒwƒbƒ_[ƒtƒ@ƒCƒ‹
+ * @brief	ãƒãƒƒã‚·ãƒ¥ã«é–¢ã™ã‚‹ãƒ˜ãƒƒãƒ€ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«
  * @detail
- * ‚±‚Ìƒtƒ@ƒCƒ‹‚Ímana_hashƒNƒ‰ƒX‚ÉŠÖŒW‚·‚éƒwƒbƒ_[ƒtƒ@ƒCƒ‹‚Å‚·B
- * mana_hashƒNƒ‰ƒX‚Í•¶š—ñ‚ğƒL[‚É‚µ‚½˜A‘z”z—ñ‚ÉŠÖ”‘€ì‚ğs‚È‚¢‚Ü‚·B
+ * ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯mana_hashã‚¯ãƒ©ã‚¹ã«é–¢ä¿‚ã™ã‚‹ãƒ˜ãƒƒãƒ€ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
+ * mana_hashã‚¯ãƒ©ã‚¹ã¯æ–‡å­—åˆ—ã‚’ã‚­ãƒ¼ã«ã—ãŸé€£æƒ³é…åˆ—ã«é–¢æ•°æ“ä½œã‚’è¡Œãªã„ã¾ã™ã€‚
  *
  * @author	Shun Moriya
  * @date	2003-
@@ -22,90 +22,90 @@
 extern "C" {
 #endif
 
-#define MANA_HASH_TABLE_SIZE	(31)	/*!< ƒnƒbƒVƒ…ƒe[ƒuƒ‹ƒTƒCƒY(‘f”‚ªD‚Ü‚µ‚¢) */
+#define MANA_HASH_TABLE_SIZE	(31)	/*!< ãƒãƒƒã‚·ãƒ¥ãƒ†ãƒ¼ãƒ–ãƒ«ã‚µã‚¤ã‚º(ç´ æ•°ãŒå¥½ã¾ã—ã„) */
 
-/*! mana_hash_table ‚Ì‘o•ûŒüƒŠƒ“ƒN */
+/*! mana_hash_table ã®åŒæ–¹å‘ãƒªãƒ³ã‚¯ */
 typedef struct mana_hash_table_link
 {
-	struct mana_hash_table_link* previousChain;	/*!< ‘O‚Ì mana_hash_table ‚Ö‚Ìƒ|ƒCƒ“ƒ^ */
-	struct mana_hash_table_link* nextChain;		/*!< Ÿ‚Ì mana_hash_table ‚Ö‚Ìƒ|ƒCƒ“ƒ^ */
+	struct mana_hash_table_link* previousChain;	/*!< å‰ã® mana_hash_table ã¸ã®ãƒã‚¤ãƒ³ã‚¿ */
+	struct mana_hash_table_link* nextChain;		/*!< æ¬¡ã® mana_hash_table ã¸ã®ãƒã‚¤ãƒ³ã‚¿ */
 }mana_hash_table_link;
 
-/*! mana_hashƒNƒ‰ƒX‚ÌƒnƒbƒVƒ…ƒe[ƒuƒ‹ */
+/*! mana_hashã‚¯ãƒ©ã‚¹ã®ãƒãƒƒã‚·ãƒ¥ãƒ†ãƒ¼ãƒ–ãƒ« */
 typedef struct mana_hash_table
 {
-	mana_hash_table_link chain;		/*!< mana_hash_table ‚Ö‚Ì‘o•ûŒüƒŠƒ“ƒN */
-	struct mana_hash_table* next;	/*!< Ÿ‚ÌƒnƒbƒVƒ…ƒe[ƒuƒ‹‚Ö‚Ìƒ|ƒCƒ“ƒ^ */
-	const char* name;				/*!< ƒL[ */
-	void* data;						/*!< ’l */
+	mana_hash_table_link chain;		/*!< mana_hash_table ã¸ã®åŒæ–¹å‘ãƒªãƒ³ã‚¯ */
+	struct mana_hash_table* next;	/*!< æ¬¡ã®ãƒãƒƒã‚·ãƒ¥ãƒ†ãƒ¼ãƒ–ãƒ«ã¸ã®ãƒã‚¤ãƒ³ã‚¿ */
+	const char* name;				/*!< ã‚­ãƒ¼ */
+	void* data;						/*!< å€¤ */
 } mana_hash_table;
 
 /*!
- * @brief	mana_hashƒNƒ‰ƒX
- * mana_hashƒNƒ‰ƒX‚Í•¶š—ñ‚ğƒL[‚É‚µ‚½˜A‘z”z—ñ‚ğ•\‚µ‚Ä‚¢‚Ü‚·B
+ * @brief	mana_hashã‚¯ãƒ©ã‚¹
+ * mana_hashã‚¯ãƒ©ã‚¹ã¯æ–‡å­—åˆ—ã‚’ã‚­ãƒ¼ã«ã—ãŸé€£æƒ³é…åˆ—ã‚’è¡¨ã—ã¦ã„ã¾ã™ã€‚
  *
- * C++‚Å‚¢‚¤‚Æ‚±‚ë‚Ìƒƒ“ƒo[•Ï”‚Å‚·‚ªACŒ¾Œê‚È‚Ì‚Å‘S‚Äpublic‚É‚È‚Á‚Ä‚¢‚Ü‚·B
- * ‘€ì—p‚ÌŠÖ”‚ğ—pˆÓ‚µ‚Ä‚¢‚é‚Ì‚ÅA‚»‚ê‚ç‚ÌŠÖ”‚ğ—˜—p‚µ‚Ä‘€ì‚µ‚Ä‚­‚¾‚³‚¢B
+ * C++ã§ã„ã†ã¨ã“ã‚ã®ãƒ¡ãƒ³ãƒãƒ¼å¤‰æ•°ã§ã™ãŒã€Cè¨€èªãªã®ã§å…¨ã¦publicã«ãªã£ã¦ã„ã¾ã™ã€‚
+ * æ“ä½œç”¨ã®é–¢æ•°ã‚’ç”¨æ„ã—ã¦ã„ã‚‹ã®ã§ã€ãã‚Œã‚‰ã®é–¢æ•°ã‚’åˆ©ç”¨ã—ã¦æ“ä½œã—ã¦ãã ã•ã„ã€‚
  */
 typedef struct mana_hash
 {
-	/*! ƒnƒbƒVƒ…ƒ`ƒF[ƒ“(”½•œ—pƒLƒƒƒbƒVƒ…) */
+	/*! ãƒãƒƒã‚·ãƒ¥ãƒã‚§ãƒ¼ãƒ³(åå¾©ç”¨ã‚­ãƒ£ãƒƒã‚·ãƒ¥) */
 	mana_hash_table_link chain;
-	/*! ƒnƒbƒVƒ…ƒ`ƒF[ƒ“(ÅŒã‚ÌƒAƒNƒZƒX) */
+	/*! ãƒãƒƒã‚·ãƒ¥ãƒã‚§ãƒ¼ãƒ³(æœ€å¾Œã®ã‚¢ã‚¯ã‚»ã‚¹) */
 	mana_hash_table* last;
-	/*! ƒnƒbƒVƒ…ƒe[ƒuƒ‹ */
+	/*! ãƒãƒƒã‚·ãƒ¥ãƒ†ãƒ¼ãƒ–ãƒ« */
 	mana_hash_table* table[MANA_HASH_TABLE_SIZE];
 }mana_hash;
 
-/*! mana_hashƒNƒ‰ƒX‚Ì”½•œq */
+/*! mana_hashã‚¯ãƒ©ã‚¹ã®åå¾©å­ */
 typedef struct mana_hash_iterator
 {
-	mana_hash_table* iterator;			/*!< QÆ’†‚Ìmana_hash_table */
+	mana_hash_table* iterator;			/*!< å‚ç…§ä¸­ã®mana_hash_table */
 }mana_hash_iterator;
 
-/*! mana_hash ƒIƒuƒWƒFƒNƒg‚Ì¶¬ */
+/*! mana_hash ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç”Ÿæˆ */
 extern mana_hash* mana_hash_create(void);
 
-/*! mana_hash ƒIƒuƒWƒFƒNƒg‚Ì”jŠü */
+/*! mana_hash ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç ´æ£„ */
 extern void mana_hash_destroy(mana_hash* self);
 
-/*! mana_hash ƒIƒuƒWƒFƒNƒg‚Ì‰Šú‰» */
+/*! mana_hash ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®åˆæœŸåŒ– */
 extern void mana_hash_initialize(mana_hash* self);
 
-/*! mana_hash ƒIƒuƒWƒFƒNƒg‚ÌŠJ•ú */
+/*! mana_hash ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®é–‹æ”¾ */
 extern void mana_hash_finalize(mana_hash* self);
 
-/*! mana_hash ƒIƒuƒWƒFƒNƒg‚Ì”äŠr */
+/*! mana_hash ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ¯”è¼ƒ */
 extern int32_t mana_hash_compare(const mana_hash* self, const mana_hash* other);
 
-/*! mana_hash ƒIƒuƒWƒFƒNƒg‚ÌƒRƒs[ */
+/*! mana_hash ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚³ãƒ”ãƒ¼ */
 extern void mana_hash_duplicate(mana_hash* self, const mana_hash* source);
 
-/*! mana_hash ƒIƒuƒWƒFƒNƒg‚ÌƒNƒŠƒA */
+/*! mana_hash ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚¯ãƒªã‚¢ */
 extern void mana_hash_clear(mana_hash* self);
 
-/*! ƒf[ƒ^‚ğÁ‹ */
+/*! ãƒ‡ãƒ¼ã‚¿ã‚’æ¶ˆå» */
 extern void mana_hash_erase(mana_hash* self, const char* name);
 
-/*! ƒf[ƒ^‚Ì‘¶İƒeƒXƒg */
+/*! ãƒ‡ãƒ¼ã‚¿ã®å­˜åœ¨ãƒ†ã‚¹ãƒˆ */
 extern int32_t mana_hash_test(mana_hash* self, const char* name);
 
-/*! ƒf[ƒ^‚ğæ“¾ */
+/*! ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
 extern void* mana_hash_get(mana_hash* self, const char* name);
 
-/*! ƒf[ƒ^‚ğİ’è */
+/*! ãƒ‡ãƒ¼ã‚¿ã‚’è¨­å®š */
 extern void* mana_hash_set(mana_hash* self, const char* name, void* data);
 
-/*! ƒCƒeƒŒ[ƒ^i”½•œqj‚ÌŠª‚«–ß‚µ */
+/*! ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿ï¼ˆåå¾©å­ï¼‰ã®å·»ãæˆ»ã— */
 extern void mana_hash_iterator_rewind(mana_hash_iterator* iterator);
 
-/*! ƒCƒeƒŒ[ƒ^i”½•œqj‚ğŸ‚ÖˆÚ“® */
+/*! ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿ï¼ˆåå¾©å­ï¼‰ã‚’æ¬¡ã¸ç§»å‹• */
 extern int32_t mana_hash_iterator_hash_next(const mana_hash* self, mana_hash_iterator* iterator);
 
-/*! ƒCƒeƒŒ[ƒ^i”½•œqj‚ªw‚·ƒnƒbƒVƒ…‚ÌƒL[‚ğæ“¾ */
+/*! ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿ï¼ˆåå¾©å­ï¼‰ãŒæŒ‡ã™ãƒãƒƒã‚·ãƒ¥ã®ã‚­ãƒ¼ã‚’å–å¾— */
 extern const char* mana_hash_iterator_get_name(const mana_hash_iterator* iterator);
 
-/*! ƒCƒeƒŒ[ƒ^i”½•œqj‚ªw‚·ƒnƒbƒVƒ…‚Ì’l‚ğæ“¾ */
+/*! ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿ï¼ˆåå¾©å­ï¼‰ãŒæŒ‡ã™ãƒãƒƒã‚·ãƒ¥ã®å€¤ã‚’å–å¾— */
 extern void* mana_hash_iterator_get_value(const mana_hash_iterator* iterator);
 
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)

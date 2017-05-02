@@ -2,8 +2,8 @@
 mana (compiler)
 
 @file	pool.h
-@brief	•¶š—ñŠi”[‚ÉŠÖ‚·‚éƒwƒbƒ_[ƒtƒ@ƒCƒ‹
-@detail	‚±‚Ìƒtƒ@ƒCƒ‹‚Í•¶š—ñ‚ğ‚‘¬‚ÉQÆ‚·‚é‚½‚ß‚ÌƒnƒbƒVƒ…‚ÉŠÖŒW‚·‚éƒwƒbƒ_[ƒtƒ@ƒCƒ‹‚Å‚·B
+@brief	æ–‡å­—åˆ—æ ¼ç´ã«é–¢ã™ã‚‹ãƒ˜ãƒƒãƒ€ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«
+@detail	ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯æ–‡å­—åˆ—ã‚’é«˜é€Ÿã«å‚ç…§ã™ã‚‹ãŸã‚ã®ãƒãƒƒã‚·ãƒ¥ã«é–¢ä¿‚ã™ã‚‹ãƒ˜ãƒƒãƒ€ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
 @author	Shun Moriya
 @date	2003-
 */
@@ -15,14 +15,14 @@ mana (compiler)
 extern "C" {
 #endif
 
-/*! •¶š—ñŠi”[ƒVƒXƒeƒ€‚Ì‰Šú‰» */
-extern void mana_pool_initialize(void);
+/*! æ–‡å­—åˆ—æ ¼ç´ã‚·ã‚¹ãƒ†ãƒ ã®åˆæœŸåŒ– */
+extern void pool_initialize(void);
 
-/*! •¶š—ñŠi”[ƒVƒXƒeƒ€‚ÌI—¹ˆ— */
-extern void mana_pool_finalize(void);
+/*! æ–‡å­—åˆ—æ ¼ç´ã‚·ã‚¹ãƒ†ãƒ ã®çµ‚äº†å‡¦ç† */
+extern void pool_finalize(void);
 
-/*! •¶š—ñŠi”[ƒVƒXƒeƒ€‚É•¶š—ñ‚ğİ’è‚µ‚Ü‚· */
-extern char* mana_pool_set(char* string);
+/*! æ–‡å­—åˆ—æ ¼ç´ã‚·ã‚¹ãƒ†ãƒ ã«æ–‡å­—åˆ—ã‚’è¨­å®šã—ã¾ã™ */
+extern char* pool_set(char* string);
 
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)
 }
