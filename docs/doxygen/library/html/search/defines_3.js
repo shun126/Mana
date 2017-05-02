@@ -28,7 +28,6 @@ var searchData=
   ['mana_5ffrand',['mana_frand',['../mana__info_8h.html#a892b6326cade4e9bdf80b81a45d6e0ad',1,'mana_info.h']]],
   ['mana_5ffunction_5fhash_5fsize',['MANA_FUNCTION_HASH_SIZE',['../mana__info_8h.html#a395d312a2dae4d995294cbde976dae52',1,'mana_info.h']]],
   ['mana_5fhash_5ftable_5fsize',['MANA_HASH_TABLE_SIZE',['../mana__hash_8h.html#a09be204d02df9d9f2bdfd934542c7bb8',1,'mana_hash.h']]],
-  ['mana_5fheader_5fflag_5f64bit',['MANA_HEADER_FLAG_64BIT',['../mana__info_8h.html#a4ad8e5d22a3e6f24f2c92f9bfdc438ec',1,'mana_info.h']]],
   ['mana_5fheader_5fflag_5fbig_5fendian',['MANA_HEADER_FLAG_BIG_ENDIAN',['../mana__info_8h.html#a6aa7f04e423272643fec1f451b0bdb2b',1,'mana_info.h']]],
   ['mana_5fheader_5fflag_5fcompiled',['MANA_HEADER_FLAG_COMPILED',['../mana__info_8h.html#a7dbbbbcb7283ed2391f2734615fdf55f',1,'mana_info.h']]],
   ['mana_5fheader_5fflag_5fresource',['MANA_HEADER_FLAG_RESOURCE',['../mana__info_8h.html#adcc4cd28069de3d6e88fc40ef25f6960',1,'mana_info.h']]],

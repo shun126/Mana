@@ -2,10 +2,10 @@
  * mana (compiler/library)
  *
  * @file	mana_hash.c
- * @brief	ƒnƒbƒVƒ…‚ÉŠÖ‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹
+ * @brief	ãƒãƒƒã‚·ãƒ¥ã«é–¢ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«
  * @detail
- * ‚±‚Ìƒtƒ@ƒCƒ‹‚Ímana_hashƒNƒ‰ƒX‚ÉŠÖŒW‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹‚Å‚·B
- * mana_hashƒNƒ‰ƒX‚Í•¶š—ñ‚ğƒL[‚É‚µ‚½˜A‘z”z—ñ‚ÉŠÖ”‘€ì‚ğs‚È‚¢‚Ü‚·B
+ * ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯mana_hashã‚¯ãƒ©ã‚¹ã«é–¢ä¿‚ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
+ * mana_hashã‚¯ãƒ©ã‚¹ã¯æ–‡å­—åˆ—ã‚’ã‚­ãƒ¼ã«ã—ãŸé€£æƒ³é…åˆ—ã«é–¢æ•°æ“ä½œã‚’è¡Œãªã„ã¾ã™ã€‚
  *
  * @author	Shun Moriya
  * @date	2003-
@@ -64,8 +64,8 @@ static int32_t mana_hash_get_hash_value(const char* name)
 }
 
 /*!
- * @return	mana_hash ƒIƒuƒWƒFƒNƒg
- * @warning	void mana_hash_initialize(mana_hash* self)‚ğŒÄ‚Ô•K—v‚Í‚ ‚è‚Ü‚¹‚ñB
+ * @return	mana_hash ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @warning	void mana_hash_initialize(mana_hash* self)ã‚’å‘¼ã¶å¿…è¦ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚
  */
 mana_hash* mana_hash_create(void)
 {
@@ -75,8 +75,8 @@ mana_hash* mana_hash_create(void)
 }
 
 /*!
- * @param[in]	self	mana_hash ƒIƒuƒWƒFƒNƒg
- * @warning		void mana_hash_finalize(mana_hash* self)‚ğŒÄ‚Ô•K—v‚Í‚ ‚è‚Ü‚¹‚ñB
+ * @param[in]	self	mana_hash ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @warning		void mana_hash_finalize(mana_hash* self)ã‚’å‘¼ã¶å¿…è¦ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚
  */
 void mana_hash_destroy(mana_hash* self)
 {
@@ -88,7 +88,7 @@ void mana_hash_destroy(mana_hash* self)
 }
 
 /*!
- * @param[in]	self	mana_hash ƒIƒuƒWƒFƒNƒg
+ * @param[in]	self	mana_hash ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 void mana_hash_initialize(mana_hash* self)
 {
@@ -98,7 +98,7 @@ void mana_hash_initialize(mana_hash* self)
 }
 
 /*!
- * @param[in]	self	mana_hash ƒIƒuƒWƒFƒNƒg
+ * @param[in]	self	mana_hash ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 void mana_hash_finalize(mana_hash* self)
 {
@@ -107,10 +107,10 @@ void mana_hash_finalize(mana_hash* self)
 }
 
 /*!
- * @param[out]	self	”äŠræmana_hash ƒIƒuƒWƒFƒNƒg
- * @param[in]	source	”äŠrŒ³mana_hash ƒIƒuƒWƒFƒNƒg
- * @retval	!= 0		ˆê’v
- * @retval	== 0		•sˆê’v
+ * @param[out]	self	æ¯”è¼ƒå…ˆmana_hash ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	source	æ¯”è¼ƒå…ƒmana_hash ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @retval	!= 0		ä¸€è‡´
+ * @retval	== 0		ä¸ä¸€è‡´
  */
 int32_t mana_hash_compare(const mana_hash* self, const mana_hash* other)
 {
@@ -144,8 +144,8 @@ int32_t mana_hash_compare(const mana_hash* self, const mana_hash* other)
 }
 
 /*!
- * @param[out]	self	ƒRƒs[æmana_hash ƒIƒuƒWƒFƒNƒg
- * @param[in]	source	ƒRƒs[Œ³mana_hash ƒIƒuƒWƒFƒNƒg
+ * @param[out]	self	ã‚³ãƒ”ãƒ¼å…ˆmana_hash ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	source	ã‚³ãƒ”ãƒ¼å…ƒmana_hash ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 void mana_hash_duplicate(mana_hash* self, const mana_hash* source)
 {
@@ -164,7 +164,7 @@ void mana_hash_duplicate(mana_hash* self, const mana_hash* source)
 }
 
 /*!
- * @param[in]	self	mana_hash ƒIƒuƒWƒFƒNƒg
+ * @param[in]	self	mana_hash ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 void mana_hash_clear(mana_hash* self)
 {
@@ -188,8 +188,8 @@ void mana_hash_clear(mana_hash* self)
 }
 
 /*!
- * @param[in]	self	mana_hash ƒIƒuƒWƒFƒNƒg
- * @param[in]	name	ƒL[
+ * @param[in]	self	mana_hash ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	name	ã‚­ãƒ¼
  */
 void mana_hash_erase(mana_hash* self, const char* name)
 {
@@ -217,10 +217,10 @@ void mana_hash_erase(mana_hash* self, const char* name)
 }
 
 /*!
- * @param[in]	self	mana_hash ƒIƒuƒWƒFƒNƒg
- * @param[in]	name	ƒL[
- * @retval	!=0	ƒf[ƒ^‚Í‘¶İ‚·‚é
- * @retval	==0	ƒf[ƒ^‚Í‘¶İ‚µ‚È‚¢
+ * @param[in]	self	mana_hash ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	name	ã‚­ãƒ¼
+ * @retval	!=0	ãƒ‡ãƒ¼ã‚¿ã¯å­˜åœ¨ã™ã‚‹
+ * @retval	==0	ãƒ‡ãƒ¼ã‚¿ã¯å­˜åœ¨ã—ãªã„
  */
 int32_t mana_hash_test(mana_hash* self, const char* name)
 {
@@ -248,9 +248,9 @@ int32_t mana_hash_test(mana_hash* self, const char* name)
 }
 
 /*!
- * @param[in]	self	mana_hash ƒIƒuƒWƒFƒNƒg
- * @param[in]	name	ƒL[
- * @return		’l
+ * @param[in]	self	mana_hash ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	name	ã‚­ãƒ¼
+ * @return		å€¤
  */
 void* mana_hash_get(mana_hash* self, const char* name)
 {
@@ -258,7 +258,7 @@ void* mana_hash_get(mana_hash* self, const char* name)
 
 	assert(self);
 
-	/* ÅŒã‚Éƒqƒbƒg‚µ‚½ƒAƒCƒeƒ€‚Æ”äŠr */
+	/* æœ€å¾Œã«ãƒ’ãƒƒãƒˆã—ãŸã‚¢ã‚¤ãƒ†ãƒ ã¨æ¯”è¼ƒ */
 	if(self->last && strcmp(self->last->name, name) == 0)
 	{
 		return self->last->data;
@@ -269,7 +269,7 @@ void* mana_hash_get(mana_hash* self, const char* name)
 	{
 		if(strcmp(table->name, name) == 0)
 		{
-			/* ¡‰ñƒqƒbƒg‚µ‚½ƒAƒCƒeƒ€‚ğ•Û‘¶ */
+			/* ä»Šå›ãƒ’ãƒƒãƒˆã—ãŸã‚¢ã‚¤ãƒ†ãƒ ã‚’ä¿å­˜ */
 			self->last = table;
 			return table->data;
 		}
@@ -280,9 +280,9 @@ void* mana_hash_get(mana_hash* self, const char* name)
 }
 
 /*!
- * @param[in]	self	mana_hash ƒIƒuƒWƒFƒNƒg
- * @param[in]	name	ƒL[
- * @param[in]	data	’l
+ * @param[in]	self	mana_hash ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param[in]	name	ã‚­ãƒ¼
+ * @param[in]	data	å€¤
  */
 void* mana_hash_set(mana_hash* self, const char* name, void* data)
 {
@@ -328,7 +328,7 @@ void mana_hash_iterator_rewind(mana_hash_iterator* iterator)
 }
 
 /*!
- * @param[in]	self		mana_hash ƒIƒuƒWƒFƒNƒg
+ * @param[in]	self		mana_hash ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  * @param[in]	iterator	mana_hash_iterator
  */
 int32_t mana_hash_iterator_hash_next(const mana_hash* self, mana_hash_iterator* iterator)
@@ -342,7 +342,7 @@ int32_t mana_hash_iterator_hash_next(const mana_hash* self, mana_hash_iterator* 
 
 /*!
  * @param[in]	iterator	mana_hash_iterator
- * @return		ƒL[
+ * @return		ã‚­ãƒ¼
  */
 const char* mana_hash_iterator_get_name(const mana_hash_iterator* iterator)
 {
@@ -353,7 +353,7 @@ const char* mana_hash_iterator_get_name(const mana_hash_iterator* iterator)
 
 /*!
  * @param[in]	iterator	mana_hash_iterator
- * @return		’l
+ * @return		å€¤
  */
 void* mana_hash_iterator_get_value(const mana_hash_iterator* iterator)
 {

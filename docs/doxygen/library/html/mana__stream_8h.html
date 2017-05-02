@@ -94,11 +94,12 @@ $(function() {
 <tr class="separator:a5bac57b57f78aaf695885740c157e370"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a075483fe6544fa1cdccaf2f936adead4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__stream_8h.html#a075483fe6544fa1cdccaf2f936adead4">mana_stream_destroy</a> (<a class="el" href="structmana__stream.html">mana_stream</a> *self)</td></tr>
 <tr class="separator:a075483fe6544fa1cdccaf2f936adead4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5081097c87d3949bd9b058fc20e59abe"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__stream_8h.html#a5081097c87d3949bd9b058fc20e59abe">mana_stream_load</a> (<a class="el" href="structmana__stream.html">mana_stream</a> *self, const char *filename)</td></tr>
-<tr class="separator:a5081097c87d3949bd9b058fc20e59abe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa82d72a78ec24a31bb85d11c8ade4e37"><td class="memItemLeft" align="right" valign="top"><a id="aa82d72a78ec24a31bb85d11c8ade4e37"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> (const <a class="el" href="structmana__stream.html">mana_stream</a> *self, const char *filename)</td></tr>
-<tr class="separator:aa82d72a78ec24a31bb85d11c8ade4e37"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9155da4c301e4826ccd64b0baf1469b4"><td class="memItemLeft" align="right" valign="top"><a id="a9155da4c301e4826ccd64b0baf1469b4"></a>
+int32_t&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_load</b> (<a class="el" href="structmana__stream.html">mana_stream</a> *self, const char *filename)</td></tr>
+<tr class="separator:a9155da4c301e4826ccd64b0baf1469b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0034dd368583bb6c8f130393075be268"><td class="memItemLeft" align="right" valign="top"><a id="a0034dd368583bb6c8f130393075be268"></a>
+int32_t&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> (<a class="el" href="structmana__stream.html">mana_stream</a> *self, const char *filename)</td></tr>
+<tr class="separator:a0034dd368583bb6c8f130393075be268"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5a4dcd860eb2bc3a617140935eaa5472"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__stream_8h.html#a5a4dcd860eb2bc3a617140935eaa5472">mana_stream_get_buffer</a> (const <a class="el" href="structmana__stream.html">mana_stream</a> *self)</td></tr>
 <tr class="separator:a5a4dcd860eb2bc3a617140935eaa5472"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4f8c6e181e146394d35ad6a01d9beeea"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__stream_8h.html#a4f8c6e181e146394d35ad6a01d9beeea">mana_stream_index_at</a> (const <a class="el" href="structmana__stream.html">mana_stream</a> *self, const size_t index)</td></tr>
@@ -113,22 +114,14 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
 <tr class="separator:aea9632b6436f3d9b76807080b4d8d55a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3c78f6f6580aa407edc63645412998d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__stream_8h.html#ad3c78f6f6580aa407edc63645412998d">mana_stream_push_integer</a> (<a class="el" href="structmana__stream.html">mana_stream</a> *self, const int32_t value)</td></tr>
 <tr class="separator:ad3c78f6f6580aa407edc63645412998d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a853d2266b16529e3cdd12624b3e384b5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__stream_8h.html#a853d2266b16529e3cdd12624b3e384b5">mana_stream_push_long</a> (<a class="el" href="structmana__stream.html">mana_stream</a> *self, const int64_t value)</td></tr>
-<tr class="separator:a853d2266b16529e3cdd12624b3e384b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac458f10b4772cf2dad79d442c71efa1e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__stream_8h.html#ac458f10b4772cf2dad79d442c71efa1e">mana_stream_push_unsigned_char</a> (<a class="el" href="structmana__stream.html">mana_stream</a> *self, const uint8_t value)</td></tr>
 <tr class="separator:ac458f10b4772cf2dad79d442c71efa1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe70f6ec59cca0386f1b13efef7f3fd3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__stream_8h.html#abe70f6ec59cca0386f1b13efef7f3fd3">mana_stream_push_unsigned_short</a> (<a class="el" href="structmana__stream.html">mana_stream</a> *self, const uint16_t value)</td></tr>
 <tr class="separator:abe70f6ec59cca0386f1b13efef7f3fd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab6c7f2949f6c618639cd991e1537fd1f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__stream_8h.html#ab6c7f2949f6c618639cd991e1537fd1f">mana_stream_push_unsigned_integer</a> (<a class="el" href="structmana__stream.html">mana_stream</a> *self, const uint32_t value)</td></tr>
 <tr class="separator:ab6c7f2949f6c618639cd991e1537fd1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8e145ef605f4404e1a1ed44bdc4bbea0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__stream_8h.html#a8e145ef605f4404e1a1ed44bdc4bbea0">mana_stream_push_unsigned_long</a> (<a class="el" href="structmana__stream.html">mana_stream</a> *self, const uint64_t value)</td></tr>
-<tr class="separator:a8e145ef605f4404e1a1ed44bdc4bbea0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1037c2e3d851112306a55c188e6a319f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__stream_8h.html#a1037c2e3d851112306a55c188e6a319f">mana_stream_push_size</a> (<a class="el" href="structmana__stream.html">mana_stream</a> *self, const size_t value)</td></tr>
-<tr class="separator:a1037c2e3d851112306a55c188e6a319f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5315a42b01775f023b0135f916d32ca5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__stream_8h.html#a5315a42b01775f023b0135f916d32ca5">mana_stream_push_float</a> (<a class="el" href="structmana__stream.html">mana_stream</a> *self, const float value)</td></tr>
 <tr class="separator:a5315a42b01775f023b0135f916d32ca5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab6f8e5a25511c37c32eed24bab5a52d4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__stream_8h.html#ab6f8e5a25511c37c32eed24bab5a52d4">mana_stream_push_double</a> (<a class="el" href="structmana__stream.html">mana_stream</a> *self, const double value)</td></tr>
-<tr class="separator:ab6f8e5a25511c37c32eed24bab5a52d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a744b67b52d3d85a64c4b996bc5ed6c92"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__stream_8h.html#a744b67b52d3d85a64c4b996bc5ed6c92">mana_stream_push_string</a> (<a class="el" href="structmana__stream.html">mana_stream</a> *self, const char *text)</td></tr>
 <tr class="separator:a744b67b52d3d85a64c4b996bc5ed6c92"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a921507976339dd3fa4f9bbfdc95f40ad"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__stream_8h.html#a921507976339dd3fa4f9bbfdc95f40ad">mana_stream_push_data</a> (<a class="el" href="structmana__stream.html">mana_stream</a> *self, const void *pointer, const size_t size)</td></tr>
@@ -141,22 +134,14 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
 <tr class="separator:a72624bca9767efe41b8c731708c9813e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0f0ec93ef84a258ae5641d60b7274ea0"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__stream_8h.html#a0f0ec93ef84a258ae5641d60b7274ea0">mana_stream_pop_integer</a> (<a class="el" href="structmana__stream.html">mana_stream</a> *self)</td></tr>
 <tr class="separator:a0f0ec93ef84a258ae5641d60b7274ea0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aec161990dd6f13e9a3871092319c409a"><td class="memItemLeft" align="right" valign="top">int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__stream_8h.html#aec161990dd6f13e9a3871092319c409a">mana_stream_pop_long</a> (<a class="el" href="structmana__stream.html">mana_stream</a> *self)</td></tr>
-<tr class="separator:aec161990dd6f13e9a3871092319c409a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af233efe94cda61093786e202497651da"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__stream_8h.html#af233efe94cda61093786e202497651da">mana_stream_pop_unsigned_char</a> (<a class="el" href="structmana__stream.html">mana_stream</a> *self)</td></tr>
 <tr class="separator:af233efe94cda61093786e202497651da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af19b4b926e3cf6a4a2e577eca8e62190"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__stream_8h.html#af19b4b926e3cf6a4a2e577eca8e62190">mana_stream_pop_unsigned_short</a> (<a class="el" href="structmana__stream.html">mana_stream</a> *self)</td></tr>
 <tr class="separator:af19b4b926e3cf6a4a2e577eca8e62190"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0acf93abaac1e3ff4ff97ff9e55ab228"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__stream_8h.html#a0acf93abaac1e3ff4ff97ff9e55ab228">mana_stream_pop_unsigned_integer</a> (<a class="el" href="structmana__stream.html">mana_stream</a> *self)</td></tr>
 <tr class="separator:a0acf93abaac1e3ff4ff97ff9e55ab228"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a696c336ef75cdbf19145bd2943cdaf36"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__stream_8h.html#a696c336ef75cdbf19145bd2943cdaf36">mana_stream_pop_unsigned_long</a> (<a class="el" href="structmana__stream.html">mana_stream</a> *self)</td></tr>
-<tr class="separator:a696c336ef75cdbf19145bd2943cdaf36"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa3f305c3950dcc315a3ddfa3ade288dc"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__stream_8h.html#aa3f305c3950dcc315a3ddfa3ade288dc">mana_stream_pop_size</a> (<a class="el" href="structmana__stream.html">mana_stream</a> *self)</td></tr>
-<tr class="separator:aa3f305c3950dcc315a3ddfa3ade288dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aee63586fa6fe93b1fd314149e8a8cb4a"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__stream_8h.html#aee63586fa6fe93b1fd314149e8a8cb4a">mana_stream_pop_float</a> (<a class="el" href="structmana__stream.html">mana_stream</a> *self)</td></tr>
 <tr class="separator:aee63586fa6fe93b1fd314149e8a8cb4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a76e21066473729788a0bec586e5146bf"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__stream_8h.html#a76e21066473729788a0bec586e5146bf">mana_stream_pop_double</a> (<a class="el" href="structmana__stream.html">mana_stream</a> *self)</td></tr>
-<tr class="separator:a76e21066473729788a0bec586e5146bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a480337a2e2679bd19a60dbe1a6c78883"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__stream_8h.html#a480337a2e2679bd19a60dbe1a6c78883">mana_stream_pop_string</a> (<a class="el" href="structmana__stream.html">mana_stream</a> *self, char *pointer, const size_t size)</td></tr>
 <tr class="separator:a480337a2e2679bd19a60dbe1a6c78883"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9680c337b1f774d2cc13bb19ce207c07"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__stream_8h.html#a9680c337b1f774d2cc13bb19ce207c07">mana_stream_pop_data</a> (<a class="el" href="structmana__stream.html">mana_stream</a> *self, void *pointer, const size_t size)</td></tr>
@@ -167,22 +152,14 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
 <tr class="separator:ab77b8b1b0b33a4060bea632d43d6bb39"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3385e5088942bd0ae446bde7491c92dc"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__stream_8h.html#a3385e5088942bd0ae446bde7491c92dc">mana_stream_get_integer</a> (const <a class="el" href="structmana__stream.html">mana_stream</a> *self)</td></tr>
 <tr class="separator:a3385e5088942bd0ae446bde7491c92dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a29ae8bebe40f6a86a32597e0f59c1aec"><td class="memItemLeft" align="right" valign="top">int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__stream_8h.html#a29ae8bebe40f6a86a32597e0f59c1aec">mana_stream_get_long</a> (const <a class="el" href="structmana__stream.html">mana_stream</a> *self)</td></tr>
-<tr class="separator:a29ae8bebe40f6a86a32597e0f59c1aec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a02b1c18b3c235a259bf32432d4df84ea"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__stream_8h.html#a02b1c18b3c235a259bf32432d4df84ea">mana_stream_get_unsigned_char</a> (const <a class="el" href="structmana__stream.html">mana_stream</a> *self)</td></tr>
 <tr class="separator:a02b1c18b3c235a259bf32432d4df84ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6b9f35c842789ab826e148d66b4f8192"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__stream_8h.html#a6b9f35c842789ab826e148d66b4f8192">mana_stream_get_unsigned_short</a> (const <a class="el" href="structmana__stream.html">mana_stream</a> *self)</td></tr>
 <tr class="separator:a6b9f35c842789ab826e148d66b4f8192"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2fe8a93c5480a71f0d129cb84aedd0d8"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__stream_8h.html#a2fe8a93c5480a71f0d129cb84aedd0d8">mana_stream_get_unsigned_integer</a> (const <a class="el" href="structmana__stream.html">mana_stream</a> *self)</td></tr>
 <tr class="separator:a2fe8a93c5480a71f0d129cb84aedd0d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af25aebb304eb56e2fd77109936996eb7"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__stream_8h.html#af25aebb304eb56e2fd77109936996eb7">mana_stream_get_unsigned_long</a> (const <a class="el" href="structmana__stream.html">mana_stream</a> *self)</td></tr>
-<tr class="separator:af25aebb304eb56e2fd77109936996eb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab7f82b56ff895f124e1aea736d838a36"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__stream_8h.html#ab7f82b56ff895f124e1aea736d838a36">mana_stream_get_size</a> (const <a class="el" href="structmana__stream.html">mana_stream</a> *self)</td></tr>
-<tr class="separator:ab7f82b56ff895f124e1aea736d838a36"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0048ade2df99ba3c318ff9bd3557ec97"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__stream_8h.html#a0048ade2df99ba3c318ff9bd3557ec97">mana_stream_get_float</a> (const <a class="el" href="structmana__stream.html">mana_stream</a> *self)</td></tr>
 <tr class="separator:a0048ade2df99ba3c318ff9bd3557ec97"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a27051812762304ee73b5203cfb7e5160"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__stream_8h.html#a27051812762304ee73b5203cfb7e5160">mana_stream_get_double</a> (const <a class="el" href="structmana__stream.html">mana_stream</a> *self)</td></tr>
-<tr class="separator:a27051812762304ee73b5203cfb7e5160"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2c7a59e9b323cce1d0f41adaf16acd49"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__stream_8h.html#a2c7a59e9b323cce1d0f41adaf16acd49">mana_stream_get_string</a> (const <a class="el" href="structmana__stream.html">mana_stream</a> *self, char *pointer, const size_t size)</td></tr>
 <tr class="separator:a2c7a59e9b323cce1d0f41adaf16acd49"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad512c7e84d0791ba8686ced440b762de"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__stream_8h.html#ad512c7e84d0791ba8686ced440b762de">mana_stream_get_string_pointer</a> (const <a class="el" href="structmana__stream.html">mana_stream</a> *self)</td></tr>
@@ -248,7 +225,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>参照ポインタを移動します </p><dl class="params"><dt>引数</dt><dd>
+<p>参照ポインタを移動します</p>
+<dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">offset</td><td>オフセット </td></tr>
@@ -273,12 +251,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>現在のポインターが mana_stream_mark した位置か調べます </p><dl class="params"><dt>引数</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
-  </table>
-  </dd>
-</dl>
+<p>現在のポインターが mana_stream_mark した位置か調べます </p>
 
 </div>
 </div>
@@ -297,7 +270,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクトの生成 </p><dl class="section return"><dt>戻り値</dt><dd><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </dd></dl>
+<p><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクトの生成</p>
+<dl class="section return"><dt>戻り値</dt><dd><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </dd></dl>
 
 </div>
 </div>
@@ -316,7 +290,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクトの破棄 </p><dl class="params"><dt>引数</dt><dd>
+<p><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクトの破棄</p>
+<dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
   </table>
@@ -340,7 +315,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>確保済みバッファサイズを取得 </p><dl class="params"><dt>引数</dt><dd>
+<p>確保済みバッファサイズを取得</p>
+<dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
   </table>
@@ -365,7 +341,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>バッファの先頭アドレスを取得 </p><dl class="params"><dt>引数</dt><dd>
+<p>バッファの先頭アドレスを取得</p>
+<dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
   </table>
@@ -390,7 +367,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>int8_tサイズデータを取得 </p><dl class="params"><dt>引数</dt><dd>
+<p>int8_tサイズデータを取得</p>
+<dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
   </table>
@@ -431,39 +409,16 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>データを取得 </p><dl class="params"><dt>引数</dt><dd>
+<p>データを取得</p>
+<dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">pointer</td><td>取得先のバッファ先頭アドレス </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">size</td><td>取得するデータのサイズ </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">pointer</td><td>ポップ先のバッファ先頭アドレス </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">size</td><td>ポップするデータのサイズ </td></tr>
   </table>
   </dd>
 </dl>
-
-</div>
-</div>
-<a id="a27051812762304ee73b5203cfb7e5160"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a27051812762304ee73b5203cfb7e5160">&sect;&nbsp;</a></span>mana_stream_get_double()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">double mana_stream_get_double </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="structmana__stream.html">mana_stream</a> *&#160;</td>
-          <td class="paramname"><em>self</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>doubleサイズデータを取得 </p><dl class="params"><dt>引数</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>戻り値</dt><dd>値 </dd></dl>
+<dl class="section return"><dt>戻り値</dt><dd>文字列 </dd></dl>
 
 </div>
 </div>
@@ -482,7 +437,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>floatサイズデータを取得 </p><dl class="params"><dt>引数</dt><dd>
+<p>floatサイズデータを取得</p>
+<dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
   </table>
@@ -507,32 +463,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>int32_tサイズデータを取得 </p><dl class="params"><dt>引数</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>戻り値</dt><dd>値 </dd></dl>
-
-</div>
-</div>
-<a id="a29ae8bebe40f6a86a32597e0f59c1aec"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a29ae8bebe40f6a86a32597e0f59c1aec">&sect;&nbsp;</a></span>mana_stream_get_long()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int64_t mana_stream_get_long </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="structmana__stream.html">mana_stream</a> *&#160;</td>
-          <td class="paramname"><em>self</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>int64_tサイズデータを取得 </p><dl class="params"><dt>引数</dt><dd>
+<p>int32_tサイズデータを取得</p>
+<dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
   </table>
@@ -557,32 +489,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>int16_tサイズデータを取得 </p><dl class="params"><dt>引数</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>戻り値</dt><dd>値 </dd></dl>
-
-</div>
-</div>
-<a id="ab7f82b56ff895f124e1aea736d838a36"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab7f82b56ff895f124e1aea736d838a36">&sect;&nbsp;</a></span>mana_stream_get_size()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">size_t mana_stream_get_size </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="structmana__stream.html">mana_stream</a> *&#160;</td>
-          <td class="paramname"><em>self</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>size_tサイズデータを取得 </p><dl class="params"><dt>引数</dt><dd>
+<p>int16_tサイズデータを取得</p>
+<dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
   </table>
@@ -623,14 +531,16 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>文字列を取得 </p><dl class="params"><dt>引数</dt><dd>
+<p>文字列を取得</p>
+<dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">pointer</td><td>取得先のバッファ先頭アドレス </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">size</td><td>取得先のバッファのサイズ </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">pointer</td><td>ポップ先のバッファ先頭アドレス </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">size</td><td>ポップ先のバッファのサイズ </td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>戻り値</dt><dd>文字列 </dd></dl>
 
 </div>
 </div>
@@ -649,7 +559,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>文字列の長さを取得 </p><dl class="params"><dt>引数</dt><dd>
+<p>文字列の長さを取得</p>
+<dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
   </table>
@@ -674,7 +585,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>文字列のポインターを取得 </p><dl class="params"><dt>引数</dt><dd>
+<p>文字列のポインターを取得</p>
+<dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
   </table>
@@ -699,7 +611,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>uint8_tサイズデータを取得 </p><dl class="params"><dt>引数</dt><dd>
+<p>uint8_tサイズデータを取得</p>
+<dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
   </table>
@@ -724,32 +637,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>uint32_tサイズデータを取得 </p><dl class="params"><dt>引数</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>戻り値</dt><dd>値 </dd></dl>
-
-</div>
-</div>
-<a id="af25aebb304eb56e2fd77109936996eb7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af25aebb304eb56e2fd77109936996eb7">&sect;&nbsp;</a></span>mana_stream_get_unsigned_long()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">uint64_t mana_stream_get_unsigned_long </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="structmana__stream.html">mana_stream</a> *&#160;</td>
-          <td class="paramname"><em>self</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>uint64_tサイズデータを取得 </p><dl class="params"><dt>引数</dt><dd>
+<p>uint32_tサイズデータを取得</p>
+<dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
   </table>
@@ -774,7 +663,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>uint16_tサイズデータを取得 </p><dl class="params"><dt>引数</dt><dd>
+<p>uint16_tサイズデータを取得</p>
+<dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
   </table>
@@ -799,7 +689,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>使用しているバッファサイズを取得 </p><dl class="params"><dt>引数</dt><dd>
+<p>使用しているバッファサイズを取得</p>
+<dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
   </table>
@@ -834,7 +725,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>バッファのアドレスを取得 </p><dl class="params"><dt>引数</dt><dd>
+<p>バッファのアドレスを取得</p>
+<dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">index</td><td>インデックス番号 </td></tr>
@@ -842,41 +734,6 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
   </dd>
 </dl>
 <dl class="section return"><dt>戻り値</dt><dd>バッファーのアドレス </dd></dl>
-
-</div>
-</div>
-<a id="a5081097c87d3949bd9b058fc20e59abe"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5081097c87d3949bd9b058fc20e59abe">&sect;&nbsp;</a></span>mana_stream_load()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool mana_stream_load </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structmana__stream.html">mana_stream</a> *&#160;</td>
-          <td class="paramname"><em>self</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>filename</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>ファイルからデータを読み込む </p><dl class="params"><dt>引数</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">filename</td><td>ファイル名 </td></tr>
-  </table>
-  </dd>
-</dl>
 
 </div>
 </div>
@@ -895,12 +752,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>現在のポインターを記録します </p><dl class="params"><dt>引数</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
-  </table>
-  </dd>
-</dl>
+<p>現在のポインターを記録します </p>
 
 </div>
 </div>
@@ -919,7 +771,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>int8_tサイズデータをポップ </p><dl class="params"><dt>引数</dt><dd>
+<p>int8_tサイズデータをポップ</p>
+<dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
   </table>
@@ -960,7 +813,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>データをポップ </p><dl class="params"><dt>引数</dt><dd>
+<p>データをポップ</p>
+<dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">pointer</td><td>ポップ先のバッファ先頭アドレス </td></tr>
@@ -968,31 +822,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
   </table>
   </dd>
 </dl>
-
-</div>
-</div>
-<a id="a76e21066473729788a0bec586e5146bf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a76e21066473729788a0bec586e5146bf">&sect;&nbsp;</a></span>mana_stream_pop_double()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">double mana_stream_pop_double </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structmana__stream.html">mana_stream</a> *&#160;</td>
-          <td class="paramname"><em>self</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>doubleサイズデータをポップ </p><dl class="params"><dt>引数</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>戻り値</dt><dd>値 </dd></dl>
+<dl class="section return"><dt>戻り値</dt><dd>文字列 </dd></dl>
 
 </div>
 </div>
@@ -1011,7 +841,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>floatサイズデータをポップ </p><dl class="params"><dt>引数</dt><dd>
+<p>floatサイズデータをポップ</p>
+<dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
   </table>
@@ -1036,32 +867,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>int32_tサイズデータをポップ </p><dl class="params"><dt>引数</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>戻り値</dt><dd>値 </dd></dl>
-
-</div>
-</div>
-<a id="aec161990dd6f13e9a3871092319c409a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aec161990dd6f13e9a3871092319c409a">&sect;&nbsp;</a></span>mana_stream_pop_long()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int64_t mana_stream_pop_long </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structmana__stream.html">mana_stream</a> *&#160;</td>
-          <td class="paramname"><em>self</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>int64_tサイズデータをポップ </p><dl class="params"><dt>引数</dt><dd>
+<p>int32_tサイズデータをポップ</p>
+<dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
   </table>
@@ -1086,32 +893,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>int16_tサイズデータをポップ </p><dl class="params"><dt>引数</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>戻り値</dt><dd>値 </dd></dl>
-
-</div>
-</div>
-<a id="aa3f305c3950dcc315a3ddfa3ade288dc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa3f305c3950dcc315a3ddfa3ade288dc">&sect;&nbsp;</a></span>mana_stream_pop_size()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">size_t mana_stream_pop_size </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structmana__stream.html">mana_stream</a> *&#160;</td>
-          <td class="paramname"><em>self</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>size_tサイズデータをポップ </p><dl class="params"><dt>引数</dt><dd>
+<p>int16_tサイズデータをポップ</p>
+<dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
   </table>
@@ -1152,7 +935,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>文字列をポップ </p><dl class="params"><dt>引数</dt><dd>
+<p>文字列をポップ</p>
+<dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">pointer</td><td>ポップ先のバッファ先頭アドレス </td></tr>
@@ -1160,6 +944,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>戻り値</dt><dd>文字列 </dd></dl>
 
 </div>
 </div>
@@ -1178,7 +963,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>uint8_tサイズデータをポップ </p><dl class="params"><dt>引数</dt><dd>
+<p>uint8_tサイズデータをポップ</p>
+<dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
   </table>
@@ -1203,32 +989,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>uint32_tサイズデータをポップ </p><dl class="params"><dt>引数</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>戻り値</dt><dd>値 </dd></dl>
-
-</div>
-</div>
-<a id="a696c336ef75cdbf19145bd2943cdaf36"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a696c336ef75cdbf19145bd2943cdaf36">&sect;&nbsp;</a></span>mana_stream_pop_unsigned_long()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">uint64_t mana_stream_pop_unsigned_long </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structmana__stream.html">mana_stream</a> *&#160;</td>
-          <td class="paramname"><em>self</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>uint64_tサイズデータをポップ </p><dl class="params"><dt>引数</dt><dd>
+<p>uint32_tサイズデータをポップ</p>
+<dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
   </table>
@@ -1253,7 +1015,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>uint16_tサイズデータをポップ </p><dl class="params"><dt>引数</dt><dd>
+<p>uint16_tサイズデータをポップ</p>
+<dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
   </table>
@@ -1288,7 +1051,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>int8_tサイズデータをプッシュ </p><dl class="params"><dt>引数</dt><dd>
+<p>int8_tサイズデータをプッシュ</p>
+<dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>値 </td></tr>
@@ -1329,46 +1093,12 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>データをプッシュ </p><dl class="params"><dt>引数</dt><dd>
+<p>データをプッシュ</p>
+<dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">pointer</td><td>データの先頭アドレス </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>データのサイズ </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="ab6f8e5a25511c37c32eed24bab5a52d4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab6f8e5a25511c37c32eed24bab5a52d4">&sect;&nbsp;</a></span>mana_stream_push_double()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void mana_stream_push_double </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structmana__stream.html">mana_stream</a> *&#160;</td>
-          <td class="paramname"><em>self</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const double&#160;</td>
-          <td class="paramname"><em>value</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>doubleサイズデータをプッシュ </p><dl class="params"><dt>引数</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>値 </td></tr>
   </table>
   </dd>
 </dl>
@@ -1400,7 +1130,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>floatサイズデータをプッシュ </p><dl class="params"><dt>引数</dt><dd>
+<p>floatサイズデータをプッシュ</p>
+<dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>値 </td></tr>
@@ -1435,42 +1166,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>int32_tサイズデータをプッシュ </p><dl class="params"><dt>引数</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>値 </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a853d2266b16529e3cdd12624b3e384b5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a853d2266b16529e3cdd12624b3e384b5">&sect;&nbsp;</a></span>mana_stream_push_long()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void mana_stream_push_long </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structmana__stream.html">mana_stream</a> *&#160;</td>
-          <td class="paramname"><em>self</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const int64_t&#160;</td>
-          <td class="paramname"><em>value</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>int64_tサイズデータをプッシュ </p><dl class="params"><dt>引数</dt><dd>
+<p>int32_tサイズデータをプッシュ</p>
+<dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>値 </td></tr>
@@ -1505,42 +1202,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>int16_tサイズデータをプッシュ </p><dl class="params"><dt>引数</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>値 </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a1037c2e3d851112306a55c188e6a319f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1037c2e3d851112306a55c188e6a319f">&sect;&nbsp;</a></span>mana_stream_push_size()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void mana_stream_push_size </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structmana__stream.html">mana_stream</a> *&#160;</td>
-          <td class="paramname"><em>self</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const size_t&#160;</td>
-          <td class="paramname"><em>value</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>size_tサイズデータをプッシュ </p><dl class="params"><dt>引数</dt><dd>
+<p>int16_tサイズデータをプッシュ</p>
+<dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>値 </td></tr>
@@ -1575,7 +1238,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>文字列をプッシュ </p><dl class="params"><dt>引数</dt><dd>
+<p>文字列をプッシュ</p>
+<dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">text</td><td>文字列 </td></tr>
@@ -1610,7 +1274,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>uint8_tサイズデータをプッシュ </p><dl class="params"><dt>引数</dt><dd>
+<p>uint8_tサイズデータをプッシュ</p>
+<dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>値 </td></tr>
@@ -1645,42 +1310,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>uint32_tサイズデータをプッシュ </p><dl class="params"><dt>引数</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>値 </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a8e145ef605f4404e1a1ed44bdc4bbea0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8e145ef605f4404e1a1ed44bdc4bbea0">&sect;&nbsp;</a></span>mana_stream_push_unsigned_long()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void mana_stream_push_unsigned_long </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structmana__stream.html">mana_stream</a> *&#160;</td>
-          <td class="paramname"><em>self</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const uint64_t&#160;</td>
-          <td class="paramname"><em>value</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>uint64_tサイズデータをプッシュ </p><dl class="params"><dt>引数</dt><dd>
+<p>uint32_tサイズデータをプッシュ</p>
+<dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>値 </td></tr>
@@ -1715,7 +1346,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>uint16_tサイズデータをプッシュ </p><dl class="params"><dt>引数</dt><dd>
+<p>uint16_tサイズデータをプッシュ</p>
+<dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>値 </td></tr>
@@ -1740,7 +1372,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
         </tr>
       </table>
 </div><div class="memdoc">
-<p>popポインタを巻き戻す </p><dl class="params"><dt>引数</dt><dd>
+<p>popポインタを巻き戻す</p>
+<dl class="params"><dt>引数</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">self</td><td><a class="el" href="structmana__stream.html" title="mana_streamクラス ">mana_stream</a> オブジェクト </td></tr>
   </table>
@@ -1752,7 +1385,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mana_stream_save</b> 
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-2017年04月22日(土) 01時27分02秒作成 - libmana / 構成:  &#160;<a href="http://www.doxygen.org/index.html">
+2017年04月07日(金) 02時45分40秒作成 - libmana / 構成:  &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.12
 </small></address>

@@ -1,6 +1,6 @@
 /*
 mana (script)
-Copyright (c) 2003 Shun Moriya <shun@mnu.sakura.ne.jp>
+Copyright (c) 2003 Shun Moriya
 */
 
 native int nativeFunction(int a0, float a1);
