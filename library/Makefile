@@ -4,9 +4,8 @@
 
 TARGET	= libmana.a
 CC	= gcc
-CFLAGS	= --std=c99 --input-charset=cp932 -c -O3 -Wall -D NDEBUG
 #CC	= clang
-#CFLAGS	= --std=c99 -c -O3 -Wall -D NDEBUG
+CFLAGS	= --std=c99 -c -O3 -Wall -D NDEBUG
 AR	= ar
 ARFLAGS	= ru $(TARGET)
 SOURCES	= libmana.c mana.c mana_actor.c mana_array.c mana_buffer.c mana_datalink.c mana_define.c mana_frame.c mana_function.c mana_hash.c mana_info.c mana_lzss.c mana_malloc.c mana_plugin.c mana_stack.c mana_stream.c
