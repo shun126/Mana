@@ -2,8 +2,8 @@
  * mana (library)
  *
  * @file	mana_define.c
- * @brief	manaƒ‰ƒCƒuƒ‰ƒŠ“à‚Å‹¤’Ê—˜—p‚³‚ê‚éƒ\[ƒXƒtƒ@ƒCƒ‹
- * @detail	‚±‚Ìƒtƒ@ƒCƒ‹‚Ímanaƒ‰ƒCƒuƒ‰ƒŠ“à‚Å‹¤’Ê—˜—p‚³‚ê‚éƒ\[ƒXƒtƒ@ƒCƒ‹‚Å‚·B
+ * @brief	manaãƒ©ã‚¤ãƒ–ãƒ©ãƒªå†…ã§å…±é€šåˆ©ç”¨ã•ã‚Œã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«
+ * @detail	ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯manaãƒ©ã‚¤ãƒ–ãƒ©ãƒªå†…ã§å…±é€šåˆ©ç”¨ã•ã‚Œã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
  * @author	Shun Moriya
  * @date	2003-
  */

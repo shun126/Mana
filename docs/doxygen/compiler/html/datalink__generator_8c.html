@@ -73,42 +73,34 @@ $(function() {
 <div class="textblock"><code>#include &quot;<a class="el" href="datalink__generator_8h_source.html">datalink_generator.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="error_8h_source.html">error.h</a>&quot;</code><br />
 <code>#include &lt;ctype.h&gt;</code><br />
-<code>#include &lt;stdio.h&gt;</code><br />
 <code>#include &lt;stdlib.h&gt;</code><br />
 <code>#include &lt;string.h&gt;</code><br />
 <code>#include &lt;time.h&gt;</code><br />
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 マクロ定義</h2></td></tr>
-<tr class="memitem:ae26714d5ee0bb3d869875a5125fa1010"><td class="memItemLeft" align="right" valign="top"><a id="ae26714d5ee0bb3d869875a5125fa1010"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>MANA_DATALINK_ALIGNMENT_SIZE</b>&#160;&#160;&#160;0x10</td></tr>
-<tr class="separator:ae26714d5ee0bb3d869875a5125fa1010"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1756a106becedb4dee0b18db84681c16"><td class="memItemLeft" align="right" valign="top"><a id="a1756a106becedb4dee0b18db84681c16"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>MANA_NIL</b>&#160;&#160;&#160;0</td></tr>
 <tr class="separator:a1756a106becedb4dee0b18db84681c16"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 型定義</h2></td></tr>
-<tr class="memitem:abeaa885c28159d133908431a1049e0bc"><td class="memItemLeft" align="right" valign="top"><a id="abeaa885c28159d133908431a1049e0bc"></a>
-typedef struct datalink_generator_entry&#160;</td><td class="memItemRight" valign="bottom"><b>datalink_generator_entry</b></td></tr>
-<tr class="separator:abeaa885c28159d133908431a1049e0bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af96e21826d420e6a275e73a20dfa75ad"><td class="memItemLeft" align="right" valign="top"><a id="af96e21826d420e6a275e73a20dfa75ad"></a>
+typedef struct mana_datalink_generator_file_entry&#160;</td><td class="memItemRight" valign="bottom"><b>mana_datalink_generator_file_entry</b></td></tr>
+<tr class="separator:af96e21826d420e6a275e73a20dfa75ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 関数</h2></td></tr>
-<tr class="memitem:afcec603f2b9d1458553efc248ef0cabc"><td class="memItemLeft" align="right" valign="top"><a id="afcec603f2b9d1458553efc248ef0cabc"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="datalink__generator_8c.html#afcec603f2b9d1458553efc248ef0cabc">datalink_generator_initialize</a> (void)</td></tr>
-<tr class="memdesc:afcec603f2b9d1458553efc248ef0cabc"><td class="mdescLeft">&#160;</td><td class="mdescRight">initialize datalink object <br /></td></tr>
-<tr class="separator:afcec603f2b9d1458553efc248ef0cabc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7cea76ba9f1f628b3ddcd0e609ab6bf5"><td class="memItemLeft" align="right" valign="top"><a id="a7cea76ba9f1f628b3ddcd0e609ab6bf5"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="datalink__generator_8c.html#a7cea76ba9f1f628b3ddcd0e609ab6bf5">datalink_generator_finalize</a> (void)</td></tr>
-<tr class="memdesc:a7cea76ba9f1f628b3ddcd0e609ab6bf5"><td class="mdescLeft">&#160;</td><td class="mdescRight">finalize datalink object <br /></td></tr>
-<tr class="separator:a7cea76ba9f1f628b3ddcd0e609ab6bf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a653f63adc898570aa08f2062a2243d14"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="datalink__generator_8c.html#a653f63adc898570aa08f2062a2243d14">datalink_generator_get_number_of_files</a> (void)</td></tr>
-<tr class="separator:a653f63adc898570aa08f2062a2243d14"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4a58a9955f4ca3ec7113853600f37832"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="datalink__generator_8c.html#a4a58a9955f4ca3ec7113853600f37832">datalink_generator_append</a> (const char *file_name)</td></tr>
-<tr class="separator:a4a58a9955f4ca3ec7113853600f37832"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adeb98b8922ba7b598f64a553cf4adfc5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="datalink__generator_8c.html#adeb98b8922ba7b598f64a553cf4adfc5">datalink_generator_write_data</a> (mana_stream *stream)</td></tr>
-<tr class="separator:adeb98b8922ba7b598f64a553cf4adfc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d9d7968fe8cb13b7322a7d1fc5f02ef"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="datalink__generator_8c.html#a4d9d7968fe8cb13b7322a7d1fc5f02ef">mana_datalink_generator_initialize</a> (void)</td></tr>
+<tr class="separator:a4d9d7968fe8cb13b7322a7d1fc5f02ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e547e6c8ca0a153cbad9728593cc7b8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="datalink__generator_8c.html#a5e547e6c8ca0a153cbad9728593cc7b8">mana_datalink_generator_finalize</a> (void)</td></tr>
+<tr class="separator:a5e547e6c8ca0a153cbad9728593cc7b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad02ec57677fbae640299c55f866e2acb"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="datalink__generator_8c.html#ad02ec57677fbae640299c55f866e2acb">mana_datalink_generator_get_number_of_files</a> (void)</td></tr>
+<tr class="separator:ad02ec57677fbae640299c55f866e2acb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d26c3e90d482674c0dfd17ada8bed3f"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="datalink__generator_8c.html#a8d26c3e90d482674c0dfd17ada8bed3f">mana_datalink_generator_append</a> (const char *file_name)</td></tr>
+<tr class="separator:a8d26c3e90d482674c0dfd17ada8bed3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad44cd97bcaee2004ac2d41a0deed081"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="datalink__generator_8c.html#aad44cd97bcaee2004ac2d41a0deed081">mana_datalink_generator_write_data</a> (mana_stream *stream)</td></tr>
+<tr class="separator:aad44cd97bcaee2004ac2d41a0deed081"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
 <div class="textblock"><p>データセクションに関するソースファイル  このファイルはデータセクションに関係するソースファイルです。 </p>
@@ -116,14 +108,14 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="data
 <dl class="section author"><dt>著者</dt><dd>Shun Moriya </dd></dl>
 <dl class="section date"><dt>日付</dt><dd>2003- </dd></dl>
 </div><h2 class="groupheader">関数詳解</h2>
-<a id="a4a58a9955f4ca3ec7113853600f37832"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4a58a9955f4ca3ec7113853600f37832">&sect;&nbsp;</a></span>datalink_generator_append()</h2>
+<a id="a8d26c3e90d482674c0dfd17ada8bed3f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d26c3e90d482674c0dfd17ada8bed3f">&sect;&nbsp;</a></span>mana_datalink_generator_append()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int32_t datalink_generator_append </td>
+          <td class="memname">int32_t mana_datalink_generator_append </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>file_name</em></td><td>)</td>
@@ -141,14 +133,33 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="data
 
 </div>
 </div>
-<a id="a653f63adc898570aa08f2062a2243d14"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a653f63adc898570aa08f2062a2243d14">&sect;&nbsp;</a></span>datalink_generator_get_number_of_files()</h2>
+<a id="a5e547e6c8ca0a153cbad9728593cc7b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e547e6c8ca0a153cbad9728593cc7b8">&sect;&nbsp;</a></span>mana_datalink_generator_finalize()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">size_t datalink_generator_get_number_of_files </td>
+          <td class="memname">void mana_datalink_generator_finalize </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>finalize datalink object </p>
+
+</div>
+</div>
+<a id="ad02ec57677fbae640299c55f866e2acb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad02ec57677fbae640299c55f866e2acb">&sect;&nbsp;</a></span>mana_datalink_generator_get_number_of_files()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t mana_datalink_generator_get_number_of_files </td>
           <td>(</td>
           <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
@@ -160,14 +171,33 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="data
 
 </div>
 </div>
-<a id="adeb98b8922ba7b598f64a553cf4adfc5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adeb98b8922ba7b598f64a553cf4adfc5">&sect;&nbsp;</a></span>datalink_generator_write_data()</h2>
+<a id="a4d9d7968fe8cb13b7322a7d1fc5f02ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d9d7968fe8cb13b7322a7d1fc5f02ef">&sect;&nbsp;</a></span>mana_datalink_generator_initialize()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool datalink_generator_write_data </td>
+          <td class="memname">void mana_datalink_generator_initialize </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>initialize datalink object </p>
+
+</div>
+</div>
+<a id="aad44cd97bcaee2004ac2d41a0deed081"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad44cd97bcaee2004ac2d41a0deed081">&sect;&nbsp;</a></span>mana_datalink_generator_write_data()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int32_t mana_datalink_generator_write_data </td>
           <td>(</td>
           <td class="paramtype">mana_stream *&#160;</td>
           <td class="paramname"><em>stream</em></td><td>)</td>
@@ -194,7 +224,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="data
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-2017年04月22日(土) 01時27分00秒作成 - mana / 構成:  &#160;<a href="http://www.doxygen.org/index.html">
+2017年04月07日(金) 02時45分39秒作成 - mana / 構成:  &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.12
 </small></address>

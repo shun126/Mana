@@ -109,11 +109,9 @@ $(function() {
 <tr class="separator:a423c3d2d410aa1705add5f5ab53539f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adcc4cd28069de3d6e88fc40ef25f6960"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__info_8h.html#adcc4cd28069de3d6e88fc40ef25f6960">MANA_HEADER_FLAG_RESOURCE</a>&#160;&#160;&#160;0x01</td></tr>
 <tr class="separator:adcc4cd28069de3d6e88fc40ef25f6960"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4ad8e5d22a3e6f24f2c92f9bfdc438ec"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__info_8h.html#a4ad8e5d22a3e6f24f2c92f9bfdc438ec">MANA_HEADER_FLAG_64BIT</a>&#160;&#160;&#160;0x02</td></tr>
-<tr class="separator:a4ad8e5d22a3e6f24f2c92f9bfdc438ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6aa7f04e423272643fec1f451b0bdb2b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__info_8h.html#a6aa7f04e423272643fec1f451b0bdb2b">MANA_HEADER_FLAG_BIG_ENDIAN</a>&#160;&#160;&#160;0x04</td></tr>
+<tr class="memitem:a6aa7f04e423272643fec1f451b0bdb2b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__info_8h.html#a6aa7f04e423272643fec1f451b0bdb2b">MANA_HEADER_FLAG_BIG_ENDIAN</a>&#160;&#160;&#160;0x02</td></tr>
 <tr class="separator:a6aa7f04e423272643fec1f451b0bdb2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7dbbbbcb7283ed2391f2734615fdf55f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__info_8h.html#a7dbbbbcb7283ed2391f2734615fdf55f">MANA_HEADER_FLAG_COMPILED</a>&#160;&#160;&#160;0x80</td></tr>
+<tr class="memitem:a7dbbbbcb7283ed2391f2734615fdf55f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__info_8h.html#a7dbbbbcb7283ed2391f2734615fdf55f">MANA_HEADER_FLAG_COMPILED</a>&#160;&#160;&#160;0x07</td></tr>
 <tr class="separator:a7dbbbbcb7283ed2391f2734615fdf55f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac1e4106f8584c21a9b14032e471b2745"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mana__info_8h.html#ac1e4106f8584c21a9b14032e471b2745">MANA_ACTOR_INFO_HEADER_FLAG_PHANTOM</a>&#160;&#160;&#160;0x01</td></tr>
 <tr class="separator:ac1e4106f8584c21a9b14032e471b2745"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -481,21 +479,6 @@ $(function() {
 
 </div>
 </div>
-<a id="a4ad8e5d22a3e6f24f2c92f9bfdc438ec"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4ad8e5d22a3e6f24f2c92f9bfdc438ec">&sect;&nbsp;</a></span>MANA_HEADER_FLAG_64BIT</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define MANA_HEADER_FLAG_64BIT&#160;&#160;&#160;0x02</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>フラグ：64ビットでコンパイルされた </p>
-
-</div>
-</div>
 <a id="a6aa7f04e423272643fec1f451b0bdb2b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6aa7f04e423272643fec1f451b0bdb2b">&sect;&nbsp;</a></span>MANA_HEADER_FLAG_BIG_ENDIAN</h2>
 
@@ -503,7 +486,7 @@ $(function() {
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define MANA_HEADER_FLAG_BIG_ENDIAN&#160;&#160;&#160;0x04</td>
+          <td class="memname">#define MANA_HEADER_FLAG_BIG_ENDIAN&#160;&#160;&#160;0x02</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -518,7 +501,7 @@ $(function() {
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define MANA_HEADER_FLAG_COMPILED&#160;&#160;&#160;0x80</td>
+          <td class="memname">#define MANA_HEADER_FLAG_COMPILED&#160;&#160;&#160;0x07</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1210,7 +1193,7 @@ $(function() {
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-2017年04月22日(土) 01時27分02秒作成 - libmana / 構成:  &#160;<a href="http://www.doxygen.org/index.html">
+2017年04月07日(金) 02時45分40秒作成 - libmana / 構成:  &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.12
 </small></address>

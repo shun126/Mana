@@ -2,8 +2,8 @@
 mana (compiler)
 
 @file	resolver.h
-@brief	ƒVƒ“ƒ{ƒ‹‚Ì‰ğŒˆ‚ÉŠÖŒW‚·‚éƒwƒbƒ_[ƒtƒ@ƒCƒ‹
-@detail	ƒVƒ“ƒ{ƒ‹‚Ì‰ğŒˆ‚ÉŠÖŒW‚·‚éƒwƒbƒ_[ƒtƒ@ƒCƒ‹‚Å‚·B
+@brief	ã‚·ãƒ³ãƒœãƒ«ã®è§£æ±ºã«é–¢ä¿‚ã™ã‚‹ãƒ˜ãƒƒãƒ€ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«
+@detail	ã‚·ãƒ³ãƒœãƒ«ã®è§£æ±ºã«é–¢ä¿‚ã™ã‚‹ãƒ˜ãƒƒãƒ€ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
 @author	Shun Moriya
 @date	2017-
 */
@@ -19,46 +19,46 @@ mana (compiler)
 extern "C" {
 #endif
 
-extern void mana_resolver_set_current_file_infomation(node_entry* self);
+extern void resolver_set_current_file_infomation(node_entry* self);
 	
 /*!
-mana_symbol_lookup‚ğŒÄ‚Ño‚µmana_symbol‚ğŒŸõ‚µ‚Äself‚Éİ’è‚µ‚Ü‚·
-@param	self	NODE_IDENTIFIERƒm[ƒh
+mana_symbol_lookupã‚’å‘¼ã³å‡ºã—mana_symbolã‚’æ¤œç´¢ã—ã¦selfã«è¨­å®šã—ã¾ã™
+@param	self	NODE_IDENTIFIERãƒãƒ¼ãƒ‰
 */
-extern void mana_resolver_search_symbol_from_name(node_entry* self);
+extern bool resolver_search_symbol_from_name(node_entry* self);
 	
 /*!
-self‚É“o˜^‚³‚ê‚½type‚ª–³‚¯‚ê‚ÎƒVƒ“ƒ{ƒ‹‚ğŒŸõ‚µ‚Ä‚»‚Ìtype‚ğself‚Éİ’è‚µ‚Ü‚·
-@param[in]	self	NODE_TYPE_DESCRIPTIONƒm[ƒh
+selfã«ç™»éŒ²ã•ã‚ŒãŸtypeãŒç„¡ã‘ã‚Œã°ã‚·ãƒ³ãƒœãƒ«ã‚’æ¤œç´¢ã—ã¦ãã®typeã‚’selfã«è¨­å®šã—ã¾ã™
+@param[in]	self	NODE_TYPE_DESCRIPTIONãƒãƒ¼ãƒ‰
 */
-extern void mana_resolver_resolve_type_description(node_entry* self);
+extern void resolver_resolve_type_description(node_entry* self);
 
 /*!
-mana_type_create_array‚ğg‚Á‚Ä”z—ñ‚ÌŒ^‚ğnew‚µ‚Ü‚·
-@param[in]	self	NODE_VARIABLE_SIZEƒm[ƒh
-@return		”z—ñtype_description
+type_create_arrayã‚’ä½¿ã£ã¦é…åˆ—ã®å‹ã‚’newã—ã¾ã™
+@param[in]	self	NODE_VARIABLE_SIZEãƒãƒ¼ãƒ‰
+@return		é…åˆ—type_description
 */
-extern type_description* mana_resolver_resolve_variable_size(node_entry* self);
+extern type_description* resolver_resolve_variable_size(node_entry* self);
 
 /*!
-mana_symbol_create_variable‚ğŒÄ‚Ño‚µ
-mana_symbol‚ğnew‚µ‚Äself‚Éİ’è‚µ‚Ü‚·
-@param[in]	self	NODE_DECLARATORƒm[ƒh
+mana_symbol_create_variableã‚’å‘¼ã³å‡ºã—
+mana_symbolã‚’newã—ã¦selfã«è¨­å®šã—ã¾ã™
+@param[in]	self	NODE_DECLARATORãƒãƒ¼ãƒ‰
 */
-extern void mana_resolver_resolve_declarator(node_entry* self, const bool static_variable);
+extern void resolver_resolve_declarator(node_entry* self, const bool static_variable);
 
 /*!
-—¼•Ó‚ÌNODE_TYPE_DESCRIPTION‚ÆNODE_DECLARATOR‚ğ‰ğŒˆ‚µ‚Ä
-mana_symbol_allocate_memory‚ğg‚Á‚Äƒƒ‚ƒŠ‚ğŠ„‚è“–‚Ä‚Ü‚·
-@param[in]	self	NODE_DECLARE_VARIABLEƒm[ƒh
+ä¸¡è¾ºã®NODE_TYPE_DESCRIPTIONã¨NODE_DECLARATORã‚’è§£æ±ºã—ã¦
+mana_symbol_allocate_memoryã‚’ä½¿ã£ã¦ãƒ¡ãƒ¢ãƒªã‚’å‰²ã‚Šå½“ã¦ã¾ã™
+@param[in]	self	NODE_DECLARE_VARIABLEãƒãƒ¼ãƒ‰
 */
-extern void mana_resolver_resolve_variable_description(node_entry* self, const symbol_memory_type_id memory_type_id, const bool static_variable);
+extern void resolver_resolve_variable_description(node_entry* self, const symbol_memory_type_id memory_type_id, const bool static_variable);
 
 /*!
-qƒm[ƒh‚©‚çŒ^‚ğŒp³‚·‚é
-@param[in]	self	ƒm[ƒh
+å­ãƒãƒ¼ãƒ‰ã‹ã‚‰å‹ã‚’ç¶™æ‰¿ã™ã‚‹
+@param[in]	self	ãƒãƒ¼ãƒ‰
 */
-extern void mana_resolver_resolve_type_from_child_node(node_entry* self);
+extern void resolver_resolve_type_from_child_node(node_entry* self);
 
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)
 }
