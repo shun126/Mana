@@ -2,8 +2,8 @@
 mana (compiler)
 
 @file	symbol.h
-@brief	ƒŒƒWƒXƒ^Š„‚è“–‚Ä‚ÉŠÖ‚·‚éƒwƒbƒ_[ƒtƒ@ƒCƒ‹
-@detail	‚±‚Ìƒtƒ@ƒCƒ‹‚ÍƒŒƒWƒXƒ^Š„‚è“–‚Ä‚ÉŠÖ‚·‚éƒwƒbƒ_[ƒtƒ@ƒCƒ‹‚Å‚·B
+@brief	ãƒ¬ã‚¸ã‚¹ã‚¿å‰²ã‚Šå½“ã¦ã«é–¢ã™ã‚‹ãƒ˜ãƒƒãƒ€ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«
+@detail	ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯ãƒ¬ã‚¸ã‚¹ã‚¿å‰²ã‚Šå½“ã¦ã«é–¢ã™ã‚‹ãƒ˜ãƒƒãƒ€ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
 @author	Shun Moriya
 @date	2003-
 */
@@ -22,61 +22,61 @@ extern "C" {
 
 typedef enum symbol_memory_type_id
 {
-	MEMORY_TYPE_NORMAL,						//!< •Ï”Œ^
-	MEMORY_TYPE_PARAMETER					//!< ˆø”Œ^
+	MEMORY_TYPE_NORMAL,						//!< å¤‰æ•°å‹
+	MEMORY_TYPE_PARAMETER					//!< å¼•æ•°å‹
 } symbol_memory_type_id;
 
 typedef enum symbol_class_type_id
 {
-	SYMBOL_CLASS_TYPE_NEW_SYMBOL,			//!< –¢Š„‚è“–‚ÄŠÖ”
-	SYMBOL_CLASS_TYPE_TYPEDEF,				//!< Œ^’è‹`
-	SYMBOL_CLASS_TYPE_FUNCTION,				//!< ŠÖ”
-	SYMBOL_CLASS_TYPE_NATIVE_FUNCTION,		//!< ŠO•”ŠÖ”
-	SYMBOL_CLASS_TYPE_MEMBER_FUNCTION,		//!< ƒƒ“ƒo[ŠÖ”(ƒAƒNƒVƒ‡ƒ“)
-	SYMBOL_CLASS_TYPE_VARIABLE_STATIC,		//!< ƒXƒ^ƒeƒBƒbƒNƒOƒ[ƒoƒ‹•Ï”
-	SYMBOL_CLASS_TYPE_VARIABLE_GLOBAL,		//!< ƒOƒ[ƒoƒ‹•Ï”
-	SYMBOL_CLASS_TYPE_VARIABLE_ACTOR,		//!< ƒCƒ“ƒXƒ^ƒ“ƒX•Ï”
-	SYMBOL_CLASS_TYPE_VARIABLE_LOCAL,		//!< ƒ[ƒJƒ‹•Ï”
-	SYMBOL_CLASS_TYPE_CONSTANT_INT,			//!< ®”
-	SYMBOL_CLASS_TYPE_CONSTANT_FLOAT,		//!< À”
-	SYMBOL_CLASS_TYPE_CONSTANT_STRING,		//!< •¶š—ñ
-	SYMBOL_CLASS_TYPE_ALIAS,				//!< ƒf[ƒ^QÆ
-	SYMBOL_CLASS_TYPE_LABEL,				//!< ƒ‰ƒxƒ‹
-	SYMBOL_CLASS_TYPE_NUMBER_OF				//!< symbol_class_type_id€–Ú”
+	SYMBOL_CLASS_TYPE_NEW_SYMBOL,			//!< æœªå‰²ã‚Šå½“ã¦é–¢æ•°
+	SYMBOL_CLASS_TYPE_TYPEDEF,				//!< å‹å®šç¾©
+	SYMBOL_CLASS_TYPE_FUNCTION,				//!< é–¢æ•°
+	SYMBOL_CLASS_TYPE_NATIVE_FUNCTION,		//!< å¤–éƒ¨é–¢æ•°
+	SYMBOL_CLASS_TYPE_MEMBER_FUNCTION,		//!< ãƒ¡ãƒ³ãƒãƒ¼é–¢æ•°(ã‚¢ã‚¯ã‚·ãƒ§ãƒ³)
+	SYMBOL_CLASS_TYPE_VARIABLE_STATIC,		//!< ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•°
+	SYMBOL_CLASS_TYPE_VARIABLE_GLOBAL,		//!< ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•°
+	SYMBOL_CLASS_TYPE_VARIABLE_ACTOR,		//!< ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹å¤‰æ•°
+	SYMBOL_CLASS_TYPE_VARIABLE_LOCAL,		//!< ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°
+	SYMBOL_CLASS_TYPE_CONSTANT_INT,			//!< æ•´æ•°
+	SYMBOL_CLASS_TYPE_CONSTANT_FLOAT,		//!< å®Ÿæ•°
+	SYMBOL_CLASS_TYPE_CONSTANT_STRING,		//!< æ–‡å­—åˆ—
+	SYMBOL_CLASS_TYPE_ALIAS,				//!< ãƒ‡ãƒ¼ã‚¿å‚ç…§
+	SYMBOL_CLASS_TYPE_LABEL,				//!< ãƒ©ãƒ™ãƒ«
+	SYMBOL_CLASS_TYPE_NUMBER_OF				//!< symbol_class_type_idé …ç›®æ•°
 } symbol_class_type_id;
 
 typedef enum symbol_data_type_id
 {
-	SYMBOL_DATA_TYPE_VOID,					//!< voidŒ^
-	SYMBOL_DATA_TYPE_CHAR,					//!< int8_tŒ^
-	SYMBOL_DATA_TYPE_SHORT,					//!< int16_tŒ^
-	SYMBOL_DATA_TYPE_INT,					//!< int32_tŒ^
-	SYMBOL_DATA_TYPE_FLOAT,					//!< floatŒ^
-	SYMBOL_DATA_TYPE_REFERENCE,				//!< referenceŒ^
-	SYMBOL_DATA_TYPE_ARRAY,					//!< arrayŒ^
-	SYMBOL_DATA_TYPE_STRUCT,				//!< structŒ^
-	SYMBOL_DATA_TYPE_ACTOR,					//!< actorŒ^
-	SYMBOL_DATA_TYPE_MODULE,				//!< moduleŒ^
-	SYMBOL_DATA_TYPE_NIL,					//!< nilŒ^
-	SYMBOL_DATA_TYPE_INCOMPLETE,			//!< éŒ¾‚ª–¢Š®—¹‚ÌŒ^
-	SYMBOL_DATA_TYPE_NUMBER_OF				//!< symbol_data_type_id‚Ì€–Ú”
+	SYMBOL_DATA_TYPE_VOID,					//!< voidå‹
+	SYMBOL_DATA_TYPE_CHAR,					//!< int8_tå‹
+	SYMBOL_DATA_TYPE_SHORT,					//!< int16_tå‹
+	SYMBOL_DATA_TYPE_INT,					//!< int32_tå‹
+	SYMBOL_DATA_TYPE_FLOAT,					//!< floatå‹
+	SYMBOL_DATA_TYPE_REFERENCE,				//!< referenceå‹
+	SYMBOL_DATA_TYPE_ARRAY,					//!< arrayå‹
+	SYMBOL_DATA_TYPE_STRUCT,				//!< structå‹
+	SYMBOL_DATA_TYPE_ACTOR,					//!< actorå‹
+	SYMBOL_DATA_TYPE_MODULE,				//!< moduleå‹
+	SYMBOL_DATA_TYPE_NIL,					//!< nilå‹
+	SYMBOL_DATA_TYPE_INCOMPLETE,			//!< å®£è¨€ãŒæœªå®Œäº†ã®å‹
+	SYMBOL_DATA_TYPE_NUMBER_OF				//!< symbol_data_type_idã®é …ç›®æ•°
 } symbol_data_type_id;
 
 typedef enum node_id
 {
 	NODE_ARRAY,								//!< variable[argument] =
 	NODE_ASSIGN,							//!< =
-	NODE_CALL_ARGUMENT,						//!< ˆø”iŒÄ‚Ño‚µj
-	NODE_DECLARE_ARGUMENT,					//!< ˆø”iéŒ¾j
-	NODE_CONST,								//!< ’è”
-	NODE_CALL,								//!< ŠÖ”ŒÄ‚Ño‚µ
-	NODE_ADD,								//!< ‰ÁZ
-	NODE_SUB,								//!< Œ¸Z
-	NODE_MUL,								//!< æZ
-	NODE_DIV,								//!< œZ
-	NODE_REM,								//!< —]è
-	NODE_NEG,								//!< }•„†”½“]
-	NODE_POW,								//!< ‚×‚«æ
+	NODE_CALL_ARGUMENT,						//!< å¼•æ•°ï¼ˆå‘¼ã³å‡ºã—ï¼‰
+	NODE_DECLARE_ARGUMENT,					//!< å¼•æ•°ï¼ˆå®£è¨€ï¼‰
+	NODE_CONST,								//!< å®šæ•°
+	NODE_CALL,								//!< é–¢æ•°å‘¼ã³å‡ºã—
+	NODE_ADD,								//!< åŠ ç®—
+	NODE_SUB,								//!< æ¸›ç®—
+	NODE_MUL,								//!< ä¹—ç®—
+	NODE_DIV,								//!< é™¤ç®—
+	NODE_REM,								//!< ä½™å‰°
+	NODE_NEG,								//!< Â±ç¬¦å·åè»¢
+	NODE_POW,								//!< ã¹ãä¹—
 	NODE_NOT,								//!< ~
 	NODE_AND,								//!< &
 	NODE_OR,								//!< |
@@ -89,27 +89,27 @@ typedef enum node_id
 	NODE_NE,								//!< !=
 	NODE_GE,								//!< >=
 	NODE_GT,								//!< >
-	NODE_STRING,							//!< •¶š—ñ
-	NODE_I2F,								//!< ®”‚©‚çÀ”‚Ö•ÏŠ·
-	NODE_F2I,								//!< À”‚©‚ç®”‚Ö•ÏŠ·
+	NODE_STRING,							//!< æ–‡å­—åˆ—
+	NODE_I2F,								//!< æ•´æ•°ã‹ã‚‰å®Ÿæ•°ã¸å¤‰æ›
+	NODE_F2I,								//!< å®Ÿæ•°ã‹ã‚‰æ•´æ•°ã¸å¤‰æ›
 	NODE_LOR,								//!< ||
 	NODE_LAND,								//!< &&
 	NODE_LNOT,								//!< !
 	NODE_HALT,								//!< halt
 	NODE_YIELD,								//!< yield
 	NODE_REQUEST,							//!< req
-	NODE_COMPLY,							//!< comply (req‹–‰Â)
-	NODE_REFUSE,							//!< refuse (req‹‘”Û)
+	NODE_COMPLY,							//!< comply (reqè¨±å¯)
+	NODE_REFUSE,							//!< refuse (reqæ‹’å¦)
 	NODE_JOIN,								//!< join
 	NODE_SENDER,							//!< sender (actor)
 	NODE_SELF,								//!< self (actor)
 	NODE_PRIORITY,							//!< priority (integer)
-	NODE_EXPRESSION_IF,						//!< O€‰‰Zq '?'
+	NODE_EXPRESSION_IF,						//!< ä¸‰é …æ¼”ç®—å­ '?'
 	NODE_PRINT,								//!< print
 	NODE_RETURN,							//!< return
 	NODE_ROLLBACK,							//!< rollback
 
-	NODE_BLOCK,								//!< ƒuƒƒbƒN
+	NODE_BLOCK,								//!< ãƒ–ãƒ­ãƒƒã‚¯
 	NODE_IF,								//!< if
 	NODE_SWITCH,							//!< switch
 	NODE_CASE,								//!< case
@@ -131,7 +131,7 @@ typedef enum node_id
 	NODE_DECLARE_VARIABLE,
 	NODE_SIZEOF,
 
-	NODE_DECLARE_ACTOR,						//!< ƒAƒNƒ^[‚ÌéŒ¾
+	NODE_DECLARE_ACTOR,						//!< ã‚¢ã‚¯ã‚¿ãƒ¼ã®å®£è¨€
 	NODE_DECLARE_PHANTOM,
 	NODE_DECLARE_MODULE,
 	NODE_DECLARE_STRUCT,
@@ -157,23 +157,23 @@ typedef struct symbol_entry
 #if defined(_DEBUG)
 	char magic[8];
 #endif
-	struct symbol_entry* next;				//!< Ÿ‚ÌƒVƒ“ƒ{ƒ‹‚Ö‚ÌƒŠƒ“ƒN
-	struct symbol_entry* hash_chain;		//!< ƒnƒbƒVƒ…ƒ`ƒFƒCƒ“
-	struct symbol_entry* parameter_list;	//!< ƒpƒ‰ƒ[ƒ^‚Ö‚ÌƒŠƒ“ƒN
-	struct type_description* type;			//!< type_description‚ÌƒŠƒ“ƒN
-	symbol_class_type_id class_type;		//!< ƒVƒ“ƒ{ƒ‹‚Ìí—ŞID
-	symbol_memory_type_id attrib;			//!< ƒVƒ“ƒ{ƒ‹‚Ìƒƒ‚ƒŠ‚Ìí—Ş
-	const char* name;						//!< –¼Ì
-	int32_t address;						//!< ƒAƒhƒŒƒX
-	int32_t etc;							//!< ”Ä—p(”p~—\’è)
-	float hloat;							//!< •‚“®¬”“_•Û‘¶ƒoƒbƒtƒ@
-	const char* string;						//!< •¶š—ñ•Û‘¶ƒoƒbƒtƒ@
-	int32_t define_level;					//!< ’è‹`ƒŒƒxƒ‹
-	int32_t number_of_parameters;			//!< ƒpƒ‰ƒ[ƒ^‚Ì”
-	bool override;							//!< ã‘‚«‹–‰Â
-	bool used;								//!< QÆƒtƒ‰ƒO
+	struct symbol_entry* next;				//!< æ¬¡ã®ã‚·ãƒ³ãƒœãƒ«ã¸ã®ãƒªãƒ³ã‚¯
+	struct symbol_entry* hash_chain;		//!< ãƒãƒƒã‚·ãƒ¥ãƒã‚§ã‚¤ãƒ³
+	struct symbol_entry* parameter_list;	//!< ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã¸ã®ãƒªãƒ³ã‚¯
+	struct type_description* type;			//!< type_descriptionã®ãƒªãƒ³ã‚¯
+	symbol_class_type_id class_type;		//!< ã‚·ãƒ³ãƒœãƒ«ã®ç¨®é¡ID
+	symbol_memory_type_id attrib;			//!< ã‚·ãƒ³ãƒœãƒ«ã®ãƒ¡ãƒ¢ãƒªã®ç¨®é¡
+	const char* name;						//!< åç§°
+	int32_t address;						//!< ã‚¢ãƒ‰ãƒ¬ã‚¹
+	int32_t etc;							//!< æ±ç”¨(å»ƒæ­¢äºˆå®š)
+	float hloat;							//!< æµ®å‹•å°æ•°ç‚¹ä¿å­˜ãƒãƒƒãƒ•ã‚¡
+	const char* string;						//!< æ–‡å­—åˆ—ä¿å­˜ãƒãƒƒãƒ•ã‚¡
+	int32_t define_level;					//!< å®šç¾©ãƒ¬ãƒ™ãƒ«
+	int32_t number_of_parameters;			//!< ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®æ•°
+	bool override;							//!< ä¸Šæ›¸ãè¨±å¯
+	bool used;								//!< å‚ç…§ãƒ•ãƒ©ã‚°
 
-	struct symbol_entry* link;				//!< ‰ğ•ú—pƒ|ƒCƒ“ƒ^
+	struct symbol_entry* link;				//!< è§£æ”¾ç”¨ãƒã‚¤ãƒ³ã‚¿
 } symbol_entry;
 
 typedef struct type_description
@@ -181,13 +181,13 @@ typedef struct type_description
 #if defined(_DEBUG)
 	char magic[8];
 #endif
-	struct type_description* parent;		//!< e‚ÌŒ^‚Ö‚ÌƒŠƒ“ƒN(Œp³‚ª‚È‚­‚È‚Á‚½‚Ì‚Å–¢g—p)
-	struct type_description* component;		//!< ”z—ñAQÆŒ^‚ÌŒ³‚ÌŒ^‚Ö‚ÌƒŠƒ“ƒN
-	symbol_data_type_id tcons;				//!< Œ^‚ÌID
-	const char* name;						//!< Œ^‚Ì–¼Ì
-	int32_t number_of_elements;				//!< ”z—ñ‚ÌƒTƒCƒY
-	int32_t memory_size;					//!< ƒƒ‚ƒŠƒTƒCƒY
-	int32_t alignment_memory_size;			//!< ƒAƒ‰ƒCƒƒ“ƒgƒTƒCƒY
+	struct type_description* parent;		//!< è¦ªã®å‹ã¸ã®ãƒªãƒ³ã‚¯(ç¶™æ‰¿ãŒãªããªã£ãŸã®ã§æœªä½¿ç”¨)
+	struct type_description* component;		//!< é…åˆ—ã€å‚ç…§å‹ã®å…ƒã®å‹ã¸ã®ãƒªãƒ³ã‚¯
+	symbol_data_type_id tcons;				//!< å‹ã®ID
+	const char* name;						//!< å‹ã®åç§°
+	int32_t number_of_elements;				//!< é…åˆ—ã®ã‚µã‚¤ã‚º
+	int32_t memory_size;					//!< ãƒ¡ãƒ¢ãƒªã‚µã‚¤ã‚º
+	int32_t alignment_memory_size;			//!< ã‚¢ãƒ©ã‚¤ãƒ¡ãƒ³ãƒˆã‚µã‚¤ã‚º
 
 	union share
 	{
@@ -197,7 +197,7 @@ typedef struct type_description
 		}actor;
 	}share;
 
-	struct type_description* link;			//!< ‰ğ•ú—pƒ|ƒCƒ“ƒ^
+	struct type_description* link;			//!< è§£æ”¾ç”¨ãƒã‚¤ãƒ³ã‚¿
 } type_description;
 
 typedef struct node_entry
@@ -205,26 +205,26 @@ typedef struct node_entry
 #if defined(_DEBUG)
 	char magic[8];
 #endif
-	node_id id;								//!< ƒm[ƒhID
-	struct symbol_entry* symbol;			//!< ƒVƒ“ƒ{ƒ‹‚Ö‚Ìƒ|ƒCƒ“ƒ^
-	struct type_description* type;			//!< Œ^‚Ö‚Ìƒ|ƒCƒ“ƒ^
-	struct node_entry* left;				//!< ¶
-	struct node_entry* right;				//!< ‰E
-	struct node_entry* body;				//!< ‰E
-	struct node_entry* next;				//!< Ÿ
-	int32_t etc;							//!< ‚»‚Ì‘¼
-	int32_t digit;							//!< ®”
-	float real;								//!< ­”
-	const char* string;						//!< •¶š—ñ‚Ö‚Ìƒ|ƒCƒ“ƒ^
+	node_id id;								//!< ãƒãƒ¼ãƒ‰ID
+	struct symbol_entry* symbol;			//!< ã‚·ãƒ³ãƒœãƒ«ã¸ã®ãƒã‚¤ãƒ³ã‚¿
+	struct type_description* type;			//!< å‹ã¸ã®ãƒã‚¤ãƒ³ã‚¿
+	struct node_entry* left;				//!< å·¦
+	struct node_entry* right;				//!< å³
+	struct node_entry* body;				//!< å³
+	struct node_entry* next;				//!< æ¬¡
+	int32_t etc;							//!< ãã®ä»–
+	int32_t digit;							//!< æ•´æ•°
+	float real;								//!< å°‘æ•°
+	const char* string;						//!< æ–‡å­—åˆ—ã¸ã®ãƒã‚¤ãƒ³ã‚¿
 
-	const char* filename;					//!< ƒtƒ@ƒCƒ‹–¼
-	int32_t line;							//!< s”Ô†
-	struct node_entry* link;				//!< ‰ğ•ú—pƒ|ƒCƒ“ƒ^
+	const char* filename;					//!< ãƒ•ã‚¡ã‚¤ãƒ«å
+	int32_t line;							//!< è¡Œç•ªå·
+	struct node_entry* link;				//!< è§£æ”¾ç”¨ãƒã‚¤ãƒ³ã‚¿
 } node_entry;
 
 /*****************************************************************************/
-extern int32_t symbol_frame_size_list;				/*!< action,function‚ÌƒtƒŒ[ƒ€ƒTƒCƒYƒŠƒXƒg */
-extern int32_t symbol_return_address_list;			/*!< action,function‚ÌƒŠƒ^[ƒ“ƒAƒhƒŒƒXƒŠƒXƒg */
+extern int32_t symbol_frame_size_list;				/*!< action,functionã®ãƒ•ãƒ¬ãƒ¼ãƒ ã‚µã‚¤ã‚ºãƒªã‚¹ãƒˆ */
+extern int32_t symbol_return_address_list;			/*!< action,functionã®ãƒªã‚¿ãƒ¼ãƒ³ã‚¢ãƒ‰ãƒ¬ã‚¹ãƒªã‚¹ãƒˆ */
 
 /*****************************************************************************/
 extern void symbol_initialize(void);
@@ -271,18 +271,18 @@ extern void symbol_close_structure(const char* name);
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // actor
 /*!
-ƒAƒNƒ^[ƒVƒ“ƒ{ƒ‹‚Ì“o˜^‚ğŠJn‚µ‚Ü‚·
-@param[in]	symbol	NULL‚È‚ç‚ÎV‹Kì¬
+ã‚¢ã‚¯ã‚¿ãƒ¼ã‚·ãƒ³ãƒœãƒ«ã®ç™»éŒ²ã‚’é–‹å§‹ã—ã¾ã™
+@param[in]	symbol	NULLãªã‚‰ã°æ–°è¦ä½œæˆ
 */
 extern void symbol_begin_registration_actor(symbol_entry* symbol);
 
 /*!
-ƒAƒNƒ^[ƒVƒ“ƒ{ƒ‹‚Ì“o˜^‚ğŠm’è‚µ‚Ü‚·
+ã‚¢ã‚¯ã‚¿ãƒ¼ã‚·ãƒ³ãƒœãƒ«ã®ç™»éŒ²ã‚’ç¢ºå®šã—ã¾ã™
 */
 extern void symbol_commit_registration_actor(const char* name, const char* parent, type_description* td, const bool phantom);
 
 /*!
-ƒAƒNƒ^[‚ÌƒVƒ“ƒ{ƒ‹“o˜^‚ğŠJn‚µ‚Ü‚·
+ã‚¢ã‚¯ã‚¿ãƒ¼ã®ã‚·ãƒ³ãƒœãƒ«ç™»éŒ²ã‚’é–‹å§‹ã—ã¾ã™
 @param[in]	symbol	
 */
 extern void symbol_open_actor(const char* name);

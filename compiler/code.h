@@ -2,8 +2,8 @@
 mana (compiler)
 
 @file	code.h
-@brief	–½—ßƒZƒNƒVƒ‡ƒ“‚ÉŠÖ‚·‚éƒwƒbƒ_[ƒtƒ@ƒCƒ‹
-@detail	‚±‚Ìƒtƒ@ƒCƒ‹‚Í–½—ßƒZƒNƒVƒ‡ƒ“‚ÉŠÖŒW‚·‚éƒwƒbƒ_[ƒtƒ@ƒCƒ‹‚Å‚·B
+@brief	å‘½ä»¤ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã«é–¢ã™ã‚‹ãƒ˜ãƒƒãƒ€ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«
+@detail	ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯å‘½ä»¤ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã«é–¢ä¿‚ã™ã‚‹ãƒ˜ãƒƒãƒ€ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
 @author	Shun Moriya
 @date	2003-
 */
@@ -17,153 +17,153 @@ extern "C" {
 
 #include <libmana.h>
 
-//! –½—ßƒZƒNƒVƒ‡ƒ“ŠÇ—ŠÖ”‚ğ‰Šú‰»
+//! å‘½ä»¤ã‚»ã‚¯ã‚·ãƒ§ãƒ³ç®¡ç†é–¢æ•°ã‚’åˆæœŸåŒ–
 extern void code_initialize(void);
 
-//! –½—ßƒZƒNƒVƒ‡ƒ“ŠÇ—ŠÖ”‚ğI—¹
+//! å‘½ä»¤ã‚»ã‚¯ã‚·ãƒ§ãƒ³ç®¡ç†é–¢æ•°ã‚’çµ‚äº†
 extern void code_finalize(void);
 
 /*!
-–½—ßƒZƒNƒVƒ‡ƒ“‚ğk¬
-@param[in]	size	k¬‚·‚éƒTƒCƒY
+å‘½ä»¤ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã‚’ç¸®å°
+@param[in]	size	ç¸®å°ã™ã‚‹ã‚µã‚¤ã‚º
 */
 extern void code_reduce(const size_t size);
 
 /*!
-int8_tŒ^”’l‚ğ–½—ßƒZƒNƒVƒ‡ƒ“‚Éİ’è
-@param[in]	value	’l
+int8_tå‹æ•°å€¤ã‚’å‘½ä»¤ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã«è¨­å®š
+@param[in]	value	å€¤
 */
 extern void code_set_char(const int8_t value);
 
 /*!
-int16_tŒ^”’l‚ğ–½—ßƒZƒNƒVƒ‡ƒ“‚Éİ’è
-@param[in]	value	’l
+int16_tå‹æ•°å€¤ã‚’å‘½ä»¤ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã«è¨­å®š
+@param[in]	value	å€¤
 */
 extern void code_set_short(const int16_t value);
 
 /*!
-int32_tŒ^”’l‚ğ–½—ßƒZƒNƒVƒ‡ƒ“‚Éİ’è
-@param[in]	value	’l
+int32_tå‹æ•°å€¤ã‚’å‘½ä»¤ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã«è¨­å®š
+@param[in]	value	å€¤
 */
 extern void code_set_integer(const int32_t value);
 
 /*!
-uint8_tŒ^”’l‚ğ–½—ßƒZƒNƒVƒ‡ƒ“‚Éİ’è
-@param[in]	value	’l
+uint8_tå‹æ•°å€¤ã‚’å‘½ä»¤ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã«è¨­å®š
+@param[in]	value	å€¤
 */
 extern void code_set_unsigned_char(const uint8_t value);
 
 /*!
-uint16_tŒ^”’l‚ğ–½—ßƒZƒNƒVƒ‡ƒ“‚Éİ’è
-@param[in]	value	’l
+uint16_tå‹æ•°å€¤ã‚’å‘½ä»¤ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã«è¨­å®š
+@param[in]	value	å€¤
 */
 extern void code_set_unsigned_short(const uint16_t value);
 
 /*!
-uint32_tŒ^”’l‚ğ–½—ßƒZƒNƒVƒ‡ƒ“‚Éİ’è
-@param[in]	value	’l
+uint32_tå‹æ•°å€¤ã‚’å‘½ä»¤ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã«è¨­å®š
+@param[in]	value	å€¤
 */
 extern void code_set_unsigned_integer(const uint32_t value);
 
 /*!
-floatŒ^”’l‚ğ–½—ßƒZƒNƒVƒ‡ƒ“‚Éİ’è
-@param[in]	value	’l
+floatå‹æ•°å€¤ã‚’å‘½ä»¤ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã«è¨­å®š
+@param[in]	value	å€¤
 */
 extern void code_set_float(const float value);
 
 /*!
-ƒIƒyƒR[ƒh‚ğ–½—ßƒZƒNƒVƒ‡ƒ“‚Éİ’è
-@param[in]	code	ƒIƒyƒR[ƒh
+ã‚ªãƒšã‚³ãƒ¼ãƒ‰ã‚’å‘½ä»¤ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã«è¨­å®š
+@param[in]	code	ã‚ªãƒšã‚³ãƒ¼ãƒ‰
 */
 extern void code_set_opecode(const uint8_t code);
 
 /*!
-ƒIƒyƒR[ƒh‚ÆƒIƒyƒ‰ƒ“ƒh‚ğ–½—ßƒZƒNƒVƒ‡ƒ“‚Éİ’è
-@param[in]	code	ƒIƒyƒR[ƒh
-@param[in]	address	ƒIƒyƒ‰ƒ“ƒh
+ã‚ªãƒšã‚³ãƒ¼ãƒ‰ã¨ã‚ªãƒšãƒ©ãƒ³ãƒ‰ã‚’å‘½ä»¤ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã«è¨­å®š
+@param[in]	code	ã‚ªãƒšã‚³ãƒ¼ãƒ‰
+@param[in]	address	ã‚ªãƒšãƒ©ãƒ³ãƒ‰
 */
 extern int32_t code_set_opecode_and_operand(const uint8_t code, const int32_t address);
 
 /*!
-* @param[in]	code	ƒIƒyƒR[ƒh
-* @param[in]	address	‘æˆêƒIƒyƒ‰ƒ“ƒh
-* @param[in]	size	‘æ“ñƒIƒyƒ‰ƒ“ƒh
-ƒIƒyƒR[ƒh‚Æ“ñ‚Â‚ÌƒIƒyƒ‰ƒ“ƒh‚ğ–½—ßƒZƒNƒVƒ‡ƒ“‚Éİ’è
+* @param[in]	code	ã‚ªãƒšã‚³ãƒ¼ãƒ‰
+* @param[in]	address	ç¬¬ä¸€ã‚ªãƒšãƒ©ãƒ³ãƒ‰
+* @param[in]	size	ç¬¬äºŒã‚ªãƒšãƒ©ãƒ³ãƒ‰
+ã‚ªãƒšã‚³ãƒ¼ãƒ‰ã¨äºŒã¤ã®ã‚ªãƒšãƒ©ãƒ³ãƒ‰ã‚’å‘½ä»¤ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã«è¨­å®š
 */
 extern int32_t code_set_opecode_and_two_operands(const uint8_t code, const int32_t address, const int32_t size);
 
 /*!
-ƒIƒyƒR[ƒh‚ğ’uŠ·
-@param[in]	address	ƒAƒhƒŒƒX
-@param[in]	code	ƒIƒyƒR[ƒh
+ã‚ªãƒšã‚³ãƒ¼ãƒ‰ã‚’ç½®æ›
+@param[in]	address	ã‚¢ãƒ‰ãƒ¬ã‚¹
+@param[in]	code	ã‚ªãƒšã‚³ãƒ¼ãƒ‰
 */
 extern void code_replace_opecode(const int32_t address, const uint8_t code);
 
 /*!
-ƒIƒyƒR[ƒh‚ÉŠÖŒW•t‚¯‚ç‚ê‚½ƒAƒhƒŒƒX‚ğ’uŠ·
-@param[in]	address		ƒAƒhƒŒƒX
-@param[in]	new_address	’u‚«Š·‚¦‚éƒAƒhƒŒƒX
+ã‚ªãƒšã‚³ãƒ¼ãƒ‰ã«é–¢ä¿‚ä»˜ã‘ã‚‰ã‚ŒãŸã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’ç½®æ›
+@param[in]	address		ã‚¢ãƒ‰ãƒ¬ã‚¹
+@param[in]	new_address	ç½®ãæ›ãˆã‚‹ã‚¢ãƒ‰ãƒ¬ã‚¹
 */
 extern void code_replace_address(const int32_t address, const int32_t new_address);
 
 /*!
-ƒIƒyƒR[ƒh‚ÉŠÖŒW•t‚¯‚ç‚ê‚½ƒAƒhƒŒƒX‚ğ’H‚Á‚Ä’uŠ·
-@param[in]	base_address	ƒAƒhƒŒƒX
-@param[in]	new_address		’u‚«Š·‚¦‚éƒAƒhƒŒƒX
+ã‚ªãƒšã‚³ãƒ¼ãƒ‰ã«é–¢ä¿‚ä»˜ã‘ã‚‰ã‚ŒãŸã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’è¾¿ã£ã¦ç½®æ›
+@param[in]	base_address	ã‚¢ãƒ‰ãƒ¬ã‚¹
+@param[in]	new_address		ç½®ãæ›ãˆã‚‹ã‚¢ãƒ‰ãƒ¬ã‚¹
 */
 extern void code_replace_all(const int32_t base_address, const int32_t new_address);
 
 /*!
-–½—ßƒZƒNƒVƒ‡ƒ“‚ğƒtƒ@ƒCƒ‹‚Öo—Í
-@param[out]	file	ƒtƒ@ƒCƒ‹¯•Êq
-@retval		true	o—Í¬Œ÷
-@retval		false	o—Í¸”s
+å‘½ä»¤ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã‚’ãƒ•ã‚¡ã‚¤ãƒ«ã¸å‡ºåŠ›
+@param[out]	file	ãƒ•ã‚¡ã‚¤ãƒ«è­˜åˆ¥å­
+@retval		true	å‡ºåŠ›æˆåŠŸ
+@retval		false	å‡ºåŠ›å¤±æ•—
 */
 extern bool code_write(mana_stream* stream);
 
 /*!
-–½—ßƒZƒNƒVƒ‡ƒ“‚ğƒƒ‚ƒŠ‚Öo—Í
-@param[out]	file	ƒtƒ@ƒCƒ‹¯•Êq
-@return		o—Í‚µ‚½ƒTƒCƒY
+å‘½ä»¤ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã‚’ãƒ¡ãƒ¢ãƒªã¸å‡ºåŠ›
+@param[out]	file	ãƒ•ã‚¡ã‚¤ãƒ«è­˜åˆ¥å­
+@return		å‡ºåŠ›ã—ãŸã‚µã‚¤ã‚º
 */
 extern int32_t code_copy(void* buffer);
 
 /*!
-–½—ßƒZƒNƒVƒ‡ƒ“‚ÌƒTƒCƒY‚ğæ“¾
-@return	–½—ßƒZƒNƒVƒ‡ƒ“‚ÌƒTƒCƒY
+å‘½ä»¤ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã®ã‚µã‚¤ã‚ºã‚’å–å¾—
+@return	å‘½ä»¤ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã®ã‚µã‚¤ã‚º
 */
 extern int32_t code_get_pc(void);
 
 /*!
-–½—ßƒZƒNƒVƒ‡ƒ“‚ÌƒTƒCƒY‚ğæ“¾
-@return	–½—ßƒZƒNƒVƒ‡ƒ“‚ÌƒTƒCƒY
+å‘½ä»¤ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã®ã‚µã‚¤ã‚ºã‚’å–å¾—
+@return	å‘½ä»¤ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã®ã‚µã‚¤ã‚º
 */
 extern int32_t code_get_size(void);
 
 /*!
-–½—ßƒZƒNƒVƒ‡ƒ“ƒoƒbƒtƒ@‚ÌƒAƒhƒŒƒX‚ğæ“¾
-@return	–½—ßƒZƒNƒVƒ‡ƒ“ƒoƒbƒtƒ@‚ÌƒAƒhƒŒƒX
+å‘½ä»¤ã‚»ã‚¯ã‚·ãƒ§ãƒ³ãƒãƒƒãƒ•ã‚¡ã®ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å–å¾—
+@return	å‘½ä»¤ã‚»ã‚¯ã‚·ãƒ§ãƒ³ãƒãƒƒãƒ•ã‚¡ã®ã‚¢ãƒ‰ãƒ¬ã‚¹
 */
 extern void* code_get_buffer(void);
 
 /*!
-ƒIƒyƒR[ƒh‚ğæ“¾
-@param[in]	address		ƒAƒhƒŒƒX
-@return		ƒIƒyƒR[ƒh
+ã‚ªãƒšã‚³ãƒ¼ãƒ‰ã‚’å–å¾—
+@param[in]	address		ã‚¢ãƒ‰ãƒ¬ã‚¹
+@return		ã‚ªãƒšã‚³ãƒ¼ãƒ‰
 */
 extern uint8_t code_getcode(const int32_t address);
 
 /*!
-int32_tŒ^”’l‚ğ–½—ßƒZƒNƒVƒ‡ƒ“‚©‚çæ“¾
-@param[in]	address		ƒAƒhƒŒƒX
-@return		int32_tŒ^”’l
+int32_tå‹æ•°å€¤ã‚’å‘½ä»¤ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã‹ã‚‰å–å¾—
+@param[in]	address		ã‚¢ãƒ‰ãƒ¬ã‚¹
+@return		int32_tå‹æ•°å€¤
 */
 extern int32_t code_get_integer(const int32_t address);
 
 /*!
-floatŒ^”’l‚ğ–½—ßƒZƒNƒVƒ‡ƒ“‚©‚çæ“¾
-@param[in]	address		ƒAƒhƒŒƒX
-@return		floatŒ^”’l
+floatå‹æ•°å€¤ã‚’å‘½ä»¤ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã‹ã‚‰å–å¾—
+@param[in]	address		ã‚¢ãƒ‰ãƒ¬ã‚¹
+@return		floatå‹æ•°å€¤
 */
 extern float code_get_float(const int32_t address);
 

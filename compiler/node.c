@@ -2,8 +2,8 @@
 mana (compiler)
 
 @file	node.c
-@brief	ˆÓ–¡‰ğÍƒm[ƒh‚ÉŠÖ‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹
-@detail	‚±‚Ìƒtƒ@ƒCƒ‹‚ÍˆÓ–¡‰ğÍƒm[ƒh‚ÉŠÖŒW‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹‚Å‚·B
+@brief	æ„å‘³è§£æãƒãƒ¼ãƒ‰ã«é–¢ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«
+@detail	ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯æ„å‘³è§£æãƒãƒ¼ãƒ‰ã«é–¢ä¿‚ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
 @author	Shun Moriya
 @date	2003-
 */
@@ -20,29 +20,29 @@ mana (compiler)
 #include <stdarg.h>
 #include <string.h>
 
-static node_entry* mana_node_root_pointer = NULL;
-static size_t mana_node_total_size = 0;
+static node_entry* node_root_pointer = NULL;
+static size_t node_total_size = 0;
 
-void mana_node_initialize(void)
+void node_initialize(void)
 {
-	mana_node_total_size = 0;
+	node_total_size = 0;
 }
 
-void mana_node_finalize(void)
+void node_finalize(void)
 {
-	node_entry* n = mana_node_root_pointer;
+	node_entry* n = node_root_pointer;
 	while (n)
 	{
 		node_entry* link = n->link;
 		mana_free(n);
 		n = link;
 	}
-	mana_node_root_pointer = NULL;
+	node_root_pointer = NULL;
 }
 
 /*!
-ƒm[ƒh¶¬‚Ì‰Šú‰»
-@param[in]	self	ƒm[ƒhƒIƒuƒWƒFƒNƒg
+ãƒãƒ¼ãƒ‰ç”Ÿæˆæ™‚ã®åˆæœŸåŒ–
+@param[in]	self	ãƒãƒ¼ãƒ‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 */
 static void node_constructor(node_entry* self)
 {
@@ -52,14 +52,14 @@ static void node_constructor(node_entry* self)
 	++count;
 #endif
 
-	self->filename = mana_lexer_get_current_filename();
-	self->line = mana_lexer_get_current_line();
+	self->filename = lexer_get_current_filename();
+	self->line = lexer_get_current_line();
 
-	self->link = mana_node_root_pointer;
-	mana_node_root_pointer = self;
+	self->link = node_root_pointer;
+	node_root_pointer = self;
 }
 
-node_entry* mana_node_clone(const node_entry* org)
+node_entry* node_clone(const node_entry* org)
 {
 	node_entry* self = NULL;
 	if(org)
@@ -70,15 +70,15 @@ node_entry* mana_node_clone(const node_entry* org)
 		node_constructor(self);
 
 		if(org->left)
-			self->left = mana_node_clone(org->left);
+			self->left = node_clone(org->left);
 
 		if(org->right)
-			self->right = mana_node_clone(org->right);
+			self->right = node_clone(org->right);
 	}
 	return self;
 }
 
-node_entry* mana_node_allocate(const node_id id)
+node_entry* node_allocate(const node_id id)
 {
 	node_entry* self = (node_entry*)mana_calloc(sizeof(node_entry), 1);
 	self->id = id;
@@ -88,9 +88,9 @@ node_entry* mana_node_allocate(const node_id id)
 	return self;
 }
 
-node_entry* mana_node_create_node(node_id id, node_entry* left, node_entry* right, node_entry* body)
+node_entry* node_create_node(node_id id, node_entry* left, node_entry* right, node_entry* body)
 {
-	node_entry* self = mana_node_allocate(id);
+	node_entry* self = node_allocate(id);
 	self->type = left ? left->type : NULL;
 	self->left = left;
 	self->right = right;
@@ -98,44 +98,44 @@ node_entry* mana_node_create_node(node_id id, node_entry* left, node_entry* righ
 	return self;
 }
 
-node_entry* mana_node_create_digit(const int32_t digit)
+node_entry* node_create_digit(const int32_t digit)
 {
 	int32_t max_char = (1 << (8 * CBSZ - 1)) - 1;
 	int32_t min_char = -1 << (8 * CBSZ - 1);
 	int32_t max_short = (1 << (8 * SBSZ - 1)) - 1;
 	int32_t min_short = -1 << (8 * SBSZ - 1);
 
-	node_entry* new_node = mana_node_allocate(NODE_CONST);
+	node_entry* new_node = node_allocate(NODE_CONST);
 	new_node->digit = digit;
 	if(digit <= max_char && digit >= min_char)
-		new_node->type = mana_type_get(SYMBOL_DATA_TYPE_CHAR);
+		new_node->type = type_get(SYMBOL_DATA_TYPE_CHAR);
 	else if(digit <= max_short && digit >= min_short)
-		new_node->type = mana_type_get(SYMBOL_DATA_TYPE_SHORT);
+		new_node->type = type_get(SYMBOL_DATA_TYPE_SHORT);
 	else
-		new_node->type = mana_type_get(SYMBOL_DATA_TYPE_INT);
+		new_node->type = type_get(SYMBOL_DATA_TYPE_INT);
 
 	return new_node;
 }
 
-node_entry* mana_node_create_real(const float real)
+node_entry* node_create_real(const float real)
 {
-	node_entry* new_node = mana_node_allocate(NODE_CONST);
+	node_entry* new_node = node_allocate(NODE_CONST);
 	new_node->real = real;
-	new_node->type = mana_type_get(SYMBOL_DATA_TYPE_FLOAT);
+	new_node->type = type_get(SYMBOL_DATA_TYPE_FLOAT);
 	return new_node;
 }
 
-node_entry* mana_node_create_string(const char* string)
+node_entry* node_create_string(const char* string)
 {
-	node_entry* new_node = mana_node_allocate(NODE_STRING);
+	node_entry* new_node = node_allocate(NODE_STRING);
 	new_node->digit = data_set(string);
-	new_node->type = mana_type_string;
+	new_node->type = type_string;
 	return new_node;
 }
 
-node_entry* mana_node_create_declare_function(node_entry* left, const char* identifier, node_entry* argument, node_entry* body)
+node_entry* node_create_declare_function(node_entry* left, const char* identifier, node_entry* argument, node_entry* body)
 {
-	node_entry* new_node = mana_node_allocate(NODE_DECLARE_FUNCTION);
+	node_entry* new_node = node_allocate(NODE_DECLARE_FUNCTION);
 	new_node->string = identifier;
 	new_node->left = left;
 	new_node->right = argument;
@@ -150,9 +150,9 @@ node_entry* mana_node_create_declare_function(node_entry* left, const char* iden
 	return new_node;
 }
 
-node_entry* mana_node_create_declare_native_function(node_entry* left, const char* identifier, node_entry* argument, node_entry* body)
+node_entry* node_create_declare_native_function(node_entry* left, const char* identifier, node_entry* argument, node_entry* body)
 {
-	node_entry* new_node = mana_node_allocate(NODE_DECLARE_NATIVE_FUNCTION);
+	node_entry* new_node = node_allocate(NODE_DECLARE_NATIVE_FUNCTION);
 	new_node->string = identifier;
 	new_node->left = left;
 	new_node->right = argument;
@@ -168,12 +168,12 @@ node_entry* mana_node_create_declare_native_function(node_entry* left, const cha
 }
 
 /*!
-ƒLƒƒƒXƒgƒm[ƒh‚ğì¬‚µ‚Ü‚·
-@param[in]	type	ƒLƒƒƒXƒg‚·‚éŒ^
-@param[in]	self	ƒm[ƒhƒIƒuƒWƒFƒNƒg
-@return				ƒm[ƒhƒIƒuƒWƒFƒNƒg
+ã‚­ãƒ£ã‚¹ãƒˆãƒãƒ¼ãƒ‰ã‚’ä½œæˆã—ã¾ã™
+@param[in]	type	ã‚­ãƒ£ã‚¹ãƒˆã™ã‚‹å‹
+@param[in]	self	ãƒãƒ¼ãƒ‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+@return				ãƒãƒ¼ãƒ‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 */
-static node_entry* mana_node_create_cast(type_description* type, node_entry* self)
+static node_entry* node_create_cast(type_description* type, node_entry* self)
 {
 	if (type->tcons == self->type->tcons)
 		return self;
@@ -182,21 +182,21 @@ static node_entry* mana_node_create_cast(type_description* type, node_entry* sel
 
 	if (type->tcons == SYMBOL_DATA_TYPE_FLOAT)
 	{
-		new_node = mana_node_allocate(NODE_I2F);
-		new_node->type = mana_type_get(SYMBOL_DATA_TYPE_FLOAT);
+		new_node = node_allocate(NODE_I2F);
+		new_node->type = type_get(SYMBOL_DATA_TYPE_FLOAT);
 		new_node->left = self;
 	}
 	else
 	{
-		new_node = mana_node_allocate(NODE_F2I);
-		new_node->type = mana_type_get(SYMBOL_DATA_TYPE_INT);
+		new_node = node_allocate(NODE_F2I);
+		new_node->type = type_get(SYMBOL_DATA_TYPE_INT);
 		new_node->left = self;
 	}
 
 	return new_node;
 }
 
-node_entry* mana_node_cast(type_description* type, node_entry* self)
+node_entry* node_cast(type_description* type, node_entry* self)
 {
 	switch ((self->type)->tcons)
 	{
@@ -208,10 +208,10 @@ node_entry* mana_node_cast(type_description* type, node_entry* self)
 			if (self->id == NODE_CONST)
 			{
 				self->real = (float)self->digit;
-				self->type = mana_type_get(SYMBOL_DATA_TYPE_FLOAT);
+				self->type = type_get(SYMBOL_DATA_TYPE_FLOAT);
 			}
 			else {
-				self = mana_node_create_cast(mana_type_get(SYMBOL_DATA_TYPE_FLOAT), self);
+				self = node_create_cast(type_get(SYMBOL_DATA_TYPE_FLOAT), self);
 			}
 		}
 		break;
@@ -225,10 +225,10 @@ node_entry* mana_node_cast(type_description* type, node_entry* self)
 			if (self->id == NODE_CONST)
 			{
 				self->digit = (int32_t)self->real;
-				self->type = mana_type_get(SYMBOL_DATA_TYPE_INT);
+				self->type = type_get(SYMBOL_DATA_TYPE_INT);
 			}
 			else {
-				self = mana_node_create_cast(mana_type_get(SYMBOL_DATA_TYPE_INT), self);
+				self = node_create_cast(type_get(SYMBOL_DATA_TYPE_INT), self);
 			}
 			break;
 
@@ -243,34 +243,34 @@ node_entry* mana_node_cast(type_description* type, node_entry* self)
 	return self;
 }
 
-size_t mana_node_get_memory_size(node_entry* self)
+size_t node_get_memory_size(node_entry* self)
 {
 	switch(self->id)
 	{
-	case NODE_CONST:			/* ’è” */
-	case NODE_IDENTIFIER:		/* •Ï” */
-		/* QÆ‚Ìactor‚©Aactor‚ÌÀ‘Ì‚©”»’è‚Å‚«‚é‚æ‚¤‚É‚·‚é */
+	case NODE_CONST:			/* å®šæ•° */
+	case NODE_IDENTIFIER:		/* å¤‰æ•° */
+		/* å‚ç…§ã®actorã‹ã€actorã®å®Ÿä½“ã‹åˆ¤å®šã§ãã‚‹ã‚ˆã†ã«ã™ã‚‹ */
 		return self->type->tcons == SYMBOL_DATA_TYPE_ACTOR ? sizeof(void*) : self->type->memory_size;
 
 	case NODE_ARRAY:			/* variable[argument] = */
 	case NODE_MEMBER_VARIABLE:			/* X.variable */
-	case NODE_NEG:			/* }•„†”½“] */
+	case NODE_NEG:			/* Â±ç¬¦å·åè»¢ */
 		return self->type->tcons == SYMBOL_DATA_TYPE_ACTOR ? sizeof(void*) : self->type->memory_size;
-/*		return mana_node_get_memory_size(self->left);	*/
+/*		return node_get_memory_size(self->left);	*/
 
 	case NODE_SELF:			/* self (actor) */
 	case NODE_PRIORITY:		/* runlevel (integer) */
 		return sizeof(int32_t*);
 
 	case NODE_ASSIGN:			/* = */
-	case NODE_CALL_ARGUMENT:		/* ŒÄ‚Ño‚µ‘¤ˆø” */
-	case NODE_CALL:			/* ŠÖ”ŒÄ‚Ño‚µ */
-	case NODE_ADD:			/* ‰ÁZ */
-	case NODE_SUB:			/* Œ¸Z */
-	case NODE_MUL:			/* æZ */
-	case NODE_DIV:			/* œZ */
-	case NODE_REM:			/* —]è */
-	case NODE_POW:			/* ‚×‚«æ */
+	case NODE_CALL_ARGUMENT:		/* å‘¼ã³å‡ºã—å´å¼•æ•° */
+	case NODE_CALL:			/* é–¢æ•°å‘¼ã³å‡ºã— */
+	case NODE_ADD:			/* åŠ ç®— */
+	case NODE_SUB:			/* æ¸›ç®— */
+	case NODE_MUL:			/* ä¹—ç®— */
+	case NODE_DIV:			/* é™¤ç®— */
+	case NODE_REM:			/* ä½™å‰° */
+	case NODE_POW:			/* ã¹ãä¹— */
 	case NODE_NOT:			/* ~ */
 	case NODE_LNOT:			/* ! */
 	case NODE_AND:			/* & */
@@ -284,13 +284,13 @@ size_t mana_node_get_memory_size(node_entry* self)
 	case NODE_NE:				/* != */
 	case NODE_GE:				/* >= */
 	case NODE_GT:				/* > */
-	case NODE_STRING:			/* •¶š—ñ */
-	case NODE_I2F:			/* ®”‚©‚çÀ”‚Ö•ÏŠ· */
-	case NODE_F2I:			/* À”‚©‚ç®”‚Ö•ÏŠ· */
+	case NODE_STRING:			/* æ–‡å­—åˆ— */
+	case NODE_I2F:			/* æ•´æ•°ã‹ã‚‰å®Ÿæ•°ã¸å¤‰æ› */
+	case NODE_F2I:			/* å®Ÿæ•°ã‹ã‚‰æ•´æ•°ã¸å¤‰æ› */
 	case NODE_LOR:			/* || */
 	case NODE_LAND:			/* && */
 	case NODE_SENDER:			/* sender (actor) */
-	case NODE_EXPRESSION_IF:	/* O€‰‰Zq '?' */
+	case NODE_EXPRESSION_IF:	/* ä¸‰é …æ¼”ç®—å­ '?' */
 	default:
 #if 1
 		return self->type->memory_size;
@@ -301,13 +301,13 @@ size_t mana_node_get_memory_size(node_entry* self)
 	}
 }
 
-static bool mana_node_dump_format_flag_ = false;
+static bool node_dump_format_flag_ = false;
 
-static void mana_node_dump_format_(FILE* file, const char* format, ...)
+static void node_dump_format_(FILE* file, const char* format, ...)
 {
-	if (mana_node_dump_format_flag_)
+	if (node_dump_format_flag_)
 	{
-		mana_node_dump_format_flag_ = false;
+		node_dump_format_flag_ = false;
 		fputc(',', file);
 	}
 
@@ -320,10 +320,10 @@ static void mana_node_dump_format_(FILE* file, const char* format, ...)
 #endif
 	va_end(arg);
 
-	mana_node_dump_format_flag_ = true;
+	node_dump_format_flag_ = true;
 }
 
-static void mana_node_dump_(FILE* file, const node_entry* self)
+static void node_dump_(FILE* file, const node_entry* self)
 {
 	static char* name[] = {
 		"NEWLINE",
@@ -331,18 +331,18 @@ static void mana_node_dump_(FILE* file, const node_entry* self)
 		"ARRAY",								/*!< variable[argument] = */
 		"ASSIGN",								/*!< = */
 		"MEMOP",								/*!< X.variable */
-		"CALL_ARGUMENT",							/*!< ŒÄ‚Ño‚µ‘¤ˆø” */
-		"DECLARE_ARGUMENT",							/*!< ŒÄ‚Ño‚µ‘¤ˆø” */
-		"CONST",								/*!< ’è” */
-		"VARIABLE",							/*!< •Ï” */
-		"CALL",								/*!< ŠÖ”ŒÄ‚Ño‚µ */
-		"ADD",									/*!< ‰ÁZ */
-		"SUB",									/*!< Œ¸Z */
-		"MUL",									/*!< æZ */
-		"DIV",									/*!< œZ */
-		"REM",									/*!< —]è */
-		"NEG",									/*!< }•„†”½“] */
-		"POW",									/*!< ‚×‚«æ */
+		"CALL_ARGUMENT",							/*!< å‘¼ã³å‡ºã—å´å¼•æ•° */
+		"DECLARE_ARGUMENT",							/*!< å‘¼ã³å‡ºã—å´å¼•æ•° */
+		"CONST",								/*!< å®šæ•° */
+		"VARIABLE",							/*!< å¤‰æ•° */
+		"CALL",								/*!< é–¢æ•°å‘¼ã³å‡ºã— */
+		"ADD",									/*!< åŠ ç®— */
+		"SUB",									/*!< æ¸›ç®— */
+		"MUL",									/*!< ä¹—ç®— */
+		"DIV",									/*!< é™¤ç®— */
+		"REM",									/*!< ä½™å‰° */
+		"NEG",									/*!< Â±ç¬¦å·åè»¢ */
+		"POW",									/*!< ã¹ãä¹— */
 		"NOT",									/*!< ~ */
 		"AND",									/*!< & */
 		"OR",									/*!< | */
@@ -355,27 +355,27 @@ static void mana_node_dump_(FILE* file, const node_entry* self)
 		"NE",									/*!< != */
 		"GE",									/*!< >= */
 		"GT",									/*!< > */
-		"STRING",								/*!< •¶š—ñ */
-		"I2F",									/*!< ®”‚©‚çÀ”‚Ö•ÏŠ· */
-		"F2I",									/*!< À”‚©‚ç®”‚Ö•ÏŠ· */
+		"STRING",								/*!< æ–‡å­—åˆ— */
+		"I2F",									/*!< æ•´æ•°ã‹ã‚‰å®Ÿæ•°ã¸å¤‰æ› */
+		"F2I",									/*!< å®Ÿæ•°ã‹ã‚‰æ•´æ•°ã¸å¤‰æ› */
 		"LOR",									/*!< || */
 		"LAND",								/*!< && */
 		"LNOT",								/*!< ! */
 		"HALT",								/*!< halt */
 		"YIELD",								/*!< yield */
 		"REQUEST",								/*!< req */
-		"COMPLY",								/*!< comply (req‹–‰Â) */
-		"REFUSE",								/*!< refuse (req‹‘”Û) */
+		"COMPLY",								/*!< comply (reqè¨±å¯) */
+		"REFUSE",								/*!< refuse (reqæ‹’å¦) */
 		"JOIN",								/*!< join */
 		"SENDER",								/*!< sender (actor) */
 		"SELF",								/*!< self (actor) */
 		"PRIORITY",							/*!< priority (integer) */
-		"EXPRESSION_IF",						/*!< O€‰‰Zq '?' */
+		"EXPRESSION_IF",						/*!< ä¸‰é …æ¼”ç®—å­ '?' */
 		"PRINT",								/*!< print */
 		"RETURN",								/*!< return */
 		"ROLLBACK",							/*!< rollback */
 
-		"BLOCK",								/*!< ƒuƒƒbƒN */
+		"BLOCK",								/*!< ãƒ–ãƒ­ãƒƒã‚¯ */
 		"IF",									/*!< if */
 		"SWITCH",								/*!< switch */
 		"CASE",								/*!< case */
@@ -397,7 +397,7 @@ static void mana_node_dump_(FILE* file, const node_entry* self)
 		"VARIABLE_DECLARATION",
 		"SIZEOF",
 
-		"DECLARE_ACTOR",						//!< ƒAƒNƒ^[‚ÌéŒ¾
+		"DECLARE_ACTOR",						//!< ã‚¢ã‚¯ã‚¿ãƒ¼ã®å®£è¨€
 		"DECLARE_PHANTOM",
 		"DECLARE_MODULE",
 		"DECLARE_STRUCT",
@@ -417,54 +417,54 @@ static void mana_node_dump_(FILE* file, const node_entry* self)
 	};
 
 #if defined(_DEBUG)
-	mana_node_dump_format_(file, "\"magic\": \"%s\"", self->magic);
+	node_dump_format_(file, "\"magic\": \"%s\"", self->magic);
 #endif
 
 	if (self->id < sizeof(name) / sizeof(name[0]))
 	{
-		mana_node_dump_format_(file, "\"name\": \"%s\"", name[self->id]);
+		node_dump_format_(file, "\"name\": \"%s\"", name[self->id]);
 	}
 	else
 	{
-		mana_node_dump_format_(file, "\"name\": \"%d\"", self->id);
+		node_dump_format_(file, "\"name\": \"%d\"", self->id);
 	}
 
 	if (self->string)
-		mana_node_dump_format_(file, "\"string\": \"%s\"", self->string);
+		node_dump_format_(file, "\"string\": \"%s\"", self->string);
 	if (self->type)
-		mana_node_dump_format_(file, "\"type\": \"%s\"", self->type->name);
+		node_dump_format_(file, "\"type\": \"%s\"", self->type->name);
 
 	if (self->left)
 	{
-		mana_node_dump_format_(file, "\"left\": {\n");
-		mana_node_dump_format_flag_ = false;
-		mana_node_dump_(file, self->left);
+		node_dump_format_(file, "\"left\": {\n");
+		node_dump_format_flag_ = false;
+		node_dump_(file, self->left);
 		fprintf(file, "}\n");
 	}
 	if (self->right)
 	{
-		mana_node_dump_format_(file, "\"right\": {\n");
-		mana_node_dump_format_flag_ = false;
-		mana_node_dump_(file, self->right);
+		node_dump_format_(file, "\"right\": {\n");
+		node_dump_format_flag_ = false;
+		node_dump_(file, self->right);
 		fprintf(file, "}\n");
 	}
 	if (self->body)
 	{
-		mana_node_dump_format_(file, "\"body\": {\n");
-		mana_node_dump_format_flag_ = false;
-		mana_node_dump_(file, self->body);
+		node_dump_format_(file, "\"body\": {\n");
+		node_dump_format_flag_ = false;
+		node_dump_(file, self->body);
 		fprintf(file, "}\n");
 	}
 	if (self->next)
 	{
-		mana_node_dump_format_(file, "\"next\": {\n");
-		mana_node_dump_format_flag_ = false;
-		mana_node_dump_(file, self->next);
+		node_dump_format_(file, "\"next\": {\n");
+		node_dump_format_flag_ = false;
+		node_dump_(file, self->next);
 		fprintf(file, "}\n");
 	}
 }
 
-void mana_node_dump(const node_entry* self)
+void node_dump(const node_entry* self)
 {
 	FILE* file;
 #if defined(__STDC_WANT_SECURE_LIB__)
@@ -477,7 +477,7 @@ void mana_node_dump(const node_entry* self)
 		if (self)
 		{
 			fputc('{', file);
-			mana_node_dump_(file, self);
+			node_dump_(file, self);
 			fputc('}', file);
 		}
 		fclose(file);
