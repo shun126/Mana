@@ -2,8 +2,8 @@
  * mana (library)
  *
  * @file	mana_plugin.c
- * @brief	ƒvƒ‰ƒOƒCƒ“ŠÖŒW‚Ìƒ\[ƒXƒtƒ@ƒCƒ‹
- * @detail	‚±‚Ìƒtƒ@ƒCƒ‹‚Íƒvƒ‰ƒOƒCƒ“ŠÖŒW‚Ìƒ\[ƒXƒtƒ@ƒCƒ‹‚Å‚·B
+ * @brief	ãƒ—ãƒ©ã‚°ã‚¤ãƒ³é–¢ä¿‚ã®ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«
+ * @detail	ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯ãƒ—ãƒ©ã‚°ã‚¤ãƒ³é–¢ä¿‚ã®ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
  * @author	Shun Moriya
  * @date	2003-
  */
@@ -22,13 +22,13 @@
 
 #if defined(_MSC_VER)
 #include <windows.h>
-/*! ƒ_ƒCƒiƒ~ƒbƒNƒ‰ƒCƒuƒ‰ƒŠ‚Ìƒnƒ“ƒhƒ‹ */
+/*! ãƒ€ã‚¤ãƒŠãƒŸãƒƒã‚¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®ãƒãƒ³ãƒ‰ãƒ« */
 #define MODULE				HMODULE
-/*! ƒ_ƒCƒiƒ~ƒbƒNƒ‰ƒCƒuƒ‰ƒŠ‚ğ“Ç‚İ‚Ş */
+/*! ãƒ€ã‚¤ãƒŠãƒŸãƒƒã‚¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’èª­ã¿è¾¼ã‚€ */
 #define LOAD_LIBRARY(N)		LoadLibrary(N);
-/*! ƒ_ƒCƒiƒ~ƒbƒNƒ‰ƒCƒuƒ‰ƒŠ‚ğŠJ•ú */
+/*! ãƒ€ã‚¤ãƒŠãƒŸãƒƒã‚¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’é–‹æ”¾ */
 #define FREE_LIBRARY(M)		FreeLibrary(M);
-/*! ƒ_ƒCƒiƒ~ƒbƒNƒ‰ƒCƒuƒ‰ƒŠ“à‚ÌŠÖ”‚ğæ“¾ */
+/*! ãƒ€ã‚¤ãƒŠãƒŸãƒƒã‚¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒªå†…ã®é–¢æ•°ã‚’å–å¾— */
 #define GET_PROC_ADR(M, N)	GetProcAddress(M, N);
 #elif defined(NN_PLATFORM_CTR)
 #else
@@ -36,13 +36,13 @@
 #include <sys/stat.h>
 #include <dirent.h>
 #include <dlfcn.h>
-/*! ƒ_ƒCƒiƒ~ƒbƒNƒ‰ƒCƒuƒ‰ƒŠ‚Ìƒ|ƒCƒ“ƒ^ */
+/*! ãƒ€ã‚¤ãƒŠãƒŸãƒƒã‚¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®ãƒã‚¤ãƒ³ã‚¿ */
 #define MODULE				void*
-/*! ƒ_ƒCƒiƒ~ƒbƒNƒ‰ƒCƒuƒ‰ƒŠ‚ğ“Ç‚İ‚Ş */
+/*! ãƒ€ã‚¤ãƒŠãƒŸãƒƒã‚¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’èª­ã¿è¾¼ã‚€ */
 #define LOAD_LIBRARY(N)		dlopen(N, RTLD_LAZY);
-/*! ƒ_ƒCƒiƒ~ƒbƒNƒ‰ƒCƒuƒ‰ƒŠ‚ğŠJ•ú */
+/*! ãƒ€ã‚¤ãƒŠãƒŸãƒƒã‚¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’é–‹æ”¾ */
 #define FREE_LIBRARY(M)		dlclose(M);
-/*! ƒ_ƒCƒiƒ~ƒbƒNƒ‰ƒCƒuƒ‰ƒŠ“à‚ÌŠÖ”‚ğæ“¾ */
+/*! ãƒ€ã‚¤ãƒŠãƒŸãƒƒã‚¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒªå†…ã®é–¢æ•°ã‚’å–å¾— */
 #define GET_PROC_ADR(M, N)	dlsym(M, N);
 #endif
 
@@ -51,7 +51,7 @@ static MODULE* mana_plugins = NULL;
 static uint32_t mana_plugin_count = 0;
 
 /*!
- * void mana_initialize(void)‚©‚çŒÄ‚Î‚ê‚é‚Ì‚ÅAŒÄ‚Ño‚·•K—v‚Í‚ ‚è‚Ü‚¹‚ñB
+ * void mana_initialize(void)ã‹ã‚‰å‘¼ã°ã‚Œã‚‹ã®ã§ã€å‘¼ã³å‡ºã™å¿…è¦ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚
  */
 void mana_plugin_initialize(void)
 {
@@ -62,7 +62,7 @@ void mana_plugin_initialize(void)
 }
 
 /*!
- * void mana_finalize(void)‚©‚çŒÄ‚Î‚ê‚é‚Ì‚ÅAŒÄ‚Ño‚·•K—v‚Í‚ ‚è‚Ü‚¹‚ñB
+ * void mana_finalize(void)ã‹ã‚‰å‘¼ã°ã‚Œã‚‹ã®ã§ã€å‘¼ã³å‡ºã™å¿…è¦ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚
  */
 void mana_plugin_finalize(void)
 {
@@ -94,9 +94,9 @@ void mana_plugin_finalize(void)
 }
 
 /*!
- * @param[in]	file_name	ƒvƒ‰ƒOƒCƒ“‚Ìƒtƒ@ƒCƒ‹–¼
- * @retval		true		¬Œ÷
- * @retval		false		¸”s
+ * @param[in]	file_name	ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ãƒ•ã‚¡ã‚¤ãƒ«å
+ * @retval		true		æˆåŠŸ
+ * @retval		false		å¤±æ•—
  */
 bool mana_plugin_load(const char* file_name)
 {
@@ -121,9 +121,9 @@ bool mana_plugin_load(const char* file_name)
 }
 
 /*!
- * @param[in]	directory_name	ƒfƒBƒŒƒNƒgƒŠ–¼
- * @retval		true			¬Œ÷
- * @retval		false			¸”s
+ * @param[in]	directory_name	ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå
+ * @retval		true			æˆåŠŸ
+ * @retval		false			å¤±æ•—
  */
 bool mana_plugin_regist(const char* directory_name)
 {

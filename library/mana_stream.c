@@ -2,10 +2,10 @@
 mana (library)
 
 @file	mana_stream.c
-@brief	mana_streamƒNƒ‰ƒX‚ÉŠÖ‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹
+@brief	mana_streamã‚¯ãƒ©ã‚¹ã«é–¢ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«
 @detail
-‚±‚Ìƒtƒ@ƒCƒ‹‚Ímana_streamƒNƒ‰ƒX‚ÉŠÖŒW‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹‚Å‚·B
-mana_streamƒNƒ‰ƒX‚Íƒƒ‚ƒŠƒXƒgƒŠ[ƒ~ƒ“ƒO‚ÉŠÖ‚·‚é‘€ì‚ðs‚È‚¢‚Ü‚·B
+ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯mana_streamã‚¯ãƒ©ã‚¹ã«é–¢ä¿‚ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
+mana_streamã‚¯ãƒ©ã‚¹ã¯ãƒ¡ãƒ¢ãƒªã‚¹ãƒˆãƒªãƒ¼ãƒŸãƒ³ã‚°ã«é–¢ã™ã‚‹æ“ä½œã‚’è¡Œãªã„ã¾ã™ã€‚
 
 @author	Shun Moriya
 @date	2003-
@@ -23,7 +23,7 @@ mana_streamƒNƒ‰ƒX‚Íƒƒ‚ƒŠƒXƒgƒŠ[ƒ~ƒ“ƒO‚ÉŠÖ‚·‚é‘€ì‚ðs‚È‚¢‚Ü‚·B
 #include <stdio.h>
 #include <string.h>
 
-// ƒƒ‚ƒŠŠm•ÛŽž‚Ìƒy[ƒWƒTƒCƒY
+// ãƒ¡ãƒ¢ãƒªç¢ºä¿æ™‚ã®ãƒšãƒ¼ã‚¸ã‚µã‚¤ã‚º
 #define MANA_STREAM_ALLOCATE_PAGE_SIZE (0x1000)
 
 mana_stream* mana_stream_create()
