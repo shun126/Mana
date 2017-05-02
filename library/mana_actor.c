@@ -283,12 +283,14 @@ static void mana_actor_cmd_push_short(mana_actor* actor)
 
 static void mana_actor_cmd_push_integer(mana_actor* actor)
 {
-	mana_stack_push_integer(&actor->stack, mana_actor_get_integer_from_memory(actor, actor->pc + 1));
+	const int32_t value = mana_actor_get_integer_from_memory(actor, actor->pc + 1);
+	mana_stack_push_integer(&actor->stack, value);
 }
 
 static void mana_actor_cmd_push_float(mana_actor* actor)
 {
-	mana_stack_push_real(&actor->stack, mana_actor_get_float_from_memory(actor, actor->pc + 1));
+	const float value = mana_actor_get_float_from_memory(actor, actor->pc + 1);
+	mana_stack_push_real(&actor->stack, value);
 }
 
 static void mana_actor_cmd_push_string(mana_actor* actor)
@@ -313,12 +315,14 @@ static void mana_actor_cmd_push_sender(mana_actor* actor)
 
 static void mana_actor_cmd_allocate(mana_actor* actor)
 {
-	mana_frame_allocate(&actor->frame, mana_actor_get_integer_from_memory(actor, actor->pc + 1));
+	const int32_t value = mana_actor_get_integer_from_memory(actor, actor->pc + 1);
+	mana_frame_allocate(&actor->frame, value);
 }
 
 static void mana_actor_cmd_free(mana_actor* actor)
 {
-	mana_frame_release(&actor->frame, mana_actor_get_integer_from_memory(actor, actor->pc + 1));
+	const int32_t value = mana_actor_get_integer_from_memory(actor, actor->pc + 1);
+	mana_frame_release(&actor->frame, value);
 }
 
 static void mana_actor_cmd_duplicate(mana_actor* actor)
@@ -333,28 +337,28 @@ static void mana_actor_cmd_remove(mana_actor* actor)
 
 static void mana_actor_cmd_load_static_address(mana_actor* actor)
 {
-	size_t offset = (size_t)mana_actor_get_integer_from_memory(actor, actor->pc + 1);
+	const uint32_t offset = mana_actor_get_unsigned_integer_from_memory(actor, actor->pc + 1);
 	MANA_ASSERT(offset < mana_static_memory_size);
 	mana_stack_push_pointer(&actor->stack, &mana_static_memory[offset]);
 }
 
 static void mana_actor_cmd_load_global_address(mana_actor* actor)
 {
-	size_t offset = (size_t)mana_actor_get_integer_from_memory(actor, actor->pc + 1);
+	const uint32_t offset = mana_actor_get_unsigned_integer_from_memory(actor, actor->pc + 1);
 	MANA_ASSERT(offset < actor->parent->file_header->size_of_global_memory);
 	mana_stack_push_pointer(&actor->stack, &actor->parent->global_memory[offset]);
 }
 
 static void mana_actor_cmd_load_frame_address(mana_actor* actor)
 {
-	int32_t offset = mana_actor_get_integer_from_memory(actor, actor->pc + 1);
+	uint32_t offset = mana_actor_get_unsigned_integer_from_memory(actor, actor->pc + 1);
 	void* address = mana_frame_get_address(&actor->frame, offset);
 	mana_stack_push_pointer(&actor->stack, address);
 }
 
 static void mana_actor_cmd_load_self_address(mana_actor* actor)
 {
-	int32_t offset = mana_actor_get_integer_from_memory(actor, actor->pc + 1);
+	uint32_t offset = mana_actor_get_unsigned_integer_from_memory(actor, actor->pc + 1);
 	mana_stack_push_pointer(&actor->stack, &((char*)actor->variable)[offset]);
 }
 
@@ -389,33 +393,29 @@ static void mana_actor_cmd_load_reffrence(mana_actor* actor)
 
 static void mana_actor_cmd_store_char(mana_actor* actor)
 {
-	char* pointer = (char*)mana_stack_get_pointer(&actor->stack, 0);
-	int32_t value = mana_stack_get_integer(&actor->stack, 1);
-	*pointer = (int8_t)value;
+	int8_t* pointer = (int8_t*)mana_stack_get_pointer(&actor->stack, 0);
+	*pointer = (int8_t)mana_stack_get_integer(&actor->stack, 1);
 	mana_stack_remove(&actor->stack, 2);
 }
 
 static void mana_actor_cmd_store_short(mana_actor* actor)
 {
 	int16_t* pointer = (int16_t*)mana_stack_get_pointer(&actor->stack, 0);
-	int32_t value = mana_stack_get_integer(&actor->stack, 1);
-	*pointer = (int16_t)value;
+	*pointer = (int16_t)mana_stack_get_integer(&actor->stack, 1);
 	mana_stack_remove(&actor->stack, 2);
 }
 
 static void mana_actor_cmd_store_integer(mana_actor* actor)
 {
 	int32_t* pointer = (int32_t*)mana_stack_get_pointer(&actor->stack, 0);
-	int32_t value = mana_stack_get_integer(&actor->stack, 1);
-	*pointer = value;
+	*pointer = mana_stack_get_integer(&actor->stack, 1);
 	mana_stack_remove(&actor->stack, 2);
 }
 
 static void mana_actor_cmd_store_float(mana_actor* actor)
 {
 	float* pointer = (float*)mana_stack_get_pointer(&actor->stack, 0);
-	float value = mana_stack_get_real(&actor->stack, 1);
-	*pointer = value;
+	*pointer = mana_stack_get_real(&actor->stack, 1);
 	mana_stack_remove(&actor->stack, 2);
 }
 
@@ -552,7 +552,7 @@ static void mana_actor_cmd_request(mana_actor* actor)
 static void mana_actor_cmd_request_wait_starting(mana_actor* actor)
 {
 	mana_actor* target_actor = (mana_actor*)mana_stack_get_pointer(&actor->stack, 0);
-	int32_t level = mana_stack_get_integer(&actor->stack, 1);
+	mana_int level = mana_stack_get_integer(&actor->stack, 1);
 	char* action = mana_actor_get_string_from_memory(actor, actor->pc + 1);
 
 	if(target_actor == 0)
@@ -586,7 +586,7 @@ static void mana_actor_cmd_request_wait_starting(mana_actor* actor)
 static void mana_actor_cmd_request_wait_ending(mana_actor* actor)
 {
 	mana_actor* target_actor = (mana_actor*)mana_stack_get_pointer(&actor->stack, 0);
-	int32_t level = mana_stack_get_integer(&actor->stack, 1);
+	mana_int level = mana_stack_get_integer(&actor->stack, 1);
 	char* action = mana_actor_get_string_from_memory(actor, actor->pc + 1);
 
 	if(target_actor == 0)
@@ -762,8 +762,8 @@ static void mana_actor_cmd_rollback(mana_actor* actor)
 
 static void mana_actor_cmd_add_integer(mana_actor* actor)
 {
-	int32_t left  = mana_stack_get_integer(&actor->stack, 1);
-	int32_t right = mana_stack_get_integer(&actor->stack, 0);
+	mana_int left  = mana_stack_get_integer(&actor->stack, 1);
+	mana_int right = mana_stack_get_integer(&actor->stack, 0);
 	mana_stack_remove(&actor->stack, 1);
 	mana_stack_set_integer(&actor->stack, 0, left + right);
 }
@@ -778,8 +778,8 @@ static void mana_actor_cmd_add_float(mana_actor* actor)
 
 static void mana_actor_cmd_divide_integer(mana_actor* actor)
 {
-	int32_t left  = mana_stack_get_integer(&actor->stack, 1);
-	int32_t right = mana_stack_get_integer(&actor->stack, 0);
+	mana_int left  = mana_stack_get_integer(&actor->stack, 1);
+	mana_int right = mana_stack_get_integer(&actor->stack, 0);
 	mana_stack_remove(&actor->stack, 1);
 	mana_stack_set_integer(&actor->stack, 0, left / right);
 }
@@ -804,8 +804,8 @@ static void mana_actor_cmd_minus_float(mana_actor* actor)
 
 static void mana_actor_cmd_MOD_integer(mana_actor* actor)
 {
-	int32_t left  = mana_stack_get_integer(&actor->stack, 1);
-	int32_t right = mana_stack_get_integer(&actor->stack, 0);
+	mana_int left  = mana_stack_get_integer(&actor->stack, 1);
+	mana_int right = mana_stack_get_integer(&actor->stack, 0);
 	mana_stack_remove(&actor->stack, 1);
 	mana_stack_set_integer(&actor->stack, 0, left % right);
 }
@@ -820,8 +820,8 @@ static void mana_actor_cmd_MOD_float(mana_actor* actor)
 
 static void mana_actor_cmd_multiply_integer(mana_actor* actor)
 {
-	int32_t left  = mana_stack_get_integer(&actor->stack, 1);
-	int32_t right = mana_stack_get_integer(&actor->stack, 0);
+	mana_int left  = mana_stack_get_integer(&actor->stack, 1);
+	mana_int right = mana_stack_get_integer(&actor->stack, 0);
 	mana_stack_remove(&actor->stack, 1);
 	mana_stack_set_integer(&actor->stack, 0, left * right);
 }
@@ -836,8 +836,8 @@ static void mana_actor_cmd_multiply_float(mana_actor* actor)
 
 static void mana_actor_cmd_subtract_integer(mana_actor* actor)
 {
-	int32_t left  = mana_stack_get_integer(&actor->stack, 1);
-	int32_t right = mana_stack_get_integer(&actor->stack, 0);
+	mana_int left  = mana_stack_get_integer(&actor->stack, 1);
+	mana_int right = mana_stack_get_integer(&actor->stack, 0);
 	mana_stack_remove(&actor->stack, 1);
 	mana_stack_set_integer(&actor->stack, 0, left - right);
 }
@@ -852,32 +852,32 @@ static void mana_actor_cmd_subtract_float(mana_actor* actor)
 
 static void mana_actor_cmd_and(mana_actor* actor)
 {
-	int32_t left  = mana_stack_get_integer(&actor->stack, 1);
-	int32_t right = mana_stack_get_integer(&actor->stack, 0);
+	mana_int left  = mana_stack_get_integer(&actor->stack, 1);
+	mana_int right = mana_stack_get_integer(&actor->stack, 0);
 	mana_stack_remove(&actor->stack, 1);
 	mana_stack_set_integer(&actor->stack, 0, left & right);
 }
 
 static void mana_actor_cmd_exclusive_or(mana_actor* actor)
 {
-	int32_t left  = mana_stack_get_integer(&actor->stack, 1);
-	int32_t right = mana_stack_get_integer(&actor->stack, 0);
+	mana_int left  = mana_stack_get_integer(&actor->stack, 1);
+	mana_int right = mana_stack_get_integer(&actor->stack, 0);
 	mana_stack_remove(&actor->stack, 1);
 	mana_stack_set_integer(&actor->stack, 0, left ^ right);
 }
 
 static void mana_actor_cmd_logical_and(mana_actor* actor)
 {
-	int32_t left  = mana_stack_get_integer(&actor->stack, 1);
-	int32_t right = mana_stack_get_integer(&actor->stack, 0);
+	mana_int left  = mana_stack_get_integer(&actor->stack, 1);
+	mana_int right = mana_stack_get_integer(&actor->stack, 0);
 	mana_stack_remove(&actor->stack, 1);
 	mana_stack_set_integer(&actor->stack, 0, left && right);
 }
 
 static void mana_actor_cmd_logical_or(mana_actor* actor)
 {
-	int32_t left  = mana_stack_get_integer(&actor->stack, 1);
-	int32_t right = mana_stack_get_integer(&actor->stack, 0);
+	mana_int left  = mana_stack_get_integer(&actor->stack, 1);
+	mana_int right = mana_stack_get_integer(&actor->stack, 0);
 	mana_stack_remove(&actor->stack, 1);
 	mana_stack_set_integer(&actor->stack, 0, left || right);
 }
@@ -894,32 +894,32 @@ static void mana_actor_cmd_logical_not(mana_actor* actor)
 
 static void mana_actor_cmd_or(mana_actor* actor)
 {
-	int32_t left  = mana_stack_get_integer(&actor->stack, 1);
-	int32_t right = mana_stack_get_integer(&actor->stack, 0);
+	mana_int left  = mana_stack_get_integer(&actor->stack, 1);
+	mana_int right = mana_stack_get_integer(&actor->stack, 0);
 	mana_stack_remove(&actor->stack, 1);
 	mana_stack_set_integer(&actor->stack, 0, left | right);
 }
 
 static void mana_actor_cmd_shift_left(mana_actor* actor)
 {
-	int32_t left  = mana_stack_get_integer(&actor->stack, 1);
-	int32_t right = mana_stack_get_integer(&actor->stack, 0);
+	mana_int left  = mana_stack_get_integer(&actor->stack, 1);
+	mana_int right = mana_stack_get_integer(&actor->stack, 0);
 	mana_stack_remove(&actor->stack, 1);
 	mana_stack_set_integer(&actor->stack, 0, left << right);
 }
 
 static void mana_actor_cmd_shift_right(mana_actor* actor)
 {
-	int32_t left  = mana_stack_get_integer(&actor->stack, 1);
-	int32_t right = mana_stack_get_integer(&actor->stack, 0);
+	mana_int left  = mana_stack_get_integer(&actor->stack, 1);
+	mana_int right = mana_stack_get_integer(&actor->stack, 0);
 	mana_stack_remove(&actor->stack, 1);
 	mana_stack_set_integer(&actor->stack, 0, left >> right);
 }
 
 static void mana_actor_cmd_compare_equal_integer(mana_actor* actor)
 {
-	int32_t left  = mana_stack_get_integer(&actor->stack, 1);
-	int32_t right = mana_stack_get_integer(&actor->stack, 0);
+	mana_int left  = mana_stack_get_integer(&actor->stack, 1);
+	mana_int right = mana_stack_get_integer(&actor->stack, 0);
 	mana_stack_remove(&actor->stack, 1);
 	mana_stack_set_integer(&actor->stack, 0, left == right);
 }
@@ -934,8 +934,8 @@ static void mana_actor_cmd_compare_equal_float(mana_actor* actor)
 
 static void mana_actor_cmd_compare_greater_equal_integer(mana_actor* actor)
 {
-	int32_t left  = mana_stack_get_integer(&actor->stack, 1);
-	int32_t right = mana_stack_get_integer(&actor->stack, 0);
+	mana_int left  = mana_stack_get_integer(&actor->stack, 1);
+	mana_int right = mana_stack_get_integer(&actor->stack, 0);
 	mana_stack_remove(&actor->stack, 1);
 	mana_stack_set_integer(&actor->stack, 0, left >= right);
 }
@@ -950,8 +950,8 @@ static void mana_actor_cmd_compare_greater_equal_float(mana_actor* actor)
 
 static void mana_actor_cmd_compare_greater_integer(mana_actor* actor)
 {
-	int32_t left  = mana_stack_get_integer(&actor->stack, 1);
-	int32_t right = mana_stack_get_integer(&actor->stack, 0);
+	mana_int left  = mana_stack_get_integer(&actor->stack, 1);
+	mana_int right = mana_stack_get_integer(&actor->stack, 0);
 	mana_stack_remove(&actor->stack, 1);
 	mana_stack_set_integer(&actor->stack, 0, left > right);
 }
@@ -966,8 +966,8 @@ static void mana_actor_cmd_compare_greater_float(mana_actor* actor)
 
 static void mana_actor_cmd_compare_not_equal_integer(mana_actor* actor)
 {
-	int32_t left  = mana_stack_get_integer(&actor->stack, 1);
-	int32_t right = mana_stack_get_integer(&actor->stack, 0);
+	mana_int left  = mana_stack_get_integer(&actor->stack, 1);
+	mana_int right = mana_stack_get_integer(&actor->stack, 0);
 	mana_stack_remove(&actor->stack, 1);
 	mana_stack_set_integer(&actor->stack, 0, left != right);
 }
@@ -982,8 +982,8 @@ static void mana_actor_cmd_compare_not_equal_float(mana_actor* actor)
 
 static void mana_actor_cmd_compare_less_equal_integer(mana_actor* actor)
 {
-	int32_t left  = mana_stack_get_integer(&actor->stack, 1);
-	int32_t right = mana_stack_get_integer(&actor->stack, 0);
+	mana_int left  = mana_stack_get_integer(&actor->stack, 1);
+	mana_int right = mana_stack_get_integer(&actor->stack, 0);
 	mana_stack_remove(&actor->stack, 1);
 	mana_stack_set_integer(&actor->stack, 0, left <= right);
 }
@@ -998,8 +998,8 @@ static void mana_actor_cmd_compare_less_equal_float(mana_actor* actor)
 
 static void mana_actor_cmd_compare_less_integer(mana_actor* actor)
 {
-	int32_t left  = mana_stack_get_integer(&actor->stack, 1);
-	int32_t right = mana_stack_get_integer(&actor->stack, 0);
+	mana_int left  = mana_stack_get_integer(&actor->stack, 1);
+	mana_int right = mana_stack_get_integer(&actor->stack, 0);
 	mana_stack_remove(&actor->stack, 1);
 	mana_stack_set_integer(&actor->stack, 0, left < right);
 }
@@ -1148,7 +1148,7 @@ static void mana_actor_cmd_print(mana_actor* actor)
 #if __STDC_WANT_SECURE_LIB__
 					message_pointer += sprintf_s(&message[message_pointer], sizeof(message) - message_pointer, "%d", mana_stack_get_integer(&actor->stack, counter++));
 #else
-					message_pointer += sprintf(&message[message_pointer], "%d", mana_stack_get_integer(&actor->stack, counter++));
+					message_pointer += sprintf(&message[message_pointer], "%lld", mana_stack_get_integer(&actor->stack, counter++));
 #endif
 					break;
 

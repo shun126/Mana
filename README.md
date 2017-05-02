@@ -26,6 +26,11 @@ You can implement the execution engine easily into your computer game program.
 - cd to <download_path>\compiler
 - Open mana.sln
 
+## Building with Xcode
+- Install Xcode 8.3.2 (should work with other versions).
+- cd to <download_path>\compiler
+- Open mana.xcodeproj
+
 # Running Tests
     mana sample/sample.mn
 
