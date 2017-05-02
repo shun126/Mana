@@ -2,10 +2,10 @@
 mana (library)
 
 @file	mana_stack.c
-@brief	mana_stackƒNƒ‰ƒX‚ÉŠÖ‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹
+@brief	mana_stackã‚¯ãƒ©ã‚¹ã«é–¢ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«
 @detail
-‚±‚Ìƒtƒ@ƒCƒ‹‚Ímana_stackƒNƒ‰ƒX‚ÉŠÖŒW‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹‚Å‚·B
-mana_stackƒNƒ‰ƒX‚Ímana_actorƒNƒ‰ƒX‚ÌƒXƒ^ƒbƒN‘€ì‚ðs‚È‚¢‚Ü‚·B
+ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯mana_stackã‚¯ãƒ©ã‚¹ã«é–¢ä¿‚ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
+mana_stackã‚¯ãƒ©ã‚¹ã¯mana_actorã‚¯ãƒ©ã‚¹ã®ã‚¹ã‚¿ãƒƒã‚¯æ“ä½œã‚’è¡Œãªã„ã¾ã™ã€‚
 
 @author	Shun Moriya
 @date	2016-
@@ -20,7 +20,7 @@ mana_stackƒNƒ‰ƒX‚Ímana_actorƒNƒ‰ƒX‚ÌƒXƒ^ƒbƒN‘€ì‚ðs‚È‚¢‚Ü‚·B
 #include <assert.h>
 #include <string.h>
 
-// ƒƒ‚ƒŠŠm•ÛŽž‚Ìƒy[ƒWƒTƒCƒY
+// ãƒ¡ãƒ¢ãƒªç¢ºä¿æ™‚ã®ãƒšãƒ¼ã‚¸ã‚µã‚¤ã‚º
 #define MANA_STACK_ALLOCATE_PAGE_SIZE (8)
 
 #define MANA_STACK_ALLOCATE_BEGIN(s) {																						\

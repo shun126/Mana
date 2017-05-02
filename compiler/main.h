@@ -2,8 +2,8 @@
 mana (compiler)
 
 @file	main.h
-@brief	���C�����[�v�Ɋւ���w�b�_�t�@�C��
-@detail	���̃t�@�C���̓��C�����[�v�Ɋ֌W����w�b�_�t�@�C���ł��B
+@brief	メインループに関するヘッダファイル
+@detail	このファイルはメインループに関係するヘッダファイルです。
 @author	Shun Moriya
 @date	2016-
 */
@@ -73,8 +73,8 @@ extern char* _fullpath(char* out, const char* in, const size_t size);
 #include <stdlib.h>
 
 extern int32_t yyparse(void);
-extern void mana_parser_initialize(void);
-extern void mana_parser_finalize(void);
+extern void parser_initialize(void);
+extern void parser_finalize(void);
 
 
 

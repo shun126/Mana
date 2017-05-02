@@ -2,8 +2,8 @@
 mana (compiler)
 
 @file	jump.h
-@brief	break,continue,goto‚È‚Ç‚ÌƒWƒƒƒ“ƒv‚ÉŠÖ‚·‚éƒwƒbƒ_[ƒtƒ@ƒCƒ‹
-@detail	‚±‚Ìƒtƒ@ƒCƒ‹‚Íbreak,continue,goto‚È‚ÇƒWƒƒƒ“ƒv‚ÉŠÖŒW‚·‚éƒwƒbƒ_[ƒtƒ@ƒCƒ‹‚Å‚·B
+@brief	break,continue,gotoãªã©ã®ã‚¸ãƒ£ãƒ³ãƒ—ã«é–¢ã™ã‚‹ãƒ˜ãƒƒãƒ€ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«
+@detail	ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯break,continue,gotoãªã©ã‚¸ãƒ£ãƒ³ãƒ—ã«é–¢ä¿‚ã™ã‚‹ãƒ˜ãƒƒãƒ€ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
 @author	Shun Moriya
 @date	2016-
 */
@@ -22,51 +22,51 @@ extern "C" {
 #include "type.h"
 #endif
 
-/*! ƒWƒƒƒ“ƒvƒ`ƒFƒCƒ“‚Ìó‘Ô */
+/*! ã‚¸ãƒ£ãƒ³ãƒ—ãƒã‚§ã‚¤ãƒ³ã®çŠ¶æ…‹ */
 typedef enum mana_jump_chain_status
 {
-	MANA_JUMP_CHAIN_STATE_SWITCH,	/*!< switchƒuƒƒbƒN */
-	MANA_JUMP_CHAIN_STATE_WHILE,	/*!< whileƒuƒƒbƒN */
-	MANA_JUMP_CHAIN_STATE_DO,		/*!< doƒuƒƒbƒN */
-	MANA_JUMP_CHAIN_STATE_FOR,		/*!< forƒuƒƒbƒN */
-	MANA_JUMP_CHAIN_STATE_LOOP,		/*!< loopƒuƒƒbƒN */
-	MANA_JUMP_CHAIN_STATE_LOCK,		/*!< lockƒuƒƒbƒN */
+	MANA_JUMP_CHAIN_STATE_SWITCH,	/*!< switchãƒ–ãƒ­ãƒƒã‚¯ */
+	MANA_JUMP_CHAIN_STATE_WHILE,	/*!< whileãƒ–ãƒ­ãƒƒã‚¯ */
+	MANA_JUMP_CHAIN_STATE_DO,		/*!< doãƒ–ãƒ­ãƒƒã‚¯ */
+	MANA_JUMP_CHAIN_STATE_FOR,		/*!< forãƒ–ãƒ­ãƒƒã‚¯ */
+	MANA_JUMP_CHAIN_STATE_LOOP,		/*!< loopãƒ–ãƒ­ãƒƒã‚¯ */
+	MANA_JUMP_CHAIN_STATE_LOCK,		/*!< lockãƒ–ãƒ­ãƒƒã‚¯ */
 } mana_jump_chain_status;
 
-/*! ƒWƒƒƒ“ƒvŠÇ—‚Ì‰Šú‰» */
+/*! ã‚¸ãƒ£ãƒ³ãƒ—ç®¡ç†ã®åˆæœŸåŒ– */
 extern void mana_jump_initialize(void);
 
-/*! ƒWƒƒƒ“ƒvŠÇ—‚ÌI—¹ˆ— */
+/*! ã‚¸ãƒ£ãƒ³ãƒ—ç®¡ç†ã®çµ‚äº†å‡¦ç† */
 extern void mana_jump_finalize(void);
 
-/*! ƒWƒƒƒ“ƒvƒuƒƒbƒN‚ÌŠJn */
+/*! ã‚¸ãƒ£ãƒ³ãƒ—ãƒ–ãƒ­ãƒƒã‚¯ã®é–‹å§‹ */
 extern void mana_jump_open_chain(mana_jump_chain_status);
 
-/*! break‚Ìİ’è */
+/*! breakã®è¨­å®š */
 extern int32_t mana_jump_break(int32_t);
 
-/*! continue‚Ìİ’è */
+/*! continueã®è¨­å®š */
 extern int32_t mana_jump_continue(int32_t);
 
-/*! continueƒWƒƒƒ“ƒvƒuƒƒbƒN‚ÌI—¹ */
+/*! continueã‚¸ãƒ£ãƒ³ãƒ—ãƒ–ãƒ­ãƒƒã‚¯ã®çµ‚äº† */
 extern void mana_jump_close_continue_only(void);
 
-/*! ƒWƒƒƒ“ƒvƒuƒƒbƒN‚ÌI—¹ */
+/*! ã‚¸ãƒ£ãƒ³ãƒ—ãƒ–ãƒ­ãƒƒã‚¯ã®çµ‚äº† */
 extern void mana_jump_close_chain(void);
 
-/*! switchƒuƒƒbƒN‚ÌŠJn */
+/*! switchãƒ–ãƒ­ãƒƒã‚¯ã®é–‹å§‹ */
 extern void mana_jump_open_switch(type_description*);
 
-/*! case‚Ì“o˜^ */
+/*! caseã®ç™»éŒ² */
 extern void mana_jump_switch_case(node_entry*);
 
-/*! default‚Ì“o˜^ */
+/*! defaultã®ç™»éŒ² */
 extern void mana_jump_switch_default(void);
 
-/*! switchƒuƒƒbƒN‚ğƒoƒCƒiƒŠ[ƒR[ƒh‚É•ÏŠ· */
+/*! switchãƒ–ãƒ­ãƒƒã‚¯ã‚’ãƒã‚¤ãƒŠãƒªãƒ¼ã‚³ãƒ¼ãƒ‰ã«å¤‰æ› */
 extern void mana_jump_switch_build(void);
 
-/*! switchƒuƒƒbƒN‚ÌI—¹ */
+/*! switchãƒ–ãƒ­ãƒƒã‚¯ã®çµ‚äº† */
 extern void mana_jump_close_switch(void);
 
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)

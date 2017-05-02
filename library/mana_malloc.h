@@ -2,8 +2,8 @@
   * mana (library)
   *
   * @file	mana_malloc.h
-  * @brief	manaƒ‰ƒCƒuƒ‰ƒŠ“à‚Å‹¤’Ê—˜—p‚³‚ê‚éƒƒ‚ƒŠŠÇ—‚ÉŠÖ‚·‚éƒwƒbƒ_[ƒtƒ@ƒCƒ‹
-  * @detail	‚±‚Ìƒtƒ@ƒCƒ‹‚Ímanaƒ‰ƒCƒuƒ‰ƒŠ“à‚Å‹¤’Ê—˜—p‚³‚ê‚éƒƒ‚ƒŠŠÇ—‚ÉŠÖ‚·‚éƒwƒbƒ_[ƒtƒ@ƒCƒ‹‚Å‚·B
+  * @brief	manaãƒ©ã‚¤ãƒ–ãƒ©ãƒªå†…ã§å…±é€šåˆ©ç”¨ã•ã‚Œã‚‹ãƒ¡ãƒ¢ãƒªç®¡ç†ã«é–¢ã™ã‚‹ãƒ˜ãƒƒãƒ€ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«
+  * @detail	ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯manaãƒ©ã‚¤ãƒ–ãƒ©ãƒªå†…ã§å…±é€šåˆ©ç”¨ã•ã‚Œã‚‹ãƒ¡ãƒ¢ãƒªç®¡ç†ã«é–¢ã™ã‚‹ãƒ˜ãƒƒãƒ€ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
   * @author	Shun Moriya
   * @date	2016-
   */
@@ -17,40 +17,40 @@
 extern "C" {
 #endif
 
-/*! ƒƒ‚ƒŠƒuƒƒbƒN‚ğŠm•Û‚·‚éŠÖ” */
+/*! ãƒ¡ãƒ¢ãƒªãƒ–ãƒ­ãƒƒã‚¯ã‚’ç¢ºä¿ã™ã‚‹é–¢æ•° */
 typedef void* (*mana_malloc_function)(const size_t);
 
-/*! ƒƒ‚ƒŠƒuƒƒbƒN‚ğŠm•Û{‰Šú‰»‚·‚éŠÖ” */
+/*! ãƒ¡ãƒ¢ãƒªãƒ–ãƒ­ãƒƒã‚¯ã‚’ç¢ºä¿ï¼‹åˆæœŸåŒ–ã™ã‚‹é–¢æ•° */
 typedef void* (*mana_calloc_function)(const size_t, const size_t);
 
-/*! ƒƒ‚ƒŠƒuƒƒbƒN‚ğÄŠm•Û‚·‚éŠÖ” */
+/*! ãƒ¡ãƒ¢ãƒªãƒ–ãƒ­ãƒƒã‚¯ã‚’å†ç¢ºä¿ã™ã‚‹é–¢æ•° */
 typedef void* (*mana_realloc_function)(void*, const size_t);
 
-/*! ƒƒ‚ƒŠƒuƒƒbƒN‚ğŠJ•ú‚·‚éŠÖ” */
+/*! ãƒ¡ãƒ¢ãƒªãƒ–ãƒ­ãƒƒã‚¯ã‚’é–‹æ”¾ã™ã‚‹é–¢æ•° */
 typedef void (*mana_free_function)(void*);
 
-/*! ƒƒ‚ƒŠƒuƒƒbƒN‚ÌŠm•ÛŠÖ”‚Ì“o˜^ */
+/*! ãƒ¡ãƒ¢ãƒªãƒ–ãƒ­ãƒƒã‚¯ã®ç¢ºä¿é–¢æ•°ã®ç™»éŒ² */
 extern void mana_set_malloc_function(mana_malloc_function function);
 
-/*! ƒƒ‚ƒŠƒuƒƒbƒN‚ğŠm•ÛŒã‰Šú‰»ŠÖ”‚Ì“o˜^ */
+/*! ãƒ¡ãƒ¢ãƒªãƒ–ãƒ­ãƒƒã‚¯ã‚’ç¢ºä¿å¾ŒåˆæœŸåŒ–é–¢æ•°ã®ç™»éŒ² */
 extern void mana_set_calloc_function(mana_calloc_function function);
 
-/*! ƒƒ‚ƒŠƒuƒƒbƒN‚ÌÄŠm•ÛŠÖ”‚Ì“o˜^ */
+/*! ãƒ¡ãƒ¢ãƒªãƒ–ãƒ­ãƒƒã‚¯ã®å†ç¢ºä¿é–¢æ•°ã®ç™»éŒ² */
 extern void mana_set_realloc_function(mana_realloc_function function);
 
-/*! ƒƒ‚ƒŠƒuƒƒbƒN‚ÌŠJ•úŠÖ”‚Ì“o˜^ */
+/*! ãƒ¡ãƒ¢ãƒªãƒ–ãƒ­ãƒƒã‚¯ã®é–‹æ”¾é–¢æ•°ã®ç™»éŒ² */
 extern void mana_set_free_function(mana_free_function function);
 
-/*! ƒƒ‚ƒŠƒuƒƒbƒN‚ÌŠm•Û */
+/*! ãƒ¡ãƒ¢ãƒªãƒ–ãƒ­ãƒƒã‚¯ã®ç¢ºä¿ */
 extern void* mana_malloc(const size_t size);
 
-/*! ƒƒ‚ƒŠƒuƒƒbƒN‚ğŠm•ÛŒã‰Šú‰» */
+/*! ãƒ¡ãƒ¢ãƒªãƒ–ãƒ­ãƒƒã‚¯ã‚’ç¢ºä¿å¾ŒåˆæœŸåŒ– */
 extern void* mana_calloc(const size_t size, const size_t count);
 
-/*! ƒƒ‚ƒŠƒuƒƒbƒN‚ÌÄŠm•Û */
+/*! ãƒ¡ãƒ¢ãƒªãƒ–ãƒ­ãƒƒã‚¯ã®å†ç¢ºä¿ */
 extern void* mana_realloc(void* buffer, const size_t size);
 
-/*! ƒƒ‚ƒŠƒuƒƒbƒN‚ÌŠJ•ú */
+/*! ãƒ¡ãƒ¢ãƒªãƒ–ãƒ­ãƒƒã‚¯ã®é–‹æ”¾ */
 extern void mana_free(void* buffer);
 
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)

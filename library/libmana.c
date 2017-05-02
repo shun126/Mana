@@ -2,8 +2,8 @@
  * mana (library)
  *
  * @file	libmana.c
- * @brief	ƒVƒXƒeƒ€‘S‘Ì‚ÉŠÖ‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹
- * @detail	‚±‚Ìƒtƒ@ƒCƒ‹‚Íƒ‰ƒCƒuƒ‰ƒŠ‘S‘Ì‚ÉŠÖŒW‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹‚Å‚·B
+ * @brief	ã‚·ã‚¹ãƒ†ãƒ å…¨ä½“ã«é–¢ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«
+ * @detail	ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒªå…¨ä½“ã«é–¢ä¿‚ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
  * @author	Shun Moriya
  * @date	2016-
  */
@@ -21,27 +21,27 @@
 #include <windows.h>
 #endif
 
-/*! ŠO•”ŠÖ”—p˜A‘•‹L‰¯”z—ñ */
+/*! å¤–éƒ¨é–¢æ•°ç”¨é€£è£…è¨˜æ†¶é…åˆ— */
 mana_hash mana_external_function_hash;
 
-/*! ƒXƒ^ƒeƒBƒbƒN•Ï”ƒTƒCƒY */
+/*! ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯å¤‰æ•°ã‚µã‚¤ã‚º */
 size_t mana_static_memory_size = 0;
 
-/*! ƒXƒ^ƒeƒBƒbƒN•Ï”Ši”[ƒGƒŠƒA */
+/*! ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯å¤‰æ•°æ ¼ç´ã‚¨ãƒªã‚¢ */
 uint8_t* mana_static_memory = NULL;
 
-/*! ƒfƒoƒbƒNƒ‚[ƒhƒtƒ‰ƒO */
+/*! ãƒ‡ãƒãƒƒã‚¯ãƒ¢ãƒ¼ãƒ‰ãƒ•ãƒ©ã‚° */
 bool mana_debug_mode = false;
 
-/*! ƒGƒ“ƒfƒBƒAƒ“ƒtƒ‰ƒO */
+/*! ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³ãƒ•ãƒ©ã‚° */
 bool mana_big_endian = false;
 
-/*! ƒ†ƒj[ƒN‚È–¼‘O‚ğ¶¬‚·‚é‚½‚ß‚ÌƒJƒEƒ“ƒ^ */
+/*! ãƒ¦ãƒ‹ãƒ¼ã‚¯ãªåå‰ã‚’ç”Ÿæˆã™ã‚‹ãŸã‚ã®ã‚«ã‚¦ãƒ³ã‚¿ */
 static uint32_t mana_generate_unique_name_count = 0;
 
 /*!
- * ƒ‰ƒCƒuƒ‰ƒŠ‚Ì‰Šú‰»‚ğs‚È‚¢‚Ü‚·B
- * ‘¼‚ÌŠÖ”‚ğÀs‚·‚é‘O‚ÉŒÄ‚Ño‚µ‚Ä‚­‚¾‚³‚¢B
+ * ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®åˆæœŸåŒ–ã‚’è¡Œãªã„ã¾ã™ã€‚
+ * ä»–ã®é–¢æ•°ã‚’å®Ÿè¡Œã™ã‚‹å‰ã«å‘¼ã³å‡ºã—ã¦ãã ã•ã„ã€‚
  */
 void mana_initialize(void)
 {
@@ -59,8 +59,8 @@ void mana_initialize(void)
 }
 
 /*!
- * ƒ‰ƒCƒuƒ‰ƒŠ‚ğI—¹‚ğs‚È‚¢‚Ü‚·B
- * ‚±‚ÌŠÖ”ˆÈ~A‘¼‚ÌŠÖ”‚ğŒÄ‚Ño‚·–‚Í‚Å‚«‚Ü‚¹‚ñB
+ * ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’çµ‚äº†ã‚’è¡Œãªã„ã¾ã™ã€‚
+ * ã“ã®é–¢æ•°ä»¥é™ã€ä»–ã®é–¢æ•°ã‚’å‘¼ã³å‡ºã™äº‹ã¯ã§ãã¾ã›ã‚“ã€‚
  */
 void mana_finalize(void)
 {
@@ -74,10 +74,10 @@ void mana_finalize(void)
 }
 
 /*!
- * @param[in]	name		ŠO•”–½—ß–¼Ì
- * @param[in]	function	ŠÖ”‚Ö‚Ìƒ|ƒCƒ“ƒ^
- * @retval		true		“o˜^¬Œ÷
- * @retval		false		“o˜^¸”s
+ * @param[in]	name		å¤–éƒ¨å‘½ä»¤åç§°
+ * @param[in]	function	é–¢æ•°ã¸ã®ãƒã‚¤ãƒ³ã‚¿
+ * @retval		true		ç™»éŒ²æˆåŠŸ
+ * @retval		false		ç™»éŒ²å¤±æ•—
  */
 bool mana_regist_function(const char* name, mana_external_funtion_type* function)
 {
@@ -85,7 +85,7 @@ bool mana_regist_function(const char* name, mana_external_funtion_type* function
 }
 
 /*!
- * @param[in]	name		ŠO•”–½—ß–¼Ì
+ * @param[in]	name		å¤–éƒ¨å‘½ä»¤åç§°
  */
 void mana_unregist_function(const char* name)
 {
@@ -94,8 +94,8 @@ void mana_unregist_function(const char* name)
 
 /*!
  * @param[in]	enable
- * - true	ƒfƒoƒbƒNƒ‚[ƒh
- * - false	ƒŠƒŠ[ƒXƒ‚[ƒh
+ * - true	ãƒ‡ãƒãƒƒã‚¯ãƒ¢ãƒ¼ãƒ‰
+ * - false	ãƒªãƒªãƒ¼ã‚¹ãƒ¢ãƒ¼ãƒ‰
  */
 void mana_set_debug_mode(const bool enable)
 {
@@ -103,8 +103,8 @@ void mana_set_debug_mode(const bool enable)
 }
 
 /*!
- * @retval	true	ƒfƒoƒbƒNƒ‚[ƒh
- * @retval	false	ƒŠƒŠ[ƒXƒ‚[ƒh
+ * @retval	true	ãƒ‡ãƒãƒƒã‚¯ãƒ¢ãƒ¼ãƒ‰
+ * @retval	false	ãƒªãƒªãƒ¼ã‚¹ãƒ¢ãƒ¼ãƒ‰
  */
 bool mana_is_debug_mode(void)
 {
@@ -112,10 +112,10 @@ bool mana_is_debug_mode(void)
 }
 
 /*!
- * x‚Å•\‚³‚ê‚éŠp“x‚ğdiv‚Ì”ÍˆÍ“à‚Éû‚ß‚Ü‚·
- * @param	x		Šp“x
- * @param	div		”ÍˆÍ
- * @return	Šp“x
+ * xã§è¡¨ã•ã‚Œã‚‹è§’åº¦ã‚’divã®ç¯„å›²å†…ã«åã‚ã¾ã™
+ * @param	x		è§’åº¦
+ * @param	div		ç¯„å›²
+ * @return	è§’åº¦
  */
 float mana_angle_mod(const float x, const float div)
 {
@@ -124,7 +124,7 @@ float mana_angle_mod(const float x, const float div)
 }
 
 /*!
- * ƒXƒ^ƒeƒBƒbƒN•Ï”—Ìˆæ‚ğŠm•Û‚µ‚Ü‚·BÅ‰‚ÌŠm•Û‚Í“à—e‚ğ‚O‚Å‰Šú‰»‚µ‚Ü‚·B
+ * ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯å¤‰æ•°é ˜åŸŸã‚’ç¢ºä¿ã—ã¾ã™ã€‚æœ€åˆã®ç¢ºä¿ã¯å†…å®¹ã‚’ï¼ã§åˆæœŸåŒ–ã—ã¾ã™ã€‚
  */
 void mana_reallocate_static_variables(const size_t allocate_size)
 {
@@ -146,7 +146,7 @@ void mana_reallocate_static_variables(const size_t allocate_size)
 }
 
 /*!
- * @param[out]	stream	mana_stream ƒIƒuƒWƒFƒNƒg
+ * @param[out]	stream	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 void mana_serialize_static_variables(mana_stream* stream)
 {
@@ -157,7 +157,7 @@ void mana_serialize_static_variables(mana_stream* stream)
 }
 
 /*!
- * @param[in]	stream	mana_stream ƒIƒuƒWƒFƒNƒg
+ * @param[in]	stream	mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 void mana_deserialize_static_variables(mana_stream* stream)
 {
@@ -168,7 +168,7 @@ void mana_deserialize_static_variables(mana_stream* stream)
 }
 
 /*!
- * @return	ƒOƒ[ƒoƒ‹•Ï”—Ìˆæ‚ÌƒAƒhƒŒƒX
+ * @return	ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•°é ˜åŸŸã®ã‚¢ãƒ‰ãƒ¬ã‚¹
  */
 uint8_t* mana_get_static_variables(void)
 {
@@ -176,7 +176,7 @@ uint8_t* mana_get_static_variables(void)
 }
 
 /*!
- * @return	ƒOƒ[ƒoƒ‹•Ï”—Ìˆæ‚ÌƒTƒCƒY
+ * @return	ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•°é ˜åŸŸã®ã‚µã‚¤ã‚º
  */
 size_t mana_get_static_variables_size(void)
 {
@@ -184,8 +184,8 @@ size_t mana_get_static_variables_size(void)
 }
 
 /*!
- * ƒZ[ƒu—ÌˆæˆÈŠO‚ÌƒOƒ[ƒoƒ‹•Ï”—Ìˆæ‚ğ‚O‚Å‰Šú‰»‚µ‚Ü‚·B
- * ‘SƒOƒ[ƒoƒ‹•Ï”—Ìˆæ‚ğ‰Šú‰»‚µ‚½ê‡‚Ívoid mana_initialize_global_variables(void)ŠÖ”‚ğ—˜—p‚µ‚Ä‚­‚¾‚³‚¢B
+ * ã‚»ãƒ¼ãƒ–é ˜åŸŸä»¥å¤–ã®ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•°é ˜åŸŸã‚’ï¼ã§åˆæœŸåŒ–ã—ã¾ã™ã€‚
+ * å…¨ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•°é ˜åŸŸã‚’åˆæœŸåŒ–ã—ãŸå ´åˆã¯void mana_initialize_global_variables(void)é–¢æ•°ã‚’åˆ©ç”¨ã—ã¦ãã ã•ã„ã€‚
  */
 void mana_clear_static_variables(void)
 {
@@ -194,9 +194,9 @@ void mana_clear_static_variables(void)
 }
 
 /*!
- * ƒAƒNƒ^[‚É–¼•t‚¯‚ç‚ê‚éƒ†ƒj[ƒN‚È–¼‘O‚ğ¶¬‚µ‚Ü‚·
- * @param[out]	name	o—Íæƒoƒbƒtƒ@ƒAƒhƒŒƒX
- * @param[in]	size	o—Íæƒoƒbƒtƒ@ƒTƒCƒY
+ * ã‚¢ã‚¯ã‚¿ãƒ¼ã«åä»˜ã‘ã‚‰ã‚Œã‚‹ãƒ¦ãƒ‹ãƒ¼ã‚¯ãªåå‰ã‚’ç”Ÿæˆã—ã¾ã™
+ * @param[out]	name	å‡ºåŠ›å…ˆãƒãƒƒãƒ•ã‚¡ã‚¢ãƒ‰ãƒ¬ã‚¹
+ * @param[in]	size	å‡ºåŠ›å…ˆãƒãƒƒãƒ•ã‚¡ã‚µã‚¤ã‚º
  * @see
  * struct mana_actor* mana_create_actor(mana* self, struct mana_actor* actor, char* new_name),
  * struct mana_actor* mana_create_actor_name(mana* self, char* name, char* new_name),

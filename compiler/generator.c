@@ -2,8 +2,8 @@
 mana (compiler)
 
 @file	generator.c
-@brief	ƒRƒ“ƒpƒCƒ‹ƒZƒNƒVƒ‡ƒ“‚ÉŠÖ‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹
-@detail	‚±‚Ìƒtƒ@ƒCƒ‹‚ÍƒRƒ“ƒpƒCƒ‹ƒZƒNƒVƒ‡ƒ“‚ÉŠÖŒW‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹‚Å‚·B
+@brief	ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã«é–¢ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«
+@detail	ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã«é–¢ä¿‚ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
 @author	Shun Moriya
 @date	2017-
 */
@@ -76,9 +76,9 @@ void generator_finalize(void)
 
 ////////////////////////////////////////////////////////////////////////////////
 /*!
-ŠÖ”–ˆ‚É“Á•Ê‚Èˆ—‚ðs‚È‚¤‚½‚ß‚ÌƒR[ƒ‹ƒoƒbƒNŠÖ”‚ð“o˜^‚µ‚Ü‚·
-@param[in]	name		ŠÖ”–¼
-@param[in]	function	ƒR[ƒ‹ƒoƒbƒNŠÖ”
+é–¢æ•°æ¯Žã«ç‰¹åˆ¥ãªå‡¦ç†ã‚’è¡Œãªã†ãŸã‚ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°ã‚’ç™»éŒ²ã—ã¾ã™
+@param[in]	name		é–¢æ•°å
+@param[in]	function	ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
 */
 void generator_add_event(const char* name, generator_event_funtion_type function)
 {
@@ -86,29 +86,29 @@ void generator_add_event(const char* name, generator_event_funtion_type function
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// ˆÈ‰º‚Í ƒVƒ“ƒ{ƒ‹‚ð‰ðŒˆ‚µ‚Â‚ÂƒR[ƒh‚ðo—Í‚µ‚é ŠÖ”ŒS
+// ä»¥ä¸‹ã¯ ã‚·ãƒ³ãƒœãƒ«ã‚’è§£æ±ºã—ã¤ã¤ã‚³ãƒ¼ãƒ‰ã‚’å‡ºåŠ›ã—ã‚‹ é–¢æ•°éƒ¡
 ////////////////////////////////////////////////////////////////////////////////
 /*!
-ƒXƒ^ƒbƒN‚É‚ ‚éƒAƒhƒŒƒX‚©‚çƒf[ƒ^‚ð“Ç‚Ýž‚Þ–½—ß‚ðo—Í‚·‚é
-@param[in]	“Ç‚Ýž‚Þtype_description
+ã‚¹ã‚¿ãƒƒã‚¯ã«ã‚ã‚‹ã‚¢ãƒ‰ãƒ¬ã‚¹ã‹ã‚‰ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã‚€å‘½ä»¤ã‚’å‡ºåŠ›ã™ã‚‹
+@param[in]	èª­ã¿è¾¼ã‚€type_description
 */
 static void generator_resolve_load(node_entry* self)
 {
-	//	mana_register_entity* register_entity;
+	//	register_entity* register_entity;
 
 	MANA_ASSERT(self);
 	MANA_ASSERT(self->type);
 #if 0
-	/* TODO:ƒeƒXƒg */
-	register_entity = mana_register_allocate(self->symbol, self->symbol->address);
+	/* TODO:ãƒ†ã‚¹ãƒˆ */
+	register_entity = register_allocate(self->symbol, self->symbol->address);
 	if (register_entity == NULL)
 	{
-		mana_register_entity* register_entity = mana_register_allocate(self->symbol, self->symbol->address);
+		register_entity* register_entity = register_allocate(self->symbol, self->symbol->address);
 		if (register_entity == NULL)
 		{
-			/* Š„‚è“–‚Ä‚éƒŒƒWƒXƒ^‚ª–³‚¢ê‡‚Íspill‚ðs‚¤ */
+			/* å‰²ã‚Šå½“ã¦ã‚‹ãƒ¬ã‚¸ã‚¹ã‚¿ãŒç„¡ã„å ´åˆã¯spillã‚’è¡Œã† */
 		}
-		/* ƒŒƒWƒXƒ^‚É‹ó‚«‚ª‚ ‚éA‚Ü‚½‚ÍŠù‚ÉŠ„‚è“–‚ÄÏ‚Ý‚Ìê‡ */
+		/* ãƒ¬ã‚¸ã‚¹ã‚¿ã«ç©ºããŒã‚ã‚‹ã€ã¾ãŸã¯æ—¢ã«å‰²ã‚Šå½“ã¦æ¸ˆã¿ã®å ´åˆ */
 	}
 #endif
 	switch (self->type->tcons)
@@ -134,7 +134,7 @@ static void generator_resolve_load(node_entry* self)
 		break;
 
 	case SYMBOL_DATA_TYPE_ACTOR:
-		if (self->type == mana_type_get(SYMBOL_DATA_TYPE_ACTOR))
+		if (self->type == type_get(SYMBOL_DATA_TYPE_ACTOR))
 			code_set_opecode(MANA_IL_LOAD_REFFRENCE);
 		else
 			code_set_opecode_and_operand(MANA_IL_PUSH_ACTOR, data_set(self->type->name));
@@ -154,8 +154,8 @@ static void generator_resolve_load(node_entry* self)
 }
 
 /*!
-ƒXƒ^ƒbƒN‚É‚ ‚éƒAƒhƒŒƒX‚Öƒf[ƒ^‚ð‘‚«ž‚Þ–½—ß‚ðo—Í‚·‚é
-@param[in]	“Ç‚Ýž‚Þtype_description
+ã‚¹ã‚¿ãƒƒã‚¯ã«ã‚ã‚‹ã‚¢ãƒ‰ãƒ¬ã‚¹ã¸ãƒ‡ãƒ¼ã‚¿ã‚’æ›¸ãè¾¼ã‚€å‘½ä»¤ã‚’å‡ºåŠ›ã™ã‚‹
+@param[in]	èª­ã¿è¾¼ã‚€type_description
 */
 static void generator_resolve_store(node_entry* self)
 {
@@ -200,15 +200,15 @@ static void generator_resolve_store(node_entry* self)
 }
 
 /*!
-* return‚Ìˆ—
-* @param	func	return‚ªŠ‘®‚·‚éŠÖ”‚Ìsymbol_entry
-* @param	tree	return•¶‚Ìnode_entry
+* returnã®å‡¦ç†
+* @param	func	returnãŒæ‰€å±žã™ã‚‹é–¢æ•°ã®symbol_entry
+* @param	tree	returnæ–‡ã®node_entry
 */
 static void generator_return(symbol_entry* func, node_entry* tree)
 {
 	type_description* type = func->type;
 
-	/* ƒGƒ‰[ƒ`ƒFƒbƒN */
+	/* ã‚¨ãƒ©ãƒ¼ãƒã‚§ãƒƒã‚¯ */
 	if (type->tcons == SYMBOL_DATA_TYPE_VOID)
 	{
 		if (tree != NULL)
@@ -220,49 +220,49 @@ static void generator_return(symbol_entry* func, node_entry* tree)
 	}
 	else
 	{
-		/* Ž©“®ƒLƒƒƒXƒg */
-		tree->left = mana_node_cast(type, tree->left);
+		/* è‡ªå‹•ã‚­ãƒ£ã‚¹ãƒˆ */
+		tree->left = node_cast(type, tree->left);
 
-		/* Œ^‚ÌŒŸØ */
-		mana_type_compatible(type, tree->left->type);
+		/* åž‹ã®æ¤œè¨¼ */
+		type_compatible(type, tree->left->type);
 
-		/* ƒm[ƒh‚Ì•]‰¿ */
+		/* ãƒŽãƒ¼ãƒ‰ã®è©•ä¾¡ */
 		const int32_t in_depth = symbol_open_block(false);
 		generator_genearte_code(tree->left, true);
 		const int32_t out_depth = symbol_close_block();
-		MANA_VERIFY_MESSAGE(in_depth == out_depth, "ƒuƒƒbƒN‚Ì[‚³‚ªˆê’v‚µ‚Ü‚¹‚ñ in:%d out:%d", in_depth, out_depth);
+		MANA_VERIFY_MESSAGE(in_depth == out_depth, "ãƒ–ãƒ­ãƒƒã‚¯ã®æ·±ã•ãŒä¸€è‡´ã—ã¾ã›ã‚“ in:%d out:%d", in_depth, out_depth);
 	}
 
-	/* ŠÖ”‚ÌÅŒã‚ÉƒWƒƒƒ“ƒv */
+	/* é–¢æ•°ã®æœ€å¾Œã«ã‚¸ãƒ£ãƒ³ãƒ— */
 	symbol_return_address_list = code_set_opecode_and_operand(MANA_IL_BRA, symbol_return_address_list);
 
-	/* ŠÖ”‚ðŽg—p‚µ‚½ƒtƒ‰ƒO‚ð—§‚Ä‚é */
+	/* é–¢æ•°ã‚’ä½¿ç”¨ã—ãŸãƒ•ãƒ©ã‚°ã‚’ç«‹ã¦ã‚‹ */
 	func->used = true;
 }
 
 /*!
-* rollback‚Ìˆ—
-* @param	tree	rollback•¶‚Ìnode_entry
+* rollbackã®å‡¦ç†
+* @param	tree	rollbackæ–‡ã®node_entry
 */
 static void generator_rollback(node_entry* tree)
 {
 	if (tree)
 	{
-		/* ƒm[ƒh‚Ì•]‰¿ */
+		/* ãƒŽãƒ¼ãƒ‰ã®è©•ä¾¡ */
 		const int32_t in_depth = symbol_open_block(false);
 		generator_genearte_code(tree, true);
 		const int32_t out_depth = symbol_close_block();
-		MANA_VERIFY_MESSAGE(in_depth == out_depth, "ƒuƒƒbƒN‚Ì[‚³‚ªˆê’v‚µ‚Ü‚¹‚ñ in:%d out:%d", in_depth, out_depth);
+		MANA_VERIFY_MESSAGE(in_depth == out_depth, "ãƒ–ãƒ­ãƒƒã‚¯ã®æ·±ã•ãŒä¸€è‡´ã—ã¾ã›ã‚“ in:%d out:%d", in_depth, out_depth);
 	}
 	code_set_opecode(MANA_IL_ROLLBACK);
 }
 
 /*!
-* ŠÖ”ŒÄ‚Ño‚µŽž‚Ìˆø”‚ðo—ÍiÄ‹AŒÄ‚Ño‚µj
-* @param	count	ˆø”‚Ì”Ô†
-* @param	param	ˆø”‚Ìsymbol_entry
-* @param	arg		ˆø”‚Ìnode_entry
-* @return	ˆø”‚Ì”
+* é–¢æ•°å‘¼ã³å‡ºã—æ™‚ã®å¼•æ•°ã‚’å‡ºåŠ›ï¼ˆå†å¸°å‘¼ã³å‡ºã—ï¼‰
+* @param	count	å¼•æ•°ã®ç•ªå·
+* @param	param	å¼•æ•°ã®symbol_entry
+* @param	arg		å¼•æ•°ã®node_entry
+* @return	å¼•æ•°ã®æ•°
 */
 static int32_t generate_argument(int32_t count, symbol_entry* param, node_entry* arg)
 {
@@ -276,14 +276,14 @@ static int32_t generate_argument(int32_t count, symbol_entry* param, node_entry*
 			{
 				MANA_ASSERT(arg->left);
 				if (arg->left->id == NODE_IDENTIFIER)
-					mana_resolver_search_symbol_from_name(arg->left);
+					resolver_search_symbol_from_name(arg->left);
 
-				// Žqƒm[ƒh‚©‚çŒ^‚ðŒp³‚·‚é
-				mana_resolver_resolve_type_from_child_node(arg);
+				// å­ãƒŽãƒ¼ãƒ‰ã‹ã‚‰åž‹ã‚’ç¶™æ‰¿ã™ã‚‹
+				resolver_resolve_type_from_child_node(arg);
 			}
 		}
-		arg = mana_node_cast(param->type, arg);
-		mana_type_compatible(param->type, arg->type);
+		arg = node_cast(param->type, arg);
+		type_compatible(param->type, arg->type);
 		//generator_genearte_code(arg, true);
 		generator_genearte_code((arg->id == NODE_CALL_ARGUMENT) ? arg->left : arg, true);
 	}
@@ -293,11 +293,11 @@ static int32_t generate_argument(int32_t count, symbol_entry* param, node_entry*
 }
 
 /*!
-* ŠÖ”‚Ìˆø”‚ÌƒTƒCƒY‚ð’²‚×‚Ü‚·
-* @param	address	ƒAƒhƒŒƒX
-* @param	param	ˆø”‚Ìsymbol_entry
-* @param	arg		ˆø”‚Ìnode_entry
-* @return	ˆø”‚ÌƒTƒCƒY
+* é–¢æ•°ã®å¼•æ•°ã®ã‚µã‚¤ã‚ºã‚’èª¿ã¹ã¾ã™
+* @param	address	ã‚¢ãƒ‰ãƒ¬ã‚¹
+* @param	param	å¼•æ•°ã®symbol_entry
+* @param	arg		å¼•æ•°ã®node_entry
+* @return	å¼•æ•°ã®ã‚µã‚¤ã‚º
 */
 static int32_t generator_call_argument_size(int32_t address, symbol_entry* param, node_entry* arg)
 {
@@ -308,17 +308,17 @@ static int32_t generator_call_argument_size(int32_t address, symbol_entry* param
 		if (arg->id == NODE_CALL_ARGUMENT)
 			arg = arg->left;
 
-		address += (mana_node_get_memory_size(arg) + (sizeof(int32_t) - 1)) / sizeof(int32_t);
+		address += (node_get_memory_size(arg) + (sizeof(int32_t) - 1)) / sizeof(int32_t);
 	}
 	return address;
 }
 
 /*!
-* ŠÖ”‚Ìˆø”‚ð•]‰¿‚µ‚Ü‚·
-* @param	address	ˆø”‚ÌƒAƒhƒŒƒX
-* @param	param	ˆø”‚Ìsymbol_entry
-* @param	arg		ˆø”‚Ìnode_entry
-* @return	ˆø”‚ÌƒAƒhƒŒƒX
+* é–¢æ•°ã®å¼•æ•°ã‚’è©•ä¾¡ã—ã¾ã™
+* @param	address	å¼•æ•°ã®ã‚¢ãƒ‰ãƒ¬ã‚¹
+* @param	param	å¼•æ•°ã®symbol_entry
+* @param	arg		å¼•æ•°ã®node_entry
+* @return	å¼•æ•°ã®ã‚¢ãƒ‰ãƒ¬ã‚¹
 */
 static int32_t generator_call_argument(int32_t address, symbol_entry* param, node_entry* arg)
 {
@@ -330,29 +330,29 @@ static int32_t generator_call_argument(int32_t address, symbol_entry* param, nod
 
 		if (arg->id == NODE_CALL_ARGUMENT)
 			arg = arg->left;
-		address -= (mana_node_get_memory_size(arg) + (sizeof(int32_t) - 1)) / sizeof(int32_t);
+		address -= (node_get_memory_size(arg) + (sizeof(int32_t) - 1)) / sizeof(int32_t);
 	}
 	return address;
 }
 
 /*!
-* ŠÖ”ŒÄ‚Ño‚µ‚Ìƒm[ƒh‚ð•]‰¿‚µ‚Ü‚·
-* @param	ŠÖ”ŒÄ‚Ño‚µ‚Ìnode_entry
+* é–¢æ•°å‘¼ã³å‡ºã—ã®ãƒŽãƒ¼ãƒ‰ã‚’è©•ä¾¡ã—ã¾ã™
+* @param	é–¢æ•°å‘¼ã³å‡ºã—ã®node_entry
 */
 static void generator_call(node_entry* self)
 {
 	node_entry* argument = self->right;
 	int32_t argument_counter = generate_argument(0, (self->symbol)->parameter_list, argument);
 
-	/* ƒGƒ‰[ƒ`ƒFƒbƒN */
+	/* ã‚¨ãƒ©ãƒ¼ãƒã‚§ãƒƒã‚¯ */
 	if ((self->symbol)->number_of_parameters != argument_counter)
 	{
-		/* ˆø”‚Ì”‚ªˆê’v‚µ‚È‚¢ */
+		/* å¼•æ•°ã®æ•°ãŒä¸€è‡´ã—ãªã„ */
 		mana_compile_error("unmatched argument.");
 	}
 	else if ((self->symbol)->class_type == SYMBOL_CLASS_TYPE_NATIVE_FUNCTION)
 	{
-		/* ŠO•”ŠÖ”‚Ìˆ— */
+		/* å¤–éƒ¨é–¢æ•°ã®å‡¦ç† */
 		int32_t argument_size = generator_call_argument_size(0, (self->symbol)->parameter_list, argument);
 
 		self->symbol->address = data_set(self->symbol->name);
@@ -365,7 +365,7 @@ static void generator_call(node_entry* self)
 	}
 	else
 	{
-		// “à•”ŠÖ”‚Ìˆ—
+		// å†…éƒ¨é–¢æ•°ã®å‡¦ç†
 		mana_linker_add_call_list(
 			code_set_opecode_and_operand((uint8_t)MANA_IL_BSR, (self->symbol)->address) + 1,
 			self->symbol
@@ -387,8 +387,8 @@ static int32_t generator_call_print_generate_argument(int32_t argc, node_entry* 
 }
 
 /*!
-* print•¶‚Ìˆ—
-* @param[in]	self	print•¶‚Ìnode_entry
+* printæ–‡ã®å‡¦ç†
+* @param[in]	self	printæ–‡ã®node_entry
 */
 static void generator_call_print(node_entry* self)
 {
@@ -399,8 +399,8 @@ static void generator_call_print(node_entry* self)
 }
 
 /*!
-* ”»•ÊŽ®“à‚É‘ã“ü•¶‚ª‚ ‚é‚©’²‚×‚Ü‚·
-* @param	tree	•]‰¿Ž®‚Ìnode_entry
+* åˆ¤åˆ¥å¼å†…ã«ä»£å…¥æ–‡ãŒã‚ã‚‹ã‹èª¿ã¹ã¾ã™
+* @param	tree	è©•ä¾¡å¼ã®node_entry
 */
 static void generator_condition_check(node_entry* tree)
 {
@@ -408,7 +408,7 @@ static void generator_condition_check(node_entry* tree)
 	{
 		if (tree->id == NODE_ASSIGN)
 		{
-			/* ðŒ”»’è‚É‘ã“ü•¶‚ÍŽg—p‚Å‚«‚È‚¢ */
+			/* æ¡ä»¶åˆ¤å®šã«ä»£å…¥æ–‡ã¯ä½¿ç”¨ã§ããªã„ */
 			mana_compile_error("can't assign expression in condition");
 		}
 
@@ -418,14 +418,14 @@ static void generator_condition_check(node_entry* tree)
 }
 
 /*!
-* ”»•ÊŽ®‚Ì•]‰¿
-* @param	tree	•]‰¿Ž®‚Ìnode_entry
-* @param	pc		ƒvƒƒOƒ‰ƒ€ƒJƒEƒ“ƒ^
-* @return	Œ»Ý‚ÌƒvƒƒOƒ‰ƒ€ƒAƒhƒŒƒX
+* åˆ¤åˆ¥å¼ã®è©•ä¾¡
+* @param	tree	è©•ä¾¡å¼ã®node_entry
+* @param	pc		ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚«ã‚¦ãƒ³ã‚¿
+* @return	ç¾åœ¨ã®ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚¢ãƒ‰ãƒ¬ã‚¹
 */
 static int32_t generator_condition_core(node_entry* tree)
 {
-	/* ”»•ÊŽ®“à‚É‘ã“üŽ®‚ª‚ ‚é‚©’²‚×‚Ü‚· */
+	/* åˆ¤åˆ¥å¼å†…ã«ä»£å…¥å¼ãŒã‚ã‚‹ã‹èª¿ã¹ã¾ã™ */
 	generator_condition_check(tree);
 
 	if (tree)
@@ -439,20 +439,20 @@ static int32_t generator_condition_core(node_entry* tree)
 }
 
 /*!
-* ”»•ÊŽ®‚Ì•]‰¿
-* @param	tree	•]‰¿Ž®‚Ìnode_entry
-* @return	Œ»Ý‚ÌƒvƒƒOƒ‰ƒ€ƒAƒhƒŒƒX
+* åˆ¤åˆ¥å¼ã®è©•ä¾¡
+* @param	tree	è©•ä¾¡å¼ã®node_entry
+* @return	ç¾åœ¨ã®ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚¢ãƒ‰ãƒ¬ã‚¹
 */
 static int32_t generator_condition(node_entry* tree, int32_t match)
 {
 	//generator_resolve_symbol(tree);
 	//generator_automatic_cast(tree);
 
-	/* ”»•ÊŽ®‚Ì•]‰¿ */
+	/* åˆ¤åˆ¥å¼ã®è©•ä¾¡ */
 	const int32_t in_depth = symbol_open_block(false);
 	generator_condition_core(tree);
 	const int32_t out_depth = symbol_close_block();
-	MANA_VERIFY_MESSAGE(in_depth == out_depth, "ƒuƒƒbƒN‚Ì[‚³‚ªˆê’v‚µ‚Ü‚¹‚ñ in:%d out:%d", in_depth, out_depth);
+	MANA_VERIFY_MESSAGE(in_depth == out_depth, "ãƒ–ãƒ­ãƒƒã‚¯ã®æ·±ã•ãŒä¸€è‡´ã—ã¾ã›ã‚“ in:%d out:%d", in_depth, out_depth);
 
 	return code_set_opecode_and_operand(match ? MANA_IL_BEQ : MANA_IL_BNE, -1);
 }
@@ -525,9 +525,9 @@ static void generator_generate_const_float(const symbol_data_type_id type_id, co
 
 ////////////////////////////////////////////////////////////////////////////////
 /*!
-Ž®‚Ì•]‰¿
-@param	tree			Ž®‚Ìnode_entry
-@param	enable_assign	true‚È‚ç‚Î‘ã“üŽ®Afalse‚È‚ç‚Î‚»‚êˆÈŠO
+å¼ã®è©•ä¾¡
+@param	tree			å¼ã®node_entry
+@param	enable_assign	trueãªã‚‰ã°ä»£å…¥å¼ã€falseãªã‚‰ã°ãã‚Œä»¥å¤–
 */
 void generator_expression(node_entry* tree, int32_t enable_assign)
 {
@@ -576,7 +576,7 @@ void generator_expression(node_entry* tree, int32_t enable_assign)
 	}
 
 	const int32_t out_depth = symbol_close_block();
-	MANA_VERIFY_MESSAGE(in_depth == out_depth, "ƒuƒƒbƒN‚Ì[‚³‚ªˆê’v‚µ‚Ü‚¹‚ñ in:%d out:%d", in_depth, out_depth);
+	MANA_VERIFY_MESSAGE(in_depth == out_depth, "ãƒ–ãƒ­ãƒƒã‚¯ã®æ·±ã•ãŒä¸€è‡´ã—ã¾ã›ã‚“ in:%d out:%d", in_depth, out_depth);
 }
 
 
@@ -587,12 +587,12 @@ void generator_genearte_code(node_entry* self, int32_t enable_load)
 		return;
 
 DO_RECURSIVE:
-	mana_resolver_set_current_file_infomation(self);
+	resolver_set_current_file_infomation(self);
 
 	switch (self->id)
 	{
 		///////////////////////////////////////////////////////////////////////
-		// ’è”’è‹`‚ÉŠÖ‚·‚éƒm[ƒh									
+		// å®šæ•°å®šç¾©ã«é–¢ã™ã‚‹ãƒŽãƒ¼ãƒ‰									
 	case NODE_DEFINE_ALIAS:
 		MANA_ASSERT(self->left == NULL);
 		MANA_ASSERT(self->right == NULL);
@@ -612,7 +612,7 @@ DO_RECURSIVE:
 		break;
 
 		///////////////////////////////////////////////////////////////////////
-		// ƒƒ‚ƒŠƒŒƒCƒAƒEƒg‚ÉŠÖ‚·‚éƒm[ƒh
+		// ãƒ¡ãƒ¢ãƒªãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆã«é–¢ã™ã‚‹ãƒŽãƒ¼ãƒ‰
 	case NODE_DECLARE_ALLOCATE:
 		// self->left
 		MANA_ASSERT(self->right == NULL);
@@ -626,7 +626,7 @@ DO_RECURSIVE:
 		break;
 
 		///////////////////////////////////////////////////////////////////////
-		// \‘¢‚ÉŠÖ‚·‚éƒm[ƒh									
+		// æ§‹é€ ã«é–¢ã™ã‚‹ãƒŽãƒ¼ãƒ‰									
 	case NODE_DECLARE_ACTOR:
 		{
 			mana_actor_symbol_entry_pointer = symbol_lookup(self->string);
@@ -673,14 +673,14 @@ DO_RECURSIVE:
 		// self->left
 		MANA_ASSERT(self->right == NULL);
 		MANA_ASSERT(self->body == NULL);
-		mana_post_resolver_resolve(self);
+		post_resolver_resolve(self);
 		break;
 
 		///////////////////////////////////////////////////////////////////////
-		// ŠÖ”éŒ¾‚ÉŠÖ‚·‚éƒm[ƒh									
+		// é–¢æ•°å®£è¨€ã«é–¢ã™ã‚‹ãƒŽãƒ¼ãƒ‰									
 	case NODE_DECLARE_ACTION:
 		{
-			self->type = mana_type_get(SYMBOL_DATA_TYPE_VOID);
+			self->type = type_get(SYMBOL_DATA_TYPE_VOID);
 			mana_function_symbol_entry_pointer = symbol_lookup(self->string);
 			{
 				symbol_open_function(self, true);
@@ -701,18 +701,18 @@ DO_RECURSIVE:
 	case NODE_DECLARE_FUNCTION:
 		{
 			MANA_ASSERT(self->symbol);
-			// ŠÖ”‚Ì–ß‚è’l‚ð•]‰¿
+			// é–¢æ•°ã®æˆ»ã‚Šå€¤ã‚’è©•ä¾¡
 			generator_genearte_code(self->left, enable_load);
-			// ƒVƒ“ƒ{ƒ‹‚ÌŒŸõ‚ÆŒ^‚Ì’è‹`
+			// ã‚·ãƒ³ãƒœãƒ«ã®æ¤œç´¢ã¨åž‹ã®å®šç¾©
 			self->symbol = mana_function_symbol_entry_pointer = symbol_lookup(self->string);
 
-			// ˆø”‚Ìˆ×‚ÉƒXƒR[ƒv‚ð•ª‚¯‚é
+			// å¼•æ•°ã®ç‚ºã«ã‚¹ã‚³ãƒ¼ãƒ—ã‚’åˆ†ã‘ã‚‹
 			symbol_open_block(false);
 			{
-				// ˆø”‚ð“o˜^
+				// å¼•æ•°ã‚’ç™»éŒ²
 				symbol_open_function(self, false);
 
-				mana_pre_resolver_resolve(self->right);
+				pre_resolver_resolve(self->right);
 				self->symbol->parameter_list = symbol_get_head_symbol();
 
 				symbol_open_function2(self->symbol);
@@ -733,7 +733,7 @@ DO_RECURSIVE:
 		break;
 
 		///////////////////////////////////////////////////////////////////////
-		// •Ï”éŒ¾‚ÉŠÖ‚·‚éƒm[ƒh									
+		// å¤‰æ•°å®£è¨€ã«é–¢ã™ã‚‹ãƒŽãƒ¼ãƒ‰									
 	case NODE_DECLARATOR:
 		// self->left
 		MANA_ASSERT(self->right == NULL);
@@ -745,7 +745,7 @@ DO_RECURSIVE:
 		// self->left
 		// self->right
 		MANA_ASSERT(self->body == NULL);
-		//mana_resolver_resolve_variable_description(self, MEMORY_TYPE_NORMAL);
+		//resolver_resolve_variable_description(self, MEMORY_TYPE_NORMAL);
 		/*
 		generator_genearte_code(self->left, enable_load); // NODE_TYPE_DESCRIPTION
 		generator_genearte_code(self->right, enable_load);// NODE_DECLARATOR
@@ -758,7 +758,7 @@ DO_RECURSIVE:
 		MANA_ASSERT(self->left == NULL);
 		MANA_ASSERT(self->right == NULL);
 		MANA_ASSERT(self->body == NULL);
-		//mana_resolver_resolve_type_description(self);
+		//resolver_resolve_type_description(self);
 		break;
 
 	case NODE_VARIABLE_SIZE:
@@ -768,19 +768,19 @@ DO_RECURSIVE:
 		break;
 
 		///////////////////////////////////////////////////////////////////////
-		// ƒuƒƒbƒN‚ð”º‚¤§Œä‚ÉŠÖ‚·‚éƒm[ƒh
+		// ãƒ–ãƒ­ãƒƒã‚¯ã‚’ä¼´ã†åˆ¶å¾¡ã«é–¢ã™ã‚‹ãƒŽãƒ¼ãƒ‰
 	case NODE_BLOCK:
 		{
 			const int32_t in_depth = symbol_open_block(false);
 
-			mana_post_resolver_resolve(self->left);
+			post_resolver_resolve(self->left);
 			generator_genearte_code(self->left, enable_load);
 
-			mana_post_resolver_resolve(self->right);
+			post_resolver_resolve(self->right);
 			generator_genearte_code(self->right, enable_load);
 
 			const int32_t out_depth = symbol_close_block();
-			MANA_VERIFY_MESSAGE(in_depth == out_depth, "ƒuƒƒbƒN‚Ì[‚³‚ªˆê’v‚µ‚Ü‚¹‚ñ in:%d out:%d", in_depth, out_depth);
+			MANA_VERIFY_MESSAGE(in_depth == out_depth, "ãƒ–ãƒ­ãƒƒã‚¯ã®æ·±ã•ãŒä¸€è‡´ã—ã¾ã›ã‚“ in:%d out:%d", in_depth, out_depth);
 		}
 		MANA_ASSERT(self->body == NULL);
 		break;
@@ -826,10 +826,10 @@ DO_RECURSIVE:
 		break;
 
 	case NODE_FOR:
-		/* 'for(type variable = expression' ‚ÌŒ`Ž® */
+		/* 'for(type variable = expression' ã®å½¢å¼ */
 		{
 			//symbol_allocate_memory($2, $1, MEMORY_TYPE_NORMAL);
-			//generator_expression(mana_node_create_node(NODE_TYPE_ASSIGN, mana_node_create_leaf($2->name), $4), true);
+			//generator_expression(node_create_node(NODE_TYPE_ASSIGN, node_create_leaf($2->name), $4), true);
 			mana_jump_open_chain(MANA_JUMP_CHAIN_STATE_FOR);
 			//$$ = code_get_pc();
 
@@ -956,7 +956,7 @@ DO_RECURSIVE:
 		break;
 
 		///////////////////////////////////////////////////////////////////////
-		// §Œä‚ÉŠÖ‚·‚éƒm[ƒh
+		// åˆ¶å¾¡ã«é–¢ã™ã‚‹ãƒŽãƒ¼ãƒ‰
 	case NODE_COMPLY:
 		MANA_ASSERT(self->left == NULL);
 		MANA_ASSERT(self->right == NULL);
@@ -996,7 +996,7 @@ DO_RECURSIVE:
 		break;
 
 		///////////////////////////////////////////////////////////////////////
-		// “ñ€‰‰ŽZŽq‚ÉŠÖ‚·‚éƒm[ƒh
+		// äºŒé …æ¼”ç®—å­ã«é–¢ã™ã‚‹ãƒŽãƒ¼ãƒ‰
 	case NODE_ADD:
 		generator_genearte_code(self->left, enable_load);
 		generator_genearte_code(self->right, enable_load);
@@ -1082,24 +1082,24 @@ DO_RECURSIVE:
 	case NODE_LS:
 	case NODE_LE:
 	case NODE_NE:
-		// ”äŠrA˜_—‰‰ŽZŽq
+		// æ¯”è¼ƒã€è«–ç†æ¼”ç®—å­
 		//generator_automatic_cast(self);
 		generator_genearte_code(self->left, enable_load);
 		generator_genearte_code(self->right, enable_load);
 		MANA_ASSERT(self->body == NULL);
-		// TODO:ƒIƒyƒR[ƒh‚ðÝ’è‚µ‚Ä‚­‚¾‚³‚¢
+		// TODO:ã‚ªãƒšã‚³ãƒ¼ãƒ‰ã‚’è¨­å®šã—ã¦ãã ã•ã„
 		code_set_opecode((uint8_t)self->etc);
 		break;
 
 		///////////////////////////////////////////////////////////////////////
-		// ’P€‰‰ŽZŽq‚ÉŠÖ‚·‚éƒm[ƒh
+		// å˜é …æ¼”ç®—å­ã«é–¢ã™ã‚‹ãƒŽãƒ¼ãƒ‰
 	case NODE_LNOT:
 	case NODE_NOT:
 		//generator_automatic_cast(self);
 		generator_genearte_code(self->left, enable_load);
 		MANA_ASSERT(self->right == NULL);
 		MANA_ASSERT(self->body == NULL);
-		// TODO:ƒIƒyƒR[ƒh‚ðÝ’è‚µ‚Ä‚­‚¾‚³‚¢
+		// TODO:ã‚ªãƒšã‚³ãƒ¼ãƒ‰ã‚’è¨­å®šã—ã¦ãã ã•ã„
 		code_set_opecode((uint8_t)self->etc);
 		break;
 
@@ -1111,7 +1111,7 @@ DO_RECURSIVE:
 		break;
 
 		///////////////////////////////////////////////////////////////////////
-		// ‰‰ŽZ‚ÉŠÖ‚·‚éƒm[ƒh
+		// æ¼”ç®—ã«é–¢ã™ã‚‹ãƒŽãƒ¼ãƒ‰
 	case NODE_ARRAY:
 		/* variable[index] */
 		generator_genearte_code(self->right, true);
@@ -1138,11 +1138,14 @@ DO_RECURSIVE:
 		break;
 
 	case NODE_CALL:
-		// ŠÖ”AƒAƒNƒVƒ‡ƒ“‚ðŒÄ‚Ñ‚Ü‚·
+		// é–¢æ•°ã€ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã‚’å‘¼ã³ã¾ã™
 		//generator_resolve_symbol(self);
-		mana_resolver_search_symbol_from_name(self);
-		//generator_genearte_code(self->right, enable_load);
-		generator_call(self);
+		// resolver_search_symbol_from_name(self)
+		if (self->symbol)
+		{
+			//generator_genearte_code(self->right, enable_load);
+			generator_call(self);
+		}
 		break;
 
 	case NODE_CALL_ARGUMENT:
@@ -1177,7 +1180,7 @@ DO_RECURSIVE:
 		break;
 
 	case NODE_EXPRESSION_IF:
-		// ŽO€‰‰ŽZŽq
+		// ä¸‰é …æ¼”ç®—å­
 		{
 			int32_t pc1, pc2;
 			generator_condition_core(self->next);
@@ -1258,7 +1261,7 @@ DO_RECURSIVE:
 		break;
 
 	case NODE_MEMBER_FUNCTION:
-		// TODO:ŽÀ‘•‚µ‚Ä‚­‚¾‚³‚¢
+		// TODO:å®Ÿè£…ã—ã¦ãã ã•ã„
 		generator_genearte_code(self->left, enable_load);
 		generator_genearte_code(self->right, enable_load);
 		break;
@@ -1268,7 +1271,7 @@ DO_RECURSIVE:
 		MANA_ASSERT(self->right == NULL);
 		{
 			//generator_resolve_symbol(self->left);
-			/////mana_resolver_search_symbol_from_name(self);
+			/////resolver_search_symbol_from_name(self);
 
 			type_description* type = self->left->type;
 			if (type)
@@ -1317,7 +1320,7 @@ DO_RECURSIVE:
 		break;
 #endif
 	case NODE_SENDER:
-		// sender‚ðpush‚µ‚Ü‚·
+		// senderã‚’pushã—ã¾ã™
 		MANA_ASSERT(self->left == NULL);
 		MANA_ASSERT(self->right == NULL);
 		MANA_ASSERT(self->body == NULL);
@@ -1325,7 +1328,7 @@ DO_RECURSIVE:
 		break;
 
 	case NODE_SELF:
-		// self‚ðpush‚µ‚Ü‚·
+		// selfã‚’pushã—ã¾ã™
 		MANA_ASSERT(self->left == NULL);
 		MANA_ASSERT(self->right == NULL);
 		MANA_ASSERT(self->body == NULL);
@@ -1333,7 +1336,7 @@ DO_RECURSIVE:
 		break;
 
 	case NODE_PRIORITY:
-		// priority‚ðpush‚µ‚Ü‚·
+		// priorityã‚’pushã—ã¾ã™
 		MANA_ASSERT(self->left == NULL);
 		MANA_ASSERT(self->right == NULL);
 		MANA_ASSERT(self->body == NULL);
@@ -1350,11 +1353,11 @@ DO_RECURSIVE:
 			self->digit = self->left->type->memory_size;
 
 			if (self->digit <= max_char && self->digit >= min_char)
-				self->type = mana_type_get(SYMBOL_DATA_TYPE_CHAR);
+				self->type = type_get(SYMBOL_DATA_TYPE_CHAR);
 			else if (self->digit <= max_short && self->digit >= min_short)
-				self->type = mana_type_get(SYMBOL_DATA_TYPE_SHORT);
+				self->type = type_get(SYMBOL_DATA_TYPE_SHORT);
 			else
-				self->type = mana_type_get(SYMBOL_DATA_TYPE_INT);
+				self->type = type_get(SYMBOL_DATA_TYPE_INT);
 		}
 		MANA_ASSERT(self->right == NULL);
 		MANA_ASSERT(self->body == NULL);
@@ -1411,12 +1414,12 @@ DO_RECURSIVE:
 		break;
 	}
 
-	// Žqƒm[ƒh‚©‚çŒ^‚ðŒp³‚·‚é
-	mana_resolver_resolve_type_from_child_node(self);
+	// å­ãƒŽãƒ¼ãƒ‰ã‹ã‚‰åž‹ã‚’ç¶™æ‰¿ã™ã‚‹
+	resolver_resolve_type_from_child_node(self);
 
 	if (self->next)
 	{
-		// ––”öÄ‹A‚È‚Ì‚Ågoto‚É‚Äˆ—‚·‚é
+		// æœ«å°¾å†å¸°ãªã®ã§gotoã«ã¦å‡¦ç†ã™ã‚‹
 		//generator_genearte_code(self->next);
 		self = self->next;
 		goto DO_RECURSIVE;

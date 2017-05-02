@@ -2,11 +2,11 @@
 mana (library)
 
 @file	mana_frame.c
-@brief	mana_frameƒNƒ‰ƒX‚ÉŠÖ‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹
+@brief	mana_frameã‚¯ãƒ©ã‚¹ã«é–¢ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«
 @detail
-‚±‚Ìƒtƒ@ƒCƒ‹‚Ímana_frameƒNƒ‰ƒX‚ÉŠÖŒW‚·‚éƒ\[ƒXƒtƒ@ƒCƒ‹‚Å‚·B
-mana_frameƒNƒ‰ƒX‚Ímana_actorƒNƒ‰ƒX‚Ìƒ[ƒJƒ‹•Ï”‚Ì‘€ì‚ðs‚È‚¢‚Ü‚·B
-–{—ˆ‚ÍƒXƒ^ƒbƒN‚Å‘€ì‚µ‚½‚Ù‚¤‚ª—Ç‚¢‚Ì‚©‚à‚µ‚ê‚Ü‚¹‚ñ‚ªc
+ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯mana_frameã‚¯ãƒ©ã‚¹ã«é–¢ä¿‚ã™ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
+mana_frameã‚¯ãƒ©ã‚¹ã¯mana_actorã‚¯ãƒ©ã‚¹ã®ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°ã®æ“ä½œã‚’è¡Œãªã„ã¾ã™ã€‚
+æœ¬æ¥ã¯ã‚¹ã‚¿ãƒƒã‚¯ã§æ“ä½œã—ãŸã»ã†ãŒè‰¯ã„ã®ã‹ã‚‚ã—ã‚Œã¾ã›ã‚“ãŒâ€¦
 
 @author	Shun Moriya
 @date	2016-
@@ -21,7 +21,7 @@ mana_frameƒNƒ‰ƒX‚Ímana_actorƒNƒ‰ƒX‚Ìƒ[ƒJƒ‹•Ï”‚Ì‘€ì‚ðs‚È‚¢‚Ü‚·B
 #include <assert.h>
 #include <string.h>
 
- // ƒƒ‚ƒŠŠm•ÛŽž‚Ìƒy[ƒWƒTƒCƒY
+ // ãƒ¡ãƒ¢ãƒªç¢ºä¿æ™‚ã®ãƒšãƒ¼ã‚¸ã‚µã‚¤ã‚º
 #define MANA_FRAME_PAGE_SIZE (64)
 
 mana_frame* mana_frame_create(void)

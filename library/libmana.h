@@ -2,8 +2,8 @@
  * mana (library)
  *
  * @file	libmana.h
- * @brief	ƒVƒXƒeƒ€‘S‘Ì‚ÉŠÖ‚·‚éƒwƒbƒ_ƒtƒ@ƒCƒ‹
- * @detail	‚±‚Ìƒtƒ@ƒCƒ‹‚Íƒ‰ƒCƒuƒ‰ƒŠ‘S‘Ì‚ÉŠÖŒW‚·‚éƒwƒbƒ_ƒtƒ@ƒCƒ‹‚Å‚·B
+ * @brief	ã‚·ã‚¹ãƒ†ãƒ å…¨ä½“ã«é–¢ã™ã‚‹ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ«
+ * @detail	ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒªå…¨ä½“ã«é–¢ä¿‚ã™ã‚‹ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
  * @author	Shun Moriya
  * @date	2016-
  */
@@ -61,49 +61,49 @@ extern "C" {
 #include "mana_stream.h"
 #endif
 
-/*! ƒ†ƒj[ƒN‚È–¼‘O‚ÌÅ‘åƒTƒCƒY */
+/*! ãƒ¦ãƒ‹ãƒ¼ã‚¯ãªåå‰ã®æœ€å¤§ã‚µã‚¤ã‚º */
 #define MANA_UNIQUE_NAME_LENGTH	(16)
 
-/*! ŠO•”ŠÖ”“o˜^ƒ}ƒNƒ */
+/*! å¤–éƒ¨é–¢æ•°ç™»éŒ²ãƒã‚¯ãƒ­ */
 #define MANA_REGIST_FUNCTION(a)	mana_regist_function((const char*)#a, a)
 
-/*! ƒ‰ƒCƒuƒ‰ƒŠ‚Ì‰Šú‰» */
+/*! ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®åˆæœŸåŒ– */
 extern void mana_initialize(void);
 
-/*! ƒ‰ƒCƒuƒ‰ƒŠ‚ÌI—¹ */
+/*! ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®çµ‚äº† */
 extern void mana_finalize(void);
 
-/*! ŠO•”ŠÖ”‚Ì“o˜^ */
+/*! å¤–éƒ¨é–¢æ•°ã®ç™»éŒ² */
 extern bool mana_regist_function(const char* name, mana_external_funtion_type* function);
 
-/*! ŠO•”ŠÖ”‚Ì“o˜^‰ğœ */
+/*! å¤–éƒ¨é–¢æ•°ã®ç™»éŒ²è§£é™¤ */
 extern void mana_unregist_function(const char* name);
 
-/*! ƒfƒoƒbƒNƒ‚[ƒh‚Ìİ’è */
+/*! ãƒ‡ãƒãƒƒã‚¯ãƒ¢ãƒ¼ãƒ‰ã®è¨­å®š */
 extern void mana_set_debug_mode(const bool enable);
 
-/*! ƒfƒoƒbƒNƒ‚[ƒh‚Ìæ“¾ */
+/*! ãƒ‡ãƒãƒƒã‚¯ãƒ¢ãƒ¼ãƒ‰ã®å–å¾— */
 extern bool mana_is_debug_mode(void);
 
-/*! Šp“x’²® */
+/*! è§’åº¦èª¿æ•´ */
 extern float mana_angle_mod(const float x, const float div);
 
-/*! ƒXƒ^ƒeƒBƒbƒN•Ï”—Ìˆæ‚ğŠm•Û‚µ‚Ü‚·BÅ‰‚ÌŠm•Û‚Í“à—e‚ğ‚O‚Å‰Šú‰»‚µ‚Ü‚·B */
+/*! ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯å¤‰æ•°é ˜åŸŸã‚’ç¢ºä¿ã—ã¾ã™ã€‚æœ€åˆã®ç¢ºä¿ã¯å†…å®¹ã‚’ï¼ã§åˆæœŸåŒ–ã—ã¾ã™ã€‚ */
 extern void mana_reallocate_static_variables(const size_t allocate_size);
 
-/*! ƒXƒ^ƒeƒBƒbƒN•Ï”—Ìˆæ‚ÌƒVƒŠƒAƒ‰ƒCƒY */
+/*! ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯å¤‰æ•°é ˜åŸŸã®ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚º */
 extern void mana_serialize_static_variables(mana_stream* stream);
 
-/*! ƒXƒ^ƒeƒBƒbƒN•Ï”—Ìˆæ‚ÌƒfƒVƒŠƒAƒCƒY */
+/*! ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯å¤‰æ•°é ˜åŸŸã®ãƒ‡ã‚·ãƒªã‚¢ã‚¤ã‚º */
 extern void mana_deserialize_static_variables(mana_stream* stream);
 
-/*! ƒXƒ^ƒeƒBƒbƒN•Ï”—Ìˆæ‚ÌƒAƒhƒŒƒX‚Ìæ“¾ */
+/*! ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯å¤‰æ•°é ˜åŸŸã®ã‚¢ãƒ‰ãƒ¬ã‚¹ã®å–å¾— */
 extern uint8_t* mana_get_static_variables(void);
 
-/*! ƒXƒ^ƒeƒBƒbƒN•Ï”—Ìˆæ‚ÌƒTƒCƒY‚Ìæ“¾ */
+/*! ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯å¤‰æ•°é ˜åŸŸã®ã‚µã‚¤ã‚ºã®å–å¾— */
 extern size_t mana_get_static_variables_size(void);
 
-/*! ƒ†ƒj[ƒN‚È–¼‘O‚ğ¶¬ */
+/*! ãƒ¦ãƒ‹ãƒ¼ã‚¯ãªåå‰ã‚’ç”Ÿæˆ */
 extern void mana_generate_unique_name(char* name, const size_t size);
 
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)

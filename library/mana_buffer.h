@@ -2,10 +2,10 @@
  * mana (library)
  *
  * @file	mana_buffer.h
- * @brief	mana_bufferƒNƒ‰ƒX‚ÉŠÖ‚·‚éƒwƒbƒ_[ƒtƒ@ƒCƒ‹
+ * @brief	mana_bufferã‚¯ãƒ©ã‚¹ã«é–¢ã™ã‚‹ãƒ˜ãƒƒãƒ€ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«
  * @detail
- * ‚±‚Ìƒtƒ@ƒCƒ‹‚Ímana_bufferƒNƒ‰ƒX‚ÉŠÖŒW‚·‚éƒwƒbƒ_[ƒtƒ@ƒCƒ‹‚Å‚·B
- * mana_streamƒNƒ‰ƒX‚Í‰Â•Ï’·ƒoƒbƒtƒ@‚ÉŠÖ‚·‚é‘€ì‚ğs‚È‚¢‚Ü‚·B
+ * ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯mana_bufferã‚¯ãƒ©ã‚¹ã«é–¢ä¿‚ã™ã‚‹ãƒ˜ãƒƒãƒ€ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚
+ * mana_streamã‚¯ãƒ©ã‚¹ã¯å¯å¤‰é•·ãƒãƒƒãƒ•ã‚¡ã«é–¢ã™ã‚‹æ“ä½œã‚’è¡Œãªã„ã¾ã™ã€‚
  *
  * @author	Shun Moriya
  * @date	2016-
@@ -22,12 +22,12 @@ extern "C" {
 #endif
 
 /*!
- * @brief	mana_bufferƒNƒ‰ƒX
+ * @brief	mana_bufferã‚¯ãƒ©ã‚¹
  *
- * mana_bufferƒNƒ‰ƒX‚Í‰Â•Ï’·ƒoƒbƒtƒ@‚ğ•\‚µ‚Ä‚¢‚Ü‚·B
+ * mana_bufferã‚¯ãƒ©ã‚¹ã¯å¯å¤‰é•·ãƒãƒƒãƒ•ã‚¡ã‚’è¡¨ã—ã¦ã„ã¾ã™ã€‚
  *
- * C++‚Å‚¢‚¤‚Æ‚±‚ë‚Ìƒƒ“ƒo[•Ï”‚Å‚·‚ªACŒ¾Œê‚È‚Ì‚Å‘S‚Äpublic‚É‚È‚Á‚Ä‚¢‚Ü‚·B
- * ‘€ì—p‚ÌŠÖ”‚ğ—pˆÓ‚µ‚Ä‚¢‚é‚Ì‚ÅA‚»‚ê‚ç‚ÌŠÖ”‚ğ—˜—p‚µ‚Ä‘€ì‚µ‚Ä‚­‚¾‚³‚¢B
+ * C++ã§ã„ã†ã¨ã“ã‚ã®ãƒ¡ãƒ³ãƒãƒ¼å¤‰æ•°ã§ã™ãŒã€Cè¨€èªãªã®ã§å…¨ã¦publicã«ãªã£ã¦ã„ã¾ã™ã€‚
+ * æ“ä½œç”¨ã®é–¢æ•°ã‚’ç”¨æ„ã—ã¦ã„ã‚‹ã®ã§ã€ãã‚Œã‚‰ã®é–¢æ•°ã‚’åˆ©ç”¨ã—ã¦æ“ä½œã—ã¦ãã ã•ã„ã€‚
  */
 typedef struct mana_buffer
 {
@@ -36,22 +36,22 @@ typedef struct mana_buffer
 	size_t used_size;
 }mana_buffer;
 
-/*! mana_stream ƒIƒuƒWƒFƒNƒg‚Ì¶¬ */
+/*! mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç”Ÿæˆ */
 extern mana_buffer* mana_buffer_create(void);
 
-/*! mana_stream ƒIƒuƒWƒFƒNƒg‚Ì”jŠü */
+/*! mana_stream ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç ´æ£„ */
 extern void mana_buffer_destroy(mana_buffer* self);
 
-/*! ƒoƒbƒtƒ@‚Ìæ“ªƒAƒhƒŒƒX‚ğæ“¾ */
+/*! ãƒãƒƒãƒ•ã‚¡ã®å…ˆé ­ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å–å¾— */
 extern void* mana_buffer_get_buffer(mana_buffer* self);
 
-/*! Šm•ÛÏ‚İƒoƒbƒtƒ@ƒTƒCƒY‚ğæ“¾ */
+/*! ç¢ºä¿æ¸ˆã¿ãƒãƒƒãƒ•ã‚¡ã‚µã‚¤ã‚ºã‚’å–å¾— */
 extern size_t mana_buffer_get_allocated_size(mana_buffer* self);
 
-/*! g—p‚µ‚Ä‚¢‚éƒoƒbƒtƒ@ƒTƒCƒY‚ğæ“¾ */
+/*! ä½¿ç”¨ã—ã¦ã„ã‚‹ãƒãƒƒãƒ•ã‚¡ã‚µã‚¤ã‚ºã‚’å–å¾— */
 extern size_t mana_buffer_get_used_size(mana_buffer* self);
 
-/*! ƒf[ƒ^‚ğƒvƒbƒVƒ… */
+/*! ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ—ãƒƒã‚·ãƒ¥ */
 extern int32_t mana_buffer_push(mana_buffer* self, const void* pointer, const size_t size);
 
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)

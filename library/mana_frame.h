@@ -2,11 +2,11 @@
 mana (library)
 
 @file	mana_frame.h
-@brief	mana_frame�N���X�Ɋւ���w�b�_�[�t�@�C��
+@brief	mana_frameクラスに関するヘッダーファイル
 @detail
-���̃t�@�C����mana_frame�N���X�Ɋ֌W����w�b�_�[�t�@�C���ł��B
-mana_frame�N���X��mana_actor�N���X�̃��[�J���ϐ��̑�����s�Ȃ��܂��B
-�{���̓X�^�b�N�ő��삵���ق����ǂ��̂�������܂��񂪁c
+このファイルはmana_frameクラスに関係するヘッダーファイルです。
+mana_frameクラスはmana_actorクラスのローカル変数の操作を行ないます。
+本来はスタックで操作したほうが良いのかもしれませんが…
 
 @author	Shun Moriya
 @date	2016-
@@ -24,122 +24,122 @@ extern "C" {
 #endif
 
 /*!
-@brief	mana_frame�N���X
-mana_frame�N���X�̓t���[���o�b�t�@��\���Ă��܂��B
+@brief	mana_frameクラス
+mana_frameクラスはフレームバッファを表しています。
 
-C++�ł����Ƃ���̃����o�[�ϐ��ł����AC����Ȃ̂őS��public�ɂȂ��Ă��܂��B
-����p�̊֐���p�ӂ��Ă���̂ŁA�����̊֐��𗘗p���đ��삵�Ă��������B
+C++でいうところのメンバー変数ですが、C言語なので全てpublicになっています。
+操作用の関数を用意しているので、それらの関数を利用して操作してください。
 */
 typedef struct mana_frame
 {
-	uint8_t* buffer;		//!< �o�b�t�@
-	size_t allocated_size;	//!< �m�ۍς݃T�C�Y
-	size_t used_size;		//!< �g�p�ς݃T�C�Y
+	uint8_t* buffer;		//!< バッファ
+	size_t allocated_size;	//!< 確保済みサイズ
+	size_t used_size;		//!< 使用済みサイズ
 }mana_frame;
 
 /*!
-mana_frame �I�u�W�F�N�g�̐���
-@return	mana_frame �I�u�W�F�N�g
-@warning	void mana_frame_initialize(mana_frame* self)���ĂԕK�v�͂���܂���B
+mana_frame オブジェクトの生成
+@return	mana_frame オブジェクト
+@warning	void mana_frame_initialize(mana_frame* self)を呼ぶ必要はありません。
 */
 extern mana_frame* mana_frame_create(void);
 
 /*!
-mana_frame �I�u�W�F�N�g�̐���
-@param[in]	size	�m�ۃT�C�Y
-@return		mana_frame �I�u�W�F�N�g
-@warning	void mana_frame_initialize_with_size(mana_frame* self, size_t size)���ĂԕK�v�͂���܂���B
+mana_frame オブジェクトの生成
+@param[in]	size	確保サイズ
+@return		mana_frame オブジェクト
+@warning	void mana_frame_initialize_with_size(mana_frame* self, size_t size)を呼ぶ必要はありません。
 */
 extern mana_frame* mana_frame_create_with_size(const size_t size);
 
 /*!
-mana_frame �I�u�W�F�N�g�̔j��
-@param[in]	self	mana_frame �I�u�W�F�N�g
-@warning	void mana_frame_finalize(mana_frame* self)���ĂԕK�v�͂���܂���B
+mana_frame オブジェクトの破棄
+@param[in]	self	mana_frame オブジェクト
+@warning	void mana_frame_finalize(mana_frame* self)を呼ぶ必要はありません。
 */
 extern void mana_frame_destroy(mana_frame* self);
 
 /*!
-mana_frame �I�u�W�F�N�g�̏�����
-@param[in]	self	mana_frame �I�u�W�F�N�g
+mana_frame オブジェクトの初期化
+@param[in]	self	mana_frame オブジェクト
 */
 extern void mana_frame_initialize(mana_frame* self);
 
 /*!
-mana_frame �I�u�W�F�N�g�̏�����
-@param[in]	self	mana_frame �I�u�W�F�N�g
-@param[in]	size	�m�ۃT�C�Y
+mana_frame オブジェクトの初期化
+@param[in]	self	mana_frame オブジェクト
+@param[in]	size	確保サイズ
 */
 extern void mana_frame_initialize_with_size(mana_frame* self, const size_t size);
 
 /*!
-mana_frame �I�u�W�F�N�g�̃V���A���C�Y
-@param[in]	self	mana_frame �I�u�W�F�N�g
-@param[out]	stream	mana_stream �I�u�W�F�N�g
+mana_frame オブジェクトのシリアライズ
+@param[in]	self	mana_frame オブジェクト
+@param[out]	stream	mana_stream オブジェクト
 */
 extern void mana_frame_serialize(const mana_frame* self, mana_stream* stream);
 
 /*!
-mana_frame �I�u�W�F�N�g�̃f�V���A���C�Y
-@param[in]	self	mana_frame �I�u�W�F�N�g
-@param[in]	stream	mana_stream �I�u�W�F�N�g
+mana_frame オブジェクトのデシリアライズ
+@param[in]	self	mana_frame オブジェクト
+@param[in]	stream	mana_stream オブジェクト
 */
 extern void mana_frame_deserialize(mana_frame* self, mana_stream* stream);
 
 /*!
-mana_frame �I�u�W�F�N�g�̊J��
-@param[in]	self	mana_frame �I�u�W�F�N�g
+mana_frame オブジェクトの開放
+@param[in]	self	mana_frame オブジェクト
 */
 extern void mana_frame_finalize(mana_frame* self);
 
 /*!
-mana_frame �I�u�W�F�N�g�̃N���A
-@param[in]	self	mana_frame �I�u�W�F�N�g
+mana_frame オブジェクトのクリア
+@param[in]	self	mana_frame オブジェクト
 */
 extern void mana_frame_clear(mana_frame* self);
 
 /*!
-�t���[���o�b�t�@�̊m��
-@param[in]	self	mana_frame �I�u�W�F�N�g
-@param[in]	size	�ǉ��T�C�Y
+フレームバッファの確保
+@param[in]	self	mana_frame オブジェクト
+@param[in]	size	追加サイズ
 */
 extern void mana_frame_allocate(mana_frame* self, const size_t size);
 
 /*!
-�t���[���o�b�t�@�̊J��
-@param[in]	self	mana_frame �I�u�W�F�N�g
-@param[in]	size	�J���T�C�Y
+フレームバッファの開放
+@param[in]	self	mana_frame オブジェクト
+@param[in]	size	開放サイズ
 */
 extern void mana_frame_release(mana_frame* self, const size_t size);
 
 /*!
-�t���[���o�b�t�@�̃A�h���X���擾
-@param[in]	self	mana_frame �I�u�W�F�N�g
-@param[in]	index	�t���[���|�C���^�ւ̃I�t�Z�b�g�l
-@return		�A�h���X
+フレームバッファのアドレスを取得
+@param[in]	self	mana_frame オブジェクト
+@param[in]	index	フレームポインタへのオフセット値
+@return		アドレス
 */
 extern void* mana_frame_get_address(const mana_frame* self, const size_t index);
 
 /*!
-�t���[���o�b�t�@�̃T�C�Y���擾
-@param[in]	self	mana_frame �I�u�W�F�N�g
-@return		�t���[���o�b�t�@�̃T�C�Y/�t���[���|�C���^
+フレームバッファのサイズを取得
+@param[in]	self	mana_frame オブジェクト
+@return		フレームバッファのサイズ/フレームポインタ
 */
 extern size_t mana_frame_get_size(const mana_frame* self);
 
 /*!
-�t���[���o�b�t�@�̃T�C�Y��ݒ�
-@param[in]	self	mana_frame �I�u�W�F�N�g
-@param[in]	size	�t���[���o�b�t�@�̃T�C�Y/�t���[���|�C���^
+フレームバッファのサイズを設定
+@param[in]	self	mana_frame オブジェクト
+@param[in]	size	フレームバッファのサイズ/フレームポインタ
 */
 extern void mana_frame_set_size(mana_frame* self, const size_t size);
 
 /*!
-�t���[���o�b�t�@���r
-@param[in]	self	mana_frame �I�u�W�F�N�g
-@param[in]	other	mana_frame �I�u�W�F�N�g
-@retval		== 0	����̓��e
-@retval		!= 0	�قȂ���e
+フレームバッファを比較
+@param[in]	self	mana_frame オブジェクト
+@param[in]	other	mana_frame オブジェクト
+@retval		== 0	同一の内容
+@retval		!= 0	異なる内容
 */
 extern int32_t mana_frame_compare(const mana_frame* self, const mana_frame* other);
 

@@ -2,8 +2,8 @@
 mana (compiler)
 
 @file	datalink_generator.h
-@brief	�f�[�^�Z�N�V�����Ɋւ���w�b�_�t�@�C��
-@detail	���̃t�@�C���̓f�[�^�Z�N�V�����Ɋ֌W����w�b�_�t�@�C���ł��B
+@brief	データセクションに関するヘッダファイル
+@detail	このファイルはデータセクションに関係するヘッダファイルです。
 @author	Shun Moriya
 @date	2016-
 */
