@@ -112,16 +112,13 @@ void pool_finalize(void)
  */
 char* pool_set(char* string)
 {
-	pool_string_hash_table* hash;
-	int32_t hash_value;
-	int32_t length;
-
 	if(string == NULL)
 		return NULL;
 
-	hash_value = pool_get_hash_value(string);
-	length = strlen(string);
+	int32_t hash_value = pool_get_hash_value(string);
+	size_t length = strlen(string);
 
+	pool_string_hash_table* hash;
 	for(hash = s_pool_hash_table[hash_value]; hash != 0; hash = hash->next)
 	{
 		if((hash->length) == length && strcmp(hash->name, string) == 0)

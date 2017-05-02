@@ -22,6 +22,16 @@ extern "C" {
 #include "mana_stream.h"
 #endif
 
+#if UINTPTR_MAX == UINT64_MAX
+	typedef double mana_real;
+	typedef int64_t mana_int;
+#elif UINTPTR_MAX == UINT32_MAX
+	typedef float mana_real;
+	typedef int32_t mana_int;
+#else
+#error "unsupport pointer size"
+#endif
+
 /*!
 @brief	mana_stackクラス
 mana_stackクラスはスタックを表しています。
@@ -36,15 +46,8 @@ typedef struct mana_stack
 	{
 		const char** string_handle;	//!< 文字列ハンドル
 		void** void_handle;			//!< データハンドル
-#if UINTPTR_MAX == UINT64_MAX
-		double* float_pointer;		//!< 実数ポインタ
-		int64_t* integer_pointer;	//!< 整数ポインタ
-#elif UINTPTR_MAX == UINT32_MAX
-		float* float_pointer;		//!< 実数ポインタ
-		int32_t* integer_pointer;	//!< 整数ポインタ
-#else
-#error "unsupport pointer size"
-#endif
+		mana_real* float_pointer;	//!< 実数ポインタ
+		mana_int* integer_pointer;	//!< 整数ポインタ
 		void* void_pointer;			//!< データポインタ
 	}buffer;
 	size_t allocated_size;			//!< 確保済みサイズ
@@ -130,14 +133,14 @@ extern void mana_stack_remove(mana_stack* self, const size_t size);
 @param[in]	self	mana_stack オブジェクト
 @param[in]	value	プッシュする値
 */
-extern void mana_stack_push_integer(mana_stack* self, const int32_t value);
+extern void mana_stack_push_integer(mana_stack* self, const mana_int value);
 
 /*!
 実数をプッシュ
 @param[in]	self	mana_stack オブジェクト
 @param[in]	value	プッシュする値
 */
-extern void mana_stack_push_real(mana_stack* self, const float value);
+extern void mana_stack_push_real(mana_stack* self, const mana_real value);
 
 /*!
 文字列をプッシュ
@@ -166,14 +169,14 @@ extern void mana_stack_push_data(mana_stack* self, const void* buffer, const siz
 @param[in]	self	mana_stack オブジェクト
 @return		ポップした値
 */
-extern int32_t mana_stack_pop_integer(mana_stack* self);
+extern mana_int mana_stack_pop_integer(mana_stack* self);
 
 /*!
 実数をポップ
 @param[in]	self	mana_stack オブジェクト
 @return		ポップした値
 */
-extern float mana_stack_pop_real(mana_stack* self);
+extern mana_real mana_stack_pop_real(mana_stack* self);
 
 /*!
 文字列をポップ
@@ -214,7 +217,7 @@ extern void mana_stack_pop_data(mana_stack* self, void* buffer, const size_t siz
 @param[in]	index	スタックポインタへのオフセット値
 @return		値
 */
-extern int32_t mana_stack_get_integer(const mana_stack* self, const size_t index);
+extern mana_int mana_stack_get_integer(const mana_stack* self, const size_t index);
 
 /*!
 実数を取得
@@ -222,7 +225,7 @@ extern int32_t mana_stack_get_integer(const mana_stack* self, const size_t index
 @param[in]	index	スタックポインタへのオフセット値
 @return		値
 */
-extern float mana_stack_get_real(const mana_stack* self, const size_t index);
+extern mana_real mana_stack_get_real(const mana_stack* self, const size_t index);
 
 /*!
 文字列を取得
@@ -258,7 +261,7 @@ extern void* mana_stack_get_address(const mana_stack* self, const size_t index);
 @param[in]	index	スタックポインタへのオフセット値
 @param[in]	integer	値
 */
-extern void mana_stack_set_integer(mana_stack* self, const size_t index, const int32_t integer);
+extern void mana_stack_set_integer(mana_stack* self, const size_t index, const mana_int integer);
 
 /*!
 実数を設定
@@ -266,7 +269,7 @@ extern void mana_stack_set_integer(mana_stack* self, const size_t index, const i
 @param[in]	index	スタックポインタへのオフセット値
 @param[in]	real	値
 */
-extern void mana_stack_set_real(mana_stack* self, const size_t index, const float real);
+extern void mana_stack_set_real(mana_stack* self, const size_t index, const mana_real real);
 
 /*!
 文字列を設定
@@ -305,7 +308,7 @@ extern void mana_stack_set_size(mana_stack* self, const size_t size);
 @retval		== 0	同一の内容
 @retval		!= 0	異なる内容
 */
-extern int32_t mana_stack_compare(const mana_stack* self, const mana_stack* other);
+extern mana_int mana_stack_compare(const mana_stack* self, const mana_stack* other);
 
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)
 }

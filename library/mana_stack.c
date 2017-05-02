@@ -66,8 +66,8 @@ void mana_stack_destroy(mana_stack* self)
 void mana_stack_initialize(mana_stack* self)
 {
 	assert(self);
-	//assert(sizeof(int32_t) == sizeof(void*));
-	//assert(sizeof(float) == sizeof(void*));
+	//assert(sizeof(mana_int) == sizeof(void*));
+	//assert(sizeof(mana_real) == sizeof(void*));
 	//assert(sizeof(char*) == sizeof(void*));
 
 	self->allocated_size = self->used_size = 0;
@@ -77,8 +77,8 @@ void mana_stack_initialize(mana_stack* self)
 void mana_stack_initialize_with_size(mana_stack* self, const size_t size)
 {
 	assert(self);
-	//assert(sizeof(int32_t) == sizeof(void*));
-	//assert(sizeof(float) == sizeof(void*));
+	//assert(sizeof(mana_int) == sizeof(void*));
+	//assert(sizeof(mana_real) == sizeof(void*));
 	//assert(sizeof(char*) == sizeof(void*));
 
 	self->allocated_size = size;
@@ -135,23 +135,23 @@ void mana_stack_remove(mana_stack* self, const size_t size)
 	}
 }
 
-void mana_stack_push_integer(mana_stack* self, const int32_t value)
+void mana_stack_push_integer(mana_stack* self, const mana_int value)
 {
 	if(self)
 	{
-		MANA_STACK_ALLOCATE_BEGIN(sizeof(int32_t));
+		MANA_STACK_ALLOCATE_BEGIN(sizeof(mana_int));
 		self->buffer.integer_pointer[self->used_size] = value;
-		MANA_STACK_ALLOCATE_END(sizeof(int32_t));
+		MANA_STACK_ALLOCATE_END(sizeof(mana_int));
 	}
 }
 
-void mana_stack_push_real(mana_stack* self, const float value)
+void mana_stack_push_real(mana_stack* self, const mana_real value)
 {
 	if(self)
 	{
-		MANA_STACK_ALLOCATE_BEGIN(sizeof(float));
+		MANA_STACK_ALLOCATE_BEGIN(sizeof(mana_real));
 		self->buffer.float_pointer[self->used_size] = value;
-		MANA_STACK_ALLOCATE_END(sizeof(float));
+		MANA_STACK_ALLOCATE_END(sizeof(mana_real));
 	}
 }
 
@@ -185,11 +185,11 @@ void mana_stack_push_data(mana_stack* self, const void* buffer, const size_t siz
 	}
 }
 
-int32_t mana_stack_pop_integer(mana_stack* self)
+mana_int mana_stack_pop_integer(mana_stack* self)
 {
 	if(self)
 	{
-		MANA_STACK_RELEASE(sizeof(int32_t));
+		MANA_STACK_RELEASE(sizeof(mana_int));
 		return self->buffer.integer_pointer[self->used_size];
 	}
 	else
@@ -198,11 +198,11 @@ int32_t mana_stack_pop_integer(mana_stack* self)
 	}
 }
 
-float mana_stack_pop_real(mana_stack* self)
+mana_real mana_stack_pop_real(mana_stack* self)
 {
 	if(self)
 	{
-		MANA_STACK_RELEASE(sizeof(float));
+		MANA_STACK_RELEASE(sizeof(mana_real));
 		return self->buffer.float_pointer[self->used_size];
 	}
 	else
@@ -259,7 +259,7 @@ void mana_stack_pop_data(mana_stack* self, void* buffer, const size_t size)
 	}
 }
 
-int32_t mana_stack_get_integer(const mana_stack* self, const size_t index)
+mana_int mana_stack_get_integer(const mana_stack* self, const size_t index)
 {
 	if(self)
 	{
@@ -273,7 +273,7 @@ int32_t mana_stack_get_integer(const mana_stack* self, const size_t index)
 	}
 }
 
-float mana_stack_get_real(const mana_stack* self, const size_t index)
+mana_real mana_stack_get_real(const mana_stack* self, const size_t index)
 {
 	if(self)
 	{
@@ -329,7 +329,7 @@ void* mana_stack_get_address(const mana_stack* self, const size_t index)
 	}
 }
 
-void mana_stack_set_integer(mana_stack* self, const size_t index, const int32_t integer)
+void mana_stack_set_integer(mana_stack* self, const size_t index, const mana_int integer)
 {
 	if(self)
 	{
@@ -339,7 +339,7 @@ void mana_stack_set_integer(mana_stack* self, const size_t index, const int32_t 
 	}
 }
 
-void mana_stack_set_real(mana_stack* self, const size_t index, const float real)
+void mana_stack_set_real(mana_stack* self, const size_t index, const mana_real real)
 {
 	if(self)
 	{
@@ -382,7 +382,7 @@ void mana_stack_set_size(mana_stack* self, const size_t size)
 	}
 }
 
-int32_t mana_stack_compare(const mana_stack* self, const mana_stack* other)
+mana_int mana_stack_compare(const mana_stack* self, const mana_stack* other)
 {
 	if(self == NULL)
 		return 1;
