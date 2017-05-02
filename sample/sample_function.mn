@@ -158,12 +158,13 @@ float functionCallingTest()
 int test_sort(short array[10], int size)
 {
 	print("before\n");
-	print("size:%d\n", size);
+
 	for(int i = 0; i < size; i++)
 	{
 		array[i] = size - i;
 		print("%d: %d\n", i, array[i]);
 	}
+	print("-----\n");
 
 	int count = 0;
 	int finish;
@@ -173,6 +174,8 @@ int test_sort(short array[10], int size)
 		{
 			if(array[i] > array[i + 1])
 			{
+				print("%d <-> %d\n", array[i], array[i+1]);
+
 				short tmp = array[i];
 				array[i] = array[i + 1];
 				array[i + 1] = tmp;
@@ -180,6 +183,12 @@ int test_sort(short array[10], int size)
 			}
 		}
 		count++;
+
+		for(int i = 0; i < size; i++)
+		{
+			print("%d: %d\n", i, array[i]);
+		}
+		print("%d----\n", count);
 	}while(!finish);
 
 	print("after\n");

@@ -42,38 +42,38 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0C6D11D50FD6D20F0008261F /* libmana.c */ = {isa = PBXFileReference; fileEncoding = 8; lastKnownFileType = sourcecode.c.c; lineEnding = 2; path = libmana.c; sourceTree = "<group>"; };
-		0C6D11D60FD6D20F0008261F /* libmana.h */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.h; lineEnding = 2; path = libmana.h; sourceTree = "<group>"; };
-		0C6D11DB0FD6D2220008261F /* mana.c */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.c; lineEnding = 2; path = mana.c; sourceTree = "<group>"; };
-		0C6D11DC0FD6D2220008261F /* mana.h */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.h; lineEnding = 2; path = mana.h; sourceTree = "<group>"; };
-		0C6D11DD0FD6D2220008261F /* mana_actor.c */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.c; lineEnding = 2; path = mana_actor.c; sourceTree = "<group>"; };
-		0C6D11DE0FD6D2220008261F /* mana_actor.h */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.h; lineEnding = 2; path = mana_actor.h; sourceTree = "<group>"; };
-		0C6D11DF0FD6D2220008261F /* mana_datalink.c */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.c; lineEnding = 2; path = mana_datalink.c; sourceTree = "<group>"; };
-		0C6D11E00FD6D2220008261F /* mana_datalink.h */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.h; lineEnding = 2; path = mana_datalink.h; sourceTree = "<group>"; };
-		0C6D11E10FD6D2220008261F /* mana_define.c */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.c; lineEnding = 2; path = mana_define.c; sourceTree = "<group>"; };
-		0C6D11E20FD6D2220008261F /* mana_define.h */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.h; lineEnding = 2; path = mana_define.h; sourceTree = "<group>"; };
-		0C6D11E30FD6D2220008261F /* mana_frame.c */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.c; lineEnding = 2; path = mana_frame.c; sourceTree = "<group>"; };
-		0C6D11E40FD6D2220008261F /* mana_frame.h */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.h; lineEnding = 2; path = mana_frame.h; sourceTree = "<group>"; };
-		0C6D11E50FD6D2220008261F /* mana_function.c */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.c; lineEnding = 2; path = mana_function.c; sourceTree = "<group>"; };
-		0C6D11E60FD6D2220008261F /* mana_function.h */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.h; lineEnding = 2; path = mana_function.h; sourceTree = "<group>"; };
-		0C6D11E70FD6D2220008261F /* mana_hash.c */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.c; lineEnding = 2; path = mana_hash.c; sourceTree = "<group>"; };
-		0C6D11E80FD6D2220008261F /* mana_hash.h */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.h; lineEnding = 2; path = mana_hash.h; sourceTree = "<group>"; };
-		0C6D11E90FD6D2220008261F /* mana_info.c */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.c; lineEnding = 2; path = mana_info.c; sourceTree = "<group>"; };
-		0C6D11EA0FD6D2220008261F /* mana_info.h */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.h; lineEnding = 2; path = mana_info.h; sourceTree = "<group>"; };
-		0C6D11EB0FD6D2220008261F /* mana_malloc.c */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.c; lineEnding = 2; path = mana_malloc.c; sourceTree = "<group>"; };
-		0C6D11EC0FD6D2220008261F /* mana_malloc.h */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.h; lineEnding = 2; path = mana_malloc.h; sourceTree = "<group>"; };
-		0C6D11ED0FD6D2220008261F /* mana_plugin.c */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.c; lineEnding = 2; path = mana_plugin.c; sourceTree = "<group>"; };
-		0C6D11EE0FD6D2220008261F /* mana_plugin.h */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.h; lineEnding = 2; path = mana_plugin.h; sourceTree = "<group>"; };
-		0C6D11EF0FD6D2220008261F /* mana_stack.c */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.c; lineEnding = 2; path = mana_stack.c; sourceTree = "<group>"; };
-		0C6D11F00FD6D2220008261F /* mana_stack.h */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.h; lineEnding = 2; path = mana_stack.h; sourceTree = "<group>"; };
-		0C6D11F10FD6D2220008261F /* mana_stream.c */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.c; lineEnding = 2; path = mana_stream.c; sourceTree = "<group>"; };
-		0C6D11F20FD6D2220008261F /* mana_stream.h */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.h; lineEnding = 2; path = mana_stream.h; sourceTree = "<group>"; };
-		0C75076F1E099211007C03AA /* mana_buffer.c */ = {isa = PBXFileReference; fileEncoding = 8; lastKnownFileType = sourcecode.c.c; lineEnding = 2; path = mana_buffer.c; sourceTree = "<group>"; };
-		0C7507701E099211007C03AA /* mana_buffer.h */ = {isa = PBXFileReference; fileEncoding = 8; lastKnownFileType = sourcecode.c.h; lineEnding = 2; path = mana_buffer.h; sourceTree = "<group>"; };
-		0CB01A6E1109746600DFE7F2 /* mana_array.c */ = {isa = PBXFileReference; fileEncoding = 8; lastKnownFileType = sourcecode.c.c; lineEnding = 2; path = mana_array.c; sourceTree = "<group>"; };
-		0CB01A6F1109746600DFE7F2 /* mana_array.h */ = {isa = PBXFileReference; fileEncoding = 8; lastKnownFileType = sourcecode.c.h; lineEnding = 2; path = mana_array.h; sourceTree = "<group>"; };
-		0CFF1A431882EC8C0072F47D /* mana_lzss.c */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.c; lineEnding = 2; path = mana_lzss.c; sourceTree = "<group>"; };
-		0CFF1A441882EC8C0072F47D /* mana_lzss.h */ = {isa = PBXFileReference; fileEncoding = 2147486209; lastKnownFileType = sourcecode.c.h; lineEnding = 2; path = mana_lzss.h; sourceTree = "<group>"; };
+		0C6D11D50FD6D20F0008261F /* libmana.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; lineEnding = 0; path = libmana.c; sourceTree = "<group>"; };
+		0C6D11D60FD6D20F0008261F /* libmana.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = libmana.h; sourceTree = "<group>"; };
+		0C6D11DB0FD6D2220008261F /* mana.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; lineEnding = 0; path = mana.c; sourceTree = "<group>"; };
+		0C6D11DC0FD6D2220008261F /* mana.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = mana.h; sourceTree = "<group>"; };
+		0C6D11DD0FD6D2220008261F /* mana_actor.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; lineEnding = 0; path = mana_actor.c; sourceTree = "<group>"; };
+		0C6D11DE0FD6D2220008261F /* mana_actor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = mana_actor.h; sourceTree = "<group>"; };
+		0C6D11DF0FD6D2220008261F /* mana_datalink.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; lineEnding = 0; path = mana_datalink.c; sourceTree = "<group>"; };
+		0C6D11E00FD6D2220008261F /* mana_datalink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = mana_datalink.h; sourceTree = "<group>"; };
+		0C6D11E10FD6D2220008261F /* mana_define.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; lineEnding = 0; path = mana_define.c; sourceTree = "<group>"; };
+		0C6D11E20FD6D2220008261F /* mana_define.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = mana_define.h; sourceTree = "<group>"; };
+		0C6D11E30FD6D2220008261F /* mana_frame.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; lineEnding = 0; path = mana_frame.c; sourceTree = "<group>"; };
+		0C6D11E40FD6D2220008261F /* mana_frame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = mana_frame.h; sourceTree = "<group>"; };
+		0C6D11E50FD6D2220008261F /* mana_function.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; lineEnding = 0; path = mana_function.c; sourceTree = "<group>"; };
+		0C6D11E60FD6D2220008261F /* mana_function.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = mana_function.h; sourceTree = "<group>"; };
+		0C6D11E70FD6D2220008261F /* mana_hash.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; lineEnding = 0; path = mana_hash.c; sourceTree = "<group>"; };
+		0C6D11E80FD6D2220008261F /* mana_hash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = mana_hash.h; sourceTree = "<group>"; };
+		0C6D11E90FD6D2220008261F /* mana_info.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; lineEnding = 0; path = mana_info.c; sourceTree = "<group>"; };
+		0C6D11EA0FD6D2220008261F /* mana_info.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = mana_info.h; sourceTree = "<group>"; };
+		0C6D11EB0FD6D2220008261F /* mana_malloc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; lineEnding = 0; path = mana_malloc.c; sourceTree = "<group>"; };
+		0C6D11EC0FD6D2220008261F /* mana_malloc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = mana_malloc.h; sourceTree = "<group>"; };
+		0C6D11ED0FD6D2220008261F /* mana_plugin.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; lineEnding = 0; path = mana_plugin.c; sourceTree = "<group>"; };
+		0C6D11EE0FD6D2220008261F /* mana_plugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = mana_plugin.h; sourceTree = "<group>"; };
+		0C6D11EF0FD6D2220008261F /* mana_stack.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; lineEnding = 0; path = mana_stack.c; sourceTree = "<group>"; };
+		0C6D11F00FD6D2220008261F /* mana_stack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = mana_stack.h; sourceTree = "<group>"; };
+		0C6D11F10FD6D2220008261F /* mana_stream.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; lineEnding = 0; path = mana_stream.c; sourceTree = "<group>"; };
+		0C6D11F20FD6D2220008261F /* mana_stream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = mana_stream.h; sourceTree = "<group>"; };
+		0C75076F1E099211007C03AA /* mana_buffer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; lineEnding = 0; path = mana_buffer.c; sourceTree = "<group>"; };
+		0C7507701E099211007C03AA /* mana_buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = mana_buffer.h; sourceTree = "<group>"; };
+		0CB01A6E1109746600DFE7F2 /* mana_array.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; lineEnding = 0; path = mana_array.c; sourceTree = "<group>"; };
+		0CB01A6F1109746600DFE7F2 /* mana_array.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = mana_array.h; sourceTree = "<group>"; };
+		0CFF1A431882EC8C0072F47D /* mana_lzss.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; lineEnding = 0; path = mana_lzss.c; sourceTree = "<group>"; };
+		0CFF1A441882EC8C0072F47D /* mana_lzss.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = mana_lzss.h; sourceTree = "<group>"; };
 		D2AAC046055464E500DB518D /* libmana.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libmana.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -196,7 +196,7 @@
 		08FB7793FE84155DC02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0830;
 			};
 			buildConfigurationList = 1DEB91EF08733DB70010E9CD /* Build configuration list for PBXProject "libmana" */;
 			compatibilityVersion = "Xcode 8.0";
@@ -244,7 +244,6 @@
 		1DEB91EC08733DB70010E9CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				PRODUCT_NAME = mana;
 			};
@@ -253,7 +252,6 @@
 		1DEB91ED08733DB70010E9CD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				PRODUCT_NAME = mana;
 			};
 			name = Release;
@@ -261,12 +259,16 @@
 		1DEB91F008733DB70010E9CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = _DEBUG;
 			};
 			name = Debug;
 		};
 		1DEB91F108733DB70010E9CD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = NDEBUG;
 			};
 			name = Release;
 		};
