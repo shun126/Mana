@@ -51,6 +51,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0C03284D1ECF4627005B35CB /* version.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = version.json; sourceTree = "<group>"; };
+		0C03284E1ECF4627005B35CB /* version.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; lineEnding = 0; path = version.rb; sourceTree = "<group>"; };
 		0C7507761E09932D007C03AA /* libmana.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = libmana.xcodeproj; path = ../library/libmana.xcodeproj; sourceTree = "<group>"; };
 		0CC249E61EB80C8800B43409 /* code.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = code.c; sourceTree = "<group>"; };
 		0CC249E71EB80C8800B43409 /* code.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = code.h; sourceTree = "<group>"; };
@@ -160,6 +162,8 @@
 				0CC24A071EB80C8800B43409 /* type.c */,
 				0CC24A081EB80C8800B43409 /* type.h */,
 				0CC24A091EB80C8800B43409 /* version.h */,
+				0C03284D1ECF4627005B35CB /* version.json */,
+				0C03284E1ECF4627005B35CB /* version.rb */,
 			);
 			name = Source;
 			sourceTree = "<group>";
