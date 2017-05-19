@@ -1,5 +1,5 @@
 # mana (compiler)
-# Copyright (c) 2016 Shun Moriya <shun@mnu.sakura.ne.jp>
+# Copyright (c) 2016 Shun Moriya
 #
 
 TARGET	= mana
