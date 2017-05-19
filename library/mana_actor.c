@@ -1191,12 +1191,10 @@ static void mana_actor_cmd_print(mana_actor* actor)
 	}
 	message[message_pointer] = '\0';
 
-#if !defined(NDEBUG) && (defined(DEBUG) || defined(_DEBUG) || defined(_DEBUG_))
 #if defined(_WIN32) || defined(_WIN64)
 	OutputDebugStringA(message);
 #else
 	fprintf(stdout, "%s", message);
-#endif
 #endif
 
 	mana_stack_remove(&actor->stack, number_of_arguments);
