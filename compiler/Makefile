@@ -12,6 +12,8 @@ CFLAGS	= --std=c99 -O3 -c -Wall -D NDEBUG -I$(LIBRARY)
 LK	= $(CC)
 LFLAGS	= --std=c99 -O3
 
+COVERAGE=
+
 YACC	= bison
 YFLAGS	= -d -k
 
@@ -30,10 +32,10 @@ SECOUND	= parser.c parser.h lexer.c
 .SECOUNDLY: $(SECOUND)
 
 $(TARGET): $(SOURCES) $(OBJECTS) $(LIBRARY)/libmana.a
-	$(LK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(LIBRARY)/libmana.a -ldl -lm
+	$(LK) $(LFLAGS) $(COVERAGE) -o $(TARGET) $(OBJECTS) $(LIBRARY)/libmana.a -ldl -lm
 
 $(LIBRARY)/libmana.a:
-	make --directory=$(LIBRARY)
+	make --directory=$(LIBRARY) COVERAGE=$(COVERAGE)
 
 .l.c:
 	$(LEX) $(LXFLAGS) -o$@ $<
@@ -42,7 +44,7 @@ $(LIBRARY)/libmana.a:
 	$(YACC) $(YFLAGS) -o $@ $<
 
 .c.o:
-	$(CC) $(CFLAGS) -o $@ $<
+	$(CC) $(CFLAGS) $(COVERAGE) -o $@ $<
 
 all: $(TARGET)
 

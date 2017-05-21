@@ -1,18 +1,23 @@
 sudo: required
 dist: trusty
-
 language: c
 
 compiler:
  - clang
  - gcc
 
+before_install:
+  - pip install --user cpp-coveralls
+
 install: 
- - if [ "$CC" = "gcc" ]; then export CC="gcc-6"; fi 
- - if [ "$CC" = "clang" ]; then export CC="clang-3.7"; fi 
+ - if [ "$CC" = "gcc" ]; then export CC="gcc-6"; COVERAGE="-coverage" fi 
+ - if [ "$CC" = "clang" ]; then export CC="clang-3.7"; COVERAGE="" fi 
 
 script:
  - make --directory=compiler CC="${CC}" version all test
+
+after_success:
+  - if [ "$CC" = "gcc" ]; then coveralls --exclude docs --exclude sample --exclude test --gcov-options '\-lp' fi
 
 addons:
  apt:

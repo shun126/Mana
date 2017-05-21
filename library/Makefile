@@ -3,11 +3,14 @@
 #
 
 TARGET	= libmana.a
+
 CC	= gcc
 #CC	= clang
 CFLAGS	= --std=c99 -c -O3 -Wall -D NDEBUG
+
 AR	= ar
 ARFLAGS	= ru $(TARGET)
+
 SOURCES	= libmana.c mana.c mana_actor.c mana_array.c mana_buffer.c mana_datalink.c mana_define.c mana_frame.c mana_function.c mana_hash.c mana_info.c mana_lzss.c mana_malloc.c mana_plugin.c mana_stack.c mana_stream.c
 OBJECTS	= libmana.o mana.o mana_actor.o mana_array.o mana_buffer.o mana_datalink.o mana_define.o mana_frame.o mana_function.o mana_hash.o mana_info.o mana_lzss.o mana_malloc.o mana_plugin.o mana_stack.o mana_stream.o
 
@@ -17,7 +20,7 @@ $(TARGET): $(SOURCES) $(OBJECTS)
 	$(AR) $(ARFLAGS) $(OBJECTS)
 
 .c.o:
-	$(CC) $(CFLAGS) -o $@ $<
+	$(CC) $(CFLAGS) $(COVERAGE) -o $@ $<
 
 clean:
 	$(RM) $(TARGET) $(OBJECTS)
