@@ -17,7 +17,7 @@ before_script:
  - >
    if [ "${COVERAGE}" != "" ]; then
     sudo apt-get install lcov
-    lcov --directory . --zerocounters;
+    lcov --directory . --zerocounters
    fi
 
 script:
