@@ -17,7 +17,7 @@ script:
  - make --directory=compiler CC="${CC}" COVERAGE="${COVERAGE}" version all test
 
 after_success:
-  - if [ ${COVERAGE} != "" ]; then coveralls --exclude docs --exclude sample --exclude test; fi
+  - if [ -n ${COVERAGE} ]; then coveralls --exclude docs --exclude sample --exclude test; fi
 
 addons:
  apt:
