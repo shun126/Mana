@@ -27,7 +27,7 @@ after_success:
      lcov --directory . --capture --output-file coverage.info
      lcov --remove coverage.info 'docs/*' 'sample/*' 'test/*' --output-file coverage.info
      lcov --list coverage.info
-     coveralls-lcov coverage.info
+     lcoveralls coverage.info
     fi
 
 addons:
