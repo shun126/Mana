@@ -7,18 +7,29 @@ compiler:
  - gcc
 
 before_install:
-  - sudo apt-get -qq update
-  - pip install --user cpp-coveralls
+ - sudo apt-get -qq update
+ - sudo apt-get install lcov rubygems
+ - gem install lcoveralls
 
 install: 
- - if [ "$CC" = "gcc" ]; then export CC="gcc-6"; export COVERAGE="-coverage"; fi 
+ - if [ "$CC" = "gcc" ]; then export CC="gcc-6"; export COVERAGE="--coverage"; fi 
  - if [ "$CC" = "clang" ]; then export CC="clang-3.7"; export COVERAGE=""; fi 
+
+before_script:
+ - if [ "${COVERAGE}" != "" ]; then
+    lcov --directory . --zerocounters
+   fi
 
 script:
  - make --directory=compiler CC="${CC}" COVERAGE="${COVERAGE}" version all test
 
 after_success:
-  - if [ "${COVERAGE}" != "" ]; then coveralls -i library -b compiler -e docs -e sample -e test --gcov-options '\-lp'; fi
+  - if [ "${COVERAGE}" != "" ]; then
+     lcov --directory . --capture --output-file coverage.info
+     lcov --remove coverage.info 'docs/*' 'sample/*' 'test/*' --output-file coverage.info
+     lcov --list coverage.info
+     coveralls-lcov coverage.info
+    fi
 
 addons:
  apt:
