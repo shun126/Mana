@@ -8,12 +8,12 @@ compiler:
 
 before_install:
  - sudo apt-get -qq update
- - sudo apt-get install lcov rubygems
- - gem install lcoveralls
 
 install: 
  - if [ "$CC" = "gcc" ]; then export CC="gcc-6"; export COVERAGE="--coverage"; fi 
  - if [ "$CC" = "clang" ]; then export CC="clang-3.7"; export COVERAGE=""; fi 
+ - sudo apt-get install lcov
+ - gem install lcoveralls
 
 before_script:
  - if [ "${COVERAGE}" != "" ]; then
