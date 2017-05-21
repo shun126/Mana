@@ -18,7 +18,7 @@ script:
  - make --directory=compiler CC="${CC}" COVERAGE="${COVERAGE}" version all test
 
 after_success:
-  - if [ -n ${COVERAGE} ]; then coveralls -i library -b compiler -e docs -e sample -e test --gcov-options '\-lp'; else echo "skip coveralls"; fi
+  - if [ "${COVERAGE}" != "" ]; then coveralls -i library -b compiler -e docs -e sample -e test --gcov-options '\-lp'; fi
 
 addons:
  apt:
