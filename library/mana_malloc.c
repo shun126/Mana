@@ -1,12 +1,12 @@
 /*!
- * mana (compiler/library)
- *
- * @file	mana_malloc.c
- * @brief	manaライブラリ内で共通利用されるメモリ管理に関するソースファイル
- * @detail	このファイルはmanaライブラリ内で共通利用されるメモリ管理に関するソースファイルです。
- * @author	Shun Moriya
- * @date	2003-
- */
+mana (compiler/library)
+
+@file	mana_malloc.c
+@brief	manaライブラリ内で共通利用されるメモリ管理に関するソースファイル
+@detail	このファイルはmanaライブラリ内で共通利用されるメモリ管理に関するソースファイルです。
+@author	Shun Moriya
+@date	2003-
+*/
 
 #if !defined(___MANA_MALLOC_H___)
 #include "mana_malloc.h"

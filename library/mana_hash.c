@@ -1,15 +1,15 @@
 /*
- * mana (compiler/library)
- *
- * @file	mana_hash.c
- * @brief	ハッシュに関するソースファイル
- * @detail
- * このファイルはmana_hashクラスに関係するソースファイルです。
- * mana_hashクラスは文字列をキーにした連想配列に関数操作を行ないます。
- *
- * @author	Shun Moriya
- * @date	2003-
- */
+mana (compiler/library)
+
+@file	mana_hash.c
+@brief	ハッシュに関するソースファイル
+@detail
+このファイルはmana_hashクラスに関係するソースファイルです。
+mana_hashクラスは文字列をキーにした連想配列に関数操作を行ないます。
+
+@author	Shun Moriya
+@date	2003-
+*/
 
 #if !defined(___MANA_HASH_H___)
 #include "mana_hash.h"
