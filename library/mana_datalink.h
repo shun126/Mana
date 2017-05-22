@@ -1,17 +1,17 @@
 /*!
- * mana (compiler/library)
- *
- * @file	mana_datalink.h
- * @brief	mana_datalinkクラスに関するヘッダーファイル
- * @detail
- * このファイルはmana_datalinkクラスに関係するヘッダーファイルです。
- * manaコンパイラはスクリプトでalias指定され、かつ参照されているリソースを
- * 結合します。
- * mana_datalinkクラスは結合されたデータを参照する機能を持っています。
- *
- * @author	Shun Moriya
- * @date	2003-
- */
+mana (compiler/library)
+
+@file	mana_datalink.h
+@brief	mana_datalinkクラスに関するヘッダーファイル
+@detail
+このファイルはmana_datalinkクラスに関係するヘッダーファイルです。
+manaコンパイラはスクリプトでalias指定され、かつ参照されているリソースを
+結合します。
+mana_datalinkクラスは結合されたデータを参照する機能を持っています。
+
+@author	Shun Moriya
+@date	2003-
+*/
 
 #if !defined(___MANA_DATALINK_H___)
 #define ___MANA_DATALINK_H___

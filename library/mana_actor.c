@@ -1,16 +1,16 @@
 /*!
- * mana (library)
- *
- * @file	mana_actor.c
- * @brief	mana_actorクラスに関するソースファイル
- * @detail
- * このファイルはmana_actorクラスに関係するソースファイルです。
- * mana_actorクラスは更新やリクエストなどの制御、外部関数の呼び出しなどの
- * 実行環境を表しています。
- *
- * @author	Shun Moriya
- * @date	2003-
- */
+mana (library)
+
+@file	mana_actor.c
+@brief	mana_actorクラスに関するソースファイル
+@detail
+このファイルはmana_actorクラスに関係するソースファイルです。
+mana_actorクラスは更新やリクエストなどの制御、外部関数の呼び出しなどの
+実行環境を表しています。
+
+@author	Shun Moriya
+@date	2003-
+*/
 
 #if !defined(___MANA_DEFINE_H___)
 #include "mana_define.h"
@@ -1191,12 +1191,10 @@ static void mana_actor_cmd_print(mana_actor* actor)
 	}
 	message[message_pointer] = '\0';
 
-#if !defined(NDEBUG) && (defined(DEBUG) || defined(_DEBUG) || defined(_DEBUG_))
 #if defined(_WIN32) || defined(_WIN64)
 	OutputDebugStringA(message);
 #else
 	fprintf(stdout, "%s", message);
-#endif
 #endif
 
 	mana_stack_remove(&actor->stack, number_of_arguments);

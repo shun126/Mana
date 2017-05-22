@@ -1,16 +1,16 @@
 /*!
- * mana (library)
- *
- * @file	mana_actor.h
- * @brief	mana_actorクラスに関するヘッダーファイル
- * @detail
- * このファイルはmana_actorクラスに関係するヘッダーファイルです。
- * mana_actorクラスは更新やリクエストなどの制御、外部関数の呼び出しなどの
- * 実行環境を表しています。
- *
- * @author	Shun Moriya
- * @date	2003-
- */
+mana (library)
+
+@file	mana_actor.h
+@brief	mana_actorクラスに関するヘッダーファイル
+@detail
+このファイルはmana_actorクラスに関係するヘッダーファイルです。
+mana_actorクラスは更新やリクエストなどの制御、外部関数の呼び出しなどの
+実行環境を表しています。
+
+@author	Shun Moriya
+@date	2003-
+*/
 
 #if !defined(___MANA_ACTOR_H___)
 #define ___MANA_ACTOR_H___

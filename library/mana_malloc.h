@@ -1,12 +1,12 @@
  /*!
-  * mana (library)
-  *
-  * @file	mana_malloc.h
-  * @brief	manaライブラリ内で共通利用されるメモリ管理に関するヘッダーファイル
-  * @detail	このファイルはmanaライブラリ内で共通利用されるメモリ管理に関するヘッダーファイルです。
-  * @author	Shun Moriya
-  * @date	2003-
-  */
+ mana (compiler/library)
+
+ @file	mana_malloc.h
+ @brief	manaライブラリ内で共通利用されるメモリ管理に関するヘッダーファイル
+ @detail	このファイルはmanaライブラリ内で共通利用されるメモリ管理に関するヘッダーファイルです。
+ @author	Shun Moriya
+ @date	2003-
+ */
 
 #if !defined(___MANA_MALLOC_H___)
 #define ___MANA_MALLOC_H___

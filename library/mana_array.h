@@ -1,12 +1,12 @@
 /*!
- * mana (library)
- *
- * @file	mana_array.h
- * @brief	mana_arrayクラスに関するヘッダーファイル
- * @detail	このファイルはmana_arrayクラスに関係するヘッダーファイルです。
- * @author	Shun Moriya
- * @date	2003-
- */
+mana (library)
+
+@file	mana_array.h
+@brief	mana_arrayクラスに関するヘッダーファイル
+@detail	このファイルはmana_arrayクラスに関係するヘッダーファイルです。
+@author	Shun Moriya
+@date	2003-
+*/
 
 #if !defined(___MANA_ARRAY_H___)
 #define ___MANA_ARRAY_H___

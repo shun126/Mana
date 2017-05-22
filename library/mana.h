@@ -1,16 +1,16 @@
 /*!
- * mana (library)
- *
- * @file	mana.h
- * @brief	manaクラスに関するヘッダーファイル
- * @detail
- * このファイルはmanaクラスに関係するヘッダーファイルです。
- * manaクラスは更新やリクエストなどの制御、mana_actor オブジェクトの検索などの
- * 実行環境を表しています。
- *
- * @author	Shun Moriya
- * @date	2003-
- */
+mana (library)
+
+@file	mana.h
+@brief	manaクラスに関するヘッダーファイル
+@detail
+このファイルはmanaクラスに関係するヘッダーファイルです。
+manaクラスは更新やリクエストなどの制御、mana_actor オブジェクトの検索などの
+実行環境を表しています。
+
+@author	Shun Moriya
+@date	2003-
+*/
 
 #if !defined(___MANA_H___)
 #define ___MANA_H___

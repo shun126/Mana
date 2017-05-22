@@ -860,10 +860,6 @@ DO_RECURSIVE:
 				break;
 			}
 		}
-		else
-		{
-			int i = 0;
-		}
 		break;
 
 	case NODE_MEMBER_FUNCTION:

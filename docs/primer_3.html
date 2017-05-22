@@ -1,0 +1,192 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="ja">
+<head>
+<title>アクター指向スクリプト言語Mana</title>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="author" content="Shun Moriya">
+<meta name="description" content="擬似マルチスレッドを用いてゲームのイベントを効率良く開発することを目的に開発されたスクリプト言語です。コンパイラと実行ライブラリに分かれているので実行環境のみ組み込むことが可能です">
+<meta name="keywords" content="アクター指向,スクリプト言語">
+<link rel="stylesheet" href="style/standard.css" type="text/css" media="all">
+<link rel="shortcut icon" href="favicon.png" type="image/x-icon">
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<link rel="alternate" href="https://shun126.github.io/Mana/" hreflang="ja">
+<link rel="canonical" href="https://shun126.github.io/Mana/">
+<script>
+ (function (i, s, o, g, r, a, m) {
+  i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+   (i[r].q = i[r].q || []).push(arguments)
+  }, i[r].l = 1 * new Date(); a = s.createElement(o),
+  m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+ })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+ ga('create', 'UA-357257-8', 'auto');
+ ga('send', 'pageview');
+</script>
+</head>
+
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr id="siteName">
+<td>
+<h1>
+<!--
+    <a href="index.html"><img src="favicon.png"alt="Mana" border="0"></a>
+    -->
+アクター指向スクリプト言語 Mana</h1>
+</td>
+</tr>
+<tr>
+<td bgcolor="#FFFFFF">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr id="globalNav">
+<td>
+<a href="https://github.com/shun126/Mana/releases" class="glink">ダウンロード</a>
+<a href="https://github.com/shun126/Mana/wiki" class="glink">ドキュメント</a>
+<a href="https://github.com/shun126/Mana/issues" class="glink">バグ・サポート</a>
+<a href="https://github.com/shun126/Mana/" class="glink">ソースコード</a>
+</td>
+</tr>
+<tr>
+<td bgcolor="#FFFFFF">
+<div id="breadCrumb">
+<a href="index.html">Home</a>
+</div>
+<div id="pageName">
+<h2>はじめてのMana</h2>
+</div>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td align="left" valign="top" width="200" bgcolor="#F5f7f7">
+<div id="sectionLinks">
+<h3>目次</h3>
+<a href="primer_1.html">Manaをはじめよう</a>
+<a href="primer_2.html">基礎を学ぼう</a>
+<a href="primer_3.html">Manaプログラムの構造</a>
+<a href="primer_4.html">命令を使ってみよう </a>
+<a href="primer_5.html">さらに使いこなしてみよう</a>
+<a href="primer_6.html">終わりに </a>
+<h3>ビルド状況</h3>
+<a href="https://travis-ci.org/shun126/Mana"><img src="https://travis-ci.org/shun126/Mana.svg?branch=master"></a>
+<a href='https://coveralls.io/github/shun126/Mana?branch=master'><img src='https://coveralls.io/repos/github/shun126/Mana/badge.svg?branch=master' alt='Coverage Status' /></a>
+<h3>Doxygen</h3>
+<a href="doxygen/compiler/html/index.html">コンパイラ</a>
+<a href="doxygen/library/html/index.html">ランタイム</a>
+</div>
+
+<br>
+
+<div id="advert">
+</div>
+</td>
+<td align="left" valign="top">
+<div class="story">
+<h1>第３章 Manaプログラムの構造</h1>
+<h2>actorとaction
+ManaはActorブロック一つがゲーム中のキャラクター一人に一対一で対応します。つまり、ソース中にActorブロックが一つも存在しない場合、ゲーム中にはキャラクターが存在しないことになります。Actorブロック内にはActionブロックが置かれ、そのキャラクターの行動を記述することでキャラクターの行動を定義することができます。 アクション内の文は必ず;で終わるか{}で囲まれていなければなりません。{}で囲まれた部分をブロックと呼び、処理を一まとめとして扱うことができます。
+
+<h2>誰が私を呼んだのか？
+actionブロック内のローカル変数senderには呼び出したアクターの情報が入っています。そこでsenderを利用する事によりリクエストを受けた相手によって行動を変更する事が出来ます。
+
+<h3>senderの利用方法
+
+~~~~
+actor GoodLookingGuy
+{
+}
+
+action Girl::talk
+{
+    switch(sender)
+    {
+    case GoodLookingGuy:
+        setMessage("Hello, nice to meet you.");
+        break;
+
+    default:
+        setMessage("...");
+        break;
+    }
+}
+~~~~
+<h2>非同期
+さて、以前述べたようにManaは擬似並列処理を制御しやすくする為に作られた言語ですが、アクターによってはある一定の処理が終わるまで処理を中断して欲しくない状態があると思います。 例えば全体のアニメーションを管理しているアクターなどは全体のアニメーションの指示の途中でフレームが切り替わると各アクターの同期が取れない等のことが考えられます。そこで、勝手にアクターの処理が切り替わっては困る期間をlockというブロックでその間はyield()命令が発行されるまで処理を他のアクターへ切り替えません。
+
+<h3>同期アクターの作成例
+
+~~~~
+action Wife::talk
+{
+    lock
+    {
+        Punch(Husband);
+        Kick(Husband);
+        Chop(Husband);
+        yield();
+    }
+}
+~~~~
+注意点としてlockはディスクからのデータロードなど極端に長い処理時間を要求する命令や、復帰しない命令に対してデッドロックしてしまわないように注意して下さい。
+
+<h2>アクターのアクション
+Manaにはアクターをキャラクターに関連付けるだけではなく、空間を定義したオブジェクトと関連付ける事でキャラクターでは実現できないアクションを定義する事が可能です。 例えばボックスを空間内に配置して、“キャラクターが箱を通過する”など様々な条件で割り込みを発生させます。この機能を利用して「道路にボックスを置き、アクターがボックスに入ったら、アクター警備員が注意する」という状況を簡単に作ることができます。
+
+<h2>関数
+関数はactionとは独立した各アクターに共通な処理を外に出すことが出来ます。関数内の文も同様に必ず;で終わるか{}で囲まれていなければなりません。
+
+<h2>プロトタイプ宣言
+プロトタイプ宣言とは、このactorにはこんなactionがあると先に宣言しておき、あとでその実体（内容）を書く、というものである。今回はほとんどのactionをプロトタイプ宣言しておく必要がある。ただし、actorのブロックの中にactionの中身を書く従来の方法も、そのactionに対してどのactorからもリクエストが発生しないのなら問題はないので、場合によっては有効に使える。（例：import先のソースにactorとactionを入れ子にして書いてしまう、など）
+
+以下、処理のサンプルソースも、このプロトタイプ宣言に沿ったものになっています。
+
+<h3>プロトタイプ宣言の書きかた
+プロトタイプ宣言ではactorのブロックにはaction名のみを書く。 actorのブロックの外で実体を書く際には「action actor名：：action名」と書く。
+
+#<h3>プロトタイプ宣言の例
+*sample.mh
+
+~~~~
+actor ActorName
+{
+    //プロトタイプ宣言（ここはaction名だけ）
+    action ActionName();
+}
+~~~~
+*sample.mn
+
+~~~~
+void function(float time);
+action ActorName名::ActionName
+{
+    function(2.0);
+    actionの中身
+}
+
+void function(float time)
+{
+    wait(time);
+}
+~~~~
+なお、宣言しておいて実体がないと以下のようなエラーが発生する。
+*there's no definition of action名
+
+</div>
+<div class="date" align="center">
+<script type="text/javascript">
+<!--
+ document.write('This page was updated:' + document.lastModified);
+ // -->
+</script>
+</div>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td id="siteInfo">Shun Moriya</td>
+</tr>
+</table>
+</body>
+</html>

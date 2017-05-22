@@ -1,16 +1,16 @@
 /*!
- * mana (library)
- *
- * @file	mana_lzss.c
- * @brief	LZSSに関するソースファイル
- * @detail
- * LZSS - Lempel-Ziv sliding window compression
- * 技術評論社 C言語による最新アルゴリズム辞典 から
- * ウィンドウバッファを使用しない方法に改変しました
- *
- * @author	Shun Moriya
- * @date	2003-
- */
+mana (library)
+
+@file	mana_lzss.c
+@brief	LZSSに関するソースファイル
+@detail
+LZSS - Lempel-Ziv sliding window compression
+技術評論社 C言語による最新アルゴリズム辞典 から
+ウィンドウバッファを使用しない方法に改変しました
+
+@author	Shun Moriya
+@date	2003-
+*/
 
 #include "mana_lzss.h"
 #include <string.h>

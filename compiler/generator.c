@@ -1211,53 +1211,55 @@ DO_RECURSIVE:
 		MANA_ASSERT(self->left == NULL);
 		MANA_ASSERT(self->right == NULL);
 		MANA_ASSERT(self->body == NULL);
-		MANA_ASSERT(self->symbol);
-		switch (self->symbol->class_type)
+		if (self->symbol)
 		{
-		case SYMBOL_CLASS_TYPE_ALIAS:
-			generator_generate_const_int(self->symbol->type->tcons, self->symbol->address);
-			break;
+			switch (self->symbol->class_type)
+			{
+			case SYMBOL_CLASS_TYPE_ALIAS:
+				generator_generate_const_int(self->symbol->type->tcons, self->symbol->address);
+				break;
 
-		case SYMBOL_CLASS_TYPE_CONSTANT_INT:
-			generator_generate_const_int(self->symbol->type->tcons, self->symbol->address);
-			break;
+			case SYMBOL_CLASS_TYPE_CONSTANT_INT:
+				generator_generate_const_int(self->symbol->type->tcons, self->symbol->address);
+				break;
 
-		case SYMBOL_CLASS_TYPE_CONSTANT_FLOAT:
-			generator_generate_const_float(self->symbol->type->tcons, self->symbol->hloat);
-			break;
+			case SYMBOL_CLASS_TYPE_CONSTANT_FLOAT:
+				generator_generate_const_float(self->symbol->type->tcons, self->symbol->hloat);
+				break;
 
-		case SYMBOL_CLASS_TYPE_CONSTANT_STRING:
-			generator_generate_const_int(self->symbol->type->tcons, self->symbol->address);
-			break;
+			case SYMBOL_CLASS_TYPE_CONSTANT_STRING:
+				generator_generate_const_int(self->symbol->type->tcons, self->symbol->address);
+				break;
 
-		case SYMBOL_CLASS_TYPE_VARIABLE_STATIC:
-			code_set_opecode_and_operand(MANA_IL_LOAD_STATIC_ADDRESS, self->symbol->address);
-			break;
+			case SYMBOL_CLASS_TYPE_VARIABLE_STATIC:
+				code_set_opecode_and_operand(MANA_IL_LOAD_STATIC_ADDRESS, self->symbol->address);
+				break;
 
-		case SYMBOL_CLASS_TYPE_VARIABLE_GLOBAL:
-			code_set_opecode_and_operand(MANA_IL_LOAD_GLOBAL_ADDRESS, self->symbol->address);
-			break;
+			case SYMBOL_CLASS_TYPE_VARIABLE_GLOBAL:
+				code_set_opecode_and_operand(MANA_IL_LOAD_GLOBAL_ADDRESS, self->symbol->address);
+				break;
 
-		case SYMBOL_CLASS_TYPE_VARIABLE_ACTOR:
-			code_set_opecode_and_operand(MANA_IL_LOAD_SELF_ADDRESS, self->symbol->address);
-			break;
+			case SYMBOL_CLASS_TYPE_VARIABLE_ACTOR:
+				code_set_opecode_and_operand(MANA_IL_LOAD_SELF_ADDRESS, self->symbol->address);
+				break;
 
-		case SYMBOL_CLASS_TYPE_VARIABLE_LOCAL:
-			code_set_opecode_and_operand(MANA_IL_LOAD_FRAME_ADDRESS, self->symbol->address);
-			break;
+			case SYMBOL_CLASS_TYPE_VARIABLE_LOCAL:
+				code_set_opecode_and_operand(MANA_IL_LOAD_FRAME_ADDRESS, self->symbol->address);
+				break;
 
-		case SYMBOL_CLASS_TYPE_TYPEDEF:
-			break;
+			case SYMBOL_CLASS_TYPE_TYPEDEF:
+				break;
 
-		case SYMBOL_CLASS_TYPE_NEW_SYMBOL:
+			case SYMBOL_CLASS_TYPE_NEW_SYMBOL:
 
-		default:
-			mana_compile_error("illigal data type");
-			break;
+			default:
+				mana_compile_error("illigal data type");
+				break;
+			}
+
+			if (enable_load)
+				generator_resolve_load(self);
 		}
-
-		if (enable_load)
-			generator_resolve_load(self);
 		break;
 
 	case NODE_MEMBER_FUNCTION:
