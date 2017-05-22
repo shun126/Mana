@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="ja">
+<head>
+<title>アクター指向スクリプト言語Mana</title>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="author" content="Shun Moriya">
+<meta name="description" content="擬似マルチスレッドを用いてゲームのイベントを効率良く開発することを目的に開発されたスクリプト言語です。コンパイラと実行ライブラリに分かれているので実行環境のみ組み込むことが可能です">
+<meta name="keywords" content="アクター指向,スクリプト言語">
+<link rel="stylesheet" href="style/standard.css" type="text/css" media="all">
+<link rel="shortcut icon" href="favicon.png" type="image/x-icon">
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<link rel="alternate" href="https://shun126.github.io/Mana/" hreflang="ja">
+<link rel="canonical" href="https://shun126.github.io/Mana/">
+<script>
+ (function (i, s, o, g, r, a, m) {
+  i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+   (i[r].q = i[r].q || []).push(arguments)
+  }, i[r].l = 1 * new Date(); a = s.createElement(o),
+  m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+ })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+ ga('create', 'UA-357257-8', 'auto');
+ ga('send', 'pageview');
+</script>
+</head>
+
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr id="siteName">
+<td>
+<h1>
+<!--
+    <a href="index.html"><img src="favicon.png"alt="Mana" border="0"></a>
+    -->
+アクター指向スクリプト言語 Mana</h1>
+</td>
+</tr>
+<tr>
+<td bgcolor="#FFFFFF">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr id="globalNav">
+<td>
+<a href="https://github.com/shun126/Mana/releases" class="glink">ダウンロード</a>
+<a href="https://github.com/shun126/Mana/wiki" class="glink">ドキュメント</a>
+<a href="https://github.com/shun126/Mana/issues" class="glink">バグ・サポート</a>
+<a href="https://github.com/shun126/Mana/" class="glink">ソースコード</a>
+</td>
+</tr>
+<tr>
+<td bgcolor="#FFFFFF">
+<div id="breadCrumb">
+<a href="index.html">Home</a>
+</div>
+<div id="pageName">
+<h2>はじめてのMana</h2>
+</div>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td align="left" valign="top" width="200" bgcolor="#F5f7f7">
+<div id="sectionLinks">
+<h3>目次</h3>
+<a href="primer_1.html">Manaをはじめよう</a>
+<a href="primer_2.html">基礎を学ぼう</a>
+<a href="primer_3.html">Manaプログラムの構造</a>
+<a href="primer_4.html">命令を使ってみよう </a>
+<a href="primer_5.html">さらに使いこなしてみよう</a>
+<a href="primer_6.html">終わりに </a>
+<h3>ビルド状況</h3>
+<a href="https://travis-ci.org/shun126/Mana"><img src="https://travis-ci.org/shun126/Mana.svg?branch=master"></a>
+<a href='https://coveralls.io/github/shun126/Mana?branch=master'><img src='https://coveralls.io/repos/github/shun126/Mana/badge.svg?branch=master' alt='Coverage Status' /></a>
+<h3>Doxygen</h3>
+<a href="doxygen/compiler/html/index.html">コンパイラ</a>
+<a href="doxygen/library/html/index.html">ランタイム</a>
+</div>
+
+<br>
+
+<div id="advert">
+</div>
+</td>
+<td align="left" valign="top">
+<div class="story">
+<h1>第４章 命令を使ってみよう</h1>
+<h2>外部ファイルの読み込み
+外部命令定義など全マップ共通の命令を各イベントスクリプト内に書く事は非常に効率が悪い。そこで、各イベントスクリプトファイルはimport命令を使用することで、共用ファイルを読み込み、定義の共有を実現する事が出来ます。
+また、別にinclude命令がありますが、import命令は重複読み込みのチェックを行い、includeはチェックを行いません。それ以外の動作はimportと同じです。
+
+<h2>例2-9 共有ファイルの定義
+*common.mn
+
+~~~~
+int ending_flag;
+native void GameFlagOn(int a);
+native void GameFlagOff(int a);
+~~~~
+*yongfu.mn
+
+~~~~
+import "common.mn";
+
+action Luyue ::init
+{
+    GameFlagOn(ending_flag);
+    GameFlagOff(ending_flag);
+}
+~~~~
+<h2>外部データを追加する
+Manaコンパイラはスクリプトファイルとデータファイルを結合して出力する機能をもっています。例えばモデルファイルとモーションファイルをスクリプトファイルと一緒に読んで欲しい場合などです。データを結合することによりCD-ROMなどのシークが低速なメディアで読み込み時間を短縮することができます。
+
+~~~~
+alias MODEL "girl.gdo";
+alias MOTION "girl.gdm";
+~~~~
+このようにスクリプトファイル内に記述すると、スクリプト入力者がシンボルを使用した時点で結合されます。つまり、シンボル定義の段階ではデータは結合されない為スクリプト内で使用されたデータのみのパッケージを作成する事が出来ます。
+<h3>aliasの使用例
+
+~~~~
+alias MODEL "girl.gdo";
+alias MOTION "girl.gdm";
+action Girl::init
+{
+    createObject(MODEL);
+    setMotion(MOTION);
+}
+~~~~
+<h2>Manaをつかいこなそう
+工事中。セーブデータの作り方、共有できる定数の書き方などを書く予定
+</div>
+<div class="date" align="center">
+<script type="text/javascript">
+<!--
+ document.write('This page was updated:' + document.lastModified);
+ // -->
+</script>
+</div>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td id="siteInfo">Shun Moriya</td>
+</tr>
+</table>
+</body>
+</html>

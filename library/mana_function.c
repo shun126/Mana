@@ -1,12 +1,12 @@
 /*!
- * mana (library)
- *
- * @file	mana_function.c
- * @brief	manaの組み込み関数関係のソースファイル
- * @detail	このファイルはmanaの組み込み関数関係のソースファイルです。
- * @author	Shun Moriya
- * @date	2016-
- */
+mana (library)
+
+@file	mana_function.c
+@brief	manaの組み込み関数関係のソースファイル
+@detail	このファイルはmanaの組み込み関数関係のソースファイルです。
+@author	Shun Moriya
+@date	2016-
+*/
 
 #if !defined(___LIBMANA_H___)
 #include "libmana.h"

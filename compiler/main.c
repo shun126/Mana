@@ -151,11 +151,15 @@ void _splitpath(const char* sptr, char* drive, char* dir, char* file, char* ext)
 
 char* _fullpath(char* out, const char* in, const size_t size)
 {
+#if 0
 	char* result = realpath(in, NULL);
 	if (result)
 		strncpy(out, result, size);
 	free(result);
 	return out;
+#else
+	return realpath(in, out);
+#endif
 }
 
 #endif
@@ -422,7 +426,7 @@ static void print_usage()
 	MANA_PRINT("            --help          print this message\n");
 	MANA_PRINT("            --copyright     print copyright holder\n");
 	MANA_PRINT("            --version       print the version\n");
-	MANA_PRINT("\n\nReport bugs to\n");
+	MANA_PRINT("\nReport bugs to https://github.com/shun126/Mana/issues\n");
 }
 
 /**
@@ -596,7 +600,7 @@ static int32_t parse_arguments(int32_t argc, char* argv[])
  * @param	argv	argument
  * @return	if return value is true, compile was complete.
  */
-int32_t main(int32_t argc, char* argv[])
+int main(int32_t argc, char* argv[])
 {
 	int32_t result = 0;
 

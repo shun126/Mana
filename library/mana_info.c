@@ -1,12 +1,12 @@
 /*!
- * mana (compiler/library)
- *
- * @file	mana_info.c
- * @brief	manaコンパイラとmanaライブラリで共通利用するソースファイル
- * @detail	このファイルはmanaコンパイラとmanaライブラリで共通利用するソースファイルです。
- * @author	Shun Moriya
- * @date	2016-
- */
+mana (compiler/library)
+
+@file	mana_info.c
+@brief	manaコンパイラとmanaライブラリで共通利用するソースファイル
+@detail	このファイルはmanaコンパイラとmanaライブラリで共通利用するソースファイルです。
+@author	Shun Moriya
+@date	2016-
+*/
 
 #if defined(_WIN32)
 #define _CRT_SECURE_NO_WARNINGS

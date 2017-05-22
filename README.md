@@ -2,6 +2,7 @@
 Actor-oriented scripting language Mana 
 
 [![Build Status](https://travis-ci.org/shun126/Mana.svg?branch=master)](https://travis-ci.org/shun126/Mana)
+[![Coverage Status](https://coveralls.io/repos/github/shun126/Mana/badge.svg?branch=master)](https://coveralls.io/github/shun126/Mana?branch=master)
 
 This scripting language was developed with the aim of developing a character's action using actor model.
 You can implement the execution engine easily into your computer game program.

@@ -1,15 +1,15 @@
 /*!
- * mana (library)
- *
- * @file	mana_buffer.c
- * @brief	mana_bufferクラスに関するソースファイル
- * @detail
- * このファイルはmana_bufferクラスに関係するソースファイルです。
- * mana_streamクラスは可変長バッファに関する操作を行ないます。
- *
- * @author	Shun Moriya
- * @date	2016-
- */
+mana (library)
+
+@file	mana_buffer.c
+@brief	mana_bufferクラスに関するソースファイル
+@detail
+このファイルはmana_bufferクラスに関係するソースファイルです。
+mana_streamクラスは可変長バッファに関する操作を行ないます。
+
+@author	Shun Moriya
+@date	2016-
+*/
 
 #if !defined(___MANA_BUFFER_H___)
 #include "mana_buffer.h"
