@@ -1,12 +1,12 @@
 /*!
- * mana (library)
- *
- * @file	mana_plugin.h
- * @brief	プラグイン関係のヘッダーファイル
- * @detail	このファイルはプラグイン関係のヘッダーファイルです。
- * @author	Shun Moriya
- * @date	2003-
- */
+mana (library)
+
+@file	mana_plugin.h
+@brief	プラグイン関係のヘッダーファイル
+@detail	このファイルはプラグイン関係のヘッダーファイルです。
+@author	Shun Moriya
+@date	2003-
+*/
 
 #if !defined(___MANA_PLUGIN_H___)
 #define ___MANA_PLUGIN_H___

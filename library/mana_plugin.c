@@ -1,12 +1,12 @@
 /*!
- * mana (library)
- *
- * @file	mana_plugin.c
- * @brief	プラグイン関係のソースファイル
- * @detail	このファイルはプラグイン関係のソースファイルです。
- * @author	Shun Moriya
- * @date	2003-
- */
+mana (library)
+
+@file	mana_plugin.c
+@brief	プラグイン関係のソースファイル
+@detail	このファイルはプラグイン関係のソースファイルです。
+@author	Shun Moriya
+@date	2003-
+*/
 
 #if !defined(___MANA_DEFINE_H___)
 #include "mana_define.h"
@@ -30,7 +30,6 @@
 #define FREE_LIBRARY(M)		FreeLibrary(M);
 /*! ダイナミックライブラリ内の関数を取得 */
 #define GET_PROC_ADR(M, N)	GetProcAddress(M, N);
-#elif defined(NN_PLATFORM_CTR)
 #else
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -46,7 +45,6 @@
 #define GET_PROC_ADR(M, N)	dlsym(M, N);
 #endif
 
-#if !defined(NN_PLATFORM_CTR)
 static MODULE* mana_plugins = NULL;
 static uint32_t mana_plugin_count = 0;
 
@@ -202,4 +200,3 @@ bool mana_plugin_regist(const char* directory_name)
 
 	return true;
 }
-#endif

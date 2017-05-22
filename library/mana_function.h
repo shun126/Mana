@@ -1,12 +1,12 @@
 /*!
- * mana (library)
- *
- * @file	mana_function.h
- * @brief	manaの組み込み関数関係のヘッダーファイル
- * @detail	このファイルはmanaの組み込み関数関係のヘッダーファイルです。
- * @author	Shun Moriya
- * @date	2003-
- */
+mana (library)
+
+@file	mana_function.h
+@brief	manaの組み込み関数関係のヘッダーファイル
+@detail	このファイルはmanaの組み込み関数関係のヘッダーファイルです。
+@author	Shun Moriya
+@date	2003-
+*/
 
 #if !defined(___MANA_FUNCTION_H___)
 #define ___MANA_FUNCTION_H___

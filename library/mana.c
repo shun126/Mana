@@ -1,16 +1,16 @@
 /*!
- * mana (library)
- *
- * @file	mana.c
- * @brief	manaクラスに関するソースファイル
- * @detail
- * このファイルはmanaクラスに関係するソースファイルです。
- * manaクラスは更新やリクエストなどの制御、mana_actor オブジェクトの検索などの
- * 実行環境を表しています。
- *
- * @author	Shun Moriya
- * @date	2003-
- */
+mana (library)
+
+@file	mana.c
+@brief	manaクラスに関するソースファイル
+@detail
+このファイルはmanaクラスに関係するソースファイルです。
+manaクラスは更新やリクエストなどの制御、mana_actor オブジェクトの検索などの
+実行環境を表しています。
+
+@author	Shun Moriya
+@date	2003-
+*/
 
 #if !defined(___LIBMANA_H___)
 #include "libmana.h"
