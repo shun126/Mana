@@ -1,0 +1,28 @@
+/*
+mana (script)
+Copyright (c) 2017 Shun Moriya
+*/
+
+// actor declarations
+actor TestActor1
+{
+	char a;
+	short b;
+	int c;
+	float d;
+
+	action init
+	{
+		print("TestActor1::init\n");
+
+		char a;
+		short b;
+		int c;
+		float d;
+	}
+
+	action main
+	{
+		print("TestActor1::main\n");
+	}
+}

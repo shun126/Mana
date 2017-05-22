@@ -22,29 +22,29 @@
     <ProjectGuid>{B50EF429-D756-4CAC-8B79-9757BDAF66D3}</ProjectGuid>
     <RootNamespace>mana</RootNamespace>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -96,8 +96,10 @@
       <PrecompiledHeader />
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>../library</AdditionalIncludeDirectories>
-      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
+      <AdditionalOptions>/source-charset:utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -115,8 +117,10 @@
       </PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>../library</AdditionalIncludeDirectories>
-      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
+      <AdditionalOptions>/source-charset:utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -134,8 +138,10 @@
       <PrecompiledHeader />
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>../library</AdditionalIncludeDirectories>
-      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
+      <AdditionalOptions>/source-charset:utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -162,8 +168,10 @@
       </PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>../library</AdditionalIncludeDirectories>
-      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
+      <AdditionalOptions>/source-charset:utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -180,93 +188,327 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="..\sample\sample.mn" />
-    <None Include="..\sample\sample_actor.mn" />
-    <None Include="..\sample\sample_const.mn" />
-    <None Include="..\sample\sample_function.mn" />
-    <None Include="..\sample\sample_struct.mn" />
-    <None Include="..\sample\sample_variable.mn" />
+    <CustomBuild Include="Parser.yy">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">if defined GNU_BISON_BIN (
+ if exist "$(GNU_BISON_BIN)" (
+  $(GNU_BISON_BIN) -d -o "%(Filename).cpp" "%(Identity)"
+ ) else (
+  echo The gnu bison was not found.
+ )
+) else (
+  echo Define the gnu bison file name in environment variable GNU_BISON_BIN
+)</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">generate C++ code from yacc file ...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RootDir)%(Directory)\%(Filename).cpp;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">if defined GNU_BISON_BIN (
+ if exist "$(GNU_BISON_BIN)" (
+  $(GNU_BISON_BIN) -d -o "%(Filename).cpp" "%(Identity)"
+ ) else (
+  echo The gnu bison was not found.
+ )
+) else (
+  echo Define the gnu bison file name in environment variable GNU_BISON_BIN
+)</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">generate C++ code from yacc file ...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RootDir)%(Directory)\%(Filename).cpp;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">if defined GNU_BISON_BIN (
+ if exist "$(GNU_BISON_BIN)" (
+  $(GNU_BISON_BIN) -d -o "%(Filename).cpp" "%(Identity)"
+ ) else (
+  echo The gnu bison was not found.
+ )
+) else (
+  echo Define the gnu bison file name in environment variable GNU_BISON_BIN
+)</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">generate C++ code from yacc file ...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RootDir)%(Directory)\%(Filename).cpp;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">if defined GNU_BISON_BIN (
+ if exist "$(GNU_BISON_BIN)" (
+  $(GNU_BISON_BIN) -d -o "%(Filename).cpp" "%(Identity)"
+ ) else (
+  echo The gnu bison was not found.
+ )
+) else (
+  echo Define the gnu bison file name in environment variable GNU_BISON_BIN
+)</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">generate C++ code from yacc file ...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RootDir)%(Directory)\%(Filename).cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="Version.json">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">if defined PYTHON_BIN (
+ echo $(PYTHON_BIN)
+ if exist $(PYTHON_BIN) (
+  $(PYTHON_BIN) Version.py
+ ) else (
+  echo The python was not found.
+ )
+)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">if defined PYTHON_BIN (
+ echo $(PYTHON_BIN)
+ if exist $(PYTHON_BIN) (
+  $(PYTHON_BIN) Version.py
+ ) else (
+  echo The python was not found.
+ )
+)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">if defined PYTHON_BIN (
+ echo $(PYTHON_BIN)
+ if exist $(PYTHON_BIN) (
+  $(PYTHON_BIN) Version.py
+ ) else (
+  echo The python was not found.
+ )
+)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">if defined PYTHON_BIN (
+ echo $(PYTHON_BIN)
+ if exist $(PYTHON_BIN) (
+  $(PYTHON_BIN) Version.py
+ ) else (
+  echo The python was not found.
+ )
+)</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generate version header file</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generate version header file</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generate version header file</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generate version header file</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Version.h</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Version.h</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Version.h</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Version.h</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Version.py</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Version.py</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Version.py</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Version.py</AdditionalInputs>
+    </CustomBuild>
+    <None Include="..\runner\Actor.inl" />
+    <None Include="..\runner\Buffer.inl" />
+    <None Include="..\runner\common\Assert.inl" />
+    <None Include="..\runner\common\Math.inl" />
+    <None Include="..\runner\common\Memory.inl" />
+    <None Include="..\runner\common\OutputStream.inl" />
+    <None Include="..\runner\common\String.inl" />
+    <None Include="..\runner\Datalink.inl" />
+    <None Include="..\runner\Function.inl" />
+    <None Include="..\runner\Mana.inl" />
+    <None Include="..\runner\Plugin.inl" />
+    <None Include="..\runner\Stack.inl" />
+    <None Include="..\runner\VM.inl" />
     <CustomBuild Include="lexer.l">
       <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">c:\bin\flex -8 -o"%(RootDir)%(Directory)\%(Filename).c" "%(FullPath)"</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">c:\bin\flex -8 -o"%(RootDir)%(Directory)\%(Filename).c" "%(FullPath)"</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">c:\bin\flex -8 -o"%(RootDir)%(Directory)\%(Filename).c" "%(FullPath)"</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">c:\bin\flex -8 -o"%(RootDir)%(Directory)\%(Filename).c" "%(FullPath)"</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">lexファイルを変換しています ...</Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">lexファイルを変換しています ...</Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">lexファイルを変換しています ...</Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">lexファイルを変換しています ...</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RootDir)%(Directory)\%(Filename).c;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RootDir)%(Directory)\%(Filename).c;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RootDir)%(Directory)\%(Filename).c;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RootDir)%(Directory)\%(Filename).c;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">if defined GNU_FLEX_BIN (
+ if exist "$(GNU_FLEX_BIN)" (
+  "$(GNU_FLEX_BIN)" -8 -o"%(Filename).cpp" "%(Identity)"
+ ) else (
+  echo The gnu flex was not found.
+ )
+) else (
+  echo Define the gnu flex file name in environment variable GNU_FLEX_BIN
+)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">if defined GNU_FLEX_BIN (
+ if exist "$(GNU_FLEX_BIN)" (
+  "$(GNU_FLEX_BIN)" -8 -o"%(Filename).cpp" "%(Identity)"
+ ) else (
+  echo The gnu flex was not found.
+ )
+) else (
+  echo Define the gnu flex file name in environment variable GNU_FLEX_BIN
+)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">if defined GNU_FLEX_BIN (
+ if exist "$(GNU_FLEX_BIN)" (
+  "$(GNU_FLEX_BIN)" -8 -o"%(Filename).cpp" "%(Identity)"
+ ) else (
+  echo The gnu flex was not found.
+ )
+) else (
+  echo Define the gnu flex file name in environment variable GNU_FLEX_BIN
+)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">if defined GNU_FLEX_BIN (
+ if exist "$(GNU_FLEX_BIN)" (
+  "$(GNU_FLEX_BIN)" -8 -o"%(Filename).cpp" "%(Identity)"
+ ) else (
+  echo The gnu flex was not found.
+ )
+) else (
+  echo Define the gnu flex file name in environment variable GNU_FLEX_BIN
+)</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RootDir)%(Directory)\%(Filename).cpp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RootDir)%(Directory)\%(Filename).cpp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RootDir)%(Directory)\%(Filename).cpp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RootDir)%(Directory)\%(Filename).cpp;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">generate C++ code from lex file ...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">generate C++ code from lex file ...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">generate C++ code from lex file ...</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">generate C++ code from lex file ...</Message>
     </CustomBuild>
-    <CustomBuild Include="parser.y">
+    <None Include="LexerDeclaration.inl" />
+    <None Include="LexerDefinition.inl" />
+    <None Include="LexerPrivateFunction.inl" />
+    <None Include="ParserDeclaration.inl" />
+    <None Include="ParserDefinition.inl" />
+    <None Include="Version.py">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </DeploymentContent>
       <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">c:\bin\bison -d -o "%(RootDir)%(Directory)\%(Filename).c" "%(FullPath)"</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">c:\bin\bison -d -o "%(RootDir)%(Directory)\%(Filename).c" "%(FullPath)"</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">c:\bin\bison -d -o "%(RootDir)%(Directory)\%(Filename).c" "%(FullPath)"</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">c:\bin\bison -d -o "%(RootDir)%(Directory)\%(Filename).c" "%(FullPath)"</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yaccファイルを変換しています ...</Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">yaccファイルを変換しています ...</Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yaccファイルを変換しています ...</Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">yaccファイルを変換しています ...</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RootDir)%(Directory)\%(Filename).c;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RootDir)%(Directory)\%(Filename).c;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RootDir)%(Directory)\%(Filename).c;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RootDir)%(Directory)\%(Filename).c;%(Outputs)</Outputs>
-    </CustomBuild>
-    <None Include="version.json" />
-    <None Include="version.rb" />
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </DeploymentContent>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">if defined PYTHON_BIN (
+ if exist "$(PYTHON_BIN)" (
+  $(PYTHON_BIN) "%(Identity)"
+ ) else (
+  echo The python was not found.
+ )
+)</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generate version.h file</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">if defined PYTHON_BIN (
+ if exist "$(PYTHON_BIN)" (
+  $(PYTHON_BIN) "%(Identity)"
+ ) else (
+  echo The python was not found.
+ )
+)</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generate version.h file</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">if defined PYTHON_BIN (
+ if exist "$(PYTHON_BIN)" (
+  $(PYTHON_BIN) "%(Identity)"
+ ) else (
+  echo The python was not found.
+ )
+)</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generate version.h file</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">if defined PYTHON_BIN (
+ if exist "$(PYTHON_BIN)" (
+  $(PYTHON_BIN) "%(Identity)"
+ ) else (
+  echo The python was not found.
+ )
+)</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generate version.h file</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Version.h</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Version.h</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Version.h</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Version.h</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Version.json</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Version.json</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Version.json</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Version.json</AdditionalInputs>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\library\libmana.vcxproj">
-      <Project>{fd619018-4982-4fcf-9cc4-9177662781dd}</Project>
-    </ProjectReference>
+    <ClInclude Include="..\runner\Actor.h" />
+    <ClInclude Include="..\runner\Buffer.h" />
+    <ClInclude Include="..\runner\common\Assert.h" />
+    <ClInclude Include="..\runner\common\FileFormat.h" />
+    <ClInclude Include="..\runner\common\HashValue.h" />
+    <ClInclude Include="..\runner\common\Math.h" />
+    <ClInclude Include="..\runner\common\Memory.h" />
+    <ClInclude Include="..\runner\common\Noncopyable.h" />
+    <ClInclude Include="..\runner\common\OutputStream.h" />
+    <ClInclude Include="..\runner\common\Platform.h" />
+    <ClInclude Include="..\runner\common\Setup.h" />
+    <ClInclude Include="..\runner\common\Stopwatch.h" />
+    <ClInclude Include="..\runner\common\String.h" />
+    <ClInclude Include="..\runner\Datalink.h" />
+    <ClInclude Include="..\runner\Function.h" />
+    <ClInclude Include="..\runner\Mana.h" />
+    <ClInclude Include="..\runner\Plugin.h" />
+    <ClInclude Include="..\runner\Stack.h" />
+    <ClInclude Include="..\runner\VM.h" />
+    <ClInclude Include="CodeBuffer.h" />
+    <ClInclude Include="CodeGenerator.h" />
+    <ClInclude Include="DataBuffer.h" />
+    <ClInclude Include="DatalinkGenerator.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="ErrorHandler.h" />
+    <ClInclude Include="GlobalAddressResolver.h" />
+    <ClInclude Include="GlobalSemanticAnalyzer.h" />
+    <ClInclude Include="IntermediateLanguage.h" />
+    <ClInclude Include="Lexer.h" />
+    <ClInclude Include="LocalAddressResolver.h" />
+    <ClInclude Include="LocalSemanticAnalyzer.h" />
+    <ClInclude Include="Main.h" />
+    <ClInclude Include="Parser.hpp" />
+    <ClInclude Include="ParsingDriver.h" />
+    <ClInclude Include="Path.h" />
+    <ClInclude Include="Register.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Runner.h" />
+    <ClInclude Include="SemanticAnalyzer.h" />
+    <ClInclude Include="StringPool.h" />
+    <ClInclude Include="Symbol.h" />
+    <ClInclude Include="SymbolFactory.h" />
+    <ClInclude Include="SymbolTable.h" />
+    <ClInclude Include="SyntaxNode.h" />
+    <ClInclude Include="SyntaxNodeFactory.h" />
+    <ClInclude Include="SystemHolder.h" />
+    <ClInclude Include="TypeDescriptor.h" />
+    <ClInclude Include="TypeDescriptorFactory.h" />
+    <ClInclude Include="Version.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\sample\sample.log" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="code.c" />
-    <ClCompile Include="data.c" />
-    <ClCompile Include="datalink_generator.c" />
-    <ClCompile Include="error.c" />
-    <ClCompile Include="generator.c" />
-    <ClCompile Include="jump.c" />
-    <ClCompile Include="lexer.c" />
-    <ClCompile Include="linker.c" />
-    <ClCompile Include="main.c" />
-    <ClCompile Include="node.c" />
-    <ClCompile Include="parser.c" />
-    <ClCompile Include="pool.c" />
-    <ClCompile Include="post_resolver.c" />
-    <ClCompile Include="pre_resolver.c" />
-    <ClCompile Include="register.c" />
-    <ClCompile Include="resolver.c" />
-    <ClCompile Include="symbol.c" />
-    <ClCompile Include="type.c" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="code.h" />
-    <ClInclude Include="data.h" />
-    <ClInclude Include="datalink_generator.h" />
-    <ClInclude Include="error.h" />
-    <ClInclude Include="generator.h" />
-    <ClInclude Include="jump.h" />
-    <ClInclude Include="lexer.h" />
-    <ClInclude Include="linker.h" />
-    <ClInclude Include="main.h" />
-    <ClInclude Include="node.h" />
-    <ClInclude Include="parser.h" />
-    <ClInclude Include="pool.h" />
-    <ClInclude Include="post_resolver.h" />
-    <ClInclude Include="pre_resolver.h" />
-    <ClInclude Include="register.h" />
-    <ClInclude Include="resolver.h" />
-    <ClInclude Include="symbol.h" />
-    <ClInclude Include="type.h" />
-    <ClInclude Include="version.h" />
+    <ClCompile Include="CodeBuffer.cpp" />
+    <ClCompile Include="CodeGenerator.cpp" />
+    <ClCompile Include="DataBuffer.cpp" />
+    <ClCompile Include="DatalinkGenerator.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="ErrorHandler.cpp" />
+    <ClCompile Include="GlobalAddressResolver.cpp" />
+    <ClCompile Include="GlobalSemanticAnalyzer.cpp" />
+    <ClCompile Include="IntermediateLanguage.cpp" />
+    <ClCompile Include="Lexer.cpp">
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClCompile Include="LocalAddressResolver.cpp" />
+    <ClCompile Include="LocalSemanticAnalyzer.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Parser.cpp" />
+    <ClCompile Include="ParsingDriver.cpp" />
+    <ClCompile Include="Path.cpp" />
+    <ClCompile Include="Register.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Runner.cpp" />
+    <ClCompile Include="SemanticAnalyzer.cpp" />
+    <ClCompile Include="StringPool.cpp" />
+    <ClCompile Include="Symbol.cpp" />
+    <ClCompile Include="SymbolFactory.cpp" />
+    <ClCompile Include="SymbolTable.cpp" />
+    <ClCompile Include="SyntaxNode.cpp" />
+    <ClCompile Include="SyntaxNodeFactory.cpp" />
+    <ClCompile Include="SystemHolder.cpp" />
+    <ClCompile Include="TypeDescriptor.cpp" />
+    <ClCompile Include="TypeDescriptorFactory.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
