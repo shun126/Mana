@@ -1,0 +1,14 @@
+/*
+mana (script)
+Copyright (c) 2018 Shun Moriya
+*/
+
+void test_statement_while()
+{
+	char hoge = 1;
+	while(hoge)
+	{
+		print("%s\n", hoge);
+		hoge = 0;
+	}
+}
