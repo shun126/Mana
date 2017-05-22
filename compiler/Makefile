@@ -1,64 +1,63 @@
 # mana (compiler)
-# Copyright (c) 2003 Shun Moriya <shun@mnu.sakura.ne.jp>
+# Copyright (c) 2003 Shun Moriya
 #
 
 TARGET	= mana
-LIBRARY	= ../library
 
-CC	= gcc
-#CC	= clang
-CFLAGS	= --std=c99 -O3 -c -Wall -D NDEBUG -I$(LIBRARY)
+#CC	= g++
+CC	= clang++
+CFLAGS	= --std=c++14 -c -O3 -Wall -D NDEBUG
 
 LK	= $(CC)
-LFLAGS	= --std=c99 -O3
+LFLAGS	= --std=c++14 -O3 
 
-YACC	= bison
-YFLAGS	= -d -k
+COVERAGE=
+
+YACC = bison
+YFLAGS	= -d
 
 LEX	= flex
 LXFLAGS	= -8 -F
 
-CP      = cp -f
-RM	= rm -f
+CP = cp -f
+RM = rm -f
 
-SOURCES	= code.c data.c datalink_generator.c error.c generator.c jump.c linker.c main.c node.c pool.c post_resolver.c pre_resolver.c register.c resolver.c symbol.c type.c parser.y lexer.l
-OBJECTS	= code.o data.o datalink_generator.o error.o generator.o jump.o linker.o main.o node.o pool.o post_resolver.o pre_resolver.o register.o resolver.o symbol.o type.o parser.o lexer.o
-SECOUND	= parser.c parser.h lexer.c
+SOURCES	= CodeGenerator.cpp DatalinkGenerator.cpp ErrorHandler.cpp GlobalSemanticAnalyzer.cpp LoaclAddressResolver.cpp LocalSemanticAnalyzer.cpp Main.cpp Path.cpp SemanticAnalyzer.cpp SymbolEntry.cpp SymbolFactory.cpp SymbolTable.cpp SyntaxNode.cpp TypeDescriptor.cpp TypeDescriptorFactory.cpp
+#	Register.cpp ¥
+PARSER	= Parser.y
+LEXER	= Lexer.l
+OBJECTS	= $(SOURCES:%.cpp=%.o) $(PARSER:%.y=%.o) $(LEXER:%.l=%.o)
+SECOUND	= Parser.cpp Parser.hpp Lexer.cpp
 
-.SUFFIXES: .y .l .c .o
-
+.SUFFIXES: .y .l .cpp .o
 .SECOUNDLY: $(SECOUND)
 
-$(TARGET): $(SOURCES) $(OBJECTS) $(LIBRARY)/libmana.a
-	$(LK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(LIBRARY)/libmana.a -ldl -lm
+$(TARGET): $(SOURCES) $(PARSER) $(LEXER) $(OBJECTS)
+	$(LK) $(LFLAGS) $(COVERAGE) -o $(TARGET) $(OBJECTS) -ldl -lm
 
-$(LIBRARY)/libmana.a:
-	make --directory=$(LIBRARY)
-
-.l.c:
+.l.cpp:
 	$(LEX) $(LXFLAGS) -o$@ $<
 
-.y.c:
+.y.cpp:
 	$(YACC) $(YFLAGS) -o $@ $<
 
-.c.o:
-	$(CC) $(CFLAGS) -o $@ $<
+.cpp.o:
+	$(CC) $(CFLAGS) $(COVERAGE) -o $@ $<
 
-all: $(TARGET)
+all:
+	$(TARGET)
 
 clean:
-	$(RM) $(TARGET) $(OBJECTS) $(SECOUND)
-	make --directory=$(LIBRARY) clean
+	$(RM) $(TARGET) $(OBJECTS)
 
 depend:
 	makedepend -Y -- $(CFLAGS) -- $(SOURCES)
-	make --directory=$(LIBRARY) depend
 
 test:
 	./$(TARGET) --debug ../sample/sample.mn
+	ruby -C ../test/mana test.rb
 
 version:
-	ruby version.rb
+	ruby Version.rb
 
 # DO NOT DELETE
-

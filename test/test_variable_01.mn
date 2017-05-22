@@ -1,0 +1,10 @@
+/*
+mana (script)
+Copyright (c) 2003 Shun Moriya
+*/
+
+// global variables
+float floatValue;
+char int8Value;
+short int16Value;
+int int32Value;

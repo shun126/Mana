@@ -1,0 +1,30 @@
+/*
+mana (script)
+Copyright (c) 2003 Shun Moriya
+*/
+
+import "test_struct_01.mn";
+
+////////////////////////////////////////////////////////////////////////////////
+// global variables
+float realValue;
+int digitValue;
+
+allocate 1024
+{
+	TestStruct1 structValue;
+}
+short shortValue;
+char charValue;
+
+////////////////////////////////////////////////////////////////////////////////
+// static variables
+static allocate 512
+{
+	int staticDigitValue;
+}
+
+static
+{
+	float staticRealValue;
+}
