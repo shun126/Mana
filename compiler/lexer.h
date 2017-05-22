@@ -1,22 +1,17 @@
 /*!
 mana (compiler)
 
-@file	lexer.h
-@brief	字句解析に関係するヘッダーファイル
-@detail	このファイルは字句解析に関係するヘッダーファイルです。
 @author	Shun Moriya
 @date	2003-
 */
 
-#if !defined(___MANA_LEXER_H___)
-#define ___MANA_LEXER_H___
+#pragma once
+#include "../runner/common/Setup.h"
 
-#include <stdint.h>
-#include <stdbool.h>
-
-#if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)
-extern "C" {
-#endif
+//extern int yylex();
+//extern int yyparse();
+extern void yyerror(const char* message);
+extern int yynerrs;
 
 /*!
 initialize scanner
@@ -24,7 +19,7 @@ initialize scanner
 @retval	true		success
 @retval	false		failed
 */
-extern int32_t lexer_initialize(const char* filename);
+extern bool lexer_initialize(const std::string_view filename);
 
 /*!
 finalize scanner
@@ -38,43 +33,35 @@ open file
 @retval	true		success
 @retval	false		failed
 */
-extern int32_t lexer_open(const char* filename, const bool check);
+extern bool lexer_open(const std::string_view filename, const bool check);
 
 /*!
 close file
 @retval	true	scanning complete.
 @retval	false	still need scanning.
 */
-extern int32_t lexer_close(void);
+extern bool lexer_close(void);
 
 /*!
 get current file name
 @return	current file name pointer
 */
-extern const char* lexer_get_current_filename(void);
+extern const std::string_view lexer_get_current_filename(void);
 
 /*!
 set current file name
 @param[in]	filename	current file name pointer
 */
-extern void lexer_set_current_filename(const char* filename);
+extern void lexer_set_current_filename(const std::string_view filename);
 
 /*!
 get current line number
 @return	current line number
 */
-extern int lexer_get_current_line(void);
+extern int lexer_get_current_lineno(void);
 
 /*!
 set current line number
 @param[in]	lineno	current line number
 */
-extern void lexer_set_current_line(const int lineno);
-
-extern int yylex(void);
-
-#if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus) || defined(c_plusplus)
-}
-#endif
-
-#endif
+extern void lexer_set_current_lineno(const int lineno);

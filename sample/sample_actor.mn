@@ -32,12 +32,13 @@ actor TestActor1
 		vec2 test;
 		//test.x = 0;
 		print("Nin hao!\n");
-
+		/*
 		pointer p;
 		pointer q;
 		p = getUserPointer();
 		q = p;
 		setUserPointer(p);
+		*/
 	}
 }
 
@@ -63,7 +64,7 @@ actor OtherTestActor
 		//f = test.x;
 		print("Hello!\n");
 		yield();
-		getUserData();
+		//getUserData();
 	}
 }
 

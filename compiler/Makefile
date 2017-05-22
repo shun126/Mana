@@ -1,64 +1,91 @@
 # mana (compiler)
-# Copyright (c) 2003 Shun Moriya <shun@mnu.sakura.ne.jp>
+# Copyright (c) 2003 Shun Moriya
 #
 
 TARGET	= mana
-LIBRARY	= ../library
 
-CC	= gcc
-#CC	= clang
-CFLAGS	= --std=c99 -O3 -c -Wall -D NDEBUG -I$(LIBRARY)
+#CC	= g++
+CC	= clang++
+CFLAGS	= --std=c++17 -O3 -Wall -D NDEBUG -c 
 
 LK	= $(CC)
-LFLAGS	= --std=c99 -O3
+LFLAGS	= --std=c++17 -O3 -Wall
 
-YACC	= bison
-YFLAGS	= -d -k
+COVERAGE=
+
+YACC = bison
+YFLAGS	= -d
 
 LEX	= flex
 LXFLAGS	= -8 -F
 
-CP      = cp -f
-RM	= rm -f
+CP = cp -f
+RM = rm -f
 
-SOURCES	= code.c data.c datalink_generator.c error.c generator.c jump.c linker.c main.c node.c pool.c post_resolver.c pre_resolver.c register.c resolver.c symbol.c type.c parser.y lexer.l
-OBJECTS	= code.o data.o datalink_generator.o error.o generator.o jump.o linker.o main.o node.o pool.o post_resolver.o pre_resolver.o register.o resolver.o symbol.o type.o parser.o lexer.o
-SECOUND	= parser.c parser.h lexer.c
+SOURCES	= \
+	CodeBuffer.cpp \
+	CodeGenerator.cpp \
+	DataBuffer.cpp \
+	ErrorHandler.cpp \
+	GlobalAddressResolver.cpp \
+	GlobalSemanticAnalyzer.cpp \
+	IntermediateLanguage.cpp \
+	LocalAddressResolver.cpp \
+	LocalSemanticAnalyzer.cpp \
+	Main.cpp \
+	ParsingDriver.cpp \
+	Path.cpp \
+	Runner.cpp \
+	SemanticAnalyzer.cpp \
+	StringPool.cpp \
+	Symbol.cpp \
+	SymbolFactory.cpp \
+	SymbolTable.cpp \
+	SyntaxNode.cpp \
+	SyntaxNodeFactory.cpp \
+	SystemHolder.cpp \
+	TypeDescriptor.cpp \
+	TypeDescriptorFactory.cpp
 
-.SUFFIXES: .y .l .c .o
+#DatalinkGenerator.cpp \
+#Lexer.cpp \
+#Parser.cpp \
+#Register.cpp \
 
+PARSER	= Parser.yy
+LEXER	= Lexer.l
+OBJECTS	= $(SOURCES:%.cpp=%.o) $(PARSER:%.yy=%.o) $(LEXER:%.l=%.o)
+SECOUND	= Parser.cpp Parser.hpp Lexer.cpp
+
+.SUFFIXES: .yy .l .cpp .o
 .SECOUNDLY: $(SECOUND)
 
-$(TARGET): $(SOURCES) $(OBJECTS) $(LIBRARY)/libmana.a
-	$(LK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(LIBRARY)/libmana.a -ldl -lm
+$(TARGET): $(SOURCES) $(PARSER) $(LEXER) $(SECOUND) $(OBJECTS)
+	$(LK) $(LFLAGS) $(COVERAGE) -o $(TARGET) $(OBJECTS) -ldl -lm
 
-$(LIBRARY)/libmana.a:
-	make --directory=$(LIBRARY)
-
-.l.c:
-	$(LEX) $(LXFLAGS) -o$@ $<
-
-.y.c:
+.yy.cpp:
 	$(YACC) $(YFLAGS) -o $@ $<
 
-.c.o:
-	$(CC) $(CFLAGS) -o $@ $<
+.l.cpp:
+	$(LEX) $(LXFLAGS) -o$@ $<
 
-all: $(TARGET)
+.cpp.o:
+	$(CC) $(CFLAGS) $(COVERAGE) -o $@ $<
+
+all:
+	$(TARGET)
 
 clean:
-	$(RM) $(TARGET) $(OBJECTS) $(SECOUND)
-	make --directory=$(LIBRARY) clean
+	$(RM) $(TARGET) $(SECOUND) $(OBJECTS)
 
 depend:
 	makedepend -Y -- $(CFLAGS) -- $(SOURCES)
-	make --directory=$(LIBRARY) depend
 
 test:
 	./$(TARGET) --debug ../sample/sample.mn
+	cd ../test/ && python3 test.py
 
 version:
-	ruby version.rb
+	python3 Version.py
 
 # DO NOT DELETE
-
