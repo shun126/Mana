@@ -8,6 +8,7 @@ LIBRARY	= ../library
 CC	= gcc
 #CC	= clang
 CFLAGS	= --std=c99 -O3 -c -Wall -D NDEBUG -I$(LIBRARY)
+#CFLAGS	= --std=c99 -g -O0 -c -Wall -D _DEBUG -I$(LIBRARY)
 
 LK	= $(CC)
 LFLAGS	= --std=c99 -O3
