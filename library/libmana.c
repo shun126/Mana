@@ -1,12 +1,12 @@
 /*!
- * mana (library)
- *
- * @file	libmana.c
- * @brief	システム全体に関するソースファイル
- * @detail	このファイルはライブラリ全体に関係するソースファイルです。
- * @author	Shun Moriya
- * @date	2003-
- */
+mana (library)
+
+@file	libmana.c
+@brief	システム全体に関するソースファイル
+@detail	このファイルはライブラリ全体に関係するソースファイルです。
+@author	Shun Moriya
+@date	2003-
+*/
 
 #if !defined(___LIBMANA_H___)
 #include "libmana.h"

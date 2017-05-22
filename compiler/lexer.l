@@ -392,7 +392,10 @@ int32_t lexer_open(const char* filename, const bool check)
 
 	if(_fullpath(path, filename, _MAX_PATH) == NULL)
 	{
-		mana_compile_error("unable to open \"%s\"", filename);
+		if(lexer_filename && lexer_filename[0] != '\0')
+		{ mana_compile_error("unable to open \"%s\"", full_path); }
+		else
+		{ MANA_PRINT("unable to open \"%s\"\n", full_path); }
 		return false;
 	}
 
@@ -424,7 +427,10 @@ int32_t lexer_open(const char* filename, const bool check)
 	if((yyin = fopen(full_path, "rt")) == NULL)
 #endif
 	{
-		mana_compile_error("unable to open \"%s\"", full_path);
+		if(lexer_filename && lexer_filename[0] != '\0')
+		{ mana_compile_error("unable to open \"%s\"", full_path); }
+		else
+		{ MANA_PRINT("unable to open \"%s\"\n", full_path); }
 		return false;
 	}
 	if(++lexer_status_pointer >= MAX_NEST_LEVEL)

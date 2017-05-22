@@ -1,0 +1,13 @@
+/*
+mana (script)
+Copyright (c) 2003 Shun Moriya
+*/
+
+void undefined()
+{
+	if(hoge)
+	{
+		print("%s\n", hoge);
+	}
+}
+

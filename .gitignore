@@ -1,4 +1,16 @@
-﻿#
+﻿# User-specific files
+*.suo
+*.user
+**/xcuserdata
+**/xcshareddata
+
+# Build results
+x64/
+x86/
+[Ww]in32/
+[Dd]ebug/
+[Rr]elease/
+
 *.bak
 *.exe
 *.idb
@@ -6,26 +18,21 @@
 *.lib
 *.ini
 *.log
-*.mx
 *.obj
 *.opendb
 *.pdb
 *.tlog
-*.user
 *.VC.db
-*.suo
 *.sdf
+
+# Visual Studio 2015 cache/options directory
+.vs/
+
+# Others
+.DS_Store
 *.tmp
-*.user
-**/xcuserdata
-**/xcshareddata
-/compiler/.vs/
-/compiler/Win32/Debug/
-/compiler/Win32/Release/
-/compiler/parser.h
-/compiler/parser.c
-/compiler/lexer.c
-/library/.vs/
-/library/Win32/Debug/
-/library/Win32/Release/
+*.swp
+
+# Mana
+*.mx
 /sample/node_entry.json
