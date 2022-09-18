@@ -1,7 +1,6 @@
 /*!
 mana (compiler)
 
-\file	TypeDescriptor.h
 \brief	型情報に関するヘッダーファイル
 \detail	このファイルは型情報に関係するヘッダーファイルです。
 \author	Shun Moriya
