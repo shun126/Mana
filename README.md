@@ -40,8 +40,9 @@ actor Child
 ## Requirements
 * [bison](https://www.gnu.org/software/bison/)
 * [flex](https://www.gnu.org/software/flex/)
-* [Visual Studio](https://visualstudio.microsoft.com/)
-* [Clang](https://clang.llvm.org/)
+* [C++ Compiler](https://en.wikipedia.org/wiki/C%2B%2B)
+  * [Visual Studio](https://visualstudio.microsoft.com/)
+  * [Clang](https://clang.llvm.org/)
 
 ## Any Linux Distribution
 - cd to <download_path>\compiler
