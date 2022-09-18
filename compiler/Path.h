@@ -1,7 +1,6 @@
 /*!
 mana (compiler)
 
-@file	Path.h
 @author	Shun Moriya
 @date	2003-
 */

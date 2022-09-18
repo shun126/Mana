@@ -1,0 +1,44 @@
+name: github-actions
+on: [push]
+jobs:
+  BuildOnUbuntu:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      - name: Install dependencies
+        run: sudo apt update
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - run: echo "The ${{ github.repository }} repository has been cloned to the runner."
+      - name: Build Mana compiler
+        run: make --directory=${{ github.workspace }}/compiler
+  BuildOnWindows:
+    runs-on: windows-latest
+    steps:
+      - run: echo "The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      - name: Add MSBuild to PATH
+        uses: microsoft/setup-msbuild@v1.0.2
+      - name: Set up Cygwin
+        uses: egor-tensin/setup-cygwin@v3
+        with:
+          platform: x64
+          packages: bison flex python3 make clang
+      - name: Add Environment variables
+        run: |
+          echo "GNU_BISON_BIN=C:\tools\cygwin\bin\bison.exe" >> $env:GITHUB_ENV
+          echo "GNU_FLEX_BIN=C:\tools\cygwin\bin\flex.exe" >> $env:GITHUB_ENV
+          echo "PYTHON_BIN=C:\tools\cygwin\bin\python3.9.exe" >> $env:GITHUB_ENV
+          echo $env:GNU_BISON_BIN
+          echo $env:GNU_FLEX_BIN
+          echo $env:PYTHON_BIN
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - run: echo "The ${{ github.repository }} repository has been cloned to the runner."
+      - name: Build Mana 32bit compiler
+        run: msbuild mana.sln /t:build /p:Configuration=Release /p:Platform=Win32
+      - name: Build Mana 64bit compiler
+        run: msbuild mana.sln /t:build /p:Configuration=Release /p:Platform=x64
