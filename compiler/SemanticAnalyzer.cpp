@@ -6,7 +6,7 @@ mana (compiler)
 */
 
 #include "SemanticAnalyzer.h"
-#include "lexer.h"
+#include "Lexer.h"
 #include "ErrorHandler.h"
 
 namespace mana
