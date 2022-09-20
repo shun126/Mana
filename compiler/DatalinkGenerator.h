@@ -1,7 +1,6 @@
 /*!
 mana (compiler)
 
-@file	DatalinkGenerator.h
 @brief	データセクションに関するヘッダファイル
 @detail	このファイルはデータセクションに関係するヘッダファイルです。
 @author	Shun Moriya

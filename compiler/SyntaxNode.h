@@ -5,8 +5,6 @@ mana (compiler)
 @date	2003-
 */
 
-// SyntaxNode
-
 #pragma once
 #include "../runner/common/Setup.h"
 #include <memory>
