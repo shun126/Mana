@@ -2,7 +2,6 @@
 #
 # mana (compiler)
 #
-# @file		version.py
 # @brief	Script file for version information
 # @detail	This file is a script file for version information.
 # @author	Shun Moriya
