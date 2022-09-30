@@ -9,7 +9,6 @@ mana (compiler)
 #include "../runner/common/Setup.h"
 #include "Symbol.h"
 #include "SymbolFactory.h"
-#include "SymbolTable.h"
 #include "SyntaxNode.h"
 
 namespace mana
@@ -19,7 +18,6 @@ namespace mana
 	public:
 		explicit SemanticAnalyzer(
 			const std::shared_ptr<SymbolFactory>& symbolFactory,
-			const std::shared_ptr<SymbolTable>& symbolTable,
 			const std::shared_ptr<TypeDescriptorFactory>& typeDescriptorFactory);
 
 		virtual ~SemanticAnalyzer() = default;
@@ -69,12 +67,10 @@ namespace mana
 		std::shared_ptr<Symbol> Lookup(const std::string_view name) const;
 
 		const std::shared_ptr<SymbolFactory>& GetSymbolFactory();
-		const std::shared_ptr<SymbolTable>& GetSymbolTable();
 		const std::shared_ptr<TypeDescriptorFactory>& GetTypeDescriptorFactory();
 
 	private:
 		std::shared_ptr<SymbolFactory> mSymbolFactory;
-		std::shared_ptr<SymbolTable> mSymbolTable;
 		std::shared_ptr<TypeDescriptorFactory> mTypeDescriptorFactory;
 	};
 }
