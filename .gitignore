@@ -31,10 +31,10 @@
 *.tlog
 *.sdf
 *.VC.db
-
 **/.DS_Store
 *.tmp
 *.swp
+*.stackdump
 
 # Mana
 *.mx

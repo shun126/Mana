@@ -6,6 +6,8 @@ mana (library)
 */
 
 #pragma once
+#include "Actor.h"
+#include "Plugin.h"
 #include "VM.h"
 
 namespace mana
@@ -151,7 +153,7 @@ namespace mana
 			}
 		}
 
-		// �O���[�o������уX�^�e�B�b�N�ϐ��̈���m�ۂ��܂�
+		// ・ｽO・ｽ・ｽ・ｽ[・ｽo・ｽ・ｽ・ｽ・ｽ・ｽ・ｽﾑス・ｽ^・ｽe・ｽB・ｽb・ｽN・ｽﾏ撰ｿｽ・ｽﾌ茨ｿｽ・ｽ・ｽm・ｽﾛゑｿｽ・ｽﾜゑｿｽ
 		mGlobalVariables.Allocate(mFileHeader->mSizeOfGlobalMemory);
 		mStaticVariables.Allocate(mFileHeader->mSizeOfStaticMemory);
 
@@ -234,12 +236,12 @@ namespace mana
 			}
 		}
 
-		// �t���O��������
+		// ・ｽt・ｽ・ｽ・ｽO・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ
 		mFlag.set(Flag::InitializeActionRunning);
 		mFlag.set(Flag::Initialized);
 		mFlag.set(Flag::EnableSystemRequest);
 
-		// �S�A�N�^�[�� init��main �A�N�V���������s
+		// ・ｽS・ｽA・ｽN・ｽ^・ｽ[・ｽ・ｽ init・ｽ・ｽmain ・ｽA・ｽN・ｽV・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽs
 		Restart();
 		RequestAll(1, "init", nullptr);
 		RequestAll(0, "main", nullptr);
@@ -247,17 +249,17 @@ namespace mana
 
 	inline void VM::UnloadProgram()
 	{
-		/* �X�N���v�g�Ŋm�ۂ������\�[�X�̊J�� */
+		/* ・ｽX・ｽN・ｽ・ｽ・ｽv・ｽg・ｽﾅ確・ｽﾛゑｿｽ・ｽ・ｽ・ｽ・ｽ・ｽ\・ｽ[・ｽX・ｽﾌ開・ｽ・ｽ */
 		/*
 		GetResource().Clear();
 		*/
 
-		/* �C�x���g�{�b�N�X�̊J�� */
+		/* ・ｽC・ｽx・ｽ・ｽ・ｽg・ｽ{・ｽb・ｽN・ｽX・ｽﾌ開・ｽ・ｽ */
 		/*
 		DestroyIntersections();
 		*/
 
-		// �ϐ��̏�����
+		// ・ｽﾏ撰ｿｽ・ｽﾌ擾ｿｽ・ｽ・ｽ・ｽ・ｽ
 		mFlag.reset(Flag::InitializeActionRunning);
 		mFlag.reset(Flag::InitializeActionFinished);
 		mFlag.reset(Flag::Initialized);
@@ -266,14 +268,14 @@ namespace mana
 		mActorHash.clear();
 		mPhantomHash.clear();
 
-		// �ϐ��̈��������܂�
+		// ・ｽﾏ撰ｿｽ・ｽﾌ茨ｿｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽﾜゑｿｽ
 		mGlobalVariables.Reset();
 		mStaticVariables.Reset();
 
-		// �f�[�^�̊J��
+		// ・ｽf・ｽ[・ｽ^・ｽﾌ開・ｽ・ｽ
 		mDatalink.Unload();
 
-		// �v���O�����̊J��
+		// ・ｽv・ｽ・ｽ・ｽO・ｽ・ｽ・ｽ・ｽ・ｽﾌ開・ｽ・ｽ
 		mProgram.reset();
 		mFileHeader = nullptr;
 		mConstantPool = nullptr;
@@ -391,7 +393,8 @@ namespace mana
 			}
 		}
 
-		return "";
+		static const std::string_view empty;
+		return empty;
 	}
 
 	inline std::shared_ptr<Actor> VM::CloneActor(const std::shared_ptr<Actor>& actor, const char* newName)

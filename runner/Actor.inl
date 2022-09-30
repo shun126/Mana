@@ -29,10 +29,6 @@ namespace mana
 		return sharedActor;
 	}
 
-	inline Actor::~Actor()
-	{
-	}
-
 #if 0	
 	inline void Actor::Serialize(mana_stream* stream)
 	{
@@ -584,13 +580,13 @@ namespace mana
 		return mVM.lock()->GetActorName(shared_from_this());
 	}
 
-	inline uint32_t Actor::GetAction(const char* actionName) const
+	inline uint32_t Actor::GetAction(const std::string_view& actionName) const
 	{
 		const auto i = mActions.find(actionName);
 		return (i == mActions.end()) ? nil : i->second;
 	}
 
-	inline void Actor::SetAction(const char* actionName, const uint32_t address)
+	inline void Actor::SetAction(const std::string_view& actionName, const uint32_t address)
 	{
 		mActions[actionName] = address;
 	}
@@ -950,17 +946,17 @@ namespace mana
 		self.mStack.Push(vm->GetStringFromMemory(self.mPc + 1));
 	}
 
-	inline void Actor::CommandPushPriority(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandPushPriority(const std::shared_ptr<VM>&, Actor& self)
 	{
 		self.mStack.Push<int_t>(self.mInterruptLevel);
 	}
 
-	inline void Actor::CommandPushSelf(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandPushSelf(const std::shared_ptr<VM>&, Actor& self)
 	{
 		self.mStack.Push(&self);
 	}
 
-	inline void Actor::CommandPushSender(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandPushSender(const std::shared_ptr<VM>&, Actor& self)
 	{
 		self.mStack.Push(self.mInterrupt[self.mInterruptLevel].mSender.get());
 	}
@@ -977,12 +973,12 @@ namespace mana
 		self.mFrame.Release(size);
 	}
 
-	inline void Actor::CommandDuplicate(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandDuplicate(const std::shared_ptr<VM>&, Actor& self)
 	{
 		self.mStack.Duplicate();
 	}
 
-	inline void Actor::CommandRemove(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandRemove(const std::shared_ptr<VM>&, Actor& self)
 	{
 		self.mStack.Remove(1);
 	}
@@ -1013,65 +1009,65 @@ namespace mana
 		self.mStack.Push(self.mVariable.GetAddressFromBottom<void*>(offset));
 	}
 
-	inline void Actor::CommandLoadInt8(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandLoadInt8(const std::shared_ptr<VM>&, Actor& self)
 	{
 		const int8_t* pointer = static_cast<const int8_t*>(self.mStack.Get<void*>(0));
 		self.mStack.Set(0, *pointer);
 	}
 
-	inline void Actor::CommandLoadInt16(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandLoadInt16(const std::shared_ptr<VM>&, Actor& self)
 	{
 		const int16_t* pointer = static_cast<const int16_t*>(self.mStack.Get<void*>(0));
 		self.mStack.Set(0, *pointer);
 	}
 
-	inline void Actor::CommandLoadInt32(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandLoadInt32(const std::shared_ptr<VM>&, Actor& self)
 	{
 		const int32_t* pointer = static_cast<const int32_t*>(self.mStack.Get<void*>(0));
 		self.mStack.Set(0, *pointer);
 	}
 
-	inline void Actor::CommandLoadFloat(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandLoadFloat(const std::shared_ptr<VM>&, Actor& self)
 	{
 		const float* pointer = static_cast<const float*>(self.mStack.Get<void*>(0));
 		self.mStack.Set(0, *pointer);
 	}
 
-	inline void Actor::CommandLoadReffrence(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandLoadReffrence(const std::shared_ptr<VM>&, Actor& self)
 	{
 		void* pointer = static_cast<void*>(self.mStack.Get<void*>(0));
 		self.mStack.Set(0, pointer);
 	}
 
-	inline void Actor::CommandStoreInt8(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandStoreInt8(const std::shared_ptr<VM>&, Actor& self)
 	{
 		int8_t* pointer = static_cast<int8_t*>(self.mStack.Get<void*>(0));
 		*pointer = static_cast<int8_t>(self.mStack.Get<int_t>(1));
 		self.mStack.Remove(2);
 	}
 
-	inline void Actor::CommandStoreInt16(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandStoreInt16(const std::shared_ptr<VM>&, Actor& self)
 	{
 		int16_t* pointer = static_cast<int16_t*>(self.mStack.Get<void*>(0));
 		*pointer = static_cast<int16_t>(self.mStack.Get<int_t>(1));
 		self.mStack.Remove(2);
 	}
 
-	inline void Actor::CommandStoreInt32(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandStoreInt32(const std::shared_ptr<VM>&, Actor& self)
 	{
 		int32_t* pointer = static_cast<int32_t*>(self.mStack.Get<void*>(0));
 		*pointer = static_cast<int32_t>(self.mStack.Get<int_t>(1));
 		self.mStack.Remove(2);
 	}
 
-	inline void Actor::CommandStoreFloat(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandStoreFloat(const std::shared_ptr<VM>&, Actor& self)
 	{
 		float* pointer = static_cast<float*>(self.mStack.Get<void*>(0));
 		*pointer = static_cast<float>(self.mStack.Get<float_t>(1));
 		self.mStack.Remove(2);
 	}
 
-	inline void Actor::CommandStoreReffrence(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandStoreReffrence(const std::shared_ptr<VM>&, Actor& self)
 	{
 		//void* pointer = self.mStack.Get<void*>(0);
 		//*pointer = self.mStack.GetAddress(1);
@@ -1117,45 +1113,45 @@ namespace mana
 		MANA_ASSERT(self.mPc < vm->mFileHeader->mSizeOfInstructionPool);
 	}
 
-	inline void Actor::CommandComply(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandComply(const std::shared_ptr<VM>&, Actor& self)
 	{
 		self.Accept();
 	}
 
-	inline void Actor::CommandRefuse(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandRefuse(const std::shared_ptr<VM>&, Actor& self)
 	{
 		self.Refuse();
 	}
 
-	inline void Actor::CommandLoadReturnAddress(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandLoadReturnAddress(const std::shared_ptr<VM>&, Actor& self)
 	{
 		uint32_t* pointer = self.mFrame.GetAddressFromBottom<uint32_t>(sizeof(int32_t));
 		self.mInterrupt[self.mInterruptLevel].mReturnAddress = *pointer;
 	}
 
-	inline void Actor::CommandStoreReturnAddress(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandStoreReturnAddress(const std::shared_ptr<VM>&, Actor& self)
 	{
 		uint32_t* pointer = self.mFrame.GetAddressFromBottom<uint32_t>(sizeof(int32_t));
 		*pointer = self.mInterrupt[self.mInterruptLevel].mReturnAddress;
 	}
 
-	inline void Actor::CommandReturnFromFunction(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandReturnFromFunction(const std::shared_ptr<VM>&, Actor& self)
 	{
 		self.mPc = self.mInterrupt[self.mInterruptLevel].mReturnAddress;
 		self.mInterrupt[self.mInterruptLevel].mFlag.set(Interrupt::Flag::Repeat);
 	}
 
-	inline void Actor::CommandReturnFromAction(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandReturnFromAction(const std::shared_ptr<VM>&, Actor& self)
 	{
 		self.Rollback(self.mInterruptLevel);
 	}
 
-	inline void Actor::CommandRollback(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandRollback(const std::shared_ptr<VM>&, Actor& self)
 	{
 		self.Rollback(self.mStack.Pop<int_t>());
 	}
 
-	inline void Actor::CommandAddInteger(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandAddInteger(const std::shared_ptr<VM>&, Actor& self)
 	{
 		const int_t left = self.mStack.Get<int_t>(1);
 		const int_t right = self.mStack.Get<int_t>(0);
@@ -1163,7 +1159,7 @@ namespace mana
 		self.mStack.Set(0, left + right);
 	}
 
-	inline void Actor::CommandAddFloat(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandAddFloat(const std::shared_ptr<VM>&, Actor& self)
 	{
 		const float_t left = self.mStack.Get<float_t>(1);
 		const float_t right = self.mStack.Get<float_t>(0);
@@ -1171,7 +1167,7 @@ namespace mana
 		self.mStack.Set(0, left + right);
 	}
 
-	inline void Actor::CommandDivideInteger(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandDivideInteger(const std::shared_ptr<VM>&, Actor& self)
 	{
 		const int_t left = self.mStack.Get<int_t>(1);
 		const int_t right = self.mStack.Get<int_t>(0);
@@ -1179,7 +1175,7 @@ namespace mana
 		self.mStack.Set(0, left / right);
 	}
 
-	inline void Actor::CommandDivideFloat(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandDivideFloat(const std::shared_ptr<VM>&, Actor& self)
 	{
 		const float_t left = self.mStack.Get<float_t>(1);
 		const float_t right = self.mStack.Get<float_t>(0);
@@ -1187,17 +1183,17 @@ namespace mana
 		self.mStack.Set(0, left / right);
 	}
 
-	inline void Actor::CommandMinusInteger(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandMinusInteger(const std::shared_ptr<VM>&, Actor& self)
 	{
 		self.mStack.Set(0, -self.mStack.Get<int_t>(0));
 	}
 
-	inline void Actor::CommandMinusFloat(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandMinusFloat(const std::shared_ptr<VM>&, Actor& self)
 	{
 		self.mStack.Set(0, -self.mStack.Get<float_t>(0));
 	}
 
-	inline void Actor::CommandModInteger(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandModInteger(const std::shared_ptr<VM>&, Actor& self)
 	{
 		const int_t left = self.mStack.Get<int_t>(1);
 		const int_t right = self.mStack.Get<int_t>(0);
@@ -1205,7 +1201,7 @@ namespace mana
 		self.mStack.Set(0, left % right);
 	}
 
-	inline void Actor::CommandModfloat(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandModfloat(const std::shared_ptr<VM>&, Actor& self)
 	{
 		const float_t left = self.mStack.Get<float_t>(1);
 		const float_t right = self.mStack.Get<float_t>(0);
@@ -1213,7 +1209,7 @@ namespace mana
 		self.mStack.Set(0, std::fmod(left, right));
 	}
 
-	inline void Actor::CommandMultiplyInteger(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandMultiplyInteger(const std::shared_ptr<VM>&, Actor& self)
 	{
 		const int_t left = self.mStack.Get<int_t>(1);
 		const int_t right = self.mStack.Get<int_t>(0);
@@ -1221,7 +1217,7 @@ namespace mana
 		self.mStack.Set(0, left * right);
 	}
 
-	inline void Actor::CommandMultiplyFloat(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandMultiplyFloat(const std::shared_ptr<VM>&, Actor& self)
 	{
 		const float_t left = self.mStack.Get<float_t>(1);
 		const float_t right = self.mStack.Get<float_t>(0);
@@ -1229,7 +1225,7 @@ namespace mana
 		self.mStack.Set(0, left * right);
 	}
 
-	inline void Actor::CommandSubtractInteger(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandSubtractInteger(const std::shared_ptr<VM>&, Actor& self)
 	{
 		const int_t left = self.mStack.Get<int_t>(1);
 		const int_t right = self.mStack.Get<int_t>(0);
@@ -1237,7 +1233,7 @@ namespace mana
 		self.mStack.Set(0, left - right);
 	}
 
-	inline void Actor::CommandSubtractFloat(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandSubtractFloat(const std::shared_ptr<VM>&, Actor& self)
 	{
 		const float_t left = self.mStack.Get<float_t>(1);
 		const float_t right = self.mStack.Get<float_t>(0);
@@ -1245,7 +1241,7 @@ namespace mana
 		self.mStack.Set(0, left - right);
 	}
 
-	inline void Actor::CommandAnd(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandAnd(const std::shared_ptr<VM>&, Actor& self)
 	{
 		const int_t left = self.mStack.Get<int_t>(1);
 		const int_t right = self.mStack.Get<int_t>(0);
@@ -1253,7 +1249,7 @@ namespace mana
 		self.mStack.Set(0, left & right);
 	}
 
-	inline void Actor::CommandExclusiveOr(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandExclusiveOr(const std::shared_ptr<VM>&, Actor& self)
 	{
 		const int_t left = self.mStack.Get<int_t>(1);
 		const int_t right = self.mStack.Get<int_t>(0);
@@ -1261,7 +1257,7 @@ namespace mana
 		self.mStack.Set(0, left ^ right);
 	}
 
-	inline void Actor::CommandLogicalAnd(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandLogicalAnd(const std::shared_ptr<VM>&, Actor& self)
 	{
 		const int_t left = self.mStack.Get<int_t>(1);
 		const int_t right = self.mStack.Get<int_t>(0);
@@ -1269,7 +1265,7 @@ namespace mana
 		self.mStack.Set(0, left && right);
 	}
 
-	inline void Actor::CommandLogicalOr(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandLogicalOr(const std::shared_ptr<VM>&, Actor& self)
 	{
 		const int_t left = self.mStack.Get<int_t>(1);
 		const int_t right = self.mStack.Get<int_t>(0);
@@ -1277,17 +1273,17 @@ namespace mana
 		self.mStack.Set(0, left || right);
 	}
 
-	inline void Actor::CommandNot(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandNot(const std::shared_ptr<VM>&, Actor& self)
 	{
 		self.mStack.Set(0, ~self.mStack.Get<int_t>(0));
 	}
 
-	inline void Actor::Commandlogical_not(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::Commandlogical_not(const std::shared_ptr<VM>&, Actor& self)
 	{
 		self.mStack.Set(0, !self.mStack.Get<int_t>(0));
 	}
 
-	inline void Actor::CommandOr(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandOr(const std::shared_ptr<VM>&, Actor& self)
 	{
 		const int_t left = self.mStack.Get<int_t>(1);
 		const int_t right = self.mStack.Get<int_t>(0);
@@ -1295,7 +1291,7 @@ namespace mana
 		self.mStack.Set(0, left | right);
 	}
 
-	inline void Actor::CommandShiftLeft(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandShiftLeft(const std::shared_ptr<VM>&, Actor& self)
 	{
 		const int_t left = self.mStack.Get<int_t>(1);
 		const int_t right = self.mStack.Get<int_t>(0);
@@ -1303,7 +1299,7 @@ namespace mana
 		self.mStack.Set(0, left << right);
 	}
 
-	inline void Actor::CommandShiftRight(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandShiftRight(const std::shared_ptr<VM>&, Actor& self)
 	{
 		const int_t left = self.mStack.Get<int_t>(1);
 		const int_t right = self.mStack.Get<int_t>(0);
@@ -1311,7 +1307,7 @@ namespace mana
 		self.mStack.Set(0, left >> right);
 	}
 
-	inline void Actor::CommandCompareEqualInteger(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandCompareEqualInteger(const std::shared_ptr<VM>&, Actor& self)
 	{
 		const int_t left = self.mStack.Get<int_t>(1);
 		const int_t right = self.mStack.Get<int_t>(0);
@@ -1319,7 +1315,7 @@ namespace mana
 		self.mStack.Set(0, left == right);
 	}
 
-	inline void Actor::CommandCompareEqualFloat(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandCompareEqualFloat(const std::shared_ptr<VM>&, Actor& self)
 	{
 		const float_t left = self.mStack.Get<float_t>(1);
 		const float_t right = self.mStack.Get<float_t>(0);
@@ -1327,7 +1323,7 @@ namespace mana
 		self.mStack.Set(0, left == right);
 	}
 
-	inline void Actor::CommandCompareGreaterEqualInteger(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandCompareGreaterEqualInteger(const std::shared_ptr<VM>&, Actor& self)
 	{
 		const int_t left = self.mStack.Get<int_t>(1);
 		const int_t right = self.mStack.Get<int_t>(0);
@@ -1335,7 +1331,7 @@ namespace mana
 		self.mStack.Set(0, left >= right);
 	}
 
-	inline void Actor::CommandCompareGreaterEqualFloat(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandCompareGreaterEqualFloat(const std::shared_ptr<VM>&, Actor& self)
 	{
 		const float_t left = self.mStack.Get<float_t>(1);
 		const float_t right = self.mStack.Get<float_t>(0);
@@ -1343,7 +1339,7 @@ namespace mana
 		self.mStack.Set(0, left >= right);
 	}
 
-	inline void Actor::CommandCompareGreaterInteger(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandCompareGreaterInteger(const std::shared_ptr<VM>&, Actor& self)
 	{
 		const int_t left = self.mStack.Get<int_t>(1);
 		const int_t right = self.mStack.Get<int_t>(0);
@@ -1351,7 +1347,7 @@ namespace mana
 		self.mStack.Set(0, left > right);
 	}
 
-	inline void Actor::CommandCompareGreaterFloat(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandCompareGreaterFloat(const std::shared_ptr<VM>&, Actor& self)
 	{
 		const float_t left = self.mStack.Get<float_t>(1);
 		const float_t right = self.mStack.Get<float_t>(0);
@@ -1359,7 +1355,7 @@ namespace mana
 		self.mStack.Set(0, left > right);
 	}
 
-	inline void Actor::CommandCompareNotEqualInteger(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandCompareNotEqualInteger(const std::shared_ptr<VM>&, Actor& self)
 	{
 		const int_t left = self.mStack.Get<int_t>(1);
 		const int_t right = self.mStack.Get<int_t>(0);
@@ -1367,7 +1363,7 @@ namespace mana
 		self.mStack.Set(0, left != right);
 	}
 
-	inline void Actor::CommandCompareNotEqualFloat(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandCompareNotEqualFloat(const std::shared_ptr<VM>&, Actor& self)
 	{
 		const float_t left = self.mStack.Get<float_t>(1);
 		const float_t right = self.mStack.Get<float_t>(0);
@@ -1375,7 +1371,7 @@ namespace mana
 		self.mStack.Set(0, left != right);
 	}
 
-	inline void Actor::CommandCompareLessEqualInteger(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandCompareLessEqualInteger(const std::shared_ptr<VM>&, Actor& self)
 	{
 		const int_t left = self.mStack.Get<int_t>(1);
 		const int_t right = self.mStack.Get<int_t>(0);
@@ -1383,7 +1379,7 @@ namespace mana
 		self.mStack.Set(0, left <= right);
 	}
 
-	inline void Actor::CommandCompareLessEqualFloat(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandCompareLessEqualFloat(const std::shared_ptr<VM>&, Actor& self)
 	{
 		const float_t left = self.mStack.Get<float_t>(1);
 		const float_t right = self.mStack.Get<float_t>(0);
@@ -1391,7 +1387,7 @@ namespace mana
 		self.mStack.Set(0, left <= right);
 	}
 
-	inline void Actor::CommandCompareLessInteger(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandCompareLessInteger(const std::shared_ptr<VM>&, Actor& self)
 	{
 		const int_t left = self.mStack.Get<int_t>(1);
 		const int_t right = self.mStack.Get<int_t>(0);
@@ -1399,7 +1395,7 @@ namespace mana
 		self.mStack.Set(0, left < right);
 	}
 
-	inline void Actor::CommandCompareLessFloat(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandCompareLessFloat(const std::shared_ptr<VM>&, Actor& self)
 	{
 		const float_t left = self.mStack.Get<float_t>(1);
 		const float_t right = self.mStack.Get<float_t>(0);
@@ -1407,12 +1403,12 @@ namespace mana
 		self.mStack.Set(0, left < right);
 	}
 
-	inline void Actor::CommandIntegerToFloat(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandIntegerToFloat(const std::shared_ptr<VM>&, Actor& self)
 	{
 		self.mStack.Set(0, static_cast<float_t>(self.mStack.Get<int_t>(0)));
 	}
 
-	inline void Actor::CommandFloatToInteger(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandFloatToInteger(const std::shared_ptr<VM>&, Actor& self)
 	{
 		self.mStack.Set(0, static_cast<int_t>(self.mStack.Get<float_t>(0)));
 	}
@@ -1654,7 +1650,7 @@ namespace mana
 		}
 	}
 
-	inline void Actor::Commanddynamic_request(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::Commanddynamic_request(const std::shared_ptr<VM>&, Actor&)
 	{
 		/*
 		CManaStack& Stack = actor->self.mStack;
@@ -1671,7 +1667,7 @@ namespace mana
 		*/
 	}
 
-	inline void Actor::CommandDynamicRequestWaitStarting(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandDynamicRequestWaitStarting(const std::shared_ptr<VM>&, Actor&)
 	{
 		/*
 		CManaStack& Stack = actor->self.mStack;
@@ -1704,7 +1700,7 @@ namespace mana
 		*/
 	}
 
-	inline void Actor::Commanddynamic_request_wait_ending(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::Commanddynamic_request_wait_ending(const std::shared_ptr<VM>&, Actor&)
 	{
 		/*
 		CManaStack& Stack = actor->self.mStack;
@@ -1737,7 +1733,7 @@ namespace mana
 		*/
 	}
 
-	inline void Actor::CommandJoin(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandJoin(const std::shared_ptr<VM>&, Actor& self)
 	{
 		Actor* target_actor = (Actor*)self.mStack.Get<void*>(0);
 		if (target_actor == nullptr)

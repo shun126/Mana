@@ -9,7 +9,6 @@ mana (library)
 #include "Platform.h"
 #include "Assert.h"
 #include "FileFormat.h"
-#include "HashValue.h"
 #include "Math.h"
 #include "Memory.h"
 #include "Noncopyable.h"

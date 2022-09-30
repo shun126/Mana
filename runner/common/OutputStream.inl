@@ -9,7 +9,8 @@ mana (library)
 
 namespace mana
 {
-	inline OutputStream::OutputStream() : mBuffer(nullptr, std::free)
+	inline OutputStream::OutputStream()
+		: mBuffer(nullptr, std::free)
 	{
 	}
 
@@ -29,7 +30,7 @@ namespace mana
 		}
 	}
 
-	inline void OutputStream::Load(const char* filename)
+	inline void OutputStream::Load(const std::string& filename)
 	{
 		std::ifstream infile(filename, std::ios::in | std::ios::ate);
 
@@ -50,7 +51,7 @@ namespace mana
 		mUsedSize += filesize;
 	}
 
-	inline void OutputStream::Save(const char* filename)
+	inline void OutputStream::Save(const std::string& filename)
 	{
 		std::ofstream outfile(filename, std::ios::out);
 		if (!outfile.is_open())
@@ -75,6 +76,22 @@ namespace mana
 		return &weakBuffer[index];
 	}
 
+	inline size_t OutputStream::GetAllocatedSize() const
+	{
+		return mAllocatedSize;
+	}
+	
+	inline size_t OutputStream::GetUsedSize() const
+	{
+		return mUsedSize;
+	}
+
+	template<typename T>
+	inline void OutputStream::Push(const T value)
+	{
+		PushData(&value, sizeof(value));
+	}
+
 	inline void OutputStream::PushString(const char* text)
 	{
 		const size_t size = std::strlen(text) + 1;
@@ -92,6 +109,14 @@ namespace mana
 		mUsedSize += size;
 	}
 
+	template<typename T>
+	inline T OutputStream::Pop()
+	{
+		T value;
+		PopData(&value, sizeof(value));
+		return value;
+	}
+
 	inline void OutputStream::PopString(char* pointer, const size_t size)
 	{
 		pointer += GetString(pointer, size);
@@ -101,6 +126,14 @@ namespace mana
 	{
 		GetData(pointer, size);
 		mPointer += size;
+	}
+
+	template<typename T>
+	inline T OutputStream::Get()
+	{
+		T value;
+		GetData(&value, sizeof(value));
+		return value;
 	}
 
 	inline size_t OutputStream::GetString(char* pointer, const size_t size)
@@ -141,6 +174,11 @@ namespace mana
 			throw std::range_error("GetData");
 		const uint8_t* weakBuffer = mBuffer.get();
 		std::memcpy(pointer, &weakBuffer[mPointer], size);
+	}
+
+	inline void OutputStream::Rewind()
+	{
+		mPointer = 0;
 	}
 
 	inline void OutputStream::Seek(const ssize_t offset)

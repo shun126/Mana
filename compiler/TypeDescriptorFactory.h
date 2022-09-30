@@ -17,17 +17,14 @@ namespace mana
 	{
 	public:
 		TypeDescriptorFactory();
-		~TypeDescriptorFactory();
+		~TypeDescriptorFactory() = default;
 
-		std::shared_ptr<TypeDescriptor> Get(const TypeDescriptor::Id id) const;
-		std::shared_ptr<TypeDescriptor> GetString() const;
+		const std::shared_ptr<TypeDescriptor>& Get(const TypeDescriptor::Id id) const;
+		const std::shared_ptr<TypeDescriptor>& GetString() const;
 
-		std::shared_ptr<TypeDescriptor> Create(const TypeDescriptor::Id tcons);
-		std::shared_ptr<TypeDescriptor> CreateReference(const std::shared_ptr<TypeDescriptor>& component);
-		std::shared_ptr<TypeDescriptor> CreateArray(const size_t arraySize);
-
-		static bool Compare(const std::shared_ptr<TypeDescriptor>& left, const std::shared_ptr<TypeDescriptor>& right);
-		static bool Compatible(const std::shared_ptr<TypeDescriptor>& left, const std::shared_ptr<TypeDescriptor>& right);
+		const std::shared_ptr<TypeDescriptor>& Create(const TypeDescriptor::Id tcons);
+		const std::shared_ptr<TypeDescriptor>& CreateReference(const std::shared_ptr<TypeDescriptor>& component);
+		const std::shared_ptr<TypeDescriptor>& CreateArray(const size_t arraySize);
 
 	private:
 		std::vector<std::shared_ptr<TypeDescriptor>> mTypeDescriptor;

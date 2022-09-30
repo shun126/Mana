@@ -6,10 +6,8 @@ mana (library)
 */
 
 #pragma once
-#include "Datalink.h"
-#include "Actor.h"
 #include "Buffer.h"
-#include "Plugin.h"
+#include "Datalink.h"
 #include <bitset>
 #include <functional>
 #include <memory>
@@ -18,6 +16,7 @@ mana (library)
 namespace mana
 {
 	class Actor;
+	class Plugin;
 
     class VM : private Noncopyable, public std::enable_shared_from_this<VM>
 	{

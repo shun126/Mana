@@ -19,7 +19,6 @@ namespace mana
 		const std::shared_ptr<GlobalSemanticAnalyzer>& globalSemanticAnalyzer,
 		const std::shared_ptr<LocalSemanticAnalyzer>& localSemanticAnalyzer,
 		const std::shared_ptr<SymbolFactory>& symbolFactory,
-		const std::shared_ptr<SymbolTable>& symbolTable,
 		const std::shared_ptr<TypeDescriptorFactory>& typeDescriptorFactory)
 		: mCodeBuffer(codeBuffer)
 		, mDataBuffer(dataBuffer)
@@ -28,7 +27,6 @@ namespace mana
 		, mLocalAddressResolver(std::make_shared<LocalAddressResolver>(mCodeBuffer))
 		, mLocalSemanticAnalyzer(localSemanticAnalyzer)
 		, mSymbolFactory(symbolFactory)
-		, mSymbolTable(symbolTable)
 		, mTypeDescriptorFactory(typeDescriptorFactory)
 	{
 	}
@@ -80,8 +78,8 @@ namespace mana
 			mCodeBuffer->AddOpecode(MANA_IL_LOAD_REFFRENCE);
 			break;
 
-		case TypeDescriptor::Id::ACTOR:
-			if (node->GetTypeDescriptor() == mTypeDescriptorFactory->Get(TypeDescriptor::Id::ACTOR))
+		case TypeDescriptor::Id::Actor:
+			if (node->GetTypeDescriptor() == mTypeDescriptorFactory->Get(TypeDescriptor::Id::Actor))
 				mCodeBuffer->AddOpecode(MANA_IL_LOAD_REFFRENCE);
 			else
 				mCodeBuffer->AddOpecodeAndOperand(MANA_IL_PUSH_ACTOR, mDataBuffer->Set(node->GetTypeDescriptor()->GetName()));
@@ -127,7 +125,7 @@ namespace mana
 			break;
 
 		case TypeDescriptor::Id::Reference:
-		case TypeDescriptor::Id::ACTOR:
+		case TypeDescriptor::Id::Actor:
 			mCodeBuffer->AddOpecode(MANA_IL_STORE_REFFRENCE);
 			break;
 
@@ -154,7 +152,7 @@ namespace mana
 	{
 		// Error check
 		std::shared_ptr<TypeDescriptor> type = func->GetTypeDescriptor();
-		if (type->GetId() == TypeDescriptor::Id::Void)
+		if (type->Is(TypeDescriptor::Id::Void))
 		{
 			if (tree != nullptr)
 				CompileError("meaningless return value specification");
@@ -169,19 +167,19 @@ namespace mana
 			tree->SetLeftNode(tree->GetLeftNode()->Cast(type, mTypeDescriptorFactory));
 
 			// 型の検証
-			TypeDescriptorFactory::Compatible(type, tree->GetLeftNode()->GetTypeDescriptor());
+			TypeDescriptor::Compatible(type, tree->GetLeftNode()->GetTypeDescriptor());
 
 			// ノードの評価
-			const int32_t in_depth = mSymbolTable->OpenBlock(false);
+			const int32_t in_depth = mSymbolFactory->OpenBlock(false);
 			generator_genearte_code(tree->GetLeftNode(), true);
-			const int32_t out_depth = mSymbolTable->CloseBlock();
+			const int32_t out_depth = mSymbolFactory->CloseBlock();
 			MANA_VERIFY_MESSAGE(in_depth == out_depth, "ブロックの深さが一致しません in:%d out:%d", in_depth, out_depth);
 		}
 
 		// 関数の最後にジャンプ
 		// TODO:SymbolTable側でコード生成できるかも
-		mSymbolTable->SetReturnAddressList(
-			mCodeBuffer->AddOpecodeAndOperand(MANA_IL_BRA, mSymbolTable->GetReturnAddressList())
+		mSymbolFactory->SetReturnAddressList(
+			mCodeBuffer->AddOpecodeAndOperand(MANA_IL_BRA, mSymbolFactory->GetReturnAddressList())
 		);
 
 		// 関数を使用したフラグを立てる
@@ -196,9 +194,9 @@ namespace mana
 	{
 		if (tree)
 		{
-			const int32_t in_depth = mSymbolTable->OpenBlock(false);
+			const int32_t in_depth = mSymbolFactory->OpenBlock(false);
 			generator_genearte_code(tree, true);
-			const int32_t out_depth = mSymbolTable->CloseBlock();
+			const int32_t out_depth = mSymbolFactory->CloseBlock();
 			MANA_VERIFY_MESSAGE(in_depth == out_depth, "ブロックの深さが一致しません in:%d out:%d", in_depth, out_depth);
 		}
 		mCodeBuffer->AddOpecode(MANA_IL_ROLLBACK);
@@ -385,7 +383,7 @@ namespace mana
 		if (tree)
 		{
 			if (
-				tree->GetTypeDescriptor()->GetId() == TypeDescriptor::Id::Void ||
+				tree->GetTypeDescriptor()->Is(TypeDescriptor::Id::Void) ||
 				tree->GetTypeDescriptor()->GetId() > TypeDescriptor::Id::Reference)
 			{
 				CompileError("illegal type of expression in condition");
@@ -406,9 +404,9 @@ namespace mana
 		//generator_automatic_cast(tree);
 
 		/* 判別式の評価 */
-		const int32_t in_depth = mSymbolTable->OpenBlock(false);
+		const int32_t in_depth = mSymbolFactory->OpenBlock(false);
 		generator_condition_core(tree);
-		const int32_t out_depth = mSymbolTable->CloseBlock();
+		const int32_t out_depth = mSymbolFactory->CloseBlock();
 		MANA_VERIFY_MESSAGE(in_depth == out_depth, "ブロックの深さが一致しません in:%d out:%d", in_depth, out_depth);
 
 		return mCodeBuffer->AddOpecodeAndOperand(match ? MANA_IL_BEQ : MANA_IL_BNE);
@@ -494,11 +492,11 @@ namespace mana
 
 		//generator_resolve_symbol(tree);
 
-		const int32_t in_depth = mSymbolTable->OpenBlock(false);
+		const int32_t in_depth = mSymbolFactory->OpenBlock(false);
 
 		if (enable_assign)
 		{
-			if (tree->GetId() != SyntaxNode::Id::Assign && tree->GetId() != SyntaxNode::Id::Call && tree->GetId() != SyntaxNode::Id::FloatToInteger)
+			if (tree->IsNot(SyntaxNode::Id::Assign) && tree->IsNot(SyntaxNode::Id::Call) && tree->GetId() != SyntaxNode::Id::FloatToInteger)
 				CompileError("illegal expression in write-statement");
 		}
 		else {
@@ -519,7 +517,7 @@ namespace mana
 			case TypeDescriptor::Id::Short:
 			case TypeDescriptor::Id::Int:
 			case TypeDescriptor::Id::Float:
-			case TypeDescriptor::Id::ACTOR:
+			case TypeDescriptor::Id::Actor:
 				mCodeBuffer->AddOpecode(MANA_IL_REMOVE);
 				break;
 
@@ -533,7 +531,7 @@ namespace mana
 			}
 		}
 
-		const int32_t out_depth = mSymbolTable->CloseBlock();
+		const int32_t out_depth = mSymbolFactory->CloseBlock();
 		MANA_VERIFY_MESSAGE(in_depth == out_depth, "ブロックの深さが一致しません in:%d out:%d", in_depth, out_depth);
 	}
 
@@ -588,9 +586,9 @@ namespace mana
 		case SyntaxNode::Id::Actor:
 		{
 			actor_symbol_entry_pointer = mSymbolFactory->Lookup(node->GetString());
-			mSymbolTable->OpenActor(node->GetString());
+			mSymbolFactory->OpenActor(node->GetString());
 			generator_genearte_code(node->GetLeftNode(), enable_load);
-			mSymbolTable->CloseActor();
+			mSymbolFactory->CloseActor();
 			actor_symbol_entry_pointer = nullptr;
 		}
 		MANA_ASSERT(node->GetRightNode() == nullptr);
@@ -606,9 +604,9 @@ namespace mana
 		case SyntaxNode::Id::Module:
 		{
 			actor_symbol_entry_pointer = mSymbolFactory->Lookup(node->GetString());
-			mSymbolTable->OpenModule(actor_symbol_entry_pointer);
+			mSymbolFactory->OpenModule(actor_symbol_entry_pointer);
 			generator_genearte_code(node->GetLeftNode(), enable_load);
-			mSymbolTable->CloseModule(node->GetString());
+			mSymbolFactory->CloseModule(node->GetString());
 			actor_symbol_entry_pointer = nullptr;
 		}
 		MANA_ASSERT(node->GetRightNode() == nullptr);
@@ -618,9 +616,9 @@ namespace mana
 		case SyntaxNode::Id::Phantom:
 		{
 			actor_symbol_entry_pointer = mSymbolFactory->Lookup(node->GetString());
-			mSymbolTable->OpenActor(node->GetString());
+			mSymbolFactory->OpenActor(node->GetString());
 			generator_genearte_code(node->GetLeftNode(), enable_load);
-			mSymbolTable->CloseActor();
+			mSymbolFactory->CloseActor();
 			actor_symbol_entry_pointer = nullptr;
 		}
 		MANA_ASSERT(node->GetRightNode() == nullptr);
@@ -641,9 +639,9 @@ namespace mana
 				node->Set(mTypeDescriptorFactory->Get(TypeDescriptor::Id::Void));
 				function_symbol_entry_pointer = mSymbolFactory->Lookup(node->GetString());
 				{
-					mSymbolTable->OpenFunction(node, true);
+					mSymbolFactory->OpenFunction(node, true);
 					generator_genearte_code(node->GetLeftNode(), enable_load);
-					mSymbolTable->CloseFunction(node, true);
+					mSymbolFactory->CloseFunction(node, true);
 				}
 				function_symbol_entry_pointer = nullptr;
 			}
@@ -666,10 +664,10 @@ namespace mana
 			node->Set(function_symbol_entry_pointer);
 
 			// 引数の為にスコープを分ける
-			mSymbolTable->OpenBlock(false);
+			mSymbolFactory->OpenBlock(false);
 			{
 				// 引数を登録
-				mSymbolTable->OpenFunction(node, false);
+				mSymbolFactory->OpenFunction(node, false);
 
 				//TODO
 				// pre_resolver_resolve
@@ -678,12 +676,12 @@ namespace mana
 				node->GetSymbol()->SetParameterList(mSymbolFactory->GetLastSymbolEntryInBlock());
 
 
-				mSymbolTable->OpenFunction2(node->GetSymbol());
+				mSymbolFactory->OpenFunction2(node->GetSymbol());
 
 				generator_genearte_code(node->GetBodyNode(), enable_load);
-				mSymbolTable->CloseFunction(node, false);
+				mSymbolFactory->CloseFunction(node, false);
 			}
-			mSymbolTable->CloseBlock();
+			mSymbolFactory->CloseBlock();
 
 			function_symbol_entry_pointer = nullptr;
 		}
@@ -739,7 +737,7 @@ namespace mana
 			// ブロックを伴う制御に関するノード
 		case SyntaxNode::Id::Block:
 		{
-			const int32_t in_depth = mSymbolTable->OpenBlock(false);
+			const int32_t in_depth = mSymbolFactory->OpenBlock(false);
 
 			mLocalSemanticAnalyzer->PostResolverResolve(node->GetLeftNode());
 			generator_genearte_code(node->GetLeftNode(), enable_load);
@@ -747,7 +745,7 @@ namespace mana
 			mLocalSemanticAnalyzer->PostResolverResolve(node->GetRightNode());
 			generator_genearte_code(node->GetRightNode(), enable_load);
 
-			const int32_t out_depth = mSymbolTable->CloseBlock();
+			const int32_t out_depth = mSymbolFactory->CloseBlock();
 			MANA_VERIFY_MESSAGE(in_depth == out_depth, "ブロックの深さが一致しません in:%d out:%d", in_depth, out_depth);
 		}
 		MANA_ASSERT(node->GetBodyNode() == nullptr);
@@ -937,7 +935,7 @@ namespace mana
 
 		case SyntaxNode::Id::Join:
 			//generator_resolve_symbol(node);
-			mSymbolTable->AddJoin(shared_from_this(), node->GetLeftNode(), node->GetRightNode());
+			mSymbolFactory->AddJoin(shared_from_this(), node->GetLeftNode(), node->GetRightNode());
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			break;
 
@@ -955,7 +953,7 @@ namespace mana
 			break;
 
 		case SyntaxNode::Id::Request:
-			mSymbolTable->AddRequest(shared_from_this(), MANA_IL_REQ, node->GetLeftNode(), node->GetRightNode(), node->GetString());
+			mSymbolFactory->AddRequest(shared_from_this(), MANA_IL_REQ, node->GetLeftNode(), node->GetRightNode(), node->GetString());
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			break;
 
@@ -971,42 +969,42 @@ namespace mana
 		case SyntaxNode::Id::Add:
 			generator_genearte_code(node->GetLeftNode(), enable_load);
 			generator_genearte_code(node->GetRightNode(), enable_load);
-			mCodeBuffer->AddOpecode((node->GetLeftNode()->GetTypeDescriptor())->GetId() == TypeDescriptor::Id::Float ? MANA_IL_ADD_FLOAT : MANA_IL_ADD_INTEGER);
+			mCodeBuffer->AddOpecode((node->GetLeftNode()->GetTypeDescriptor())->Is(TypeDescriptor::Id::Float) ? MANA_IL_ADD_FLOAT : MANA_IL_ADD_INTEGER);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			break;
 
 		case SyntaxNode::Id::Sub:
 			generator_genearte_code(node->GetLeftNode(), enable_load);
 			generator_genearte_code(node->GetRightNode(), enable_load);
-			mCodeBuffer->AddOpecode((node->GetLeftNode()->GetTypeDescriptor())->GetId() == TypeDescriptor::Id::Float ? MANA_IL_SUB_FLOAT : MANA_IL_SUB_INTEGER);
+			mCodeBuffer->AddOpecode((node->GetLeftNode()->GetTypeDescriptor())->Is(TypeDescriptor::Id::Float) ? MANA_IL_SUB_FLOAT : MANA_IL_SUB_INTEGER);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			break;
 
 		case SyntaxNode::Id::Mul:
 			generator_genearte_code(node->GetLeftNode(), enable_load);
 			generator_genearte_code(node->GetRightNode(), enable_load);
-			mCodeBuffer->AddOpecode((node->GetLeftNode()->GetTypeDescriptor())->GetId() == TypeDescriptor::Id::Float ? MANA_IL_MUL_FLOAT : MANA_IL_MUL_INTEGER);
+			mCodeBuffer->AddOpecode((node->GetLeftNode()->GetTypeDescriptor())->Is(TypeDescriptor::Id::Float) ? MANA_IL_MUL_FLOAT : MANA_IL_MUL_INTEGER);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			break;
 
 		case SyntaxNode::Id::Div:
 			generator_genearte_code(node->GetLeftNode(), enable_load);
 			generator_genearte_code(node->GetRightNode(), enable_load);
-			mCodeBuffer->AddOpecode((node->GetLeftNode()->GetTypeDescriptor())->GetId() == TypeDescriptor::Id::Float ? MANA_IL_DIV_FLOAT : MANA_IL_DIV_INTEGER);
+			mCodeBuffer->AddOpecode((node->GetLeftNode()->GetTypeDescriptor())->Is(TypeDescriptor::Id::Float) ? MANA_IL_DIV_FLOAT : MANA_IL_DIV_INTEGER);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			break;
 
 		case SyntaxNode::Id::Rem:
 			generator_genearte_code(node->GetLeftNode(), enable_load);
 			generator_genearte_code(node->GetRightNode(), enable_load);
-			mCodeBuffer->AddOpecode((node->GetLeftNode()->GetTypeDescriptor())->GetId() == TypeDescriptor::Id::Float ? MANA_IL_MOD_FLOAT : MANA_IL_MOD_INTEGER);
+			mCodeBuffer->AddOpecode((node->GetLeftNode()->GetTypeDescriptor())->Is(TypeDescriptor::Id::Float) ? MANA_IL_MOD_FLOAT : MANA_IL_MOD_INTEGER);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			break;
 
 		case SyntaxNode::Id::Pow:
 			generator_genearte_code(node->GetLeftNode(), enable_load);
 			generator_genearte_code(node->GetRightNode(), enable_load);
-			mCodeBuffer->AddOpecode((node->GetLeftNode()->GetTypeDescriptor())->GetId() == TypeDescriptor::Id::Float ? MANA_IL_SUB_FLOAT : MANA_IL_SUB_INTEGER);
+			mCodeBuffer->AddOpecode((node->GetLeftNode()->GetTypeDescriptor())->Is(TypeDescriptor::Id::Float) ? MANA_IL_SUB_FLOAT : MANA_IL_SUB_INTEGER);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			break;
 
@@ -1135,7 +1133,7 @@ namespace mana
 				generator_generate_const_float(node->GetTypeDescriptor()->GetId(), node->GetFloat());
 				break;
 
-			case TypeDescriptor::Id::NIL:
+			case TypeDescriptor::Id::Nil:
 				mCodeBuffer->AddOpecode(MANA_IL_PUSH_ZERO_INTEGER);
 				break;
 

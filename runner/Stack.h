@@ -159,7 +159,7 @@ namespace mana
 		}
 
 	private:
-		typedef union Buffer
+		union Buffer
 		{
 			Actor* mActorPointer;
 			const char* mStringPointer;
@@ -185,7 +185,7 @@ namespace mana
 			void Set(float value) { mFloat = static_cast<float_t>(value); }
 			void Set(double value) { mFloat = static_cast<float_t>(value); }
 			void Set(bool value) { mBool = value; }
-		}Buffer;
+		};
 		std::unique_ptr<Buffer, decltype(&std::free)> mBuffer;
 		size_t mAllocatedSize = 0;
 		size_t mUsedSize = 0;
