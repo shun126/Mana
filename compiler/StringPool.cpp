@@ -9,28 +9,27 @@ mana (compiler)
 
 namespace mana
 {
-
 	StringPool::StringPool()
 		: mBuffer(nullptr, std::free)
 	{
 	}
 
-	size_t StringPool::Find(const char* text) const noexcept
+	address_t StringPool::Find(const std::string_view& text) const noexcept
 	{
-		if (text)
+		if (!text.empty())
 		{
 			for (const auto& address : mAddress)
 			{
-				if (strcmp(static_cast<const char*>(&mBuffer.get()[address]), text) == 0)
+				if (strcmp(static_cast<const char*>(&mBuffer.get()[address]), text.data()) == 0)
 					return address;
 			}
 		}
-		return static_cast<size_t>(~0);
+		return InvalidAddress;
 	}
 
-	const std::string_view StringPool::Text(const size_t address) const
+	const std::string_view StringPool::Text(const address_t address) const
 	{
-		if (address == ~0)
+		if (address == InvalidAddress)
 			return std::string_view();
 
 		if (address >= mUsedSize)
@@ -39,17 +38,17 @@ namespace mana
 		return std::string_view(static_cast<const char*>(&mBuffer.get()[address]));
 	}
 
-	const std::string_view StringPool::Get(const char* text) const
+	const std::string_view StringPool::Get(const std::string_view text) const
 	{
 		return Text(Find(text));
 	}
 
-	const std::string_view StringPool::Set(const char* text)
+	const std::string_view StringPool::Set(const std::string_view text)
 	{
-		auto address = Find(text);
-		if (address == ~0)
+		address_t address = Find(text);
+		if (address == InvalidAddress)
 		{
-			size_t length = strlen(text) + 1;
+			address_t length = text.length() + 1;
 			if (mUsedSize + length >= mAllocatedSize)
 			{
 				mAllocatedSize += (mUsedSize + length + 4096);
@@ -61,7 +60,7 @@ namespace mana
 				}
 				mBuffer.reset(newBuffer);
 			}
-			std::memcpy(mBuffer.get() + mUsedSize, text, length);
+			std::memcpy(mBuffer.get() + mUsedSize, text.data(), length);
 
 			address = mUsedSize;
 			mUsedSize += length;

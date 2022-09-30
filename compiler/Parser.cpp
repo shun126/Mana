@@ -34,6 +34,31 @@
 // especially those whose name start with YY_ or yy_.  They are
 // private implementation details that can be changed or removed.
 
+// "%code top" blocks.
+#line 36 "Parser.yy"
+
+	#include "../runner/common/Setup.h"
+	#include "ErrorHandler.h"
+	#include "Lexer.h"
+	#include "Main.h"
+    #include "ParsingDriver.h"
+	#include "Symbol.h"
+	#include "SyntaxNode.h"
+	#include "TypeDescriptor.h"
+
+#include "Main.h"
+#include "CodeGenerator.h"
+#include "GlobalAddressResolver.h"
+#include "GlobalSemanticAnalyzer.h"
+#include "DataBuffer.h"
+#include "SyntaxNode.h"
+#include "TypeDescriptorFactory.h"
+
+	#include "ParserDeclaration.inl"
+	#include <memory>
+	#include <string_view>
+
+#line 62 "Parser.cpp"
 
 
 // First part of user prologue.
@@ -46,31 +71,12 @@ mana (compiler)
 @date	2003-
 */
 
-#include "../runner/common/Setup.h"
-#include "ErrorHandler.h"
-#include "Lexer.h"
-#include "Main.h"
-#include "Symbol.h"
-#include "TypeDescriptor.h"
-//#include "generator.h"
-#include "Lexer.h"
-//#include "linker.h"
-//#include "main.h"
-//#include "pre_resolver.h"
-
-#include "SyntaxNode.h"
-#include "Parser.hpp"
-
-#include "ParserDeclaration.inl"
-#include <memory>
-#include <string_view>
-
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
 #define YYERROR_VERBOSE
 #endif
 
 
-#line 74 "Parser.cpp"
+#line 80 "Parser.cpp"
 
 
 #include "Parser.hpp"
@@ -147,18 +153,19 @@ mana (compiler)
 #define YYERROR         goto yyerrorlab
 #define YYRECOVERING()  (!!yyerrstatus_)
 
-#line 38 "Parser.yy"
+#line 19 "Parser.yy"
 namespace mana {
-#line 153 "Parser.cpp"
+#line 159 "Parser.cpp"
 
   /// Build a parser object.
-  Parser::Parser ()
+  Parser::Parser (mana::ParsingDriver* mParsingDriver_yyarg)
 #if YYDEBUG
     : yydebug_ (false),
-      yycdebug_ (&std::cerr)
+      yycdebug_ (&std::cerr),
 #else
-
+    :
 #endif
+      mParsingDriver (mParsingDriver_yyarg)
   {}
 
   Parser::~Parser ()
@@ -950,910 +957,910 @@ namespace mana {
           switch (yyn)
             {
   case 2: // program: line
-#line 94 "Parser.yy"
+#line 112 "Parser.yy"
                                         {
 						if (yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ())
 						{
 							yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()->Dump();
 						}
 
-						auto globalSemanticAnalyzer = mana::GetSystemHolder().GetGlobalSemanticAnalyzer();
+						auto globalSemanticAnalyzer = mParsingDriver->GetGlobalSemanticAnalyzer();
 						globalSemanticAnalyzer->Resolve(yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ());
 
-						auto codeGenerator = mana::GetSystemHolder().GetCodeGenerator();
+						auto codeGenerator = mParsingDriver->GetCodeGenerator();
 						codeGenerator->generator_genearte_code(yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > (), true);
 
-						auto globalAddressResolver = mana::GetSystemHolder().GetCodeGenerator()->GetGlobalAddressResolver();
+						auto globalAddressResolver = mParsingDriver->GetCodeGenerator()->GetGlobalAddressResolver();
 						globalAddressResolver->ResolveAddress();
 						//globalAddressResolver->mana_linker_resolve_address();
 					}
-#line 971 "Parser.cpp"
+#line 978 "Parser.cpp"
     break;
 
   case 3: // line: %empty
-#line 113 "Parser.yy"
+#line 131 "Parser.yy"
                                         { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = nullptr; }
-#line 977 "Parser.cpp"
+#line 984 "Parser.cpp"
     break;
 
   case 4: // line: declarations line
-#line 115 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::Bind(yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 983 "Parser.cpp"
+#line 133 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->Bind(yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 990 "Parser.cpp"
     break;
 
   case 5: // declarations: actor
-#line 118 "Parser.yy"
+#line 136 "Parser.yy"
                   { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > (); }
-#line 989 "Parser.cpp"
+#line 996 "Parser.cpp"
     break;
 
   case 6: // declarations: struct
-#line 119 "Parser.yy"
+#line 137 "Parser.yy"
                                   { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > (); }
-#line 995 "Parser.cpp"
+#line 1002 "Parser.cpp"
     break;
 
   case 7: // declarations: function
-#line 120 "Parser.yy"
+#line 138 "Parser.yy"
                                   { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > (); }
-#line 1001 "Parser.cpp"
+#line 1008 "Parser.cpp"
     break;
 
   case 8: // declarations: declaration ';'
-#line 121 "Parser.yy"
+#line 139 "Parser.yy"
                                   { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > (); }
-#line 1007 "Parser.cpp"
+#line 1014 "Parser.cpp"
     break;
 
   case 9: // declarations: tNATIVE variable_type tIDENTIFIER '(' arg_decls ')' ';'
-#line 124 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateNativeFunction(yystack_[5].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[4].value.as < std::string_view > (), yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1013 "Parser.cpp"
+#line 142 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateNativeFunction(yystack_[5].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[4].value.as < std::string_view > (), yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1020 "Parser.cpp"
     break;
 
   case 10: // declarations: tALLOCATE tDIGIT '{' allocate_declarations '}'
-#line 127 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateDeclareMemory(yystack_[3].value.as < mana::int_t > (), yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1019 "Parser.cpp"
+#line 145 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateDeclareMemory(yystack_[3].value.as < mana::int_t > (), yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1026 "Parser.cpp"
     break;
 
   case 11: // declarations: tSTATIC '{' allocate_declarations '}'
-#line 129 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateDeclareStaticMemory(0, yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1025 "Parser.cpp"
+#line 147 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateDeclareStaticMemory(0, yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1032 "Parser.cpp"
     break;
 
   case 12: // declarations: tSTATIC tALLOCATE tDIGIT '{' allocate_declarations '}'
-#line 131 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateDeclareStaticMemory(yystack_[3].value.as < mana::int_t > (), yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1031 "Parser.cpp"
+#line 149 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateDeclareStaticMemory(yystack_[3].value.as < mana::int_t > (), yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1038 "Parser.cpp"
     break;
 
   case 13: // declarations: tALIAS tIDENTIFIER tSTRING ';'
-#line 134 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateAlias(yystack_[2].value.as < std::string_view > (), yystack_[1].value.as < std::string_view > ()); }
-#line 1037 "Parser.cpp"
+#line 152 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateAlias(yystack_[2].value.as < std::string_view > (), yystack_[1].value.as < std::string_view > ()); }
+#line 1044 "Parser.cpp"
     break;
 
   case 14: // declarations: tINCLUDE tSTRING ';'
-#line 137 "Parser.yy"
+#line 155 "Parser.yy"
                                         { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = nullptr; if(! lexer_open(yystack_[1].value.as < std::string_view > (), false)){ YYABORT; } }
-#line 1043 "Parser.cpp"
+#line 1050 "Parser.cpp"
     break;
 
   case 15: // declarations: tIMPORT tSTRING ';'
-#line 139 "Parser.yy"
+#line 157 "Parser.yy"
                                         { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = nullptr; if(! lexer_open(yystack_[1].value.as < std::string_view > (), true)){ YYABORT; } }
-#line 1049 "Parser.cpp"
+#line 1056 "Parser.cpp"
     break;
 
   case 16: // allocate_declarations: %empty
-#line 144 "Parser.yy"
+#line 162 "Parser.yy"
                                         { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = nullptr; }
-#line 1055 "Parser.cpp"
+#line 1062 "Parser.cpp"
     break;
 
   case 17: // allocate_declarations: variable_decl ';' allocate_declarations
-#line 146 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::Bind(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1061 "Parser.cpp"
+#line 164 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->Bind(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1068 "Parser.cpp"
     break;
 
   case 18: // declaration: variable_decl
-#line 149 "Parser.yy"
+#line 167 "Parser.yy"
                           { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > (); }
-#line 1067 "Parser.cpp"
+#line 1074 "Parser.cpp"
     break;
 
   case 19: // declaration: tDEFINE tIDENTIFIER tDIGIT
-#line 151 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateConstantNode(yystack_[1].value.as < std::string_view > (), yystack_[0].value.as < mana::int_t > ()); }
-#line 1073 "Parser.cpp"
+#line 169 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateConstantNode(yystack_[1].value.as < std::string_view > (), yystack_[0].value.as < mana::int_t > ()); }
+#line 1080 "Parser.cpp"
     break;
 
   case 20: // declaration: tDEFINE tIDENTIFIER tREAL
-#line 153 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateConstantNode(yystack_[1].value.as < std::string_view > (), yystack_[0].value.as < mana::float_t > ()); }
-#line 1079 "Parser.cpp"
+#line 171 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateConstantNode(yystack_[1].value.as < std::string_view > (), yystack_[0].value.as < mana::float_t > ()); }
+#line 1086 "Parser.cpp"
     break;
 
   case 21: // declaration: tDEFINE tIDENTIFIER '-' tDIGIT
-#line 155 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateConstantNode(yystack_[2].value.as < std::string_view > (), -yystack_[0].value.as < mana::int_t > ()); }
-#line 1085 "Parser.cpp"
+#line 173 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateConstantNode(yystack_[2].value.as < std::string_view > (), -yystack_[0].value.as < mana::int_t > ()); }
+#line 1092 "Parser.cpp"
     break;
 
   case 22: // declaration: tDEFINE tIDENTIFIER '-' tREAL
-#line 157 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateConstantNode(yystack_[2].value.as < std::string_view > (), -yystack_[0].value.as < mana::float_t > ()); }
-#line 1091 "Parser.cpp"
+#line 175 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateConstantNode(yystack_[2].value.as < std::string_view > (), -yystack_[0].value.as < mana::float_t > ()); }
+#line 1098 "Parser.cpp"
     break;
 
   case 23: // declaration: tDEFINE tIDENTIFIER tSTRING
-#line 159 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = CreateConstantNode(yystack_[1].value.as < std::string_view > (), yystack_[0].value.as < std::string_view > ()); }
-#line 1097 "Parser.cpp"
+#line 177 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateConstantNode(yystack_[1].value.as < std::string_view > (), yystack_[0].value.as < std::string_view > ()); }
+#line 1104 "Parser.cpp"
     break;
 
   case 24: // declaration: tDEFINE tIDENTIFIER tIDENTIFIER
-#line 161 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = CreateDefineNode(yystack_[1].value.as < std::string_view > (), yystack_[0].value.as < std::string_view > ()); }
-#line 1103 "Parser.cpp"
+#line 179 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateDefineNode(yystack_[1].value.as < std::string_view > (), yystack_[0].value.as < std::string_view > ()); }
+#line 1110 "Parser.cpp"
     break;
 
   case 25: // declaration: tUNDEF tIDENTIFIER
-#line 163 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = CreateUndefineNode(yystack_[0].value.as < std::string_view > ()); }
-#line 1109 "Parser.cpp"
+#line 181 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateUndefineNode(yystack_[0].value.as < std::string_view > ()); }
+#line 1116 "Parser.cpp"
     break;
 
   case 26: // actor: tACTOR tIDENTIFIER '{' actions '}'
-#line 167 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateActor(yystack_[3].value.as < std::string_view > (), yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1115 "Parser.cpp"
+#line 185 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateActor(yystack_[3].value.as < std::string_view > (), yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1122 "Parser.cpp"
     break;
 
   case 27: // actor: tPHANTOM tIDENTIFIER '{' actions '}'
-#line 169 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreatePhantom(yystack_[3].value.as < std::string_view > (), yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1121 "Parser.cpp"
+#line 187 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreatePhantom(yystack_[3].value.as < std::string_view > (), yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1128 "Parser.cpp"
     break;
 
   case 28: // actor: tMODULE tIDENTIFIER '{' actions '}'
-#line 171 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateModule(yystack_[3].value.as < std::string_view > (), yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1127 "Parser.cpp"
+#line 189 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateModule(yystack_[3].value.as < std::string_view > (), yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1134 "Parser.cpp"
     break;
 
   case 29: // actions: %empty
-#line 175 "Parser.yy"
+#line 193 "Parser.yy"
                                         { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = nullptr; }
-#line 1133 "Parser.cpp"
+#line 1140 "Parser.cpp"
     break;
 
   case 30: // actions: action actions
-#line 177 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::Bind(yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1139 "Parser.cpp"
+#line 195 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->Bind(yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1146 "Parser.cpp"
     break;
 
   case 31: // action: tACTION tIDENTIFIER block
-#line 181 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateAction(yystack_[1].value.as < std::string_view > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1145 "Parser.cpp"
+#line 199 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateAction(yystack_[1].value.as < std::string_view > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1152 "Parser.cpp"
     break;
 
   case 32: // action: tEXTEND tIDENTIFIER ';'
-#line 183 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateExtend(yystack_[1].value.as < std::string_view > ()); }
-#line 1151 "Parser.cpp"
+#line 201 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateExtend(yystack_[1].value.as < std::string_view > ()); }
+#line 1158 "Parser.cpp"
     break;
 
   case 33: // action: declaration ';'
-#line 184 "Parser.yy"
+#line 202 "Parser.yy"
                                   { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > (); }
-#line 1157 "Parser.cpp"
+#line 1164 "Parser.cpp"
     break;
 
   case 34: // struct: tSTRUCT tIDENTIFIER '{' struct_members '}'
-#line 188 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateStruct(yystack_[3].value.as < std::string_view > (), yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1163 "Parser.cpp"
+#line 206 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateStruct(yystack_[3].value.as < std::string_view > (), yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1170 "Parser.cpp"
     break;
 
   case 35: // struct_members: %empty
-#line 192 "Parser.yy"
+#line 210 "Parser.yy"
                                         { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = nullptr; }
-#line 1169 "Parser.cpp"
+#line 1176 "Parser.cpp"
     break;
 
   case 36: // struct_members: struct_member struct_members
-#line 194 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::Bind(yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1175 "Parser.cpp"
+#line 212 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->Bind(yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1182 "Parser.cpp"
     break;
 
   case 37: // struct_member: variable_decl ';'
-#line 197 "Parser.yy"
+#line 215 "Parser.yy"
                   { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > (); }
-#line 1181 "Parser.cpp"
+#line 1188 "Parser.cpp"
     break;
 
   case 38: // function: variable_type tIDENTIFIER '(' arg_decls ')' block
-#line 201 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateInternalFunction(yystack_[5].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[4].value.as < std::string_view > (), yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1187 "Parser.cpp"
+#line 219 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateInternalFunction(yystack_[5].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[4].value.as < std::string_view > (), yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1194 "Parser.cpp"
     break;
 
   case 39: // variable_type: tACTOR2
-#line 205 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateActorTypeDescription(); }
-#line 1193 "Parser.cpp"
+#line 223 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateActorTypeDescription(); }
+#line 1200 "Parser.cpp"
     break;
 
   case 40: // variable_type: tIDENTIFIER
-#line 207 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateTypeDescription(yystack_[0].value.as < std::string_view > ()); }
-#line 1199 "Parser.cpp"
+#line 225 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateTypeDescription(yystack_[0].value.as < std::string_view > ()); }
+#line 1206 "Parser.cpp"
     break;
 
   case 41: // variable_type: tTYPE
-#line 209 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateTypeDescription(yystack_[0].value.as < std::shared_ptr<mana::TypeDescriptor> > ()); }
-#line 1205 "Parser.cpp"
+#line 227 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateTypeDescription(yystack_[0].value.as < std::shared_ptr<mana::TypeDescriptor> > ()); }
+#line 1212 "Parser.cpp"
     break;
 
   case 42: // block: '{' statements '}'
-#line 213 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateBlock(yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1211 "Parser.cpp"
+#line 231 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateBlock(yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1218 "Parser.cpp"
     break;
 
   case 43: // statements: %empty
-#line 217 "Parser.yy"
+#line 235 "Parser.yy"
                                         { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = nullptr; }
-#line 1217 "Parser.cpp"
+#line 1224 "Parser.cpp"
     break;
 
   case 44: // statements: statement statements
-#line 219 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::Bind(yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1223 "Parser.cpp"
+#line 237 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->Bind(yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1230 "Parser.cpp"
     break;
 
   case 45: // statement: tIF '(' expression ')' statement
-#line 222 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateIf(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > (), nullptr); }
-#line 1229 "Parser.cpp"
+#line 240 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateIf(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > (), nullptr); }
+#line 1236 "Parser.cpp"
     break;
 
   case 46: // statement: tIF '(' expression ')' statement tELSE statement
-#line 224 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateIf(yystack_[4].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1235 "Parser.cpp"
+#line 242 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateIf(yystack_[4].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1242 "Parser.cpp"
     break;
 
   case 47: // statement: tSWITCH '(' expression ')' '{' cases '}'
-#line 226 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateSwitch(yystack_[4].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1241 "Parser.cpp"
+#line 244 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateSwitch(yystack_[4].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1248 "Parser.cpp"
     break;
 
   case 48: // statement: tWHILE '(' expression ')' statement
-#line 228 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateWhile(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1247 "Parser.cpp"
+#line 246 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateWhile(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1254 "Parser.cpp"
     break;
 
   case 49: // statement: tDO statement tWHILE '(' expression ')' ';'
-#line 230 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateDoWhile(yystack_[5].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1253 "Parser.cpp"
+#line 248 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateDoWhile(yystack_[5].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1260 "Parser.cpp"
     break;
 
   case 50: // statement: tFOR '(' expression ';' expression ';' expression ')' statement
-#line 232 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateFor(yystack_[6].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[4].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1259 "Parser.cpp"
+#line 250 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateFor(yystack_[6].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[4].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1266 "Parser.cpp"
     break;
 
   case 51: // statement: tFOR '(' variable_decl ';' expression ';' expression ')' statement
-#line 234 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateFor(yystack_[6].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[4].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1265 "Parser.cpp"
+#line 252 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateFor(yystack_[6].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[4].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1272 "Parser.cpp"
     break;
 
   case 52: // statement: tLOOP statement
-#line 236 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateLoop(yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1271 "Parser.cpp"
+#line 254 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateLoop(yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1278 "Parser.cpp"
     break;
 
   case 53: // statement: tLOCK statement
-#line 238 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateLock(yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1277 "Parser.cpp"
+#line 256 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateLock(yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1284 "Parser.cpp"
     break;
 
   case 54: // statement: GOTO tIDENTIFIER ';'
-#line 240 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateGoto(yystack_[1].value.as < std::string_view > ()); }
-#line 1283 "Parser.cpp"
+#line 258 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateGoto(yystack_[1].value.as < std::string_view > ()); }
+#line 1290 "Parser.cpp"
     break;
 
   case 55: // statement: tIDENTIFIER ':'
-#line 242 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateLabel(yystack_[1].value.as < std::string_view > ()); }
-#line 1289 "Parser.cpp"
+#line 260 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateLabel(yystack_[1].value.as < std::string_view > ()); }
+#line 1296 "Parser.cpp"
     break;
 
   case 56: // statement: tRETURN ';'
-#line 244 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateReturn(nullptr); }
-#line 1295 "Parser.cpp"
+#line 262 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateReturn(nullptr); }
+#line 1302 "Parser.cpp"
     break;
 
   case 57: // statement: tRETURN expression ';'
-#line 246 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateReturn(yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1301 "Parser.cpp"
+#line 264 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateReturn(yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1308 "Parser.cpp"
     break;
 
   case 58: // statement: tROLLBACK expression ';'
-#line 248 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateRollback(yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1307 "Parser.cpp"
+#line 266 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateRollback(yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1314 "Parser.cpp"
     break;
 
   case 59: // statement: tBREAK ';'
-#line 250 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateBreak(); }
-#line 1313 "Parser.cpp"
+#line 268 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateBreak(); }
+#line 1320 "Parser.cpp"
     break;
 
   case 60: // statement: tCONTINUE ';'
-#line 252 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateContinue(); }
-#line 1319 "Parser.cpp"
+#line 270 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateContinue(); }
+#line 1326 "Parser.cpp"
     break;
 
   case 61: // statement: tHALT '(' ')' ';'
-#line 254 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateHalt(); }
-#line 1325 "Parser.cpp"
+#line 272 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateHalt(); }
+#line 1332 "Parser.cpp"
     break;
 
   case 62: // statement: tYIELD '(' ')' ';'
-#line 256 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateYield(); }
-#line 1331 "Parser.cpp"
+#line 274 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateYield(); }
+#line 1338 "Parser.cpp"
     break;
 
   case 63: // statement: tCOMPLY '(' ')' ';'
-#line 258 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateComply(); }
-#line 1337 "Parser.cpp"
+#line 276 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateComply(); }
+#line 1344 "Parser.cpp"
     break;
 
   case 64: // statement: tREFUSE '(' ')' ';'
-#line 260 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateRefuse(); }
-#line 1343 "Parser.cpp"
+#line 278 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateRefuse(); }
+#line 1350 "Parser.cpp"
     break;
 
   case 65: // statement: tPRINT '(' arg_calls ')' ';'
-#line 262 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreatePrint(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1349 "Parser.cpp"
+#line 280 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreatePrint(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1356 "Parser.cpp"
     break;
 
   case 66: // statement: tREQUEST '(' expression ',' expression tDC tIDENTIFIER ')' ';'
-#line 264 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateRequest(yystack_[6].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[4].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[2].value.as < std::string_view > ()); }
-#line 1355 "Parser.cpp"
+#line 282 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateRequest(yystack_[6].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[4].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[2].value.as < std::string_view > ()); }
+#line 1362 "Parser.cpp"
     break;
 
   case 67: // statement: tJOIN '(' expression ',' expression ')' ';'
-#line 266 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateJoin(yystack_[4].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1361 "Parser.cpp"
+#line 284 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateJoin(yystack_[4].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1368 "Parser.cpp"
     break;
 
   case 68: // statement: block
-#line 267 "Parser.yy"
+#line 285 "Parser.yy"
                                   { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > (); }
-#line 1367 "Parser.cpp"
+#line 1374 "Parser.cpp"
     break;
 
   case 69: // statement: declaration ';'
-#line 268 "Parser.yy"
+#line 286 "Parser.yy"
                                   { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > (); }
-#line 1373 "Parser.cpp"
+#line 1380 "Parser.cpp"
     break;
 
   case 70: // statement: expression ';'
-#line 269 "Parser.yy"
+#line 287 "Parser.yy"
                                   { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > (); }
-#line 1379 "Parser.cpp"
+#line 1386 "Parser.cpp"
     break;
 
   case 71: // statement: ';'
-#line 271 "Parser.yy"
+#line 289 "Parser.yy"
                                         { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = nullptr; }
-#line 1385 "Parser.cpp"
+#line 1392 "Parser.cpp"
     break;
 
   case 72: // statement: error ';'
-#line 273 "Parser.yy"
+#line 291 "Parser.yy"
                                         { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = nullptr; yyerrok; yyclearin; }
-#line 1391 "Parser.cpp"
+#line 1398 "Parser.cpp"
     break;
 
   case 73: // statement: error '}'
-#line 275 "Parser.yy"
+#line 293 "Parser.yy"
                                         { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = nullptr; yyerrok; yyclearin; }
-#line 1397 "Parser.cpp"
+#line 1404 "Parser.cpp"
     break;
 
   case 74: // expression: left_hand '=' expression
-#line 279 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateAssign(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1403 "Parser.cpp"
+#line 297 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateAssign(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1410 "Parser.cpp"
     break;
 
   case 75: // expression: expression tAND expression
-#line 281 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateLogicalAnd(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1409 "Parser.cpp"
+#line 299 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateLogicalAnd(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1416 "Parser.cpp"
     break;
 
   case 76: // expression: expression tOR expression
-#line 283 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateLogicalOr(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1415 "Parser.cpp"
+#line 301 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateLogicalOr(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1422 "Parser.cpp"
     break;
 
   case 77: // expression: expression tAADD expression
-#line 285 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateAddAndAssign(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1421 "Parser.cpp"
+#line 303 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateAddAndAssign(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1428 "Parser.cpp"
     break;
 
   case 78: // expression: expression tASUB expression
-#line 287 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateSubAndAssign(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1427 "Parser.cpp"
+#line 305 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateSubAndAssign(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1434 "Parser.cpp"
     break;
 
   case 79: // expression: expression tAMUL expression
-#line 289 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateMulAndAssign(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1433 "Parser.cpp"
+#line 307 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateMulAndAssign(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1440 "Parser.cpp"
     break;
 
   case 80: // expression: expression tADIV expression
-#line 291 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateDivAndAssign(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1439 "Parser.cpp"
+#line 309 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateDivAndAssign(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1446 "Parser.cpp"
     break;
 
   case 81: // expression: expression tAMOD expression
-#line 293 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateModAndAssign(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1445 "Parser.cpp"
+#line 311 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateModAndAssign(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1452 "Parser.cpp"
     break;
 
   case 82: // expression: expression tAAND expression
-#line 295 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateAndAndAssign(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1451 "Parser.cpp"
+#line 313 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateAndAndAssign(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1458 "Parser.cpp"
     break;
 
   case 83: // expression: expression tAOR expression
-#line 297 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateOrAndAssign(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1457 "Parser.cpp"
+#line 315 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateOrAndAssign(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1464 "Parser.cpp"
     break;
 
   case 84: // expression: expression tAXOR expression
-#line 299 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateXorAndAssign(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1463 "Parser.cpp"
+#line 317 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateXorAndAssign(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1470 "Parser.cpp"
     break;
 
   case 85: // expression: expression tALSHFT expression
-#line 301 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateLeftShiftAndAssign(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1469 "Parser.cpp"
+#line 319 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateLeftShiftAndAssign(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1476 "Parser.cpp"
     break;
 
   case 86: // expression: expression tARSHFT expression
-#line 303 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateRightShiftAndAssign(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1475 "Parser.cpp"
+#line 321 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateRightShiftAndAssign(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1482 "Parser.cpp"
     break;
 
   case 87: // expression: expression '+' expression
-#line 305 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateAdd(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1481 "Parser.cpp"
+#line 323 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateAdd(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1488 "Parser.cpp"
     break;
 
   case 88: // expression: expression '-' expression
-#line 307 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateSub(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1487 "Parser.cpp"
+#line 325 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateSub(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1494 "Parser.cpp"
     break;
 
   case 89: // expression: expression '*' expression
-#line 309 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateMul(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1493 "Parser.cpp"
+#line 327 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateMul(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1500 "Parser.cpp"
     break;
 
   case 90: // expression: expression '/' expression
-#line 311 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateDiv(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1499 "Parser.cpp"
+#line 329 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateDiv(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1506 "Parser.cpp"
     break;
 
   case 91: // expression: expression '%' expression
-#line 313 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateMod(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1505 "Parser.cpp"
+#line 331 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateMod(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1512 "Parser.cpp"
     break;
 
   case 92: // expression: expression tPOW expression
-#line 315 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreatePow(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1511 "Parser.cpp"
+#line 333 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreatePow(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1518 "Parser.cpp"
     break;
 
   case 93: // expression: expression '&' expression
-#line 317 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateAnd(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1517 "Parser.cpp"
+#line 335 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateAnd(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1524 "Parser.cpp"
     break;
 
   case 94: // expression: expression '|' expression
-#line 319 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateOr(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1523 "Parser.cpp"
+#line 337 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateOr(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1530 "Parser.cpp"
     break;
 
   case 95: // expression: expression '^' expression
-#line 321 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateXor(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1529 "Parser.cpp"
+#line 339 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateXor(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1536 "Parser.cpp"
     break;
 
   case 96: // expression: expression tLSHFT expression
-#line 323 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateLeftShift(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1535 "Parser.cpp"
+#line 341 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateLeftShift(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1542 "Parser.cpp"
     break;
 
   case 97: // expression: expression tRSHFT expression
-#line 325 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateRightShift(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1541 "Parser.cpp"
+#line 343 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateRightShift(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1548 "Parser.cpp"
     break;
 
   case 98: // expression: expression '>' expression
-#line 327 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateGT(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1547 "Parser.cpp"
+#line 345 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateGT(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1554 "Parser.cpp"
     break;
 
   case 99: // expression: expression tGE expression
-#line 329 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateGE(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1553 "Parser.cpp"
+#line 347 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateGE(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1560 "Parser.cpp"
     break;
 
   case 100: // expression: expression '<' expression
-#line 331 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateLS(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1559 "Parser.cpp"
+#line 349 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateLS(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1566 "Parser.cpp"
     break;
 
   case 101: // expression: expression tLE expression
-#line 333 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateLE(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1565 "Parser.cpp"
+#line 351 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateLE(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1572 "Parser.cpp"
     break;
 
   case 102: // expression: expression tEQ expression
-#line 335 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateEQ(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1571 "Parser.cpp"
+#line 353 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateEQ(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1578 "Parser.cpp"
     break;
 
   case 103: // expression: expression tNE expression
-#line 337 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateNE(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1577 "Parser.cpp"
+#line 355 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateNE(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1584 "Parser.cpp"
     break;
 
   case 104: // expression: tINC expression
-#line 339 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateIncrement(yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1583 "Parser.cpp"
+#line 357 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateIncrement(yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1590 "Parser.cpp"
     break;
 
   case 105: // expression: tDEC expression
-#line 341 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateDecrement(yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1589 "Parser.cpp"
+#line 359 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateDecrement(yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1596 "Parser.cpp"
     break;
 
   case 106: // expression: expression tINC
-#line 343 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateIncrement(yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1595 "Parser.cpp"
+#line 361 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateIncrement(yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1602 "Parser.cpp"
     break;
 
   case 107: // expression: expression tDEC
-#line 345 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateDecrement(yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1601 "Parser.cpp"
+#line 363 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateDecrement(yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1608 "Parser.cpp"
     break;
 
   case 108: // expression: expression '?' expression ':' expression
-#line 347 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateExpressionIf(yystack_[4].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1607 "Parser.cpp"
+#line 365 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateExpressionIf(yystack_[4].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1614 "Parser.cpp"
     break;
 
   case 109: // expression: primary
-#line 348 "Parser.yy"
+#line 366 "Parser.yy"
                                   { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > (); }
-#line 1613 "Parser.cpp"
+#line 1620 "Parser.cpp"
     break;
 
   case 110: // primary: '-' expression
-#line 352 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateNegative(yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1619 "Parser.cpp"
+#line 370 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateNegative(yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1626 "Parser.cpp"
     break;
 
   case 111: // primary: '+' expression
-#line 354 "Parser.yy"
+#line 372 "Parser.yy"
                                         { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > (); }
-#line 1625 "Parser.cpp"
+#line 1632 "Parser.cpp"
     break;
 
   case 112: // primary: '!' expression
-#line 356 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateNot(yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1631 "Parser.cpp"
+#line 374 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateNot(yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1638 "Parser.cpp"
     break;
 
   case 113: // primary: '~' expression
-#line 358 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateComplement1(yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1637 "Parser.cpp"
+#line 376 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateComplement1(yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1644 "Parser.cpp"
     break;
 
   case 114: // primary: tSIZEOF '(' variable_type ')'
-#line 360 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateSizeOf(yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1643 "Parser.cpp"
+#line 378 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateSizeOf(yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1650 "Parser.cpp"
     break;
 
   case 115: // primary: tIDENTIFIER '(' arg_calls ')'
-#line 362 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateCall(yystack_[3].value.as < std::string_view > (), yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1649 "Parser.cpp"
+#line 380 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateCall(yystack_[3].value.as < std::string_view > (), yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1656 "Parser.cpp"
     break;
 
   case 116: // primary: constant
-#line 363 "Parser.yy"
+#line 381 "Parser.yy"
                                   { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > (); }
-#line 1655 "Parser.cpp"
+#line 1662 "Parser.cpp"
     break;
 
   case 117: // primary: left_hand
-#line 364 "Parser.yy"
+#line 382 "Parser.yy"
                                   { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > (); }
-#line 1661 "Parser.cpp"
+#line 1668 "Parser.cpp"
     break;
 
   case 118: // constant: tFALSE
-#line 368 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateInteger(0); }
-#line 1667 "Parser.cpp"
+#line 386 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateInteger(0); }
+#line 1674 "Parser.cpp"
     break;
 
   case 119: // constant: tTRUE
-#line 370 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateInteger(1); }
-#line 1673 "Parser.cpp"
+#line 388 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateInteger(1); }
+#line 1680 "Parser.cpp"
     break;
 
   case 120: // constant: tPRIORITY
-#line 372 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreatePriority(); }
-#line 1679 "Parser.cpp"
+#line 390 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreatePriority(); }
+#line 1686 "Parser.cpp"
     break;
 
   case 121: // constant: tSELF
-#line 374 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateSelf(); }
-#line 1685 "Parser.cpp"
+#line 392 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateSelf(); }
+#line 1692 "Parser.cpp"
     break;
 
   case 122: // constant: tSENDER
-#line 376 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateSender(); }
-#line 1691 "Parser.cpp"
+#line 394 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateSender(); }
+#line 1698 "Parser.cpp"
     break;
 
   case 123: // constant: tNIL
-#line 378 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateNil(); }
-#line 1697 "Parser.cpp"
+#line 396 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateNil(); }
+#line 1704 "Parser.cpp"
     break;
 
   case 124: // constant: tDIGIT
-#line 380 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateInteger(yystack_[0].value.as < mana::int_t > ()); }
-#line 1703 "Parser.cpp"
+#line 398 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateInteger(yystack_[0].value.as < mana::int_t > ()); }
+#line 1710 "Parser.cpp"
     break;
 
   case 125: // constant: tREAL
-#line 382 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateFloat(yystack_[0].value.as < mana::float_t > ()); }
-#line 1709 "Parser.cpp"
+#line 400 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateFloat(yystack_[0].value.as < mana::float_t > ()); }
+#line 1716 "Parser.cpp"
     break;
 
   case 126: // constant: tSTRING
-#line 384 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateString(yystack_[0].value.as < std::string_view > ()); }
-#line 1715 "Parser.cpp"
+#line 402 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateString(yystack_[0].value.as < std::string_view > ()); }
+#line 1722 "Parser.cpp"
     break;
 
   case 127: // left_hand: left_hand '.' tIDENTIFIER
-#line 388 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateMemberVariable(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::string_view > ()); }
-#line 1721 "Parser.cpp"
+#line 406 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateMemberVariable(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::string_view > ()); }
+#line 1728 "Parser.cpp"
     break;
 
   case 128: // left_hand: left_hand '.' tIDENTIFIER '(' arg_calls ')'
-#line 390 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateMemberFunction(yystack_[5].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[3].value.as < std::string_view > (), yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1727 "Parser.cpp"
+#line 408 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateMemberFunction(yystack_[5].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[3].value.as < std::string_view > (), yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1734 "Parser.cpp"
     break;
 
   case 129: // left_hand: left_hand '[' expression ']'
-#line 392 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateArray(yystack_[3].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1733 "Parser.cpp"
+#line 410 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateArray(yystack_[3].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1740 "Parser.cpp"
     break;
 
   case 130: // left_hand: tIDENTIFIER
-#line 394 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateIdentifier(yystack_[0].value.as < std::string_view > ()); }
-#line 1739 "Parser.cpp"
+#line 412 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateIdentifier(yystack_[0].value.as < std::string_view > ()); }
+#line 1746 "Parser.cpp"
     break;
 
   case 131: // left_hand: '(' expression ')'
-#line 396 "Parser.yy"
+#line 414 "Parser.yy"
                                         { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > (); }
-#line 1745 "Parser.cpp"
+#line 1752 "Parser.cpp"
     break;
 
   case 132: // cases: case
-#line 399 "Parser.yy"
+#line 417 "Parser.yy"
                           { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > (); }
-#line 1751 "Parser.cpp"
+#line 1758 "Parser.cpp"
     break;
 
   case 133: // cases: cases case
-#line 401 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::BindCaseNode(yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1757 "Parser.cpp"
+#line 419 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->BindCaseNode(yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1764 "Parser.cpp"
     break;
 
   case 134: // case: tCASE expression ':' statements
-#line 404 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateSwitchCaseNode(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1763 "Parser.cpp"
+#line 422 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateSwitchCaseNode(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1770 "Parser.cpp"
     break;
 
   case 135: // case: tDEFAULT ':' statements
-#line 406 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateSwitchDefaultNode(yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1769 "Parser.cpp"
+#line 424 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateSwitchDefaultNode(yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1776 "Parser.cpp"
     break;
 
   case 136: // arg_calls: %empty
-#line 410 "Parser.yy"
+#line 428 "Parser.yy"
                                         { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = nullptr; }
-#line 1775 "Parser.cpp"
+#line 1782 "Parser.cpp"
     break;
 
   case 137: // arg_calls: expression
-#line 412 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateArgumentNode(yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1781 "Parser.cpp"
+#line 430 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateArgumentNode(yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1788 "Parser.cpp"
     break;
 
   case 138: // arg_calls: expression ',' arg_calls
-#line 414 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateArgumentNode(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1787 "Parser.cpp"
+#line 432 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateArgumentNode(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1794 "Parser.cpp"
     break;
 
   case 139: // arg_decls: %empty
-#line 418 "Parser.yy"
+#line 436 "Parser.yy"
                                         { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = nullptr; }
-#line 1793 "Parser.cpp"
+#line 1800 "Parser.cpp"
     break;
 
   case 140: // arg_decls: variable_decl
-#line 420 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateDeclareArgumentNode(yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1799 "Parser.cpp"
+#line 438 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateDeclareArgumentNode(yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1806 "Parser.cpp"
     break;
 
   case 141: // arg_decls: arg_decls ',' variable_decl
-#line 422 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateDeclareArgumentNode(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1805 "Parser.cpp"
+#line 440 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateDeclareArgumentNode(yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1812 "Parser.cpp"
     break;
 
   case 142: // variable_decl: variable_type declarator
-#line 427 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateDeclareVariableNode(yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > (), nullptr); }
-#line 1811 "Parser.cpp"
+#line 445 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateDeclareVariableNode(yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > (), nullptr); }
+#line 1818 "Parser.cpp"
     break;
 
   case 143: // variable_decl: variable_type declarator '=' expression
-#line 429 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateDeclareVariableNode(yystack_[3].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1817 "Parser.cpp"
+#line 447 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateDeclareVariableNode(yystack_[3].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[2].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1824 "Parser.cpp"
     break;
 
   case 144: // declarator: tIDENTIFIER
-#line 434 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateDeclaratorNode(yystack_[0].value.as < std::string_view > ()); }
-#line 1823 "Parser.cpp"
+#line 452 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateDeclaratorNode(yystack_[0].value.as < std::string_view > ()); }
+#line 1830 "Parser.cpp"
     break;
 
   case 145: // declarator: tIDENTIFIER variable_sizes
-#line 436 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mana::CreateDeclaratorNode(yystack_[1].value.as < std::string_view > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1829 "Parser.cpp"
+#line 454 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = mParsingDriver->CreateDeclaratorNode(yystack_[1].value.as < std::string_view > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1836 "Parser.cpp"
     break;
 
   case 146: // variable_sizes: variable_size
-#line 439 "Parser.yy"
+#line 457 "Parser.yy"
                   { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > (); }
-#line 1835 "Parser.cpp"
+#line 1842 "Parser.cpp"
     break;
 
   case 147: // variable_sizes: variable_size variable_sizes
-#line 441 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = 	mana::Bind(yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
-#line 1841 "Parser.cpp"
+#line 459 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = 	mParsingDriver->Bind(yystack_[1].value.as < std::shared_ptr<mana::SyntaxNode> > (), yystack_[0].value.as < std::shared_ptr<mana::SyntaxNode> > ()); }
+#line 1848 "Parser.cpp"
     break;
 
   case 148: // variable_size: '[' tDIGIT ']'
-#line 444 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = 	mana::CreateVariableSizeNode(yystack_[1].value.as < mana::int_t > ()); }
-#line 1847 "Parser.cpp"
+#line 462 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = 	mParsingDriver->CreateVariableSizeNode(yystack_[1].value.as < mana::int_t > ()); }
+#line 1854 "Parser.cpp"
     break;
 
   case 149: // variable_size: '[' tIDENTIFIER ']'
-#line 446 "Parser.yy"
-                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = 	mana::CreateVariableSizeNode(yystack_[1].value.as < std::string_view > ()); }
-#line 1853 "Parser.cpp"
+#line 464 "Parser.yy"
+                                        { yylhs.value.as < std::shared_ptr<mana::SyntaxNode> > () = 	mParsingDriver->CreateVariableSizeNode(yystack_[1].value.as < std::string_view > ()); }
+#line 1860 "Parser.cpp"
     break;
 
 
-#line 1857 "Parser.cpp"
+#line 1864 "Parser.cpp"
 
             default:
               break;
@@ -2620,21 +2627,21 @@ namespace mana {
   const short
   Parser::yyrline_[] =
   {
-       0,    93,    93,   113,   114,   118,   119,   120,   121,   123,
-     126,   128,   130,   133,   136,   138,   144,   145,   149,   150,
-     152,   154,   156,   158,   160,   162,   166,   168,   170,   175,
-     176,   180,   182,   184,   187,   192,   193,   197,   200,   204,
-     206,   208,   212,   217,   218,   221,   223,   225,   227,   229,
-     231,   233,   235,   237,   239,   241,   243,   245,   247,   249,
-     251,   253,   255,   257,   259,   261,   263,   265,   267,   268,
-     269,   270,   272,   274,   278,   280,   282,   284,   286,   288,
-     290,   292,   294,   296,   298,   300,   302,   304,   306,   308,
-     310,   312,   314,   316,   318,   320,   322,   324,   326,   328,
-     330,   332,   334,   336,   338,   340,   342,   344,   346,   348,
-     351,   353,   355,   357,   359,   361,   363,   364,   367,   369,
-     371,   373,   375,   377,   379,   381,   383,   387,   389,   391,
-     393,   395,   399,   400,   403,   405,   410,   411,   413,   418,
-     419,   421,   426,   428,   433,   435,   439,   440,   443,   445
+       0,   111,   111,   131,   132,   136,   137,   138,   139,   141,
+     144,   146,   148,   151,   154,   156,   162,   163,   167,   168,
+     170,   172,   174,   176,   178,   180,   184,   186,   188,   193,
+     194,   198,   200,   202,   205,   210,   211,   215,   218,   222,
+     224,   226,   230,   235,   236,   239,   241,   243,   245,   247,
+     249,   251,   253,   255,   257,   259,   261,   263,   265,   267,
+     269,   271,   273,   275,   277,   279,   281,   283,   285,   286,
+     287,   288,   290,   292,   296,   298,   300,   302,   304,   306,
+     308,   310,   312,   314,   316,   318,   320,   322,   324,   326,
+     328,   330,   332,   334,   336,   338,   340,   342,   344,   346,
+     348,   350,   352,   354,   356,   358,   360,   362,   364,   366,
+     369,   371,   373,   375,   377,   379,   381,   382,   385,   387,
+     389,   391,   393,   395,   397,   399,   401,   405,   407,   409,
+     411,   413,   417,   418,   421,   423,   428,   429,   431,   436,
+     437,   439,   444,   446,   451,   453,   457,   458,   461,   463
   };
 
   void
@@ -2719,11 +2726,11 @@ namespace mana {
       return symbol_kind::S_YYUNDEF;
   }
 
-#line 38 "Parser.yy"
+#line 19 "Parser.yy"
 } // mana
-#line 2725 "Parser.cpp"
+#line 2732 "Parser.cpp"
 
-#line 448 "Parser.yy"
+#line 466 "Parser.yy"
 
 
 #include "ParserDefinition.inl"

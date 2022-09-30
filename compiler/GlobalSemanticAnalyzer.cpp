@@ -13,46 +13,45 @@ namespace mana
 {
 	GlobalSemanticAnalyzer::GlobalSemanticAnalyzer(
 		const std::shared_ptr<SymbolFactory>& symbolFactory,
-		const std::shared_ptr<SymbolTable>& symbolTable,
 		const std::shared_ptr<TypeDescriptorFactory>& typeDescriptorFactory)
-		: SemanticAnalyzer(symbolFactory, symbolTable, typeDescriptorFactory)
+		: SemanticAnalyzer(symbolFactory, typeDescriptorFactory)
 	{
 		{
 			// vec2
-			GetSymbolTable()->OpenStructure();
-			GetSymbolTable()->AllocateMemory(GetSymbolFactory()->CreateVariable("x", nullptr, false, GetSymbolTable()->IsOpenBlock(), GetSymbolTable()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
-			GetSymbolTable()->AllocateMemory(GetSymbolFactory()->CreateVariable("y", nullptr, false, GetSymbolTable()->IsOpenBlock(), GetSymbolTable()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
-			GetSymbolTable()->CloseStructure("vec2");
+			GetSymbolFactory()->OpenStructure();
+			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("x", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
+			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("y", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
+			GetSymbolFactory()->CloseStructure("vec2");
 
 			// vec3
-			GetSymbolTable()->OpenStructure();
-			GetSymbolTable()->AllocateMemory(GetSymbolFactory()->CreateVariable("x", nullptr, false, GetSymbolTable()->IsOpenBlock(), GetSymbolTable()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
-			GetSymbolTable()->AllocateMemory(GetSymbolFactory()->CreateVariable("y", nullptr, false, GetSymbolTable()->IsOpenBlock(), GetSymbolTable()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
-			GetSymbolTable()->AllocateMemory(GetSymbolFactory()->CreateVariable("z", nullptr, false, GetSymbolTable()->IsOpenBlock(), GetSymbolTable()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
-			GetSymbolTable()->CloseStructure("vec3");
+			GetSymbolFactory()->OpenStructure();
+			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("x", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
+			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("y", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
+			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("z", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
+			GetSymbolFactory()->CloseStructure("vec3");
 
 			// vec4
-			GetSymbolTable()->OpenStructure();
-			GetSymbolTable()->AllocateMemory(GetSymbolFactory()->CreateVariable("x", nullptr, false, GetSymbolTable()->IsOpenBlock(), GetSymbolTable()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
-			GetSymbolTable()->AllocateMemory(GetSymbolFactory()->CreateVariable("y", nullptr, false, GetSymbolTable()->IsOpenBlock(), GetSymbolTable()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
-			GetSymbolTable()->AllocateMemory(GetSymbolFactory()->CreateVariable("z", nullptr, false, GetSymbolTable()->IsOpenBlock(), GetSymbolTable()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
-			GetSymbolTable()->AllocateMemory(GetSymbolFactory()->CreateVariable("w", nullptr, false, GetSymbolTable()->IsOpenBlock(), GetSymbolTable()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
-			GetSymbolTable()->CloseStructure("vec4");
+			GetSymbolFactory()->OpenStructure();
+			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("x", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
+			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("y", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
+			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("z", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
+			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("w", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
+			GetSymbolFactory()->CloseStructure("vec4");
 
 			// rotator
-			GetSymbolTable()->OpenStructure();
-			GetSymbolTable()->AllocateMemory(GetSymbolFactory()->CreateVariable("pitch", nullptr, false, GetSymbolTable()->IsOpenBlock(), GetSymbolTable()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
-			GetSymbolTable()->AllocateMemory(GetSymbolFactory()->CreateVariable("yaw", nullptr, false, GetSymbolTable()->IsOpenBlock(), GetSymbolTable()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
-			GetSymbolTable()->AllocateMemory(GetSymbolFactory()->CreateVariable("roll", nullptr, false, GetSymbolTable()->IsOpenBlock(), GetSymbolTable()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
-			GetSymbolTable()->CloseStructure("rotator");
+			GetSymbolFactory()->OpenStructure();
+			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("pitch", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
+			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("yaw", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
+			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("roll", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
+			GetSymbolFactory()->CloseStructure("rotator");
 
 			// color
-			GetSymbolTable()->OpenStructure();
-			GetSymbolTable()->AllocateMemory(GetSymbolFactory()->CreateVariable("r", nullptr, false, GetSymbolTable()->IsOpenBlock(), GetSymbolTable()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
-			GetSymbolTable()->AllocateMemory(GetSymbolFactory()->CreateVariable("g", nullptr, false, GetSymbolTable()->IsOpenBlock(), GetSymbolTable()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
-			GetSymbolTable()->AllocateMemory(GetSymbolFactory()->CreateVariable("b", nullptr, false, GetSymbolTable()->IsOpenBlock(), GetSymbolTable()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
-			GetSymbolTable()->AllocateMemory(GetSymbolFactory()->CreateVariable("a", nullptr, false, GetSymbolTable()->IsOpenBlock(), GetSymbolTable()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
-			GetSymbolTable()->CloseStructure("color");
+			GetSymbolFactory()->OpenStructure();
+			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("r", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
+			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("g", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
+			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("b", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
+			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("a", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
+			GetSymbolFactory()->CloseStructure("color");
 
 			// TODO: transform
 		}
@@ -256,19 +255,19 @@ namespace mana
 			// Nodes related to memory layout
 		case SyntaxNode::Id::Allocate:
 			{
-				int32_t allocatedSize = mStaticBlockOpend ? GetSymbolTable()->GetStaticMemoryAddress() : GetSymbolTable()->GetGlobalMemoryAddress();
+				int32_t allocatedSize = mStaticBlockOpend ? GetSymbolFactory()->GetStaticMemoryAddress() : GetSymbolFactory()->GetGlobalMemoryAddress();
 				allocatedSize += node->GetInt();
 
 				Resolve(node->GetLeftNode());
 
-				const int32_t address = mStaticBlockOpend ? GetSymbolTable()->GetStaticMemoryAddress() : GetSymbolTable()->GetGlobalMemoryAddress();
+				const int32_t address = mStaticBlockOpend ? GetSymbolFactory()->GetStaticMemoryAddress() : GetSymbolFactory()->GetGlobalMemoryAddress();
 				if (address >= allocatedSize)
 					CompileError("static variable range over");
 
 				if(mStaticBlockOpend)
-					GetSymbolTable()->SetStaticMemoryAddress(allocatedSize);
+					GetSymbolFactory()->SetStaticMemoryAddress(allocatedSize);
 				else
-					GetSymbolTable()->SetGlobalMemoryAddress(allocatedSize);
+					GetSymbolFactory()->SetGlobalMemoryAddress(allocatedSize);
 			}
 			MANA_ASSERT(node->GetRightNode() == nullptr);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
@@ -285,9 +284,9 @@ namespace mana
 			// Nodes related to structure
 		case SyntaxNode::Id::Actor:
 			{
-				GetSymbolTable()->BeginRegistrationActor(Lookup(node->GetString()));
+				GetSymbolFactory()->BeginRegistrationActor(Lookup(node->GetString()));
 				Resolve(node->GetLeftNode());
-				GetSymbolTable()->CommitRegistrationActor(node->GetString(), /*nullptr*/"", nullptr, false);
+				GetSymbolFactory()->CommitRegistrationActor(node->GetString(), /*nullptr*/"", nullptr, false);
 			}
 			MANA_ASSERT(node->GetRightNode() == nullptr);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
@@ -297,14 +296,14 @@ namespace mana
 			MANA_ASSERT(node->GetLeftNode() == nullptr);
 			MANA_ASSERT(node->GetRightNode() == nullptr);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
-			GetSymbolTable()->ExtendModule(node->GetString());
+			GetSymbolFactory()->ExtendModule(node->GetString());
 			break;
 
 		case SyntaxNode::Id::Module:
 			{
-				GetSymbolTable()->BeginRegistrationModule(Lookup(node->GetString()));
+				GetSymbolFactory()->BeginRegistrationModule(Lookup(node->GetString()));
 				Resolve(node->GetLeftNode());
-				GetSymbolTable()->CommitRegistrationModule(node->GetString());
+				GetSymbolFactory()->CommitRegistrationModule(node->GetString());
 			}
 			MANA_ASSERT(node->GetRightNode() == nullptr);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
@@ -312,18 +311,18 @@ namespace mana
 
 		case SyntaxNode::Id::Phantom:
 			{
-				GetSymbolTable()->BeginRegistrationActor(Lookup(node->GetString()));
+				GetSymbolFactory()->BeginRegistrationActor(Lookup(node->GetString()));
 				Resolve(node->GetLeftNode());
-				GetSymbolTable()->CommitRegistrationActor(node->GetString(), /*nullptr*/"", nullptr, true);
+				GetSymbolFactory()->CommitRegistrationActor(node->GetString(), /*nullptr*/"", nullptr, true);
 			}
 			MANA_ASSERT(node->GetRightNode() == nullptr);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			break;
 
 		case SyntaxNode::Id::Struct:
-			GetSymbolTable()->OpenStructure();
+			GetSymbolFactory()->OpenStructure();
 			Resolve(node->GetLeftNode());
-			GetSymbolTable()->CloseStructure(node->GetString());
+			GetSymbolFactory()->CloseStructure(node->GetString());
 			MANA_ASSERT(node->GetRightNode() == nullptr);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			break;
@@ -332,7 +331,7 @@ namespace mana
 		case SyntaxNode::Id::Action:
 			{
 				MANA_ASSERT(node->GetSymbol() == nullptr);
-				node->Set(GetSymbolFactory()->CreateFunction(node->GetString(), GetSymbolTable()->IsActorOrStructerOpened(), GetSymbolTable()->IsFunctionOpened()));
+				node->Set(GetSymbolFactory()->CreateFunction(node->GetString(), GetSymbolFactory()->IsActorOrStructerOpened(), GetSymbolFactory()->IsFunctionOpened()));
 				node->GetSymbol()->SetTypeDescription(GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Void));
 			}
 			// node->GetLeftNode()
@@ -352,7 +351,7 @@ namespace mana
 				// 関数の戻り値を評価
 				Resolve(node->GetLeftNode());
 				// シンボルの作成と型の定義
-				node->Set(GetSymbolFactory()->CreateFunction(node->GetString(), GetSymbolTable()->IsActorOrStructerOpened(), GetSymbolTable()->IsModuleOpened()));
+				node->Set(GetSymbolFactory()->CreateFunction(node->GetString(), GetSymbolFactory()->IsActorOrStructerOpened(), GetSymbolFactory()->IsModuleOpened()));
 				node->GetSymbol()->SetTypeDescription(node->GetLeftNode()->GetTypeDescriptor());
 				// シンボルに引数の数を登録
 				node->GetSymbol()->SetNumberOfParameters(CalcArgumentCount(0, node->GetRightNode()));
@@ -364,12 +363,12 @@ namespace mana
 			{
 				MANA_ASSERT(node->GetSymbol() == nullptr);
 				// シンボルの作成と型の定義
-				node->Set(GetSymbolFactory()->CreateFunction(node->GetString(), GetSymbolTable()->IsActorOrStructerOpened(), GetSymbolTable()->IsModuleOpened()));
-				GetSymbolTable()->BeginNativeFunction();
+				node->Set(GetSymbolFactory()->CreateFunction(node->GetString(), GetSymbolFactory()->IsActorOrStructerOpened(), GetSymbolFactory()->IsModuleOpened()));
+				GetSymbolFactory()->BeginNativeFunction();
 				Resolve(node->GetLeftNode());
 				Resolve(node->GetRightNode());
 				node->GetSymbol()->SetNumberOfParameters(CalcArgumentCount(0, node->GetRightNode()));
-				GetSymbolTable()->CloseNativeFunction(node->GetSymbol(), node->GetLeftNode()->GetTypeDescriptor());
+				GetSymbolFactory()->CloseNativeFunction(node->GetSymbol(), node->GetLeftNode()->GetTypeDescriptor());
 			}
 			break;
 
@@ -380,8 +379,8 @@ namespace mana
 				node->GetString(),
 				nullptr,
 				mStaticBlockOpend,
-				GetSymbolTable()->IsOpenBlock(),
-				GetSymbolTable()->IsFunctionOpened()
+				GetSymbolFactory()->IsOpenBlock(),
+				GetSymbolFactory()->IsFunctionOpened()
 			));
 			// node->GetLeftNode()
 			MANA_ASSERT(node->GetRightNode() == nullptr);
@@ -390,8 +389,8 @@ namespace mana
 
 		case SyntaxNode::Id::DeclareVariable:
 			ResolveVariableDescription(node, Symbol::MemoryTypeId::NORMAL, mStaticBlockOpend);
-			MANA_ASSERT(node->GetLeftNode() && node->GetLeftNode()->GetId() == SyntaxNode::Id::TypeDescription);
-			MANA_ASSERT(node->GetRightNode() && node->GetRightNode()->GetId() == SyntaxNode::Id::Declarator);
+			MANA_ASSERT(node->GetLeftNode() && node->GetLeftNode()->Is(SyntaxNode::Id::TypeDescription));
+			MANA_ASSERT(node->GetRightNode() && node->GetRightNode()->Is(SyntaxNode::Id::Declarator));
 			break;
 
 		case SyntaxNode::Id::TypeDescription:

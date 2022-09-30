@@ -44,6 +44,18 @@
 
 #ifndef YY_YY_PARSER_HPP_INCLUDED
 # define YY_YY_PARSER_HPP_INCLUDED
+// "%code requires" blocks.
+#line 25 "Parser.yy"
+
+	#include "../runner/common/Setup.h"
+	#include "SyntaxNode.h"
+	#include "TypeDescriptor.h"
+
+    namespace mana {
+        class ParsingDriver;
+    }
+
+#line 59 "Parser.hpp"
 
 
 # include <cstdlib> // std::abort
@@ -177,9 +189,9 @@
 # define YYDEBUG 0
 #endif
 
-#line 38 "Parser.yy"
+#line 19 "Parser.yy"
 namespace mana {
-#line 183 "Parser.hpp"
+#line 195 "Parser.hpp"
 
 
 
@@ -1047,7 +1059,7 @@ switch (yykind)
     };
 
     /// Build a parser object.
-    Parser ();
+    Parser (mana::ParsingDriver* mParsingDriver_yyarg);
     virtual ~Parser ();
 
 #if 201103L <= YY_CPLUSPLUS
@@ -2574,13 +2586,15 @@ switch (yykind)
     };
 
 
+    // User arguments.
+    mana::ParsingDriver* mParsingDriver;
 
   };
 
 
-#line 38 "Parser.yy"
+#line 19 "Parser.yy"
 } // mana
-#line 2584 "Parser.hpp"
+#line 2598 "Parser.hpp"
 
 
 

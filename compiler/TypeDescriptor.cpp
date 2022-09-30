@@ -21,30 +21,19 @@ namespace mana
 #endif
 	}
 
-	void TypeDescriptor::SetArray(const std::shared_ptr<TypeDescriptor>& ElmnT)
+	bool TypeDescriptor::Is(const Id id) const
 	{
-#if 1
-		if (mComponent == nullptr)
-		{
-			if (this != ElmnT.get())
-				mComponent = ElmnT;
+		return mTcons == id;
+	}
 
-			mAlignmentMemorySize = ElmnT->mAlignmentMemorySize;
-			mMemorySize = mArraySize * ElmnT->mMemorySize;
-		}
-		else
-		{
-			MANA_ASSERT(this != mComponent.get());
-			mComponent->SetArray(ElmnT);
-			//ElmnT = mComponent;
-			mAlignmentMemorySize = mComponent->mAlignmentMemorySize;
-			mMemorySize = mArraySize * mComponent->mMemorySize;
-		}
-#else
-		MANA_BUG("");
-		mAlignmentMemorySize = ElmnT->mAlignmentMemorySize;
-		mMemorySize = mArraySize * ElmnT->mMemorySize;
-#endif
+	bool TypeDescriptor::IsNot(const Id id) const
+	{
+		return mTcons != id;
+	}
+
+	TypeDescriptor::Id TypeDescriptor::GetId() const
+	{
+		return mTcons;
 	}
 
 	bool TypeDescriptor::Compare(const std::shared_ptr<TypeDescriptor>& typeDescriptor) const
@@ -66,11 +55,11 @@ namespace mana
 				return mComponent->Compare(typeDescriptor->mComponent);
 			}
 
-		case Id::ACTOR:
+		case Id::Actor:
 			return true;
 
 		case Id::Struct:
-		case Id::INCOMPLETE:
+		case Id::Incomplete:
 		default:
 			return (this == typeDescriptor.get());
 		}
@@ -123,11 +112,11 @@ namespace mana
 				return true;
 			break;
 
-		case Id::ACTOR:
+		case Id::Actor:
 			if(Compare(typeDescriptor))
 				return true;
 
-			if(typeDescriptor->mTcons == Id::NIL)
+			if(typeDescriptor->mTcons == Id::Nil)
 				return true;
 			break;
 
@@ -145,19 +134,44 @@ namespace mana
 		return false;
 	}
 
-	bool TypeDescriptor::Is(const Id id) const
+	bool TypeDescriptor::Compare(const std::shared_ptr<TypeDescriptor>& left, const std::shared_ptr<TypeDescriptor>& right)
 	{
-		return mTcons == id;
+		MANA_ASSERT(left);
+		MANA_ASSERT(right);
+		return left->Compare(right);
 	}
 
-	bool TypeDescriptor::IsNot(const Id id) const
+	bool TypeDescriptor::Compatible(const std::shared_ptr<TypeDescriptor>& left, const std::shared_ptr<TypeDescriptor>& right)
 	{
-		return mTcons != id;
+		MANA_ASSERT(left);
+		MANA_ASSERT(right);
+		return left->Compatible(right);
 	}
 
-	TypeDescriptor::Id TypeDescriptor::GetId() const
+	void TypeDescriptor::SetArray(const std::shared_ptr<TypeDescriptor>& arrayElementTypeDescriptor)
 	{
-		return mTcons;
+#if 1
+		if (mComponent == nullptr)
+		{
+			if (this != arrayElementTypeDescriptor.get())
+				mComponent = arrayElementTypeDescriptor;
+
+			mAlignmentMemorySize = arrayElementTypeDescriptor->mAlignmentMemorySize;
+			mMemorySize = mArraySize * arrayElementTypeDescriptor->mMemorySize;
+		}
+		else
+		{
+			MANA_ASSERT(this != mComponent.get());
+			mComponent->SetArray(arrayElementTypeDescriptor);
+			//arrayElementTypeDescriptor = mComponent;
+			mAlignmentMemorySize = mComponent->mAlignmentMemorySize;
+			mMemorySize = mArraySize * mComponent->mMemorySize;
+		}
+#else
+		MANA_BUG("");
+		mAlignmentMemorySize = arrayElementTypeDescriptor->mAlignmentMemorySize;
+		mMemorySize = mArraySize * arrayElementTypeDescriptor->mMemorySize;
+#endif
 	}
 
 	const std::string_view TypeDescriptor::GetName() const
@@ -197,6 +211,8 @@ namespace mana
 
 	size_t TypeDescriptor::GetActionCount() const
 	{
+		MANA_ASSERT(mSymbolEntry);
+
 		size_t count = 0;
 		for (std::shared_ptr<Symbol> symbol = mSymbolEntry; symbol; symbol = symbol->GetNext())
 		{
@@ -208,7 +224,42 @@ namespace mana
 
 	bool TypeDescriptor::IsPhantom() const
 	{
-		return share.actor.mPhantom;
+		return mShare.mActor.mPhantom;
+	}
+
+	void TypeDescriptor::SetSymbolEntry(const std::shared_ptr<Symbol>& symbolEntry)
+	{
+		mSymbolEntry = symbolEntry;
+	}
+
+	void TypeDescriptor::SetName(const std::string_view name)
+	{
+		mName = name;
+	}
+
+	void TypeDescriptor::SetMemorySize(const size_t memorySize)
+	{
+		mMemorySize = memorySize;
+	}
+
+	void TypeDescriptor::SetAlignmentMemorySize(const size_t alignmentMemorySize)
+	{
+		mAlignmentMemorySize = alignmentMemorySize;
+	}
+
+	void TypeDescriptor::SetArraySize(const size_t arraySize)
+	{
+		mArraySize = arraySize;
+	}
+
+	const std::shared_ptr<Symbol>& TypeDescriptor::GetParent() const
+	{
+		return mParent;
+	}
+
+	void TypeDescriptor::SetParent(const std::shared_ptr<Symbol>& parent)
+	{
+		mParent = parent;
 	}
 
 	void TypeDescriptor::Dump(std::ofstream& output) const
@@ -238,8 +289,8 @@ namespace mana
 			break;
 
 		case Id::Struct:
-		case Id::ACTOR:
-		case Id::MODULE:
+		case Id::Actor:
+		case Id::Module:
 			output << "{";
 			output << mMemorySize;
 			output << " bytes(";
@@ -250,25 +301,5 @@ namespace mana
 		default:
 			break;
 		}
-	}
-
-	void TypeDescriptor::SetSymbolEntry(const std::shared_ptr<Symbol>& symbolEntry)
-	{
-		mSymbolEntry = symbolEntry;
-	}
-
-	void TypeDescriptor::SetName(const std::string_view name)
-	{
-		mName = name;
-	}
-
-	void TypeDescriptor::SetMemorySize(const size_t memorySize)
-	{
-		mMemorySize = memorySize;
-	}
-
-	void TypeDescriptor::SetAlignmentMemorySize(const size_t alignmentMemorySize)
-	{
-		mAlignmentMemorySize = alignmentMemorySize;
 	}
 }
