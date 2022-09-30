@@ -33,7 +33,7 @@ namespace mana
 		using Callback = int32_t (*)(const std::shared_ptr<Actor>& actor, void* parameter);
 				
 	public:
-		virtual ~Actor();
+		virtual ~Actor() = default;
 		
 		std::shared_ptr<Actor> Clone() const;
 		
@@ -49,7 +49,7 @@ namespace mana
 		void Restart();
 
 		const std::string_view& GetName();
-		uint32_t GetAction(const char* actionName) const;
+		uint32_t GetAction(const std::string_view& actionName) const;
 
 		int32_t GetCounter() const;
 		void SetCounter(const int32_t counter);
@@ -114,7 +114,7 @@ namespace mana
 		const Stack& GetStack() const { return mStack; }
 
 	private:
-		void SetAction(const char* actionName, const uint32_t address);
+		void SetAction(const std::string_view& actionName, const uint32_t address);
 		//void Initialize(const ActionInfoHeader* actionInfo);
 
 	private:
@@ -170,7 +170,7 @@ namespace mana
 		char* mName;
 #endif
 		std::weak_ptr<VM> mVM;
-		std::unordered_map <const char*, uint32_t, HashValueGenerate, HashValueCompare> mActions;
+		std::unordered_map <std::string_view, uint32_t> mActions;
 		Buffer mFrame;
 		Stack mStack;
 		//std::map<int32_t, Interrupt> mInterrupt;

@@ -6,10 +6,11 @@ mana (compiler)
 */
 
 #include "DataBuffer.h"
+#include "../runner/common/OutputStream.h"
 
 namespace mana
 {
-	static constexpr size_t allocationPageSize = 4096;
+	static constexpr address_t allocationPageSize = 4096;
 
 	DataBuffer::DataBuffer() noexcept
 		: mBuffer(nullptr, std::free)
@@ -21,24 +22,24 @@ namespace mana
 		return mBuffer.get();
 	}
 
-	size_t DataBuffer::GetSize() const noexcept
+	address_t DataBuffer::GetSize() const noexcept
 	{
 		return mUsedSize;
 	}
 
-	size_t DataBuffer::Get(const std::string_view& text) const noexcept
+	address_t DataBuffer::Get(const std::string_view& text) const noexcept
 	{
 		return Find(text);
 	}
 
-	size_t DataBuffer::Set(const std::string_view& text)
+	address_t DataBuffer::Set(const std::string_view& text)
 	{
-		const size_t entity = Find(text);
-		if (entity != nil)
+		const address_t entity = Find(text);
+		if (entity != InvalidAddress)
 			return entity;
 
-		const size_t length = text.size() + 1;
-		const size_t newAllocateSize = mUsedSize + length;
+		const address_t length = text.size() + 1;
+		const address_t newAllocateSize = mUsedSize + length;
 		if (newAllocateSize >= mAllocatedSize)
 		{
 			mAllocatedSize += newAllocateSize + allocationPageSize;
@@ -52,7 +53,7 @@ namespace mana
 
 		std::memcpy(mBuffer.get() + mUsedSize, text.data(), length);
 
-		const size_t result = mUsedSize;
+		const address_t result = mUsedSize;
 		mEntities.push_back(mUsedSize);
 		mUsedSize += length;
 		return result;
@@ -64,7 +65,7 @@ namespace mana
 		return true;
 	}
 
-	size_t DataBuffer::Find(const std::string_view& text) const noexcept
+	address_t DataBuffer::Find(const std::string_view& text) const noexcept
 	{
 		for (const auto& address : mEntities)
 		{
@@ -72,6 +73,6 @@ namespace mana
 			if (data == text)
 				return address;
 		}
-		return nil;
+		return InvalidAddress;
 	}
 }

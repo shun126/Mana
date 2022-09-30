@@ -6,7 +6,7 @@ mana (compiler)
 */
 
 #pragma once
-#include "SystemHolder.h"
+//#include "SystemHolder.h"
 #if 0
 #include "../executor/Datalink.h"
 #include "node.h"
@@ -45,5 +45,5 @@ namespace mana
 	extern const char* GetOutputFilename();
 	extern const char* GetTargetFilename();
 
-	extern SystemHolder& GetSystemHolder();
+	//extern SystemHolder& GetSystemHolder();
 }

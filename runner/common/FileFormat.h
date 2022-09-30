@@ -8,6 +8,11 @@ mana (compiler/library)
 #pragma once
 #include "Platform.h"
 #include "Memory.h"
+
+#if MANA_BUILD_TARGET == MANA_BUILD_DEBUG
+#include "Assert.h"
+#endif
+
 #include <array>
 #include <cstdio>
 #include <string_view>

@@ -6,26 +6,27 @@ mana (compiler)
 */
 
 #include "CodeBuffer.h"
+#include "../runner/common/OutputStream.h"
 
 namespace mana
 {
-	CodeBuffer::Command::Command(const uint8_t code, const size_t nextCommand)
+	CodeBuffer::Command::Command(const uint8_t code, const address_t nextCommand)
 		: mCode(code)
 		, mNextCommand(nextCommand)
 	{
 	}
 
-	void CodeBuffer::Reduce(const size_t reduceSize)
+	void CodeBuffer::Reduce(const address_t reduceSize)
 	{
 		mCommand.resize(mCommand.size() - reduceSize);
 	}
 
 	void CodeBuffer::AddOpecode(const IntermediateLanguage code)
 	{
-		AddCommand(code, nil);
+		AddCommand(code, InvalidAddress);
 	}
 
-	size_t CodeBuffer::AddOpecodeAndOperand(const IntermediateLanguage code, const size_t address)
+	address_t CodeBuffer::AddOpecodeAndOperand(const IntermediateLanguage code, const address_t address)
 	{
 		const auto pc = GetSize();
 		AddCommand(code, address);
@@ -33,7 +34,7 @@ namespace mana
 		return pc;
 	}
 
-	size_t CodeBuffer::AddOpecodeAndTwoOperands(const IntermediateLanguage code, const size_t address, const size_t size)
+	address_t CodeBuffer::AddOpecodeAndTwoOperands(const IntermediateLanguage code, const address_t address, const address_t size)
 	{
 		const auto pc = GetSize();
 		AddCommand(code, address);
@@ -42,23 +43,23 @@ namespace mana
 		return pc;
 	}
 
-	void CodeBuffer::ReplaceOpecode(const size_t address, const IntermediateLanguage code)
+	void CodeBuffer::ReplaceOpecode(const address_t address, const IntermediateLanguage code)
 	{
 		mCommand[address].mCode = code;
 	}
 
-	void CodeBuffer::ReplaceAddress(const size_t address, const size_t newAddress)
+	void CodeBuffer::ReplaceAddress(const address_t address, const address_t newAddress)
 	{
 		Replace(address, newAddress);
 	}
 
-	void CodeBuffer::ReplaceAddressAll(const size_t baseAddress, const size_t newAddress)
+	void CodeBuffer::ReplaceAddressAll(const address_t baseAddress, const address_t newAddress)
 	{
-		size_t address = baseAddress;
-		while (address != nil)
+		address_t address = baseAddress;
+		while (address != InvalidAddress)
 		{
-			const size_t nextAddress = mCommand[address].mNextCommand;
-			mCommand[address + 0].mNextCommand = nil;
+			const address_t nextAddress = mCommand[address].mNextCommand;
+			mCommand[address + 0].mNextCommand = InvalidAddress;
 			ReplaceAddress(address + 1, newAddress);
 			address = nextAddress;
 		}
@@ -78,7 +79,7 @@ namespace mana
 		return std::move(buffer);
 	}
 
-	size_t CodeBuffer::GetSize() const
+	address_t CodeBuffer::GetSize() const
 	{
 		return mCommand.size();
 	}
@@ -91,7 +92,7 @@ namespace mana
 		}
 	}
 
-	size_t CodeBuffer::AddCommand(const uint8_t code, const size_t nextCommand)
+	address_t CodeBuffer::AddCommand(const uint8_t code, const address_t nextCommand)
 	{
 		const auto pc = mCommand.size();
 		mCommand.push_back(Command(code, nextCommand));

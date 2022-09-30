@@ -13,39 +13,90 @@ mana (compiler)
 
 namespace mana
 {
+	bool lexer_initialize(const std::shared_ptr<mana::ParsingDriver>& parsingDriver, const std::string_view filename)
+	{
+		if (mLexer == nullptr)
+		{
+			mLexer = std::make_shared<Lexer>(parsingDriver);
+			yylineno = 1;
+		}
+		return mLexer->Open(filename, true);
+	}
+
+	void lexer_finalize(void)
+	{
+		if (mLexer)
+		{
+			mLexer.reset();
+			yylex_destroy();
+		}
+	}
+
+	bool lexer_open(const std::string_view filename, const bool check)
+	{
+		return mLexer->Open(filename, check);
+	}
+
+	bool lexer_close()
+	{
+		return mLexer->Close();
+	}
+
+	const std::string& lexer_get_current_filename(void)
+	{
+		static const std::string empty;
+		return mLexer ? mLexer->GetCurrentFilename() : empty;
+	}
+
+	void lexer_set_current_filename(const std::string& filename)
+	{
+		if (mLexer)
+			mLexer->SetCurrentFilename(filename);
+	}
+
+	int lexer_get_current_lineno(void)
+	{
+		return yylineno;
+	}
+
+	void lexer_set_current_lineno(const int lineno)
+	{
+		yylineno = lineno;
+	}
+
 	inline static std::shared_ptr<TypeDescriptor> GetVoidTypeDescriptor()
 	{
-		return GetSystemHolder().GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Void);
+		return mLexer->mParsingDriver->GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Void);
 	}
 
 	inline static std::shared_ptr<TypeDescriptor> GetInt8TypeDescriptor()
 	{
-		return GetSystemHolder().GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Char);
+		return mLexer->mParsingDriver->GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Char);
 	}
 
 	inline static std::shared_ptr<TypeDescriptor> GetInt16TypeDescriptor()
 	{
-		return GetSystemHolder().GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Short);
+		return mLexer->mParsingDriver->GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Short);
 	}
 
 	inline static std::shared_ptr<TypeDescriptor> GetInt32TypeDescriptor()
 	{
-		return GetSystemHolder().GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Int);
+		return mLexer->mParsingDriver->GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Int);
 	}
 
 	inline static std::shared_ptr<TypeDescriptor> GetFloat32TypeDescriptor()
 	{
-		return GetSystemHolder().GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float);
+		return mLexer->mParsingDriver->GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float);
 	}
 
 	inline static std::shared_ptr<TypeDescriptor> GetStringTypeDescriptor()
 	{
-		return GetSystemHolder().GetTypeDescriptorFactory()->GetString();
+		return mLexer->mParsingDriver->GetTypeDescriptorFactory()->GetString();
 	}
 
 	inline static std::shared_ptr<TypeDescriptor> GetReferenceTypeDescriptor()
 	{
-		return GetSystemHolder().GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Reference);
+		return mLexer->mParsingDriver->GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Reference);
 	}
 
 	inline static int_t ToInt(const std::string_view text)
@@ -74,7 +125,7 @@ namespace mana
 	*/
 	static const std::string_view ToString(const char* text)
 	{
-		return GetSystemHolder().GetStringPool()->Set(text);
+		return mLexer->mParsingDriver->GetStringPool()->Set(text);
 	}
 
 	/*
@@ -111,7 +162,7 @@ namespace mana
 			}
 			*q = '\0';
 
-			return GetSystemHolder().GetStringPool()->Set(newBuffer);
+			return mLexer->mParsingDriver->GetStringPool()->Set(newBuffer);
 		}
 		else
 		{

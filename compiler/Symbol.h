@@ -12,12 +12,10 @@ mana (compiler)
 
 namespace mana
 {
-	class SymbolTable;
 	class SymbolFactory;
 
 	class Symbol final
 	{
-		friend class SymbolTable;
 		friend class SymbolFactory;
 
 	public:
@@ -39,7 +37,7 @@ namespace mana
 			LABEL,				//!< ラベル
 		};
 
-		static const std::string_view GetClassTypeName(const ClassTypeId id)
+		static const std::string_view& GetClassTypeName(const ClassTypeId id)
 		{
 			static const std::string_view names[] = {
 				"new symbol",
@@ -70,6 +68,7 @@ namespace mana
 	public:
 		~Symbol() = default;
 
+		bool IsValid() const;
 		bool IsValidVariable() const;
 		
 		std::shared_ptr<Symbol> GetParameterList();
