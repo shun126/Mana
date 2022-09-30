@@ -13,9 +13,8 @@ namespace mana
 {
 	LocalSemanticAnalyzer::LocalSemanticAnalyzer(
 		const std::shared_ptr<SymbolFactory>& symbolFactory,
-		const std::shared_ptr<SymbolTable>& symbolTable,
 		const std::shared_ptr<TypeDescriptorFactory>& typeDescriptorFactory)
-		: SemanticAnalyzer(symbolFactory, symbolTable, typeDescriptorFactory)
+		: SemanticAnalyzer(symbolFactory, typeDescriptorFactory)
 	{
 	}
 
@@ -190,8 +189,8 @@ DO_RECURSIVE:
 				node->Set(GetSymbolFactory()->CreateVariable(
 					node->GetString(),
 					nullptr,
-					GetSymbolTable()->IsOpenBlock(),
-					GetSymbolTable()->IsFunctionOpened(),
+					GetSymbolFactory()->IsOpenBlock(),
+					GetSymbolFactory()->IsFunctionOpened(),
 					false
 				));
 			PostResolverResolve(node->GetLeftNode());
@@ -223,10 +222,10 @@ DO_RECURSIVE:
 			// ブロックを伴う制御に関するノード
 		case SyntaxNode::Id::Block:
 		{
-			const int32_t in_depth = GetSymbolTable()->OpenBlock(false);
+			const int32_t in_depth = GetSymbolFactory()->OpenBlock(false);
 			PostResolverResolve(node->GetLeftNode());
 			PostResolverResolve(node->GetRightNode());
-			const int32_t out_depth = GetSymbolTable()->CloseBlock();
+			const int32_t out_depth = GetSymbolFactory()->CloseBlock();
 			MANA_VERIFY_MESSAGE(in_depth == out_depth, "ブロックの深さが一致しません in:%d out:%d", in_depth, out_depth);
 		}
 		MANA_ASSERT(node->GetBodyNode() == nullptr);
@@ -388,7 +387,7 @@ DO_RECURSIVE:
 					else
 					{
 						AutoCast(node);
-						TypeDescriptorFactory::Compatible(node->GetLeftNode()->GetTypeDescriptor(), node->GetRightNode()->GetTypeDescriptor());
+						TypeDescriptor::Compatible(node->GetLeftNode()->GetTypeDescriptor(), node->GetRightNode()->GetTypeDescriptor());
 					}
 				}
 			}
@@ -452,13 +451,13 @@ DO_RECURSIVE:
 				if (GetNodeType(&t1, &t2, node))
 				{
 					AutoCast(node);
-					TypeDescriptorFactory::Compatible(node->GetLeftNode()->GetTypeDescriptor(), node->GetRightNode()->GetTypeDescriptor());
+					TypeDescriptor::Compatible(node->GetLeftNode()->GetTypeDescriptor(), node->GetRightNode()->GetTypeDescriptor());
 					switch (t1)
 					{
 					case TypeDescriptor::Id::Char:
 					case TypeDescriptor::Id::Short:
 					case TypeDescriptor::Id::Int:
-					case TypeDescriptor::Id::ACTOR:
+					case TypeDescriptor::Id::Actor:
 						node->Set(MANA_IL_COMPARE_EQ_INTEGER);
 						break;
 					case TypeDescriptor::Id::Float:
@@ -484,13 +483,13 @@ DO_RECURSIVE:
 				if (GetNodeType(&t1, &t2, node))
 				{
 					AutoCast(node);
-					TypeDescriptorFactory::Compatible(node->GetLeftNode()->GetTypeDescriptor(), node->GetRightNode()->GetTypeDescriptor());
+					TypeDescriptor::Compatible(node->GetLeftNode()->GetTypeDescriptor(), node->GetRightNode()->GetTypeDescriptor());
 					switch (t1)
 					{
 					case TypeDescriptor::Id::Char:
 					case TypeDescriptor::Id::Short:
 					case TypeDescriptor::Id::Int:
-					case TypeDescriptor::Id::ACTOR:
+					case TypeDescriptor::Id::Actor:
 						node->Set(MANA_IL_COMPARE_GE_INTEGER);
 						break;
 					case TypeDescriptor::Id::Float:
@@ -516,13 +515,13 @@ DO_RECURSIVE:
 				if (GetNodeType(&t1, &t2, node))
 				{
 					AutoCast(node);
-					TypeDescriptorFactory::Compatible(node->GetLeftNode()->GetTypeDescriptor(), node->GetRightNode()->GetTypeDescriptor());
+					TypeDescriptor::Compatible(node->GetLeftNode()->GetTypeDescriptor(), node->GetRightNode()->GetTypeDescriptor());
 					switch (t1)
 					{
 					case TypeDescriptor::Id::Char:
 					case TypeDescriptor::Id::Short:
 					case TypeDescriptor::Id::Int:
-					case TypeDescriptor::Id::ACTOR:
+					case TypeDescriptor::Id::Actor:
 						node->Set(MANA_IL_COMPARE_GT_INTEGER);
 						break;
 					case TypeDescriptor::Id::Float:
@@ -548,13 +547,13 @@ DO_RECURSIVE:
 				if (GetNodeType(&t1, &t2, node))
 				{
 					AutoCast(node);
-					TypeDescriptorFactory::Compatible(node->GetLeftNode()->GetTypeDescriptor(), node->GetRightNode()->GetTypeDescriptor());
+					TypeDescriptor::Compatible(node->GetLeftNode()->GetTypeDescriptor(), node->GetRightNode()->GetTypeDescriptor());
 					switch (t1)
 					{
 					case TypeDescriptor::Id::Char:
 					case TypeDescriptor::Id::Short:
 					case TypeDescriptor::Id::Int:
-					case TypeDescriptor::Id::ACTOR:
+					case TypeDescriptor::Id::Actor:
 						node->Set(MANA_IL_COMPARE_LE_INTEGER);
 						break;
 					case TypeDescriptor::Id::Float:
@@ -580,13 +579,13 @@ DO_RECURSIVE:
 				if (GetNodeType(&t1, &t2, node))
 				{
 					AutoCast(node);
-					TypeDescriptorFactory::Compatible(node->GetLeftNode()->GetTypeDescriptor(), node->GetRightNode()->GetTypeDescriptor());
+					TypeDescriptor::Compatible(node->GetLeftNode()->GetTypeDescriptor(), node->GetRightNode()->GetTypeDescriptor());
 					switch (t1)
 					{
 					case TypeDescriptor::Id::Char:
 					case TypeDescriptor::Id::Short:
 					case TypeDescriptor::Id::Int:
-					case TypeDescriptor::Id::ACTOR:
+					case TypeDescriptor::Id::Actor:
 						node->Set(MANA_IL_COMPARE_LS_INTEGER);
 						break;
 					case TypeDescriptor::Id::Float:
@@ -612,13 +611,13 @@ DO_RECURSIVE:
 				if (GetNodeType(&t1, &t2, node))
 				{
 					AutoCast(node);
-					TypeDescriptorFactory::Compatible(node->GetLeftNode()->GetTypeDescriptor(), node->GetRightNode()->GetTypeDescriptor());
+					TypeDescriptor::Compatible(node->GetLeftNode()->GetTypeDescriptor(), node->GetRightNode()->GetTypeDescriptor());
 					switch (t1)
 					{
 					case TypeDescriptor::Id::Char:
 					case TypeDescriptor::Id::Short:
 					case TypeDescriptor::Id::Int:
-					case TypeDescriptor::Id::ACTOR:
+					case TypeDescriptor::Id::Actor:
 						node->Set(MANA_IL_COMPARE_NE_INTEGER);
 						break;
 					case TypeDescriptor::Id::Float:
@@ -725,7 +724,7 @@ DO_RECURSIVE:
 				return;
 			}
 			AutoCast(node);
-			TypeDescriptorFactory::Compatible(node->GetLeftNode()->GetTypeDescriptor(), node->GetRightNode()->GetTypeDescriptor());
+			TypeDescriptor::Compatible(node->GetLeftNode()->GetTypeDescriptor(), node->GetRightNode()->GetTypeDescriptor());
 			break;
 
 			break;

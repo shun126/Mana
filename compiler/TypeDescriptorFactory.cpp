@@ -7,16 +7,17 @@ mana (compiler)
 
 #include "TypeDescriptorFactory.h"
 #include <array>
+#include <string>
 
 namespace mana
 {
 	struct InitializeType final
 	{
-		const std::string mName;
+		std::string_view mName;
 		size_t mMemorySize;
 		size_t mAlignmentSize;
 	};
-	
+
 	static const std::array<InitializeType, TypeDescriptor::TypeIdSize> mInitializeType = { {
 		{ "void", sizeof(int32_t), sizeof(int32_t) },
 		{ "char", sizeof(int8_t), sizeof(int8_t) },
@@ -34,76 +35,54 @@ namespace mana
 
 	TypeDescriptorFactory::TypeDescriptorFactory()
 	{
-		for(size_t i = 0; i < TypeDescriptor::TypeIdSize; ++i)
+		for(size_t i = 0; i < mInitializeType.size(); ++i)
 		{
-			std::unique_ptr<TypeDescriptor> typeDescriptor = std::make_unique<TypeDescriptor>(static_cast<TypeDescriptor::Id>(i));
-			typeDescriptor->mName = mInitializeType[i].mName;
-			typeDescriptor->mMemorySize = mInitializeType[i].mMemorySize;
-			typeDescriptor->mAlignmentMemorySize = mInitializeType[i].mAlignmentSize;
+			auto typeDescriptor = std::shared_ptr<TypeDescriptor>(new TypeDescriptor(static_cast<TypeDescriptor::Id>(i)));
+			typeDescriptor->SetName(mInitializeType[i].mName);
+			typeDescriptor->SetMemorySize(mInitializeType[i].mMemorySize);
+			typeDescriptor->SetAlignmentMemorySize(mInitializeType[i].mAlignmentSize);
 			mTypeDescriptor.push_back(std::move(typeDescriptor));
 		}
 
 		mStringTypeDescriptor = CreateReference(Get(TypeDescriptor::Id::Char));
 	}
 
-	TypeDescriptorFactory::~TypeDescriptorFactory()
-	{
-		for (auto& typeDescriptor : mTypeDescriptor)
-		{
-			typeDescriptor.reset();
-		}
-	}
-
-	std::shared_ptr<TypeDescriptor> TypeDescriptorFactory::Get(const TypeDescriptor::Id id) const
+	const std::shared_ptr<TypeDescriptor>& TypeDescriptorFactory::Get(const TypeDescriptor::Id id) const
 	{
 		return mTypeDescriptor.at(static_cast<size_t>(id));
 	}
 
-	std::shared_ptr<TypeDescriptor> TypeDescriptorFactory::GetString() const
+	const std::shared_ptr<TypeDescriptor>& TypeDescriptorFactory::GetString() const
 	{
 		return mStringTypeDescriptor;
 	}
 
-	std::shared_ptr<TypeDescriptor> TypeDescriptorFactory::Create(const TypeDescriptor::Id tcons)
+	const std::shared_ptr<TypeDescriptor>& TypeDescriptorFactory::Create(const TypeDescriptor::Id tcons)
 	{
-		auto newTypeDescriptor = std::make_shared<TypeDescriptor>(tcons);
+		auto newTypeDescriptor = std::shared_ptr<TypeDescriptor>(new TypeDescriptor(tcons));
 		mTypeDescriptor.push_back(newTypeDescriptor);
 		return newTypeDescriptor;
 	}
 
-	std::shared_ptr<TypeDescriptor> TypeDescriptorFactory::CreateReference(const std::shared_ptr<TypeDescriptor>& component)
+	const std::shared_ptr<TypeDescriptor>& TypeDescriptorFactory::CreateReference(const std::shared_ptr<TypeDescriptor>& component)
 	{
-		const auto& referenceTypeDescriptorFactory = Get(TypeDescriptor::Id::Reference);
+		const auto& referenceTypeDescriptor = Get(TypeDescriptor::Id::Reference);
 
-		auto newTypeDescriptor = std::make_shared<TypeDescriptor>(TypeDescriptor::Id::Reference);
+		auto newTypeDescriptor = Create(TypeDescriptor::Id::Reference);
 		newTypeDescriptor->SetTypeDescriptor(component);
-		newTypeDescriptor->SetMemorySize(referenceTypeDescriptorFactory->GetMemorySize());
-		newTypeDescriptor->mAlignmentMemorySize = referenceTypeDescriptorFactory->mAlignmentMemorySize;
-		mTypeDescriptor.push_back(newTypeDescriptor);
-
+		newTypeDescriptor->SetMemorySize(referenceTypeDescriptor->GetMemorySize());
+		newTypeDescriptor->SetAlignmentMemorySize(referenceTypeDescriptor->GetAlignmentMemorySize());
 		return newTypeDescriptor;
 	}
 
-	std::shared_ptr<TypeDescriptor> TypeDescriptorFactory::CreateArray(const size_t arraySize)
+	const std::shared_ptr<TypeDescriptor>& TypeDescriptorFactory::CreateArray(const size_t arraySize)
 	{
-		const auto& referenceTypeDescriptorFactory = Get(TypeDescriptor::Id::Array);
+		const auto& referenceTypeDescriptor = Get(TypeDescriptor::Id::Array);
 
-		auto newTypeDescriptor = std::make_shared<TypeDescriptor>(TypeDescriptor::Id::Array);
-		newTypeDescriptor->mMemorySize = referenceTypeDescriptorFactory->mMemorySize;
-		newTypeDescriptor->mAlignmentMemorySize = referenceTypeDescriptorFactory->mAlignmentMemorySize;
-		newTypeDescriptor->mArraySize = arraySize;
-		mTypeDescriptor.push_back(newTypeDescriptor);
-
+		auto newTypeDescriptor = Create(TypeDescriptor::Id::Array);
+		newTypeDescriptor->SetMemorySize(referenceTypeDescriptor->GetMemorySize());
+		newTypeDescriptor->SetAlignmentMemorySize(referenceTypeDescriptor->GetAlignmentMemorySize());
+		newTypeDescriptor->SetArraySize(arraySize);
 		return newTypeDescriptor;
-	}
-
-	bool TypeDescriptorFactory::Compare(const std::shared_ptr<TypeDescriptor>& left, const std::shared_ptr<TypeDescriptor>& right)
-	{
-		return left->Compare(right);
-	}
-
-	bool TypeDescriptorFactory::Compatible(const std::shared_ptr<TypeDescriptor>& left, const std::shared_ptr<TypeDescriptor>& right)
-	{
-		return left->Compatible(right);
 	}
 }

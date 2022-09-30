@@ -6,8 +6,6 @@ mana (compiler/library)
 */
 
 #pragma once
-#include <cstddef>
-#include <cstdint>
 
 #if !defined(MANA_TARGET_DETECTED)
 	#if defined(_WIN32) || defined(_WIN64)
@@ -50,22 +48,4 @@ mana (compiler/library)
 #define MANA_UNUSED_VAR(var)	((void)&var)
 #define MANA_ELEMENT_OF(var)	(sizeof(var) / sizeof(var[0]))
 
-namespace mana
-{
-#if defined(MANA_TARGET_WINDOWS)
-	//! Signed size integer type.
-	using ssize_t = intptr_t;
-#endif
-
-#if UINTPTR_MAX == UINT64_MAX
-	using float_t = double;
-	using int_t = int64_t;
-	using size_t = std::size_t;
-#elif UINTPTR_MAX == UINT32_MAX
-	using float_t = float;
-	using int_t = int32_t;
-	using size_t = std::size_t;
-#else
-#error "unsupport pointer size"
-#endif
-}
+#include "Type.h"

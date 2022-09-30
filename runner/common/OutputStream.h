@@ -21,32 +21,32 @@ namespace mana
 		OutputStream();
 		virtual ~OutputStream() = default;
 
-		void Load(const char* filename);
-		void Save(const char* filename);
+		void Load(const std::string& filename);
+		void Save(const std::string& filename);
 	
 		const void* GetBuffer() const;
 		const void* IndexAt(const size_t index) const;
-		size_t GetAllocatedSize() const { return mAllocatedSize; }
-		size_t GetUsedSize() const { return mUsedSize; }
+		size_t GetAllocatedSize() const;
+		size_t GetUsedSize() const;
 
 		template<typename T>
-		void Push(const T value) { PushData(&value, sizeof(value)); }
+		void Push(const T value);
 		void PushString(const char* text);
 		void PushData(const void* pointer, const size_t size);
 
 		template<typename T>
-		T Pop() { T value; PopData(&value, sizeof(value)); return value; }
+		T Pop();
 		void PopString(char* pointer, const size_t size);
 		void PopData(void* pointer, const size_t size);
 
 		template<typename T>
-		T Get() { T value; GetData(&value, sizeof(value)); return value; }
+		T Get();
 		size_t GetString(char* pointer, const size_t size);
 		const char* GetStringPointer() const;
 		size_t GetStringLength() const;
 	 	void GetData(void* pointer, const size_t size);
 
-		void Rewind() { mPointer = 0; }
+		void Rewind();
 		void Seek(const ssize_t offset);
 		
 		std::shared_ptr<const void> MakeShared() const;
