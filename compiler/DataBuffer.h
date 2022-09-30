@@ -6,41 +6,43 @@ mana (compiler)
 */
 
 #pragma once
-#include "../runner/common/Setup.h"
+#include "../runner/common/Platform.h"
+#include "../runner/common/Noncopyable.h"
+#include <cstdlib>
 #include <memory>
+#include <string_view>
 #include <vector>
 
 namespace mana
 {
+	class OutputStream;
+
 	/*
 	Data Section Class
 	*/
 	class DataBuffer final : private Noncopyable
 	{
-		static constexpr size_t nil = static_cast<size_t>(~0);
-
 	public:
 		DataBuffer() noexcept;
-
 		~DataBuffer() = default;
 
 		const char* GetBuffer() const noexcept;
 
-		size_t GetSize() const noexcept;
+		address_t GetSize() const noexcept;
 
-		size_t Get(const std::string_view& text) const noexcept;
+		address_t Get(const std::string_view& text) const noexcept;
 
-		size_t Set(const std::string_view& text);
+		address_t Set(const std::string_view& text);
 
 		bool Write(OutputStream& stream) const;
 
 	private:
-		size_t Find(const std::string_view& text) const noexcept;
+		address_t Find(const std::string_view& text) const noexcept;
 
 	private:
-		std::vector<size_t> mEntities;
+		std::vector<address_t> mEntities;
 		std::unique_ptr<char, decltype(&std::free)> mBuffer;
-		size_t mAllocatedSize = 0;
-		size_t mUsedSize = 0;
+		address_t mAllocatedSize = 0;
+		address_t mUsedSize = 0;
 	};
 }

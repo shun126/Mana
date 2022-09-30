@@ -41,6 +41,25 @@ static char* symbol_data_type_id_name[NUMBER_OF] = {
 #endif
 	}
 
+	bool Symbol::IsValid() const
+	{
+		if (
+			GetClassTypeId() != Symbol::ClassTypeId::VARIABLE_STATIC &&
+			GetClassTypeId() != Symbol::ClassTypeId::VARIABLE_GLOBAL &&
+			GetClassTypeId() != Symbol::ClassTypeId::VARIABLE_ACTOR &&
+			GetClassTypeId() != Symbol::ClassTypeId::VARIABLE_LOCAL &&
+			GetClassTypeId() != Symbol::ClassTypeId::CONSTANT_INT &&
+			GetClassTypeId() != Symbol::ClassTypeId::CONSTANT_FLOAT &&
+			GetClassTypeId() != Symbol::ClassTypeId::CONSTANT_STRING)
+		{
+			CompileError("non-variable name '%s'", GetName());
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+
 	bool Symbol::IsValidVariable() const
 	{
 		if(
@@ -219,10 +238,9 @@ static char* symbol_data_type_id_name[NUMBER_OF] = {
 		switch (mClassTypeId)
 		{
 		case Symbol::ClassTypeId::TYPEDEF:
-			if (mTypeDescription->GetId() == TypeDescriptor::Id::ACTOR)
+			if (mTypeDescription->Is(TypeDescriptor::Id::Actor))
 			{
-				auto symbol = mTypeDescription->GetSymbolEntry();
-				if (symbol)
+				if (auto symbol = mTypeDescription->GetSymbolEntry())
 					symbol->symbol_check_undefine_recursive();
 			}
 			break;
@@ -264,8 +282,8 @@ static char* symbol_data_type_id_name[NUMBER_OF] = {
 		{
 			switch (GetTypeDescriptor()->GetId())
 			{
-			case TypeDescriptor::Id::ACTOR:
-			case TypeDescriptor::Id::MODULE:
+			case TypeDescriptor::Id::Actor:
+			case TypeDescriptor::Id::Module:
 			case TypeDescriptor::Id::Struct:
 				if (GetTypeDescriptor()->GetSymbolEntry())
 				{

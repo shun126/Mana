@@ -13,10 +13,8 @@ namespace mana
 {
 	SemanticAnalyzer::SemanticAnalyzer(
 		const std::shared_ptr<SymbolFactory>& symbolFactory,
-		const std::shared_ptr<SymbolTable>& symbolTable,
 		const std::shared_ptr<TypeDescriptorFactory>& typeDescriptorFactory)
 		: mSymbolFactory(symbolFactory)
-		, mSymbolTable(symbolTable)
 		, mTypeDescriptorFactory(typeDescriptorFactory)
 	{
 	}
@@ -24,7 +22,7 @@ namespace mana
 	void SemanticAnalyzer::SetCurrentFileInfomation(const std::shared_ptr<SyntaxNode>& node)
 	{
 		MANA_ASSERT(node);
-		lexer_set_current_filename(node->GetFilename());
+		lexer_set_current_filename(node->GetFilename().data());
 		lexer_set_current_lineno(node->GetLineno());
 	}
 
@@ -84,8 +82,8 @@ namespace mana
 				node->GetString(),
 				type,
 				isStaticVariable,
-				mSymbolTable->IsOpenBlock(),
-				mSymbolTable->IsFunctionOpened()
+				mSymbolFactory->IsOpenBlock(),
+				mSymbolFactory->IsFunctionOpened()
 			));
 		}
 	}
@@ -144,7 +142,7 @@ namespace mana
 		ResolveDeclarator(node->GetRightNode(), isStaticVariable);
 
 		//if (node->right->symbol->class_type == VARIABLE_LOCAL)
-		GetSymbolTable()->AllocateMemory(node->GetRightNode()->GetSymbol(), node->GetLeftNode()->GetTypeDescriptor(), memoryTypeId);
+		GetSymbolFactory()->AllocateMemory(node->GetRightNode()->GetSymbol(), node->GetLeftNode()->GetTypeDescriptor(), memoryTypeId);
 		//symbol_allocate_memory(node->right->symbol, node->left->type, PARAMETER);
 	}
 
@@ -184,11 +182,6 @@ namespace mana
 	const std::shared_ptr<SymbolFactory>& SemanticAnalyzer::GetSymbolFactory()
 	{
 		return mSymbolFactory;
-	}
-
-	const std::shared_ptr<SymbolTable>& SemanticAnalyzer::GetSymbolTable()
-	{
-		return mSymbolTable;
 	}
 
 	const std::shared_ptr<TypeDescriptorFactory>& SemanticAnalyzer::GetTypeDescriptorFactory()

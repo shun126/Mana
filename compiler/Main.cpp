@@ -10,9 +10,7 @@ mana (compiler)
 #include "ErrorHandler.h"
 #include "Lexer.h"
 #include "Path.h"
-#include "Parser.hpp"
-#include "SymbolTable.h"
-#include "SystemHolder.h"
+#include "ParsingDriver.h"
 #include "Version.h"
 
 #include "../runner/Mana.h"
@@ -21,8 +19,7 @@ mana (compiler)
 
 namespace mana
 {
-	Parser mParser;
-	SystemHolder mSystemHolder;
+	std::shared_ptr<ParsingDriver> mParser;
 	static char mInputFilename[_MAX_PATH];
 	static char mOutputFilename[_MAX_PATH];
 	int32_t mDebug;
@@ -45,10 +42,12 @@ namespace mana
 		return mOutputFilename[0] != '\0' ? mOutputFilename : mInputFilename;
 	}
 
+	/*
 	SystemHolder& GetSystemHolder()
 	{
 		return mana::mSystemHolder;
 	}
+	*/
 
 	static void Dump()
 	{
@@ -65,12 +64,12 @@ namespace mana
 		{
 			{
 				log << "Symbol Table\n\n";
-				mSystemHolder.GetSymbolFactory()->Dump(log);
+				mParser->GetSymbolFactory()->Dump(log);
 				log << "\n";
 			}
 			{
 				log << "Code\n";
-				mSystemHolder.GetCodeGenerator()->Dump(log);
+				mParser->GetCodeGenerator()->Dump(log);
 				log << "\n";
 			}
 		}
@@ -92,22 +91,22 @@ namespace mana
 #if UINTPTR_MAX == UINT64_MAX
 		header.mFlag |= (1 << FileHeader::Flag::Is64bit);
 #endif
-		header.mNumberOfActors = GetSystemHolder().GetSymbolTable()->GetNumberOfActors();
-		header.mSizeOfConstantPool = GetSystemHolder().GetDataBuffer()->GetSize();
-		header.mSizeOfInstructionPool = GetSystemHolder().GetCodeBuffer()->GetSize();
-		header.mSizeOfStaticMemory = GetSystemHolder().GetSymbolTable()->GetStaticMemoryAddress();
-		header.mSizeOfGlobalMemory = GetSystemHolder().GetSymbolTable()->GetGlobalMemoryAddress();
+		header.mNumberOfActors = mParser->GetSymbolFactory()->GetNumberOfActors();
+		header.mSizeOfConstantPool = mParser->GetDataBuffer()->GetSize();
+		header.mSizeOfInstructionPool = mParser->GetCodeBuffer()->GetSize();
+		header.mSizeOfStaticMemory = mParser->GetSymbolFactory()->GetStaticMemoryAddress();
+		header.mSizeOfGlobalMemory = mParser->GetSymbolFactory()->GetGlobalMemoryAddress();
 		header.mRandomSeedNumber = static_cast<uint32_t>(time(NULL));
 
 		stream.PushData(&header, sizeof(header));
 
-		if (!GetSystemHolder().GetSymbolTable()->GenerateActorInfomation(stream))
+		if (!mParser->GetSymbolFactory()->GenerateActorInfomation(stream))
 		{
 			return false;
 		}
 
-		GetSystemHolder().GetDataBuffer()->Write(stream);
-		GetSystemHolder().GetCodeBuffer()->Write(stream);
+		mParser->GetDataBuffer()->Write(stream);
+		mParser->GetCodeBuffer()->Write(stream);
 #if 0
 		TODO:Unimplemented
 
@@ -150,7 +149,9 @@ namespace mana
 
 		try
 		{
-			if (lexer_initialize(mInputFilename))
+			mParser = std::make_shared<ParsingDriver>();
+
+			if (lexer_initialize(mParser, mInputFilename))
 			{
 #if 0
 				// TODO:Unimplemented
@@ -161,7 +162,7 @@ namespace mana
 					fprintf(mVariableHeaderFile, "typedef struct mana_global\n{\n");
 				}
 #endif
-				result = mParser.parse() != 0 || yynerrs != 0;
+				result = mParser->Parse() != 0 || yynerrs != 0;
 #if 0
 				// TODO:Unimplemented
 				if (mVariableHeaderFile)
@@ -177,7 +178,7 @@ namespace mana
 					Dump();
 				}
 
-				GetSystemHolder().GetSymbolTable()->CheckUndefine();
+				mParser->GetSymbolFactory()->CheckUndefine();
 
 				if (result == 0)
 				{
@@ -388,9 +389,7 @@ int main(int argc, char* argv[])
 
 	if (mana::ParseArguments(argc, argv))
 	{
-		mana::mSystemHolder.Initialize();
 		result = mana::Generate();
-		mana::mSystemHolder.Finalize();
 	}
 
 #if MANA_TARGET_WINDOWS && MANA_BUILD_TARGET < MANA_BUILD_RELEASE
