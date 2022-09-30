@@ -7,8 +7,9 @@ mana (compiler)
 
 #pragma once
 #include "Main.h"
-#include "SystemHolder.h"
+//#include "SystemHolder.h"
 #include "StringPool.h"
+#include <memory>
 #include <set>
 #include <stack>
 #include <string_view>
@@ -20,24 +21,32 @@ struct Context
 	mana::int_t mLineno;
 };
 
-struct Lexer
+namespace mana
 {
-	std::stack<std::unique_ptr<Context>> mContext;
-	std::set<std::string_view> mPathSet;
-	std::string_view mCurrentPath;
+	class ParsingDriver;
 
-	Lexer();
-	~Lexer();
+	class Lexer final : private Noncopyable
+	{
+	public:
+		explicit Lexer(const std::shared_ptr<mana::ParsingDriver>& parsingDriver);
+		~Lexer();
 
-	bool Open(const std::string_view filename, const bool check);
-	bool IsOpened(const std::string_view path);
-	bool Close();
+		bool Open(const std::string_view filename, const bool check);
+		bool IsOpened(const std::string_view path);
+		bool Close();
 
-	const std::string_view GetCurrentFilename(void);
-	void SetCurrentFilename(const std::string_view filename);
+		const std::string& GetCurrentFilename();
+		void SetCurrentFilename(const std::string& filename);
 
-	static mana::int_t binary(const char* text);
-};
+		static mana::int_t binary(const char* text);
+
+	public:
+		std::shared_ptr<mana::ParsingDriver> mParsingDriver;
+		std::stack<std::unique_ptr<Context>> mContext;
+		std::set<std::string_view> mPathSet;
+		std::string mCurrentPath;
+	};
+}
 
 namespace mana
 {
@@ -54,4 +63,6 @@ namespace mana
 	static float_t ToFloat(const std::string_view text);
 	static const std::string_view ToString(const char* text);
 	static const std::string_view LiteralToString(const char* text, const size_t length);
+
+	static std::shared_ptr<Lexer> mLexer;
 }

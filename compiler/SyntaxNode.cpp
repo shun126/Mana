@@ -9,7 +9,6 @@ mana (compiler)
 #include "Lexer.h"
 #include "Main.h"
 #include "Symbol.h"
-#include "SystemHolder.h"
 #include "TypeDescriptor.h"
 #include "TypeDescriptorFactory.h"
 #include <cstdarg>
@@ -78,12 +77,12 @@ namespace mana
 		case Id::Const:		// 定数
 		case Id::Identifier:	// 変数
 									// 参照のactorか、actorの実体か判定できるようにする
-			return mType->GetId() == TypeDescriptor::Id::ACTOR ? sizeof(void*) : mType->GetMemorySize();
+			return mType->Is(TypeDescriptor::Id::Actor) ? sizeof(void*) : mType->GetMemorySize();
 
 		case Id::Array:			/* variable[argument] = */
 		case Id::MemberVariable:			/* X.variable */
 		case Id::Neg:			/* ±符号反転 */
-			return mType->GetId() == TypeDescriptor::Id::ACTOR ? sizeof(void*) : mType->GetMemorySize();
+			return mType->Is(TypeDescriptor::Id::Actor) ? sizeof(void*) : mType->GetMemorySize();
 			/*		return node_get_memory_size(self->left);	*/
 
 		case Id::Self:			/* self (actor) */

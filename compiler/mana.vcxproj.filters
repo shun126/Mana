@@ -37,15 +37,6 @@
     <None Include="..\runner\common\String.inl">
       <Filter>runner\common</Filter>
     </None>
-    <None Include="..\runner\common\Assert.inl">
-      <Filter>runner\common</Filter>
-    </None>
-    <None Include="..\runner\common\Math.inl">
-      <Filter>runner\common</Filter>
-    </None>
-    <None Include="..\runner\common\Memory.inl">
-      <Filter>runner\common</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Parser.hpp" />
@@ -65,10 +56,8 @@
     <ClInclude Include="StringPool.h" />
     <ClInclude Include="SymbolFactory.h" />
     <ClInclude Include="SyntaxNode.h" />
-    <ClInclude Include="SystemHolder.h" />
     <ClInclude Include="TypeDescriptor.h" />
     <ClInclude Include="TypeDescriptorFactory.h" />
-    <ClInclude Include="SymbolTable.h" />
     <ClInclude Include="..\runner\Datalink.h">
       <Filter>runner</Filter>
     </ClInclude>
@@ -123,16 +112,15 @@
     <ClInclude Include="..\runner\common\FileFormat.h">
       <Filter>runner\common</Filter>
     </ClInclude>
-    <ClInclude Include="..\runner\common\HashValue.h">
-      <Filter>runner\common</Filter>
-    </ClInclude>
     <ClInclude Include="Runner.h" />
     <ClInclude Include="Main.h" />
     <ClInclude Include="ParsingDriver.h" />
     <ClInclude Include="Symbol.h" />
-    <ClInclude Include="SyntaxNodeFactory.h" />
     <ClInclude Include="IntermediateLanguage.h" />
     <ClInclude Include="LocalAddressResolver.h" />
+    <ClInclude Include="..\runner\common\Type.h">
+      <Filter>runner\common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Parser.cpp" />
@@ -149,17 +137,14 @@
     <ClCompile Include="SyntaxNode.cpp" />
     <ClCompile Include="TypeDescriptor.cpp" />
     <ClCompile Include="TypeDescriptorFactory.cpp" />
-    <ClCompile Include="SymbolTable.cpp" />
     <ClCompile Include="Runner.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="DataBuffer.cpp" />
     <ClCompile Include="CodeBuffer.cpp" />
     <ClCompile Include="GlobalAddressResolver.cpp" />
     <ClCompile Include="StringPool.cpp" />
-    <ClCompile Include="SystemHolder.cpp" />
     <ClCompile Include="ParsingDriver.cpp" />
     <ClCompile Include="Symbol.cpp" />
-    <ClCompile Include="SyntaxNodeFactory.cpp" />
     <ClCompile Include="IntermediateLanguage.cpp" />
     <ClCompile Include="LocalAddressResolver.cpp" />
   </ItemGroup>

@@ -145,7 +145,7 @@ namespace mana
 			case TypeDescriptor::Id::Char:
 			case TypeDescriptor::Id::Short:
 			case TypeDescriptor::Id::Int:
-			case TypeDescriptor::Id::ACTOR:
+			case TypeDescriptor::Id::Actor:
 				mCodeBuffer->AddOpecode(MANA_IL_DUPLICATE);
 				codeGenerator->generator_expression(p->node, false);
 				mCodeBuffer->AddOpecode(MANA_IL_COMPARE_EQ_INTEGER);
@@ -189,7 +189,7 @@ namespace mana
 		case TypeDescriptor::Id::Short:
 		case TypeDescriptor::Id::Int:
 		case TypeDescriptor::Id::Float:
-		case TypeDescriptor::Id::ACTOR:
+		case TypeDescriptor::Id::Actor:
 			mCodeBuffer->AddOpecode(MANA_IL_REMOVE);
 			break;
 

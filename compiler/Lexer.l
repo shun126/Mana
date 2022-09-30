@@ -13,8 +13,9 @@ mana (compiler)
 #include "SyntaxNode.h"
 #include "TypeDescriptor.h"
 #include "TypeDescriptorFactory.h"
-#include "Parser.hpp"
+#include "ParsingDriver.h"
 #include <stdio.h>
+#include <stdint.h>
 
 #if defined(MANA_TARGET_WINDOWS)
 #include <io.h>
@@ -26,8 +27,6 @@ mana (compiler)
 #endif
 
 #include "LexerDeclaration.inl"
-
-static Lexer* mLexer = nullptr;
 
 #define YY_DECL int yylex(mana::Parser::value_type* yylval)
 
@@ -156,7 +155,7 @@ other		.
 	{
 		memcpy(filename, &yytext[1], yyleng-2);
 		filename[yyleng-2] = '\0';
-		mLexer->SetCurrentFilename(filename);
+		mana::mLexer->SetCurrentFilename(filename);
 	}
 }
 <LINE>\n			BEGIN INITIAL;
@@ -166,7 +165,7 @@ other		.
 <HEX>{ws}+			;
 <HEX>{other}		{ mana::CompileError("Illegal char '%c' ignored\n", yytext[0]); }
 
-<BIN>[01_]+			{ yylval->build<mana::int_t>() = mLexer->binary(yytext); BEGIN INITIAL; return mana::Parser::token::tDIGIT; }
+<BIN>[01_]+			{ yylval->build<mana::int_t>() = mana::mLexer->binary(yytext); BEGIN INITIAL; return mana::Parser::token::tDIGIT; }
 <BIN>{ws}+			;
 <BIN>{other}		{ mana::CompileError("Illegal char '%c' ignored\n", yytext[0]); }
 
@@ -177,56 +176,5 @@ other		.
 
 int yywrap()
 {
-	return lexer_close();
-}
-
-bool lexer_initialize(const std::string_view filename)
-{
-	if(mLexer == nullptr)
-	{
-		mLexer = new Lexer;
-		yylineno = 1;
-	}
-	return mLexer->Open(filename, true);
-}
-
-void lexer_finalize(void)
-{
-	if(mLexer)
-	{
-		delete mLexer;
-		mLexer = nullptr;
-
-		yylex_destroy();
-	}
-}
-
-bool lexer_open(const std::string_view filename, const bool check)
-{
-	return mLexer->Open(filename, check);
-}
-
-bool lexer_close()
-{
-	return mLexer->Close();
-}
-
-const std::string_view lexer_get_current_filename(void)
-{
-	return mLexer->GetCurrentFilename();
-}
-
-void lexer_set_current_filename(const std::string_view filename)
-{
-	mLexer->SetCurrentFilename(filename);
-}
-
-int lexer_get_current_lineno(void)
-{
-	return yylineno;
-}
-
-void lexer_set_current_lineno(const int lineno)
-{
-	yylineno = lineno;
+	return mana::lexer_close();
 }

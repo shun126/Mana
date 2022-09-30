@@ -8,7 +8,6 @@ mana (compiler)
 #pragma once
 #include "SemanticAnalyzer.h"
 #include "SymbolFactory.h"
-#include "SymbolTable.h"
 #include "SyntaxNode.h"
 #include "TypeDescriptor.h"
 
@@ -19,7 +18,6 @@ namespace mana
 	public:
 		LocalSemanticAnalyzer(
 			const std::shared_ptr<SymbolFactory>& symbolFactory,
-			const std::shared_ptr<SymbolTable>& symbolTable,
 			const std::shared_ptr<TypeDescriptorFactory>& typeDescriptorFactory
 		);
 		virtual ~LocalSemanticAnalyzer();

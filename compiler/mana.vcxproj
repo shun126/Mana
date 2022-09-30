@@ -272,9 +272,6 @@
     </CustomBuild>
     <None Include="..\runner\Actor.inl" />
     <None Include="..\runner\Buffer.inl" />
-    <None Include="..\runner\common\Assert.inl" />
-    <None Include="..\runner\common\Math.inl" />
-    <None Include="..\runner\common\Memory.inl" />
     <None Include="..\runner\common\OutputStream.inl" />
     <None Include="..\runner\common\String.inl" />
     <None Include="..\runner\Datalink.inl" />
@@ -400,7 +397,6 @@
     <ClInclude Include="..\runner\Buffer.h" />
     <ClInclude Include="..\runner\common\Assert.h" />
     <ClInclude Include="..\runner\common\FileFormat.h" />
-    <ClInclude Include="..\runner\common\HashValue.h" />
     <ClInclude Include="..\runner\common\Math.h" />
     <ClInclude Include="..\runner\common\Memory.h" />
     <ClInclude Include="..\runner\common\Noncopyable.h" />
@@ -409,6 +405,7 @@
     <ClInclude Include="..\runner\common\Setup.h" />
     <ClInclude Include="..\runner\common\Stopwatch.h" />
     <ClInclude Include="..\runner\common\String.h" />
+    <ClInclude Include="..\runner\common\Type.h" />
     <ClInclude Include="..\runner\Datalink.h" />
     <ClInclude Include="..\runner\Function.h" />
     <ClInclude Include="..\runner\Mana.h" />
@@ -446,10 +443,7 @@
     <ClInclude Include="StringPool.h" />
     <ClInclude Include="Symbol.h" />
     <ClInclude Include="SymbolFactory.h" />
-    <ClInclude Include="SymbolTable.h" />
     <ClInclude Include="SyntaxNode.h" />
-    <ClInclude Include="SyntaxNodeFactory.h" />
-    <ClInclude Include="SystemHolder.h" />
     <ClInclude Include="TypeDescriptor.h" />
     <ClInclude Include="TypeDescriptorFactory.h" />
     <ClInclude Include="Version.h" />
@@ -491,10 +485,7 @@
     <ClCompile Include="StringPool.cpp" />
     <ClCompile Include="Symbol.cpp" />
     <ClCompile Include="SymbolFactory.cpp" />
-    <ClCompile Include="SymbolTable.cpp" />
     <ClCompile Include="SyntaxNode.cpp" />
-    <ClCompile Include="SyntaxNodeFactory.cpp" />
-    <ClCompile Include="SystemHolder.cpp" />
     <ClCompile Include="TypeDescriptor.cpp" />
     <ClCompile Include="TypeDescriptorFactory.cpp" />
   </ItemGroup>
