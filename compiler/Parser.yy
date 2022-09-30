@@ -6,25 +6,6 @@ mana (compiler)
 @date	2003-
 */
 
-#include "../runner/common/Setup.h"
-#include "ErrorHandler.h"
-#include "Lexer.h"
-#include "Main.h"
-#include "Symbol.h"
-#include "TypeDescriptor.h"
-//#include "generator.h"
-#include "Lexer.h"
-//#include "linker.h"
-//#include "main.h"
-//#include "pre_resolver.h"
-
-#include "SyntaxNode.h"
-#include "Parser.hpp"
-
-#include "ParserDeclaration.inl"
-#include <memory>
-#include <string_view>
-
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
 #define YYERROR_VERBOSE
 #endif
@@ -37,6 +18,43 @@ mana (compiler)
 %define api.parser.class {Parser}
 %define api.namespace {mana}
 %define api.value.type variant
+
+%parse-param { mana::ParsingDriver* mParsingDriver }
+
+%code requires
+{
+	#include "../runner/common/Setup.h"
+	#include "SyntaxNode.h"
+	#include "TypeDescriptor.h"
+
+    namespace mana {
+        class ParsingDriver;
+    }
+}
+
+%code top
+{
+	#include "../runner/common/Setup.h"
+	#include "ErrorHandler.h"
+	#include "Lexer.h"
+	#include "Main.h"
+    #include "ParsingDriver.h"
+	#include "Symbol.h"
+	#include "SyntaxNode.h"
+	#include "TypeDescriptor.h"
+
+#include "Main.h"
+#include "CodeGenerator.h"
+#include "GlobalAddressResolver.h"
+#include "GlobalSemanticAnalyzer.h"
+#include "DataBuffer.h"
+#include "SyntaxNode.h"
+#include "TypeDescriptorFactory.h"
+
+	#include "ParserDeclaration.inl"
+	#include <memory>
+	#include <string_view>
+}
 
 %type	<std::shared_ptr<mana::SyntaxNode>> block case cases left_hand constant expression statement statements variable_size variable_sizes variable_type function struct_member struct_members struct action actions actor declarator declaration allocate_declarations declarations primary arg_calls arg_decls variable_decl line
 %token	<mana::int_t> tDIGIT
@@ -97,13 +115,13 @@ program			: line
 							$1->Dump();
 						}
 
-						auto globalSemanticAnalyzer = mana::GetSystemHolder().GetGlobalSemanticAnalyzer();
+						auto globalSemanticAnalyzer = mParsingDriver->GetGlobalSemanticAnalyzer();
 						globalSemanticAnalyzer->Resolve($1);
 
-						auto codeGenerator = mana::GetSystemHolder().GetCodeGenerator();
+						auto codeGenerator = mParsingDriver->GetCodeGenerator();
 						codeGenerator->generator_genearte_code($1, true);
 
-						auto globalAddressResolver = mana::GetSystemHolder().GetCodeGenerator()->GetGlobalAddressResolver();
+						auto globalAddressResolver = mParsingDriver->GetCodeGenerator()->GetGlobalAddressResolver();
 						globalAddressResolver->ResolveAddress();
 						//globalAddressResolver->mana_linker_resolve_address();
 					}
@@ -112,7 +130,7 @@ program			: line
 line			: // empty
 					{ $$ = nullptr; }
 				| declarations line
-					{ $$ = mana::Bind($1, $2); }
+					{ $$ = mParsingDriver->Bind($1, $2); }
 				;
 
 declarations	: actor
@@ -121,17 +139,17 @@ declarations	: actor
 				| declaration ';'
 
 				| tNATIVE variable_type tIDENTIFIER '(' arg_decls ')' ';'
-					{ $$ = mana::CreateNativeFunction($2, $3, $5); }
+					{ $$ = mParsingDriver->CreateNativeFunction($2, $3, $5); }
 
 				| tALLOCATE tDIGIT '{' allocate_declarations '}' 
-					{ $$ = mana::CreateDeclareMemory($2, $4); }
+					{ $$ = mParsingDriver->CreateDeclareMemory($2, $4); }
 				| tSTATIC '{' allocate_declarations '}'
-					{ $$ = mana::CreateDeclareStaticMemory(0, $3); }
+					{ $$ = mParsingDriver->CreateDeclareStaticMemory(0, $3); }
 				| tSTATIC tALLOCATE tDIGIT '{' allocate_declarations '}'
-					{ $$ = mana::CreateDeclareStaticMemory($3, $5); }
+					{ $$ = mParsingDriver->CreateDeclareStaticMemory($3, $5); }
 
 				| tALIAS tIDENTIFIER tSTRING ';'
-					{ $$ = mana::CreateAlias($2, $3); }
+					{ $$ = mParsingDriver->CreateAlias($2, $3); }
 
 				| tINCLUDE tSTRING ';'
 					{ $$ = nullptr; if(! lexer_open($2, false)){ YYABORT; } }
@@ -143,127 +161,127 @@ allocate_declarations
 				: // empty
 					{ $$ = nullptr; }
 				| variable_decl ';' allocate_declarations
-					{ $$ = mana::Bind($1, $3); }
+					{ $$ = mParsingDriver->Bind($1, $3); }
 				;
 
 declaration		: variable_decl
 				| tDEFINE tIDENTIFIER tDIGIT
-					{ $$ = mana::CreateConstantNode($2, $3); }
+					{ $$ = mParsingDriver->CreateConstantNode($2, $3); }
 				| tDEFINE tIDENTIFIER tREAL
-					{ $$ = mana::CreateConstantNode($2, $3); }
+					{ $$ = mParsingDriver->CreateConstantNode($2, $3); }
 				| tDEFINE tIDENTIFIER '-' tDIGIT
-					{ $$ = mana::CreateConstantNode($2, -$4); }
+					{ $$ = mParsingDriver->CreateConstantNode($2, -$4); }
 				| tDEFINE tIDENTIFIER '-' tREAL
-					{ $$ = mana::CreateConstantNode($2, -$4); }
+					{ $$ = mParsingDriver->CreateConstantNode($2, -$4); }
 				| tDEFINE tIDENTIFIER tSTRING
-					{ $$ = CreateConstantNode($2, $3); }
+					{ $$ = mParsingDriver->CreateConstantNode($2, $3); }
 				| tDEFINE tIDENTIFIER tIDENTIFIER
-					{ $$ = CreateDefineNode($2, $3); }
+					{ $$ = mParsingDriver->CreateDefineNode($2, $3); }
 				| tUNDEF tIDENTIFIER
-					{ $$ = CreateUndefineNode($2); }
+					{ $$ = mParsingDriver->CreateUndefineNode($2); }
 				;
 
 actor			: tACTOR tIDENTIFIER '{' actions '}'
-					{ $$ = mana::CreateActor($2, $4); }
+					{ $$ = mParsingDriver->CreateActor($2, $4); }
 				| tPHANTOM tIDENTIFIER '{' actions '}'
-					{ $$ = mana::CreatePhantom($2, $4); }
+					{ $$ = mParsingDriver->CreatePhantom($2, $4); }
 				| tMODULE tIDENTIFIER '{' actions '}'
-					{ $$ = mana::CreateModule($2, $4); }
+					{ $$ = mParsingDriver->CreateModule($2, $4); }
 				;
 
 actions			: // empty
 					{ $$ = nullptr; }
 				| action actions
-					{ $$ = mana::Bind($1, $2); }
+					{ $$ = mParsingDriver->Bind($1, $2); }
 				;
 
 action			: tACTION tIDENTIFIER block
-					{ $$ = mana::CreateAction($2, $3); }
+					{ $$ = mParsingDriver->CreateAction($2, $3); }
 				| tEXTEND tIDENTIFIER ';'
-					{ $$ = mana::CreateExtend($2); }
+					{ $$ = mParsingDriver->CreateExtend($2); }
 				| declaration ';'
 				;
 
 struct			: tSTRUCT tIDENTIFIER '{' struct_members '}'
-					{ $$ = mana::CreateStruct($2, $4); }
+					{ $$ = mParsingDriver->CreateStruct($2, $4); }
 				;
 
 struct_members	: // empty
 					{ $$ = nullptr; }
 				| struct_member struct_members
-					{ $$ = mana::Bind($1, $2); }
+					{ $$ = mParsingDriver->Bind($1, $2); }
 				;
 
 struct_member	: variable_decl ';'
 				;
 
 function		: variable_type tIDENTIFIER '(' arg_decls ')' block
-					{ $$ = mana::CreateInternalFunction($1, $2, $4, $6); }
+					{ $$ = mParsingDriver->CreateInternalFunction($1, $2, $4, $6); }
 				;
 
 variable_type	: tACTOR2
-					{ $$ = mana::CreateActorTypeDescription(); }
+					{ $$ = mParsingDriver->CreateActorTypeDescription(); }
 				| tIDENTIFIER
-					{ $$ = mana::CreateTypeDescription($1); }
+					{ $$ = mParsingDriver->CreateTypeDescription($1); }
 				| tTYPE
-					{ $$ = mana::CreateTypeDescription($1); }
+					{ $$ = mParsingDriver->CreateTypeDescription($1); }
 				;
 
 block			: '{' statements '}'
-					{ $$ = mana::CreateBlock($2); }
+					{ $$ = mParsingDriver->CreateBlock($2); }
 				;
 
 statements		: // empty
 					{ $$ = nullptr; }
 				| statement statements
-					{ $$ = mana::Bind($1, $2); }
+					{ $$ = mParsingDriver->Bind($1, $2); }
 				;
 statement		: tIF '(' expression ')' statement
-					{ $$ = mana::CreateIf($3, $5, nullptr); }
+					{ $$ = mParsingDriver->CreateIf($3, $5, nullptr); }
 				| tIF '(' expression ')' statement tELSE statement
-					{ $$ = mana::CreateIf($3, $5, $7); }
+					{ $$ = mParsingDriver->CreateIf($3, $5, $7); }
 				| tSWITCH '(' expression ')' '{' cases '}'
-					{ $$ = mana::CreateSwitch($3, $6); }
+					{ $$ = mParsingDriver->CreateSwitch($3, $6); }
 				| tWHILE '(' expression ')' statement
-					{ $$ = mana::CreateWhile($3, $5); }
+					{ $$ = mParsingDriver->CreateWhile($3, $5); }
 				| tDO statement tWHILE '(' expression ')' ';'
-					{ $$ = mana::CreateDoWhile($2, $5); }
+					{ $$ = mParsingDriver->CreateDoWhile($2, $5); }
 				| tFOR '(' expression ';' expression ';' expression ')' statement
-					{ $$ = mana::CreateFor($3, $5, $7, $9); }
+					{ $$ = mParsingDriver->CreateFor($3, $5, $7, $9); }
 				| tFOR '(' variable_decl ';' expression ';' expression ')' statement
-					{ $$ = mana::CreateFor($3, $5, $7, $9); }
+					{ $$ = mParsingDriver->CreateFor($3, $5, $7, $9); }
 				| tLOOP statement
-					{ $$ = mana::CreateLoop($2); }
+					{ $$ = mParsingDriver->CreateLoop($2); }
 				| tLOCK statement
-					{ $$ = mana::CreateLock($2); }
+					{ $$ = mParsingDriver->CreateLock($2); }
 				| GOTO tIDENTIFIER ';'
-					{ $$ = mana::CreateGoto($2); }
+					{ $$ = mParsingDriver->CreateGoto($2); }
 				| tIDENTIFIER ':'
-					{ $$ = mana::CreateLabel($1); }
+					{ $$ = mParsingDriver->CreateLabel($1); }
 				| tRETURN ';'
-					{ $$ = mana::CreateReturn(nullptr); }
+					{ $$ = mParsingDriver->CreateReturn(nullptr); }
 				| tRETURN expression ';'
-					{ $$ = mana::CreateReturn($2); }
+					{ $$ = mParsingDriver->CreateReturn($2); }
 				| tROLLBACK expression ';'
-					{ $$ = mana::CreateRollback($2); }
+					{ $$ = mParsingDriver->CreateRollback($2); }
 				| tBREAK ';'
-					{ $$ = mana::CreateBreak(); }
+					{ $$ = mParsingDriver->CreateBreak(); }
 				| tCONTINUE ';'
-					{ $$ = mana::CreateContinue(); }
+					{ $$ = mParsingDriver->CreateContinue(); }
 				| tHALT '(' ')' ';'
-					{ $$ = mana::CreateHalt(); }
+					{ $$ = mParsingDriver->CreateHalt(); }
 				| tYIELD '(' ')' ';'
-					{ $$ = mana::CreateYield(); }
+					{ $$ = mParsingDriver->CreateYield(); }
 				| tCOMPLY '(' ')' ';'
-					{ $$ = mana::CreateComply(); }
+					{ $$ = mParsingDriver->CreateComply(); }
 				| tREFUSE '(' ')' ';'
-					{ $$ = mana::CreateRefuse(); }
+					{ $$ = mParsingDriver->CreateRefuse(); }
 				| tPRINT '(' arg_calls ')' ';'
-					{ $$ = mana::CreatePrint($3); }
+					{ $$ = mParsingDriver->CreatePrint($3); }
 				| tREQUEST '(' expression ','  expression tDC tIDENTIFIER ')' ';'
-					{ $$ = mana::CreateRequest($3, $5, $7); }
+					{ $$ = mParsingDriver->CreateRequest($3, $5, $7); }
 				| tJOIN '(' expression ','  expression ')' ';'
-					{ $$ = mana::CreateJoin($3, $5); }
+					{ $$ = mParsingDriver->CreateJoin($3, $5); }
 				| block
 				| declaration ';'
 				| expression ';'
@@ -276,174 +294,174 @@ statement		: tIF '(' expression ')' statement
 				;
 
 expression		: left_hand '=' expression
-					{ $$ = mana::CreateAssign($1, $3); }
+					{ $$ = mParsingDriver->CreateAssign($1, $3); }
 				| expression tAND expression
-					{ $$ = mana::CreateLogicalAnd($1, $3); }
+					{ $$ = mParsingDriver->CreateLogicalAnd($1, $3); }
 				| expression tOR expression
-					{ $$ = mana::CreateLogicalOr($1, $3); }
+					{ $$ = mParsingDriver->CreateLogicalOr($1, $3); }
 				| expression tAADD expression
-					{ $$ = mana::CreateAddAndAssign($1, $3); }
+					{ $$ = mParsingDriver->CreateAddAndAssign($1, $3); }
 				| expression tASUB expression
-					{ $$ = mana::CreateSubAndAssign($1, $3); }
+					{ $$ = mParsingDriver->CreateSubAndAssign($1, $3); }
 				| expression tAMUL expression
-					{ $$ = mana::CreateMulAndAssign($1, $3); }
+					{ $$ = mParsingDriver->CreateMulAndAssign($1, $3); }
 				| expression tADIV expression
-					{ $$ = mana::CreateDivAndAssign($1, $3); }
+					{ $$ = mParsingDriver->CreateDivAndAssign($1, $3); }
 				| expression tAMOD expression
-					{ $$ = mana::CreateModAndAssign($1, $3); }
+					{ $$ = mParsingDriver->CreateModAndAssign($1, $3); }
 				| expression tAAND expression
-					{ $$ = mana::CreateAndAndAssign($1, $3); }
+					{ $$ = mParsingDriver->CreateAndAndAssign($1, $3); }
 				| expression tAOR expression
-					{ $$ = mana::CreateOrAndAssign($1, $3); }
+					{ $$ = mParsingDriver->CreateOrAndAssign($1, $3); }
 				| expression tAXOR expression
-					{ $$ = mana::CreateXorAndAssign($1, $3); }
+					{ $$ = mParsingDriver->CreateXorAndAssign($1, $3); }
 				| expression tALSHFT expression
-					{ $$ = mana::CreateLeftShiftAndAssign($1, $3); }
+					{ $$ = mParsingDriver->CreateLeftShiftAndAssign($1, $3); }
 				| expression tARSHFT expression
-					{ $$ = mana::CreateRightShiftAndAssign($1, $3); }
+					{ $$ = mParsingDriver->CreateRightShiftAndAssign($1, $3); }
 				| expression '+' expression
-					{ $$ = mana::CreateAdd($1, $3); }
+					{ $$ = mParsingDriver->CreateAdd($1, $3); }
 				| expression '-' expression
-					{ $$ = mana::CreateSub($1, $3); }
+					{ $$ = mParsingDriver->CreateSub($1, $3); }
 				| expression '*' expression
-					{ $$ = mana::CreateMul($1, $3); }
+					{ $$ = mParsingDriver->CreateMul($1, $3); }
 				| expression '/' expression
-					{ $$ = mana::CreateDiv($1, $3); }
+					{ $$ = mParsingDriver->CreateDiv($1, $3); }
 				| expression '%' expression
-					{ $$ = mana::CreateMod($1, $3); }
+					{ $$ = mParsingDriver->CreateMod($1, $3); }
 				| expression tPOW expression
-					{ $$ = mana::CreatePow($1, $3); }
+					{ $$ = mParsingDriver->CreatePow($1, $3); }
 				| expression '&' expression
-					{ $$ = mana::CreateAnd($1, $3); }
+					{ $$ = mParsingDriver->CreateAnd($1, $3); }
 				| expression '|' expression
-					{ $$ = mana::CreateOr($1, $3); }
+					{ $$ = mParsingDriver->CreateOr($1, $3); }
 				| expression '^' expression
-					{ $$ = mana::CreateXor($1, $3); }
+					{ $$ = mParsingDriver->CreateXor($1, $3); }
 				| expression tLSHFT expression
-					{ $$ = mana::CreateLeftShift($1, $3); }
+					{ $$ = mParsingDriver->CreateLeftShift($1, $3); }
 				| expression tRSHFT expression
-					{ $$ = mana::CreateRightShift($1, $3); }
+					{ $$ = mParsingDriver->CreateRightShift($1, $3); }
 				| expression '>' expression
-					{ $$ = mana::CreateGT($1, $3); }
+					{ $$ = mParsingDriver->CreateGT($1, $3); }
 				| expression tGE expression
-					{ $$ = mana::CreateGE($1, $3); }
+					{ $$ = mParsingDriver->CreateGE($1, $3); }
 				| expression '<' expression
-					{ $$ = mana::CreateLS($1, $3); }
+					{ $$ = mParsingDriver->CreateLS($1, $3); }
 				| expression tLE expression
-					{ $$ = mana::CreateLE($1, $3); }
+					{ $$ = mParsingDriver->CreateLE($1, $3); }
 				| expression tEQ expression
-					{ $$ = mana::CreateEQ($1, $3); }
+					{ $$ = mParsingDriver->CreateEQ($1, $3); }
 				| expression tNE expression
-					{ $$ = mana::CreateNE($1, $3); }
+					{ $$ = mParsingDriver->CreateNE($1, $3); }
 				| tINC expression
-					{ $$ = mana::CreateIncrement($2); }
+					{ $$ = mParsingDriver->CreateIncrement($2); }
 				| tDEC expression
-					{ $$ = mana::CreateDecrement($2); }
+					{ $$ = mParsingDriver->CreateDecrement($2); }
 				| expression tINC %prec tUINC
-					{ $$ = mana::CreateIncrement($1); }
+					{ $$ = mParsingDriver->CreateIncrement($1); }
 				| expression tDEC %prec tUDEC
-					{ $$ = mana::CreateDecrement($1); }
+					{ $$ = mParsingDriver->CreateDecrement($1); }
 				| expression '?' expression ':' expression
-					{ $$ = mana::CreateExpressionIf($1, $3, $5); }
+					{ $$ = mParsingDriver->CreateExpressionIf($1, $3, $5); }
 				| primary
 				;
 
 primary			: '-' expression %prec tUMINUS
-					{ $$ = mana::CreateNegative($2); }
+					{ $$ = mParsingDriver->CreateNegative($2); }
 				| '+' expression %prec tUPLUS
 					{ $$ = $2; }
 				| '!' expression
-					{ $$ = mana::CreateNot($2); }
+					{ $$ = mParsingDriver->CreateNot($2); }
 				| '~' expression
-					{ $$ = mana::CreateComplement1($2); }
+					{ $$ = mParsingDriver->CreateComplement1($2); }
 				| tSIZEOF '(' variable_type ')'
-					{ $$ = mana::CreateSizeOf($3); }
+					{ $$ = mParsingDriver->CreateSizeOf($3); }
 				| tIDENTIFIER '(' arg_calls ')'
-					{ $$ = mana::CreateCall($1, $3); }
+					{ $$ = mParsingDriver->CreateCall($1, $3); }
 				| constant
 				| left_hand
 				;
 
 constant		: tFALSE
-					{ $$ = mana::CreateInteger(0); }
+					{ $$ = mParsingDriver->CreateInteger(0); }
 				| tTRUE
-					{ $$ = mana::CreateInteger(1); }
+					{ $$ = mParsingDriver->CreateInteger(1); }
 				| tPRIORITY
-					{ $$ = mana::CreatePriority(); }
+					{ $$ = mParsingDriver->CreatePriority(); }
 				| tSELF
-					{ $$ = mana::CreateSelf(); }
+					{ $$ = mParsingDriver->CreateSelf(); }
 				| tSENDER
-					{ $$ = mana::CreateSender(); }
+					{ $$ = mParsingDriver->CreateSender(); }
 				| tNIL
-					{ $$ = mana::CreateNil(); }
+					{ $$ = mParsingDriver->CreateNil(); }
 				| tDIGIT
-					{ $$ = mana::CreateInteger($1); }
+					{ $$ = mParsingDriver->CreateInteger($1); }
 				| tREAL
-					{ $$ = mana::CreateFloat($1); }
+					{ $$ = mParsingDriver->CreateFloat($1); }
 				| tSTRING
-					{ $$ = mana::CreateString($1); }
+					{ $$ = mParsingDriver->CreateString($1); }
 				;
 
 left_hand		: left_hand '.' tIDENTIFIER
-					{ $$ = mana::CreateMemberVariable($1, $3); }
+					{ $$ = mParsingDriver->CreateMemberVariable($1, $3); }
 				| left_hand '.' tIDENTIFIER '(' arg_calls ')'
-					{ $$ = mana::CreateMemberFunction($1, $3, $5); }
+					{ $$ = mParsingDriver->CreateMemberFunction($1, $3, $5); }
 				| left_hand '[' expression ']'
-					{ $$ = mana::CreateArray($1, $3); }
+					{ $$ = mParsingDriver->CreateArray($1, $3); }
 				| tIDENTIFIER
-					{ $$ = mana::CreateIdentifier($1); }
+					{ $$ = mParsingDriver->CreateIdentifier($1); }
 				| '(' expression ')'
 					{ $$ = $2; }
 				;
 
 cases			: case
 				| cases case
-					{ $$ = mana::BindCaseNode($1, $2); }
+					{ $$ = mParsingDriver->BindCaseNode($1, $2); }
 				;
 case			: tCASE expression ':' statements
-					{ $$ = mana::CreateSwitchCaseNode($2, $4); }
+					{ $$ = mParsingDriver->CreateSwitchCaseNode($2, $4); }
 				| tDEFAULT ':' statements
-					{ $$ = mana::CreateSwitchDefaultNode($3); }
+					{ $$ = mParsingDriver->CreateSwitchDefaultNode($3); }
 				;
 
 arg_calls		: /* empty */
 					{ $$ = nullptr; }
 				| expression
-					{ $$ = mana::CreateArgumentNode($1); }
+					{ $$ = mParsingDriver->CreateArgumentNode($1); }
 				| expression ',' arg_calls
-					{ $$ = mana::CreateArgumentNode($1, $3); }
+					{ $$ = mParsingDriver->CreateArgumentNode($1, $3); }
 				;
 
 arg_decls		: // empty
 					{ $$ = nullptr; }
 				| variable_decl
-					{ $$ = mana::CreateDeclareArgumentNode($1); }
+					{ $$ = mParsingDriver->CreateDeclareArgumentNode($1); }
 				| arg_decls ',' variable_decl
-					{ $$ = mana::CreateDeclareArgumentNode($1, $3); }
+					{ $$ = mParsingDriver->CreateDeclareArgumentNode($1, $3); }
 				;
 
 
 variable_decl	: variable_type declarator
-					{ $$ = mana::CreateDeclareVariableNode($1, $2, nullptr); }
+					{ $$ = mParsingDriver->CreateDeclareVariableNode($1, $2, nullptr); }
 				| variable_type declarator '=' expression
-					{ $$ = mana::CreateDeclareVariableNode($1, $2, $4); }
+					{ $$ = mParsingDriver->CreateDeclareVariableNode($1, $2, $4); }
 				;
 				;
 
 declarator		: tIDENTIFIER
-					{ $$ = mana::CreateDeclaratorNode($1); }
+					{ $$ = mParsingDriver->CreateDeclaratorNode($1); }
 				| tIDENTIFIER variable_sizes
-					{ $$ = mana::CreateDeclaratorNode($1, $2); }
+					{ $$ = mParsingDriver->CreateDeclaratorNode($1, $2); }
 				;
 
 variable_sizes	: variable_size
 				| variable_size variable_sizes
-					{ $$ = 	mana::Bind($1, $2); }
+					{ $$ = 	mParsingDriver->Bind($1, $2); }
 				;
 variable_size	: '[' tDIGIT ']'
-					{ $$ = 	mana::CreateVariableSizeNode($2); }
+					{ $$ = 	mParsingDriver->CreateVariableSizeNode($2); }
 				| '[' tIDENTIFIER ']'
-					{ $$ = 	mana::CreateVariableSizeNode($2); }
+					{ $$ = 	mParsingDriver->CreateVariableSizeNode($2); }
 				;
 %%
 

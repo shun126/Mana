@@ -17,7 +17,6 @@ namespace mana
 	public:
 		GlobalSemanticAnalyzer(
 			const std::shared_ptr<SymbolFactory>& symbolFactory,
-			const std::shared_ptr<SymbolTable>& symbolTable,
 			const std::shared_ptr<TypeDescriptorFactory>& typeDescriptorFactory);
 		~GlobalSemanticAnalyzer() = default;
 

@@ -14,7 +14,6 @@ mana (compiler)
 #include "LocalAddressResolver.h"
 #include "LocalSemanticAnalyzer.h"
 #include "SymbolFactory.h"
-#include "SymbolTable.h"
 #include "SyntaxNode.h"
 #include "TypeDescriptorFactory.h"
 #include <fstream>
@@ -34,7 +33,6 @@ namespace mana
 			const std::shared_ptr<GlobalSemanticAnalyzer>& globalSemanticAnalyzer,
 			const std::shared_ptr<LocalSemanticAnalyzer>& localSemanticAnalyzer,
 			const std::shared_ptr<SymbolFactory>& symbolFactory,
-			const std::shared_ptr<SymbolTable>& symbolTable,
 			const std::shared_ptr<TypeDescriptorFactory>& typeDescriptorFactory);
 
 		~CodeGenerator() = default;
@@ -89,7 +87,6 @@ namespace mana
 		std::shared_ptr<LocalSemanticAnalyzer> mLocalSemanticAnalyzer;
 		std::shared_ptr<StringPool> mStringPool;
 		std::shared_ptr<SymbolFactory> mSymbolFactory;
-		std::shared_ptr<SymbolTable> mSymbolTable;
 		std::shared_ptr<TypeDescriptorFactory> mTypeDescriptorFactory;
 
 		std::shared_ptr<Symbol> actor_symbol_entry_pointer;
