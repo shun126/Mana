@@ -19,38 +19,38 @@ namespace mana
 		{
 			// vec2
 			GetSymbolFactory()->OpenStructure();
-			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("x", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
-			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("y", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
+			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("x", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::Normal);
+			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("y", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::Normal);
 			GetSymbolFactory()->CloseStructure("vec2");
 
 			// vec3
 			GetSymbolFactory()->OpenStructure();
-			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("x", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
-			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("y", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
-			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("z", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
+			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("x", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::Normal);
+			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("y", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::Normal);
+			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("z", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::Normal);
 			GetSymbolFactory()->CloseStructure("vec3");
 
 			// vec4
 			GetSymbolFactory()->OpenStructure();
-			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("x", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
-			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("y", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
-			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("z", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
-			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("w", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
+			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("x", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::Normal);
+			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("y", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::Normal);
+			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("z", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::Normal);
+			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("w", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::Normal);
 			GetSymbolFactory()->CloseStructure("vec4");
 
 			// rotator
 			GetSymbolFactory()->OpenStructure();
-			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("pitch", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
-			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("yaw", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
-			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("roll", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
+			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("pitch", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::Normal);
+			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("yaw", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::Normal);
+			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("roll", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::Normal);
 			GetSymbolFactory()->CloseStructure("rotator");
 
 			// color
 			GetSymbolFactory()->OpenStructure();
-			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("r", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
-			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("g", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
-			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("b", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
-			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("a", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::NORMAL);
+			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("r", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::Normal);
+			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("g", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::Normal);
+			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("b", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::Normal);
+			GetSymbolFactory()->AllocateMemory(GetSymbolFactory()->CreateVariable("a", nullptr, false, GetSymbolFactory()->IsOpenBlock(), GetSymbolFactory()->IsFunctionOpened()), GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float), Symbol::MemoryTypeId::Normal);
 			GetSymbolFactory()->CloseStructure("color");
 
 			// TODO: transform
@@ -70,7 +70,7 @@ namespace mana
 			GetSymbol() = symbol_create_function("setUserData");
 			GetSymbol()->number_of_parameters = 1;
 			symbol_begin_native_function_registration();
-			symbol_allocate_memory(symbol_create_variable("data", nullptr, false), type_get(Int), PARAMETER);
+			symbol_allocate_memory(symbol_create_variable("data", nullptr, false), type_get(Int), Parameter);
 			symbol_commit_native_function_registration(GetSymbol(), type_get(Void));
 
 			/* pointer getUserPointer() */
@@ -83,7 +83,7 @@ namespace mana
 			GetSymbol() = symbol_create_function("setUserPointer");
 			GetSymbol()->number_of_parameters = 1;
 			symbol_begin_native_function_registration();
-			symbol_allocate_memory(symbol_create_variable("address", nullptr, false), type_pointer, PARAMETER);
+			symbol_allocate_memory(symbol_create_variable("address", nullptr, false), type_pointer, Parameter);
 			symbol_commit_native_function_registration(GetSymbol(), type_get(Void));
 
 			/* int debug() */
@@ -96,36 +96,36 @@ namespace mana
 			GetSymbol() = symbol_create_function("setTickCount");
 			GetSymbol()->number_of_parameters = 1;
 			symbol_begin_native_function_registration();
-			symbol_allocate_memory(symbol_create_variable("count", nullptr, false), type_get(Int), PARAMETER);
+			symbol_allocate_memory(symbol_create_variable("count", nullptr, false), type_get(Int), Parameter);
 			symbol_commit_native_function_registration(GetSymbol(), type_get(Void));
 
 			/* void wait(float) */
 			GetSymbol() = symbol_create_function("wait");
 			GetSymbol()->number_of_parameters = 1;
 			symbol_begin_native_function_registration();
-			symbol_allocate_memory(symbol_create_variable("second", nullptr, false), type_get(Float), PARAMETER);
+			symbol_allocate_memory(symbol_create_variable("second", nullptr, false), type_get(Float), Parameter);
 			symbol_commit_native_function_registration(GetSymbol(), type_get(Void));
 
 			/* void waitFrame(int) */
 			GetSymbol() = symbol_create_function("waitFrame");
 			GetSymbol()->number_of_parameters = 1;
 			symbol_begin_native_function_registration();
-			symbol_allocate_memory(symbol_create_variable("frame", nullptr, false), type_get(Int), PARAMETER);
+			symbol_allocate_memory(symbol_create_variable("frame", nullptr, false), type_get(Int), Parameter);
 			symbol_commit_native_function_registration(GetSymbol(), type_get(Void));
 
 			/* void srand(int count) */
 			GetSymbol() = symbol_create_function("srand");
 			GetSymbol()->number_of_parameters = 1;
 			symbol_begin_native_function_registration();
-			symbol_allocate_memory(symbol_create_variable("count", nullptr, false), type_get(Int), PARAMETER);
+			symbol_allocate_memory(symbol_create_variable("count", nullptr, false), type_get(Int), Parameter);
 			symbol_commit_native_function_registration(GetSymbol(), type_get(Void));
 
 			/* int rand(int, int) */
 			GetSymbol() = symbol_create_function("rand");
 			GetSymbol()->number_of_parameters = 2;
 			symbol_begin_native_function_registration();
-			symbol_allocate_memory(symbol_create_variable("min", nullptr, false), type_get(Int), PARAMETER);
-			symbol_allocate_memory(symbol_create_variable("max", nullptr, false), type_get(Int), PARAMETER);
+			symbol_allocate_memory(symbol_create_variable("min", nullptr, false), type_get(Int), Parameter);
+			symbol_allocate_memory(symbol_create_variable("max", nullptr, false), type_get(Int), Parameter);
 			symbol_commit_native_function_registration(GetSymbol(), type_get(Int));
 
 			/* float frand() */
@@ -138,50 +138,50 @@ namespace mana
 			GetSymbol() = symbol_create_function("sin");
 			GetSymbol()->number_of_parameters = 1;
 			symbol_begin_native_function_registration();
-			symbol_allocate_memory(symbol_create_variable("degree", nullptr, false), type_get(Float), PARAMETER);
+			symbol_allocate_memory(symbol_create_variable("degree", nullptr, false), type_get(Float), Parameter);
 			symbol_commit_native_function_registration(GetSymbol(), type_get(Float));
 
 			/* float cos(float) */
 			GetSymbol() = symbol_create_function("cos");
 			GetSymbol()->number_of_parameters = 1;
 			symbol_begin_native_function_registration();
-			symbol_allocate_memory(symbol_create_variable("degree", nullptr, false), type_get(Float), PARAMETER);
+			symbol_allocate_memory(symbol_create_variable("degree", nullptr, false), type_get(Float), Parameter);
 			symbol_commit_native_function_registration(GetSymbol(), type_get(Float));
 
 			/* float atan2(float, float) */
 			GetSymbol() = symbol_create_function("atan2");
 			GetSymbol()->number_of_parameters = 2;
 			symbol_begin_native_function_registration();
-			symbol_allocate_memory(symbol_create_variable("y", nullptr, false), type_get(Float), PARAMETER);
-			symbol_allocate_memory(symbol_create_variable("x", nullptr, false), type_get(Float), PARAMETER);
+			symbol_allocate_memory(symbol_create_variable("y", nullptr, false), type_get(Float), Parameter);
+			symbol_allocate_memory(symbol_create_variable("x", nullptr, false), type_get(Float), Parameter);
 			symbol_commit_native_function_registration(GetSymbol(), type_get(Float));
 
 			/* float tan(float) */
 			GetSymbol() = symbol_create_function("tan");
 			GetSymbol()->number_of_parameters = 1;
 			symbol_begin_native_function_registration();
-			symbol_allocate_memory(symbol_create_variable("degree", nullptr, false), type_get(Float), PARAMETER);
+			symbol_allocate_memory(symbol_create_variable("degree", nullptr, false), type_get(Float), Parameter);
 			symbol_commit_native_function_registration(GetSymbol(), type_get(Float));
 
 			/* float angleMod(float) */
 			GetSymbol() = symbol_create_function("angleMod");
 			GetSymbol()->number_of_parameters = 1;
 			symbol_begin_native_function_registration();
-			symbol_allocate_memory(symbol_create_variable("degree", nullptr, false), type_get(Float), PARAMETER);
+			symbol_allocate_memory(symbol_create_variable("degree", nullptr, false), type_get(Float), Parameter);
 			symbol_commit_native_function_registration(GetSymbol(), type_get(Float));
 
 			/* float sqrt(float) */
 			GetSymbol() = symbol_create_function("sqrt");
 			GetSymbol()->number_of_parameters = 1;
 			symbol_begin_native_function_registration();
-			symbol_allocate_memory(symbol_create_variable("degree", nullptr, false), type_get(Float), PARAMETER);
+			symbol_allocate_memory(symbol_create_variable("degree", nullptr, false), type_get(Float), Parameter);
 			symbol_commit_native_function_registration(GetSymbol(), type_get(Float));
 
 			/* actor get,(GetString()) */
 			GetSymbol() = symbol_create_function("get,");
 			GetSymbol()->number_of_parameters = 1;
 			symbol_begin_native_function_registration();
-			symbol_allocate_memory(symbol_create_variable("name", nullptr, false), type_string, PARAMETER);
+			symbol_allocate_memory(symbol_create_variable("name", nullptr, false), type_string, Parameter);
 			symbol_commit_native_function_registration(GetSymbol(), type_get(ACTOR));
 		}
 #endif
@@ -340,7 +340,7 @@ namespace mana
 			break;
 
 		case SyntaxNode::Id::DeclareArgument:
-			ResolveVariableDescription(node->GetLeftNode(), Symbol::MemoryTypeId::PARAMETER, mStaticBlockOpend);
+			ResolveVariableDescription(node->GetLeftNode(), Symbol::MemoryTypeId::Parameter, mStaticBlockOpend);
 			Resolve(node->GetRightNode());
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			break;
@@ -388,7 +388,7 @@ namespace mana
 			break;
 
 		case SyntaxNode::Id::DeclareVariable:
-			ResolveVariableDescription(node, Symbol::MemoryTypeId::NORMAL, mStaticBlockOpend);
+			ResolveVariableDescription(node, Symbol::MemoryTypeId::Normal, mStaticBlockOpend);
 			MANA_ASSERT(node->GetLeftNode() && node->GetLeftNode()->Is(SyntaxNode::Id::TypeDescription));
 			MANA_ASSERT(node->GetRightNode() && node->GetRightNode()->Is(SyntaxNode::Id::Declarator));
 			break;

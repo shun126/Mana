@@ -19,7 +19,6 @@ mana (compiler)
 
 namespace mana
 {
-	std::shared_ptr<ParsingDriver> mParser;
 	static char mInputFilename[_MAX_PATH];
 	static char mOutputFilename[_MAX_PATH];
 	int32_t mDebug;
@@ -49,7 +48,7 @@ namespace mana
 	}
 	*/
 
-	static void Dump()
+	static void Dump(const std::shared_ptr<ParsingDriver>& parser)
 	{
 		char filename[_MAX_PATH];
 		char drive[_MAX_DRIVE];
@@ -64,18 +63,18 @@ namespace mana
 		{
 			{
 				log << "Symbol Table\n\n";
-				mParser->GetSymbolFactory()->Dump(log);
+				parser->GetSymbolFactory()->Dump(log);
 				log << "\n";
 			}
 			{
 				log << "Code\n";
-				mParser->GetCodeGenerator()->Dump(log);
+				parser->GetCodeGenerator()->Dump(log);
 				log << "\n";
 			}
 		}
 	}
 
-	static bool GenerateBinary(OutputStream& stream)
+	static bool GenerateBinary(OutputStream& stream, const std::shared_ptr<ParsingDriver>& parser)
 	{
 		FileHeader header;
 		memset(&header, 0, sizeof(FileHeader));
@@ -91,22 +90,22 @@ namespace mana
 #if UINTPTR_MAX == UINT64_MAX
 		header.mFlag |= (1 << FileHeader::Flag::Is64bit);
 #endif
-		header.mNumberOfActors = mParser->GetSymbolFactory()->GetNumberOfActors();
-		header.mSizeOfConstantPool = mParser->GetDataBuffer()->GetSize();
-		header.mSizeOfInstructionPool = mParser->GetCodeBuffer()->GetSize();
-		header.mSizeOfStaticMemory = mParser->GetSymbolFactory()->GetStaticMemoryAddress();
-		header.mSizeOfGlobalMemory = mParser->GetSymbolFactory()->GetGlobalMemoryAddress();
+		header.mNumberOfActors = parser->GetSymbolFactory()->GetNumberOfActors();
+		header.mSizeOfConstantPool = parser->GetDataBuffer()->GetSize();
+		header.mSizeOfInstructionPool = parser->GetCodeBuffer()->GetSize();
+		header.mSizeOfStaticMemory = parser->GetSymbolFactory()->GetStaticMemoryAddress();
+		header.mSizeOfGlobalMemory = parser->GetSymbolFactory()->GetGlobalMemoryAddress();
 		header.mRandomSeedNumber = static_cast<uint32_t>(time(NULL));
 
 		stream.PushData(&header, sizeof(header));
 
-		if (!mParser->GetSymbolFactory()->GenerateActorInfomation(stream))
+		if (!parser->GetSymbolFactory()->GenerateActorInfomation(stream))
 		{
 			return false;
 		}
 
-		mParser->GetDataBuffer()->Write(stream);
-		mParser->GetCodeBuffer()->Write(stream);
+		parser->GetDataBuffer()->Write(stream);
+		parser->GetCodeBuffer()->Write(stream);
 #if 0
 		TODO:Unimplemented
 
@@ -149,9 +148,11 @@ namespace mana
 
 		try
 		{
-			mParser = std::make_shared<ParsingDriver>();
+			std::shared_ptr<ParsingDriver> parser = std::make_shared<ParsingDriver>();
+			if (parser == nullptr)
+				throw std::bad_alloc();
 
-			if (lexer_initialize(mParser, mInputFilename))
+			if (lexer_initialize(parser, mInputFilename))
 			{
 #if 0
 				// TODO:Unimplemented
@@ -162,7 +163,7 @@ namespace mana
 					fprintf(mVariableHeaderFile, "typedef struct mana_global\n{\n");
 				}
 #endif
-				result = mParser->Parse() != 0 || yynerrs != 0;
+				result = parser->Parse() != 0 || yynerrs != 0;
 #if 0
 				// TODO:Unimplemented
 				if (mVariableHeaderFile)
@@ -175,15 +176,15 @@ namespace mana
 #endif
 				if (mDebug)
 				{
-					Dump();
+					Dump(parser);
 				}
 
-				mParser->GetSymbolFactory()->CheckUndefine();
+				parser->GetSymbolFactory()->CheckUndefine();
 
 				if (result == 0)
 				{
 					OutputStream stream;
-					if (GenerateBinary(stream))
+					if (GenerateBinary(stream, parser))
 					{
 						if (mOutputFilename[0] != '\0')
 						{
@@ -385,6 +386,7 @@ int main(int argc, char* argv[])
 	_CrtMemState stNewMemState;
 	_CrtMemState stDiffMemState;
 	_CrtMemCheckpoint(&stOldMemState);
+	/// _CrtSetBreakAlloc(363);
 #endif
 
 	if (mana::ParseArguments(argc, argv))

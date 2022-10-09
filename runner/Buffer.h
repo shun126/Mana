@@ -6,7 +6,7 @@ mana (library)
 */
 
 #pragma once
-#include "common/Setup.h"
+#include "common/Platform.h"
 
 namespace mana
 {
@@ -15,7 +15,7 @@ namespace mana
 	public:
 		Buffer();
 
-		explicit Buffer(const size_t size);
+		explicit Buffer(const address_t size);
 
 		~Buffer() = default;
 
@@ -28,19 +28,19 @@ namespace mana
 
 		void Reset();
 
-		void Allocate(const size_t size);
+		void Allocate(const address_t size);
 
-		void Release(const size_t size);
+		void Release(const address_t size);
 	
 		template<typename T>
-		T* GetAddressFromTop(const size_t index) const;
+		T* GetAddressFromTop(const address_t index) const;
 
 		template<typename T>
-		T* GetAddressFromBottom(const size_t index) const;
+		T* GetAddressFromBottom(const address_t index) const;
 
-		size_t GetSize() const;
+		address_t GetSize() const;
 	
-		void SetSize(const size_t size);
+		void SetSize(const address_t size);
 
 #if 0
 		//bool mana_frame_compare(const mana_frame* other);	
@@ -48,8 +48,8 @@ namespace mana
 
 	private:
 		std::unique_ptr<void, decltype(&std::free)> mBuffer;
-		size_t mAllocatedSize = 0;
-		size_t mUsedSize = 0;
+		address_t mAllocatedSize = 0;
+		address_t mUsedSize = 0;
 	};
 }
 

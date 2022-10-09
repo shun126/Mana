@@ -6,7 +6,10 @@ mana (library)
 */
 
 #pragma once
-#include "common/Setup.h"
+#include "common/Platform.h"
+#include "common/Assert.h"
+#include "common/Noncopyable.h"
+#include "common/OutputStream.h"
 #include <memory>
 
 namespace mana
@@ -16,147 +19,49 @@ namespace mana
 	class Stack : private Noncopyable
 	{
 	public:
-		Stack() : mBuffer(nullptr, std::free)
-		{
-		}
-
+		Stack();
 		virtual ~Stack() = default;
 
-		void Serialize(OutputStream* stream) const
-		{
-			stream->Push(mUsedSize);
-			stream->PushData(mBuffer.get(), mUsedSize);
-		}
+		void Serialize(OutputStream* stream) const;
+		void Deserialize(OutputStream* stream);
+		void Clear();
+		void Duplicate();
+		void Remove(const address_t size);
 
-		void Deserialize(OutputStream* stream)
-		{
-			mUsedSize = stream->Pop<size_t>();
-			mAllocatedSize = mUsedSize + 1;
-			//mBuffer.mVoidPointer = mana_realloc(mBuffer.mVoidPointer, mAllocatedSize);
-
-			//mana_stream_pop_data(stream, mBuffer.mVoidPointer, mUsedSize);
-		}
-
-		void Clear()
-		{
-			mUsedSize = 0;
-		}
+		template<typename T>
+		void Push(T value);
 	
-		void Duplicate()
-		{
-			Push(Get<void*>(0));
-		}
+		void Push(const void* buffer, const address_t size);
+
+		template<typename T>
+		T Pop();
+
+		void PopData(void* buffer, const address_t size);
 	
-		void Remove(const size_t size)
-		{
-			mUsedSize -= size;
-			MANA_ASSERT(mAllocatedSize == 0 || mUsedSize < mAllocatedSize);
-		}
-
-		template<typename T> void Push(T value)
-		{
-			AllocateBegin(sizeof(T));
-			mBuffer.get()[mUsedSize].Set(value);
-			AllocateEnd(sizeof(T));
-		}
+		void* PopAddress();
 	
-		void Push(const void* buffer, const size_t size)
-		{
-			AllocateBegin(size);
-			std::memcpy(&mBuffer.get()[mUsedSize], buffer, size);
-			AllocateEnd(size);
-		}
+		template<typename T>
+		T Get(const address_t index) const;
 
-		template<typename T> T Pop()
-		{
-			Deallocate(sizeof(T));
-			return static_cast<T>(mBuffer.get()[mUsedSize]);
-		}
-
-		void PopData(void* buffer, const size_t size)
-		{
-			Deallocate(size);
-			std::memcpy(buffer, &mBuffer.get()[mUsedSize], size);
-		}
+		void* GetAddress(const address_t index) const;
 	
-		void* PopAddress()
-		{
-			Deallocate(sizeof(void*));
-			return &mBuffer.get()[mUsedSize];
-		}
-	
-		template<typename T> T Get(const size_t index) const
-		{
-			const size_t pointer = mUsedSize - index - 1;
-			MANA_ASSERT(pointer < mAllocatedSize);
-			return static_cast<T>(mBuffer.get()[pointer]);
-		}
+		template<typename T>
+		void Set(const address_t index, T value);
 
-		void* GetAddress(const size_t index) const
-		{
-			const size_t pointer = mUsedSize - index;
-			MANA_ASSERT(pointer < mAllocatedSize);
-			return &mBuffer.get()[pointer];
-		}
-	
-		template<typename T> void Set(const size_t index, T value)
-		{
-			const size_t pointer = mUsedSize - index - 1;
-			MANA_ASSERT(pointer < mAllocatedSize);
-			mBuffer.get()[pointer].Set(value);
-		}
+		address_t GetSize() const;
 
-		size_t GetSize() const
-		{
-			return mUsedSize;
-		}
+		void SetSize(const address_t size);
 
-		void SetSize(const size_t size)
-		{
-			mUsedSize = size;
-			MANA_ASSERT(mUsedSize < mAllocatedSize);
-		}
-
-		bool operator==(const Stack& other) const
-		{
-			if(mUsedSize != other.mUsedSize)
-				return false;
-			return std::memcmp(mBuffer.get(), other.mBuffer.get(), mUsedSize) == 0;
-		}
+		bool operator==(const Stack& other) const;
 	
 	private:
-		static size_t GetAlignmentSize(const size_t size)
-		{
-			static const size_t PageSize = 8;
-			return (size + (PageSize - 1)) / PageSize * PageSize;
-		}
+		static address_t GetAlignmentSize(const address_t size);
 
-		void AllocateBegin(const size_t gainSize)
-		{
-			const size_t allocateSize = GetAlignmentSize(mUsedSize + gainSize);
-			if (allocateSize >= mAllocatedSize)
-			{
-				mAllocatedSize = allocateSize;
+		void AllocateBegin(const address_t gainSize);
 
-				Buffer* newBuffer = static_cast<Buffer*>(std::realloc(mBuffer.get(), mAllocatedSize * sizeof(mBuffer)));
-				if (newBuffer == nullptr)
-					std::bad_alloc();
-				mBuffer.release();
-				mBuffer.reset(newBuffer);
-			}
-		}
+		void AllocateEnd(const address_t gainSize);
 
-		void AllocateEnd(const size_t gainSize)
-		{
-			mUsedSize += ((gainSize + sizeof(mBuffer) - 1) / sizeof(mBuffer));
-			MANA_ASSERT(mUsedSize < mAllocatedSize);
-		}
-
-		void Deallocate(const size_t releaseSize)
-		{
-			mUsedSize -= ((releaseSize + sizeof(mBuffer) - 1) / sizeof(mBuffer));
-			MANA_ASSERT(mUsedSize < mAllocatedSize);
-		}
+		void Deallocate(const address_t releaseSize);
 
 	private:
 		union Buffer
@@ -187,7 +92,9 @@ namespace mana
 			void Set(bool value) { mBool = value; }
 		};
 		std::unique_ptr<Buffer, decltype(&std::free)> mBuffer;
-		size_t mAllocatedSize = 0;
-		size_t mUsedSize = 0;
+		address_t mAllocatedSize = 0;
+		address_t mUsedSize = 0;
 	};
 }
+
+#include "Stack.inl"

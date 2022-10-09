@@ -29,10 +29,10 @@ static char* symbol_data_type_id_name[NUMBER_OF] = {
 };
 #endif
 
-	Symbol::Symbol(const std::string_view name, const ClassTypeId classType, const int32_t level)
+	Symbol::Symbol(const std::string_view name, const ClassTypeId classType, const size_t blockLevel)
 		: mClassTypeId(classType)
 		, mName(name)
-		, mBlockLevel(level)
+		, mBlockLevel(blockLevel)
 	{
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
 		static uint32_t count = 0;
@@ -44,13 +44,13 @@ static char* symbol_data_type_id_name[NUMBER_OF] = {
 	bool Symbol::IsValid() const
 	{
 		if (
-			GetClassTypeId() != Symbol::ClassTypeId::VARIABLE_STATIC &&
-			GetClassTypeId() != Symbol::ClassTypeId::VARIABLE_GLOBAL &&
-			GetClassTypeId() != Symbol::ClassTypeId::VARIABLE_ACTOR &&
-			GetClassTypeId() != Symbol::ClassTypeId::VARIABLE_LOCAL &&
-			GetClassTypeId() != Symbol::ClassTypeId::CONSTANT_INT &&
-			GetClassTypeId() != Symbol::ClassTypeId::CONSTANT_FLOAT &&
-			GetClassTypeId() != Symbol::ClassTypeId::CONSTANT_STRING)
+			GetClassTypeId() != Symbol::ClassTypeId::StaticVariable &&
+			GetClassTypeId() != Symbol::ClassTypeId::GlobalVariable &&
+			GetClassTypeId() != Symbol::ClassTypeId::ActorVariable &&
+			GetClassTypeId() != Symbol::ClassTypeId::LocalVariable &&
+			GetClassTypeId() != Symbol::ClassTypeId::ConstantInteger &&
+			GetClassTypeId() != Symbol::ClassTypeId::ConstantFloat &&
+			GetClassTypeId() != Symbol::ClassTypeId::ConstantString)
 		{
 			CompileError("non-variable name '%s'", GetName());
 			return false;
@@ -63,13 +63,13 @@ static char* symbol_data_type_id_name[NUMBER_OF] = {
 	bool Symbol::IsValidVariable() const
 	{
 		if(
-			mClassTypeId != ClassTypeId::VARIABLE_STATIC &&
-			mClassTypeId != ClassTypeId::VARIABLE_GLOBAL &&
-			mClassTypeId != ClassTypeId::VARIABLE_ACTOR &&
-			mClassTypeId != ClassTypeId::VARIABLE_LOCAL &&
-			mClassTypeId != ClassTypeId::CONSTANT_INT &&
-			mClassTypeId != ClassTypeId::CONSTANT_FLOAT &&
-			mClassTypeId != ClassTypeId::CONSTANT_STRING
+			mClassTypeId != ClassTypeId::StaticVariable &&
+			mClassTypeId != ClassTypeId::GlobalVariable &&
+			mClassTypeId != ClassTypeId::ActorVariable &&
+			mClassTypeId != ClassTypeId::LocalVariable &&
+			mClassTypeId != ClassTypeId::ConstantInteger &&
+			mClassTypeId != ClassTypeId::ConstantFloat &&
+			mClassTypeId != ClassTypeId::ConstantString
 		){
 			CompileError("non-variable name '%s'", mName.c_str());
 			return false;
@@ -188,17 +188,17 @@ static char* symbol_data_type_id_name[NUMBER_OF] = {
 		mString = value;
 	}
 
-	int32_t Symbol::GetBlockLevel() const
+	size_t Symbol::GetBlockLevel() const
 	{
 		return mBlockLevel;
 	}
 
-	void Symbol::SetBlockLevel(const int32_t blockLevel)
+	void Symbol::SetBlockLevel(const size_t blockLevel)
 	{
 		mBlockLevel = blockLevel;
 	}
 
-	int32_t Symbol::GetNumberOfParameters() const
+	uint8_t Symbol::GetNumberOfParameters() const
 	{
 		return mNumberOfParameters;
 	}
@@ -228,16 +228,20 @@ static char* symbol_data_type_id_name[NUMBER_OF] = {
 		mTypeDescription = typeDescription;
 	}
 
-	void Symbol::SetNumberOfParameters(const int32_t numberOfParameters)
+	void Symbol::SetNumberOfParameters(const size_t numberOfParameters)
 	{
-		mNumberOfParameters = numberOfParameters;
+		if (numberOfParameters > std::numeric_limits<decltype(mNumberOfParameters)>::max())
+		{
+			throw std::overflow_error("Too many arguments");
+		}
+		mNumberOfParameters = static_cast<decltype(mNumberOfParameters)>(numberOfParameters);
 	}
 
 	void Symbol::symbol_check_undefine_recursive() const
 	{
 		switch (mClassTypeId)
 		{
-		case Symbol::ClassTypeId::TYPEDEF:
+		case Symbol::ClassTypeId::Type:
 			if (mTypeDescription->Is(TypeDescriptor::Id::Actor))
 			{
 				if (auto symbol = mTypeDescription->GetSymbolEntry())

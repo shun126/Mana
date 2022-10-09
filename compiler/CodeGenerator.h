@@ -73,8 +73,8 @@ namespace mana
 		int32_t generator_call_print_generate_argument(int32_t argc, std::shared_ptr<SyntaxNode> node);
 		void generator_call_print(std::shared_ptr<SyntaxNode> node);
 		void generator_condition_check(std::shared_ptr<SyntaxNode> tree);
-		size_t generator_condition_core(std::shared_ptr<SyntaxNode> tree);
-		size_t generator_condition(std::shared_ptr<SyntaxNode> tree, int32_t match);
+		address_t generator_condition_core(std::shared_ptr<SyntaxNode> tree);
+		address_t generator_condition(std::shared_ptr<SyntaxNode> tree, const bool match);
 		void generator_generate_const_int(const TypeDescriptor::Id type_id, const int32_t value);
 		void generator_generate_const_float(const TypeDescriptor::Id type_id, const float value);
 

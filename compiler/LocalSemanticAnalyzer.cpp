@@ -199,7 +199,7 @@ DO_RECURSIVE:
 			break;
 
 		case SyntaxNode::Id::DeclareVariable:
-			ResolveVariableDescription(node, Symbol::MemoryTypeId::NORMAL, false);
+			ResolveVariableDescription(node, Symbol::MemoryTypeId::Normal, false);
 			// node->GetLeftNode()
 			// node->GetRightNode()
 			PostResolverResolve(node->GetBodyNode());
@@ -703,7 +703,7 @@ DO_RECURSIVE:
 								node->GetRightNode()->GetTypeDescriptor() == GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Short) ||
 								node->GetRightNode()->GetTypeDescriptor() == GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Int));
 
-							if (node->GetRightNode()->GetInt() >= (node->GetLeftNode()->GetTypeDescriptor())->GetArraySize())
+							if (ToAddress(node->GetRightNode()->GetInt()) >= (node->GetLeftNode()->GetTypeDescriptor())->GetArraySize())
 								CompileError("subscript range over");
 						}
 
@@ -742,9 +742,9 @@ DO_RECURSIVE:
 					node = (*function)(node);
 				}
 
-				if (node->GetSymbol()->class_type != ClassTypeId::FUNCTION &&
-					node->GetSymbol()->class_type != ClassTypeId::NATIVE_FUNCTION &&
-					node->GetSymbol()->class_type != ClassTypeId::MEMBER_FUNCTION)
+				if (node->GetSymbol()->class_type != ClassTypeId::Function &&
+					node->GetSymbol()->class_type != ClassTypeId::NativeFunction &&
+					node->GetSymbol()->class_type != ClassTypeId::MemberFunction)
 				{
 					CompileError("trying to call non-funcation");
 				}
@@ -814,7 +814,7 @@ DO_RECURSIVE:
 
 				switch (node->GetSymbol()->GetClassTypeId())
 				{
-				case Symbol::ClassTypeId::ALIAS:
+				case Symbol::ClassTypeId::Alias:
 					/*TODO
 					if (!node->GetSymbol()->IsUsed())
 					{
@@ -825,38 +825,38 @@ DO_RECURSIVE:
 					*/
 					break;
 
-				case Symbol::ClassTypeId::CONSTANT_INT:
+				case Symbol::ClassTypeId::ConstantInteger:
 					node->GetSymbol()->SetTypeDescription(GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Int));
 					break;
 
-				case Symbol::ClassTypeId::CONSTANT_FLOAT:
+				case Symbol::ClassTypeId::ConstantFloat:
 					node->GetSymbol()->SetTypeDescription(GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float));
 					break;
 
-				case Symbol::ClassTypeId::CONSTANT_STRING:
+				case Symbol::ClassTypeId::ConstantString:
 					node->GetSymbol()->SetTypeDescription(GetTypeDescriptorFactory()->GetString());
 					break;
 
-				case Symbol::ClassTypeId::VARIABLE_STATIC:
+				case Symbol::ClassTypeId::StaticVariable:
 					GetSymbolFactory()->IsValid(node->GetSymbol());
 					break;
 
-				case Symbol::ClassTypeId::VARIABLE_GLOBAL:
+				case Symbol::ClassTypeId::GlobalVariable:
 					GetSymbolFactory()->IsValid(node->GetSymbol());
 					break;
 
-				case Symbol::ClassTypeId::VARIABLE_ACTOR:
+				case Symbol::ClassTypeId::ActorVariable:
 					GetSymbolFactory()->IsValid(node->GetSymbol());
 					break;
 
-				case Symbol::ClassTypeId::VARIABLE_LOCAL:
+				case Symbol::ClassTypeId::LocalVariable:
 					GetSymbolFactory()->IsValid(node->GetSymbol());
 					break;
 
-				case Symbol::ClassTypeId::TYPEDEF:
+				case Symbol::ClassTypeId::Type:
 					break;
 
-				case Symbol::ClassTypeId::NEW_SYMBOL:
+				case Symbol::ClassTypeId::NewSymbol:
 				default:
 					CompileError("illigal data GetTypeDescriptor()");
 					break;
@@ -891,7 +891,7 @@ DO_RECURSIVE:
 					{
 						for (std::shared_ptr<Symbol> symbol = type->GetSymbolEntry(); symbol; symbol = symbol->GetNext())
 						{
-							if (symbol->GetName() == node->GetString() && symbol->GetClassTypeId() == Symbol::ClassTypeId::VARIABLE_ACTOR)
+							if (symbol->GetName() == node->GetString() && symbol->GetClassTypeId() == Symbol::ClassTypeId::ActorVariable)
 							{
 								// variable.member
 								node->Set(symbol->GetTypeDescriptor());

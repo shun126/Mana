@@ -44,14 +44,12 @@ namespace mana
 
 	const std::string& lexer_get_current_filename(void)
 	{
-		static const std::string empty;
-		return mLexer ? mLexer->GetCurrentFilename() : empty;
+		return mLexer->GetCurrentFilename();
 	}
 
 	void lexer_set_current_filename(const std::string& filename)
 	{
-		if (mLexer)
-			mLexer->SetCurrentFilename(filename);
+		mLexer->SetCurrentFilename(filename);
 	}
 
 	int lexer_get_current_lineno(void)

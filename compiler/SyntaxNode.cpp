@@ -70,7 +70,7 @@ namespace mana
 		return mId;
 	}
 
-	size_t SyntaxNode::GetMemorySize() const
+	address_t SyntaxNode::GetMemorySize() const
 	{
 		switch (mId)
 		{

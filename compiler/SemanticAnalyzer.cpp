@@ -101,7 +101,7 @@ namespace mana
 			std::shared_ptr<Symbol> symbol = Lookup(node->GetString());
 			if (symbol)
 			{
-				if (symbol->GetClassTypeId() == Symbol::ClassTypeId::CONSTANT_INT)
+				if (symbol->GetClassTypeId() == Symbol::ClassTypeId::ConstantInteger)
 				{
 					node->Set(GetTypeDescriptorFactory()->CreateArray(symbol->GetAddress()));
 				}
@@ -141,9 +141,9 @@ namespace mana
 		MANA_ASSERT(node->GetRightNode() && node->GetRightNode()->Is(SyntaxNode::Id::Declarator));
 		ResolveDeclarator(node->GetRightNode(), isStaticVariable);
 
-		//if (node->right->symbol->class_type == VARIABLE_LOCAL)
+		//if (node->right->symbol->class_type == LocalVariable)
 		GetSymbolFactory()->AllocateMemory(node->GetRightNode()->GetSymbol(), node->GetLeftNode()->GetTypeDescriptor(), memoryTypeId);
-		//symbol_allocate_memory(node->right->symbol, node->left->type, PARAMETER);
+		//symbol_allocate_memory(node->right->symbol, node->left->type, Parameter);
 	}
 
 	void SemanticAnalyzer::ResolveTypeFromChildNode(const std::shared_ptr<SyntaxNode>& node)

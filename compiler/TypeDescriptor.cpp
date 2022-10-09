@@ -48,8 +48,8 @@ namespace mana
 
 		case Id::Array:
 			{
-				const size_t n1 = mArraySize;
-				const size_t n2 = typeDescriptor->mArraySize;
+				const address_t n1 = mArraySize;
+				const address_t n2 = typeDescriptor->mArraySize;
 				if (n1 != n2 )
 					CompileError("array size unmatched");
 				return mComponent->Compare(typeDescriptor->mComponent);
@@ -189,17 +189,17 @@ namespace mana
 		return mComponent;
 	}
 
-	size_t TypeDescriptor::GetArraySize() const
+	address_t TypeDescriptor::GetArraySize() const
 	{
 		return mArraySize;
 	}
 
-	size_t TypeDescriptor::GetMemorySize() const
+	address_t TypeDescriptor::GetMemorySize() const
 	{
 		return mMemorySize;
 	}
 
-	size_t TypeDescriptor::GetAlignmentMemorySize() const
+	address_t TypeDescriptor::GetAlignmentMemorySize() const
 	{
 		return mAlignmentMemorySize;
 	}
@@ -209,14 +209,14 @@ namespace mana
 		mComponent = component;
 	}
 
-	size_t TypeDescriptor::GetActionCount() const
+	address_t TypeDescriptor::GetActionCount() const
 	{
 		MANA_ASSERT(mSymbolEntry);
 
-		size_t count = 0;
+		address_t count = 0;
 		for (std::shared_ptr<Symbol> symbol = mSymbolEntry; symbol; symbol = symbol->GetNext())
 		{
-			if (symbol->GetClassTypeId() == Symbol::ClassTypeId::MEMBER_FUNCTION)
+			if (symbol->GetClassTypeId() == Symbol::ClassTypeId::MemberFunction)
 				++count;
 		}
 		return count;
@@ -237,17 +237,17 @@ namespace mana
 		mName = name;
 	}
 
-	void TypeDescriptor::SetMemorySize(const size_t memorySize)
+	void TypeDescriptor::SetMemorySize(const address_t memorySize)
 	{
 		mMemorySize = memorySize;
 	}
 
-	void TypeDescriptor::SetAlignmentMemorySize(const size_t alignmentMemorySize)
+	void TypeDescriptor::SetAlignmentMemorySize(const address_t alignmentMemorySize)
 	{
 		mAlignmentMemorySize = alignmentMemorySize;
 	}
 
-	void TypeDescriptor::SetArraySize(const size_t arraySize)
+	void TypeDescriptor::SetArraySize(const address_t arraySize)
 	{
 		mArraySize = arraySize;
 	}

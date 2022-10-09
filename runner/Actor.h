@@ -11,6 +11,7 @@ mana (library)
 
 #include <bitset>
 #include <map>
+#include <string>
 #include <unordered_map>
 
 #include <cfloat>
@@ -71,25 +72,27 @@ namespace mana
 		void SetReturnData(const void* pointer, const int32_t size);
 
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
-		const char* GetActionName() const;
-		const char* GetFunctionName() const;
+		std::string_view GetActorName() const;
+		void SetActorName(const std::string_view& name);
+		std::string GetActionName() const;
+		const std::string_view GetFunctionName() const;
 #endif
 
-		std::shared_ptr<VM> GetVirtualMachine() const { return mVM.lock(); }
+		std::shared_ptr<VM> GetVirtualMachine() const;
 		bool IsInit();
 		bool IsRepeat();
 		bool IsRunning();
 		void Repeat(const bool initialComplete);
 		void Again();
 		void Halt();
-		void Stop() { mFlag.reset(Flag::RUNNING); }
-		void yield() { mInterrupt[mInterruptLevel].mFlag |= Interrupt::Flag::Suspend; }
-		void Accept() { mFlag.reset(Flag::REFUSED); }
-		void Refuse() { mFlag.set(Flag::REFUSED); }
-		int32_t GetInterruptLevel() const { return mInterruptLevel; }
-		bool IsSynchronized() const { return mInterrupt[mInterruptLevel].mFlag.test(Interrupt::Flag::Synchronized); }
+		void Stop();
+		void yield();
+		void Accept();
+		void Refuse();
+		int32_t GetInterruptLevel() const;
+		bool IsSynchronized() const;
 		void SetSynchronized(const bool synchronized);
-		void SetSynchronizedWithLevel(const size_t level, const bool synchronized);
+		void SetSynchronizedWithLevel(const int32_t level, const bool synchronized);
 		
 #if 0
 		void GetData(const int32_t resouce_id, const void** buffer, size_t* size);
@@ -110,8 +113,8 @@ namespace mana
 		void* GetUserPointer() const;
 		void SetUserPointer(void* userPointer);
 
-		Stack& GetStack() { return mStack; }
-		const Stack& GetStack() const { return mStack; }
+		Stack& GetStack();
+		const Stack& GetStack() const;
 
 	private:
 		void SetAction(const std::string_view& actionName, const uint32_t address);
@@ -123,21 +126,21 @@ namespace mana
 		static const size_t MANA_ACTOR_MAX_INTERRUPT_LEVEL = 32;
 
 		//! 割り込みテーブル
-		struct Interrupt
+		struct Interrupt final
 		{
-			std::shared_ptr<Actor> mSender;				//!< 要求したmana_actor オブジェクト
+			std::shared_ptr<Actor> mSender;			//!< 要求したmana_actor オブジェクト
 			uint32_t mAddress;						//!< 割り込み先アドレス
 			uint32_t mReturnAddress;				//!< リターンアドレス
 			int32_t mCounter;						//!< 汎用カウンタ
-			int32_t mFramePointer;					//!< フレームポインタ
-			int32_t mStackPointer;					//!< スタックポインタ
+			address_t mFramePointer;				//!< フレームポインタ
+			address_t mStackPointer;				//!< スタックポインタ
 			void* mFileCallbackParameter;			//!< ファイル終了コールバックパラメータ
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
-			const char* mActionName;				//!< 実行中のアクション名 */
+			std::string mActionName;				//!< 実行中のアクション名 */
 #endif
 			std::bitset<8> mFlag;
 
-			enum Flag : uint8_t
+			enum class Flag : uint8_t
 			{
 				Initialized,	//!< 初期化済みフラグ
 				IsInSyncCall,	//!< 同期実行フラグ
@@ -148,53 +151,53 @@ namespace mana
 		};
 
 		//! 戻り値
-		struct ReturnValue
+		struct ReturnValue final
 		{
 			union
 			{
 				int_t mIntegerValue;			//!< 整数値
-				float_t mFloatValue;				//!< 実数値
+				float_t mFloatValue;			//!< 実数値
 				const char* mStringValue;		//!< 文字列
 				void* mPointerValue;			//!< 構造体
 				Actor* mActorValue;				//!< アクター
 			} mValues;
 			int32_t mSize;						//!< サイズ(mPointerValue)
+
+			static constexpr int32_t Invalid = 0;	/*!< 戻り値：無効 */
+			static constexpr int32_t Actor = -1;	/*!< 戻り値：アクターへの参照 */
+			static constexpr int32_t Integer = -2;	/*!< 戻り値：整数 */
+			static constexpr int32_t Float = -3;	/*!< 戻り値：小数 */
+			static constexpr int32_t String = -4;	/*!< 戻り値：文字列への参照 */
 		};
 
-		static constexpr int32_t MANA_RETURN_VALUE_TYPE_INVALID = 0;	/*!< 戻り値：無効 */
-		static constexpr int32_t MANA_RETURN_VALUE_TYPE_ACTOR = -1;		/*!< 戻り値：アクターへの参照 */
-		static constexpr int32_t MANA_RETURN_VALUE_TYPE_INTEGER = -2;	/*!< 戻り値：整数 */
-		static constexpr int32_t MANA_RETURN_VALUE_TYPE_FLOAT = -3;		/*!< 戻り値：小数 */
-		static constexpr int32_t MANA_RETURN_VALUE_TYPE_STRING = -4;	/*!< 戻り値：文字列への参照 */
-#if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
-		char* mName;
-#endif
 		std::weak_ptr<VM> mVM;
 		std::unordered_map <std::string_view, uint32_t> mActions;
 		Buffer mFrame;
 		Stack mStack;
-		//std::map<int32_t, Interrupt> mInterrupt;
-		Interrupt mInterrupt[MANA_ACTOR_MAX_INTERRUPT_LEVEL];
+		std::map<int32_t, Interrupt> mInterrupts;
 		ReturnValue mReturnValue;
 
-		//std::map<const char* action, uint8_t* address> mAction;
-		void* mRequestCallbackParameter;							/*!< リクエストコールバック */
-		void* mRollbackCallbackParameter;							/*!< ロールバックコールバック */
+		void* mRequestCallbackParameter;			/*!< リクエストコールバック */
+		void* mRollbackCallbackParameter;			/*!< ロールバックコールバック */
 		Buffer mVariable;	// 将来的にBufferクラスへ
-		uint32_t mPc;											/*!< プログラムカウンタ */
-		uint8_t mInterruptLevel;								/*!< 割り込みレベル */
+		address_t mPc;								/*!< プログラムカウンタ */
+		int32_t mInterruptLevel;					/*!< 割り込みレベル */
 		std::bitset<8> mFlag;
-		enum Flag : uint8_t
+		enum class Flag : uint8_t
 		{
 			HALT,			//!< 停止フラグ
 			RUNNING,		//!< 実行フラグ
 			TOUCHED,		//!< 接触フラグ
 			HIDED,			//!< 非表示フラグ
 			REQUESTED,		//!< リクエストフラグ
-			REFUSED		//!< リクエスト禁止フラグ
+			REFUSED			//!< リクエスト禁止フラグ
 		};
 		uintptr_t mUserData;										//!< ユーザーデータ
 		void* mUserPointer;											//!< ユーザーポインター
+
+#if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
+		std::string_view mName;
+#endif
 
 	private:
 		static void CommandRestart(const std::shared_ptr<VM>& vm, Actor& self);

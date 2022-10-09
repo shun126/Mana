@@ -8,6 +8,9 @@ mana (compiler/library)
 #pragma once
 #include <cstddef>
 #include <cstdint>
+#include <limits>
+#include <stdexcept>
+#include <type_traits>
 
 namespace mana
 {
@@ -17,16 +20,12 @@ namespace mana
 #endif
 
 #if UINTPTR_MAX == UINT64_MAX
-	using float_t = double;
-	using int_t = std::int64_t;
-	using size_t = std::size_t;
 #elif UINTPTR_MAX == UINT32_MAX
-	using float_t = float;
-	using int_t = std::int32_t;
-	using size_t = std::size_t;
 #else
 #error "unsupport pointer size"
 #endif
+	using float_t = float;
+	using int_t = std::int32_t;
 
 	using address_t = std::uint32_t;
 	static constexpr address_t InvalidAddress = static_cast<address_t>(~0);
@@ -36,5 +35,29 @@ namespace mana
 	inline bool IsValid(const address_t address)
 	{
 		return address != InvalidAddress;
+	}
+
+	template<typename T>
+	inline address_t ToAddress(const T size)
+	{
+		if constexpr (std::is_signed<T>())
+		{
+			if (size < 0)
+			{
+				throw std::underflow_error("Negative values for data or program size are not allowed");
+			}
+			else if (static_cast<size_t>(size) > std::numeric_limits<address_t>::max())
+			{
+				throw std::overflow_error("Data or program size must not exceed 32 bits");
+			}
+		}
+		else
+		{
+			if (static_cast<size_t>(size) > std::numeric_limits<address_t>::max())
+			{
+				throw std::overflow_error("Data or program size must not exceed 32 bits");
+			}
+		}
+		return static_cast<address_t>(size);
 	}
 }

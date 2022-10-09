@@ -43,7 +43,7 @@ namespace mana
 
 		for (i = 0; i < MANA_ACTOR_MAX_INTERRUPT_LEVEL; i++)
 		{
-			Interrupt* p = &mInterrupt[i];
+			Interrupt* p = &mInterrupts[i];
 
 			const char* sender_name = mana_get_actor_name(mVM, p->mSender);
 			if (sender_name)
@@ -86,7 +86,7 @@ namespace mana
 
 		for (int32_t i = 0; i < MANA_ACTOR_MAX_INTERRUPT_LEVEL; i++)
 		{
-			Interrupt* p = &mInterrupt[i];
+			Interrupt* p = &mInterrupts[i];
 
 			if (mana_stream_pop_char(stream))
 			{
@@ -119,6 +119,9 @@ namespace mana
 
 	inline bool Actor::Run()
 	{
+		if (mInterrupts.empty())
+			return false;
+
 		using IntermediateLanguageFunction = void(*)(const std::shared_ptr<VM>& vm, Actor& self);
 		struct IntermediateLanguageCommand final
 		{
@@ -260,14 +263,21 @@ namespace mana
 
 		std::shared_ptr<VM> vm = mVM.lock();
 
+		Interrupt& currentInterrupt = mInterrupts[mInterruptLevel];
 		size_t timer = 0;
 		do {
-			mFlag.reset(Flag::REQUESTED);
+			mFlag.reset(static_cast<uint8_t>(Flag::REQUESTED));
 
 			if (!IsRunning())
 				return false;
 			
+
+
+			// TODO: 検証が終わったら必ず削除して下さい
 			printf("%x\n", mPc);
+
+
+
 
 			const int32_t opecode = vm->GetOpecode(mPc);
 			const IntermediateLanguageCommand& command = mIntermediateLanguage.at(opecode);
@@ -280,29 +290,29 @@ namespace mana
 
 			if (IsRepeat())
 			{
-				mInterrupt[mInterruptLevel].mFlag.reset(Actor::Interrupt::Flag::Repeat);
+				currentInterrupt.mFlag.reset(static_cast<uint8_t>(Interrupt::Flag::Repeat));
 			}
 			else
 			{
 				mPc += GetInstructionSize(mVM.lock()->mInstructionPool, mPc);
-				mInterrupt[mInterruptLevel].mFlag.reset(Actor::Interrupt::Flag::Initialized);
+				currentInterrupt.mFlag.reset(static_cast<uint8_t>(Interrupt::Flag::Initialized));
 			}
 
-			if (mInterrupt[mInterruptLevel].mFlag[Actor::Interrupt::Flag::Suspend] && !IsSynchronized())
+			if (currentInterrupt.mFlag[static_cast<uint8_t>(Interrupt::Flag::Suspend)] && !IsSynchronized())
 			{
-				mInterrupt[mInterruptLevel].mFlag.reset(Actor::Interrupt::Flag::Suspend);
+				currentInterrupt.mFlag.reset(static_cast<uint8_t>(Interrupt::Flag::Suspend));
 				break;
 			}
 		} while (++timer < 500 || IsSynchronized());
 
-		return mFlag[Flag::RUNNING];
+		return mFlag[static_cast<uint8_t>(Flag::RUNNING)];
 	}
 
 	inline bool Actor::SyncCall(const int32_t level, const char* action, const std::shared_ptr<Actor>& sender)
 	{
 		if (Request(level, action, sender))
 		{
-			mInterrupt[level].mFlag.set(Actor::Interrupt::Flag::IsInSyncCall);
+			mInterrupts[level].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::IsInSyncCall));
 			while (true)
 			{
 				mVM.lock()->Run();
@@ -317,7 +327,7 @@ namespace mana
 	{
 		if (Request(level, action, sender))
 		{
-			mInterrupt[level].mFlag.set(Actor::Interrupt::Flag::IsInSyncCall);
+			mInterrupts[level].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::IsInSyncCall));
 			while (true)
 			{
 				Run();
@@ -330,30 +340,30 @@ namespace mana
 
 	inline bool Actor::Request(const int32_t level, const char* action, const std::shared_ptr<Actor>& sender)
 	{
-		if (level < 0 || level >= MANA_ACTOR_MAX_INTERRUPT_LEVEL)
-		{
-			MANA_TRACE("MANA: %s::%s request failed. reason: level %d range over\n", GetName().data(), action, level);
-			return false;
-		}
-
-		if (mFlag[Flag::HALT])
+		if (mFlag[static_cast<uint8_t>(Flag::HALT)])
 		{
 			MANA_TRACE("MANA: level %d, %s::%s request failed. reason: halt\n", level, GetName().data(), action);
 			return false;
 		}
 
-		if (mFlag[Flag::REFUSED])
+		if (mFlag[static_cast<uint8_t>(Flag::REFUSED)])
 		{
 			MANA_TRACE("MANA: level %d, %s::%s request failed. reason: refuse\n", level, GetName().data(), action);
 			return false;
 		}
-
-		if (mInterrupt[level].mAddress != nil)
+		/*
+		if (level < 0 || level >= MANA_ACTOR_MAX_INTERRUPT_LEVEL)
+		{
+			MANA_TRACE("MANA: %s::%s request failed. reason: level %d range over\n", GetName().data(), action, level);
+			return false;
+		}
+		*/
+		if (mInterrupts.find(level) != mInterrupts.end())
 		{
 			MANA_TRACE("MANA: level %d, %s::%s request failed. ", level, GetName().data(), action);
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
-			if (mInterrupt[level].mActionName)
-				MANA_TRACE("reason : %s running", mInterrupt[level].mActionName);
+			if (mInterrupts[level].mActionName.empty() == false)
+				MANA_TRACE("reason : %s running", mInterrupts[level].mActionName.c_str());
 #endif
 			MANA_TRACE("\n");
 			return false;
@@ -366,66 +376,71 @@ namespace mana
 			return false;
 		}
 
-		mFlag.set(Flag::RUNNING);
-		mInterrupt[level].mCounter = 0;
-		mInterrupt[level].mSender = sender;
-		mInterrupt[level].mAddress = address;
-		mInterrupt[level].mFlag.reset(Actor::Interrupt::Flag::Synchronized);
-		mInterrupt[level].mFileCallbackParameter = nullptr;
+		mFlag.set(static_cast<uint8_t>(Flag::RUNNING));
+
+		Interrupt interrupt;
+		interrupt.mCounter = 0;
+		interrupt.mSender = sender;
+		interrupt.mAddress = address;
+		interrupt.mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Synchronized));
+		interrupt.mFileCallbackParameter = nullptr;
 
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
 		MANA_TRACE("Mana:request: %s ", GetName().data());
-		if (mInterrupt[mInterruptLevel].mActionName)
-			MANA_TRACE("level %d %s => ", mInterruptLevel, mInterrupt[mInterruptLevel].mActionName);
+		if (mInterrupts.size() > 0)
+			MANA_TRACE("level %d %s => ", mInterruptLevel, mInterrupts[mInterruptLevel].mActionName.c_str());
 		MANA_TRACE("level %d %s (%08x) registered\n", level, action, address);
 
 		// 実行するアクション名を記録
-		mInterrupt[level].mActionName = action;
+		interrupt.mActionName = action;
 #endif
 
 		if (level >= mInterruptLevel)
 		{
+			// 現在よりも高い優先度(高いほど優先)の場合、すぐに割り込む
+
 			MANA_TRACE("mana:request: %s ", GetName().data());
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
 			if (mInterruptLevel)
 			{
-				MANA_TRACE("%s => level %d %s ", mInterruptLevel, mInterrupt[mInterruptLevel].mActionName);
+				MANA_TRACE("%s => level %d %s ", mInterruptLevel, mInterrupts[mInterruptLevel].mActionName);
 			}
 #endif
-			MANA_TRACE("level %d %s succeed\n", level, mInterrupt[level].mActionName);
+			MANA_TRACE("level %d %s succeed\n", level, interrupt.mActionName.c_str());
 
 			// コールバック関数を呼びます
 			//if(mRequestCallback)
 			//	mRequestCallback(mRequestCallbackParameter);
 
-			/* 現在よりも高い優先度(高いほど優先)の場合、すぐに割り込む */
 			Again();
 
-			/* 現在のFPとSPを保存します */
-			mInterrupt[level].mFramePointer = mFrame.GetSize();
-			mInterrupt[level].mStackPointer = mStack.GetSize();
+			// 現在のFPとSPを保存します
+			interrupt.mFramePointer = mFrame.GetSize();
+			interrupt.mStackPointer = mStack.GetSize();
 
-			/* 現在のプログラムカウンタを保存します */
-			mInterrupt[mInterruptLevel].mAddress = mPc;
+			// 現在のプログラムカウンタを保存します
+			mInterrupts[mInterruptLevel].mAddress = mPc;
 
-			/* 新しい優先度(高いほど優先)とプログラムカウンタを設定します */
-			mInterruptLevel = (uint8_t)level;
+			// 新しい優先度(高いほど優先)とプログラムカウンタを設定します
+			mInterruptLevel = level;
 			mPc = address;
 
-			/* 次のTickでプログラムカウンタを進めない処理 */
-			mInterrupt[mInterruptLevel].mFlag.set(Actor::Interrupt::Flag::Repeat);
+			// 次のTickでプログラムカウンタを進めない処理
+			interrupt.mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
 		}
 		else
 		{
-			/* 現在よりも低い優先度(高いほど優先)の場合、現在のアクション終了後に実行 */
+			// 現在よりも低い優先度(高いほど優先)の場合、現在のアクション終了後に実行
 
-			/* 現在の優先度(高いほど優先)に入ったときのFPとSPを保存します */
-			mInterrupt[level].mFramePointer = mInterrupt[mInterruptLevel].mFramePointer;
-			mInterrupt[level].mStackPointer = mInterrupt[mInterruptLevel].mStackPointer;
+			// 現在の優先度(高いほど優先)に入ったときのFPとSPを保存します
+			interrupt.mFramePointer = mInterrupts[mInterruptLevel].mFramePointer;
+			interrupt.mStackPointer = mInterrupts[mInterruptLevel].mStackPointer;
 
-			/* 次のTickでプログラムカウンタを進める処理 */
-			mInterrupt[level].mFlag.reset(Actor::Interrupt::Flag::Repeat);
+			// 次のTickでプログラムカウンタを進める処理
+			interrupt.mFlag.reset(static_cast<uint8_t>(Interrupt::Flag::Repeat));
 		}
+
+		mInterrupts[level] = interrupt;
 
 		MANA_ASSERT(mPc != nil);
 
@@ -434,59 +449,63 @@ namespace mana
 
 	inline void Actor::Rollback(const int32_t level)
 	{
+		if (mInterrupts.empty())
+			return;
+
 		// 非同期モードに変更
 		SetSynchronized(false);
 
+		// 現在実行中のリクエストを検索
+		Interrupt& currentInterrupt = mInterrupts[mInterruptLevel];
+
 		// リクエストが終了したことをsenderに通知する
-		if (mInterrupt[mInterruptLevel].mSender)
+		if (currentInterrupt.mSender)
 		{
-			mInterrupt[mInterruptLevel].mSender->Again();
-			mInterrupt[mInterruptLevel].mSender = nullptr;
+			currentInterrupt.mSender->Again();
+			currentInterrupt.mSender = nullptr;
 		}
 #if 0
 		/* ファイル読み込み中ならば解放 */
-		if (mAsyncFileCallback && mInterrupt[mInterruptLevel].mFileCallbackParameter)
+		if (mAsyncFileCallback && currentInterrupt.mFileCallbackParameter)
 		{
-			mAsyncFileCallback(MANA_FILE_COMMAND_CLOSE, mInterrupt[mInterruptLevel].mFileCallbackParameter);
-			mInterrupt[mInterruptLevel].mFileCallbackParameter = nullptr;
+			mAsyncFileCallback(MANA_FILE_COMMAND_CLOSE, currentInterrupt.mFileCallbackParameter);
+			currentInterrupt.mFileCallbackParameter = nullptr;
 		}
 #endif
-
-		// 優先度開放
-		mInterrupt[mInterruptLevel].mAddress = nil;
 
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
 		const uint8_t lastInterruptLevel = mInterruptLevel;
-		const char* lastActionName = mInterrupt[mInterruptLevel].mActionName;
-
-		// 実行中のアクション名を消去
-		mInterrupt[mInterruptLevel].mActionName = nullptr;
+		const std::string& lastActionName = currentInterrupt.mActionName;
 #endif
 
 		// SyncCall中か取得
-		const bool inSyncCall = mInterrupt[mInterruptLevel].mFlag[Interrupt::Flag::IsInSyncCall];
+		const bool inSyncCall = currentInterrupt.mFlag[static_cast<uint8_t>(Interrupt::Flag::IsInSyncCall)];
 		if (inSyncCall)
 		{
-			mInterrupt[mInterruptLevel].mFlag.reset(Interrupt::Flag::IsInSyncCall);
+			currentInterrupt.mFlag.reset(static_cast<uint8_t>(Interrupt::Flag::IsInSyncCall));
 		}
 
 		// FPとSPを取得
-		size_t framePointer = mInterrupt[mInterruptLevel].mFramePointer;
-		size_t stackPointer = mInterrupt[mInterruptLevel].mStackPointer;
+		address_t framePointer = currentInterrupt.mFramePointer;
+		address_t stackPointer = currentInterrupt.mStackPointer;
+
+		// 優先度開放
+		mInterrupts.erase(mInterruptLevel);
 
 		// 優先度(高いほど優先)が指定されているならば、強制的に指定優先度まで戻る
 		int32_t currentLevel = mInterruptLevel - 1;
 		if (currentLevel > level)
 		{
+			//for(auto i = mInterrupts.find(currentLevel); i != mInterrupts.end(); ++i)
 			while (currentLevel > level)
 			{
-				Interrupt* interrupt = &mInterrupt[currentLevel];
+				Interrupt* interrupt = &mInterrupts[currentLevel];
 
 				// 優先度開放
 				interrupt->mAddress = nil;
 #if 0
 				/* ファイルエントリの削除 */
-				if (mAsyncFileCallback && mInterrupt->mFileCallbackParameter)
+				if (mAsyncFileCallback && mInterrupts->mFileCallbackParameter)
 				{
 					MANA_TRACE("Rollback: %d: waitting for file loading\n", currentLevel);
 
@@ -495,8 +514,8 @@ namespace mana
 				}
 #endif				
 				// フレームポインタとスタックポインタを取得
-				framePointer = mInterrupt->mFramePointer;
-				stackPointer = mInterrupt->mStackPointer;
+				framePointer = interrupt->mFramePointer;
+				stackPointer = interrupt->mStackPointer;
 #if 0
 				/* コールバック関数を呼びます */
 				if (mRollbackCallback)
@@ -513,7 +532,7 @@ namespace mana
 		// 中断されたアクションの再開
 		while (currentLevel >= 0)
 		{
-			Interrupt* interrupt = &mInterrupt[currentLevel];
+			Interrupt* interrupt = &mInterrupts[currentLevel];
 			if (interrupt->mAddress != ~0)
 			{
 				// 中断していた場所から復帰させます
@@ -524,10 +543,10 @@ namespace mana
 					mRollbackCallback(mRollbackCallbackParameter);
 #endif			
 				// 優先度(高いほど優先)変更
-				mInterruptLevel = static_cast<uint8_t>(currentLevel);
+				mInterruptLevel = currentLevel;
 
 				// 次回のTickでプログラムカウンターを加算しない
-				mInterrupt[mInterruptLevel].mFlag.set(Interrupt::Flag::Repeat);
+				interrupt->mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
 
 				// SyncCall中ならばTickを抜ける
 				if (inSyncCall)
@@ -536,8 +555,8 @@ namespace mana
 				MANA_TRACE(
 					"mana:rollback: %s level %d %s => level %d %s succeed\n",
 					GetName().data(),
-					lastInterruptLevel, lastActionName,
-					mInterruptLevel, interrupt->mActionName
+					lastInterruptLevel, lastActionName.c_str(),
+					mInterruptLevel, interrupt->mActionName.c_str()
 				);
 
 				/*
@@ -560,17 +579,10 @@ namespace mana
 	{
 		mPc = nil;
 		mInterruptLevel = 0;
-		mFlag.reset(Flag::HALT);
-		mFlag.reset(Flag::RUNNING);
-		mFlag.reset(Flag::REFUSED);
-
-		memset(&mInterrupt, 0, sizeof(mInterrupt));
-		for (uint32_t i = 0; i < MANA_ACTOR_MAX_INTERRUPT_LEVEL; i++)
-		{
-			mInterrupt[i].mAddress = nil;
-			mInterrupt[i].mReturnAddress = nil;
-		}
-
+		mFlag.reset(static_cast<uint8_t>(Flag::HALT));
+		mFlag.reset(static_cast<uint8_t>(Flag::RUNNING));
+		mFlag.reset(static_cast<uint8_t>(Flag::REFUSED));
+		mInterrupts.clear();
 		mFrame.Clear();
 		mStack.Clear();
 	}
@@ -593,12 +605,12 @@ namespace mana
 
 	inline int32_t Actor::GetCounter() const
 	{
-		return mInterrupt[mInterruptLevel].mCounter;
+		return const_cast<Actor*>(this)->mInterrupts[mInterruptLevel].mCounter;
 	}
 
 	inline void Actor::SetCounter(const int32_t counter)
 	{
-		mInterrupt[mInterruptLevel].mCounter = counter;
+		mInterrupts[mInterruptLevel].mCounter = counter;
 	}
 
 	inline int32_t Actor::GetArgumentCount() const
@@ -661,31 +673,31 @@ namespace mana
 
 	inline void Actor::SetReturnInteger(const int32_t value)
 	{
-		mReturnValue.mSize = MANA_RETURN_VALUE_TYPE_INTEGER;
+		mReturnValue.mSize = ReturnValue::Integer;
 		mReturnValue.mValues.mIntegerValue = value;
 	}
 
 	inline void Actor::SetReturnFloat(const float value)
 	{
-		mReturnValue.mSize = MANA_RETURN_VALUE_TYPE_FLOAT;
+		mReturnValue.mSize = ReturnValue::Float;
 		mReturnValue.mValues.mFloatValue = value;
 	}
 
 	inline void Actor::SetReturnString(const char* string)
 	{
-		mReturnValue.mSize = MANA_RETURN_VALUE_TYPE_STRING;
+		mReturnValue.mSize = ReturnValue::String;
 		mReturnValue.mValues.mStringValue = string;
 	}
 
 	inline void Actor::SetReturnActor(const std::shared_ptr<Actor>& actor)
 	{
-		mReturnValue.mSize = MANA_RETURN_VALUE_TYPE_ACTOR;
+		mReturnValue.mSize = ReturnValue::Actor;
 		mReturnValue.mValues.mActorValue = actor.get();
 	}
 
 	inline void Actor::SetReturnPointer(void* pointer)
 	{
-		mReturnValue.mSize = MANA_RETURN_VALUE_TYPE_ACTOR;
+		mReturnValue.mSize = ReturnValue::Actor;
 		mReturnValue.mValues.mPointerValue = pointer;
 	}
 
@@ -704,51 +716,62 @@ namespace mana
 	}
 
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
-	inline const char* Actor::GetActionName() const
+	inline std::string_view Actor::GetActorName() const
 	{
-		const char* action;
-
-		action = mInterrupt[mInterruptLevel].mActionName;
-
-		return action ? action : "SLEEP!";
+		return mName;
 	}
 
-	inline const char* Actor::GetFunctionName() const
+	inline void Actor::SetActorName(const std::string_view& name)
 	{
-		return mVM.lock()->GetStringFromMemory(mPc + 1);
+		mName = name;
+	}
+
+	inline std::string Actor::GetActionName() const
+	{
+		const Interrupt& interrupt = const_cast<Actor*>(this)->mInterrupts[mInterruptLevel];
+		return interrupt.mActionName;
+	}
+
+	inline const std::string_view Actor::GetFunctionName() const
+	{
+		return std::string_view(mVM.lock()->GetStringFromMemory(mPc + 1));
 	}
 #endif
 
+	inline std::shared_ptr<VM> Actor::GetVirtualMachine() const
+	{
+		return mVM.lock();
+	}
+
 	inline bool Actor::IsInit()
 	{
-		return mInterrupt[mInterruptLevel].mFlag[Interrupt::Flag::Initialized];
+		return mInterrupts[mInterruptLevel].mFlag[static_cast<uint8_t>(Interrupt::Flag::Initialized)];
 	}
 
 	inline bool Actor::IsRepeat()
 	{
-		return mInterrupt[mInterruptLevel].mFlag[Interrupt::Flag::Repeat];
+		return mInterrupts[mInterruptLevel].mFlag[static_cast<uint8_t>(Interrupt::Flag::Repeat)];
 	}
 
 	inline bool Actor::IsRunning()
 	{
-		const uint8_t flag = mFlag[Flag::HALT] | mFlag[Flag::RUNNING];
-		return flag == Flag::RUNNING;
+		return mFlag[static_cast<uint8_t>(Flag::HALT)] == false && mFlag[static_cast<uint8_t>(Flag::RUNNING)] == true;
 	}
 
 	inline void Actor::Repeat(const bool initial_complete)
 	{
 		if (initial_complete)
-			mInterrupt[mInterruptLevel].mFlag.set(Interrupt::Flag::Initialized);
+			mInterrupts[mInterruptLevel].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Initialized));
 		else
-			mInterrupt[mInterruptLevel].mFlag.reset(Interrupt::Flag::Initialized);
-		mInterrupt[mInterruptLevel].mFlag.set(Interrupt::Flag::Repeat);
-		mInterrupt[mInterruptLevel].mFlag.set(Interrupt::Flag::Suspend);
+			mInterrupts[mInterruptLevel].mFlag.reset(static_cast<uint8_t>(Interrupt::Flag::Initialized));
+		mInterrupts[mInterruptLevel].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
+		mInterrupts[mInterruptLevel].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Suspend));
 	}
 
 	inline void Actor::Again()
 	{
-		mFlag.set(Flag::REQUESTED);
-		mVM.lock()->mFlag.set(VM::Flag::Requested);
+		mFlag.set(static_cast<uint8_t>(Flag::REQUESTED));
+		mVM.lock()->mFlag.set(static_cast<uint8_t>(VM::Flag::Requested));
 	}
 
 	inline void Actor::Halt()
@@ -756,26 +779,56 @@ namespace mana
 		Stop();
 		yield();
 
-		mFlag.set(Flag::HALT);
-		mInterruptLevel = MANA_ACTOR_MAX_INTERRUPT_LEVEL - 1;
-		mInterrupt[mInterruptLevel].mAddress = nil;
+		mFlag.set(static_cast<uint8_t>(Flag::HALT));
+		mInterruptLevel = 0;
+		mInterrupts.clear();
+	}
+
+	inline void Actor::Stop()
+	{
+		mFlag.reset(static_cast<uint8_t>(Flag::RUNNING));
+	}
+
+	inline void Actor::yield()
+	{
+		mInterrupts[mInterruptLevel].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Suspend));
+	}
+	
+	inline void Actor::Accept()
+	{
+		mFlag.reset(static_cast<uint8_t>(Flag::REFUSED));
+	}
+
+	inline void Actor::Refuse()
+	{
+		mFlag.set(static_cast<uint8_t>(Flag::REFUSED));
+	}
+
+	inline int32_t Actor::GetInterruptLevel() const
+	{
+		return mInterruptLevel;
+	}
+
+	inline bool Actor::IsSynchronized() const
+	{
+		const Interrupt& interrupt = const_cast<Actor*>(this)->mInterrupts[mInterruptLevel];
+		return interrupt.mFlag.test(static_cast<uint8_t>(Interrupt::Flag::Synchronized));
 	}
 
 	inline void Actor::SetSynchronized(const bool synchronized)
 	{
 		if (synchronized)
-			mInterrupt[mInterruptLevel].mFlag.set(Interrupt::Flag::Synchronized);
+			mInterrupts[mInterruptLevel].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Synchronized));
 		else
-			mInterrupt[mInterruptLevel].mFlag.reset(Interrupt::Flag::Synchronized);
+			mInterrupts[mInterruptLevel].mFlag.reset(static_cast<uint8_t>(Interrupt::Flag::Synchronized));
 	}
 
-	inline void Actor::SetSynchronizedWithLevel(const size_t level, const bool synchronized)
+	inline void Actor::SetSynchronizedWithLevel(const int32_t level, const bool synchronized)
 	{
-		MANA_ASSERT(level >= 0 && level < MANA_ACTOR_MAX_INTERRUPT_LEVEL);
 		if (synchronized)
-			mInterrupt[level].mFlag.set(Interrupt::Flag::Synchronized);
+			mInterrupts[level].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Synchronized));
 		else
-			mInterrupt[level].mFlag.reset(Interrupt::Flag::Synchronized);
+			mInterrupts[level].mFlag.reset(static_cast<uint8_t>(Interrupt::Flag::Synchronized));
 	}
 
 #if 0
@@ -812,7 +865,7 @@ namespace mana
 		MANA_ASSERT(self);
 		MANA_ASSERT(level >= 0 && level < MANA_ACTOR_MAX_INTERRUPT_LEVEL);
 
-		return mInterrupt[level].mFileCallbackParameter;
+		return mInterrupts[level].mFileCallbackParameter;
 	}
 
 	/*!
@@ -825,7 +878,7 @@ namespace mana
 		MANA_ASSERT(self);
 		MANA_ASSERT(level >= 0 && level < MANA_ACTOR_MAX_INTERRUPT_LEVEL);
 
-		mInterrupt[level].mFileCallbackParameter = parameter;
+		mInterrupts[level].mFileCallbackParameter = parameter;
 	}
 
 	/*!
@@ -882,6 +935,16 @@ namespace mana
 	inline void Actor::SetUserPointer(void* userPointer)
 	{
 		mUserPointer = userPointer;
+	}
+
+	inline Stack& Actor::GetStack()
+	{
+		return mStack;
+	}
+
+	inline const Stack& Actor::GetStack() const
+	{
+		return mStack;
 	}
 
 	inline void Actor::CommandRestart(const std::shared_ptr<VM>&, Actor& self)
@@ -958,7 +1021,7 @@ namespace mana
 
 	inline void Actor::CommandPushSender(const std::shared_ptr<VM>&, Actor& self)
 	{
-		self.mStack.Push(self.mInterrupt[self.mInterruptLevel].mSender.get());
+		self.mStack.Push(self.mInterrupts[self.mInterruptLevel].mSender.get());
 	}
 
 	inline void Actor::CommandAllocate(const std::shared_ptr<VM>& vm, Actor& self)
@@ -1079,7 +1142,7 @@ namespace mana
 		if (!self.mStack.Pop<int_t>())
 		{
 			self.mPc = vm->GetUint32FromMemory(self.mPc + 1);
-			self.mInterrupt[self.mInterruptLevel].mFlag.set(Interrupt::Flag::Repeat);
+			self.mInterrupts[self.mInterruptLevel].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
 
 			MANA_ASSERT(self.mPc < vm->mFileHeader->mSizeOfInstructionPool);
 		}
@@ -1090,7 +1153,7 @@ namespace mana
 		if (self.mStack.Pop<int_t>())
 		{
 			self.mPc = vm->GetUint32FromMemory(self.mPc + 1);
-			self.mInterrupt[self.mInterruptLevel].mFlag.set(Interrupt::Flag::Repeat);
+			self.mInterrupts[self.mInterruptLevel].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
 
 			MANA_ASSERT(self.mPc < vm->mFileHeader->mSizeOfInstructionPool);
 		}
@@ -1099,15 +1162,15 @@ namespace mana
 	inline void Actor::CommandBranchAway(const std::shared_ptr<VM>& vm, Actor& self)
 	{
 		self.mPc = vm->GetUint32FromMemory(self.mPc + 1);
-		self.mInterrupt[self.mInterruptLevel].mFlag.set(Interrupt::Flag::Repeat);
+		self.mInterrupts[self.mInterruptLevel].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
 
 		MANA_ASSERT(self.mPc < vm->mFileHeader->mSizeOfInstructionPool);
 	}
 
 	inline void Actor::CommandBranchSubRoutine(const std::shared_ptr<VM>& vm, Actor& self)
 	{
-		self.mInterrupt[self.mInterruptLevel].mReturnAddress = self.mPc + 4 + 1; // saved return program address
-		self.mInterrupt[self.mInterruptLevel].mFlag.set(Interrupt::Flag::Repeat);
+		self.mInterrupts[self.mInterruptLevel].mReturnAddress = self.mPc + 4 + 1; // saved return program address
+		self.mInterrupts[self.mInterruptLevel].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
 		self.mPc = vm->GetUint32FromMemory(self.mPc + 1);
 
 		MANA_ASSERT(self.mPc < vm->mFileHeader->mSizeOfInstructionPool);
@@ -1126,19 +1189,19 @@ namespace mana
 	inline void Actor::CommandLoadReturnAddress(const std::shared_ptr<VM>&, Actor& self)
 	{
 		uint32_t* pointer = self.mFrame.GetAddressFromBottom<uint32_t>(sizeof(int32_t));
-		self.mInterrupt[self.mInterruptLevel].mReturnAddress = *pointer;
+		self.mInterrupts[self.mInterruptLevel].mReturnAddress = *pointer;
 	}
 
 	inline void Actor::CommandStoreReturnAddress(const std::shared_ptr<VM>&, Actor& self)
 	{
 		uint32_t* pointer = self.mFrame.GetAddressFromBottom<uint32_t>(sizeof(int32_t));
-		*pointer = self.mInterrupt[self.mInterruptLevel].mReturnAddress;
+		*pointer = self.mInterrupts[self.mInterruptLevel].mReturnAddress;
 	}
 
 	inline void Actor::CommandReturnFromFunction(const std::shared_ptr<VM>&, Actor& self)
 	{
-		self.mPc = self.mInterrupt[self.mInterruptLevel].mReturnAddress;
-		self.mInterrupt[self.mInterruptLevel].mFlag.set(Interrupt::Flag::Repeat);
+		self.mPc = self.mInterrupts[self.mInterruptLevel].mReturnAddress;
+		self.mInterrupts[self.mInterruptLevel].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
 	}
 
 	inline void Actor::CommandReturnFromAction(const std::shared_ptr<VM>&, Actor& self)
@@ -1528,22 +1591,22 @@ namespace mana
 				{
 					switch (self.mReturnValue.mSize)
 					{
-					case MANA_RETURN_VALUE_TYPE_INVALID:
+					case ReturnValue::Invalid:
 						break;
 
-					case MANA_RETURN_VALUE_TYPE_ACTOR:
+					case ReturnValue::Actor:
 						self.mStack.Push(self.mReturnValue.mValues.mActorValue);
 						break;
 
-					case MANA_RETURN_VALUE_TYPE_INTEGER:
+					case ReturnValue::Integer:
 						self.mStack.Push(self.mReturnValue.mValues.mIntegerValue);
 						break;
 
-					case MANA_RETURN_VALUE_TYPE_FLOAT:
+					case ReturnValue::Float:
 						self.mStack.Push(self.mReturnValue.mValues.mFloatValue);
 						break;
 
-					case MANA_RETURN_VALUE_TYPE_STRING:
+					case ReturnValue::String:
 						self.mStack.Push(self.mReturnValue.mValues.mStringValue);
 						break;
 
@@ -1560,9 +1623,9 @@ namespace mana
 				if (self.mInterruptLevel > last_interrupt_level)
 				{
 					// TODO:即値を使わないで下さい
-					self.mInterrupt[last_interrupt_level].mAddress = last_pc + 4 + 2 + 2 + 1 + (nNumberOfArguments * sizeof(int16_t));
-					self.mInterrupt[self.mInterruptLevel].mStackPointer = self.mStack.GetSize();
-					self.mInterrupt[self.mInterruptLevel].mFlag.set(Interrupt::Flag::Repeat);
+					self.mInterrupts[last_interrupt_level].mAddress = last_pc + 4 + 2 + 2 + 1 + (nNumberOfArguments * sizeof(int16_t));
+					self.mInterrupts[self.mInterruptLevel].mStackPointer = self.mStack.GetSize();
+					self.mInterrupts[self.mInterruptLevel].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
 				}
 			}
 		}
@@ -1576,7 +1639,7 @@ namespace mana
 
 		if (target_actor)
 		{
-			self.mInterrupt[self.mInterruptLevel].mFlag = Interrupt::Flag::Repeat;
+			self.mInterrupts[self.mInterruptLevel].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
 			self.mPc += sizeof(int32_t) + 1;
 			target_actor->Request(level, action, self.shared_from_this());
 		}
@@ -1658,7 +1721,7 @@ namespace mana
 		const int32_t level = Stack.PopInteger();
 		const char* action = actor->GetStringFromMemory(1);
 
-		actor->self.mInterrupt[actor->GetInterruptLevel()].repeat = true;
+		actor->self.mInterrupts[actor->GetInterruptLevel()].repeat = true;
 		actor->self.mPc += sizeof(int32_t) + 1;
 
 		Actor* target_actor = actor->GetParent().GetActor(pszTarget,);
@@ -1780,7 +1843,7 @@ namespace mana
 					{
 					case 'd':
 #if __STDC_WANT_SECURE_LIB__
-						message_pointer += sprintf_s(&message[message_pointer], sizeof(message) - message_pointer, "%lld", self.mStack.Get<int_t>(counter++));
+						message_pointer += sprintf_s(&message[message_pointer], sizeof(message) - message_pointer, "%ld", self.mStack.Get<int_t>(counter++));
 #else
 						message_pointer += sprintf(&message[message_pointer], "%lld", self.mStack.Get<int_t>(counter++));
 #endif
