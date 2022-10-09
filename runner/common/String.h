@@ -9,6 +9,7 @@ mana (compiler/library)
 #include "Platform.h"
 #include <cstdarg>
 #include <cstring>
+#include <memory>
 #include <string>
 
 #if defined(MANA_TARGET_WINDOWS)
@@ -41,35 +42,33 @@ namespace mana
 		return std::strcmp(buffer1, buffer2);
 	}
 
+	inline std::string FormatTextList(const char* format, va_list ap)
+	{
+		std::unique_ptr<char, decltype(&std::free)> message(nullptr, std::free);
+		static const size_t gainSize = 100;
+		size_t size = gainSize;
+		int n;
+
+		do {
+			void* newBuffer = std::realloc(message.get(), size);
+			if (newBuffer == nullptr)
+				throw std::bad_alloc();
+			message.reset(static_cast<char*>(newBuffer));
+
+			n = std::vsnprintf(message.get(), size, format, ap);
+			size += gainSize;
+		} while(n < 0);
+
+		return std::string(message.get());
+	}
+
 	inline std::string FormatText(const char* format, ...)
 	{
 		va_list ap;
 		va_start(ap, format);
-		std::string output = std::move(FormatText(format, ap));
+		std::string output = FormatTextList(format, ap);
 		va_end(ap);
 		return output;
-	}
-
-	inline std::string FormatText(const char* format, va_list ap)
-	{
-		static const size_t gainSize = 100;
-		size_t size = gainSize;
-		char* p = nullptr;
-		int n;
-
-		do{
-			p = reinterpret_cast<char*>(realloc(p, size));
-			if (p == nullptr)
-				throw std::bad_alloc();
-
-			n = std::vsnprintf(p, size, format, ap);
-			size += gainSize;
-		} while(n < 0);
-
-		const std::string a(p);
-		std::free(p);
-
-		return a; // TODO
 	}
 
 	inline void Trace1(const char* message)
@@ -84,49 +83,48 @@ namespace mana
 	inline void Trace(const char* format, ...)
 	{
 		va_list argptr;
-		char* message = nullptr;
+		std::unique_ptr<char, decltype(&std::free)> message(nullptr, std::free);
 		size_t size = 0;
 		size_t length;
 
-		do{
+		do {
 			size += 256;
 
-			message = (char*)std::realloc(message, size);
+			void* newBuffer = std::realloc(message.get(), size);
+			if (newBuffer == nullptr)
+				throw std::bad_alloc();
+			message.reset(static_cast<char*>(newBuffer));
 
 			va_start(argptr, format);
 #if defined(MANA_TARGET_WINDOWS)
-			length = vsprintf_s(message, size, format, argptr);
+			length = vsprintf_s(message.get(), size, format, argptr);
 #else
 			length = std::vsprintf(message, format, argptr);
 #endif
 			va_end(argptr);
-		}while(length <= 0 || length > size);
+		} while (length <= 0 || length > size);
 
-		Trace1(message);
-
-		std::free(message);
+		Trace1(message.get());
 	}
 
 	inline void Trace(const char* format, va_list ap)
 	{
-
+		std::unique_ptr<char, decltype(&std::free)> message(nullptr, std::free);
 		static const size_t gainSize = 100;
 		size_t size = gainSize;
-		char* message = nullptr;
 		int n;
 
-		do{
-			message = reinterpret_cast<char*>(realloc(message, size));
-			if (message == nullptr)
+		do {
+			void* newBuffer = std::realloc(message.get(), size);
+			if (newBuffer == nullptr)
 				throw std::bad_alloc();
+			message.reset(static_cast<char*>(newBuffer));
 
-			n = std::vsnprintf(message, size, format, ap);
+			n = std::vsnprintf(message.get(), size, format, ap);
 			size += gainSize;
-		} while(n < 0);
+		} while (n < 0);
 
-		Trace1(message);
-
-		std::free(message);
+		Trace1(message.get());
 	}
 
 	inline int32_t mana_string_find(const int8_t text[], const int8_t pattern[])
@@ -135,18 +133,18 @@ namespace mana
 
 		c = pattern[0];
 		i = 0;
-		while(text[i] != 0)
+		while (text[i] != 0)
 		{
-			if(text[i++] == c)
+			if (text[i++] == c)
 			{
 				k = i;
 				j = 1;
-				while(text[k] == pattern[j] && pattern[j] != 0)
+				while (text[k] == pattern[j] && pattern[j] != 0)
 				{
 					k++;
 					j++;
 				}
-				if(pattern[j] == '\0')
+				if (pattern[j] == '\0')
 				{
 					return k - j;
 				}

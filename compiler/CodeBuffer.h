@@ -9,6 +9,7 @@ mana (compiler)
 #include "../runner/common/Platform.h"
 #include "../runner/common/FileFormat.h"
 #include "../runner/common/Noncopyable.h"
+#include <cstdlib>
 #include <memory>
 #include <vector>
 
@@ -56,10 +57,13 @@ namespace mana
 		void ReplaceAddressAll(const address_t baseAddress, const address_t newAddress);
 
 		std::unique_ptr<void, decltype(&std::free)> Copy() const;
-
+	
 		address_t GetSize() const;
 
 		void Write(OutputStream& stream) const;
+
+		template <typename T>
+		static T Raw(const void* program, const address_t address);
 
 	private:
 		address_t AddCommand(const uint8_t code, const address_t nextCommand);
@@ -87,6 +91,23 @@ namespace mana
 		}
 	}
 
+	template <typename T>
+	void CodeBuffer::Replace(const address_t address, const T value)
+	{
+		const uint8_t* pointer = reinterpret_cast<const uint8_t*>(&value);
+		// Stored in BigEndian in CodeBuffer
+		if (IsBigEndian())
+		{
+			for (uint_fast8_t i = 0; i < static_cast<uint_fast8_t>(sizeof(T)); ++i)
+				mCommand[address + i].mCode = pointer[i];
+		}
+		else
+		{
+			for (uint_fast8_t i = 0; i < static_cast<uint_fast8_t>(sizeof(T)); ++i)
+				mCommand[address + i].mCode = pointer[static_cast<uint_fast8_t>(sizeof(T) - 1) - i];
+		}
+	}
+
 	/*
 	runner\common\FileFormat.h getと重複
 	*/
@@ -94,33 +115,38 @@ namespace mana
 	T CodeBuffer::Get(const address_t address) const
 	{
 		T value;
-		uint8_t* p = reinterpret_cast<uint8_t*>(&value);
+		uint8_t* pointer = reinterpret_cast<uint8_t*>(&value);
+		// Stored in BigEndian in CodeBuffer
 		if (IsBigEndian())
 		{
 			for (uint_fast8_t i = 0; i < static_cast<uint_fast8_t>(sizeof(T)); ++i)
-				p[i] = mCommand[address + i].mCode;
+				pointer[i] = mCommand[address + i].mCode;
 		}
 		else
 		{
 			for (uint_fast8_t i = 0; i < static_cast<uint_fast8_t>(sizeof(T)); ++i)
-				p[i] = mCommand[address + static_cast<uint_fast8_t>(sizeof(T) - 1) - i].mCode;
+				pointer[i] = mCommand[address + static_cast<uint_fast8_t>(sizeof(T) - 1) - i].mCode;
 		}
 		return value;
 	}
 
 	template <typename T>
-	void CodeBuffer::Replace(const address_t address, const T value)
+	T CodeBuffer::Raw(const void* program, const address_t address)
 	{
-		const uint8_t* p = reinterpret_cast<const uint8_t*>(&value);
+		T value;
+		uint8_t* pointer = reinterpret_cast<uint8_t*>(&value);
+		const uint8_t* source = static_cast<const uint8_t*>(program) + address;
+		// Stored in BigEndian in CodeBuffer
 		if (IsBigEndian())
 		{
 			for (uint_fast8_t i = 0; i < static_cast<uint_fast8_t>(sizeof(T)); ++i)
-				mCommand[address + i].mCode = p[i];
+				pointer[i] = source[i];
 		}
 		else
 		{
 			for (uint_fast8_t i = 0; i < static_cast<uint_fast8_t>(sizeof(T)); ++i)
-				mCommand[address + static_cast<uint_fast8_t>(sizeof(T) - 1) - i].mCode = p[i];
+				pointer[i] = source[static_cast<int_fast16_t>(sizeof(T) - 1) - i];
 		}
+		return value;
 	}
 }

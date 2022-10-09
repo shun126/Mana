@@ -14,8 +14,8 @@ namespace mana
 	struct InitializeType final
 	{
 		std::string_view mName;
-		size_t mMemorySize;
-		size_t mAlignmentSize;
+		address_t mMemorySize;
+		address_t mAlignmentSize;
 	};
 
 	static const std::array<InitializeType, TypeDescriptor::TypeIdSize> mInitializeType = { {
@@ -57,14 +57,14 @@ namespace mana
 		return mStringTypeDescriptor;
 	}
 
-	const std::shared_ptr<TypeDescriptor>& TypeDescriptorFactory::Create(const TypeDescriptor::Id tcons)
+	std::shared_ptr<TypeDescriptor> TypeDescriptorFactory::Create(const TypeDescriptor::Id tcons)
 	{
 		auto newTypeDescriptor = std::shared_ptr<TypeDescriptor>(new TypeDescriptor(tcons));
 		mTypeDescriptor.push_back(newTypeDescriptor);
 		return newTypeDescriptor;
 	}
 
-	const std::shared_ptr<TypeDescriptor>& TypeDescriptorFactory::CreateReference(const std::shared_ptr<TypeDescriptor>& component)
+	std::shared_ptr<TypeDescriptor> TypeDescriptorFactory::CreateReference(const std::shared_ptr<TypeDescriptor>& component)
 	{
 		const auto& referenceTypeDescriptor = Get(TypeDescriptor::Id::Reference);
 
@@ -75,7 +75,7 @@ namespace mana
 		return newTypeDescriptor;
 	}
 
-	const std::shared_ptr<TypeDescriptor>& TypeDescriptorFactory::CreateArray(const size_t arraySize)
+	std::shared_ptr<TypeDescriptor> TypeDescriptorFactory::CreateArray(const address_t arraySize)
 	{
 		const auto& referenceTypeDescriptor = Get(TypeDescriptor::Id::Array);
 
