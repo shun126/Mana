@@ -198,7 +198,7 @@ namespace mana
 		MANA_IL_DYNAMIC_REQWE,							/* 62 */
 	};
 
-	static constexpr size_t IntermediateLanguageSize = static_cast<size_t>(MANA_IL_DYNAMIC_REQWE + 1);
+	static constexpr address_t IntermediateLanguageSize = static_cast<address_t>(MANA_IL_DYNAMIC_REQWE + 1);
 
 	struct IntermediateLanguageProperty final
 	{
@@ -216,7 +216,7 @@ namespace mana
 
 	inline const IntermediateLanguageProperty& GetIntermediateLanguageProperty(const IntermediateLanguage code)
 	{
-		static const std::array<IntermediateLanguageProperty, static_cast<size_t>(IntermediateLanguageSize)> properties =
+		static const std::array<IntermediateLanguageProperty, static_cast<address_t>(IntermediateLanguageSize)> properties =
 		{
 			{
 				// thread
@@ -227,14 +227,14 @@ namespace mana
 				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_PREEMPTIVE, 0) },
 
 				// jump
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_BEQ, sizeof(size_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_BNE, sizeof(size_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_BRA, sizeof(size_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_BSR, sizeof(size_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_CALL, sizeof(size_t) + sizeof(int16_t) + sizeof(int16_t) /* + (program[6] * sizeof(int16_t))*/)}, // 引数によってサイズが変わる
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_REQ, sizeof(size_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_REQWS, sizeof(size_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_REQWE, sizeof(size_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_BEQ, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_BNE, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_BRA, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_BSR, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_CALL, sizeof(address_t) + sizeof(int16_t) + sizeof(int16_t) /* + (program[6] * sizeof(int16_t))*/)}, // 引数によってサイズが変わる
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_REQ, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_REQWS, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_REQWE, sizeof(address_t)) },
 				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_JOIN, 0) },
 				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_COMPLY, 0) },
 				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_REFUSE, 0) },
@@ -250,25 +250,25 @@ namespace mana
 				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_PUSH_CHAR, sizeof(int8_t)) },
 				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_PUSH_SHORT, sizeof(int16_t)) },
 				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_PUSH_INTEGER, sizeof(int32_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_PUSH_SIZE, sizeof(size_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_PUSH_SIZE, sizeof(address_t)) },
 				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_PUSH_FLOAT, sizeof(float)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_PUSH_STRING, sizeof(size_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_PUSH_STRING, sizeof(address_t)) },
 				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_PUSH_PRIORITY, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_PUSH_ACTOR, sizeof(size_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_PUSH_ACTOR, sizeof(address_t)) },
 				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_PUSH_SELF, 0) },
 				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_PUSH_SENDER, 0) },
 
 				// stack
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_ALLOCATE, sizeof(size_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_FREE, sizeof(size_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_ALLOCATE, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_FREE, sizeof(address_t)) },
 				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_DUPLICATE, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_DUPLICATE_DATA, sizeof(size_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_DUPLICATE_DATA, sizeof(address_t)) },
 				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_REMOVE, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_REMOVE_DATA, sizeof(size_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_LOAD_STATIC_ADDRESS, sizeof(size_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_LOAD_GLOBAL_ADDRESS, sizeof(size_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_LOAD_FRAME_ADDRESS, sizeof(size_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_LOAD_SELF_ADDRESS, sizeof(size_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_REMOVE_DATA, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_LOAD_STATIC_ADDRESS, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_LOAD_GLOBAL_ADDRESS, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_LOAD_FRAME_ADDRESS, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_LOAD_SELF_ADDRESS, sizeof(address_t)) },
 
 				// memory operation
 				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_LOAD_CHAR, 0) },
@@ -276,13 +276,13 @@ namespace mana
 				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_LOAD_INTEGER, 0) },
 				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_LOAD_FLOAT, 0) },
 				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_LOAD_REFFRENCE, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_LOAD_DATA, sizeof(size_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_LOAD_DATA, sizeof(address_t)) },
 				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_STORE_CHAR, 0) },
 				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_STORE_SHORT, 0) },
 				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_STORE_INTEGER, 0) },
 				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_STORE_FLOAT, 0) },
 				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_STORE_REFFRENCE, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_STORE_DATA, sizeof(size_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_STORE_DATA, sizeof(address_t)) },
 
 				// caluclation
 				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_ADD_INTEGER, 0) },
@@ -327,20 +327,20 @@ namespace mana
 				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_COMPARE_LE_FLOAT, 0) },
 				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_COMPARE_LS_FLOAT, 0) },
 
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_COMPARE_EQ_DATA, sizeof(size_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_COMPARE_NE_DATA, sizeof(size_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_COMPARE_GE_DATA, sizeof(size_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_COMPARE_GT_DATA, sizeof(size_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_COMPARE_LE_DATA, sizeof(size_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_COMPARE_LS_DATA, sizeof(size_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_COMPARE_EQ_DATA, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_COMPARE_NE_DATA, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_COMPARE_GE_DATA, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_COMPARE_GT_DATA, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_COMPARE_LE_DATA, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_COMPARE_LS_DATA, sizeof(address_t)) },
 
 				// utility
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_PRINT, sizeof(size_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_PRINT, sizeof(address_t)) },
 
 				// under discussion
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_DYNAMIC_REQ, sizeof(size_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_DYNAMIC_REQWS, sizeof(size_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_DYNAMIC_REQWE, sizeof(size_t)) }
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_DYNAMIC_REQ, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_DYNAMIC_REQWS, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MANA_IL_DYNAMIC_REQWE, sizeof(address_t)) }
 			}
 		 };
 
@@ -353,14 +353,14 @@ namespace mana
 
 #undef MANA_FILE_FORMAT_DEBUG_PARAMETER
 
-	inline size_t GetInstructionSize(const void* codeBuffer, const size_t index)
+	inline address_t GetInstructionSize(const void* codeBuffer, const address_t index)
 	{
 		const uint8_t* program = &static_cast<const uint8_t*>(codeBuffer)[index];
 		const IntermediateLanguage code = static_cast<IntermediateLanguage>(*program);
 		if (IntermediateLanguage::MANA_IL_CALL == code)
 		{
 			// Size varies depending on the argument.
-			return sizeof(size_t) + sizeof(int16_t) + sizeof(int16_t) + (program[6] * sizeof(int16_t));
+			return sizeof(address_t) + sizeof(int16_t) + sizeof(int16_t) + (program[6] * sizeof(int16_t));
 		}
 		else
 		{

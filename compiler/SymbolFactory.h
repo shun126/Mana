@@ -124,7 +124,7 @@ namespace mana
 		// actor
 		void BeginRegistrationActor(const std::shared_ptr<Symbol>& symbolEntry);
 		void CommitRegistrationActor(const std::string_view name, const std::string_view parent, const std::shared_ptr<TypeDescriptor>& type, const bool phantom);
-		bool IsActorOrStructerOpened() const { return mActorOrStructureLevel > 0; }
+		bool IsActorOrStructerOpened() const;
 
 		void OpenActor(const std::string_view name);
 		void CloseActor();
@@ -171,12 +171,12 @@ namespace mana
 
 
 
-		size_t GetReturnAddressList() const
+		address_t GetReturnAddressList() const
 		{
 			return mReturnAddressList;
 		}
 
-		void SetReturnAddressList(const size_t returnAddressList)
+		void SetReturnAddressList(const address_t returnAddressList)
 		{
 			mReturnAddressList = returnAddressList;
 		}
@@ -196,10 +196,10 @@ namespace mana
 	private:
 		std::shared_ptr<Symbol> CreateSymbol(const std::string_view name, const Symbol::ClassTypeId class_type);
 		std::shared_ptr<Symbol> CreateSymbolWithAddress(const std::string_view name, const Symbol::ClassTypeId class_type, const int32_t address);
-		std::shared_ptr<Symbol> CreateSymbolWithLevel(const std::string_view name, Symbol::ClassTypeId class_type, const int32_t level);
+		std::shared_ptr<Symbol> CreateSymbolWithLevel(const std::string_view name, Symbol::ClassTypeId class_type, const size_t blockLevel);
 
 
-		bool GenerateActorEntity(OutputStream& stream, const std::shared_ptr<const Symbol>& symbol, const std::shared_ptr<const TypeDescriptor>& type, const int32_t arraySize) const;
+		bool GenerateActorEntity(OutputStream& stream, const std::shared_ptr<const Symbol>& symbol, const std::shared_ptr<const TypeDescriptor>& type) const;
 
 		static int32_t symbol_align_size(const int32_t X, const int32_t Y)
 		{
@@ -218,14 +218,7 @@ namespace mana
 
 		struct BlockEntry final
 		{
-			explicit BlockEntry(const std::shared_ptr<Symbol>& symbolEntry)
-				: mSymbolEntry(symbolEntry)
-			{
-			}
-			explicit BlockEntry(const std::shared_ptr<TypeDescriptor>& typeDescriptor)
-				: mTypeDescriptor(typeDescriptor)
-			{
-			}
+			BlockEntry() = default;
 			void Set(const std::shared_ptr<Symbol>& symbolEntry)
 			{
 				mSymbolEntry = symbolEntry;
@@ -241,8 +234,8 @@ namespace mana
 
 		struct BlockTable final
 		{
+			BlockEntry mHead;
 			int32_t mAllocp;
-			std::vector<BlockEntry> mHead;
 
 			BlockTable(const int32_t allocp)
 				: mAllocp(allocp)
@@ -251,11 +244,11 @@ namespace mana
 		std::stack<std::unique_ptr<BlockTable>> mBlockTable;
 
 
-		int32_t mActorOrStructureLevel = 0;
-		int32_t mFunctionBlockLevel = 0;
-		//TODO:int32_t mBlockLevel = 0; mBlockTable.size()で代用可能？
+		ssize_t mActorOrStructureLevel = 0;
+		size_t mFunctionBlockLevel = 0;
 		bool mIsFunctionOpened = false;
 		bool mModuleBlockOpened = false;
+
 
 		int32_t mStaticMemoryAddress = 0;
 		int32_t mGlobalMemoryAddress = 0;

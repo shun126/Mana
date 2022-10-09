@@ -10,6 +10,8 @@ mana (compiler)
 #include <cstdlib>
 #include <direct.h>
 #else
+#include <limits.h>
+#include <stdlib.h>
 #include <unistd.h>
 #endif
 

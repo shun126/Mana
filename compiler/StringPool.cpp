@@ -6,6 +6,7 @@ mana (compiler)
 */
 
 #include "StringPool.h"
+#include <cstring>
 
 namespace mana
 {
@@ -20,7 +21,7 @@ namespace mana
 		{
 			for (const auto& address : mAddress)
 			{
-				if (strcmp(static_cast<const char*>(&mBuffer.get()[address]), text.data()) == 0)
+				if (std::strcmp(static_cast<const char*>(&mBuffer.get()[address]), text.data()) == 0)
 					return address;
 			}
 		}
@@ -48,7 +49,7 @@ namespace mana
 		address_t address = Find(text);
 		if (address == InvalidAddress)
 		{
-			address_t length = text.length() + 1;
+			address_t length = ToAddress(text.length() + 1);
 			if (mUsedSize + length >= mAllocatedSize)
 			{
 				mAllocatedSize += (mUsedSize + length + 4096);

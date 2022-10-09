@@ -6,10 +6,11 @@ mana (compiler)
 */
 
 #pragma once
-#include "../runner/common/Setup.h"
+#include "../runner/common/Platform.h"
 #include <array>
 #include <fstream>
 #include <memory>
+#include <string_view>
 
 namespace mana
 {
@@ -17,6 +18,7 @@ namespace mana
 
 	class TypeDescriptor final
 	{
+		friend class SemanticAnalyzer;
 		friend class SymbolFactory;
 		friend class TypeDescriptorFactory;
 
@@ -81,11 +83,11 @@ namespace mana
 
 		std::shared_ptr<TypeDescriptor> GetComponent() const;
 
-		size_t GetArraySize() const;
-		size_t GetMemorySize() const;
-		size_t GetAlignmentMemorySize() const;
+		address_t GetArraySize() const;
+		address_t GetMemorySize() const;
+		address_t GetAlignmentMemorySize() const;
 
-		size_t GetActionCount() const;
+		address_t GetActionCount() const;
 		bool IsPhantom() const;
 
 		const std::shared_ptr<Symbol>& GetParent() const;
@@ -98,9 +100,9 @@ namespace mana
 		void SetTypeDescriptor(const std::shared_ptr<TypeDescriptor>& component);
 		void SetName(const std::string_view name);
 		void SetSymbolEntry(const std::shared_ptr<Symbol>& symbolEntry);
-		void SetMemorySize(const size_t memorySize);
-		void SetAlignmentMemorySize(const size_t alignmentMemorySize);
-		void SetArraySize(const size_t arraySize);
+		void SetMemorySize(const address_t memorySize);
+		void SetAlignmentMemorySize(const address_t alignmentMemorySize);
+		void SetArraySize(const address_t arraySize);
 
 
 	private:
@@ -110,17 +112,17 @@ namespace mana
 		std::shared_ptr<Symbol> mSymbolEntry;
 		std::shared_ptr<Symbol> mParent;
 		std::shared_ptr<TypeDescriptor> mComponent;	//!< Array, link to original type of reference type
-		Id mTcons = Id::Incomplete;					//!< Type identifier
 		std::string mName;							//!< Type name
-		size_t mArraySize = 1;
-		size_t mMemorySize = 0;
-		size_t mAlignmentMemorySize = 0;
+		Id mTcons = Id::Incomplete;					//!< Type identifier
+		address_t mArraySize = 1;
+		address_t mMemorySize = 0;
+		address_t mAlignmentMemorySize = 0;
 
 		union share
 		{
 			struct actor
 			{
-				int32_t mPhantom;
+				bool mPhantom;
 			} mActor;
 		} mShare;
 	};
