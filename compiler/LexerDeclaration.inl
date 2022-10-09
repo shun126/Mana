@@ -28,7 +28,7 @@ namespace mana
 	class Lexer final : private Noncopyable
 	{
 	public:
-		explicit Lexer(const std::shared_ptr<mana::ParsingDriver>& parsingDriver);
+		explicit Lexer(const std::shared_ptr<ParsingDriver>& parsingDriver);
 		~Lexer();
 
 		bool Open(const std::string_view filename, const bool check);
@@ -38,10 +38,10 @@ namespace mana
 		const std::string& GetCurrentFilename();
 		void SetCurrentFilename(const std::string& filename);
 
-		static mana::int_t binary(const char* text);
+		static int_t binary(const char* text);
 
 	public:
-		std::shared_ptr<mana::ParsingDriver> mParsingDriver;
+		std::shared_ptr<ParsingDriver> mParsingDriver;
 		std::stack<std::unique_ptr<Context>> mContext;
 		std::set<std::string_view> mPathSet;
 		std::string mCurrentPath;

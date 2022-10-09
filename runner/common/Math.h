@@ -64,14 +64,14 @@ namespace mana
 	}
 
 	template <typename T>
-	T Alignment(const T value, const T alignment)
+	inline T Alignment(const T value, const T alignment)
 	{
-		return (value + (alignment - 1)) / alignment;
+		return (value + alignment - 1) / alignment;
 	}
 
 	template <typename T>
-	T AlignUp(const T value, const T alignment)
+	inline T AlignUp(const T value, const T alignment)
 	{
-		return (value + alignment - 1) / alignment * alignment;
+		return Alignment(value, alignment) * alignment;
 	}
 }

@@ -124,7 +124,7 @@ namespace mana
 		bool IsNot(const Id id) const;
 		Id GetId() const;
 
-		size_t GetMemorySize() const;
+		address_t GetMemorySize() const;
 
 		std::shared_ptr<SyntaxNode> GetLeftNode() const;
 		void SetLeftNode(const std::shared_ptr<SyntaxNode>& left);
@@ -161,7 +161,7 @@ namespace mana
 		void Dump() const;
 
 	private:
-		SyntaxNode() {}
+		SyntaxNode() = default;
 
 		std::shared_ptr<SyntaxNode> CreateCast(const std::shared_ptr<TypeDescriptor>& type, const std::shared_ptr<TypeDescriptorFactory>& typeDescriptorFactory);
 		void OnDump(FILE* file) const;

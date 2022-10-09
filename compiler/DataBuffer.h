@@ -8,6 +8,7 @@ mana (compiler)
 #pragma once
 #include "../runner/common/Platform.h"
 #include "../runner/common/Noncopyable.h"
+#include <cstdlib>
 #include <memory>
 #include <string_view>
 #include <vector>

@@ -254,7 +254,7 @@ namespace mana
 			if (arg->Is(SyntaxNode::Id::CallArgument))
 				arg = arg->GetLeftNode();
 
-			address += Alignment(arg->GetMemorySize(), sizeof(int32_t));
+			address += Alignment(arg->GetMemorySize(), ToAddress(sizeof(int32_t)));
 		}
 		return address;
 	}
@@ -278,7 +278,7 @@ namespace mana
 			if (arg->Is(SyntaxNode::Id::CallArgument))
 				arg = arg->GetLeftNode();
 
-			address -= Alignment(arg->GetMemorySize(), sizeof(int32_t));
+			address -= Alignment(arg->GetMemorySize(), ToAddress(sizeof(int32_t)));
 		}
 		return address;
 	}
@@ -293,12 +293,17 @@ namespace mana
 		int32_t argument_counter = generate_argument(0, (node->GetSymbol())->GetParameterList(), argument);
 
 		// エラーチェック
-		if ((node->GetSymbol())->GetNumberOfParameters() != argument_counter)
+		if (argument_counter < 0 || std::numeric_limits<uint8_t>::max() < argument_counter)
+		{
+			// 256以上の引数は指定できません
+			CompileError("Cannot specify more than 256 arguments.");
+		}
+		else if ((node->GetSymbol())->GetNumberOfParameters() != argument_counter)
 		{
 			// 引数の数が一致しない
 			CompileError("unmatched argument.");
 		}
-		else if ((node->GetSymbol())->GetClassTypeId() == Symbol::ClassTypeId::NATIVE_FUNCTION)
+		else if ((node->GetSymbol())->GetClassTypeId() == Symbol::ClassTypeId::NativeFunction)
 		{
 			// for external function
 			int32_t argument_size = generator_call_argument_size(0, (node->GetSymbol())->GetParameterList(), argument);
@@ -307,8 +312,8 @@ namespace mana
 
 			mCodeBuffer->AddOpecodeAndOperand(MANA_IL_CALL, (node->GetSymbol())->GetAddress());
 			mCodeBuffer->Add<uint8_t>(((node->GetSymbol())->GetTypeDescriptor()->GetId() != TypeDescriptor::Id::Void));
-			mCodeBuffer->Add<uint8_t>(argument_counter);
-			mCodeBuffer->Add<uint16_t>(argument_size);
+			mCodeBuffer->Add<uint8_t>(static_cast<uint8_t>(argument_counter));
+			mCodeBuffer->Add<uint16_t>(static_cast<uint16_t>(argument_size));
 			generator_call_argument(argument_size - 1, (node->GetSymbol())->GetParameterList(), argument);
 		}
 		else
@@ -375,7 +380,7 @@ namespace mana
 	* @param	pc		プログラムカウンタ
 	* @return	現在のプログラムアドレス
 	*/
-	size_t CodeGenerator::generator_condition_core(std::shared_ptr<SyntaxNode> tree)
+	address_t CodeGenerator::generator_condition_core(std::shared_ptr<SyntaxNode> tree)
 	{
 		// 判別式内に代入式があるか調べます
 		generator_condition_check(tree);
@@ -398,7 +403,7 @@ namespace mana
 	@param	tree	評価式のSyntaxNode
 	@return	現在のプログラムアドレス
 	*/
-	size_t CodeGenerator::generator_condition(std::shared_ptr<SyntaxNode> tree, int32_t match)
+	address_t CodeGenerator::generator_condition(std::shared_ptr<SyntaxNode> tree, const bool match)
 	{
 		//generator_resolve_symbol(tree);
 		//generator_automatic_cast(tree);
@@ -702,7 +707,7 @@ namespace mana
 			break;
 
 		case SyntaxNode::Id::DeclareVariable:
-			//symbol_allocate_memory(node->GetRightNode()->GetSymbol(), node->GetLeftNode()->GetTypeDescriptor(), NORMAL);
+			//symbol_allocate_memory(node->GetRightNode()->GetSymbol(), node->GetLeftNode()->GetTypeDescriptor(), Normal);
 			// node->GetLeftNode()
 			// node->GetRightNode()
 			if (node->GetBodyNode())
@@ -710,12 +715,12 @@ namespace mana
 				// initializer
 				generator_genearte_code(node->GetBodyNode(), enable_load);
 			}
-			//resolver_resolve_variable_description(node, NORMAL);
+			//resolver_resolve_variable_description(node, Normal);
 			/*
 			generator_genearte_code(node->GetLeftNode(), enable_load); // SyntaxNode::Id::TypeDescription
 			generator_genearte_code(node->GetRightNode(), enable_load);// SyntaxNode::Id::Declarator
-			if(node->GetRightNode()->GetSymbol()->class_type == VARIABLE_LOCAL)
-			symbol_allocate_memory(node->GetRightNode()->GetSymbol(), node->GetLeftNode()->GetTypeDescriptor(), NORMAL);
+			if(node->GetRightNode()->GetSymbol()->class_type == LocalVariable)
+			symbol_allocate_memory(node->GetRightNode()->GetSymbol(), node->GetLeftNode()->GetTypeDescriptor(), Normal);
 			*/
 			break;
 
@@ -782,7 +787,7 @@ namespace mana
 		case SyntaxNode::Id::Do:
 		{
 			mLocalAddressResolver->OpenChain(LocalAddressResolver::JumpChainStatus::Do);
-			const int32_t address = mCodeBuffer->GetSize();
+			const address_t address = mCodeBuffer->GetSize();
 			generator_genearte_code(node->GetLeftNode(), enable_load);
 			mLocalAddressResolver->CloseContinueOnly();
 
@@ -795,7 +800,7 @@ namespace mana
 		case SyntaxNode::Id::For:
 			/* 'for(GetTypeDescriptor() variable = expression' の形式 */
 		{
-			//symbol_allocate_memory($2, $1, NORMAL);
+			//symbol_allocate_memory($2, $1, Normal);
 			//generator_expression(node_create_node(SyntaxNode::Id::NODE_TYPE_ASSIGN, node_create_leaf($2->name), $4), true);
 			mLocalAddressResolver->OpenChain(LocalAddressResolver::JumpChainStatus::For);
 			//$$ = GetSize();
@@ -831,12 +836,12 @@ namespace mana
 
 		case SyntaxNode::Id::If:
 		{
-			int32_t address = generator_condition(node->GetBodyNode(), true);
+			address_t address = generator_condition(node->GetBodyNode(), true);
 			generator_genearte_code(node->GetLeftNode(), enable_load);
 			if (node->GetRightNode())
 			{
 				// else block
-				const size_t else_begin_address = mCodeBuffer->AddOpecodeAndOperand(MANA_IL_BRA);
+				const address_t else_begin_address = mCodeBuffer->AddOpecodeAndOperand(MANA_IL_BRA);
 				mCodeBuffer->ReplaceAddressAll(address, mCodeBuffer->GetSize());
 				generator_genearte_code(node->GetRightNode(), enable_load);
 				address = else_begin_address;
@@ -1182,42 +1187,42 @@ namespace mana
 			{
 				switch (node->GetSymbol()->GetClassTypeId())
 				{
-				case Symbol::ClassTypeId::ALIAS:
+				case Symbol::ClassTypeId::Alias:
 					generator_generate_const_int(node->GetSymbol()->GetTypeDescriptor()->GetId(), node->GetSymbol()->GetAddress());
 					break;
 
-				case Symbol::ClassTypeId::CONSTANT_INT:
+				case Symbol::ClassTypeId::ConstantInteger:
 					generator_generate_const_int(node->GetSymbol()->GetTypeDescriptor()->GetId(), node->GetSymbol()->GetEtc());
 					break;
 
-				case Symbol::ClassTypeId::CONSTANT_FLOAT:
+				case Symbol::ClassTypeId::ConstantFloat:
 					generator_generate_const_float(node->GetSymbol()->GetTypeDescriptor()->GetId(), node->GetSymbol()->GetFloat());
 					break;
 
-				case Symbol::ClassTypeId::CONSTANT_STRING:
+				case Symbol::ClassTypeId::ConstantString:
 					generator_generate_const_int(node->GetSymbol()->GetTypeDescriptor()->GetId(), node->GetSymbol()->GetAddress());
 					break;
 
-				case Symbol::ClassTypeId::VARIABLE_STATIC:
+				case Symbol::ClassTypeId::StaticVariable:
 					mCodeBuffer->AddOpecodeAndOperand(MANA_IL_LOAD_STATIC_ADDRESS, node->GetSymbol()->GetAddress());
 					break;
 
-				case Symbol::ClassTypeId::VARIABLE_GLOBAL:
+				case Symbol::ClassTypeId::GlobalVariable:
 					mCodeBuffer->AddOpecodeAndOperand(MANA_IL_LOAD_GLOBAL_ADDRESS, node->GetSymbol()->GetAddress());
 					break;
 
-				case Symbol::ClassTypeId::VARIABLE_ACTOR:
+				case Symbol::ClassTypeId::ActorVariable:
 					mCodeBuffer->AddOpecodeAndOperand(MANA_IL_LOAD_SELF_ADDRESS, node->GetSymbol()->GetAddress());
 					break;
 
-				case Symbol::ClassTypeId::VARIABLE_LOCAL:
+				case Symbol::ClassTypeId::LocalVariable:
 					mCodeBuffer->AddOpecodeAndOperand(MANA_IL_LOAD_FRAME_ADDRESS, node->GetSymbol()->GetAddress());
 					break;
 
-				case Symbol::ClassTypeId::TYPEDEF:
+				case Symbol::ClassTypeId::Type:
 					break;
 
-				case Symbol::ClassTypeId::NEW_SYMBOL:
+				case Symbol::ClassTypeId::NewSymbol:
 
 				default:
 					CompileError("illigal data GetTypeDescriptor()");
@@ -1252,7 +1257,7 @@ namespace mana
 						{
 							for (std::shared_ptr<Symbol> symbol = type->GetSymbolEntry(); symbol; symbol = symbol->GetNext())
 							{
-								if (symbol->GetName() == node->GetString() && symbol->GetClassTypeId() == Symbol::ClassTypeId::VARIABLE_ACTOR)
+								if (symbol->GetName() == node->GetString() && symbol->GetClassTypeId() == Symbol::ClassTypeId::ActorVariable)
 								{
 									// variable.member
 									mCodeBuffer->AddOpecodeAndOperand(MANA_IL_PUSH_SIZE, symbol->GetAddress());
@@ -1351,23 +1356,23 @@ namespace mana
 			//generator_generate_variable_value(node);
 			switch ((node->GetSymbol())->class_type)
 			{
-			case VARIABLE_STATIC:
+			case StaticVariable:
 				AddOpecodeAndOperand(MANA_IL_LOAD_STATIC_ADDRESS, (node->GetSymbol())->address);
 				break;
 
-			case VARIABLE_GLOBAL:
+			case GlobalVariable:
 				AddOpecodeAndOperand(MANA_IL_LOAD_GLOBAL_ADDRESS, (node->GetSymbol())->address);
 				break;
 
-			case VARIABLE_ACTOR:
+			case ActorVariable:
 				AddOpecodeAndOperand(MANA_IL_LOAD_SELF_ADDRESS, (node->GetSymbol())->address);
 				break;
 
-			case VARIABLE_LOCAL:
+			case LocalVariable:
 				AddOpecodeAndOperand(MANA_IL_LOAD_FRAME_ADDRESS, (node->GetSymbol())->address);
 				break;
 
-			case TYPEDEF:
+			case Type:
 				break;
 
 			default:
@@ -1413,7 +1418,7 @@ namespace mana
 		const auto codeBuffer = mCodeBuffer->Copy();
 		if (codeBuffer.get())
 		{
-			size_t pc = 0;
+			address_t pc = 0;
 			while (pc < mCodeBuffer->GetSize())
 			{
 				mSymbolFactory->DumpFunctionNameFromAddress(output, pc);

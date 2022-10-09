@@ -224,6 +224,10 @@ namespace mana
 			{
 				std::shared_ptr<Actor> actor = std::shared_ptr<Actor>(new Actor(shared_from_this(), actorInfo->mVariableSize));
 
+#if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
+				actor->SetActorName(actorName);
+#endif
+
 				for (uint16_t j = 0; j < actorInfo->mNumberOfActions; ++j)
 				{
 					actor->SetAction(mConstantPool + actionInfo->mName, actionInfo->mAddress);

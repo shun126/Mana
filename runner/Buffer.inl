@@ -15,7 +15,7 @@ namespace mana
 	{
 	}
 
-	inline Buffer::Buffer(const size_t size)
+	inline Buffer::Buffer(const address_t size)
 		: mBuffer(nullptr, std::free)
 	{
 		Allocate(size);
@@ -51,9 +51,9 @@ namespace mana
 		mAllocatedSize = mUsedSize = 0;
 	}
 
-	inline void Buffer::Allocate(const size_t size)
+	inline void Buffer::Allocate(const address_t size)
 	{
-		const size_t newSize = mUsedSize + size;
+		const address_t newSize = mUsedSize + size;
 
 		if (mUsedSize >= mAllocatedSize)
 		{
@@ -76,13 +76,13 @@ namespace mana
 		mUsedSize = newSize;
 	}
 
-	inline void Buffer::Release(const size_t size)
+	inline void Buffer::Release(const address_t size)
 	{
 		mUsedSize -= size;
 	}
 
 	template<typename T>
-	inline T* Buffer::GetAddressFromTop(const size_t index) const
+	inline T* Buffer::GetAddressFromTop(const address_t index) const
 	{
 		MANA_ASSERT(index < mUsedSize);
 		void* address = static_cast<uint8_t*>(mBuffer.get()) + (index);
@@ -90,19 +90,19 @@ namespace mana
 	}
 
 	template<typename T>
-	inline T* Buffer::GetAddressFromBottom(const size_t index) const
+	inline T* Buffer::GetAddressFromBottom(const address_t index) const
 	{
 		MANA_ASSERT(0 < index && index <= mUsedSize);
 		void* address = static_cast<uint8_t*>(mBuffer.get()) + (mUsedSize - index);
 		return reinterpret_cast<T*>(address);
 	}
 
-	inline size_t Buffer::GetSize() const
+	inline address_t Buffer::GetSize() const
 	{
 		return mUsedSize;
 	}
 
-	inline void Buffer::SetSize(const size_t size)
+	inline void Buffer::SetSize(const address_t size)
 	{
 		MANA_ASSERT((mUsedSize + size) <= mAllocatedSize);
 		mUsedSize = size;

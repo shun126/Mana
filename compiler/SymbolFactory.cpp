@@ -47,7 +47,7 @@ namespace mana
 		return symbol;
 	}
 
-	std::shared_ptr<Symbol> SymbolFactory::CreateSymbolWithLevel(const std::string_view name, Symbol::ClassTypeId class_type, const int32_t level)
+	std::shared_ptr<Symbol> SymbolFactory::CreateSymbolWithLevel(const std::string_view name, Symbol::ClassTypeId class_type, const size_t level)
 	{
 		std::shared_ptr<Symbol> symbol = std::make_shared<Symbol>(name, class_type, level);
 		mSymbolEntries.push_back(symbol);
@@ -56,8 +56,8 @@ namespace mana
 
 		if (!mBlockTable.empty())
 		{
-			if (!mBlockTable.top()->mHead.empty())
-				symbol->SetNext(mBlockTable.top()->mHead.back().mSymbolEntry);
+			if (mBlockTable.top()->mHead.mSymbolEntry)
+				symbol->SetNext(mBlockTable.top()->mHead.mSymbolEntry);
 			RegisterToBlock(symbol);
 		}
 		
@@ -73,7 +73,7 @@ namespace mana
 		if(symbol)
 			CompileError("duplicated declaration '%s'", name);
 
-		symbol = CreateSymbolWithAddress(name, Symbol::ClassTypeId::ALIAS, -1);
+		symbol = CreateSymbolWithAddress(name, Symbol::ClassTypeId::Alias, -1);
 		symbol->SetTypeDescription(mTypeDescriptorFactory->Get(TypeDescriptor::Id::Int));
 
 		if (fullpath(path, filename.data(), sizeof(path)))
@@ -95,7 +95,7 @@ namespace mana
 		if(symbol)
 			CompileError("duplicated declaration '%s'", name);
 
-		symbol = CreateSymbol(name, Symbol::ClassTypeId::CONSTANT_INT);
+		symbol = CreateSymbol(name, Symbol::ClassTypeId::ConstantInteger);
 		symbol->SetTypeDescription(mTypeDescriptorFactory->Get(TypeDescriptor::Id::Int));
 		symbol->SetEtc(value);
 #if 0
@@ -114,7 +114,7 @@ namespace mana
 		if(symbol)
 			CompileError("duplicated declaration '%s'", name);
 
-		symbol = CreateSymbol(name, Symbol::ClassTypeId::CONSTANT_FLOAT);
+		symbol = CreateSymbol(name, Symbol::ClassTypeId::ConstantFloat);
 		symbol->SetTypeDescription(mTypeDescriptorFactory->Get(TypeDescriptor::Id::Float));
 		symbol->SetFloat(value);
 #if 0
@@ -133,7 +133,7 @@ namespace mana
 		if(symbol)
 			CompileError("duplicated declaration '%s'", name);
 
-		symbol = CreateSymbol(name, Symbol::ClassTypeId::CONSTANT_STRING);
+		symbol = CreateSymbol(name, Symbol::ClassTypeId::ConstantString);
 		symbol->SetTypeDescription(mTypeDescriptorFactory->GetString());
 		symbol->SetString(value);
 #if 0
@@ -153,25 +153,25 @@ namespace mana
 		{
 			if (isStaticVariable)
 			{
-				symbol = CreateSymbolWithAddress(name, Symbol::ClassTypeId::VARIABLE_STATIC, 0);
+				symbol = CreateSymbolWithAddress(name, Symbol::ClassTypeId::StaticVariable, 0);
 			}
 			else if(isBlockOpened == false)
 			{
-				symbol = CreateSymbolWithAddress(name, Symbol::ClassTypeId::VARIABLE_GLOBAL, 0);
+				symbol = CreateSymbolWithAddress(name, Symbol::ClassTypeId::GlobalVariable, 0);
 			}
 			else if(isFunctionOpened == false)
 			{
-				symbol = CreateSymbolWithAddress(name, Symbol::ClassTypeId::VARIABLE_ACTOR, 0);
+				symbol = CreateSymbolWithAddress(name, Symbol::ClassTypeId::ActorVariable, 0);
 			}
 			else
 			{
-				symbol = CreateSymbolWithAddress(name, Symbol::ClassTypeId::VARIABLE_LOCAL, 0);
+				symbol = CreateSymbolWithAddress(name, Symbol::ClassTypeId::LocalVariable, 0);
 			}
 			symbol->SetTypeDescription(type);
 		}
 		else
 		{
-			CompileError("duplicated declaration '%s'", name);
+			CompileError("duplicated declaration '%s'", name.data());
 		}
 
 		return symbol;
@@ -184,7 +184,7 @@ namespace mana
 		symbol = Lookup(name);
 		if(symbol == nullptr)
 		{
-			symbol = CreateSymbolWithLevel(name, Symbol::ClassTypeId::LABEL, 0/* TODO:mFunctionBlockLevel*/);
+			symbol = CreateSymbolWithLevel(name, Symbol::ClassTypeId::Label, 0/* TODO:mFunctionBlockLevel*/);
 			symbol->SetAddress(-1);
 			symbol->SetEtc(-1);
 		}
@@ -195,7 +195,7 @@ namespace mana
 	std::shared_ptr<Symbol> SymbolFactory::CreateFunction(const std::string_view name, const bool isActorOrStructerOpened, const bool isModuleBlockOpened)
 	{
 		const Symbol::ClassTypeId class_type = isActorOrStructerOpened
-			? Symbol::ClassTypeId::MEMBER_FUNCTION : Symbol::ClassTypeId::FUNCTION;
+			? Symbol::ClassTypeId::MemberFunction : Symbol::ClassTypeId::Function;
 
 		std::shared_ptr<Symbol> symbol = Lookup(name);
 		if (symbol == nullptr)
@@ -216,7 +216,7 @@ namespace mana
 		std::shared_ptr<Symbol> symbol = Lookup(name);
 		if (symbol == nullptr)
 		{
-			symbol = CreateSymbolWithAddress(name, Symbol::ClassTypeId::TYPEDEF, 0);
+			symbol = CreateSymbolWithAddress(name, Symbol::ClassTypeId::Type, 0);
 			symbol->SetTypeDescription(type);
 		}
 		else if (symbol->GetTypeDescriptor() == type)
@@ -224,7 +224,7 @@ namespace mana
 			return symbol;
 		}
 		else if (
-			symbol->GetClassTypeId() == Symbol::ClassTypeId::TYPEDEF &&
+			symbol->GetClassTypeId() == Symbol::ClassTypeId::Type &&
 			symbol->GetTypeDescriptor()->GetId() == TypeDescriptor::Id::Incomplete )
 		{
 			if (
@@ -258,13 +258,13 @@ namespace mana
 	bool SymbolFactory::IsValid(std::shared_ptr<Symbol> symbol)
 	{
 		if (symbol &&
-			symbol->GetClassTypeId() != Symbol::ClassTypeId::VARIABLE_STATIC &&
-			symbol->GetClassTypeId() != Symbol::ClassTypeId::VARIABLE_GLOBAL &&
-			symbol->GetClassTypeId() != Symbol::ClassTypeId::VARIABLE_ACTOR &&
-			symbol->GetClassTypeId() != Symbol::ClassTypeId::VARIABLE_LOCAL &&
-			symbol->GetClassTypeId() != Symbol::ClassTypeId::CONSTANT_INT &&
-			symbol->GetClassTypeId() != Symbol::ClassTypeId::CONSTANT_FLOAT &&
-			symbol->GetClassTypeId() != Symbol::ClassTypeId::CONSTANT_STRING
+			symbol->GetClassTypeId() != Symbol::ClassTypeId::StaticVariable &&
+			symbol->GetClassTypeId() != Symbol::ClassTypeId::GlobalVariable &&
+			symbol->GetClassTypeId() != Symbol::ClassTypeId::ActorVariable &&
+			symbol->GetClassTypeId() != Symbol::ClassTypeId::LocalVariable &&
+			symbol->GetClassTypeId() != Symbol::ClassTypeId::ConstantInteger &&
+			symbol->GetClassTypeId() != Symbol::ClassTypeId::ConstantFloat &&
+			symbol->GetClassTypeId() != Symbol::ClassTypeId::ConstantString
 			) {
 			CompileError("non-variable name '%s'", symbol->GetName());
 			return false;
@@ -288,7 +288,7 @@ TODO:
 		{
 			CompileError("reference to undeclared identifier '%s'", name);
 
-			symbol = CreateSymbol(name, Symbol::ClassTypeId::VARIABLE_LOCAL, 0);
+			symbol = CreateSymbol(name, Symbol::ClassTypeId::LocalVariable, 0);
 			symbol->SetTypeDescription(mTypeDescriptorFactory->Get(TypeDescriptor::Id::Int));
 		}
 		return symbol;
@@ -327,15 +327,17 @@ TODO:
 			mMaxLocalMemoryAddress = mLocalMemoryAddress;
 
 		// check and update hash table
-		for (const BlockEntry& blockEntry : mBlockTable.top()->mHead)
-		{
-			// deleting from hash chain
-			mHashChainTable.erase(blockEntry.mSymbolEntry->GetName());
+		const BlockEntry& blockEntry = mBlockTable.top()->mHead;
 
-			// check if undefined type
-			if (blockEntry.mSymbolEntry->GetClassTypeId() == Symbol::ClassTypeId::TYPEDEF /*&& (symbol->GetTypeDescriptor())->GetId() == TypeDescriptor::Id::Incomplete*/)
-				CompileError("incomplete type name '%s'", blockEntry.mSymbolEntry->GetName().data());
+		// deleting from hash chain
+		for (std::shared_ptr<Symbol> symbol = blockEntry.mSymbolEntry; symbol; symbol = symbol->GetNext())
+		{
+			mHashChainTable.erase(symbol->GetName());
 		}
+
+		// check if undefined type
+		if (blockEntry.mSymbolEntry->GetClassTypeId() == Symbol::ClassTypeId::Type && (blockEntry.mSymbolEntry->GetTypeDescriptor())->Is(TypeDescriptor::Id::Incomplete))
+			CompileError("incomplete type name '%s'", blockEntry.mSymbolEntry->GetName().data());
 
 		mLocalMemoryAddress = mBlockTable.top()->mAllocp;
 		mBlockTable.pop();
@@ -352,17 +354,15 @@ TODO:
 	{
 		if (!mBlockTable.empty())
 		{
-			for (const BlockEntry& blockEntry : mBlockTable.top()->mHead)
-			{
-				function(blockEntry.mSymbolEntry);
-			}
+			const BlockEntry& blockEntry = mBlockTable.top()->mHead;
+			function(blockEntry.mSymbolEntry);
 		}
 	}
 
 
 
 
-	void SymbolFactory::ExtendModule(const std::shared_ptr< Symbol>& symbol)
+	void SymbolFactory::ExtendModule(const std::shared_ptr<Symbol>& symbol)
 	{
 		if (symbol)
 		{
@@ -373,19 +373,19 @@ TODO:
 			}
 
 			// Register in block table to release symbol_hash_chain_table in CloseBlock
-			lastSymbol->SetNext(mBlockTable.top()->mHead.back().mSymbolEntry);
+			lastSymbol->SetNext(mBlockTable.top()->mHead.mSymbolEntry);
 			RegisterToBlock(symbol);
 		}
 	}
 
 	void SymbolFactory::RegisterToBlock(const std::shared_ptr<Symbol>& symbolEntry)
 	{
-		mBlockTable.top()->mHead.emplace_back(symbolEntry);
+		mBlockTable.top()->mHead.Set(symbolEntry);
 	}
 
 	void SymbolFactory::RegisterToBlock(const std::shared_ptr<TypeDescriptor>& typeDescriptor)
 	{
-		mBlockTable.top()->mHead.emplace_back(typeDescriptor);
+		mBlockTable.top()->mHead.Set(typeDescriptor);
 	}
 
 
@@ -393,18 +393,14 @@ TODO:
 	{
 		if (mBlockTable.empty())
 			return nullptr;
-		if (mBlockTable.top()->mHead.empty())
-			return nullptr;
-		return mBlockTable.top()->mHead.back().mSymbolEntry;
+		return mBlockTable.top()->mHead.mSymbolEntry;
 	}
 
 	std::shared_ptr<TypeDescriptor> SymbolFactory::GetLastTypeDescriptorInBlock() const
 	{
 		if (mBlockTable.empty())
 			return nullptr;
-		if (mBlockTable.top()->mHead.empty())
-			return nullptr;
-		return mBlockTable.top()->mHead.back().mTypeDescriptor;
+		return mBlockTable.top()->mHead.mTypeDescriptor;
 	}
 
 
@@ -414,7 +410,7 @@ TODO:
 	{
 		for(const std::shared_ptr<Symbol>& symbol : mSymbolEntries)
 		{
-			if(symbol->GetBlockLevel() <= 0)
+			if(symbol->GetBlockLevel() == 0)
 				symbol->OnDump(output, 0);
 		}
 	}
@@ -428,7 +424,7 @@ TODO:
 
 			switch (symbol->GetClassTypeId())
 			{
-			case Symbol::ClassTypeId::FUNCTION:
+			case Symbol::ClassTypeId::Function:
 				if (symbol->GetAddress() == address)
 				{
 					output << symbol->GetName();
@@ -437,12 +433,12 @@ TODO:
 				}
 				break;
 
-			case Symbol::ClassTypeId::TYPEDEF:
+			case Symbol::ClassTypeId::Type:
 				if (symbol->GetTypeDescriptor() && symbol->GetTypeDescriptor()->GetId() == TypeDescriptor::Id::Actor)
 				{
 					for (std::shared_ptr<Symbol> component_symbol = symbol->GetTypeDescriptor()->GetSymbolEntry(); component_symbol; component_symbol = component_symbol->GetNext())
 					{
-						if (component_symbol->GetClassTypeId() != Symbol::ClassTypeId::MEMBER_FUNCTION)
+						if (component_symbol->GetClassTypeId() != Symbol::ClassTypeId::MemberFunction)
 							continue;
 
 						if (component_symbol->GetAddress() == address)
@@ -528,7 +524,7 @@ TODO:
 		// TODO:  レジスタ割り当て処理をクリア
 		//register_clear();
 
-		if (functionSymbolEntry->GetClassTypeId() == Symbol::ClassTypeId::NEW_SYMBOL)
+		if (functionSymbolEntry->GetClassTypeId() == Symbol::ClassTypeId::NewSymbol)
 		{
 			functionSymbolEntry->SetTypeDescription(functionTypeDescriptor);
 		}
@@ -603,7 +599,7 @@ TODO:
 
 		// gotoのジャンプ先を更新
 		EachBlock([this](const std::shared_ptr<Symbol>& symbol) {
-			if (symbol->GetClassTypeId() != Symbol::ClassTypeId::LABEL)
+			if (symbol->GetClassTypeId() != Symbol::ClassTypeId::Label)
 				return;
 			if (symbol->GetAddress() < 0)
 				CompileError("label '%s' used but not defined", symbol->GetName());
@@ -686,7 +682,7 @@ TODO:
 			CompileError("incomplete data type is used");
 
 		// 2) initialize function's symbol entry
-		function->mClassTypeId = Symbol::ClassTypeId::NATIVE_FUNCTION;
+		function->mClassTypeId = Symbol::ClassTypeId::NativeFunction;
 		function->SetTypeDescription(type);
 		function->SetParameterList(GetLastSymbolEntryInBlock());
 
@@ -717,7 +713,7 @@ TODO:
 	{
 		MANA_ASSERT(GetBlockDepth() > 0);
 
-		int32_t maxAligmentSize = 0;
+		address_t maxAligmentSize = 0;
 
 		// 最も大きいサイズのタイプにアライメントを合わせる
 		EachBlock([&maxAligmentSize](const std::shared_ptr<Symbol>& symbol)
@@ -729,7 +725,7 @@ TODO:
 #if 0
 		if (!mBlockTable.top()->mHead.empty())
 		{
-			const std::shared_ptr<Symbol>& symbol = mBlockTable.top()->mHead.back();
+			const std::shared_ptr<Symbol>& symbol = mBlockTable.top()->mHead.;
 			while (symbol)
 			{
 				const std::shared_ptr<TypeDescriptor>& typeDescriptor = symbol->GetTypeDescriptor();
@@ -741,7 +737,7 @@ TODO:
 #endif
 
 		// 1) create new type description
-		const std::shared_ptr<TypeDescriptor>& newType = mTypeDescriptorFactory->Create(TypeDescriptor::Id::Struct);
+		std::shared_ptr<TypeDescriptor> newType = mTypeDescriptorFactory->Create(TypeDescriptor::Id::Struct);
 		newType->SetSymbolEntry(GetLastSymbolEntryInBlock());
 		newType->SetName(name);
 		newType->SetAlignmentMemorySize(maxAligmentSize);
@@ -770,7 +766,7 @@ TODO:
 		Define(symbol);
 	}
 
-	void SymbolFactory::symbol_open_actor_register_member(const std::shared_ptr<TypeDescriptor>& typeDescriptor)
+	void SymbolFactory::symbol_open_actor_register_member(const std::shared_ptr<TypeDescriptor>&)
 	{
 	}
 
@@ -876,6 +872,11 @@ TODO:
 		}
 	}
 
+	bool SymbolFactory::IsActorOrStructerOpened() const
+	{
+		return mActorOrStructureLevel > 0;
+	}
+
 	void SymbolFactory::OpenActor(const std::string_view name)
 	{
 		if (GetBlockDepth() != 0)
@@ -941,7 +942,7 @@ TODO:
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// module
 	// symbol_begin_registration_module
-	void SymbolFactory::BeginRegistrationModule(const std::shared_ptr<Symbol>& symbol)
+	void SymbolFactory::BeginRegistrationModule(const std::shared_ptr<Symbol>& parentSymbol)
 	{
 		if (GetBlockDepth() != 0)
 		{
@@ -952,16 +953,16 @@ TODO:
 		mModuleBlockOpened = true;
 		++mActorOrStructureLevel;
 
-		if (symbol)
+		if (parentSymbol)
 		{
 			std::shared_ptr<TypeDescriptor> type;
-			for (type = symbol->GetTypeDescriptor(); type->Is(TypeDescriptor::Id::Array); type = type->GetComponent())
+			for (type = parentSymbol->GetTypeDescriptor(); type->Is(TypeDescriptor::Id::Array); type = type->GetComponent())
 				;
 
 			// typeがactorではない場合、続行不可能
 			if (type->IsNot(TypeDescriptor::Id::Actor) && type->IsNot(TypeDescriptor::Id::Module))
 			{
-				CompileError("%s is NOT modeule!", symbol->GetName().data());
+				CompileError("%s is NOT modeule!", parentSymbol->GetName().data());
 			}
 			else
 			{
@@ -984,10 +985,12 @@ TODO:
 	{
 		mDataBuffer->Set(name);
 
-		const std::shared_ptr<TypeDescriptor>& referenceType = GetLastTypeDescriptorInBlock();
+		const std::shared_ptr<Symbol>& refernceSymbol = GetLastSymbolEntryInBlock();
+		//const std::shared_ptr<TypeDescriptor>& referenceType = GetLastTypeDescriptorInBlock();
 		std::shared_ptr<TypeDescriptor> type = mTypeDescriptorFactory->Create(TypeDescriptor::Id::Module);
 		//type = type_create(SYMBOL_DATA_TYPE_MODULE, type, NULL);
-		type->SetTypeDescriptor(referenceType);
+		//type->SetTypeDescriptor(referenceType);
+		type->SetParent(refernceSymbol);
 
 		//, referenceType);
 		//type->name = name;
@@ -1028,18 +1031,18 @@ TODO:
 			/* シンボルリストの末端からhashに登録 */
 			if (action_symbol)
 			{
-				ExtendModule(action_symbol);
-#if 0
+				//ExtendModule(action_symbol);
+
 				std::shared_ptr<Symbol> last_symbol = action_symbol;
 				while (last_symbol->GetNext())
 				{
 					last_symbol = last_symbol->GetNext();
 				}
-				last_symbol->SetNext(mBlockTable.top().mHead);
+				last_symbol->SetNext(mBlockTable.top()->mHead.mSymbolEntry);
 
 				/* symbol_close_blockでsymbol_hash_chain_tableを開放する為 */
-				mBlockTable.top().mHead = action_symbol;
-#endif
+				mBlockTable.top()->mHead.mSymbolEntry = action_symbol;
+
 				symbol_open_actor_register_member(action_symbol);
 			}
 		}
@@ -1151,22 +1154,22 @@ TODO:
 		{
 			switch (symbol->GetClassTypeId())
 			{
-			case Symbol::ClassTypeId::VARIABLE_STATIC:
+			case Symbol::ClassTypeId::StaticVariable:
 				symbol->SetAddress(symbol_align_size(mStaticMemoryAddress, type->GetAlignmentMemorySize()));
 				mStaticMemoryAddress = symbol->GetAddress() + type->GetMemorySize();
 				break;
 
-			case Symbol::ClassTypeId::VARIABLE_GLOBAL:
+			case Symbol::ClassTypeId::GlobalVariable:
 				symbol->SetAddress(symbol_align_size(mGlobalMemoryAddress, type->GetAlignmentMemorySize()));
 				mGlobalMemoryAddress = symbol->GetAddress() + type->GetMemorySize();
 				break;
 
-			case Symbol::ClassTypeId::VARIABLE_ACTOR:
+			case Symbol::ClassTypeId::ActorVariable:
 				symbol->SetAddress(symbol_align_size(mActorMemoryAddress, type->GetAlignmentMemorySize()));
 				mActorMemoryAddress = symbol->GetAddress() + type->GetMemorySize();
 				break;
 
-			case Symbol::ClassTypeId::VARIABLE_LOCAL:
+			case Symbol::ClassTypeId::LocalVariable:
 				// ローカル変数は後ろから確保される為、他の変数と計算が反対になるので注意
 				symbol->SetAddress(symbol_align_size(mLocalMemoryAddress, type->GetAlignmentMemorySize()) + type->GetMemorySize());
 				mLocalMemoryAddress = symbol->GetAddress();
@@ -1218,7 +1221,7 @@ TODO:
 
 			MANA_ASSERT(symbol->GetTypeDescriptor());
 
-			if (symbol->GetClassTypeId() == Symbol::ClassTypeId::TYPEDEF)
+			if (symbol->GetClassTypeId() == Symbol::ClassTypeId::Type)
 			{
 				switch (symbol->GetTypeDescriptor()->GetId())
 				{
@@ -1354,16 +1357,16 @@ TODO:
 			switch (symbol->GetTypeDescriptor()->GetId())
 			{
 			case TypeDescriptor::Id::Actor:
-				if (symbol->GetClassTypeId() == Symbol::ClassTypeId::TYPEDEF && symbol->GetTypeDescriptor()->GetId() == TypeDescriptor::Id::Actor)
+				if (symbol->GetClassTypeId() == Symbol::ClassTypeId::Type && symbol->GetTypeDescriptor()->GetId() == TypeDescriptor::Id::Actor)
 				{
-					if (!GenerateActorEntity(stream, symbol, symbol->GetTypeDescriptor(), 1))
+					if (!GenerateActorEntity(stream, symbol, symbol->GetTypeDescriptor()))
 						return false;
 				}
 				break;
 
 			case TypeDescriptor::Id::Array:
 			{
-				size_t arraySize = symbol->GetTypeDescriptor()->GetArraySize();
+				//size_t arraySize = symbol->GetTypeDescriptor()->GetArraySize();
 				for (
 					std::shared_ptr<TypeDescriptor> nested_type = symbol->GetTypeDescriptor()->GetComponent();
 					nested_type != nullptr;
@@ -1372,13 +1375,13 @@ TODO:
 					switch (nested_type->GetId())
 					{
 					case TypeDescriptor::Id::Actor:
-						if (symbol->GetClassTypeId() == Symbol::ClassTypeId::TYPEDEF && nested_type->GetId() == TypeDescriptor::Id::Actor)
-							if (!GenerateActorEntity(stream, symbol, nested_type, arraySize))
+						if (symbol->GetClassTypeId() == Symbol::ClassTypeId::Type && nested_type->GetId() == TypeDescriptor::Id::Actor)
+							if (!GenerateActorEntity(stream, symbol, nested_type/*, arraySize*/))
 								return false;
 						goto ESCAPE;
 
 					case TypeDescriptor::Id::Array:
-						arraySize *= nested_type->GetArraySize();
+						//arraySize *= nested_type->GetArraySize();
 						break;
 
 					default:
@@ -1394,7 +1397,7 @@ TODO:
 			});
 	}
 
-	bool SymbolFactory::GenerateActorEntity(OutputStream& stream, const std::shared_ptr<const Symbol>& symbol, const std::shared_ptr<const TypeDescriptor>& type, const int32_t arraySize) const
+	bool SymbolFactory::GenerateActorEntity(OutputStream& stream, const std::shared_ptr<const Symbol>& symbol, const std::shared_ptr<const TypeDescriptor>& type) const
 	{
 		ActorInfoHeader actorInfoHeader;
 
@@ -1426,7 +1429,7 @@ TODO:
 
 		for (std::shared_ptr<Symbol> component_symbol = type->GetSymbolEntry(); component_symbol; component_symbol = component_symbol->GetNext())
 		{
-			if (component_symbol->GetClassTypeId() == Symbol::ClassTypeId::MEMBER_FUNCTION)
+			if (component_symbol->GetClassTypeId() == Symbol::ClassTypeId::MemberFunction)
 			{
 				ActionInfoHeader actionInfoHeader;
 

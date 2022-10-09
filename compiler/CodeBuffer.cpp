@@ -81,7 +81,7 @@ namespace mana
 
 	address_t CodeBuffer::GetSize() const
 	{
-		return mCommand.size();
+		return static_cast<address_t>(mCommand.size());
 	}
 
 	void CodeBuffer::Write(OutputStream& stream) const
@@ -94,7 +94,7 @@ namespace mana
 
 	address_t CodeBuffer::AddCommand(const uint8_t code, const address_t nextCommand)
 	{
-		const auto pc = mCommand.size();
+		const address_t pc = static_cast<address_t>(mCommand.size());
 		mCommand.push_back(Command(code, nextCommand));
 		return pc;
 	}

@@ -38,7 +38,7 @@ namespace mana
 		if (entity != InvalidAddress)
 			return entity;
 
-		const address_t length = text.size() + 1;
+		const address_t length = ToAddress(text.size() + 1);
 		const address_t newAllocateSize = mUsedSize + length;
 		if (newAllocateSize >= mAllocatedSize)
 		{
