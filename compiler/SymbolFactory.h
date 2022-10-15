@@ -237,7 +237,7 @@ namespace mana
 			BlockEntry mHead;
 			int32_t mAllocp;
 
-			BlockTable(const int32_t allocp)
+			explicit BlockTable(const int32_t allocp)
 				: mAllocp(allocp)
 			{}
 		};
@@ -256,7 +256,7 @@ namespace mana
 		int32_t mLocalMemoryAddress = 0;
 		int32_t mMaxLocalMemoryAddress = 0;
 
-		int32_t mFrameSizeList;
+		int32_t mFrameSizeList = 0;
 		address_t mReturnAddressList = InvalidAddress;
 	};
 }

@@ -110,7 +110,7 @@ namespace mana
 	inline void Stack::SetSize(const address_t size)
 	{
 		mUsedSize = size;
-		MANA_ASSERT(mUsedSize < mAllocatedSize);
+		MANA_ASSERT(mUsedSize <= mAllocatedSize);
 	}
 
 	inline bool Stack::operator==(const Stack& other) const
