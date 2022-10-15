@@ -24,11 +24,11 @@ namespace mana
 {
 	ParsingDriver::ParsingDriver()
 		: mParser(std::make_unique<Parser>(this))
+		, mCodeBuffer(std::make_shared<CodeBuffer>())
+		, mDataBuffer(std::make_shared<DataBuffer>())
+		, mStringPool(std::make_shared<StringPool>())
+		, mTypeDescriptorFactory(std::make_shared<TypeDescriptorFactory>())
 	{
-		mCodeBuffer = std::make_shared<CodeBuffer>();
-		mDataBuffer = std::make_shared<DataBuffer>();
-		mStringPool = std::make_shared<StringPool>();
-		mTypeDescriptorFactory = std::make_shared<TypeDescriptorFactory>();
 		mSymbolFactory = std::make_shared<SymbolFactory>(mCodeBuffer, mDataBuffer, mStringPool, mTypeDescriptorFactory);
 		mLocalSemanticAnalyzer = std::make_shared<LocalSemanticAnalyzer>(mSymbolFactory, mTypeDescriptorFactory);
 		mGlobalSemanticAnalyzer = std::make_shared<GlobalSemanticAnalyzer>(mSymbolFactory, mTypeDescriptorFactory);

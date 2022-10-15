@@ -13,8 +13,8 @@ mana (library)
 namespace mana
 {
 	inline Actor::Actor(const std::shared_ptr<VM>& vm, const size_t variableSize)
+		: mVM(vm)
 	{
-		mVM = vm;
 		MANA_ASSERT(vm.get() != nullptr);
 		mVariable.Allocate(variableSize);
 	}
@@ -125,15 +125,24 @@ namespace mana
 		using IntermediateLanguageFunction = void(*)(const std::shared_ptr<VM>& vm, Actor& self);
 		struct IntermediateLanguageCommand final
 		{
+			explicit IntermediateLanguageCommand(IntermediateLanguageFunction command)
+				: mCommand(command)
+			{
+			}
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
+			IntermediateLanguageCommand(IntermediateLanguage code, IntermediateLanguageFunction command)
+				: mCode(code)
+				, mCommand(command)
+			{
+			}
 			IntermediateLanguage mCode;
 #endif
 			IntermediateLanguageFunction mCommand;
 		};
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
-#define MANA_ACTOR_SET_COMMAND(code, command)	code, command
+#define MANA_ACTOR_SET_COMMAND(code, command)	IntermediateLanguageCommand(code, command)
 #else
-#define MANA_ACTOR_SET_COMMAND(code, command)	command
+#define MANA_ACTOR_SET_COMMAND(code, command)	IntermediateLanguageCommand(command)
 #endif
 		static const std::array<IntermediateLanguageCommand, IntermediateLanguageSize> mIntermediateLanguage = {
 			// thread
@@ -475,7 +484,7 @@ namespace mana
 
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
 		const uint8_t lastInterruptLevel = mInterruptLevel;
-		const std::string& lastActionName = currentInterrupt.mActionName;
+		const std::string lastActionName = currentInterrupt.mActionName;
 #endif
 
 		// SyncCall中か取得
@@ -572,7 +581,7 @@ namespace mana
 
 		// 実行可能なアクションが無いので、アクターは停止する
 		Restart();
-		MANA_TRACE("mana:rollback: %s level %d %s stoped\n", GetName().data(), lastInterruptLevel, lastActionName);
+		MANA_TRACE("mana:rollback: %s level %d %s stoped\n", GetName().data(), lastInterruptLevel, lastActionName.c_str());
 	}
 
 	inline void Actor::Restart()
@@ -1048,14 +1057,14 @@ namespace mana
 
 	inline void Actor::CommandLoadStaticAddress(const std::shared_ptr<VM>& vm, Actor& self)
 	{
-		const uint32_t offset = vm->GetUint32FromMemory(self.mPc + 1);
+		//const uint32_t offset = vm->GetUint32FromMemory(self.mPc + 1);
 		//MANA_ASSERT(offset < mana_static_memory_size);
 		//mana_stack_push_pointer(&actor->mStack, &mana_static_memory[offset]);
 	}
 
 	inline void Actor::CommandLoadGlobalAddress(const std::shared_ptr<VM>& vm, Actor& self)
 	{
-		const uint32_t offset = vm->GetUint32FromMemory(self.mPc + 1);
+		//const uint32_t offset = vm->GetUint32FromMemory(self.mPc + 1);
 		//MANA_ASSERT(offset < actor->mVM->file_header->size_of_global_memory);
 		//mana_stack_push_pointer(&actor->mStack, &actor->mVM->global_memory[offset]);
 	}
@@ -1647,7 +1656,7 @@ namespace mana
 
 	inline void Actor::CommandRequestWaitStarting(const std::shared_ptr<VM>& vm, Actor& self)
 	{
-		Actor* target_actor = (Actor*)self.mStack.Get<void*>(0);
+		Actor* target_actor = static_cast<Actor*>(self.mStack.Get<void*>(0));
 		int_t level = self.mStack.Get<int_t>(1);
 		const char* action = vm->GetStringFromMemory(self.mPc + 1);
 
@@ -1681,7 +1690,7 @@ namespace mana
 
 	inline void Actor::CommandRequestWaitEnding(const std::shared_ptr<VM>& vm, Actor& self)
 	{
-		Actor* target_actor = (Actor*)self.mStack.Get<void*>(0);
+		Actor* target_actor = static_cast<Actor*>(self.mStack.Get<void*>(0));
 		int_t level = self.mStack.Get<int_t>(1);
 		const char* action = vm->GetStringFromMemory(self.mPc + 1);
 
@@ -1798,7 +1807,7 @@ namespace mana
 
 	inline void Actor::CommandJoin(const std::shared_ptr<VM>&, Actor& self)
 	{
-		Actor* target_actor = (Actor*)self.mStack.Get<void*>(0);
+		Actor* target_actor = static_cast<Actor*>(self.mStack.Get<void*>(0));
 		if (target_actor == nullptr)
 		{
 			self.mStack.Remove(2);
@@ -1845,7 +1854,7 @@ namespace mana
 #if __STDC_WANT_SECURE_LIB__
 						message_pointer += sprintf_s(&message[message_pointer], sizeof(message) - message_pointer, "%ld", self.mStack.Get<int_t>(counter++));
 #else
-						message_pointer += sprintf(&message[message_pointer], "%lld", self.mStack.Get<int_t>(counter++));
+						message_pointer += sprintf(&message[message_pointer], "%d", self.mStack.Get<int_t>(counter++));
 #endif
 						break;
 

@@ -425,11 +425,13 @@ namespace mana
 		if (actorInfo == nullptr)
 			throw std::runtime_error("Phantom not found");
 
-		if (!(actorInfo->mFlag && (1 << ActorInfoHeader::Flag::Phantom)))
+		if ((actorInfo->mFlag & (1 << ActorInfoHeader::Flag::Phantom)) == 0)
 			throw std::runtime_error("It is not a phantom");
 
-		std::shared_ptr<Actor> newActor = std::shared_ptr<Actor>(new Actor(shared_from_this(), actorInfo->mVariableSize));
-		mActorHash[newName] = std::move(newActor);
+		std::shared_ptr<Actor> newActor = std::shared_ptr<Actor>(
+			new Actor(shared_from_this(), actorInfo->mVariableSize)
+		);
+		mActorHash[newName] = newActor;
 
 		{
 			const ActionInfoHeader* actionInfo = reinterpret_cast<const ActionInfoHeader*>(actorInfo + 1);

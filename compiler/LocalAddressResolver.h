@@ -30,7 +30,7 @@ namespace mana
 		};
 
 	public:
-		LocalAddressResolver(const std::shared_ptr<CodeBuffer>& codeBuffer);
+		explicit LocalAddressResolver(const std::shared_ptr<CodeBuffer>& codeBuffer);
 		~LocalAddressResolver();
 
 		//! ジャンプブロックの開始

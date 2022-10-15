@@ -202,11 +202,11 @@ namespace mana
 		{
 			symbol = CreateSymbolWithAddress(name, class_type, 0);
 			symbol->SetClassTypeId(class_type);
-			symbol->SetOverride(isModuleBlockOpened);
+			symbol->SetOverride(mModuleBlockOpened /* TODO:不要？  isModuleBlockOpened*/);
 		}
 		else if (symbol->IsOverride() == false || symbol->GetClassTypeId() != class_type)
 		{
-			CompileError("the function already declared");
+			CompileError("function '%s' already declared", symbol->GetName().data());
 		}
 		return symbol;
 	}
@@ -250,9 +250,11 @@ namespace mana
 
 	void SymbolFactory::Destroy(const std::string_view name)
 	{
-		std::shared_ptr<Symbol> symbol = Lookup(name);
-		if (symbol)
-			symbol->SetName(nullptr);
+		const auto i = std::remove_if(mSymbolEntries.begin(), mSymbolEntries.end(), [&name](const std::shared_ptr<Symbol>& symbol)
+		{
+			return name == symbol->GetName();
+		});
+		mSymbolEntries.erase(i, mSymbolEntries.end());
 	}
 
 	bool SymbolFactory::IsValid(std::shared_ptr<Symbol> symbol)
@@ -326,8 +328,19 @@ TODO:
 		if (mLocalMemoryAddress > mMaxLocalMemoryAddress)
 			mMaxLocalMemoryAddress = mLocalMemoryAddress;
 
+		const std::unique_ptr<BlockTable>& blockTable = mBlockTable.top();
+
 		// check and update hash table
-		const BlockEntry& blockEntry = mBlockTable.top()->mHead;
+		const BlockEntry& blockEntry = blockTable->mHead;
+
+		// check if undefined type
+		if (
+			blockEntry.mSymbolEntry &&
+			blockEntry.mSymbolEntry->GetClassTypeId() == Symbol::ClassTypeId::Type &&
+			blockEntry.mSymbolEntry->GetTypeDescriptor()->Is(TypeDescriptor::Id::Incomplete))
+		{
+			CompileError("incomplete type name '%s'", blockEntry.mSymbolEntry->GetName().data());
+		}
 
 		// deleting from hash chain
 		for (std::shared_ptr<Symbol> symbol = blockEntry.mSymbolEntry; symbol; symbol = symbol->GetNext())
@@ -335,11 +348,8 @@ TODO:
 			mHashChainTable.erase(symbol->GetName());
 		}
 
-		// check if undefined type
-		if (blockEntry.mSymbolEntry->GetClassTypeId() == Symbol::ClassTypeId::Type && (blockEntry.mSymbolEntry->GetTypeDescriptor())->Is(TypeDescriptor::Id::Incomplete))
-			CompileError("incomplete type name '%s'", blockEntry.mSymbolEntry->GetName().data());
+		mLocalMemoryAddress = blockTable->mAllocp;
 
-		mLocalMemoryAddress = mBlockTable.top()->mAllocp;
 		mBlockTable.pop();
 
 		return static_cast<int32_t>(GetBlockDepth());
@@ -355,7 +365,10 @@ TODO:
 		if (!mBlockTable.empty())
 		{
 			const BlockEntry& blockEntry = mBlockTable.top()->mHead;
-			function(blockEntry.mSymbolEntry);
+			if (blockEntry.mSymbolEntry)
+			{
+				function(blockEntry.mSymbolEntry);
+			}
 		}
 	}
 
@@ -1249,7 +1262,7 @@ TODO:
 
 	void SymbolFactory::CheckUndefine()
 	{
-		Each([this](const std::shared_ptr<Symbol>& symbol) {
+		Each([](const std::shared_ptr<Symbol>& symbol) {
 			if (symbol->GetBlockLevel() > 0)
 				return true;
 

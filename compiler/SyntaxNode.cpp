@@ -300,7 +300,13 @@ namespace mana
 					return CreateCast(typeDescriptorFactory->Get(TypeDescriptor::Id::Int), typeDescriptorFactory);
 				}
 				break;
+
+			default:
+				break;
 			}
+			break;
+
+		default:
 			break;
 		}
 

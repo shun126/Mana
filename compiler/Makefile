@@ -78,6 +78,9 @@ clean:
 depend:
 	makedepend -Y -- $(CFLAGS) -- $(SOURCES)
 
+cppcheck:
+	cppcheck -D __unix__ --enable=all $(SOURCES)
+
 test:
 	./$(TARGET) --debug ../sample/sample.mn
 	cd ../test/ && python3 test.py
