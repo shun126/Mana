@@ -76,7 +76,7 @@ namespace mana
 				*pointer++ = static_cast<IntermediateLanguage>(command.mCode);
 			}
 		}
-		return std::move(buffer);
+		return buffer;
 	}
 
 	address_t CodeBuffer::GetSize() const
