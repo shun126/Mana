@@ -14,8 +14,9 @@
 *.lib
 *.a
 
-# Visual Studio 2015 cache/options directory
+# Visual Studio cache/options directory
 .vs/
+.vscode/
 
 # Others
 *.bak

@@ -23,8 +23,8 @@ namespace mana
 			int32_t mAddress;
 
 			CallList(const int32_t address, const std::shared_ptr<Symbol>& symbol)
-				: mAddress(address)
-				, mSymbol(symbol)
+				: mSymbol(symbol)
+				, mAddress(address)
 			{}
 		};
 

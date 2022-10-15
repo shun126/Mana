@@ -28,6 +28,7 @@ namespace mana
 #else
 		MANA_PRINT("%s:%d: error: %s\n", lexer_get_current_filename().data(), lexer_get_current_lineno(), FormatText(format, argptr).c_str());
 #endif
+		va_end(argptr);
 		++yynerrs;
 	}
 
@@ -40,6 +41,7 @@ namespace mana
 #else
 		MANA_PRINT("%s%d: warning: %s\n", lexer_get_current_filename().data(), lexer_get_current_lineno(), FormatText(format, argptr).c_str());
 #endif
+		va_end(argptr);
 	}
 
 	void LinkerError(const char* format, ...)
@@ -47,6 +49,7 @@ namespace mana
 		va_list argptr;
 		va_start(argptr, format);
 		MANA_PRINT("%s: error: %s\n", GetTargetFilename(), FormatText(format, argptr).c_str());
+		va_end(argptr);
 	}
 
 	void LinkerWarning(const char* format, ...)
@@ -54,6 +57,7 @@ namespace mana
 		va_list argptr;
 		va_start(argptr, format);
 		MANA_PRINT("%s: warning: %s\n", GetTargetFilename(), FormatText(format, argptr).c_str());
+		va_end(argptr);
 	}
 
 	void Fatal(const FatalType type)
@@ -70,6 +74,7 @@ namespace mana
 		va_list argptr;
 		va_start(argptr, format);
 		MANA_PRINT("%s: fatal: %s\n", GetTargetFilename(), FormatText(format, argptr).c_str());
+		va_end(argptr);
 		++yynerrs;
 	}
 

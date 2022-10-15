@@ -18,12 +18,13 @@ namespace mana
 	//! Signed size integer type.
 	using ssize_t = intptr_t;
 #endif
-
+/*
 #if UINTPTR_MAX == UINT64_MAX
 #elif UINTPTR_MAX == UINT32_MAX
 #else
 #error "unsupport pointer size"
 #endif
+*/
 	using float_t = float;
 	using int_t = std::int32_t;
 

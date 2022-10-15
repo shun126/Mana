@@ -45,7 +45,7 @@ namespace mana
 	inline std::string FormatTextList(const char* format, va_list ap)
 	{
 		std::unique_ptr<char, decltype(&std::free)> message(nullptr, std::free);
-		static const size_t gainSize = 100;
+		static const size_t gainSize = 256;
 		size_t size = gainSize;
 		int n;
 
@@ -82,13 +82,14 @@ namespace mana
 
 	inline void Trace(const char* format, ...)
 	{
+		static const size_t gainSize = 256;
 		va_list argptr;
 		std::unique_ptr<char, decltype(&std::free)> message(nullptr, std::free);
 		size_t size = 0;
 		size_t length;
 
 		do {
-			size += 256;
+			size += gainSize;
 
 			void* newBuffer = std::realloc(message.get(), size);
 			if (newBuffer == nullptr)
@@ -99,7 +100,7 @@ namespace mana
 #if defined(MANA_TARGET_WINDOWS)
 			length = vsprintf_s(message.get(), size, format, argptr);
 #else
-			length = std::vsprintf(message, format, argptr);
+			length = std::vsprintf(message.get(), format, argptr);
 #endif
 			va_end(argptr);
 		} while (length <= 0 || length > size);
@@ -110,7 +111,7 @@ namespace mana
 	inline void Trace(const char* format, va_list ap)
 	{
 		std::unique_ptr<char, decltype(&std::free)> message(nullptr, std::free);
-		static const size_t gainSize = 100;
+		static const size_t gainSize = 256;
 		size_t size = gainSize;
 		int n;
 

@@ -92,6 +92,6 @@ namespace mana
 		std::shared_ptr<Symbol> actor_symbol_entry_pointer;
 		std::shared_ptr<Symbol> function_symbol_entry_pointer;
 		//mana_hash* event_hash;
-		bool static_block_opend;
+		//bool static_block_opend;
 	};
 }
