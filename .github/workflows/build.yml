@@ -12,8 +12,9 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v3
       - run: echo "The ${{ github.repository }} repository has been cloned to the runner."
-      - name: Build Mana compiler
+      - name: Generate Mana version infomation
         run: make --directory=${{ github.workspace }}/compiler version
+      - name: Build Mana compiler
         run: make --directory=${{ github.workspace }}/compiler
       - name: Test Mana compiler
         run: make --directory=${{ github.workspace }}/compiler test
@@ -41,6 +42,8 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v2
       - run: echo "The ${{ github.repository }} repository has been cloned to the runner."
+      - name: Generate Mana version infomation
+        run: ${{env.PYTHON_BIN}} Version.py
       - name: Build Mana 32bit compiler
         run: msbuild mana.sln /t:build /p:Configuration=Release /p:Platform=Win32
       - name: Build Mana 64bit compiler
