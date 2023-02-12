@@ -44,7 +44,6 @@ SOURCES	= \
 	TypeDescriptor.cpp \
 	TypeDescriptorFactory.cpp
 
-#DatalinkGenerator.cpp \
 #Lexer.cpp \
 #Parser.cpp \
 #Register.cpp \
@@ -146,21 +145,22 @@ GlobalSemanticAnalyzer.o: ../runner/common/Noncopyable.h
 GlobalSemanticAnalyzer.o: ../runner/common/OutputStream.h
 GlobalSemanticAnalyzer.o: ../runner/common/OutputStream.inl
 GlobalSemanticAnalyzer.o: ../runner/common/Stopwatch.h Symbol.h
-GlobalSemanticAnalyzer.o: TypeDescriptor.h SymbolFactory.h StringPool.h
-GlobalSemanticAnalyzer.o: ../runner/common/Platform.h
+GlobalSemanticAnalyzer.o: TypeDescriptor.h ../runner/common/Platform.h
+GlobalSemanticAnalyzer.o: SymbolFactory.h StringPool.h
 GlobalSemanticAnalyzer.o: ../runner/common/Noncopyable.h
 GlobalSemanticAnalyzer.o: TypeDescriptorFactory.h SyntaxNode.h ErrorHandler.h
-IntermediateLanguage.o: IntermediateLanguage.h ../runner/common/Memory.h
-IntermediateLanguage.o: ../runner/common/Setup.h ../runner/common/Platform.h
-IntermediateLanguage.o: ../runner/common/Type.h ../runner/common/Assert.h
+IntermediateLanguage.o: IntermediateLanguage.h ../runner/common/Platform.h
+IntermediateLanguage.o: ../runner/common/Type.h ../runner/common/Memory.h
+IntermediateLanguage.o: CodeBuffer.h ../runner/common/FileFormat.h
+IntermediateLanguage.o: ../runner/common/Platform.h ../runner/common/Memory.h
+IntermediateLanguage.o: ../runner/common/Noncopyable.h
+IntermediateLanguage.o: ../runner/common/Setup.h ../runner/common/Assert.h
 IntermediateLanguage.o: ../runner/common/String.h
-IntermediateLanguage.o: ../runner/common/FileFormat.h
-IntermediateLanguage.o: ../runner/common/Memory.h ../runner/common/Math.h
+IntermediateLanguage.o: ../runner/common/FileFormat.h ../runner/common/Math.h
 IntermediateLanguage.o: ../runner/common/Noncopyable.h
 IntermediateLanguage.o: ../runner/common/OutputStream.h
 IntermediateLanguage.o: ../runner/common/OutputStream.inl
 IntermediateLanguage.o: ../runner/common/Stopwatch.h
-IntermediateLanguage.o: ../runner/common/FileFormat.h
 LocalAddressResolver.o: LocalAddressResolver.h ../runner/common/Setup.h
 LocalAddressResolver.o: ../runner/common/Platform.h ../runner/common/Type.h
 LocalAddressResolver.o: ../runner/common/Assert.h ../runner/common/String.h
@@ -188,8 +188,8 @@ LocalSemanticAnalyzer.o: ../runner/common/Noncopyable.h
 LocalSemanticAnalyzer.o: ../runner/common/OutputStream.h
 LocalSemanticAnalyzer.o: ../runner/common/OutputStream.inl
 LocalSemanticAnalyzer.o: ../runner/common/Stopwatch.h Symbol.h
-LocalSemanticAnalyzer.o: TypeDescriptor.h SymbolFactory.h StringPool.h
-LocalSemanticAnalyzer.o: ../runner/common/Platform.h
+LocalSemanticAnalyzer.o: TypeDescriptor.h ../runner/common/Platform.h
+LocalSemanticAnalyzer.o: SymbolFactory.h StringPool.h
 LocalSemanticAnalyzer.o: ../runner/common/Noncopyable.h
 LocalSemanticAnalyzer.o: TypeDescriptorFactory.h SyntaxNode.h ErrorHandler.h
 Main.o: Main.h CodeGenerator.h ../runner/common/Setup.h
@@ -206,8 +206,10 @@ Main.o: StringPool.h TypeDescriptorFactory.h SyntaxNode.h
 Main.o: LocalAddressResolver.h LocalSemanticAnalyzer.h ErrorHandler.h Lexer.h
 Main.o: Path.h ParsingDriver.h Parser.hpp Version.h ../runner/Mana.h
 Main.o: ../runner/common/Setup.h ../runner/Actor.h ../runner/Buffer.h
-Main.o: ../runner/Buffer.inl ../runner/Stack.h ../runner/Actor.inl
-Main.o: ../runner/VM.h ../runner/Datalink.h ../runner/VM.inl
+Main.o: ../runner/common/Platform.h ../runner/Buffer.inl ../runner/Stack.h
+Main.o: ../runner/common/Assert.h ../runner/common/Noncopyable.h
+Main.o: ../runner/common/OutputStream.h ../runner/Stack.inl
+Main.o: ../runner/Actor.inl ../runner/VM.h ../runner/VM.inl
 Main.o: ../runner/Plugin.h ../runner/Plugin.inl ../runner/common/FileFormat.h
 Main.o: ../runner/Function.h
 ParsingDriver.o: ../runner/common/Setup.h ../runner/common/Platform.h
@@ -219,7 +221,7 @@ ParsingDriver.o: ../runner/common/OutputStream.h
 ParsingDriver.o: ../runner/common/OutputStream.inl
 ParsingDriver.o: ../runner/common/Stopwatch.h ParsingDriver.h
 ParsingDriver.o: ../runner/common/Noncopyable.h Parser.hpp SyntaxNode.h
-ParsingDriver.o: TypeDescriptor.h CodeBuffer.h ../runner/common/Platform.h
+ParsingDriver.o: TypeDescriptor.h ../runner/common/Platform.h CodeBuffer.h
 ParsingDriver.o: ../runner/common/FileFormat.h CodeGenerator.h DataBuffer.h
 ParsingDriver.o: GlobalAddressResolver.h GlobalSemanticAnalyzer.h
 ParsingDriver.o: SemanticAnalyzer.h Symbol.h SymbolFactory.h StringPool.h
@@ -238,8 +240,10 @@ Runner.o: ../runner/common/FileFormat.h ../runner/common/Memory.h
 Runner.o: ../runner/common/Math.h ../runner/common/Noncopyable.h
 Runner.o: ../runner/common/OutputStream.h ../runner/common/OutputStream.inl
 Runner.o: ../runner/common/Stopwatch.h ../runner/Actor.h ../runner/Buffer.h
-Runner.o: ../runner/Buffer.inl ../runner/Stack.h ../runner/Actor.inl
-Runner.o: ../runner/VM.h ../runner/Datalink.h ../runner/VM.inl
+Runner.o: ../runner/common/Platform.h ../runner/Buffer.inl ../runner/Stack.h
+Runner.o: ../runner/common/Assert.h ../runner/common/Noncopyable.h
+Runner.o: ../runner/common/OutputStream.h ../runner/Stack.inl
+Runner.o: ../runner/Actor.inl ../runner/VM.h ../runner/VM.inl
 Runner.o: ../runner/Plugin.h ../runner/Plugin.inl
 Runner.o: ../runner/common/FileFormat.h ../runner/Function.h
 SemanticAnalyzer.o: SemanticAnalyzer.h ../runner/common/Setup.h
@@ -250,7 +254,7 @@ SemanticAnalyzer.o: ../runner/common/Math.h ../runner/common/Noncopyable.h
 SemanticAnalyzer.o: ../runner/common/OutputStream.h
 SemanticAnalyzer.o: ../runner/common/OutputStream.inl
 SemanticAnalyzer.o: ../runner/common/Stopwatch.h Symbol.h TypeDescriptor.h
-SemanticAnalyzer.o: SymbolFactory.h StringPool.h ../runner/common/Platform.h
+SemanticAnalyzer.o: ../runner/common/Platform.h SymbolFactory.h StringPool.h
 SemanticAnalyzer.o: ../runner/common/Noncopyable.h TypeDescriptorFactory.h
 SemanticAnalyzer.o: SyntaxNode.h Lexer.h ErrorHandler.h
 StringPool.o: StringPool.h ../runner/common/Platform.h
@@ -261,7 +265,7 @@ Symbol.o: ../runner/common/String.h ../runner/common/FileFormat.h
 Symbol.o: ../runner/common/Memory.h ../runner/common/Math.h
 Symbol.o: ../runner/common/Noncopyable.h ../runner/common/OutputStream.h
 Symbol.o: ../runner/common/OutputStream.inl ../runner/common/Stopwatch.h
-Symbol.o: TypeDescriptor.h ErrorHandler.h
+Symbol.o: TypeDescriptor.h ../runner/common/Platform.h ErrorHandler.h
 SymbolFactory.o: SymbolFactory.h ../runner/common/Setup.h
 SymbolFactory.o: ../runner/common/Platform.h ../runner/common/Type.h
 SymbolFactory.o: ../runner/common/Assert.h ../runner/common/String.h
@@ -285,21 +289,17 @@ SyntaxNode.o: ../runner/common/Math.h ../runner/common/Noncopyable.h
 SyntaxNode.o: ../runner/common/OutputStream.h
 SyntaxNode.o: ../runner/common/OutputStream.inl ../runner/common/Stopwatch.h
 SyntaxNode.o: Lexer.h Main.h Symbol.h TypeDescriptor.h
-SyntaxNode.o: TypeDescriptorFactory.h
-TypeDescriptor.o: TypeDescriptor.h ../runner/common/Setup.h
-TypeDescriptor.o: ../runner/common/Platform.h ../runner/common/Type.h
+SyntaxNode.o: ../runner/common/Platform.h TypeDescriptorFactory.h
+SyntaxNode.o: ../runner/common/Noncopyable.h
+TypeDescriptor.o: TypeDescriptor.h ../runner/common/Platform.h
+TypeDescriptor.o: ../runner/common/Type.h ErrorHandler.h Symbol.h
+TypeDescriptor.o: ../runner/common/Setup.h ../runner/common/Platform.h
 TypeDescriptor.o: ../runner/common/Assert.h ../runner/common/String.h
 TypeDescriptor.o: ../runner/common/FileFormat.h ../runner/common/Memory.h
 TypeDescriptor.o: ../runner/common/Math.h ../runner/common/Noncopyable.h
 TypeDescriptor.o: ../runner/common/OutputStream.h
 TypeDescriptor.o: ../runner/common/OutputStream.inl
-TypeDescriptor.o: ../runner/common/Stopwatch.h ErrorHandler.h Symbol.h
-TypeDescriptorFactory.o: TypeDescriptorFactory.h ../runner/common/Setup.h
-TypeDescriptorFactory.o: ../runner/common/Platform.h ../runner/common/Type.h
-TypeDescriptorFactory.o: ../runner/common/Assert.h ../runner/common/String.h
-TypeDescriptorFactory.o: ../runner/common/FileFormat.h
-TypeDescriptorFactory.o: ../runner/common/Memory.h ../runner/common/Math.h
-TypeDescriptorFactory.o: ../runner/common/Noncopyable.h
-TypeDescriptorFactory.o: ../runner/common/OutputStream.h
-TypeDescriptorFactory.o: ../runner/common/OutputStream.inl
-TypeDescriptorFactory.o: ../runner/common/Stopwatch.h TypeDescriptor.h
+TypeDescriptor.o: ../runner/common/Stopwatch.h
+TypeDescriptorFactory.o: TypeDescriptorFactory.h ../runner/common/Platform.h
+TypeDescriptorFactory.o: ../runner/common/Type.h
+TypeDescriptorFactory.o: ../runner/common/Noncopyable.h TypeDescriptor.h

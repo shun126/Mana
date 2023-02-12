@@ -40,7 +40,7 @@ namespace mana
 			}
 			else
 			{
-				CompileError("incomplete type name '%s'", node->GetString().data());
+				CompileError({ "incomplete type name '", node->GetString(), "'" });
 				node->Set(GetTypeDescriptorFactory()->Create(TypeDescriptor::Id::Int));
 				return false;
 			}
@@ -62,7 +62,7 @@ namespace mana
 			}
 			else
 			{
-				CompileError("incomplete type name '%s'", node->GetString().data());
+				CompileError({ "incomplete type name '", node->GetString(), "'" });
 				node->Set(GetTypeDescriptorFactory()->Create(TypeDescriptor::Id::Int));
 			}
 		}
@@ -112,7 +112,7 @@ namespace mana
 			}
 			else
 			{
-				CompileError("identifier %s is not defined", node->GetString());
+				CompileError({ "identifier ", node->GetString(), " is not defined" });
 			}
 		}
 		else

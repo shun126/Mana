@@ -8,6 +8,7 @@ mana (compiler)
 #include "TypeDescriptor.h"
 #include "ErrorHandler.h"
 #include "Symbol.h"
+#include <iomanip>
 
 namespace mana
 {
@@ -268,9 +269,9 @@ namespace mana
 		switch (mTcons)
 		{
 		case Id::Reference:
-			output << '(';
+			output << "\\<";
 			mComponent->Dump(output);
-			output << ')';
+			output << "\\>";
 			break;
 
 		case Id::Array:
@@ -291,11 +292,11 @@ namespace mana
 		case Id::Struct:
 		case Id::Actor:
 		case Id::Module:
-			output << "{";
-			output << mMemorySize;
-			output << " bytes(";
-			output << mAlignmentMemorySize;
-			output << ")}";
+			output << " { ";
+			output << "0x" << std::setfill('0') << std::hex << std::setw(8) << mMemorySize;
+			output << " bytes ";
+			output << "aligment 0x" << std::setfill('0') << std::hex << std::setw(8) << mAlignmentMemorySize;
+			output << " }";
 			break;
 
 		default:

@@ -56,20 +56,21 @@ namespace mana
 		char fname[_MAX_FNAME];
 		char ext[_MAX_EXT];
 		splitpath(mInputFilename, drive, sizeof(drive), dir, sizeof(dir), fname, sizeof(fname), ext, sizeof(ext));
-		makepath(filename, sizeof(filename), drive, dir, fname, ".log");
+		makepath(filename, sizeof(filename), drive, dir, fname, ".md");
 
 		std::ofstream log(filename);
 		if (log.is_open())
 		{
 			{
-				log << "Symbol Table\n\n";
+				log << "# Symbol Table\n";
 				parser->GetSymbolFactory()->Dump(log);
 				log << "\n";
 			}
 			{
-				log << "Code\n";
+				log << "# Code\n";
+				log << "```\n";
 				parser->GetCodeGenerator()->Dump(log);
-				log << "\n";
+				log << "```\n";
 			}
 		}
 	}
@@ -90,7 +91,10 @@ namespace mana
 #if UINTPTR_MAX == UINT64_MAX
 		header.mFlag |= (1 << FileHeader::Flag::Is64bit);
 #endif
-		header.mNumberOfActors = parser->GetSymbolFactory()->GetNumberOfActors();
+		const size_t numberOfActors = parser->GetSymbolFactory()->GetNumberOfActors();
+		if (std::numeric_limits<uint32_t>::max() < numberOfActors)
+			throw std::overflow_error("Too many actors defined");
+		header.mNumberOfActors = static_cast<uint32_t>(numberOfActors);
 		header.mSizeOfConstantPool = parser->GetDataBuffer()->GetSize();
 		header.mSizeOfInstructionPool = parser->GetCodeBuffer()->GetSize();
 		header.mSizeOfStaticMemory = parser->GetSymbolFactory()->GetStaticMemoryAddress();
@@ -217,32 +221,33 @@ namespace mana
 
 	static void PrintTitle()
 	{
-		MANA_PRINT("mana %s.%s (%04d-%02d-%02d)\n",
+		printf("mana %s.%s (%04d-%02d-%02d)\n",
 			mana::build::MajorVersion, mana::build::MinorVersion,
 			mana::build::Year, mana::build::Month, mana::build::Day);
 	}
 
 	static void PrintCopyright()
 	{
-		MANA_PRINT("mana - Copyright (C) 2002-%04d Shun Moriya\n", mana::build::Year);
+		printf("mana - Copyright (C) 2002-%04d Shun Moriya\n", mana::build::Year);
 	}
 
 	static void PrintUsage()
 	{
-		MANA_PRINT("usage:mana [switch] infile\n");
-		MANA_PRINT("            -o filename     specify output file name\n");
-		MANA_PRINT("            -i dirname      specify program header directory name\n");
-		MANA_PRINT("            --help          print this message\n");
-		MANA_PRINT("            --copyright     print copyright holder\n");
-		MANA_PRINT("            --version       print the version\n");
-		MANA_PRINT("\nReport bugs to https://github.com/shun126/Mana/issues\n");
+		std::cout << "usage:mana [switch] infile" << std::endl;
+		std::cout << "            -o filename     specify output file name" << std::endl;
+		std::cout << "            -i dirname      specify program header directory name" << std::endl;
+		std::cout << "            --help          print this message" << std::endl;
+		std::cout << "            --copyright     print copyright holder" << std::endl;
+		std::cout << "            --version       print the version" << std::endl;
+		std::cout << std::endl;
+		std::cout << "Report bugs to https://github.com/shun126/Mana/issues" << std::endl;
 	}
 
 	static bool ParseArguments(int argc, char* argv[])
 	{
 		if (argc < 2)
 		{
-			MANA_PRINT("No input files\n");
+			std::cerr << "No input files" << std::endl;
 			return false;
 		}
 		else
@@ -267,7 +272,7 @@ namespace mana
 						cmdcnt++;
 						if (cmdcnt >= argc)
 						{
-							MANA_PRINT("no output file name\n");
+							std::cerr << "no output file name" << std::endl;
 							return false;
 						}
 						else
@@ -328,7 +333,7 @@ namespace mana
 						}
 
 					default:
-						MANA_PRINT("unrecognized option\n");
+						std::cerr << "unrecognized option" << std::endl;
 						return false;
 					}
 				}
@@ -338,7 +343,7 @@ namespace mana
 				}
 				else
 				{
-					MANA_PRINT("unrecognized option\n");
+					std::cerr << "unrecognized option" << std::endl;
 					return false;
 				}
 			}
@@ -366,7 +371,7 @@ namespace mana
 					mVariableHeaderFile.open(globalTypeHeaderDirectoryName, std::ios::out);
 					if (!mVariableHeaderFile.is_open())
 					{
-						MANA_PRINT("'%s' open failed.\n", globalTypeHeaderDirectoryName.c_str());
+						std::cerr << "'" << globalTypeHeaderDirectoryName << "' open failed." << std::endl;
 						return false;
 					}
 				}

@@ -113,7 +113,7 @@ namespace mana
 		auto i = mFunctionHash.find(functionName);
 		if (i == mFunctionHash.end())
 		{
-			MANA_ERROR("An external function called %s was not found.\n", functionName.c_str());
+			MANA_ERROR({ "An external function called ", functionName, " was not found.\n" });
 		}
 		return i->second;
 	}
@@ -124,14 +124,6 @@ namespace mana
 
 		mProgram = program;
 
-		if (reinterpret_cast<intptr_t>(program.get()) % Datalink::StandardAlignmentSize)
-		{
-			const std::string message = FormatText(
-				"The program address is NOT aligned on %lld-byte boundaries.",
-				Datalink::StandardAlignmentSize
-			);
-			throw std::invalid_argument(message);
-		}
 		mFileHeader = reinterpret_cast<const FileHeader*>(mProgram.get());;
 		if (std::memcmp(SIGNATURE, mFileHeader->mHeader, sizeof(mFileHeader->mHeader)) != 0)
 		{
@@ -175,7 +167,7 @@ namespace mana
 			uint32_t program_counter = 0;
 			while (program_counter < mFileHeader->mSizeOfInstructionPool)
 			{
-				if (mInstructionPool[program_counter] == MANA_IL_CALL)
+				if (mInstructionPool[program_counter] == CALL)
 				{
 					const char* name = GetString(self, &self->mInstructionPool[program_counter + 1]);
 					mana_external_funtion_type* function = mana_hash_get(&mana_external_function_hash, name);
@@ -194,14 +186,6 @@ namespace mana
 			counter++;
 			mFileHeader->mFlag &= 0x03;
 			mFileHeader->mFlag |= (counter << 2);
-		}
-
-		if (mFileHeader->mFlag & FileHeader::FLAG_RESOURCE)
-		{
-			uint8_t* p = mInstructionPool + mFileHeader->mSiizeOfInstructionPool;
-			p = (uint8_t*)(((intptr_t)p + (Datalink::StandardAlignmentSize - 1))
-				/ Datalink::StandardAlignmentSize * Datalink::StandardAlignmentSize);
-			mDatalink.Load((void*)p);
 		}
 #endif
 
@@ -275,9 +259,6 @@ namespace mana
 		// ・ｽﾏ撰ｿｽ・ｽﾌ茨ｿｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽﾜゑｿｽ
 		mGlobalVariables.Reset();
 		mStaticVariables.Reset();
-
-		// ・ｽf・ｽ[・ｽ^・ｽﾌ開・ｽ・ｽ
-		mDatalink.Unload();
 
 		// ・ｽv・ｽ・ｽ・ｽO・ｽ・ｽ・ｽ・ｽ・ｽﾌ開・ｽ・ｽ
 		mProgram.reset();
@@ -445,13 +426,6 @@ namespace mana
 		return newActor;
 	}
 
-	inline void VM::GetResource(const size_t resouce_id, const void** buffer, size_t* size) const
-	{
-		MANA_ASSERT(resouce_id >= 0 && resouce_id < mDatalink.GetNumberOfDatas());
-		*buffer = mDatalink.GetData(resouce_id);
-		*size = mDatalink.GetDataSize(resouce_id);
-	}
-
 	inline uint16_t VM::GetUint16FromMemory(const uint32_t address) const
 	{
 		uint8_t* pointer;
@@ -609,5 +583,25 @@ namespace mana
 	inline int32_t VM::GetInt32FromMemory(const uint32_t address) const
 	{
 		return static_cast<int32_t>(GetUint32FromMemory(address));
+	}
+
+	inline Buffer& VM::GetGlobalVariables() noexcept
+	{
+		return mGlobalVariables;
+	}
+
+	inline const Buffer& VM::GetGlobalVariables() const noexcept
+	{
+		return mGlobalVariables;
+	}
+
+	inline Buffer& VM::GetStaticVariables() noexcept
+	{
+		return mStaticVariables;
+	}
+
+	inline const Buffer& VM::GetStaticVariables() const noexcept
+	{
+		return mStaticVariables;
 	}
 }

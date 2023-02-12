@@ -108,12 +108,17 @@ namespace mana
 		mUsedSize = size;
 	}
 
-#if 0
-	//inline bool mana_frame_compare(const mana_frame* other);	
+	inline bool Buffer::operator==(const Buffer& other) const noexcept
 	{
-		if (self->mUsedSize != other->mUsedSize)
-			return 1;
-		return memcmp(self->mBuffer, other->mBuffer, self->mUsedSize);
+		return 
+			(mUsedSize == other.mUsedSize) &&
+			(std::memcmp(mBuffer.get(), other.mBuffer.get(), mUsedSize) == 0);
 	}
-#endif	
+
+	inline bool Buffer::operator!=(const Buffer& other) const noexcept
+	{
+		return
+			(mUsedSize != other.mUsedSize) ||
+			(std::memcmp(mBuffer.get(), other.mBuffer.get(), mUsedSize) != 0);
+	}
 }

@@ -42,9 +42,8 @@ namespace mana
 	
 		void SetSize(const address_t size);
 
-#if 0
-		//bool mana_frame_compare(const mana_frame* other);	
-#endif	
+		bool operator==(const Buffer& other) const noexcept;
+		bool operator!=(const Buffer& other) const noexcept;
 
 	private:
 		std::unique_ptr<void, decltype(&std::free)> mBuffer;

@@ -36,13 +36,9 @@ namespace mana
 		if (mana::fullpath(path, filename.data(), _MAX_PATH) == NULL)
 		{
 			if (mCurrentPath.empty())
-			{
-				mana::CompileError("unable to open \"%s\"", path);
-			}
+				mana::CompileError({ "unable to open \"", path, "\"" });
 			else
-			{
-				MANA_PRINT("unable to open \"%s\"\n", path);
-			}
+				mana::Trace({ "unable to open \"", path, "\"\n"});
 			return false;
 		}
 
@@ -72,13 +68,14 @@ namespace mana
 		if ((yyin = fopen(path, "rt")) == NULL)
 #endif
 		{
+			const std::string message = Concat({ "unable to open \"", pathPtr, "\"\n" });
 			if (mCurrentPath.empty())
 			{
-				mana::CompileError("unable to open \"%s\"", pathPtr.data());
+				mana::CompileError(message);
 			}
 			else
 			{
-				MANA_PRINT("unable to open \"%s\"\n", pathPtr.data());
+				MANA_PRINT(message.c_str());
 			}
 			return false;
 		}

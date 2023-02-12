@@ -18,10 +18,6 @@ namespace mana
 	{
 	}
 
-	LocalSemanticAnalyzer::~LocalSemanticAnalyzer()
-	{
-	}
-
 	bool LocalSemanticAnalyzer::GetNodeType(TypeDescriptor::Id* t1, TypeDescriptor::Id* t2, const std::shared_ptr<const SyntaxNode>& node)
 	{
 		MANA_ASSERT(node);
@@ -85,12 +81,6 @@ DO_RECURSIVE:
 		{
 			///////////////////////////////////////////////////////////////////////
 			// 定数定義に関するノード
-		case SyntaxNode::Id::Alias:
-			MANA_ASSERT(node->GetLeftNode() == nullptr);
-			MANA_ASSERT(node->GetRightNode() == nullptr);
-			MANA_ASSERT(node->GetBodyNode() == nullptr);
-			break;
-
 		case SyntaxNode::Id::DefineConstant:
 			// TODO:将来的には対応して下さい
 			MANA_ASSERT(node->GetLeftNode() == nullptr);
@@ -226,7 +216,10 @@ DO_RECURSIVE:
 			PostResolverResolve(node->GetLeftNode());
 			PostResolverResolve(node->GetRightNode());
 			const int32_t out_depth = GetSymbolFactory()->CloseBlock();
-			MANA_VERIFY_MESSAGE(in_depth == out_depth, "ブロックの深さが一致しません in:%d out:%d", in_depth, out_depth);
+			MANA_VERIFY_MESSAGE(
+				in_depth == out_depth,
+				Concat({ "ブロックの深さが一致しません in:", std::to_string(in_depth), " out:", std::to_string(out_depth) })
+			);
 		}
 		MANA_ASSERT(node->GetBodyNode() == nullptr);
 		break;
@@ -422,7 +415,7 @@ DO_RECURSIVE:
 					if (t1 < TypeDescriptor::Id::Char || t1 > TypeDescriptor::Id::Int || t2 < TypeDescriptor::Id::Char || t2 > TypeDescriptor::Id::Int)
 						CompileError("imcompatible GetTypeDescriptor() operation in expression");
 					// TODO
-					//node->Set( = MANA_IL_LAND;
+					//node->Set( = IntermediateLanguage::LAND;
 				}
 			}
 			break;
@@ -437,7 +430,7 @@ DO_RECURSIVE:
 				{
 					if (t1 < TypeDescriptor::Id::Char || t1 > TypeDescriptor::Id::Int || t2 < TypeDescriptor::Id::Char || t2 > TypeDescriptor::Id::Int)
 						CompileError("imcompatible GetTypeDescriptor() operation in expression");
-					node->Set(MANA_IL_LOR);
+					node->Set(IntermediateLanguage::LOR);
 				}
 			}
 			break;
@@ -458,13 +451,13 @@ DO_RECURSIVE:
 					case TypeDescriptor::Id::Short:
 					case TypeDescriptor::Id::Int:
 					case TypeDescriptor::Id::Actor:
-						node->Set(MANA_IL_COMPARE_EQ_INTEGER);
+						node->Set(IntermediateLanguage::COMPARE_EQ_INTEGER);
 						break;
 					case TypeDescriptor::Id::Float:
-						node->Set(MANA_IL_COMPARE_EQ_FLOAT);
+						node->Set(IntermediateLanguage::COMPARE_EQ_FLOAT);
 						break;
 					case TypeDescriptor::Id::Struct:
-						node->Set(MANA_IL_COMPARE_EQ_DATA);
+						node->Set(IntermediateLanguage::COMPARE_EQ_DATA);
 						break;
 					default:
 						MANA_BUG("illigal data GetTypeDescriptor()");
@@ -490,13 +483,13 @@ DO_RECURSIVE:
 					case TypeDescriptor::Id::Short:
 					case TypeDescriptor::Id::Int:
 					case TypeDescriptor::Id::Actor:
-						node->Set(MANA_IL_COMPARE_GE_INTEGER);
+						node->Set(IntermediateLanguage::COMPARE_GE_INTEGER);
 						break;
 					case TypeDescriptor::Id::Float:
-						node->Set(MANA_IL_COMPARE_GE_FLOAT);
+						node->Set(IntermediateLanguage::COMPARE_GE_FLOAT);
 						break;
 					case TypeDescriptor::Id::Struct:
-						node->Set(MANA_IL_COMPARE_GE_DATA);
+						node->Set(IntermediateLanguage::COMPARE_GE_DATA);
 						break;
 					default:
 						MANA_BUG("illigal data GetTypeDescriptor()");
@@ -522,13 +515,13 @@ DO_RECURSIVE:
 					case TypeDescriptor::Id::Short:
 					case TypeDescriptor::Id::Int:
 					case TypeDescriptor::Id::Actor:
-						node->Set(MANA_IL_COMPARE_GT_INTEGER);
+						node->Set(IntermediateLanguage::COMPARE_GT_INTEGER);
 						break;
 					case TypeDescriptor::Id::Float:
-						node->Set(MANA_IL_COMPARE_GT_FLOAT);
+						node->Set(IntermediateLanguage::COMPARE_GT_FLOAT);
 						break;
 					case TypeDescriptor::Id::Struct:
-						node->Set(MANA_IL_COMPARE_GT_DATA);
+						node->Set(IntermediateLanguage::COMPARE_GT_DATA);
 						break;
 					default:
 						MANA_BUG("illigal data GetTypeDescriptor()");
@@ -554,13 +547,13 @@ DO_RECURSIVE:
 					case TypeDescriptor::Id::Short:
 					case TypeDescriptor::Id::Int:
 					case TypeDescriptor::Id::Actor:
-						node->Set(MANA_IL_COMPARE_LE_INTEGER);
+						node->Set(IntermediateLanguage::COMPARE_LE_INTEGER);
 						break;
 					case TypeDescriptor::Id::Float:
-						node->Set(MANA_IL_COMPARE_LE_FLOAT);
+						node->Set(IntermediateLanguage::COMPARE_LE_FLOAT);
 						break;
 					case TypeDescriptor::Id::Struct:
-						node->Set(MANA_IL_COMPARE_LE_DATA);
+						node->Set(IntermediateLanguage::COMPARE_LE_DATA);
 						break;
 					default:
 						MANA_BUG("illigal data GetTypeDescriptor()");
@@ -586,13 +579,13 @@ DO_RECURSIVE:
 					case TypeDescriptor::Id::Short:
 					case TypeDescriptor::Id::Int:
 					case TypeDescriptor::Id::Actor:
-						node->Set(MANA_IL_COMPARE_LS_INTEGER);
+						node->Set(IntermediateLanguage::COMPARE_LS_INTEGER);
 						break;
 					case TypeDescriptor::Id::Float:
-						node->Set(MANA_IL_COMPARE_LS_FLOAT);
+						node->Set(IntermediateLanguage::COMPARE_LS_FLOAT);
 						break;
 					case TypeDescriptor::Id::Struct:
-						node->Set(MANA_IL_COMPARE_LS_DATA);
+						node->Set(IntermediateLanguage::COMPARE_LS_DATA);
 						break;
 					default:
 						MANA_BUG("illigal data GetTypeDescriptor()");
@@ -618,13 +611,13 @@ DO_RECURSIVE:
 					case TypeDescriptor::Id::Short:
 					case TypeDescriptor::Id::Int:
 					case TypeDescriptor::Id::Actor:
-						node->Set(MANA_IL_COMPARE_NE_INTEGER);
+						node->Set(IntermediateLanguage::COMPARE_NE_INTEGER);
 						break;
 					case TypeDescriptor::Id::Float:
-						node->Set(MANA_IL_COMPARE_NE_FLOAT);
+						node->Set(IntermediateLanguage::COMPARE_NE_FLOAT);
 						break;
 					case TypeDescriptor::Id::Struct:
-						node->Set(MANA_IL_COMPARE_NE_DATA);
+						node->Set(IntermediateLanguage::COMPARE_NE_DATA);
 						break;
 					default:
 						MANA_BUG("illigal data GetTypeDescriptor()");
@@ -646,7 +639,7 @@ DO_RECURSIVE:
 				{
 					if (t1 < TypeDescriptor::Id::Char || t1 > TypeDescriptor::Id::Int)
 						CompileError("imcompatible GetTypeDescriptor() operation in expression");
-					node->Set(MANA_IL_LNOT);
+					node->Set(IntermediateLanguage::LNOT);
 				}
 			}
 			break;
@@ -661,7 +654,7 @@ DO_RECURSIVE:
 				{
 					if (t1 < TypeDescriptor::Id::Char || t1 > TypeDescriptor::Id::Int)
 						CompileError("imcompatible GetTypeDescriptor() operation in expression");
-					node->Set(MANA_IL_NOT);
+					node->Set(IntermediateLanguage::NOT);
 				}
 			}
 			break;
@@ -720,7 +713,7 @@ DO_RECURSIVE:
 
 			if (node->GetLeftNode()->Is(SyntaxNode::Id::Const))
 			{
-				CompileError("already initialized constant '%s'", node->GetLeftNode()->GetSymbol()->GetName());
+				CompileError({ "already initialized constant '", node->GetLeftNode()->GetSymbol()->GetName(), "'" });
 				return;
 			}
 			AutoCast(node);
@@ -814,17 +807,6 @@ DO_RECURSIVE:
 
 				switch (node->GetSymbol()->GetClassTypeId())
 				{
-				case Symbol::ClassTypeId::Alias:
-					/*TODO
-					if (!node->GetSymbol()->IsUsed())
-					{
-						node->GetSymbol()->SetAddress(Append(node->GetSymbol()->GetString()));
-						node->GetSymbol()->SetTypeDescription(GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Int));
-						node->GetSymbol()->SetUsed(true);
-					}
-					*/
-					break;
-
 				case Symbol::ClassTypeId::ConstantInteger:
 					node->GetSymbol()->SetTypeDescription(GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Int));
 					break;
@@ -900,7 +882,7 @@ DO_RECURSIVE:
 						}
 						//type = type->parent;
 					}
-					CompileError("reference to undefined field '%s'", node->GetString());
+					CompileError({ "reference to undefined field '", node->GetString(), "'" });
 				}
 				else
 				{

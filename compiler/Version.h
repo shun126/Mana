@@ -15,11 +15,11 @@ namespace mana
 {
 	namespace build
 	{
-		static constexpr int32_t Year = 2022;
-		static constexpr int32_t Month = 10;
-		static constexpr int32_t Day = 7;
-		static constexpr int32_t Hour = 21;
-		static constexpr int32_t Minute = 20;
+		static constexpr int32_t Year = 0;
+		static constexpr int32_t Month = 0;
+		static constexpr int32_t Day = 0;
+		static constexpr int32_t Hour = 0;
+		static constexpr int32_t Minute = 0;
 		static const char* MajorVersion = "0";
 		static const char* MinorVersion = "9.7";
 	}

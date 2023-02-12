@@ -59,30 +59,30 @@ namespace mana
 		switch (node->GetTypeDescriptor()->GetId())
 		{
 		case TypeDescriptor::Id::Char:
-			mCodeBuffer->AddOpecode(MANA_IL_LOAD_CHAR);
+			mCodeBuffer->AddOpecode(IntermediateLanguage::LOAD_CHAR);
 			break;
 
 		case TypeDescriptor::Id::Short:
-			mCodeBuffer->AddOpecode(MANA_IL_LOAD_SHORT);
+			mCodeBuffer->AddOpecode(IntermediateLanguage::LOAD_SHORT);
 			break;
 
 		case TypeDescriptor::Id::Int:
-			mCodeBuffer->AddOpecode(MANA_IL_LOAD_INTEGER);
+			mCodeBuffer->AddOpecode(IntermediateLanguage::LOAD_INTEGER);
 			break;
 
 		case TypeDescriptor::Id::Float:
-			mCodeBuffer->AddOpecode(MANA_IL_LOAD_FLOAT);
+			mCodeBuffer->AddOpecode(IntermediateLanguage::LOAD_FLOAT);
 			break;
 
 		case TypeDescriptor::Id::Reference:
-			mCodeBuffer->AddOpecode(MANA_IL_LOAD_REFFRENCE);
+			mCodeBuffer->AddOpecode(IntermediateLanguage::LOAD_REFFRENCE);
 			break;
 
 		case TypeDescriptor::Id::Actor:
 			if (node->GetTypeDescriptor() == mTypeDescriptorFactory->Get(TypeDescriptor::Id::Actor))
-				mCodeBuffer->AddOpecode(MANA_IL_LOAD_REFFRENCE);
+				mCodeBuffer->AddOpecode(IntermediateLanguage::LOAD_REFFRENCE);
 			else
-				mCodeBuffer->AddOpecodeAndOperand(MANA_IL_PUSH_ACTOR, mDataBuffer->Set(node->GetTypeDescriptor()->GetName()));
+				mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::PUSH_ACTOR, mDataBuffer->Set(node->GetTypeDescriptor()->GetName()));
 			break;
 
 		case TypeDescriptor::Id::Array:
@@ -90,7 +90,7 @@ namespace mana
 			MANA_ASSERT(node->GetRightNode() == nullptr);
 
 		case TypeDescriptor::Id::Struct:
-			mCodeBuffer->AddOpecodeAndOperand(MANA_IL_LOAD_DATA, node->GetTypeDescriptor()->GetMemorySize());
+			mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::LOAD_DATA, node->GetTypeDescriptor()->GetMemorySize());
 			break;
 
 		default:
@@ -109,24 +109,24 @@ namespace mana
 		switch (node->GetTypeDescriptor()->GetId())
 		{
 		case TypeDescriptor::Id::Char:
-			mCodeBuffer->AddOpecode(MANA_IL_STORE_CHAR);
+			mCodeBuffer->AddOpecode(IntermediateLanguage::STORE_CHAR);
 			break;
 
 		case TypeDescriptor::Id::Short:
-			mCodeBuffer->AddOpecode(MANA_IL_STORE_SHORT);
+			mCodeBuffer->AddOpecode(IntermediateLanguage::STORE_SHORT);
 			break;
 
 		case TypeDescriptor::Id::Int:
-			mCodeBuffer->AddOpecode(MANA_IL_STORE_INTEGER);
+			mCodeBuffer->AddOpecode(IntermediateLanguage::STORE_INTEGER);
 			break;
 
 		case TypeDescriptor::Id::Float:
-			mCodeBuffer->AddOpecode(MANA_IL_STORE_FLOAT);
+			mCodeBuffer->AddOpecode(IntermediateLanguage::STORE_FLOAT);
 			break;
 
 		case TypeDescriptor::Id::Reference:
 		case TypeDescriptor::Id::Actor:
-			mCodeBuffer->AddOpecode(MANA_IL_STORE_REFFRENCE);
+			mCodeBuffer->AddOpecode(IntermediateLanguage::STORE_REFFRENCE);
 			break;
 
 		case TypeDescriptor::Id::Array:
@@ -134,7 +134,7 @@ namespace mana
 			MANA_ASSERT(node->GetRightNode() == nullptr);
 
 		case TypeDescriptor::Id::Struct:
-			mCodeBuffer->AddOpecodeAndOperand(MANA_IL_STORE_DATA, node->GetTypeDescriptor()->GetMemorySize());
+			mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::STORE_DATA, node->GetTypeDescriptor()->GetMemorySize());
 			break;
 
 		default:
@@ -173,13 +173,16 @@ namespace mana
 			const int32_t in_depth = mSymbolFactory->OpenBlock(false);
 			generator_genearte_code(tree->GetLeftNode(), true);
 			const int32_t out_depth = mSymbolFactory->CloseBlock();
-			MANA_VERIFY_MESSAGE(in_depth == out_depth, "ブロックの深さが一致しません in:%d out:%d", in_depth, out_depth);
+			MANA_VERIFY_MESSAGE(
+				in_depth == out_depth,
+				Concat({ "ブロックの深さが一致しません in:", std::to_string(in_depth), " out:", std::to_string(out_depth) })
+			);
 		}
 
 		// 関数の最後にジャンプ
 		// TODO:SymbolTable側でコード生成できるかも
 		mSymbolFactory->SetReturnAddressList(
-			mCodeBuffer->AddOpecodeAndOperand(MANA_IL_BRA, mSymbolFactory->GetReturnAddressList())
+			mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::BRA, mSymbolFactory->GetReturnAddressList())
 		);
 
 		// 関数を使用したフラグを立てる
@@ -197,9 +200,12 @@ namespace mana
 			const int32_t in_depth = mSymbolFactory->OpenBlock(false);
 			generator_genearte_code(tree, true);
 			const int32_t out_depth = mSymbolFactory->CloseBlock();
-			MANA_VERIFY_MESSAGE(in_depth == out_depth, "ブロックの深さが一致しません in:%d out:%d", in_depth, out_depth);
+			MANA_VERIFY_MESSAGE(
+				in_depth == out_depth,
+				Concat({ "ブロックの深さが一致しません in:", std::to_string(in_depth), " out:", std::to_string(out_depth) })
+			);
 		}
-		mCodeBuffer->AddOpecode(MANA_IL_ROLLBACK);
+		mCodeBuffer->AddOpecode(IntermediateLanguage::ROLLBACK);
 	}
 
 	/*!
@@ -310,7 +316,7 @@ namespace mana
 
 			node->GetSymbol()->SetAddress(mDataBuffer->Set(node->GetSymbol()->GetName()));
 
-			mCodeBuffer->AddOpecodeAndOperand(MANA_IL_CALL, (node->GetSymbol())->GetAddress());
+			mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::CALL, (node->GetSymbol())->GetAddress());
 			mCodeBuffer->Add<uint8_t>(((node->GetSymbol())->GetTypeDescriptor()->GetId() != TypeDescriptor::Id::Void));
 			mCodeBuffer->Add<uint8_t>(static_cast<uint8_t>(argument_counter));
 			mCodeBuffer->Add<uint16_t>(static_cast<uint16_t>(argument_size));
@@ -320,7 +326,7 @@ namespace mana
 		{
 			// for internal function
 			const int32_t address = mCodeBuffer->AddOpecodeAndOperand(
-				MANA_IL_BSR,
+				IntermediateLanguage::BSR,
 				node->GetSymbol()->GetAddress()
 			);
 			mGlobalAddressResolver->AddCallList(
@@ -350,7 +356,7 @@ namespace mana
 	void CodeGenerator::generator_call_print(std::shared_ptr<SyntaxNode> node)
 	{
 		mCodeBuffer->AddOpecodeAndOperand(
-			MANA_IL_PRINT,
+			IntermediateLanguage::PRINT,
 			generator_call_print_generate_argument(0, node)
 		);
 	}
@@ -412,9 +418,12 @@ namespace mana
 		const int32_t in_depth = mSymbolFactory->OpenBlock(false);
 		generator_condition_core(tree);
 		const int32_t out_depth = mSymbolFactory->CloseBlock();
-		MANA_VERIFY_MESSAGE(in_depth == out_depth, "ブロックの深さが一致しません in:%d out:%d", in_depth, out_depth);
+		MANA_VERIFY_MESSAGE(
+			in_depth == out_depth,
+			Concat({ "ブロックの深さが一致しません in:", std::to_string(in_depth), " out:", std::to_string(out_depth) })
+		);
 
-		return mCodeBuffer->AddOpecodeAndOperand(match ? MANA_IL_BEQ : MANA_IL_BNE);
+		return mCodeBuffer->AddOpecodeAndOperand(match ? IntermediateLanguage::BEQ : IntermediateLanguage::BNE);
 	}
 
 	void CodeGenerator::generator_generate_const_int(const TypeDescriptor::Id type_id, const int32_t value)
@@ -424,10 +433,10 @@ namespace mana
 		case TypeDescriptor::Id::Char:
 			if (value == 0)
 			{
-				mCodeBuffer->AddOpecode(MANA_IL_PUSH_ZERO_INTEGER);
+				mCodeBuffer->AddOpecode(IntermediateLanguage::PUSH_ZERO_INTEGER);
 			}
 			else {
-				mCodeBuffer->AddOpecode(MANA_IL_PUSH_CHAR);
+				mCodeBuffer->AddOpecode(IntermediateLanguage::PUSH_CHAR);
 				mCodeBuffer->Add((int8_t)value);
 			}
 			break;
@@ -435,10 +444,10 @@ namespace mana
 		case TypeDescriptor::Id::Short:
 			if (value == 0)
 			{
-				mCodeBuffer->AddOpecode(MANA_IL_PUSH_ZERO_INTEGER);
+				mCodeBuffer->AddOpecode(IntermediateLanguage::PUSH_ZERO_INTEGER);
 			}
 			else {
-				mCodeBuffer->AddOpecode(MANA_IL_PUSH_SHORT);
+				mCodeBuffer->AddOpecode(IntermediateLanguage::PUSH_SHORT);
 				mCodeBuffer->Add((int16_t)value);
 			}
 			break;
@@ -446,10 +455,10 @@ namespace mana
 		case TypeDescriptor::Id::Int:
 			if (value == 0)
 			{
-				mCodeBuffer->AddOpecode(MANA_IL_PUSH_ZERO_INTEGER);
+				mCodeBuffer->AddOpecode(IntermediateLanguage::PUSH_ZERO_INTEGER);
 			}
 			else {
-				mCodeBuffer->AddOpecode(MANA_IL_PUSH_INTEGER);
+				mCodeBuffer->AddOpecode(IntermediateLanguage::PUSH_INTEGER);
 				mCodeBuffer->Add(value);
 			}
 			break;
@@ -468,11 +477,11 @@ namespace mana
 		case TypeDescriptor::Id::Float:
 			if (value == 0.0f)
 			{
-				mCodeBuffer->AddOpecode(MANA_IL_PUSH_ZERO_FLOAT);
+				mCodeBuffer->AddOpecode(IntermediateLanguage::PUSH_ZERO_FLOAT);
 			}
 			else
 			{
-				mCodeBuffer->AddOpecode(MANA_IL_PUSH_FLOAT);
+				mCodeBuffer->AddOpecode(IntermediateLanguage::PUSH_FLOAT);
 				mCodeBuffer->Add(value);
 			}
 			break;
@@ -523,11 +532,11 @@ namespace mana
 			case TypeDescriptor::Id::Int:
 			case TypeDescriptor::Id::Float:
 			case TypeDescriptor::Id::Actor:
-				mCodeBuffer->AddOpecode(MANA_IL_REMOVE);
+				mCodeBuffer->AddOpecode(IntermediateLanguage::REMOVE);
 				break;
 
 			case TypeDescriptor::Id::Struct:
-				mCodeBuffer->AddOpecodeAndOperand(MANA_IL_REMOVE_DATA, tree->GetTypeDescriptor()->GetMemorySize());
+				mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::REMOVE_DATA, tree->GetTypeDescriptor()->GetMemorySize());
 				break;
 
 			default:
@@ -537,7 +546,10 @@ namespace mana
 		}
 
 		const int32_t out_depth = mSymbolFactory->CloseBlock();
-		MANA_VERIFY_MESSAGE(in_depth == out_depth, "ブロックの深さが一致しません in:%d out:%d", in_depth, out_depth);
+		MANA_VERIFY_MESSAGE(
+			in_depth == out_depth,
+			Concat({ "ブロックの深さが一致しません in:", std::to_string(in_depth), " out:", std::to_string(out_depth) })
+		);
 	}
 
 
@@ -554,12 +566,6 @@ namespace mana
 		{
 			///////////////////////////////////////////////////////////////////////
 			// 定数定義に関するノード									
-		case SyntaxNode::Id::Alias:
-			MANA_ASSERT(node->GetLeftNode() == nullptr);
-			MANA_ASSERT(node->GetRightNode() == nullptr);
-			MANA_ASSERT(node->GetBodyNode() == nullptr);
-			break;
-
 		case SyntaxNode::Id::DefineConstant:
 			MANA_ASSERT(node->GetLeftNode() == nullptr);
 			MANA_ASSERT(node->GetRightNode() == nullptr);
@@ -751,7 +757,10 @@ namespace mana
 			generator_genearte_code(node->GetRightNode(), enable_load);
 
 			const int32_t out_depth = mSymbolFactory->CloseBlock();
-			MANA_VERIFY_MESSAGE(in_depth == out_depth, "ブロックの深さが一致しません in:%d out:%d", in_depth, out_depth);
+			MANA_VERIFY_MESSAGE(
+				in_depth == out_depth,
+				Concat({ "ブロックの深さが一致しません in:", std::to_string(in_depth), " out:", std::to_string(out_depth) })
+			);
 		}
 		MANA_ASSERT(node->GetBodyNode() == nullptr);
 		break;
@@ -760,7 +769,7 @@ namespace mana
 			MANA_ASSERT(node->GetLeftNode() == nullptr);
 			MANA_ASSERT(node->GetRightNode() == nullptr);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
-			mCodeBuffer->AddOpecodeAndOperand(MANA_IL_BRA, mLocalAddressResolver->Break(mCodeBuffer->GetSize()));
+			mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::BRA, mLocalAddressResolver->Break(mCodeBuffer->GetSize()));
 			break;
 
 		case SyntaxNode::Id::Case:
@@ -775,7 +784,7 @@ namespace mana
 			MANA_ASSERT(node->GetLeftNode() == nullptr);
 			MANA_ASSERT(node->GetRightNode() == nullptr);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
-			mCodeBuffer->AddOpecodeAndOperand(MANA_IL_BRA, mLocalAddressResolver->Continue(mCodeBuffer->GetSize()));
+			mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::BRA, mLocalAddressResolver->Continue(mCodeBuffer->GetSize()));
 			break;
 
 		case SyntaxNode::Id::Default:
@@ -812,7 +821,7 @@ namespace mana
 
 			mLocalAddressResolver->CloseContinueOnly();
 			generator_expression(node->GetRightNode(), true);
-			mCodeBuffer->AddOpecodeAndOperand(MANA_IL_BRA, mLocalAddressResolver->Continue(mCodeBuffer->GetSize()));
+			mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::BRA, mLocalAddressResolver->Continue(mCodeBuffer->GetSize()));
 			mLocalAddressResolver->CloseChain();
 		}
 		break;
@@ -823,7 +832,7 @@ namespace mana
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			{
 				std::shared_ptr<Symbol> symbol = mSymbolFactory->CreateLabel(node->GetString());
-				symbol->SetEtc(mCodeBuffer->AddOpecodeAndOperand(MANA_IL_BRA, symbol->GetEtc()));
+				symbol->SetEtc(mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::BRA, symbol->GetEtc()));
 			}
 			break;
 
@@ -831,7 +840,7 @@ namespace mana
 			MANA_ASSERT(node->GetLeftNode() == nullptr);
 			MANA_ASSERT(node->GetRightNode() == nullptr);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
-			mCodeBuffer->AddOpecode(MANA_IL_HALT);
+			mCodeBuffer->AddOpecode(IntermediateLanguage::HALT);
 			break;
 
 		case SyntaxNode::Id::If:
@@ -841,7 +850,7 @@ namespace mana
 			if (node->GetRightNode())
 			{
 				// else block
-				const address_t else_begin_address = mCodeBuffer->AddOpecodeAndOperand(MANA_IL_BRA);
+				const address_t else_begin_address = mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::BRA);
 				mCodeBuffer->ReplaceAddressAll(address, mCodeBuffer->GetSize());
 				generator_genearte_code(node->GetRightNode(), enable_load);
 				address = else_begin_address;
@@ -862,10 +871,10 @@ namespace mana
 
 		case SyntaxNode::Id::Lock:
 			mLocalAddressResolver->OpenChain(LocalAddressResolver::JumpChainStatus::Lock);
-			mCodeBuffer->AddOpecode(MANA_IL_NONPREEMPTIVE);
+			mCodeBuffer->AddOpecode(IntermediateLanguage::NONPREEMPTIVE);
 			generator_genearte_code(node->GetLeftNode(), enable_load);
 			mLocalAddressResolver->CloseChain();
-			mCodeBuffer->AddOpecode(MANA_IL_PREEMPTIVE);
+			mCodeBuffer->AddOpecode(IntermediateLanguage::PREEMPTIVE);
 			MANA_ASSERT(node->GetRightNode() == nullptr);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			break;
@@ -875,7 +884,7 @@ namespace mana
 			mLocalAddressResolver->OpenChain(LocalAddressResolver::JumpChainStatus::Loop);
 			const int32_t address = mCodeBuffer->GetSize();
 			generator_genearte_code(node->GetLeftNode(), enable_load);
-			mCodeBuffer->AddOpecodeAndOperand(MANA_IL_BRA, address);
+			mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::BRA, address);
 			mLocalAddressResolver->CloseChain();
 		}
 		MANA_ASSERT(node->GetRightNode() == nullptr);
@@ -904,12 +913,12 @@ namespace mana
 			generator_expression(node->GetLeftNode(), false);
 			const int32_t address = mCodeBuffer->GetSize();
 			mLocalAddressResolver->OpenChain(LocalAddressResolver::JumpChainStatus::Switch);
-			mCodeBuffer->AddOpecodeAndOperand(MANA_IL_BRA);
+			mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::BRA);
 			mLocalAddressResolver->OpenSwitchBlock(node->GetLeftNode()->GetTypeDescriptor());
 
 			generator_genearte_code(node->GetRightNode(), enable_load);
 
-			mCodeBuffer->AddOpecodeAndOperand(MANA_IL_BRA, mLocalAddressResolver->Break(mCodeBuffer->GetSize()));
+			mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::BRA, mLocalAddressResolver->Break(mCodeBuffer->GetSize()));
 			mCodeBuffer->ReplaceAddressAll(address, mCodeBuffer->GetSize());
 			mLocalAddressResolver->ResolveSwitchBlock(shared_from_this());
 			mLocalAddressResolver->CloseChain();
@@ -923,7 +932,7 @@ namespace mana
 			mLocalAddressResolver->OpenChain(LocalAddressResolver::JumpChainStatus::While);
 			mLocalAddressResolver->Break(generator_condition(node->GetLeftNode(), true));
 			generator_genearte_code(node->GetRightNode(), enable_load);
-			mCodeBuffer->AddOpecodeAndOperand(MANA_IL_BRA, mLocalAddressResolver->Continue(mCodeBuffer->GetSize()));
+			mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::BRA, mLocalAddressResolver->Continue(mCodeBuffer->GetSize()));
 			mLocalAddressResolver->CloseChain();
 		}
 		MANA_ASSERT(node->GetBodyNode() == nullptr);
@@ -935,7 +944,7 @@ namespace mana
 			MANA_ASSERT(node->GetLeftNode() == nullptr);
 			MANA_ASSERT(node->GetRightNode() == nullptr);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
-			mCodeBuffer->AddOpecode(MANA_IL_COMPLY);
+			mCodeBuffer->AddOpecode(IntermediateLanguage::COMPLY);
 			break;
 
 		case SyntaxNode::Id::Join:
@@ -951,14 +960,14 @@ namespace mana
 			break;
 
 		case SyntaxNode::Id::Reject:
-			mCodeBuffer->AddOpecode(MANA_IL_REFUSE);
+			mCodeBuffer->AddOpecode(IntermediateLanguage::REFUSE);
 			MANA_ASSERT(node->GetLeftNode() == nullptr);
 			MANA_ASSERT(node->GetRightNode() == nullptr);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			break;
 
 		case SyntaxNode::Id::Request:
-			mSymbolFactory->AddRequest(shared_from_this(), MANA_IL_REQ, node->GetLeftNode(), node->GetRightNode(), node->GetString());
+			mSymbolFactory->AddRequest(shared_from_this(), IntermediateLanguage::REQ, node->GetLeftNode(), node->GetRightNode(), node->GetString());
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			break;
 
@@ -966,7 +975,7 @@ namespace mana
 			MANA_ASSERT(node->GetLeftNode() == nullptr);
 			MANA_ASSERT(node->GetRightNode() == nullptr);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
-			mCodeBuffer->AddOpecode(MANA_IL_YIELD);
+			mCodeBuffer->AddOpecode(IntermediateLanguage::YIELD);
 			break;
 
 			///////////////////////////////////////////////////////////////////////
@@ -974,77 +983,77 @@ namespace mana
 		case SyntaxNode::Id::Add:
 			generator_genearte_code(node->GetLeftNode(), enable_load);
 			generator_genearte_code(node->GetRightNode(), enable_load);
-			mCodeBuffer->AddOpecode((node->GetLeftNode()->GetTypeDescriptor())->Is(TypeDescriptor::Id::Float) ? MANA_IL_ADD_FLOAT : MANA_IL_ADD_INTEGER);
+			mCodeBuffer->AddOpecode((node->GetLeftNode()->GetTypeDescriptor())->Is(TypeDescriptor::Id::Float) ? IntermediateLanguage::ADD_FLOAT : IntermediateLanguage::ADD_INTEGER);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			break;
 
 		case SyntaxNode::Id::Sub:
 			generator_genearte_code(node->GetLeftNode(), enable_load);
 			generator_genearte_code(node->GetRightNode(), enable_load);
-			mCodeBuffer->AddOpecode((node->GetLeftNode()->GetTypeDescriptor())->Is(TypeDescriptor::Id::Float) ? MANA_IL_SUB_FLOAT : MANA_IL_SUB_INTEGER);
+			mCodeBuffer->AddOpecode((node->GetLeftNode()->GetTypeDescriptor())->Is(TypeDescriptor::Id::Float) ? IntermediateLanguage::SUB_FLOAT : IntermediateLanguage::SUB_INTEGER);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			break;
 
 		case SyntaxNode::Id::Mul:
 			generator_genearte_code(node->GetLeftNode(), enable_load);
 			generator_genearte_code(node->GetRightNode(), enable_load);
-			mCodeBuffer->AddOpecode((node->GetLeftNode()->GetTypeDescriptor())->Is(TypeDescriptor::Id::Float) ? MANA_IL_MUL_FLOAT : MANA_IL_MUL_INTEGER);
+			mCodeBuffer->AddOpecode((node->GetLeftNode()->GetTypeDescriptor())->Is(TypeDescriptor::Id::Float) ? IntermediateLanguage::MUL_FLOAT : IntermediateLanguage::MUL_INTEGER);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			break;
 
 		case SyntaxNode::Id::Div:
 			generator_genearte_code(node->GetLeftNode(), enable_load);
 			generator_genearte_code(node->GetRightNode(), enable_load);
-			mCodeBuffer->AddOpecode((node->GetLeftNode()->GetTypeDescriptor())->Is(TypeDescriptor::Id::Float) ? MANA_IL_DIV_FLOAT : MANA_IL_DIV_INTEGER);
+			mCodeBuffer->AddOpecode((node->GetLeftNode()->GetTypeDescriptor())->Is(TypeDescriptor::Id::Float) ? IntermediateLanguage::DIV_FLOAT : IntermediateLanguage::DIV_INTEGER);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			break;
 
 		case SyntaxNode::Id::Rem:
 			generator_genearte_code(node->GetLeftNode(), enable_load);
 			generator_genearte_code(node->GetRightNode(), enable_load);
-			mCodeBuffer->AddOpecode((node->GetLeftNode()->GetTypeDescriptor())->Is(TypeDescriptor::Id::Float) ? MANA_IL_MOD_FLOAT : MANA_IL_MOD_INTEGER);
+			mCodeBuffer->AddOpecode((node->GetLeftNode()->GetTypeDescriptor())->Is(TypeDescriptor::Id::Float) ? IntermediateLanguage::MOD_FLOAT : IntermediateLanguage::MOD_INTEGER);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			break;
 
 		case SyntaxNode::Id::Pow:
 			generator_genearte_code(node->GetLeftNode(), enable_load);
 			generator_genearte_code(node->GetRightNode(), enable_load);
-			mCodeBuffer->AddOpecode((node->GetLeftNode()->GetTypeDescriptor())->Is(TypeDescriptor::Id::Float) ? MANA_IL_SUB_FLOAT : MANA_IL_SUB_INTEGER);
+			mCodeBuffer->AddOpecode((node->GetLeftNode()->GetTypeDescriptor())->Is(TypeDescriptor::Id::Float) ? IntermediateLanguage::SUB_FLOAT : IntermediateLanguage::SUB_INTEGER);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			break;
 
 		case SyntaxNode::Id::And:
 			generator_genearte_code(node->GetLeftNode(), enable_load);
 			generator_genearte_code(node->GetRightNode(), enable_load);
-			mCodeBuffer->AddOpecode(MANA_IL_AND);
+			mCodeBuffer->AddOpecode(IntermediateLanguage::AND);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			break;
 
 		case SyntaxNode::Id::Or:
 			generator_genearte_code(node->GetLeftNode(), enable_load);
 			generator_genearte_code(node->GetRightNode(), enable_load);
-			mCodeBuffer->AddOpecode(MANA_IL_OR);
+			mCodeBuffer->AddOpecode(IntermediateLanguage::OR);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			break;
 
 		case SyntaxNode::Id::Xor:
 			generator_genearte_code(node->GetLeftNode(), enable_load);
 			generator_genearte_code(node->GetRightNode(), enable_load);
-			mCodeBuffer->AddOpecode(MANA_IL_EOR);
+			mCodeBuffer->AddOpecode(IntermediateLanguage::EOR);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			break;
 
 		case SyntaxNode::Id::LeftShift:
 			generator_genearte_code(node->GetLeftNode(), enable_load);
 			generator_genearte_code(node->GetRightNode(), enable_load);
-			mCodeBuffer->AddOpecode(MANA_IL_SHL);
+			mCodeBuffer->AddOpecode(IntermediateLanguage::SHL);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			break;
 
 		case SyntaxNode::Id::RightShift:
 			generator_genearte_code(node->GetLeftNode(), enable_load);
 			generator_genearte_code(node->GetRightNode(), enable_load);
-			mCodeBuffer->AddOpecode(MANA_IL_SHR);
+			mCodeBuffer->AddOpecode(IntermediateLanguage::SHR);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			break;
 
@@ -1077,7 +1086,7 @@ namespace mana
 
 		case SyntaxNode::Id::Neg:
 			generator_genearte_code(node->GetLeftNode(), enable_load);
-			mCodeBuffer->AddOpecode(node->GetLeftNode()->GetTypeDescriptor()->GetId() == TypeDescriptor::Id::Float ? MANA_IL_MINUS_FLOAT : MANA_IL_MINUS_INTEGER);
+			mCodeBuffer->AddOpecode(node->GetLeftNode()->GetTypeDescriptor()->GetId() == TypeDescriptor::Id::Float ? IntermediateLanguage::MINUS_FLOAT : IntermediateLanguage::MINUS_INTEGER);
 			MANA_ASSERT(node->GetRightNode() == nullptr);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			break;
@@ -1087,10 +1096,10 @@ namespace mana
 		case SyntaxNode::Id::Array:
 			/* variable[index] */
 			generator_genearte_code(node->GetRightNode(), true);
-			mCodeBuffer->AddOpecodeAndOperand(MANA_IL_PUSH_SIZE, (node->GetTypeDescriptor())->GetMemorySize());
-			mCodeBuffer->AddOpecode(MANA_IL_MUL_INTEGER);
+			mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::PUSH_SIZE, (node->GetTypeDescriptor())->GetMemorySize());
+			mCodeBuffer->AddOpecode(IntermediateLanguage::MUL_INTEGER);
 			generator_genearte_code(node->GetLeftNode(), false);
-			mCodeBuffer->AddOpecode(MANA_IL_ADD_INTEGER);
+			mCodeBuffer->AddOpecode(IntermediateLanguage::ADD_INTEGER);
 			if (enable_load)
 			{
 				generator_resolve_load(node);
@@ -1139,7 +1148,7 @@ namespace mana
 				break;
 
 			case TypeDescriptor::Id::Nil:
-				mCodeBuffer->AddOpecode(MANA_IL_PUSH_ZERO_INTEGER);
+				mCodeBuffer->AddOpecode(IntermediateLanguage::PUSH_ZERO_INTEGER);
 				break;
 
 			default:
@@ -1156,9 +1165,9 @@ namespace mana
 		{
 			int32_t pc1, pc2;
 			generator_condition_core(node->GetNextNode());
-			pc1 = mCodeBuffer->AddOpecodeAndOperand(MANA_IL_BEQ);
+			pc1 = mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::BEQ);
 			generator_genearte_code(node->GetLeftNode(), enable_load);
-			pc2 = mCodeBuffer->AddOpecodeAndOperand(MANA_IL_BRA);
+			pc2 = mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::BRA);
 			mCodeBuffer->ReplaceAddressAll(pc1, mCodeBuffer->GetSize());
 			generator_genearte_code(node->GetRightNode(), enable_load);
 			mCodeBuffer->ReplaceAddressAll(pc2, mCodeBuffer->GetSize());
@@ -1167,14 +1176,14 @@ namespace mana
 
 		case SyntaxNode::Id::IntegerToFloat:
 			generator_genearte_code(node->GetLeftNode(), enable_load);
-			mCodeBuffer->AddOpecode(MANA_IL_INT2FLOAT);
+			mCodeBuffer->AddOpecode(IntermediateLanguage::INT2FLOAT);
 			MANA_ASSERT(node->GetRightNode() == nullptr);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			break;
 
 		case SyntaxNode::Id::FloatToInteger:
 			generator_genearte_code(node->GetLeftNode(), enable_load);
-			mCodeBuffer->AddOpecode(MANA_IL_FLOAT2INT);
+			mCodeBuffer->AddOpecode(IntermediateLanguage::FLOAT2INT);
 			MANA_ASSERT(node->GetRightNode() == nullptr);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			break;
@@ -1187,10 +1196,6 @@ namespace mana
 			{
 				switch (node->GetSymbol()->GetClassTypeId())
 				{
-				case Symbol::ClassTypeId::Alias:
-					generator_generate_const_int(node->GetSymbol()->GetTypeDescriptor()->GetId(), node->GetSymbol()->GetAddress());
-					break;
-
 				case Symbol::ClassTypeId::ConstantInteger:
 					generator_generate_const_int(node->GetSymbol()->GetTypeDescriptor()->GetId(), node->GetSymbol()->GetEtc());
 					break;
@@ -1204,19 +1209,19 @@ namespace mana
 					break;
 
 				case Symbol::ClassTypeId::StaticVariable:
-					mCodeBuffer->AddOpecodeAndOperand(MANA_IL_LOAD_STATIC_ADDRESS, node->GetSymbol()->GetAddress());
+					mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::LOAD_STATIC_ADDRESS, node->GetSymbol()->GetAddress());
 					break;
 
 				case Symbol::ClassTypeId::GlobalVariable:
-					mCodeBuffer->AddOpecodeAndOperand(MANA_IL_LOAD_GLOBAL_ADDRESS, node->GetSymbol()->GetAddress());
+					mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::LOAD_GLOBAL_ADDRESS, node->GetSymbol()->GetAddress());
 					break;
 
 				case Symbol::ClassTypeId::ActorVariable:
-					mCodeBuffer->AddOpecodeAndOperand(MANA_IL_LOAD_SELF_ADDRESS, node->GetSymbol()->GetAddress());
+					mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::LOAD_SELF_ADDRESS, node->GetSymbol()->GetAddress());
 					break;
 
 				case Symbol::ClassTypeId::LocalVariable:
-					mCodeBuffer->AddOpecodeAndOperand(MANA_IL_LOAD_FRAME_ADDRESS, node->GetSymbol()->GetAddress());
+					mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::LOAD_FRAME_ADDRESS, node->GetSymbol()->GetAddress());
 					break;
 
 				case Symbol::ClassTypeId::Type:
@@ -1260,9 +1265,9 @@ namespace mana
 								if (symbol->GetName() == node->GetString() && symbol->GetClassTypeId() == Symbol::ClassTypeId::ActorVariable)
 								{
 									// variable.member
-									mCodeBuffer->AddOpecodeAndOperand(MANA_IL_PUSH_SIZE, symbol->GetAddress());
+									mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::PUSH_SIZE, symbol->GetAddress());
 									generator_genearte_code(node->GetLeftNode(), false);
-									mCodeBuffer->AddOpecode(MANA_IL_ADD_INTEGER);
+									mCodeBuffer->AddOpecode(IntermediateLanguage::ADD_INTEGER);
 									if (enable_load)
 										generator_resolve_load(node);
 									goto ESCAPE;
@@ -1283,9 +1288,9 @@ namespace mana
 #if 0
 		case SyntaxNode::Id::NODE_MEMOP:
 			/* variable.member */
-			mCodeBuffer->AddOpecodeAndOperand(MANA_IL_PUSH_SIZE, node->etc);
+			mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::PUSH_SIZE, node->etc);
 			generator_genearte_code(node->GetLeftNode(), false);
-			mCodeBuffer->AddOpecode(MANA_IL_ADD_INTEGER);
+			mCodeBuffer->AddOpecode(IntermediateLanguage::ADD_INTEGER);
 			if (enable_load)
 			{
 				generator_resolve_load(node);
@@ -1299,7 +1304,7 @@ namespace mana
 			MANA_ASSERT(node->GetLeftNode() == nullptr);
 			MANA_ASSERT(node->GetRightNode() == nullptr);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
-			mCodeBuffer->AddOpecode(MANA_IL_PUSH_SENDER);
+			mCodeBuffer->AddOpecode(IntermediateLanguage::PUSH_SENDER);
 			break;
 
 		case SyntaxNode::Id::Self:
@@ -1307,7 +1312,7 @@ namespace mana
 			MANA_ASSERT(node->GetLeftNode() == nullptr);
 			MANA_ASSERT(node->GetRightNode() == nullptr);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
-			mCodeBuffer->AddOpecode(MANA_IL_PUSH_SELF);
+			mCodeBuffer->AddOpecode(IntermediateLanguage::PUSH_SELF);
 			break;
 
 		case SyntaxNode::Id::Priority:
@@ -1315,7 +1320,7 @@ namespace mana
 			MANA_ASSERT(node->GetLeftNode() == nullptr);
 			MANA_ASSERT(node->GetRightNode() == nullptr);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
-			mCodeBuffer->AddOpecode(MANA_IL_PUSH_PRIORITY);
+			mCodeBuffer->AddOpecode(IntermediateLanguage::PUSH_PRIORITY);
 			break;
 
 		case SyntaxNode::Id::Sizeof:
@@ -1345,7 +1350,7 @@ namespace mana
 			MANA_ASSERT(node->GetLeftNode() == nullptr);
 			MANA_ASSERT(node->GetRightNode() == nullptr);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
-			mCodeBuffer->AddOpecodeAndOperand(MANA_IL_PUSH_STRING, node->GetInt());
+			mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::PUSH_STRING, node->GetInt());
 			break;
 #if 0
 		case SyntaxNode::Id::NODE_VARIABLE:
@@ -1357,19 +1362,19 @@ namespace mana
 			switch ((node->GetSymbol())->class_type)
 			{
 			case StaticVariable:
-				AddOpecodeAndOperand(MANA_IL_LOAD_STATIC_ADDRESS, (node->GetSymbol())->address);
+				AddOpecodeAndOperand(IntermediateLanguage::LOAD_STATIC_ADDRESS, (node->GetSymbol())->address);
 				break;
 
 			case GlobalVariable:
-				AddOpecodeAndOperand(MANA_IL_LOAD_GLOBAL_ADDRESS, (node->GetSymbol())->address);
+				AddOpecodeAndOperand(IntermediateLanguage::LOAD_GLOBAL_ADDRESS, (node->GetSymbol())->address);
 				break;
 
 			case ActorVariable:
-				AddOpecodeAndOperand(MANA_IL_LOAD_SELF_ADDRESS, (node->GetSymbol())->address);
+				AddOpecodeAndOperand(IntermediateLanguage::LOAD_SELF_ADDRESS, (node->GetSymbol())->address);
 				break;
 
 			case LocalVariable:
-				AddOpecodeAndOperand(MANA_IL_LOAD_FRAME_ADDRESS, (node->GetSymbol())->address);
+				AddOpecodeAndOperand(IntermediateLanguage::LOAD_FRAME_ADDRESS, (node->GetSymbol())->address);
 				break;
 
 			case Type:

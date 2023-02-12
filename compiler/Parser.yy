@@ -62,7 +62,7 @@ mana (compiler)
 %token	<std::string_view> tSTRING tIDENTIFIER
 %token	<std::shared_ptr<mana::TypeDescriptor>> tTYPE
 
-%token	tALIAS tDEFINE tUNDEF tINCLUDE tIMPORT
+%token	tDEFINE tUNDEF tINCLUDE tIMPORT
 %token	tNATIVE tSTRUCT tACTOR tACTOR2 tPHANTOM tACTION tMODULE tEXTEND
 %token	tFALSE tTRUE tPRIORITY tSELF tSENDER tNIL
 %token	tREQUEST tJOIN
@@ -147,9 +147,6 @@ declarations	: actor
 					{ $$ = mParsingDriver->CreateDeclareStaticMemory(0, $3); }
 				| tSTATIC tALLOCATE tDIGIT '{' allocate_declarations '}'
 					{ $$ = mParsingDriver->CreateDeclareStaticMemory($3, $5); }
-
-				| tALIAS tIDENTIFIER tSTRING ';'
-					{ $$ = mParsingDriver->CreateAlias($2, $3); }
 
 				| tINCLUDE tSTRING ';'
 					{ $$ = nullptr; if(! lexer_open($2, false)){ YYABORT; } }

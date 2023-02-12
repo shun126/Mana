@@ -64,36 +64,11 @@ namespace mana
 		return symbol;
 	}
 
-	std::shared_ptr<Symbol> SymbolFactory::CreateAlias(const std::string_view name, const std::string_view filename)
-	{
-		std::shared_ptr<Symbol> symbol;
-		char path[_MAX_PATH];
-
-		symbol = Lookup(name);
-		if(symbol)
-			CompileError("duplicated declaration '%s'", name);
-
-		symbol = CreateSymbolWithAddress(name, Symbol::ClassTypeId::Alias, -1);
-		symbol->SetTypeDescription(mTypeDescriptorFactory->Get(TypeDescriptor::Id::Int));
-
-		if (fullpath(path, filename.data(), sizeof(path)))
-		{
-			symbol->SetString(mStringPool->Set(path));
-		}
-		else
-		{
-			CompileError("unable to open \"%s\"", filename);
-			symbol->SetString(filename);
-		}
-
-		return symbol;
-	}
-
 	std::shared_ptr<Symbol> SymbolFactory::CreateConstInt(const std::string_view name, const int32_t value)
 	{
 		std::shared_ptr<Symbol> symbol = Lookup(name);
 		if(symbol)
-			CompileError("duplicated declaration '%s'", name);
+			CompileError({ "duplicated declaration '", name, "'" });
 
 		symbol = CreateSymbol(name, Symbol::ClassTypeId::ConstantInteger);
 		symbol->SetTypeDescription(mTypeDescriptorFactory->Get(TypeDescriptor::Id::Int));
@@ -112,7 +87,7 @@ namespace mana
 	{
 		std::shared_ptr<Symbol> symbol = Lookup(name);
 		if(symbol)
-			CompileError("duplicated declaration '%s'", name);
+			CompileError({ "duplicated declaration '", name, "'" });
 
 		symbol = CreateSymbol(name, Symbol::ClassTypeId::ConstantFloat);
 		symbol->SetTypeDescription(mTypeDescriptorFactory->Get(TypeDescriptor::Id::Float));
@@ -130,8 +105,10 @@ namespace mana
 	std::shared_ptr<Symbol> SymbolFactory::CreateConstString(const std::string_view name, const std::string_view value)
 	{
 		std::shared_ptr<Symbol> symbol = Lookup(name);
-		if(symbol)
-			CompileError("duplicated declaration '%s'", name);
+		if (symbol)
+		{
+			CompileError({ "duplicated declaration '", name, "'" });
+		}
 
 		symbol = CreateSymbol(name, Symbol::ClassTypeId::ConstantString);
 		symbol->SetTypeDescription(mTypeDescriptorFactory->GetString());
@@ -171,7 +148,7 @@ namespace mana
 		}
 		else
 		{
-			CompileError("duplicated declaration '%s'", name.data());
+			CompileError({ "duplicated declaration '", name, "'" });
 		}
 
 		return symbol;
@@ -206,7 +183,7 @@ namespace mana
 		}
 		else if (symbol->IsOverride() == false || symbol->GetClassTypeId() != class_type)
 		{
-			CompileError("function '%s' already declared", symbol->GetName().data());
+			CompileError({ "function '", symbol->GetName(), "' already declared" });
 		}
 		return symbol;
 	}
@@ -267,8 +244,9 @@ namespace mana
 			symbol->GetClassTypeId() != Symbol::ClassTypeId::ConstantInteger &&
 			symbol->GetClassTypeId() != Symbol::ClassTypeId::ConstantFloat &&
 			symbol->GetClassTypeId() != Symbol::ClassTypeId::ConstantString
-			) {
-			CompileError("non-variable name '%s'", symbol->GetName());
+			)
+		{
+			CompileError({ "non-variable name '", symbol->GetName(), "'" });
 			return false;
 		}
 		else {
@@ -339,7 +317,7 @@ TODO:
 			blockEntry.mSymbolEntry->GetClassTypeId() == Symbol::ClassTypeId::Type &&
 			blockEntry.mSymbolEntry->GetTypeDescriptor()->Is(TypeDescriptor::Id::Incomplete))
 		{
-			CompileError("incomplete type name '%s'", blockEntry.mSymbolEntry->GetName().data());
+			CompileError({ "incomplete type name '", blockEntry.mSymbolEntry->GetName(), "'" });
 		}
 
 		// deleting from hash chain
@@ -549,12 +527,12 @@ TODO:
 		mFunctionBlockLevel = GetBlockDepth();
 
 		// frame bufferの確保する命令を発行
-		mFrameSizeList = mCodeBuffer->AddOpecodeAndOperand(MANA_IL_ALLOCATE, InvalidAddress);
+		mFrameSizeList = mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::ALLOCATE, InvalidAddress);
 
 		if (!isAction)
 		{
 			// return addressをframe bufferに保存する命令を発行
-			mCodeBuffer->AddOpecode(MANA_IL_SAVE_RETURN_ADDRESS);
+			mCodeBuffer->AddOpecode(IntermediateLanguage::SAVE_RETURN_ADDRESS);
 		}
 
 		// returnのジャンプ先リンクを初期化
@@ -570,34 +548,34 @@ TODO:
 	{
 		for (std::shared_ptr<const Symbol> symbol = function->GetParameterList(); symbol; symbol = symbol->GetNext())
 		{
-			mCodeBuffer->AddOpecodeAndOperand(MANA_IL_LOAD_FRAME_ADDRESS, symbol->GetAddress());
+			mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::LOAD_FRAME_ADDRESS, symbol->GetAddress());
 
 			switch (symbol->GetTypeDescriptor()->GetId())
 			{
 			case TypeDescriptor::Id::Char:
-				mCodeBuffer->AddOpecode(MANA_IL_STORE_CHAR);
+				mCodeBuffer->AddOpecode(IntermediateLanguage::STORE_CHAR);
 				break;
 
 			case TypeDescriptor::Id::Short:
-				mCodeBuffer->AddOpecode(MANA_IL_STORE_SHORT);
+				mCodeBuffer->AddOpecode(IntermediateLanguage::STORE_SHORT);
 				break;
 
 			case TypeDescriptor::Id::Int:
-				mCodeBuffer->AddOpecode(MANA_IL_STORE_INTEGER);
+				mCodeBuffer->AddOpecode(IntermediateLanguage::STORE_INTEGER);
 				break;
 
 			case TypeDescriptor::Id::Float:
-				mCodeBuffer->AddOpecode(MANA_IL_STORE_FLOAT);
+				mCodeBuffer->AddOpecode(IntermediateLanguage::STORE_FLOAT);
 				break;
 
 			case TypeDescriptor::Id::Actor:
-				mCodeBuffer->AddOpecode(MANA_IL_STORE_INTEGER);
+				mCodeBuffer->AddOpecode(IntermediateLanguage::STORE_INTEGER);
 				break;
 
 			default:
 				if (symbol->GetTypeDescriptor()->GetMemorySize() <= 0)
 					CompileError("missing size information on parameter");
-				mCodeBuffer->AddOpecodeAndOperand(MANA_IL_STORE_DATA, symbol->GetTypeDescriptor()->GetMemorySize());
+				mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::STORE_DATA, symbol->GetTypeDescriptor()->GetMemorySize());
 				break;
 			}
 		}
@@ -615,7 +593,7 @@ TODO:
 			if (symbol->GetClassTypeId() != Symbol::ClassTypeId::Label)
 				return;
 			if (symbol->GetAddress() < 0)
-				CompileError("label '%s' used but not defined", symbol->GetName());
+				CompileError({ "label '", symbol->GetName(), "' used but not defined" });
 
 			mCodeBuffer->ReplaceAddressAll(symbol->GetEtc(), symbol->GetAddress());
 			});
@@ -626,23 +604,23 @@ TODO:
 		// 直後のジャンプは削除
 		if (mReturnAddressList != InvalidAddress)
 		{
-			mCodeBuffer->Reduce(GetIntermediateLanguageProperty(IntermediateLanguage::MANA_IL_BRA).mSize);
+			mCodeBuffer->Reduce(GetIntermediateLanguageProperty(IntermediateLanguage::BRA).mSize);
 		}
 
 		// アクションならばGetEtcは0以外
 		if (node->GetSymbol()->GetEtc() == 0)
 		{
 			// return addressをレジスタに復帰する命令を発行
-			mCodeBuffer->AddOpecode(MANA_IL_LOAD_RETURN_ADDRESS);
+			mCodeBuffer->AddOpecode(IntermediateLanguage::LOAD_RETURN_ADDRESS);
 		}
 
 		// free命令の発行
-		mFrameSizeList = mCodeBuffer->AddOpecodeAndOperand(MANA_IL_FREE, mFrameSizeList);
+		mFrameSizeList = mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::FREE, mFrameSizeList);
 
 		// return命令の発行
 		if (IsActorOrStructerOpened())
 		{
-			mCodeBuffer->AddOpecode(MANA_IL_RETURN_FROM_ACTION);
+			mCodeBuffer->AddOpecode(IntermediateLanguage::RETURN_FROM_ACTION);
 		}
 		else
 		{
@@ -652,7 +630,7 @@ TODO:
 				if (!node->GetSymbol()->IsUsed())
 					CompileError("meaningless return value specification");
 			}
-			mCodeBuffer->AddOpecode(MANA_IL_RETURN_FROM_FUNCTION);
+			mCodeBuffer->AddOpecode(IntermediateLanguage::RETURN_FROM_FUNCTION);
 		}
 
 		/*
@@ -803,7 +781,7 @@ TODO:
 			// typeがactorまたはmoduleではない場合、続行不可能
 			if (type->GetId() != TypeDescriptor::Id::Actor && type->GetId() != TypeDescriptor::Id::Module)
 			{
-				CompileError("%s is NOT actor!", symbol->GetName());
+				CompileError({ symbol->GetName(), " is NOT actor!" });
 			}
 			else
 			{
@@ -838,7 +816,7 @@ TODO:
 
 				// actor and phantom check
 				if (type->mShare.mActor.mPhantom != phantom)
-					CompileError("already declared %s", type->mShare.mActor.mPhantom ? "a phantom" : "an actor");
+					CompileError({ "already declared ", type->mShare.mActor.mPhantom ? "a phantom" : "an actor" });
 
 				// @TODO: actorの宣言が二つある場合、ワーニングを出す？
 				goto SKIP;
@@ -913,7 +891,7 @@ TODO:
 			// typeがactorではない場合、続行不可能
 			if (type->GetId() != TypeDescriptor::Id::Actor && type->GetId() != TypeDescriptor::Id::Module)
 			{
-				CompileError("%s is NOT actor!", symbol->GetName());
+				CompileError({ symbol->GetName(), "%s is NOT actor!" });
 			}
 			else
 			{
@@ -975,7 +953,7 @@ TODO:
 			// typeがactorではない場合、続行不可能
 			if (type->IsNot(TypeDescriptor::Id::Actor) && type->IsNot(TypeDescriptor::Id::Module))
 			{
-				CompileError("%s is NOT modeule!", parentSymbol->GetName().data());
+				CompileError({ parentSymbol->GetName(), " is NOT modeule!" });
 			}
 			else
 			{
@@ -1086,14 +1064,14 @@ TODO:
 					IntermediateLanguage code;
 					switch (opcode)
 					{
-					case MANA_IL_REQ:
-						code = MANA_IL_DYNAMIC_REQ;
+					case IntermediateLanguage::REQ:
+						code = IntermediateLanguage::DYNAMIC_REQ;
 						break;
-					case MANA_IL_REQWS:
-						code = MANA_IL_DYNAMIC_REQWS;
+					case IntermediateLanguage::REQWS:
+						code = IntermediateLanguage::DYNAMIC_REQWS;
 						break;
-					case MANA_IL_REQWE:
-						code = MANA_IL_DYNAMIC_REQWE;
+					case IntermediateLanguage::REQWE:
+						code = IntermediateLanguage::DYNAMIC_REQWE;
 						break;
 					default:
 						goto ABORT;
@@ -1124,7 +1102,7 @@ TODO:
 			case TypeDescriptor::Id::Actor:
 				codeGenerator->generator_expression(actor, false);
 				codeGenerator->generator_expression(level, false);
-				mCodeBuffer->AddOpecode(MANA_IL_JOIN);
+				mCodeBuffer->AddOpecode(IntermediateLanguage::JOIN);
 				return;
 
 			default:
@@ -1417,7 +1395,7 @@ TODO:
 		const size_t number_of_actions = type->GetActionCount();
 		if (number_of_actions > (1 << (8 * sizeof(actorInfoHeader.mNumberOfActions))))
 		{
-			LinkerError("Too much actions in %s.\n", symbol->GetName());
+			LinkerError({ "Too much actions in ", symbol->GetName(), "\n" });
 			return false;
 		}
 
@@ -1429,7 +1407,7 @@ TODO:
 
 		if (actorInfoHeader.mName == (uint32_t)-1)
 		{
-			LinkerError("Can't find actor '%s'.\n", symbol->GetName());
+			LinkerError({ "Can't find actor '", symbol->GetName(), "'\n" });
 			return false;
 		}
 
@@ -1452,7 +1430,7 @@ TODO:
 
 				if (actionInfoHeader.mName == (uint32_t)-1)
 				{
-					LinkerError("Can't find action '%s'.\n", component_symbol->GetName());
+					LinkerError({ "Can't find action '", component_symbol->GetName(), "'\n" });
 					return false;
 				}
 

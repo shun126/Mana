@@ -13,9 +13,6 @@
       <Filter>runner</Filter>
     </None>
     <None Include="Version.py" />
-    <None Include="..\runner\Mana.inl">
-      <Filter>runner</Filter>
-    </None>
     <None Include="..\runner\Plugin.inl">
       <Filter>runner</Filter>
     </None>
@@ -25,16 +22,7 @@
     <None Include="..\runner\Buffer.inl">
       <Filter>runner</Filter>
     </None>
-    <None Include="..\runner\Datalink.inl">
-      <Filter>runner</Filter>
-    </None>
-    <None Include="..\runner\Function.inl">
-      <Filter>runner</Filter>
-    </None>
     <None Include="..\runner\common\OutputStream.inl">
-      <Filter>runner\common</Filter>
-    </None>
-    <None Include="..\runner\common\String.inl">
       <Filter>runner\common</Filter>
     </None>
   </ItemGroup>
@@ -45,22 +33,17 @@
     <ClInclude Include="CodeBuffer.h" />
     <ClInclude Include="CodeGenerator.h" />
     <ClInclude Include="DataBuffer.h" />
-    <ClInclude Include="DatalinkGenerator.h" />
     <ClInclude Include="ErrorHandler.h" />
     <ClInclude Include="GlobalAddressResolver.h" />
     <ClInclude Include="GlobalSemanticAnalyzer.h" />
     <ClInclude Include="LocalSemanticAnalyzer.h" />
     <ClInclude Include="Path.h" />
-    <ClInclude Include="Register.h" />
     <ClInclude Include="SemanticAnalyzer.h" />
     <ClInclude Include="StringPool.h" />
     <ClInclude Include="SymbolFactory.h" />
     <ClInclude Include="SyntaxNode.h" />
     <ClInclude Include="TypeDescriptor.h" />
     <ClInclude Include="TypeDescriptorFactory.h" />
-    <ClInclude Include="..\runner\Datalink.h">
-      <Filter>runner</Filter>
-    </ClInclude>
     <ClInclude Include="..\runner\Function.h">
       <Filter>runner</Filter>
     </ClInclude>
@@ -126,12 +109,10 @@
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="Lexer.cpp" />
     <ClCompile Include="CodeGenerator.cpp" />
-    <ClCompile Include="DatalinkGenerator.cpp" />
     <ClCompile Include="ErrorHandler.cpp" />
     <ClCompile Include="GlobalSemanticAnalyzer.cpp" />
     <ClCompile Include="LocalSemanticAnalyzer.cpp" />
     <ClCompile Include="Path.cpp" />
-    <ClCompile Include="Register.cpp" />
     <ClCompile Include="SemanticAnalyzer.cpp" />
     <ClCompile Include="SymbolFactory.cpp" />
     <ClCompile Include="SyntaxNode.cpp" />

@@ -20,7 +20,7 @@ namespace mana
 			const std::shared_ptr<SymbolFactory>& symbolFactory,
 			const std::shared_ptr<TypeDescriptorFactory>& typeDescriptorFactory
 		);
-		virtual ~LocalSemanticAnalyzer();
+		~LocalSemanticAnalyzer() = default;
 
 		void PostResolverResolve(std::shared_ptr<SyntaxNode> node);
 

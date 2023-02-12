@@ -7,7 +7,6 @@ mana (library)
 
 #pragma once
 #include "Buffer.h"
-#include "Datalink.h"
 #include <bitset>
 #include <functional>
 #include <memory>
@@ -68,8 +67,6 @@ namespace mana
 		float_t GetDeltaTime() const;
 		bool IsFrameChanged() const;
 		
-		void GetResource(const size_t resouce_id, const void** buffer, size_t* size) const;
-
 	private:
 		int8_t GetInt8FromMemory(const uint32_t address) const;
 		uint8_t GetUint8FromMemory(const uint32_t address) const;
@@ -84,6 +81,10 @@ namespace mana
 
 	private:
 		ExternalFuntionType FindFunction(const std::string& functionName) const;
+		Buffer& GetGlobalVariables() noexcept;
+		const Buffer& GetGlobalVariables() const noexcept;
+		Buffer& GetStaticVariables() noexcept;
+		const Buffer& GetStaticVariables() const noexcept;
 
 	private:
 		std::shared_ptr<Plugin> mPlugin;
@@ -97,7 +98,6 @@ namespace mana
 		std::unordered_map<std::string_view, const ActorInfoHeader*> mPhantomHash;		//!< phantomを表すmana_actor オブジェクトへの連想配列
 		Buffer mGlobalVariables;
 		Buffer mStaticVariables;
-		Datalink mDatalink;
 		
 		uint32_t mFrameCounter = 0;
 		enum Flag : uint8_t

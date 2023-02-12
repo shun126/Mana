@@ -23,11 +23,15 @@ namespace mana
 {
 	class VM;
 
+	/*!
+	Actor class
+	*/
 	class Actor : private Noncopyable, public std::enable_shared_from_this<Actor>
 	{
 		friend class VM;
 
-		explicit Actor(const std::shared_ptr<VM>& vm, const size_t variableSize);
+		//! Constructor
+		explicit Actor(const std::shared_ptr<VM>& vm, const address_t variableSize);
 
 	public:
 		//! request / rollbackコールバック
@@ -304,9 +308,9 @@ namespace mana
 
 #if MANA_BUILD_TARGET > MANA_BUILD_DEBUG
 /*! 引数の数を調べ、一致しない場合はreturnします */
-#define MANA_ASSERT_PARAMETER(P, I) {									\
-	if(P->GetArgumentCount() != I)							\
-		return;															\
+#define MANA_ASSERT_PARAMETER(P, I) {					\
+	if(P->GetArgumentCount() != I)						\
+		return;											\
 }
 /*! initアクション中ならばreturnします */
 #define MANA_ASSERT_ILLIGAL_CALL_IN_INIT_ACTION(P) {	\
@@ -315,31 +319,17 @@ namespace mana
 }
 #else
 /*! 引数の数を調べ、一致しない場合は警告を表示してreturnします */
-#if 1
 #define MANA_ASSERT_PARAMETER(P, I)	\
 	if(P->GetArgumentCount() != I){	\
-		 MANA_PRINT("ERROR: %s: function %s number of arguments %d correct%d\n", P->GetName(), P->GetFunctionName(), P->GetArgumentCount(), I);\
+		 MANA_PRINT({ "ERROR: ", P->GetName(), ": function ", P->GetFunctionName(), " number of arguments ", std::to_string(P->GetArgumentCount()), " correct ", std::to_string(I), "\n" });\
 		 return;					\
 	}
 /*! initアクション中ならば警告を表示してreturnします */
 #define MANA_ASSERT_CANT_CALL_IN_INIT_ACTION(P)			\
 	if(P->GetVirtualMachine()->IsInInitAction()){		\
-		MANA_PRINT("ERROR: %s: init action %s can not call\n", P->GetName(), P->GetFunctionName());\
+		MANA_PRINT({ "ERROR: ", P->GetName(), ": init action ", P->GetFunctionName()," can not call\n" });\
 		return;											\
 	}
-#else
-#define MANA_ASSERT_PARAMETER(P, I)										\
-	if(GetArgumentCount(P) != I){							\
-		MANA_PRINT("ERROR: %s: 関数%sの引数の数が%dです。正しい引数の数は%dです。\n", P->GetName(P), GetFunctionName(P), GetArgumentCount(P), I);\
-		return;															\
-	}
-/*! initアクション中ならば警告を表示してreturnします */
-#define MANA_ASSERT_CANT_CALL_IN_INIT_ACTION(P)							\
-	if(mana_is_in_init_action(P->parent)){								\
-		MANA_PRINT("ERROR: %s: initアクション内で %s は使えません。\n", GetName(P), GetFunctionName(P));\
-		return;															\
-	}
-#endif
 #endif
 
 #include "Actor.inl"

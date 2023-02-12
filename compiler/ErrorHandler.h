@@ -9,8 +9,7 @@ mana (compiler)
 */
 
 #pragma once
-#include <cstdarg>
-#include <cstdint>
+#include <string>
 
 namespace mana
 {
@@ -35,16 +34,24 @@ namespace mana
 		NoMemory,
 	};
 
-	extern void CompileError(const char* format, ...);
-	extern void CompileWarning(const char* format, ...);
+	extern void CompileError(const std::string& message);
+	extern void CompileError(std::initializer_list<std::string_view> message);
 
-	extern void LinkerError(const char* format, ...);
-	extern void LinkerWarning(const char* format, ...);
+	extern void CompileWarning(const std::string& message);
+	extern void CompileWarning(std::initializer_list<std::string_view> message);
+
+	extern void LinkerError(const std::string& message);
+	extern void LinkerError(std::initializer_list<std::string_view> message);
+
+	extern void LinkerWarning(const std::string& message);
+	extern void LinkerWarning(std::initializer_list<std::string_view> message);
 
 	extern void Fatal(const FatalType type);
-	extern void Fatal(const char* format, ...);
+	extern void Fatal(const std::string& message);
+	extern void Fatal(std::initializer_list<std::string_view> message);
+
 	extern void FatalNoMemory();
 }
 
 extern int yynerrs;
-extern void yyerror(const char* message);
+//extern void yyerror(const char* message);
