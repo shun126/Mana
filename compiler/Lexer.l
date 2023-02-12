@@ -76,7 +76,6 @@ other		.
 
 <INITIAL>"#line"	BEGIN LINE;
 
-<INITIAL>"alias"	return mana::Parser::token::tALIAS;
 <INITIAL>"define"	return mana::Parser::token::tDEFINE;
 <INITIAL>"undef"	return mana::Parser::token::tUNDEF;
 
@@ -138,7 +137,7 @@ other		.
 <INITIAL>{real}		{ yylval->build<mana::float_t>() = mana::ToFloat(yytext); return mana::Parser::token::tREAL; }
 <INITIAL>{id}		{ yylval->build<std::string_view>() = mana::ToString(yytext); return mana::Parser::token::tIDENTIFIER; }
 <INITIAL>{string}	{ yylval->build<std::string_view>() = mana::LiteralToString(yytext, yyleng); return mana::Parser::token::tSTRING; }
-<INITIAL>{other}	{ if(yytext[0] != '\r') mana::CompileError("Illegal char '%c' ignored\n", yytext[0]); }
+<INITIAL>{other}	{ if(yytext[0] != '\r') mana::CompileError({ "Illegal char '", std::string_view(&yytext[0], 1), "' ignored\n" }); }
 
 <COMMENT_BLOCK>"/*"	{ mana::CompileError("comment nest error"); }
 <COMMENT_BLOCK>"*/"	BEGIN INITIAL;
@@ -163,11 +162,11 @@ other		.
 
 <HEX>[A-Fa-f0-9]+	{ yylval->build<mana::int_t>() = mana::ToIntHex(yytext); BEGIN INITIAL; return mana::Parser::token::tDIGIT; }
 <HEX>{ws}+			;
-<HEX>{other}		{ mana::CompileError("Illegal char '%c' ignored\n", yytext[0]); }
+<HEX>{other}		{ mana::CompileError({ "Illegal char '", std::string_view(&yytext[0], 1), "' ignored\n" }); }
 
 <BIN>[01_]+			{ yylval->build<mana::int_t>() = mana::mLexer->binary(yytext); BEGIN INITIAL; return mana::Parser::token::tDIGIT; }
 <BIN>{ws}+			;
-<BIN>{other}		{ mana::CompileError("Illegal char '%c' ignored\n", yytext[0]); }
+<BIN>{other}		{ mana::CompileError({ "Illegal char '", std::string_view(&yytext[0], 1), "' ignored\n" }); }
 
 %%
 

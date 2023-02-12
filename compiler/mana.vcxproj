@@ -27,24 +27,24 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -230,35 +230,39 @@
     <CustomBuild Include="Version.json">
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">if defined PYTHON_BIN (
- echo $(PYTHON_BIN)
  if exist $(PYTHON_BIN) (
+  echo $(PYTHON_BIN) Version.py
   $(PYTHON_BIN) Version.py
  ) else (
   echo The python was not found.
+  echo PYTHON_BIN=$(PYTHON_BIN)
  )
 )</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">if defined PYTHON_BIN (
- echo $(PYTHON_BIN)
  if exist $(PYTHON_BIN) (
+  echo $(PYTHON_BIN) Version.py
   $(PYTHON_BIN) Version.py
  ) else (
   echo The python was not found.
+  echo PYTHON_BIN=$(PYTHON_BIN)
  )
 )</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">if defined PYTHON_BIN (
- echo $(PYTHON_BIN)
  if exist $(PYTHON_BIN) (
+  echo $(PYTHON_BIN) Version.py
   $(PYTHON_BIN) Version.py
  ) else (
   echo The python was not found.
+  echo PYTHON_BIN=$(PYTHON_BIN)
  )
 )</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">if defined PYTHON_BIN (
- echo $(PYTHON_BIN)
  if exist $(PYTHON_BIN) (
+  echo $(PYTHON_BIN) Version.py
   $(PYTHON_BIN) Version.py
  ) else (
   echo The python was not found.
+  echo PYTHON_BIN=$(PYTHON_BIN)
  )
 )</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generate version header file</Message>
@@ -277,10 +281,6 @@
     <None Include="..\runner\Actor.inl" />
     <None Include="..\runner\Buffer.inl" />
     <None Include="..\runner\common\OutputStream.inl" />
-    <None Include="..\runner\common\String.inl" />
-    <None Include="..\runner\Datalink.inl" />
-    <None Include="..\runner\Function.inl" />
-    <None Include="..\runner\Mana.inl" />
     <None Include="..\runner\Plugin.inl" />
     <None Include="..\runner\Stack.inl" />
     <None Include="..\runner\VM.inl" />
@@ -410,7 +410,6 @@
     <ClInclude Include="..\runner\common\Stopwatch.h" />
     <ClInclude Include="..\runner\common\String.h" />
     <ClInclude Include="..\runner\common\Type.h" />
-    <ClInclude Include="..\runner\Datalink.h" />
     <ClInclude Include="..\runner\Function.h" />
     <ClInclude Include="..\runner\Mana.h" />
     <ClInclude Include="..\runner\Plugin.h" />
@@ -419,12 +418,6 @@
     <ClInclude Include="CodeBuffer.h" />
     <ClInclude Include="CodeGenerator.h" />
     <ClInclude Include="DataBuffer.h" />
-    <ClInclude Include="DatalinkGenerator.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="ErrorHandler.h" />
     <ClInclude Include="GlobalAddressResolver.h" />
     <ClInclude Include="GlobalSemanticAnalyzer.h" />
@@ -436,12 +429,6 @@
     <ClInclude Include="Parser.hpp" />
     <ClInclude Include="ParsingDriver.h" />
     <ClInclude Include="Path.h" />
-    <ClInclude Include="Register.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="Runner.h" />
     <ClInclude Include="SemanticAnalyzer.h" />
     <ClInclude Include="StringPool.h" />
@@ -456,12 +443,6 @@
     <ClCompile Include="CodeBuffer.cpp" />
     <ClCompile Include="CodeGenerator.cpp" />
     <ClCompile Include="DataBuffer.cpp" />
-    <ClCompile Include="DatalinkGenerator.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="ErrorHandler.cpp" />
     <ClCompile Include="GlobalAddressResolver.cpp" />
     <ClCompile Include="GlobalSemanticAnalyzer.cpp" />
@@ -478,12 +459,6 @@
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="ParsingDriver.cpp" />
     <ClCompile Include="Path.cpp" />
-    <ClCompile Include="Register.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="Runner.cpp" />
     <ClCompile Include="SemanticAnalyzer.cpp" />
     <ClCompile Include="StringPool.cpp" />
