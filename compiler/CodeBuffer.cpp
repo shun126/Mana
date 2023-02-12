@@ -10,12 +10,6 @@ mana (compiler)
 
 namespace mana
 {
-	CodeBuffer::Command::Command(const uint8_t code, const address_t nextCommand)
-		: mCode(code)
-		, mNextCommand(nextCommand)
-	{
-	}
-
 	void CodeBuffer::Reduce(const address_t reduceSize)
 	{
 		mCommand.resize(mCommand.size() - reduceSize);
@@ -45,7 +39,7 @@ namespace mana
 
 	void CodeBuffer::ReplaceOpecode(const address_t address, const IntermediateLanguage code)
 	{
-		mCommand[address].mCode = code;
+		mCommand[address].Replace(code);
 	}
 
 	void CodeBuffer::ReplaceAddress(const address_t address, const address_t newAddress)
@@ -92,10 +86,17 @@ namespace mana
 		}
 	}
 
-	address_t CodeBuffer::AddCommand(const uint8_t code, const address_t nextCommand)
+	address_t CodeBuffer::AddCommand(const IntermediateLanguage code, const address_t nextCommand)
 	{
 		const address_t pc = static_cast<address_t>(mCommand.size());
-		mCommand.push_back(Command(code, nextCommand));
+		mCommand.emplace_back(code, nextCommand);
+		return pc;
+	}
+
+	address_t CodeBuffer::AddCommand(const uint8_t data, const address_t nextCommand)
+	{
+		const address_t pc = static_cast<address_t>(mCommand.size());
+		mCommand.emplace_back(data, nextCommand);
 		return pc;
 	}
 }

@@ -33,7 +33,6 @@ namespace mana
 			ConstantInteger,
 			ConstantFloat,
 			ConstantString,
-			Alias,
 			Label,
 		};
 
@@ -52,7 +51,6 @@ namespace mana
 				"constant integer",
 				"constant real",
 				"constant string",
-				"alias",
 				"label",
 			};
 			return names[static_cast<size_t>(id)];

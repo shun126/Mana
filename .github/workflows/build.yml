@@ -13,7 +13,10 @@ jobs:
         uses: actions/checkout@v3
       - run: echo "The ${{ github.repository }} repository has been cloned to the runner."
       - name: Build Mana compiler
+        run: make --directory=${{ github.workspace }}/compiler version
         run: make --directory=${{ github.workspace }}/compiler
+      - name: Test Mana compiler
+        run: make --directory=${{ github.workspace }}/compiler test
   BuildOnWindows:
     runs-on: windows-latest
     steps:

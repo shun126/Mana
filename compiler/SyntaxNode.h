@@ -100,7 +100,6 @@ namespace mana
 			Extend,
 			Allocate,
 			Static,
-			Alias,
 			NativeFunction,
 			DeclareFunction,
 
@@ -179,7 +178,7 @@ namespace mana
 		std::shared_ptr<Symbol> mSymbol;
 		std::shared_ptr<TypeDescriptor> mType;
 
-		IntermediateLanguage mCode = IntermediateLanguage::MANA_IL_HALT;
+		IntermediateLanguage mCode = IntermediateLanguage::HALT;
 		int_t mDigit = 0;
 		float_t mReal = 0;
 		std::string_view mString;

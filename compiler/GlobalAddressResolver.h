@@ -17,6 +17,14 @@ namespace mana
 
 	class GlobalAddressResolver final : private Noncopyable
 	{
+	public:
+		explicit GlobalAddressResolver(const std::shared_ptr<CodeBuffer>& codeBuffer);
+		~GlobalAddressResolver() = default;
+
+		void AddCallList(const int32_t address, const std::shared_ptr<Symbol>& symbol);
+		void ResolveAddress() const;
+
+	private:
 		struct CallList final
 		{
 			std::shared_ptr<Symbol> mSymbol;
@@ -28,14 +36,6 @@ namespace mana
 			{}
 		};
 
-	public:
-		explicit GlobalAddressResolver(const std::shared_ptr<CodeBuffer>& codeBuffer);
-		~GlobalAddressResolver() = default;
-
-		void AddCallList(const int32_t address, const std::shared_ptr<Symbol>& symbol);
-		void ResolveAddress() const;
-
-	private:
 		std::shared_ptr<CodeBuffer> mCodeBuffer;
 		std::vector<std::unique_ptr<CallList>> mCallList;
 	};

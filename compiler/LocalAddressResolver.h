@@ -31,7 +31,7 @@ namespace mana
 
 	public:
 		explicit LocalAddressResolver(const std::shared_ptr<CodeBuffer>& codeBuffer);
-		~LocalAddressResolver();
+		~LocalAddressResolver() = default;
 
 		//! ジャンプブロックの開始
 		void OpenChain(const JumpChainStatus status);

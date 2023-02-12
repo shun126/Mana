@@ -22,16 +22,6 @@ namespace mana
 	*/
 	class CodeBuffer final : private Noncopyable
 	{
-		struct Command
-		{
-			uint8_t mCode = 0;
-			address_t mNextCommand = 0;
-
-			Command() = default;
-			
-			explicit Command(const uint8_t code, const address_t nextCommand);
-		};
-
 	public:
 		CodeBuffer() = default;
 		~CodeBuffer() = default;
@@ -66,12 +56,43 @@ namespace mana
 		static T Raw(const void* program, const address_t address);
 
 	private:
+		address_t AddCommand(const IntermediateLanguage code, const address_t nextCommand);
 		address_t AddCommand(const uint8_t code, const address_t nextCommand);
 
 		template <typename T>
 		void Replace(const address_t address, const T value);
 
 	private:
+		struct Command final
+		{
+			uint8_t mCode = 0;
+			address_t mNextCommand = 0;
+
+			Command() = default;
+
+			Command(const IntermediateLanguage code, const address_t nextCommand) noexcept
+				: mCode(static_cast<uint8_t>(code))
+				, mNextCommand(nextCommand)
+			{
+			}
+
+			Command(const uint8_t data, const address_t nextCommand) noexcept
+				: mCode(data)
+				, mNextCommand(nextCommand)
+			{
+			}
+
+			void Replace(const IntermediateLanguage code) noexcept
+			{
+				mCode = static_cast<uint8_t>(code);
+			}
+
+			void Replace(const uint8_t data) noexcept
+			{
+				mCode = data;
+			}
+		};
+
 		std::vector<Command> mCommand;
 	};
 
@@ -92,8 +113,7 @@ namespace mana
 	}
 
 	template <typename T>
-	void CodeBuffer::Replace(const address_t address, const T value)
-	{
+	void CodeBuffer::Replace(const address_t address, const T value){
 		const uint8_t* pointer = reinterpret_cast<const uint8_t*>(&value);
 		// Stored in BigEndian in CodeBuffer
 		if (IsBigEndian())

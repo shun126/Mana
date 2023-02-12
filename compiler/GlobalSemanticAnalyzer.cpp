@@ -217,14 +217,6 @@ namespace mana
 			break;
 
 			// Nodes related to constant definitions
-		case SyntaxNode::Id::Alias:
-			MANA_ASSERT(node->GetLeftNode() == nullptr);
-			MANA_ASSERT(node->GetRightNode() == nullptr);
-			MANA_ASSERT(node->GetBodyNode() == nullptr);
-
-			GetSymbolFactory()->CreateAlias(node->GetString(), node->GetString());
-			break;
-
 		case SyntaxNode::Id::DefineConstant:
 			MANA_ASSERT(node->GetTypeDescriptor());
 			MANA_ASSERT(node->GetLeftNode() == nullptr);
@@ -410,7 +402,7 @@ namespace mana
 				if (symbol)
 					node->Set(static_cast<int_t>(symbol->GetAddress()));
 				else
-					CompileError("undefined GetSymbol() '%s'", node->GetString());
+					CompileError({ "undefined GetSymbol() '", node->GetString(), "'" });
 			}
 			break;
 

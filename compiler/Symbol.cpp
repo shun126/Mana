@@ -52,7 +52,7 @@ static char* symbol_data_type_id_name[NUMBER_OF] = {
 			GetClassTypeId() != Symbol::ClassTypeId::ConstantFloat &&
 			GetClassTypeId() != Symbol::ClassTypeId::ConstantString)
 		{
-			CompileError("non-variable name '%s'", GetName());
+			CompileError({ "non-variable name '", GetName(), "'" });
 			return false;
 		}
 		else {
@@ -71,7 +71,7 @@ static char* symbol_data_type_id_name[NUMBER_OF] = {
 			mClassTypeId != ClassTypeId::ConstantFloat &&
 			mClassTypeId != ClassTypeId::ConstantString
 		){
-			CompileError("non-variable name '%s'", mName.c_str());
+			CompileError({ "non-variable name '", mName, "'" });
 			return false;
 		}
 
@@ -260,25 +260,30 @@ static char* symbol_data_type_id_name[NUMBER_OF] = {
 	void Symbol::OnDump(std::ofstream& output, const int32_t level) const
 	{
 		for (int32_t i = 0; i < level; i++)
-			output << ' ';
+			output << "  ";
 
+		output << "* ";
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
 		output << mMagic;
 		output << " ";
 #endif
+		output << "id='";
 		output << Symbol::GetClassTypeName(mClassTypeId); // TODO
-		output << " ";
+		output << "' ";
 
 		if (mTypeDescription)
 		{
+			output << "type='";
 			mTypeDescription->Dump(output);
-			output << " ";
+			output << "' ";
 		}
 
+		output << "name='";
 		output << mName;
-		output << " (";
+		output << "' ";
+
+		output << "address=";
 		output << "0x" << std::setfill('0') << std::hex << std::setw(8) << mAddress;
-		output << ")";
 
 		output << "\n";
 

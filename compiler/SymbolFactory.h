@@ -44,7 +44,6 @@ namespace mana
 		~SymbolFactory() = default;
 
 		// create symbol
-		std::shared_ptr<Symbol> CreateAlias(const std::string_view name, const std::string_view alias);
 		std::shared_ptr<Symbol> CreateConstInt(const std::string_view name, const int32_t value);
 		std::shared_ptr<Symbol> CreateConstFloat(const std::string_view name, const float value);
 		std::shared_ptr<Symbol> CreateConstString(const std::string_view name, const std::string_view text);
