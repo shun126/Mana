@@ -433,7 +433,6 @@ namespace mana
 			"Extend",
 			"Allocate",
 			"Static",
-			"Alias",
 			"NativeFunction",
 			"DeclareFunction",
 

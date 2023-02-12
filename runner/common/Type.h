@@ -33,11 +33,17 @@ namespace mana
 
 	using offset_t = std::int32_t;
 
+	/*!
+	Determine if the address is invalid.
+	*/
 	inline bool IsValid(const address_t address)
 	{
 		return address != InvalidAddress;
 	}
 
+	/*!
+	Check the value range and cast to address_t
+	*/
 	template<typename T>
 	inline address_t ToAddress(const T size)
 	{
@@ -49,14 +55,41 @@ namespace mana
 			}
 			else if (static_cast<size_t>(size) > std::numeric_limits<address_t>::max())
 			{
-				throw std::overflow_error("Data or program size must not exceed 32 bits");
+				throw std::overflow_error("Data or program size must not exceed unsigned 32 bits");
 			}
 		}
 		else
 		{
 			if (static_cast<size_t>(size) > std::numeric_limits<address_t>::max())
 			{
-				throw std::overflow_error("Data or program size must not exceed 32 bits");
+				throw std::overflow_error("Data or program size must not exceed unsigned 32 bits");
+			}
+		}
+		return static_cast<address_t>(size);
+	}
+
+	/*!
+	Check the value range and cast to offset_t
+	*/
+	template<typename T>
+	inline offset_t ToOffset(const T size)
+	{
+		if constexpr (std::is_signed<T>())
+		{
+			if (static_cast<ssize_t>(size) > std::numeric_limits<offset_t>::min())
+			{
+				throw std::underflow_error("Data or program size must not exceed signed 32 bits");
+			}
+			else if (static_cast<ssize_t>(size) > std::numeric_limits<address_t>::max())
+			{
+				throw std::overflow_error("Data or program size must not exceed signed 32 bits");
+			}
+		}
+		else
+		{
+			if (static_cast<size_t>(size) > std::numeric_limits<address_t>::max())
+			{
+				throw std::overflow_error("Data or program size must not exceed signed 32 bits");
 			}
 		}
 		return static_cast<address_t>(size);

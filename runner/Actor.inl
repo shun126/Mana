@@ -12,7 +12,7 @@ mana (library)
 
 namespace mana
 {
-	inline Actor::Actor(const std::shared_ptr<VM>& vm, const size_t variableSize)
+	inline Actor::Actor(const std::shared_ptr<VM>& vm, const address_t variableSize)
 		: mVM(vm)
 	{
 		MANA_ASSERT(vm.get() != nullptr);
@@ -23,7 +23,7 @@ namespace mana
 	{
 		std::shared_ptr<Actor> sharedActor = std::shared_ptr<Actor>(
 			new Actor(mVM.lock(), mVariable.GetSize())
-			);
+		);
 		sharedActor->mActions = mActions;
 
 		return sharedActor;
@@ -146,127 +146,127 @@ namespace mana
 #endif
 		static const std::array<IntermediateLanguageCommand, IntermediateLanguageSize> mIntermediateLanguage = {
 			// thread
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_RESTART, &CommandRestart),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_HALT, &CommandHalt),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_YIELD, &CommandYield),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_NONPREEMPTIVE, &CommandSetNonPreemptive),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_PREEMPTIVE, &CommandSetPreemptive),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::RESTART, &CommandRestart),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::HALT, &CommandHalt),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::YIELD, &CommandYield),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::NONPREEMPTIVE, &CommandSetNonPreemptive),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PREEMPTIVE, &CommandSetPreemptive),
 
 			// jump
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_BEQ, &CommandBranchEqual),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_BNE, &CommandBranchNotEqual),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_BRA, &CommandBranchAway),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_BSR, &CommandBranchSubRoutine),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_CALL, &CommandCall),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_REQ, &CommandRequest),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_REQWS, &CommandRequestWaitStarting),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_REQWE, &CommandRequestWaitEnding),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_JOIN, &CommandJoin),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_COMPLY, &CommandComply),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_REFUSE, &CommandRefuse),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_LOAD_RETURN_ADDRESS, &CommandLoadReturnAddress),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_SAVE_RETURN_ADDRESS, &CommandStoreReturnAddress),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_RETURN_FROM_FUNCTION, &CommandReturnFromFunction),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_RETURN_FROM_ACTION, &CommandReturnFromAction),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_ROLLBACK, &CommandRollback),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::BEQ, &CommandBranchEqual),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::BNE, &CommandBranchNotEqual),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::BRA, &CommandBranchAway),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::BSR, &CommandBranchSubRoutine),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::CALL, &CommandCall),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::REQ, &CommandRequest),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::REQWS, &CommandRequestWaitStarting),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::REQWE, &CommandRequestWaitEnding),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::JOIN, &CommandJoin),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::COMPLY, &CommandComply),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::REFUSE, &CommandRefuse),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::LOAD_RETURN_ADDRESS, &CommandLoadReturnAddress),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::SAVE_RETURN_ADDRESS, &CommandStoreReturnAddress),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::RETURN_FROM_FUNCTION, &CommandReturnFromFunction),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::RETURN_FROM_ACTION, &CommandReturnFromAction),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::ROLLBACK, &CommandRollback),
 
 			// constant
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_PUSH_ZERO_INTEGER, &CommandPushZeroInteger),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_PUSH_ZERO_FLOAT, &CommandPushZeroFloat),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_PUSH_CHAR, &CommandPushChar),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_PUSH_SHORT, &CommandPushShort),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_PUSH_INTEGER, &CommandPushInteger),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_PUSH_SIZE, &CommandPushInteger),	// TODO:サイズに対応して下さい
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_PUSH_FLOAT, &CommandPushFloat),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_PUSH_STRING, &CommandPushString),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_PUSH_PRIORITY, &CommandPushPriority),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_PUSH_ACTOR, &CommandPushActor),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_PUSH_SELF, &CommandPushSelf),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_PUSH_SENDER, &CommandPushSender),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PUSH_ZERO_INTEGER, &CommandPushZeroInteger),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PUSH_ZERO_FLOAT, &CommandPushZeroFloat),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PUSH_CHAR, &CommandPushChar),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PUSH_SHORT, &CommandPushShort),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PUSH_INTEGER, &CommandPushInteger),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PUSH_SIZE, &CommandPushInteger),	// TODO:サイズに対応して下さい
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PUSH_FLOAT, &CommandPushFloat),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PUSH_STRING, &CommandPushString),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PUSH_PRIORITY, &CommandPushPriority),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PUSH_ACTOR, &CommandPushActor),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PUSH_SELF, &CommandPushSelf),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PUSH_SENDER, &CommandPushSender),
 
 			// stack
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_ALLOCATE, &CommandAllocate),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_FREE, &CommandRelease),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_DUPLICATE, &CommandDuplicate),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_DUPLICATE_DATA, &CommandDuplicateData),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_REMOVE, &CommandRemove),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_REMOVE_DATA, &CommandRemoveData),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_LOAD_STATIC_ADDRESS, &CommandLoadStaticAddress),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_LOAD_GLOBAL_ADDRESS, &CommandLoadGlobalAddress),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_LOAD_FRAME_ADDRESS, &CommandLoadFrameAddress),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_LOAD_SELF_ADDRESS, &CommandLoadSelfAddress),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::ALLOCATE, &CommandAllocate),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::FREE, &CommandRelease),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::Duplicate, &CommandDuplicate),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::DUPLICATE_DATA, &CommandDuplicateData),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::REMOVE, &CommandRemove),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::REMOVE_DATA, &CommandRemoveData),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::LOAD_STATIC_ADDRESS, &CommandLoadStaticAddress),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::LOAD_GLOBAL_ADDRESS, &CommandLoadGlobalAddress),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::LOAD_FRAME_ADDRESS, &CommandLoadFrameAddress),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::LOAD_SELF_ADDRESS, &CommandLoadSelfAddress),
 
 			// memory operation
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_LOAD_CHAR, &CommandLoadInt8),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_LOAD_SHORT, &CommandLoadInt16),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_LOAD_INTEGER, &CommandLoadInt32),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_LOAD_FLOAT, &CommandLoadFloat),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_LOAD_REFFRENCE, &CommandLoadReffrence),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_LOAD_DATA, &CommandLoadData),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_STORE_CHAR, &CommandStoreInt8),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_STORE_SHORT, &CommandStoreInt16),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_STORE_INTEGER, &CommandStoreInt32),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_STORE_FLOAT, &CommandStoreFloat),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_STORE_REFFRENCE, &CommandStoreReffrence),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_STORE_DATA, &CommandStoreData),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::LOAD_CHAR, &CommandLoadInt8),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::LOAD_SHORT, &CommandLoadInt16),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::LOAD_INTEGER, &CommandLoadInt32),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::LOAD_FLOAT, &CommandLoadFloat),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::LOAD_REFFRENCE, &CommandLoadReffrence),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::LOAD_DATA, &CommandLoadData),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::STORE_CHAR, &CommandStoreInt8),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::STORE_SHORT, &CommandStoreInt16),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::STORE_INTEGER, &CommandStoreInt32),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::STORE_FLOAT, &CommandStoreFloat),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::STORE_REFFRENCE, &CommandStoreReffrence),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::STORE_DATA, &CommandStoreData),
 
 			// caluclation
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_ADD_INTEGER, &CommandAddInteger),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_DIV_INTEGER, &CommandDivideInteger),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_MINUS_INTEGER, &CommandMinusInteger),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_MOD_INTEGER, &CommandModInteger),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_MUL_INTEGER, &CommandMultiplyInteger),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_SUB_INTEGER, &CommandSubtractInteger),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::ADD_INTEGER, &CommandAddInteger),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::DIV_INTEGER, &CommandDivideInteger),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MINUS_INTEGER, &CommandMinusInteger),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MOD_INTEGER, &CommandModInteger),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MUL_INTEGER, &CommandMultiplyInteger),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::SUB_INTEGER, &CommandSubtractInteger),
 
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_ADD_FLOAT, &CommandAddFloat),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_DIV_FLOAT, &CommandDivideFloat),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_MINUS_FLOAT, &CommandMinusFloat),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_MOD_FLOAT, &CommandModfloat),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_MUL_FLOAT, &CommandMultiplyFloat),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_SUB_FLOAT, &CommandSubtractFloat),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::ADD_FLOAT, &CommandAddFloat),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::DIV_FLOAT, &CommandDivideFloat),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MINUS_FLOAT, &CommandMinusFloat),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MOD_FLOAT, &CommandModfloat),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MUL_FLOAT, &CommandMultiplyFloat),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::SUB_FLOAT, &CommandSubtractFloat),
 
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_AND, &CommandAnd),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_EOR, &CommandExclusiveOr),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_LAND, &CommandLogicalAnd),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_LOR, &CommandLogicalOr),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_LNOT, &Commandlogical_not),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_NOT, &CommandNot),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_OR, &CommandOr),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_SHL, &CommandShiftLeft),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_SHR, &CommandShiftRight),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::AND, &CommandAnd),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::EOR, &CommandExclusiveOr),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::LAND, &CommandLogicalAnd),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::LOR, &CommandLogicalOr),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::LNOT, &Commandlogical_not),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::NOT, &CommandNot),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::OR, &CommandOr),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::SHL, &CommandShiftLeft),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::SHR, &CommandShiftRight),
 
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_INT2FLOAT, &CommandIntegerToFloat),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_FLOAT2INT, &CommandFloatToInteger),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::INT2FLOAT, &CommandIntegerToFloat),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::FLOAT2INT, &CommandFloatToInteger),
 
 			// compare and branch
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_COMPARE_EQ_INTEGER, &CommandCompareEqualInteger),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_COMPARE_NE_INTEGER, &CommandCompareNotEqualInteger),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_COMPARE_GE_INTEGER, &CommandCompareGreaterEqualInteger),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_COMPARE_GT_INTEGER, &CommandCompareGreaterInteger),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_COMPARE_LE_INTEGER, &CommandCompareLessEqualInteger),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_COMPARE_LS_INTEGER, &CommandCompareLessInteger),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::COMPARE_EQ_INTEGER, &CommandCompareEqualInteger),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::COMPARE_NE_INTEGER, &CommandCompareNotEqualInteger),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::COMPARE_GE_INTEGER, &CommandCompareGreaterEqualInteger),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::COMPARE_GT_INTEGER, &CommandCompareGreaterInteger),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::COMPARE_LE_INTEGER, &CommandCompareLessEqualInteger),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::COMPARE_LS_INTEGER, &CommandCompareLessInteger),
 
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_COMPARE_EQ_FLOAT, &CommandCompareEqualFloat),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_COMPARE_NE_FLOAT, &CommandCompareNotEqualFloat),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_COMPARE_GE_FLOAT, &CommandCompareGreaterEqualFloat),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_COMPARE_GT_FLOAT, &CommandCompareGreaterFloat),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_COMPARE_LE_FLOAT, &CommandCompareLessEqualFloat),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_COMPARE_LS_FLOAT, &CommandCompareLessFloat),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::COMPARE_EQ_FLOAT, &CommandCompareEqualFloat),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::COMPARE_NE_FLOAT, &CommandCompareNotEqualFloat),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::COMPARE_GE_FLOAT, &CommandCompareGreaterEqualFloat),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::COMPARE_GT_FLOAT, &CommandCompareGreaterFloat),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::COMPARE_LE_FLOAT, &CommandCompareLessEqualFloat),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::COMPARE_LS_FLOAT, &CommandCompareLessFloat),
 
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_COMPARE_EQ_DATA, &CommandCompareEqualData),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_COMPARE_NE_DATA, &CommandCompareNotEqualData),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_COMPARE_GE_DATA, &CommandCompareGreaterEqualData),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_COMPARE_GT_DATA, &CommandCompareGreaterdata),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_COMPARE_LE_DATA, &CommandCompareLessEqualData),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_COMPARE_LS_DATA, &CommandCompareLessdata),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::COMPARE_EQ_DATA, &CommandCompareEqualData),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::COMPARE_NE_DATA, &CommandCompareNotEqualData),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::COMPARE_GE_DATA, &CommandCompareGreaterEqualData),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::COMPARE_GT_DATA, &CommandCompareGreaterdata),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::COMPARE_LE_DATA, &CommandCompareLessEqualData),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::COMPARE_LS_DATA, &CommandCompareLessdata),
 
 			// utility
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_PRINT, &CommandPrint),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PRINT, &CommandPrint),
 
 			// under discussion
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_DYNAMIC_REQ, &Commanddynamic_request),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_DYNAMIC_REQWS, &CommandDynamicRequestWaitStarting),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MANA_IL_DYNAMIC_REQWE, &Commanddynamic_request_wait_ending),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::DYNAMIC_REQ, &Commanddynamic_request),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::DYNAMIC_REQWS, &CommandDynamicRequestWaitStarting),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::DYNAMIC_REQWE, &Commanddynamic_request_wait_ending),
 		};
 #undef MANA_ACTOR_SET_COMMAND
 
@@ -280,14 +280,6 @@ namespace mana
 			if (!IsRunning())
 				return false;
 			
-
-
-			// TODO: 検証が終わったら必ず削除して下さい
-			printf("%x\n", mPc);
-
-
-
-
 			const int32_t opecode = vm->GetOpecode(mPc);
 			const IntermediateLanguageCommand& command = mIntermediateLanguage.at(opecode);
 			MANA_ASSERT(static_cast<IntermediateLanguage>(opecode) == command.mCode);
@@ -351,13 +343,13 @@ namespace mana
 	{
 		if (mFlag[static_cast<uint8_t>(Flag::HALT)])
 		{
-			MANA_TRACE("MANA: level %d, %s::%s request failed. reason: halt\n", level, GetName().data(), action);
+			MANA_TRACE({ "MANA: level ", std::to_string(level), ", ", GetName(), "::", action, " request failed. reason: halt\n" });
 			return false;
 		}
 
 		if (mFlag[static_cast<uint8_t>(Flag::REFUSED)])
 		{
-			MANA_TRACE("MANA: level %d, %s::%s request failed. reason: refuse\n", level, GetName().data(), action);
+			MANA_TRACE({ "MANA: level ", std::to_string(level), ", ", GetName(), "::", action, " request failed. reason: refuse\n" });
 			return false;
 		}
 		/*
@@ -369,10 +361,10 @@ namespace mana
 		*/
 		if (mInterrupts.find(level) != mInterrupts.end())
 		{
-			MANA_TRACE("MANA: level %d, %s::%s request failed. ", level, GetName().data(), action);
+			MANA_TRACE({ "MANA: level ", std::to_string(level), ", ", GetName(), "::", action, " request failed.\n" });
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
 			if (mInterrupts[level].mActionName.empty() == false)
-				MANA_TRACE("reason : %s running", mInterrupts[level].mActionName.c_str());
+				MANA_TRACE({ "reason : ", mInterrupts[level].mActionName," running" });
 #endif
 			MANA_TRACE("\n");
 			return false;
@@ -381,7 +373,7 @@ namespace mana
 		uint32_t address = GetAction(action);
 		if (address == nil)
 		{
-			MANA_TRACE("MANA: level %d, %s::%s request failed. reason: not found\n", level, GetName().data(), action);
+			MANA_TRACE({ "MANA: level ", std::to_string(level), ",", GetName(), "::", action, " request failed.reason: not found\n" });
 			return false;
 		}
 
@@ -395,10 +387,10 @@ namespace mana
 		interrupt.mFileCallbackParameter = nullptr;
 
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
-		MANA_TRACE("Mana:request: %s ", GetName().data());
+		MANA_TRACE({ "mana:request: ", GetName(), " " });
 		if (mInterrupts.size() > 0)
-			MANA_TRACE("level %d %s => ", mInterruptLevel, mInterrupts[mInterruptLevel].mActionName.c_str());
-		MANA_TRACE("level %d %s (%08x) registered\n", level, action, address);
+			MANA_TRACE({ "level ", std::to_string(mInterruptLevel), mInterrupts[mInterruptLevel].mActionName, " => " });
+		MANA_TRACE({ "level ", std::to_string(level), " ",  action , "(", std::to_string(address), ")" });
 
 		// 実行するアクション名を記録
 		interrupt.mActionName = action;
@@ -408,14 +400,14 @@ namespace mana
 		{
 			// 現在よりも高い優先度(高いほど優先)の場合、すぐに割り込む
 
-			MANA_TRACE("mana:request: %s ", GetName().data());
+			MANA_TRACE({ "mana:request: ", GetName(), " " });
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
 			if (mInterruptLevel)
 			{
-				MANA_TRACE("%s => level %d %s ", mInterruptLevel, mInterrupts[mInterruptLevel].mActionName);
+				MANA_TRACE({ "level ", std::to_string(mInterruptLevel), " ", mInterrupts[mInterruptLevel].mActionName, " =>" });
 			}
 #endif
-			MANA_TRACE("level %d %s succeed\n", level, interrupt.mActionName.c_str());
+			MANA_TRACE({ "level ", std::to_string(level), " ", interrupt.mActionName, " succeed\n" });
 
 			// コールバック関数を呼びます
 			//if(mRequestCallback)
@@ -483,7 +475,7 @@ namespace mana
 #endif
 
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
-		const uint8_t lastInterruptLevel = mInterruptLevel;
+		const int32_t lastInterruptLevel = mInterruptLevel;
 		const std::string lastActionName = currentInterrupt.mActionName;
 #endif
 
@@ -562,10 +554,13 @@ namespace mana
 					yield();
 
 				MANA_TRACE(
-					"mana:rollback: %s level %d %s => level %d %s succeed\n",
-					GetName().data(),
-					lastInterruptLevel, lastActionName.c_str(),
-					mInterruptLevel, interrupt->mActionName.c_str()
+					{
+						"mana:rollback: ", GetName(),
+						" level ", std::to_string(lastInterruptLevel), " ", lastActionName,
+						" => ",
+						" level ", std::to_string(mInterruptLevel), " ", interrupt->mActionName,
+						" succeed\n"
+					}
 				);
 
 				/*
@@ -581,7 +576,7 @@ namespace mana
 
 		// 実行可能なアクションが無いので、アクターは停止する
 		Restart();
-		MANA_TRACE("mana:rollback: %s level %d %s stoped\n", GetName().data(), lastInterruptLevel, lastActionName.c_str());
+		MANA_TRACE({ "mana:rollback: ", GetName(), "level ", std::to_string(lastInterruptLevel), " ",  lastActionName, "stoped\n" });
 	}
 
 	inline void Actor::Restart()
@@ -647,8 +642,7 @@ namespace mana
 		MANA_ASSERT(GetArgumentCount() > value);
 
 		uint32_t address = mPc + 5 + sizeof(int16_t) + sizeof(int16_t) + (value * sizeof(int16_t));
-		size_t offset = (size_t)mVM.lock()->GetUint16FromMemory(address);
-		return mStack.Get<int_t>(offset);
+		return mStack.Get<int_t>(mVM.lock()->GetUint16FromMemory(address));
 	}
 
 	inline float Actor::GetParameterFloat(const int32_t value)
@@ -1057,28 +1051,32 @@ namespace mana
 
 	inline void Actor::CommandLoadStaticAddress(const std::shared_ptr<VM>& vm, Actor& self)
 	{
-		//const uint32_t offset = vm->GetUint32FromMemory(self.mPc + 1);
-		//MANA_ASSERT(offset < mana_static_memory_size);
+		const address_t offset = vm->GetUint32FromMemory(self.mPc + 1);
+		Buffer& staticVariables = vm->GetStaticVariables();
+		MANA_ASSERT(offset < staticVariables.GetSize());
+		self.mStack.Push(staticVariables.GetAddressFromTop<void>(offset));
 		//mana_stack_push_pointer(&actor->mStack, &mana_static_memory[offset]);
 	}
 
 	inline void Actor::CommandLoadGlobalAddress(const std::shared_ptr<VM>& vm, Actor& self)
 	{
-		//const uint32_t offset = vm->GetUint32FromMemory(self.mPc + 1);
-		//MANA_ASSERT(offset < actor->mVM->file_header->size_of_global_memory);
+		const address_t offset = vm->GetUint32FromMemory(self.mPc + 1);
+		Buffer& globalVariables = vm->GetGlobalVariables();
+		MANA_ASSERT(offset < globalVariables.GetSize());
+		self.mStack.Push(globalVariables.GetAddressFromTop<void>(offset));
 		//mana_stack_push_pointer(&actor->mStack, &actor->mVM->global_memory[offset]);
 	}
 
 	inline void Actor::CommandLoadFrameAddress(const std::shared_ptr<VM>& vm, Actor& self)
 	{
 		const uint32_t offset = vm->GetUint32FromMemory(self.mPc + 1);
-		self.mStack.Push(self.mFrame.GetAddressFromBottom<void*>(offset));
+		self.mStack.Push(self.mFrame.GetAddressFromBottom<void>(offset));
 	}
 
 	inline void Actor::CommandLoadSelfAddress(const std::shared_ptr<VM>& vm, Actor& self)
 	{
 		uint32_t offset = vm->GetUint32FromMemory(self.mPc + 1);
-		self.mStack.Push(self.mVariable.GetAddressFromBottom<void*>(offset));
+		self.mStack.Push(self.mVariable.GetAddressFromBottom<void>(offset));
 	}
 
 	inline void Actor::CommandLoadInt8(const std::shared_ptr<VM>&, Actor& self)
@@ -1724,6 +1722,7 @@ namespace mana
 
 	inline void Actor::Commanddynamic_request(const std::shared_ptr<VM>&, Actor&)
 	{
+		MANA_NOT_IMPLEMENTED();
 		/*
 		CManaStack& Stack = actor->self.mStack;
 		const char* pszTarget, = Stack.PopString();
@@ -1741,6 +1740,7 @@ namespace mana
 
 	inline void Actor::CommandDynamicRequestWaitStarting(const std::shared_ptr<VM>&, Actor&)
 	{
+		MANA_NOT_IMPLEMENTED();
 		/*
 		CManaStack& Stack = actor->self.mStack;
 		const char* pszTarget, = Stack.GetString(0);
@@ -1774,6 +1774,7 @@ namespace mana
 
 	inline void Actor::Commanddynamic_request_wait_ending(const std::shared_ptr<VM>&, Actor&)
 	{
+		MANA_NOT_IMPLEMENTED();
 		/*
 		CManaStack& Stack = actor->self.mStack;
 		const char* pszTarget, = Stack.GetString(0);

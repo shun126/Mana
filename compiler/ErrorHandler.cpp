@@ -19,45 +19,53 @@ namespace mana
 		const char* mEnUs;
 	};
 
-	void CompileError(const char* format, ...)
+	void CompileError(const std::string& message)
 	{
-		va_list argptr;
-		va_start(argptr, format);
 #if defined(MANA_TARGET_WINDOWS)
-		MANA_PRINT("%s(%d): error: %s\n", lexer_get_current_filename().data(), lexer_get_current_lineno(), FormatText(format, argptr).c_str());
+		Trace({ lexer_get_current_filename(), "(", std::to_string(lexer_get_current_lineno()), "): error: ", message, "\n" });
 #else
-		MANA_PRINT("%s:%d: error: %s\n", lexer_get_current_filename().data(), lexer_get_current_lineno(), FormatText(format, argptr).c_str());
+		Trace({ lexer_get_current_filename(), ":", std::to_string(lexer_get_current_lineno()), " error: ", message, "\n" });
 #endif
-		va_end(argptr);
 		++yynerrs;
 	}
 
-	void CompileWarning(const char* format, ...)
+	void CompileError(std::initializer_list<std::string_view> message)
 	{
-		va_list argptr;
-		va_start(argptr, format);
+		CompileError(Concat(message));
+	}
+
+	void CompileWarning(const std::string& message)
+	{
 #if defined(MANA_TARGET_WINDOWS)
-		MANA_PRINT("%s(%d): warning: %s\n", lexer_get_current_filename().data(), lexer_get_current_lineno(), FormatText(format, argptr).c_str());
+		Trace({ lexer_get_current_filename(), "(", std::to_string(lexer_get_current_lineno()), "): warning: ", message, "\n" });
 #else
-		MANA_PRINT("%s%d: warning: %s\n", lexer_get_current_filename().data(), lexer_get_current_lineno(), FormatText(format, argptr).c_str());
+		Trace({ lexer_get_current_filename(), ":", std::to_string(lexer_get_current_lineno()), " warning: ", message, "\n" });
 #endif
-		va_end(argptr);
 	}
 
-	void LinkerError(const char* format, ...)
+	void CompileWarning(std::initializer_list<std::string_view> message)
 	{
-		va_list argptr;
-		va_start(argptr, format);
-		MANA_PRINT("%s: error: %s\n", GetTargetFilename(), FormatText(format, argptr).c_str());
-		va_end(argptr);
+		CompileWarning(Concat(message));
 	}
 
-	void LinkerWarning(const char* format, ...)
+	void LinkerError(const std::string& message)
 	{
-		va_list argptr;
-		va_start(argptr, format);
-		MANA_PRINT("%s: warning: %s\n", GetTargetFilename(), FormatText(format, argptr).c_str());
-		va_end(argptr);
+		Trace({ GetTargetFilename(), ": error: ", message, "\n" });
+	}
+
+	void LinkerError(std::initializer_list<std::string_view> message)
+	{
+		LinkerError(Concat(message));
+	}
+
+	void LinkerWarning(const std::string& message)
+	{
+		Trace({ GetTargetFilename(), ": warning: ", message, "\n" });
+	}
+
+	void LinkerWarning(std::initializer_list<std::string_view> message)
+	{
+		LinkerWarning(Concat(message));
 	}
 
 	void Fatal(const FatalType type)
@@ -65,17 +73,19 @@ namespace mana
 		Message message[] = {
 			{ "メモリが足りません", "Not enough memory" }
 		};
-		MANA_PRINT("%s: fatal: %s\n", GetTargetFilename(), message[static_cast<uint8_t>(type)].mJaJp);
+		Trace({ GetTargetFilename(), ": fatal: ", message[static_cast<uint8_t>(type)].mJaJp, "\n" });
 		++yynerrs;
 	}
 
-	void Fatal(const char* format, ...)
+	void Fatal(const std::string& message)
 	{
-		va_list argptr;
-		va_start(argptr, format);
-		MANA_PRINT("%s: fatal: %s\n", GetTargetFilename(), FormatText(format, argptr).c_str());
-		va_end(argptr);
+		Trace({ GetTargetFilename(), ": fatal: ", message, "\n" });
 		++yynerrs;
+	}
+
+	void Fatal(std::initializer_list<std::string_view> message)
+	{
+		Fatal(Concat(message));
 	}
 
 	void FatalNoMemory()

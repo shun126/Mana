@@ -33,30 +33,6 @@ namespace mana
 		float r, g, b, a;
 	};
 
-	inline void mana_function_get_user_data(const std::shared_ptr<Actor>& actor)
-	{
-		MANA_ASSERT_PARAMETER(actor, 0);
-		actor->SetReturnInteger(actor->GetUserData());
-	}
-
-	inline void mana_function_set_user_data(const std::shared_ptr<Actor>& actor)
-	{
-		MANA_ASSERT_PARAMETER(actor, 1);
-		actor->SetUserData(actor->GetParameterInteger(0));
-	}
-
-	inline void mana_function_get_user_pointer(const std::shared_ptr<Actor>& actor)
-	{
-		MANA_ASSERT_PARAMETER(actor, 0);
-		actor->SetReturnPointer(actor->GetUserPointer());
-	}
-
-	inline void mana_function_set_user_pointer(const std::shared_ptr<Actor>& actor)
-	{
-		MANA_ASSERT_PARAMETER(actor, 1);
-		actor->SetUserPointer(actor->GetParameterPointer(0));
-	}
-
 	inline void mana_function_debug(const std::shared_ptr<Actor>& actor)
 	{
 		MANA_ASSERT_PARAMETER(actor, 0);
@@ -176,10 +152,6 @@ namespace mana
 	*/
 	inline void mana_function_initialize(VM& vm)
 	{
-		vm.RegistFunction("getUserData", mana_function_get_user_data);
-		vm.RegistFunction("setUserData", mana_function_set_user_data);
-		vm.RegistFunction("getUserPointer", mana_function_get_user_pointer);
-		vm.RegistFunction("setUserPointer", mana_function_set_user_pointer);
 		vm.RegistFunction("debug", mana_function_debug);
 		vm.RegistFunction("wait", mana_function_wait);
 		vm.RegistFunction("rand", mana_function_rand);

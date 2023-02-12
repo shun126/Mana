@@ -136,13 +136,6 @@ namespace mana
 		return staticNode;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateAlias(const std::string_view identifier, const std::string_view filename)
-	{
-		//TODO:実装して下さい
-		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Alias);
-		return node;
-	}
-
 	// declaration
 	std::shared_ptr<SyntaxNode> ParsingDriver::CreateConstantNode(const std::string_view identifier, const int_t value)
 	{

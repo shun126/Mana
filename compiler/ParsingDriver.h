@@ -49,7 +49,6 @@ namespace mana
 		std::shared_ptr<SyntaxNode> CreateNativeFunction(std::shared_ptr<SyntaxNode> returnExpression, const std::string_view identifier, std::shared_ptr<SyntaxNode> argument);
 		std::shared_ptr<SyntaxNode> CreateDeclareMemory(const int_t size, std::shared_ptr<SyntaxNode> allocateDeclarations);
 		std::shared_ptr<SyntaxNode> CreateDeclareStaticMemory(const int_t size, std::shared_ptr<SyntaxNode> allocateDeclarations);
-		std::shared_ptr<SyntaxNode> CreateAlias(const std::string_view identifier, const std::string_view filename);	// Not yet
 
 		// declaration
 		std::shared_ptr<SyntaxNode> CreateConstantNode(const std::string_view identifier, const int_t value);
