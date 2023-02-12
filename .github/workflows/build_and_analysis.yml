@@ -43,7 +43,8 @@ jobs:
         uses: actions/checkout@v2
       - run: echo "The ${{ github.repository }} repository has been cloned to the runner."
       - name: Generate Mana version infomation
-        run: ${{env.PYTHON_BIN}} compiler/Version.py
+        working-directory: ./compiler
+        run: ${{env.PYTHON_BIN}} Version.py
       - name: Build Mana 32bit compiler
         run: msbuild mana.sln /t:build /p:Configuration=Release /p:Platform=Win32
       - name: Build Mana 64bit compiler
