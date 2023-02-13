@@ -7,11 +7,43 @@ Actor-oriented scripting language Mana
 This scripting language was developed with the aim of developing a character's action using actor model.
 You can implement the execution engine easily into your computer game program.
 
-# Requirements
-* [bison](https://www.gnu.org/software/bison/)
-* [flex](https://www.gnu.org/software/flex/)
+# What Mana code looks like
+````mana:talk.mn
+actor Mother
+{
+    int mFlag;
+    action initialize
+    {
+        mFlag = 0;
+    }
+    action main
+    {
+        print("Hi");
+        request(1, Child::talk);
+    }
+}
+
+actor Child
+{
+    action update
+    {
+        int i;
+    }
+    action talk
+    {
+        print("Hi");
+    }
+}
+````
 
 # Installing
+## Requirements
+* [bison](https://www.gnu.org/software/bison/)
+* [flex](https://www.gnu.org/software/flex/)
+* [C++ Compiler](https://en.wikipedia.org/wiki/C%2B%2B)
+  * [Visual Studio](https://visualstudio.microsoft.com/)
+  * [Clang](https://clang.llvm.org/)
+
 ## Any Linux Distribution
 - cd to <download_path>\compiler
 - make
@@ -22,8 +54,8 @@ You can implement the execution engine easily into your computer game program.
 - make
 
 ## Building with MSVC
-- Install Microsoft Visual C++ 2015 Community (should work with other versions).
-- Run "Vistual Studio 2015 Command Prompt" from the "Visual Studio 2015" start menu.
+- Install Microsoft Visual C++ 2019 Community (should work with other versions).
+- Run "Vistual Studio 2019 Command Prompt" from the "Visual Studio 2019" start menu.
 - cd to <download_path>\compiler
 - Open mana.sln
 
@@ -33,13 +65,9 @@ You can implement the execution engine easily into your computer game program.
 - Open mana.xcodeproj
 
 # Running Tests
-    mana sample/sample.mn
-
-# Resources
-* [Homepage](https://shun126.github.io/Mana/ "Homepage")
-## Doxygen
- * [Runtime](https://shun126.github.io/Mana/doxygen/library/html/ "Library")
- * [Compiler](https://shun126.github.io/Mana/doxygen/compiler/html/ "Compiler")
+````bash
+mana sample/sample.mn
+````
 
 ---
 Shun Moriya

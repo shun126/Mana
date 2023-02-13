@@ -5,34 +5,39 @@
 **/xcshareddata
 
 # Build results
-x64/
-x86/
+[Xx]64/
+[Xx]86/
 [Ww]in32/
 [Dd]ebug/
 [Rr]elease/
-
-*.bak
 *.exe
+*.lib
+*.a
+
+# Visual Studio cache/options directory
+.vs/
+.vscode/
+
+# Others
+*.bak
 *.idb
 *.ilk
 *.lib
 *.ini
 *.log
+*.o
 *.obj
 *.opendb
 *.pdb
 *.tlog
-*.VC.db
 *.sdf
-
-# Visual Studio 2015 cache/options directory
-.vs/
-
-# Others
-.DS_Store
+*.VC.db
+**/.DS_Store
 *.tmp
 *.swp
+*.stackdump
 
 # Mana
 *.mx
-/sample/node_entry.json
+/sample/*.json
+/test/*.json

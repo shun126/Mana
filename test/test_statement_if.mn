@@ -1,0 +1,15 @@
+/*
+mana (script)
+Copyright (c) 2003 Shun Moriya
+*/
+
+void test_statement_if()
+{
+	int flag = 1;
+
+	if(flag < 10)
+		flag = 10;
+	else if(flag >= 1000)
+		flag = 1000;
+}
+
