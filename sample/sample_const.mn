@@ -7,4 +7,6 @@ define Digit1	1;
 define Digit2	-1;
 define Real1	1.0;
 define Real2	-1.0;
+define DefileTest	Hoge;
+undef DefileTest;
 //alias MotionFile	"motion.anm";
