@@ -1,4 +1,0 @@
-User-Agent: *
-Disallow:
-
-Sitemap: https://shun126.github.io/Mana/sitemap.xml

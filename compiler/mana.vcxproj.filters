@@ -1,80 +1,145 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <CustomBuild Include="parser.y" />
+    <None Include="ParserDeclaration.inl" />
+    <None Include="ParserDefinition.inl" />
+    <None Include="LexerDefinition.inl" />
+    <None Include="LexerPrivateFunction.inl" />
+    <None Include="LexerDeclaration.inl" />
+    <None Include="..\runner\VM.inl">
+      <Filter>runner</Filter>
+    </None>
+    <None Include="..\runner\Actor.inl">
+      <Filter>runner</Filter>
+    </None>
+    <None Include="Version.py" />
+    <None Include="..\runner\Plugin.inl">
+      <Filter>runner</Filter>
+    </None>
+    <None Include="..\runner\Stack.inl">
+      <Filter>runner</Filter>
+    </None>
+    <None Include="..\runner\Buffer.inl">
+      <Filter>runner</Filter>
+    </None>
+    <None Include="..\runner\common\OutputStream.inl">
+      <Filter>runner\common</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Parser.hpp" />
+    <ClInclude Include="Version.h" />
+    <ClInclude Include="Lexer.h" />
+    <ClInclude Include="CodeBuffer.h" />
+    <ClInclude Include="CodeGenerator.h" />
+    <ClInclude Include="DataBuffer.h" />
+    <ClInclude Include="ErrorHandler.h" />
+    <ClInclude Include="GlobalAddressResolver.h" />
+    <ClInclude Include="GlobalSemanticAnalyzer.h" />
+    <ClInclude Include="LocalSemanticAnalyzer.h" />
+    <ClInclude Include="Path.h" />
+    <ClInclude Include="SemanticAnalyzer.h" />
+    <ClInclude Include="StringPool.h" />
+    <ClInclude Include="SymbolFactory.h" />
+    <ClInclude Include="SyntaxNode.h" />
+    <ClInclude Include="TypeDescriptor.h" />
+    <ClInclude Include="TypeDescriptorFactory.h" />
+    <ClInclude Include="..\runner\Function.h">
+      <Filter>runner</Filter>
+    </ClInclude>
+    <ClInclude Include="..\runner\Mana.h">
+      <Filter>runner</Filter>
+    </ClInclude>
+    <ClInclude Include="..\runner\Plugin.h">
+      <Filter>runner</Filter>
+    </ClInclude>
+    <ClInclude Include="..\runner\Stack.h">
+      <Filter>runner</Filter>
+    </ClInclude>
+    <ClInclude Include="..\runner\VM.h">
+      <Filter>runner</Filter>
+    </ClInclude>
+    <ClInclude Include="..\runner\Actor.h">
+      <Filter>runner</Filter>
+    </ClInclude>
+    <ClInclude Include="..\runner\Buffer.h">
+      <Filter>runner</Filter>
+    </ClInclude>
+    <ClInclude Include="..\runner\common\Math.h">
+      <Filter>runner\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\runner\common\Memory.h">
+      <Filter>runner\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\runner\common\Noncopyable.h">
+      <Filter>runner\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\runner\common\OutputStream.h">
+      <Filter>runner\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\runner\common\Platform.h">
+      <Filter>runner\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\runner\common\Setup.h">
+      <Filter>runner\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\runner\common\Stopwatch.h">
+      <Filter>runner\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\runner\common\String.h">
+      <Filter>runner\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\runner\common\Assert.h">
+      <Filter>runner\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\runner\common\FileFormat.h">
+      <Filter>runner\common</Filter>
+    </ClInclude>
+    <ClInclude Include="Runner.h" />
+    <ClInclude Include="Main.h" />
+    <ClInclude Include="ParsingDriver.h" />
+    <ClInclude Include="Symbol.h" />
+    <ClInclude Include="IntermediateLanguage.h" />
+    <ClInclude Include="LocalAddressResolver.h" />
+    <ClInclude Include="..\runner\common\Type.h">
+      <Filter>runner\common</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Parser.cpp" />
+    <ClCompile Include="Lexer.cpp" />
+    <ClCompile Include="CodeGenerator.cpp" />
+    <ClCompile Include="ErrorHandler.cpp" />
+    <ClCompile Include="GlobalSemanticAnalyzer.cpp" />
+    <ClCompile Include="LocalSemanticAnalyzer.cpp" />
+    <ClCompile Include="Path.cpp" />
+    <ClCompile Include="SemanticAnalyzer.cpp" />
+    <ClCompile Include="SymbolFactory.cpp" />
+    <ClCompile Include="SyntaxNode.cpp" />
+    <ClCompile Include="TypeDescriptor.cpp" />
+    <ClCompile Include="TypeDescriptorFactory.cpp" />
+    <ClCompile Include="Runner.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="DataBuffer.cpp" />
+    <ClCompile Include="CodeBuffer.cpp" />
+    <ClCompile Include="GlobalAddressResolver.cpp" />
+    <ClCompile Include="StringPool.cpp" />
+    <ClCompile Include="ParsingDriver.cpp" />
+    <ClCompile Include="Symbol.cpp" />
+    <ClCompile Include="IntermediateLanguage.cpp" />
+    <ClCompile Include="LocalAddressResolver.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="Parser.yy" />
+    <CustomBuild Include="Version.json" />
     <CustomBuild Include="lexer.l" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\sample\sample.mn">
-      <Filter>sample</Filter>
-    </None>
-    <None Include="..\sample\sample_actor.mn">
-      <Filter>sample</Filter>
-    </None>
-    <None Include="..\sample\sample_const.mn">
-      <Filter>sample</Filter>
-    </None>
-    <None Include="..\sample\sample_function.mn">
-      <Filter>sample</Filter>
-    </None>
-    <None Include="..\sample\sample_struct.mn">
-      <Filter>sample</Filter>
-    </None>
-    <None Include="..\sample\sample_variable.mn">
-      <Filter>sample</Filter>
-    </None>
-    <None Include="version.json" />
-    <None Include="version.rb" />
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="sample">
-      <UniqueIdentifier>{5a2e2d75-6317-49c2-8204-c5eb801d81ad}</UniqueIdentifier>
+    <Filter Include="runner">
+      <UniqueIdentifier>{090657a0-57bb-4a4f-ab1f-d9d6ba0552a7}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="..\sample\sample.log">
-      <Filter>sample</Filter>
-    </Text>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="code.c" />
-    <ClCompile Include="data.c" />
-    <ClCompile Include="datalink_generator.c" />
-    <ClCompile Include="generator.c" />
-    <ClCompile Include="jump.c" />
-    <ClCompile Include="linker.c" />
-    <ClCompile Include="main.c" />
-    <ClCompile Include="node.c" />
-    <ClCompile Include="pool.c" />
-    <ClCompile Include="post_resolver.c" />
-    <ClCompile Include="pre_resolver.c" />
-    <ClCompile Include="register.c" />
-    <ClCompile Include="resolver.c" />
-    <ClCompile Include="symbol.c" />
-    <ClCompile Include="type.c" />
-    <ClCompile Include="lexer.c" />
-    <ClCompile Include="parser.c" />
-    <ClCompile Include="error.c" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="code.h" />
-    <ClInclude Include="data.h" />
-    <ClInclude Include="datalink_generator.h" />
-    <ClInclude Include="generator.h" />
-    <ClInclude Include="jump.h" />
-    <ClInclude Include="linker.h" />
-    <ClInclude Include="main.h" />
-    <ClInclude Include="node.h" />
-    <ClInclude Include="pool.h" />
-    <ClInclude Include="post_resolver.h" />
-    <ClInclude Include="pre_resolver.h" />
-    <ClInclude Include="register.h" />
-    <ClInclude Include="resolver.h" />
-    <ClInclude Include="symbol.h" />
-    <ClInclude Include="type.h" />
-    <ClInclude Include="version.h" />
-    <ClInclude Include="parser.h" />
-    <ClInclude Include="error.h" />
-    <ClInclude Include="lexer.h" />
+    <Filter Include="runner\common">
+      <UniqueIdentifier>{20aa3323-a5f3-4e58-a6e4-81a69bde64d1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>
