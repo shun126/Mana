@@ -1,8 +1,10 @@
 # Mana
 Actor-oriented scripting language Mana 
 
-[![Build Status](https://travis-ci.org/shun126/Mana.svg?branch=master)](https://travis-ci.org/shun126/Mana)
-[![Coverage Status](https://coveralls.io/repos/github/shun126/Mana/badge.svg?branch=master)](https://coveralls.io/github/shun126/Mana?branch=master)
+[![stars](https://img.shields.io/github/stars/shun126/Mana?style=social)](https://github.com/shun126/Mana/stargazers)
+[![license](https://img.shields.io/github/license/shun126/Mana)](https://github.com/shun126/Mana/blob/main/LICENSE)
+[![release](https://img.shields.io/github/v/release/shun126/Mana)](https://github.com/shun126/Mana/releases)
+[![downloads](https://img.shields.io/github/downloads/shun126/Mana/total)](https://github.com/shun126/Mana/releases)
 
 This scripting language was developed with the aim of developing a character's action using actor model.
 You can implement the execution engine easily into your computer game program.
@@ -38,8 +40,8 @@ actor Child
 
 # Installing
 ## Requirements
-* [bison](https://www.gnu.org/software/bison/)
-* [flex](https://www.gnu.org/software/flex/)
+* [bison 3.8](https://www.gnu.org/software/bison/)
+* [flex 2.6.4](https://github.com/westes/flex)
 * [C++ Compiler](https://en.wikipedia.org/wiki/C%2B%2B)
   * [Visual Studio](https://visualstudio.microsoft.com/)
   * [Clang](https://clang.llvm.org/)
@@ -54,8 +56,8 @@ actor Child
 - make
 
 ## Building with MSVC
-- Install Microsoft Visual C++ 2019 Community (should work with other versions).
-- Run "Vistual Studio 2019 Command Prompt" from the "Visual Studio 2019" start menu.
+- Install Microsoft Visual C++ 2022 Community (should work with other versions).
+- Run "Vistual Studio 2022 Command Prompt" from the "Visual Studio 2022" start menu.
 - cd to <download_path>\compiler
 - Open mana.sln
 
@@ -71,3 +73,5 @@ mana sample/sample.mn
 
 ---
 Shun Moriya
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/M4M413XDXB)
