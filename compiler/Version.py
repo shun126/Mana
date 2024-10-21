@@ -15,8 +15,8 @@ json_file = open('Version.json', 'r')
 if json_file:
 	json_object = json.load(json_file)
 	if json_object:
-		major_version = json_object["MAJOR_VERSION"]
-		minor_version = json_object["MINOR_VERSION"]
+		major_version = json_object["MajorVersion"]
+		minor_version = json_object["MinorVersion"]
 
 		header_file = open('Version.h', 'w')
 		if header_file:

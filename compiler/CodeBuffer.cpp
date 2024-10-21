@@ -93,10 +93,10 @@ namespace mana
 		return pc;
 	}
 
-	address_t CodeBuffer::AddCommand(const uint8_t data, const address_t nextCommand)
+	address_t CodeBuffer::AddCommand(const uint8_t code, const address_t nextCommand)
 	{
 		const address_t pc = static_cast<address_t>(mCommand.size());
-		mCommand.emplace_back(data, nextCommand);
+		mCommand.emplace_back(code, nextCommand);
 		return pc;
 	}
 }

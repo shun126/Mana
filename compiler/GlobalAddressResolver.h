@@ -15,7 +15,7 @@ namespace mana
 	class CodeBuffer;
 	class Symbol;
 
-	class GlobalAddressResolver final : private Noncopyable
+	class GlobalAddressResolver final : Noncopyable
 	{
 	public:
 		explicit GlobalAddressResolver(const std::shared_ptr<CodeBuffer>& codeBuffer);

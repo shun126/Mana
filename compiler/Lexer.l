@@ -82,13 +82,13 @@ other		.
 <INITIAL>"include"	return mana::Parser::token::tINCLUDE;
 <INITIAL>"import"	return mana::Parser::token::tIMPORT;
 
-<INITIAL>"void"		{ yylval->build<std::shared_ptr<mana::TypeDescriptor>>() = mana::GetVoidTypeDescriptor(); return mana::Parser::token::tTYPE; }
-<INITIAL>"char"		{ yylval->build<std::shared_ptr<mana::TypeDescriptor>>() = mana::GetInt8TypeDescriptor(); return mana::Parser::token::tTYPE; }
-<INITIAL>"short"	{ yylval->build<std::shared_ptr<mana::TypeDescriptor>>() = mana::GetInt16TypeDescriptor(); return mana::Parser::token::tTYPE; }
-<INITIAL>"int"		{ yylval->build<std::shared_ptr<mana::TypeDescriptor>>() = mana::GetInt32TypeDescriptor(); return mana::Parser::token::tTYPE; }
-<INITIAL>"float"	{ yylval->build<std::shared_ptr<mana::TypeDescriptor>>() = mana::GetFloat32TypeDescriptor(); return mana::Parser::token::tTYPE; }
-<INITIAL>"string"	{ yylval->build<std::shared_ptr<mana::TypeDescriptor>>() = mana::GetStringTypeDescriptor(); return mana::Parser::token::tTYPE; }
-<INITIAL>"pointer"	{ yylval->build<std::shared_ptr<mana::TypeDescriptor>>() = mana::GetReferenceTypeDescriptor(); return mana::Parser::token::tTYPE; }
+<INITIAL>"void"		{ yylval->build<std::shared_ptr<mana::TypeDescriptor>>() = mana::lexer::GetVoidTypeDescriptor(); return mana::Parser::token::tTYPE; }
+<INITIAL>"char"		{ yylval->build<std::shared_ptr<mana::TypeDescriptor>>() = mana::lexer::GetInt8TypeDescriptor(); return mana::Parser::token::tTYPE; }
+<INITIAL>"short"	{ yylval->build<std::shared_ptr<mana::TypeDescriptor>>() = mana::lexer::GetInt16TypeDescriptor(); return mana::Parser::token::tTYPE; }
+<INITIAL>"int"		{ yylval->build<std::shared_ptr<mana::TypeDescriptor>>() = mana::lexer::GetInt32TypeDescriptor(); return mana::Parser::token::tTYPE; }
+<INITIAL>"float"	{ yylval->build<std::shared_ptr<mana::TypeDescriptor>>() = mana::lexer::GetFloat32TypeDescriptor(); return mana::Parser::token::tTYPE; }
+<INITIAL>"string"	{ yylval->build<std::shared_ptr<mana::TypeDescriptor>>() = mana::lexer::GetStringTypeDescriptor(); return mana::Parser::token::tTYPE; }
+<INITIAL>"pointer"	{ yylval->build<std::shared_ptr<mana::TypeDescriptor>>() = mana::lexer::GetReferenceTypeDescriptor(); return mana::Parser::token::tTYPE; }
 
 <INITIAL>"native"	return mana::Parser::token::tNATIVE;
 <INITIAL>"struct"	return mana::Parser::token::tSTRUCT;
@@ -103,7 +103,7 @@ other		.
 
 <INITIAL>"false"	return mana::Parser::token::tFALSE;
 <INITIAL>"true"		return mana::Parser::token::tTRUE;
-<INITIAL>"nil"		return mana::Parser::token::tNIL;
+<INITIAL>"Nil"		return mana::Parser::token::tNIL;
 <INITIAL>"priority"	return mana::Parser::token::tPRIORITY;
 <INITIAL>"self"		return mana::Parser::token::tSELF;
 <INITIAL>"sender"	return mana::Parser::token::tSENDER;
@@ -133,10 +133,10 @@ other		.
 
 <INITIAL>"sizeof"	return mana::Parser::token::tSIZEOF;
 
-<INITIAL>{digit}+	{ yylval->build<mana::int_t>() = mana::ToInt(yytext); return mana::Parser::token::tDIGIT; }
-<INITIAL>{real}		{ yylval->build<mana::float_t>() = mana::ToFloat(yytext); return mana::Parser::token::tREAL; }
-<INITIAL>{id}		{ yylval->build<std::string_view>() = mana::ToString(yytext); return mana::Parser::token::tIDENTIFIER; }
-<INITIAL>{string}	{ yylval->build<std::string_view>() = mana::LiteralToString(yytext, yyleng); return mana::Parser::token::tSTRING; }
+<INITIAL>{digit}+	{ yylval->build<mana::int_t>() = mana::lexer::ToInt(yytext); return mana::Parser::token::tDIGIT; }
+<INITIAL>{real}		{ yylval->build<mana::float_t>() = mana::lexer::ToFloat(yytext); return mana::Parser::token::tREAL; }
+<INITIAL>{id}		{ yylval->build<std::string_view>() = mana::lexer::ToString(yytext); return mana::Parser::token::tIDENTIFIER; }
+<INITIAL>{string}	{ yylval->build<std::string_view>() = mana::lexer::LiteralToString(yytext, yyleng); return mana::Parser::token::tSTRING; }
 <INITIAL>{other}	{ if(yytext[0] != '\r') mana::CompileError({ "Illegal char '", std::string_view(&yytext[0], 1), "' ignored\n" }); }
 
 <COMMENT_BLOCK>"/*"	{ mana::CompileError("comment nest error"); }
@@ -147,24 +147,24 @@ other		.
 <COMMENT_LINE>"\n"	{ ++yylineno; BEGIN INITIAL; }
 <COMMENT_LINE>{other}	;
 
-<LINE>[0-9]+		yylineno = mana::ToInt(yytext);
+<LINE>[0-9]+		yylineno = mana::lexer::ToInt(yytext);
 <LINE>{string}		{
 	static char filename[_MAX_PATH];
 	if(yyleng > 2)
 	{
 		memcpy(filename, &yytext[1], yyleng-2);
 		filename[yyleng-2] = '\0';
-		mana::mLexer->SetCurrentFilename(filename);
+		mana::LexerInstance->SetCurrentFilename(filename);
 	}
 }
 <LINE>\n			BEGIN INITIAL;
 <LINE>.				;
 
-<HEX>[A-Fa-f0-9]+	{ yylval->build<mana::int_t>() = mana::ToIntHex(yytext); BEGIN INITIAL; return mana::Parser::token::tDIGIT; }
+<HEX>[A-Fa-f0-9]+	{ yylval->build<mana::int_t>() = mana::lexer::ToIntHex(yytext); BEGIN INITIAL; return mana::Parser::token::tDIGIT; }
 <HEX>{ws}+			;
 <HEX>{other}		{ mana::CompileError({ "Illegal char '", std::string_view(&yytext[0], 1), "' ignored\n" }); }
 
-<BIN>[01_]+			{ yylval->build<mana::int_t>() = mana::mLexer->binary(yytext); BEGIN INITIAL; return mana::Parser::token::tDIGIT; }
+<BIN>[01_]+			{ yylval->build<mana::int_t>() = mana::LexerInstance->Binary(yytext); BEGIN INITIAL; return mana::Parser::token::tDIGIT; }
 <BIN>{ws}+			;
 <BIN>{other}		{ mana::CompileError({ "Illegal char '", std::string_view(&yytext[0], 1), "' ignored\n" }); }
 
@@ -175,5 +175,5 @@ other		.
 
 int yywrap()
 {
-	return mana::lexer_close();
+	return mana::lexer::Close();
 }

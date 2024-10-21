@@ -5,7 +5,6 @@ mana (library)
 @date	2003-
 */
 
-#include "Plugin.h"
 #pragma once
 
 #if defined(MANA_TARGET_WINDOWS)
@@ -59,7 +58,7 @@ namespace mana
 			mana_finalize function = (mana_finalize)GET_PROC_ADR(plugin, "mana_finalize");
 			if (function)
 				function(vm);
-			FREE_LIBRARY(plugin);
+			FREE_LIBRARY(plugin)
 		}
 	}
 
@@ -71,23 +70,23 @@ namespace mana
 			return;
 		}
 
-		MODULE module = LOAD_LIBRARY(fileName.c_str());
+		MODULE module = LOAD_LIBRARY(fileName.c_str())
 		if (module == nullptr)
 		{
 			return;
 		}
 
 		typedef int32_t(*mana_initialize)(const std::shared_ptr<VM>&);
-		mana_initialize function = (mana_initialize)GET_PROC_ADR(module, "mana_initialize");
+		mana_initialize function = (mana_initialize)GET_PROC_ADR(module, "mana_initialize")
 		if (function && function(vm))
 		{
 			mPlugins.push_back(module);
 			return;
 		}
-		FREE_LIBRARY(module);
+		FREE_LIBRARY(module)
 	}
 
-	inline void Plugin::Regist(const std::string& directoryName)
+	inline void Plugin::Register(const std::string& directoryName)
 	{
 #if defined(MANA_TARGET_WINDOWS)
 		{
@@ -106,7 +105,7 @@ namespace mana
 					{
 						if(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 						{
-							Regist(fd.cFileName);
+							Register(fd.cFileName);
 						}
 						else
 						{
@@ -134,7 +133,7 @@ namespace mana
 						stat(entry->d_name, &fi);
 						if(S_ISDIR(fi.st_mode))
 						{
-							Regist(entry->d_name);
+							Register(entry->d_name);
 						}
 						else
 						{

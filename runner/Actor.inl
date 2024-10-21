@@ -6,7 +6,6 @@ mana (library)
 */
 
 #pragma once
-#include "Actor.h"
 #include "VM.h"
 #include "common/FileFormat.h"
 
@@ -69,7 +68,7 @@ namespace mana
 		mana_stream_pushData(stream, mVariable, mVariableSize);
 		mana_stream_pushInteger(stream, mPc);
 
-		mana_stream_push_char(stream, mInterruptLevel);
+		mana_stream_push_char(stream, mInterruptPriority);
 		mana_stream_push_unsigned_char(stream, mFlag);
 
 		mana_stream_mark(stream);
@@ -110,7 +109,7 @@ namespace mana
 
 		mPc = mana_stream_popInteger(stream);
 
-		mInterruptLevel = mana_stream_pop_char(stream);
+		mInterruptPriority = mana_stream_pop_char(stream);
 		mFlag = mana_stream_pop_unsigned_char(stream);
 
 		mana_stream_check(stream);
@@ -135,7 +134,7 @@ namespace mana
 				, mCommand(command)
 			{
 			}
-			IntermediateLanguage mCode;
+			IntermediateLanguage mCode = IntermediateLanguage::Halt;
 #endif
 			IntermediateLanguageFunction mCommand;
 		};
@@ -146,136 +145,136 @@ namespace mana
 #endif
 		static const std::array<IntermediateLanguageCommand, IntermediateLanguageSize> mIntermediateLanguage = {
 			// thread
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::RESTART, &CommandRestart),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::HALT, &CommandHalt),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::YIELD, &CommandYield),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::NONPREEMPTIVE, &CommandSetNonPreemptive),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PREEMPTIVE, &CommandSetPreemptive),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::Restart, &CommandRestart),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::Halt, &CommandHalt),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::Yield, &CommandYield),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::NonPreEmptive, &CommandSetNonPreemptive),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PreEmptive, &CommandSetPreemptive),
 
 			// jump
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::BEQ, &CommandBranchEqual),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::BNE, &CommandBranchNotEqual),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::BRA, &CommandBranchAway),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::BSR, &CommandBranchSubRoutine),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::CALL, &CommandCall),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::REQ, &CommandRequest),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::REQWS, &CommandRequestWaitStarting),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::REQWE, &CommandRequestWaitEnding),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::JOIN, &CommandJoin),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::COMPLY, &CommandComply),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::REFUSE, &CommandRefuse),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::LOAD_RETURN_ADDRESS, &CommandLoadReturnAddress),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::SAVE_RETURN_ADDRESS, &CommandStoreReturnAddress),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::RETURN_FROM_FUNCTION, &CommandReturnFromFunction),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::RETURN_FROM_ACTION, &CommandReturnFromAction),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::ROLLBACK, &CommandRollback),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::BranchEqual, &CommandBranchEqual),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::BranchNotEqual, &CommandBranchNotEqual),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::Branch, &CommandBranchAway),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::BranchSubRoutine, &CommandBranchSubRoutine),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::Call, &CommandCall),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::Request, &CommandRequest),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::RequestWaitStarting, &CommandRequestWaitStarting),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::RequestWaitEnded, &CommandRequestWaitEnding),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::Join, &CommandJoin),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::Comply, &CommandComply),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::Refuse, &CommandRefuse),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::LoadReturnAddress, &CommandLoadReturnAddress),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::SaveReturnAddress, &CommandStoreReturnAddress),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::ReturnFromFunction, &CommandReturnFromFunction),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::ReturnFromAction, &CommandReturnFromAction),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::Rollback, &CommandRollback),
 
 			// constant
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PUSH_ZERO_INTEGER, &CommandPushZeroInteger),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PUSH_ZERO_FLOAT, &CommandPushZeroFloat),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PUSH_CHAR, &CommandPushChar),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PUSH_SHORT, &CommandPushShort),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PUSH_INTEGER, &CommandPushInteger),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PUSH_SIZE, &CommandPushInteger),	// TODO:サイズに対応して下さい
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PUSH_FLOAT, &CommandPushFloat),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PUSH_STRING, &CommandPushString),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PUSH_PRIORITY, &CommandPushPriority),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PUSH_ACTOR, &CommandPushActor),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PUSH_SELF, &CommandPushSelf),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PUSH_SENDER, &CommandPushSender),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PushZeroInteger, &CommandPushZeroInteger),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PushZeroFloat, &CommandPushZeroFloat),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PushChar, &CommandPushChar),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PushShort, &CommandPushShort),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PushInteger, &CommandPushInteger),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PushSize, &CommandPushInteger),	// TODO:サイズに対応して下さい
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PushFloat, &CommandPushFloat),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PushString, &CommandPushString),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PushPriority, &CommandPushPriority),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PushActor, &CommandPushActor),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PushSelf, &CommandPushSelf),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PushSender, &CommandPushSender),
 
 			// stack
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::ALLOCATE, &CommandAllocate),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::FREE, &CommandRelease),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::Allocate, &CommandAllocate),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::Free, &CommandRelease),
 			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::Duplicate, &CommandDuplicate),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::DUPLICATE_DATA, &CommandDuplicateData),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::REMOVE, &CommandRemove),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::REMOVE_DATA, &CommandRemoveData),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::LOAD_STATIC_ADDRESS, &CommandLoadStaticAddress),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::LOAD_GLOBAL_ADDRESS, &CommandLoadGlobalAddress),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::LOAD_FRAME_ADDRESS, &CommandLoadFrameAddress),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::LOAD_SELF_ADDRESS, &CommandLoadSelfAddress),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::DuplicateData, &CommandDuplicateData),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::Remove, &CommandRemove),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::RemoveData, &CommandRemoveData),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::LoadStaticAddress, &CommandLoadStaticAddress),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::LoadGlobalAddress, &CommandLoadGlobalAddress),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::LoadFrameAddress, &CommandLoadFrameAddress),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::LoadSelfAddress, &CommandLoadSelfAddress),
 
 			// memory operation
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::LOAD_CHAR, &CommandLoadInt8),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::LOAD_SHORT, &CommandLoadInt16),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::LOAD_INTEGER, &CommandLoadInt32),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::LOAD_FLOAT, &CommandLoadFloat),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::LOAD_REFFRENCE, &CommandLoadReffrence),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::LOAD_DATA, &CommandLoadData),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::STORE_CHAR, &CommandStoreInt8),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::STORE_SHORT, &CommandStoreInt16),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::STORE_INTEGER, &CommandStoreInt32),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::STORE_FLOAT, &CommandStoreFloat),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::STORE_REFFRENCE, &CommandStoreReffrence),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::STORE_DATA, &CommandStoreData),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::LoadChar, &CommandLoadInt8),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::LoadShort, &CommandLoadInt16),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::LoadInteger, &CommandLoadInt32),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::LoadFloat, &CommandLoadFloat),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::LoadReference, &CommandLoadReference),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::LoadData, &CommandLoadData),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::StoreChar, &CommandStoreInt8),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::StoreShort, &CommandStoreInt16),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::StoreInteger, &CommandStoreInt32),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::StoreFloat, &CommandStoreFloat),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::StoreReference, &CommandStoreReference),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::StoreData, &CommandStoreData),
 
 			// caluclation
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::ADD_INTEGER, &CommandAddInteger),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::DIV_INTEGER, &CommandDivideInteger),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MINUS_INTEGER, &CommandMinusInteger),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MOD_INTEGER, &CommandModInteger),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MUL_INTEGER, &CommandMultiplyInteger),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::SUB_INTEGER, &CommandSubtractInteger),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::AddInteger, &CommandAddInteger),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::DivideInteger, &CommandDivideInteger),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MinusInteger, &CommandMinusInteger),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::ModInteger, &CommandModInteger),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MultiInteger, &CommandMultiplyInteger),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::SubtractInteger, &CommandSubtractInteger),
 
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::ADD_FLOAT, &CommandAddFloat),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::DIV_FLOAT, &CommandDivideFloat),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MINUS_FLOAT, &CommandMinusFloat),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MOD_FLOAT, &CommandModfloat),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MUL_FLOAT, &CommandMultiplyFloat),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::SUB_FLOAT, &CommandSubtractFloat),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::AddFloat, &CommandAddFloat),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::DivideFloat, &CommandDivideFloat),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MinusFloat, &CommandMinusFloat),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::ModFloat, &CommandModFloat),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MultiFloat, &CommandMultiplyFloat),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::SubtractFloat, &CommandSubtractFloat),
 
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::AND, &CommandAnd),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::EOR, &CommandExclusiveOr),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::LAND, &CommandLogicalAnd),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::LOR, &CommandLogicalOr),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::LNOT, &Commandlogical_not),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::NOT, &CommandNot),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::OR, &CommandOr),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::SHL, &CommandShiftLeft),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::SHR, &CommandShiftRight),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::And, &CommandAnd),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::ExclusiveOr, &CommandExclusiveOr),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::LogicalAnd, &CommandLogicalAnd),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::LogicalOr, &CommandLogicalOr),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::LogicalNot, &CommandLogicalNot),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::Not, &CommandNot),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::Or, &CommandOr),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::ShiftLeft, &CommandShiftLeft),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::ShiftRight, &CommandShiftRight),
 
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::INT2FLOAT, &CommandIntegerToFloat),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::FLOAT2INT, &CommandFloatToInteger),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::CastIntegerToFloat, &CommandIntegerToFloat),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::CastFloatToInteger, &CommandFloatToInteger),
 
 			// compare and branch
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::COMPARE_EQ_INTEGER, &CommandCompareEqualInteger),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::COMPARE_NE_INTEGER, &CommandCompareNotEqualInteger),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::COMPARE_GE_INTEGER, &CommandCompareGreaterEqualInteger),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::COMPARE_GT_INTEGER, &CommandCompareGreaterInteger),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::COMPARE_LE_INTEGER, &CommandCompareLessEqualInteger),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::COMPARE_LS_INTEGER, &CommandCompareLessInteger),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::CompareEqualInteger, &CommandCompareEqualInteger),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::CompareNotEqualInteger, &CommandCompareNotEqualInteger),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::CompareGreaterEqualInteger, &CommandCompareGreaterEqualInteger),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::CompareGreaterInteger, &CommandCompareGreaterInteger),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::CompareLessEqualInteger, &CommandCompareLessEqualInteger),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::CompareLessInteger, &CommandCompareLessInteger),
 
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::COMPARE_EQ_FLOAT, &CommandCompareEqualFloat),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::COMPARE_NE_FLOAT, &CommandCompareNotEqualFloat),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::COMPARE_GE_FLOAT, &CommandCompareGreaterEqualFloat),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::COMPARE_GT_FLOAT, &CommandCompareGreaterFloat),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::COMPARE_LE_FLOAT, &CommandCompareLessEqualFloat),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::COMPARE_LS_FLOAT, &CommandCompareLessFloat),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::CompareEqualFloat, &CommandCompareEqualFloat),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::CompareNotEqualFloat, &CommandCompareNotEqualFloat),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::CompareGreaterEqualFloat, &CommandCompareGreaterEqualFloat),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::CompareGreaterFloat, &CommandCompareGreaterFloat),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::CompareLessEqualFloat, &CommandCompareLessEqualFloat),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::CompareLessFloat, &CommandCompareLessFloat),
 
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::COMPARE_EQ_DATA, &CommandCompareEqualData),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::COMPARE_NE_DATA, &CommandCompareNotEqualData),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::COMPARE_GE_DATA, &CommandCompareGreaterEqualData),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::COMPARE_GT_DATA, &CommandCompareGreaterdata),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::COMPARE_LE_DATA, &CommandCompareLessEqualData),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::COMPARE_LS_DATA, &CommandCompareLessdata),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::CompareEqualData, &CommandCompareEqualData),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::CompareNotEqualData, &CommandCompareNotEqualData),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::CompareGreaterEqualData, &CommandCompareGreaterEqualData),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::CompareGreaterData, &CommandCompareGreaterData),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::CompareLessEqualData, &CommandCompareLessEqualData),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::CompareLessData, &CommandCompareLessData),
 
 			// utility
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PRINT, &CommandPrint),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::Print, &CommandPrint),
 
 			// under discussion
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::DYNAMIC_REQ, &Commanddynamic_request),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::DYNAMIC_REQWS, &CommandDynamicRequestWaitStarting),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::DYNAMIC_REQWE, &Commanddynamic_request_wait_ending),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::DynamicRequest, &CommandDynamicRequest),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::DynamicRequestWaitStarting, &CommandDynamicRequestWaitStarting),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::DynamicRequestWaitEnded, &CommandDynamicRequestWaitEnded),
 		};
 #undef MANA_ACTOR_SET_COMMAND
 
 		std::shared_ptr<VM> vm = mVM.lock();
 
-		Interrupt& currentInterrupt = mInterrupts[mInterruptLevel];
+		Interrupt& currentInterrupt = mInterrupts[mInterruptPriority];
 		size_t timer = 0;
 		do {
-			mFlag.reset(static_cast<uint8_t>(Flag::REQUESTED));
+			mFlag.reset(static_cast<uint8_t>(Flag::Requested));
 
 			if (!IsRunning())
 				return false;
@@ -306,112 +305,106 @@ namespace mana
 			}
 		} while (++timer < 500 || IsSynchronized());
 
-		return mFlag[static_cast<uint8_t>(Flag::RUNNING)];
+		return mFlag[static_cast<uint8_t>(Flag::Running)];
 	}
 
-	inline bool Actor::SyncCall(const int32_t level, const char* action, const std::shared_ptr<Actor>& sender)
+	inline bool Actor::SyncCall(const int32_t priority, const char* action, const std::shared_ptr<Actor>& sender)
 	{
-		if (Request(level, action, sender))
+		if (Request(priority, action, sender))
 		{
-			mInterrupts[level].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::IsInSyncCall));
+			mInterrupts[priority].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::IsInSyncCall));
 			while (true)
 			{
 				mVM.lock()->Run();
-				if (mInterruptLevel < level)
+				if (mInterruptPriority < priority)
 					return true;
 			}
 		}
 		return false;
 	}
 
-	inline bool Actor::AsyncCall(const int32_t level, const char* action, const std::shared_ptr<Actor>& sender)
+	inline bool Actor::AsyncCall(const int32_t priority, const char* action, const std::shared_ptr<Actor>& sender)
 	{
-		if (Request(level, action, sender))
+		if (Request(priority, action, sender))
 		{
-			mInterrupts[level].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::IsInSyncCall));
+			mInterrupts[priority].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::IsInSyncCall));
 			while (true)
 			{
 				Run();
-				if (mInterruptLevel < level)
+				if (mInterruptPriority < priority)
 					return true;
 			}
 		}
 		return false;
 	}
 
-	inline bool Actor::Request(const int32_t level, const char* action, const std::shared_ptr<Actor>& sender)
+	inline bool Actor::Request(const int32_t priority, const char* action, const std::shared_ptr<Actor>& sender)
 	{
-		if (mFlag[static_cast<uint8_t>(Flag::HALT)])
+		if (mFlag[static_cast<uint8_t>(Flag::Halt)])
 		{
-			MANA_TRACE({ "MANA: level ", std::to_string(level), ", ", GetName(), "::", action, " request failed. reason: halt\n" });
+			MANA_TRACE({ "MANA: priority ", std::to_string(priority), ", ", GetName(), "::", action, " request failed. reason: halt\n" });
 			return false;
 		}
 
-		if (mFlag[static_cast<uint8_t>(Flag::REFUSED)])
+		if (mFlag[static_cast<uint8_t>(Flag::Refused)])
 		{
-			MANA_TRACE({ "MANA: level ", std::to_string(level), ", ", GetName(), "::", action, " request failed. reason: refuse\n" });
+			MANA_TRACE({ "MANA: priority ", std::to_string(priority), ", ", GetName(), "::", action, " request failed. reason: refuse\n" });
 			return false;
 		}
-		/*
-		if (level < 0 || level >= MANA_ACTOR_MAX_INTERRUPT_LEVEL)
+
+		if (mInterrupts.find(priority) != mInterrupts.end())
 		{
-			MANA_TRACE("MANA: %s::%s request failed. reason: level %d range over\n", GetName().data(), action, level);
-			return false;
-		}
-		*/
-		if (mInterrupts.find(level) != mInterrupts.end())
-		{
-			MANA_TRACE({ "MANA: level ", std::to_string(level), ", ", GetName(), "::", action, " request failed.\n" });
+			MANA_TRACE({ "MANA: priority ", std::to_string(priority), ", ", GetName(), "::", action, " request failed.\n" });
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
-			if (mInterrupts[level].mActionName.empty() == false)
-				MANA_TRACE({ "reason : ", mInterrupts[level].mActionName," running" });
+			if (mInterrupts[priority].mActionName.empty() == false)
+				MANA_TRACE({ "reason : ", mInterrupts[priority].mActionName," running" });
 #endif
 			MANA_TRACE("\n");
 			return false;
 		}
 
 		uint32_t address = GetAction(action);
-		if (address == nil)
+		if (address == Nil)
 		{
-			MANA_TRACE({ "MANA: level ", std::to_string(level), ",", GetName(), "::", action, " request failed.reason: not found\n" });
+			MANA_TRACE({ "MANA: priority ", std::to_string(priority), ",", GetName(), "::", action, " request failed.reason: not found\n" });
 			return false;
 		}
 
-		mFlag.set(static_cast<uint8_t>(Flag::RUNNING));
+		mFlag.set(static_cast<uint8_t>(Flag::Running));
 
 		Interrupt interrupt;
 		interrupt.mCounter = 0;
 		interrupt.mSender = sender;
+		interrupt.mReturnAddress = Nil;
 		interrupt.mAddress = address;
 		interrupt.mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Synchronized));
 		interrupt.mFileCallbackParameter = nullptr;
 
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
 		MANA_TRACE({ "mana:request: ", GetName(), " " });
-		if (mInterrupts.size() > 0)
-			MANA_TRACE({ "level ", std::to_string(mInterruptLevel), mInterrupts[mInterruptLevel].mActionName, " => " });
-		MANA_TRACE({ "level ", std::to_string(level), " ",  action , "(", std::to_string(address), ")" });
+		if (mInterrupts.empty() == false)
+			MANA_TRACE({ "priority ", std::to_string(mInterruptPriority), mInterrupts[mInterruptPriority].mActionName, " => " });
+		MANA_TRACE({ "priority ", std::to_string(priority), " ",  action , "(", std::to_string(address), ")" });
 
 		// 実行するアクション名を記録
 		interrupt.mActionName = action;
 #endif
 
-		if (level >= mInterruptLevel)
+		if (priority >= mInterruptPriority)
 		{
 			// 現在よりも高い優先度(高いほど優先)の場合、すぐに割り込む
 
 			MANA_TRACE({ "mana:request: ", GetName(), " " });
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
-			if (mInterruptLevel)
+			if (mInterruptPriority)
 			{
-				MANA_TRACE({ "level ", std::to_string(mInterruptLevel), " ", mInterrupts[mInterruptLevel].mActionName, " =>" });
+				MANA_TRACE({ "priority ", std::to_string(mInterruptPriority), " ", mInterrupts[mInterruptPriority].mActionName, " =>" });
 			}
 #endif
-			MANA_TRACE({ "level ", std::to_string(level), " ", interrupt.mActionName, " succeed\n" });
+			MANA_TRACE({ "priority ", std::to_string(priority), " ", interrupt.mActionName, " succeed\n" });
 
 			// コールバック関数を呼びます
-			//if(mRequestCallback)
-			//	mRequestCallback(mRequestCallbackParameter);
+			mRequestEvent.Broadcast(priority);
 
 			Again();
 
@@ -420,10 +413,10 @@ namespace mana
 			interrupt.mStackPointer = mStack.GetSize();
 
 			// 現在のプログラムカウンタを保存します
-			mInterrupts[mInterruptLevel].mAddress = mPc;
+			mInterrupts[mInterruptPriority].mAddress = mPc;
 
 			// 新しい優先度(高いほど優先)とプログラムカウンタを設定します
-			mInterruptLevel = level;
+			mInterruptPriority = priority;
 			mPc = address;
 
 			// 次のTickでプログラムカウンタを進めない処理
@@ -434,21 +427,21 @@ namespace mana
 			// 現在よりも低い優先度(高いほど優先)の場合、現在のアクション終了後に実行
 
 			// 現在の優先度(高いほど優先)に入ったときのFPとSPを保存します
-			interrupt.mFramePointer = mInterrupts[mInterruptLevel].mFramePointer;
-			interrupt.mStackPointer = mInterrupts[mInterruptLevel].mStackPointer;
+			interrupt.mFramePointer = mInterrupts[mInterruptPriority].mFramePointer;
+			interrupt.mStackPointer = mInterrupts[mInterruptPriority].mStackPointer;
 
 			// 次のTickでプログラムカウンタを進める処理
 			interrupt.mFlag.reset(static_cast<uint8_t>(Interrupt::Flag::Repeat));
 		}
 
-		mInterrupts[level] = interrupt;
+		mInterrupts[priority] = interrupt;
 
-		MANA_ASSERT(mPc != nil);
+		MANA_ASSERT(mPc != Nil);
 
 		return true;
 	}
 
-	inline void Actor::Rollback(const int32_t level)
+	inline void Actor::Rollback(const int32_t priority)
 	{
 		if (mInterrupts.empty())
 			return;
@@ -457,7 +450,7 @@ namespace mana
 		SetSynchronized(false);
 
 		// 現在実行中のリクエストを検索
-		Interrupt& currentInterrupt = mInterrupts[mInterruptLevel];
+		Interrupt& currentInterrupt = mInterrupts[mInterruptPriority];
 
 		// リクエストが終了したことをsenderに通知する
 		if (currentInterrupt.mSender)
@@ -475,7 +468,7 @@ namespace mana
 #endif
 
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
-		const int32_t lastInterruptLevel = mInterruptLevel;
+		const int32_t lastInterruptPriority = mInterruptPriority;
 		const std::string lastActionName = currentInterrupt.mActionName;
 #endif
 
@@ -491,19 +484,19 @@ namespace mana
 		address_t stackPointer = currentInterrupt.mStackPointer;
 
 		// 優先度開放
-		mInterrupts.erase(mInterruptLevel);
+		mInterrupts.erase(mInterruptPriority);
 
 		// 優先度(高いほど優先)が指定されているならば、強制的に指定優先度まで戻る
-		int32_t currentLevel = mInterruptLevel - 1;
-		if (currentLevel > level)
+		int32_t currentLevel = mInterruptPriority - 1;
+		if (currentLevel > priority)
 		{
 			//for(auto i = mInterrupts.find(currentLevel); i != mInterrupts.end(); ++i)
-			while (currentLevel > level)
+			while (currentLevel > priority)
 			{
 				Interrupt* interrupt = &mInterrupts[currentLevel];
 
 				// 優先度開放
-				interrupt->mAddress = nil;
+				interrupt->mAddress = Nil;
 #if 0
 				/* ファイルエントリの削除 */
 				if (mAsyncFileCallback && mInterrupts->mFileCallbackParameter)
@@ -517,11 +510,10 @@ namespace mana
 				// フレームポインタとスタックポインタを取得
 				framePointer = interrupt->mFramePointer;
 				stackPointer = interrupt->mStackPointer;
-#if 0
+
 				/* コールバック関数を呼びます */
-				if (mRollbackCallback)
-					mRollbackCallback(mRollbackCallbackParameter);
-#endif			
+				mRollbackEvent.Broadcast(currentLevel);
+
 				--currentLevel;
 			}
 		}
@@ -534,7 +526,7 @@ namespace mana
 		while (currentLevel >= 0)
 		{
 			Interrupt* interrupt = &mInterrupts[currentLevel];
-			if (interrupt->mAddress != ~0)
+			if (interrupt->mAddress != Nil)
 			{
 				// 中断していた場所から復帰させます
 				mPc = interrupt->mAddress;
@@ -544,7 +536,7 @@ namespace mana
 					mRollbackCallback(mRollbackCallbackParameter);
 #endif			
 				// 優先度(高いほど優先)変更
-				mInterruptLevel = currentLevel;
+				mInterruptPriority = currentLevel;
 
 				// 次回のTickでプログラムカウンターを加算しない
 				interrupt->mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
@@ -556,9 +548,9 @@ namespace mana
 				MANA_TRACE(
 					{
 						"mana:rollback: ", GetName(),
-						" level ", std::to_string(lastInterruptLevel), " ", lastActionName,
+						" priority ", std::to_string(lastInterruptPriority), " ", lastActionName,
 						" => ",
-						" level ", std::to_string(mInterruptLevel), " ", interrupt->mActionName,
+						" priority ", std::to_string(mInterruptPriority), " ", interrupt->mActionName,
 						" succeed\n"
 					}
 				);
@@ -576,16 +568,16 @@ namespace mana
 
 		// 実行可能なアクションが無いので、アクターは停止する
 		Restart();
-		MANA_TRACE({ "mana:rollback: ", GetName(), "level ", std::to_string(lastInterruptLevel), " ",  lastActionName, "stoped\n" });
+		MANA_TRACE({ "mana:rollback: ", GetName(), "priority ", std::to_string(lastInterruptPriority), " ",  lastActionName, "stoped\n" });
 	}
 
 	inline void Actor::Restart()
 	{
-		mPc = nil;
-		mInterruptLevel = 0;
-		mFlag.reset(static_cast<uint8_t>(Flag::HALT));
-		mFlag.reset(static_cast<uint8_t>(Flag::RUNNING));
-		mFlag.reset(static_cast<uint8_t>(Flag::REFUSED));
+		mPc = Nil;
+		mInterruptPriority = 0;
+		mFlag.reset(static_cast<uint8_t>(Flag::Halt));
+		mFlag.reset(static_cast<uint8_t>(Flag::Running));
+		mFlag.reset(static_cast<uint8_t>(Flag::Refused));
 		mInterrupts.clear();
 		mFrame.Clear();
 		mStack.Clear();
@@ -599,7 +591,7 @@ namespace mana
 	inline uint32_t Actor::GetAction(const std::string_view& actionName) const
 	{
 		const auto i = mActions.find(actionName);
-		return (i == mActions.end()) ? nil : i->second;
+		return (i == mActions.end()) ? Nil : i->second;
 	}
 
 	inline void Actor::SetAction(const std::string_view& actionName, const uint32_t address)
@@ -609,12 +601,12 @@ namespace mana
 
 	inline int32_t Actor::GetCounter() const
 	{
-		return const_cast<Actor*>(this)->mInterrupts[mInterruptLevel].mCounter;
+		return const_cast<Actor*>(this)->mInterrupts[mInterruptPriority].mCounter;
 	}
 
 	inline void Actor::SetCounter(const int32_t counter)
 	{
-		mInterrupts[mInterruptLevel].mCounter = counter;
+		mInterrupts[mInterruptPriority].mCounter = counter;
 	}
 
 	inline int32_t Actor::GetArgumentCount() const
@@ -731,7 +723,7 @@ namespace mana
 
 	inline std::string Actor::GetActionName() const
 	{
-		const Interrupt& interrupt = const_cast<Actor*>(this)->mInterrupts[mInterruptLevel];
+		const Interrupt& interrupt = const_cast<Actor*>(this)->mInterrupts[mInterruptPriority];
 		return interrupt.mActionName;
 	}
 
@@ -748,32 +740,32 @@ namespace mana
 
 	inline bool Actor::IsInit()
 	{
-		return mInterrupts[mInterruptLevel].mFlag[static_cast<uint8_t>(Interrupt::Flag::Initialized)];
+		return mInterrupts[mInterruptPriority].mFlag[static_cast<uint8_t>(Interrupt::Flag::Initialized)];
 	}
 
 	inline bool Actor::IsRepeat()
 	{
-		return mInterrupts[mInterruptLevel].mFlag[static_cast<uint8_t>(Interrupt::Flag::Repeat)];
+		return mInterrupts[mInterruptPriority].mFlag[static_cast<uint8_t>(Interrupt::Flag::Repeat)];
 	}
 
 	inline bool Actor::IsRunning()
 	{
-		return mFlag[static_cast<uint8_t>(Flag::HALT)] == false && mFlag[static_cast<uint8_t>(Flag::RUNNING)] == true;
+		return mFlag[static_cast<uint8_t>(Flag::Halt)] == false && mFlag[static_cast<uint8_t>(Flag::Running)] == true;
 	}
 
-	inline void Actor::Repeat(const bool initial_complete)
+	inline void Actor::Repeat(const bool initialComplete)
 	{
-		if (initial_complete)
-			mInterrupts[mInterruptLevel].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Initialized));
+		if (initialComplete)
+			mInterrupts[mInterruptPriority].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Initialized));
 		else
-			mInterrupts[mInterruptLevel].mFlag.reset(static_cast<uint8_t>(Interrupt::Flag::Initialized));
-		mInterrupts[mInterruptLevel].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
-		mInterrupts[mInterruptLevel].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Suspend));
+			mInterrupts[mInterruptPriority].mFlag.reset(static_cast<uint8_t>(Interrupt::Flag::Initialized));
+		mInterrupts[mInterruptPriority].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
+		mInterrupts[mInterruptPriority].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Suspend));
 	}
 
 	inline void Actor::Again()
 	{
-		mFlag.set(static_cast<uint8_t>(Flag::REQUESTED));
+		mFlag.set(static_cast<uint8_t>(Flag::Requested));
 		mVM.lock()->mFlag.set(static_cast<uint8_t>(VM::Flag::Requested));
 	}
 
@@ -782,143 +774,77 @@ namespace mana
 		Stop();
 		yield();
 
-		mFlag.set(static_cast<uint8_t>(Flag::HALT));
-		mInterruptLevel = 0;
+		mFlag.set(static_cast<uint8_t>(Flag::Halt));
+		mInterruptPriority = 0;
 		mInterrupts.clear();
 	}
 
 	inline void Actor::Stop()
 	{
-		mFlag.reset(static_cast<uint8_t>(Flag::RUNNING));
+		mFlag.reset(static_cast<uint8_t>(Flag::Running));
 	}
 
 	inline void Actor::yield()
 	{
-		mInterrupts[mInterruptLevel].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Suspend));
+		mInterrupts[mInterruptPriority].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Suspend));
 	}
 	
 	inline void Actor::Accept()
 	{
-		mFlag.reset(static_cast<uint8_t>(Flag::REFUSED));
+		mFlag.reset(static_cast<uint8_t>(Flag::Refused));
 	}
 
 	inline void Actor::Refuse()
 	{
-		mFlag.set(static_cast<uint8_t>(Flag::REFUSED));
+		mFlag.set(static_cast<uint8_t>(Flag::Refused));
 	}
 
-	inline int32_t Actor::GetInterruptLevel() const
+	inline int32_t Actor::GetInterruptPriority() const
 	{
-		return mInterruptLevel;
+		return mInterruptPriority;
 	}
 
 	inline bool Actor::IsSynchronized() const
 	{
-		const Interrupt& interrupt = const_cast<Actor*>(this)->mInterrupts[mInterruptLevel];
+		const Interrupt& interrupt = const_cast<Actor*>(this)->mInterrupts[mInterruptPriority];
 		return interrupt.mFlag.test(static_cast<uint8_t>(Interrupt::Flag::Synchronized));
 	}
 
 	inline void Actor::SetSynchronized(const bool synchronized)
 	{
 		if (synchronized)
-			mInterrupts[mInterruptLevel].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Synchronized));
+			mInterrupts[mInterruptPriority].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Synchronized));
 		else
-			mInterrupts[mInterruptLevel].mFlag.reset(static_cast<uint8_t>(Interrupt::Flag::Synchronized));
+			mInterrupts[mInterruptPriority].mFlag.reset(static_cast<uint8_t>(Interrupt::Flag::Synchronized));
 	}
 
-	inline void Actor::SetSynchronizedWithLevel(const int32_t level, const bool synchronized)
+	inline void Actor::SetSynchronizedWithPriority(const int32_t priority, const bool synchronized)
 	{
 		if (synchronized)
-			mInterrupts[level].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Synchronized));
+			mInterrupts[priority].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Synchronized));
 		else
-			mInterrupts[level].mFlag.reset(static_cast<uint8_t>(Interrupt::Flag::Synchronized));
+			mInterrupts[priority].mFlag.reset(static_cast<uint8_t>(Interrupt::Flag::Synchronized));
 	}
 
-#if 0
-	inline void Actor::GetData(const const int32_t resouce_id, const void** buffer, size_t* mSize)
+	inline EventNameType Actor::AddRequestEvent(const std::function<void(int32_t)>& function)
 	{
-		MANA_ASSERT(resouce_id >= 0 && resouce_id < manaDatalink_get_number_ofDatas(&mVM->datalink));
-		*buffer = manaDatalink_getData(&mVM->datalink, resouce_id);
-		*mSize = manaDatalink_getData_size(&mVM->datalink, resouce_id);
+		return mRequestEvent.Add(function);
 	}
 
-	/*!
-	 * @return	ファイルコールバック関数
-	 */
-	inline fileCallback* Actor::GetFileCallback(void)
+	inline void Actor::RemoveRequestEvent(const EventNameType eventName)
 	{
-		return mAsyncFileCallback;
+		mRequestEvent.Remove(eventName);
 	}
 
-	/*!
-	 * @param[in]	function	ファイルコールバック関数
-	 */
-	inline void Actor::SetFileCallback(fileCallback* function)
+	inline EventNameType Actor::AddRollbackEvent(const std::function<void(int32_t)>& function)
 	{
-		mAsyncFileCallback = function;
+		return mRollbackEvent.Add(function);
 	}
 
-	/*!
-	 * @param[in]	self	, オブジェクト
-	 * @param[in]	level	優先度
-	 * @return		ファイルコールバックパラメーター
-	 */
-	inline void* Actor::GetFileCallbackParameter(int32_t level)
+	inline void Actor::RemoveRollbackEvent(const EventNameType eventName)
 	{
-		MANA_ASSERT(self);
-		MANA_ASSERT(level >= 0 && level < MANA_ACTOR_MAX_INTERRUPT_LEVEL);
-
-		return mInterrupts[level].mFileCallbackParameter;
+		mRollbackEvent.Remove(eventName);
 	}
-
-	/*!
-	 * @param[in]	self		, オブジェクト
-	 * @param[in]	level		優先度
-	 * @param[in]	parameter	ファイルコールバックパラメーター
-	 */
-	inline void Actor::SetFileCallbackParameter(int32_t level, void* parameter)
-	{
-		MANA_ASSERT(self);
-		MANA_ASSERT(level >= 0 && level < MANA_ACTOR_MAX_INTERRUPT_LEVEL);
-
-		mInterrupts[level].mFileCallbackParameter = parameter;
-	}
-
-	/*!
-	 * @param[in]	function	リクエストコールバック関数
-	 */
-	inline void Actor::SetRequestCallback(Callback* function)
-	{
-		mRequestCallback = function;
-	}
-
-	/*!
-	 * @param[in]	self		, オブジェクト
-	 * @param[in]	parameter	リクエストコールバックパラメーター
-	 */
-	inline void Actor::SetRequestCallbackParameter(void* parameter)
-	{
-		MANA_ASSERT(self);
-
-		mRequestCallbackParameter = parameter;
-	}
-	/*!
-	 * @param[in]	function	ロールバックコールバック関数
-	 */
-	inline void Actor::SetRollbackCallback(Callback* function)
-	{
-		mRollbackCallback = function;
-	}
-
-	/*!
-	 * @param[in]	function	ロールバックコールバック関数
-	 * @param[in]	parameter	ロールバックコールバックパラメーター
-	 */
-	inline void Actor::SetRollbackCallbackParameter(void* parameter)
-	{
-		mRollbackCallbackParameter = parameter;
-	}
-#endif
 
 	inline uintptr_t Actor::GetUserData() const
 	{
@@ -1014,7 +940,7 @@ namespace mana
 
 	inline void Actor::CommandPushPriority(const std::shared_ptr<VM>&, Actor& self)
 	{
-		self.mStack.Push<int_t>(self.mInterruptLevel);
+		self.mStack.Push<int_t>(self.mInterruptPriority);
 	}
 
 	inline void Actor::CommandPushSelf(const std::shared_ptr<VM>&, Actor& self)
@@ -1024,7 +950,7 @@ namespace mana
 
 	inline void Actor::CommandPushSender(const std::shared_ptr<VM>&, Actor& self)
 	{
-		self.mStack.Push(self.mInterrupts[self.mInterruptLevel].mSender.get());
+		self.mStack.Push(self.mInterrupts[self.mInterruptPriority].mSender.get());
 	}
 
 	inline void Actor::CommandAllocate(const std::shared_ptr<VM>& vm, Actor& self)
@@ -1103,7 +1029,7 @@ namespace mana
 		self.mStack.Set(0, *pointer);
 	}
 
-	inline void Actor::CommandLoadReffrence(const std::shared_ptr<VM>&, Actor& self)
+	inline void Actor::CommandLoadReference(const std::shared_ptr<VM>&, Actor& self)
 	{
 		void* pointer = static_cast<void*>(self.mStack.Get<void*>(0));
 		self.mStack.Set(0, pointer);
@@ -1137,7 +1063,7 @@ namespace mana
 		self.mStack.Remove(2);
 	}
 
-	inline void Actor::CommandStoreReffrence(const std::shared_ptr<VM>&, Actor& self)
+	inline void Actor::CommandStoreReference(const std::shared_ptr<VM>&, Actor& self)
 	{
 		//void* pointer = self.mStack.Get<void*>(0);
 		//*pointer = self.mStack.GetAddress(1);
@@ -1149,7 +1075,7 @@ namespace mana
 		if (!self.mStack.Pop<int_t>())
 		{
 			self.mPc = vm->GetUint32FromMemory(self.mPc + 1);
-			self.mInterrupts[self.mInterruptLevel].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
+			self.mInterrupts[self.mInterruptPriority].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
 
 			MANA_ASSERT(self.mPc < vm->mFileHeader->mSizeOfInstructionPool);
 		}
@@ -1160,7 +1086,7 @@ namespace mana
 		if (self.mStack.Pop<int_t>())
 		{
 			self.mPc = vm->GetUint32FromMemory(self.mPc + 1);
-			self.mInterrupts[self.mInterruptLevel].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
+			self.mInterrupts[self.mInterruptPriority].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
 
 			MANA_ASSERT(self.mPc < vm->mFileHeader->mSizeOfInstructionPool);
 		}
@@ -1169,15 +1095,15 @@ namespace mana
 	inline void Actor::CommandBranchAway(const std::shared_ptr<VM>& vm, Actor& self)
 	{
 		self.mPc = vm->GetUint32FromMemory(self.mPc + 1);
-		self.mInterrupts[self.mInterruptLevel].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
+		self.mInterrupts[self.mInterruptPriority].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
 
 		MANA_ASSERT(self.mPc < vm->mFileHeader->mSizeOfInstructionPool);
 	}
 
 	inline void Actor::CommandBranchSubRoutine(const std::shared_ptr<VM>& vm, Actor& self)
 	{
-		self.mInterrupts[self.mInterruptLevel].mReturnAddress = self.mPc + 4 + 1; // saved return program address
-		self.mInterrupts[self.mInterruptLevel].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
+		self.mInterrupts[self.mInterruptPriority].mReturnAddress = self.mPc + 4 + 1; // saved return program address
+		self.mInterrupts[self.mInterruptPriority].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
 		self.mPc = vm->GetUint32FromMemory(self.mPc + 1);
 
 		MANA_ASSERT(self.mPc < vm->mFileHeader->mSizeOfInstructionPool);
@@ -1196,24 +1122,24 @@ namespace mana
 	inline void Actor::CommandLoadReturnAddress(const std::shared_ptr<VM>&, Actor& self)
 	{
 		uint32_t* pointer = self.mFrame.GetAddressFromBottom<uint32_t>(sizeof(int32_t));
-		self.mInterrupts[self.mInterruptLevel].mReturnAddress = *pointer;
+		self.mInterrupts[self.mInterruptPriority].mReturnAddress = *pointer;
 	}
 
 	inline void Actor::CommandStoreReturnAddress(const std::shared_ptr<VM>&, Actor& self)
 	{
 		uint32_t* pointer = self.mFrame.GetAddressFromBottom<uint32_t>(sizeof(int32_t));
-		*pointer = self.mInterrupts[self.mInterruptLevel].mReturnAddress;
+		*pointer = self.mInterrupts[self.mInterruptPriority].mReturnAddress;
 	}
 
 	inline void Actor::CommandReturnFromFunction(const std::shared_ptr<VM>&, Actor& self)
 	{
-		self.mPc = self.mInterrupts[self.mInterruptLevel].mReturnAddress;
-		self.mInterrupts[self.mInterruptLevel].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
+		self.mPc = self.mInterrupts[self.mInterruptPriority].mReturnAddress;
+		self.mInterrupts[self.mInterruptPriority].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
 	}
 
 	inline void Actor::CommandReturnFromAction(const std::shared_ptr<VM>&, Actor& self)
 	{
-		self.Rollback(self.mInterruptLevel);
+		self.Rollback(self.mInterruptPriority);
 	}
 
 	inline void Actor::CommandRollback(const std::shared_ptr<VM>&, Actor& self)
@@ -1271,7 +1197,7 @@ namespace mana
 		self.mStack.Set(0, left % right);
 	}
 
-	inline void Actor::CommandModfloat(const std::shared_ptr<VM>&, Actor& self)
+	inline void Actor::CommandModFloat(const std::shared_ptr<VM>&, Actor& self)
 	{
 		const float_t left = self.mStack.Get<float_t>(1);
 		const float_t right = self.mStack.Get<float_t>(0);
@@ -1348,7 +1274,7 @@ namespace mana
 		self.mStack.Set(0, ~self.mStack.Get<int_t>(0));
 	}
 
-	inline void Actor::Commandlogical_not(const std::shared_ptr<VM>&, Actor& self)
+	inline void Actor::CommandLogicalNot(const std::shared_ptr<VM>&, Actor& self)
 	{
 		self.mStack.Set(0, !self.mStack.Get<int_t>(0));
 	}
@@ -1390,7 +1316,7 @@ namespace mana
 		const float_t left = self.mStack.Get<float_t>(1);
 		const float_t right = self.mStack.Get<float_t>(0);
 		self.mStack.Remove(1);
-		self.mStack.Set(0, left == right);
+		self.mStack.Set(0, std::abs(left - right) <= std::numeric_limits<float>::epsilon());
 	}
 
 	inline void Actor::CommandCompareGreaterEqualInteger(const std::shared_ptr<VM>&, Actor& self)
@@ -1438,7 +1364,7 @@ namespace mana
 		const float_t left = self.mStack.Get<float_t>(1);
 		const float_t right = self.mStack.Get<float_t>(0);
 		self.mStack.Remove(1);
-		self.mStack.Set(0, left != right);
+		self.mStack.Set(0, std::abs(left - right) > std::numeric_limits<float>::epsilon());
 	}
 
 	inline void Actor::CommandCompareLessEqualInteger(const std::shared_ptr<VM>&, Actor& self)
@@ -1494,33 +1420,33 @@ namespace mana
 
 	inline void Actor::CommandLoadData(const std::shared_ptr<VM>& vm, Actor& self)
 	{
-		const int32_t size = vm->GetInt32FromMemory(self.mPc + 1);
+		const uint32_t size = vm->GetUint32FromMemory(self.mPc + 1);
 		const void* pointer = self.mStack.Pop<void*>();
 		self.mStack.Push(pointer, size);
 	}
 
 	inline void Actor::CommandStoreData(const std::shared_ptr<VM>& vm, Actor& self)
 	{
-		const int32_t size = vm->GetInt32FromMemory(self.mPc + 1);
+		const uint32_t size = vm->GetUint32FromMemory(self.mPc + 1);
 		void* pointer = self.mStack.Pop<void*>();
 		self.mStack.PopData(pointer, size);
 	}
 
 	inline void Actor::CommandDuplicateData(const std::shared_ptr<VM>& vm, Actor& self)
 	{
-		const int32_t size = vm->GetInt32FromMemory(self.mPc + 1);
+		const uint32_t size = vm->GetUint32FromMemory(self.mPc + 1);
 		void* pointer = self.mStack.GetAddress(size / sizeof(void*));
 		self.mStack.Push(pointer, size);
 	}
 
 	inline void Actor::CommandRemoveData(const std::shared_ptr<VM>& vm, Actor& self)
 	{
-		self.mStack.Remove(vm->GetInt32FromMemory(self.mPc + 1) / sizeof(void*));
+		self.mStack.Remove(vm->GetUint32FromMemory(self.mPc + 1) / sizeof(void*));
 	}
 
 	inline void Actor::CommandCompareEqualData(const std::shared_ptr<VM>& vm, Actor& self)
 	{
-		const int32_t size = vm->GetInt32FromMemory(self.mPc + 1 + sizeof(int32_t));
+		const uint32_t size = vm->GetUint32FromMemory(self.mPc + 1 + sizeof(int32_t));
 		const void* buf1 = self.mStack.GetAddress(size * 1 / sizeof(void*));
 		const void* buf2 = self.mStack.GetAddress(size * 2 / sizeof(void*));
 		self.mStack.Remove(size * 2 / sizeof(void*));
@@ -1529,16 +1455,16 @@ namespace mana
 
 	inline void Actor::CommandCompareGreaterEqualData(const std::shared_ptr<VM>& vm, Actor& self)
 	{
-		const int32_t size = vm->GetInt32FromMemory(self.mPc + 1 + sizeof(int32_t));
+		const uint32_t size = vm->GetUint32FromMemory(self.mPc + 1 + sizeof(int32_t));
 		const void* buf1 = self.mStack.GetAddress(size * 1 / sizeof(void*));
 		const void* buf2 = self.mStack.GetAddress(size * 2 / sizeof(void*));
 		self.mStack.Remove(size * 2 / sizeof(void*));
 		self.mStack.Push(std::memcmp(buf1, buf2, size) >= 0);
 	}
 
-	inline void Actor::CommandCompareGreaterdata(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandCompareGreaterData(const std::shared_ptr<VM>& vm, Actor& self)
 	{
-		const int32_t size = vm->GetInt32FromMemory(self.mPc + 1 + sizeof(int32_t));
+		const uint32_t size = vm->GetUint32FromMemory(self.mPc + 1 + sizeof(int32_t));
 		const void* buf1 = self.mStack.GetAddress(size * 1 / sizeof(void*));
 		const void* buf2 = self.mStack.GetAddress(size * 2 / sizeof(void*));
 		self.mStack.Remove(size * 2 / sizeof(void*));
@@ -1547,7 +1473,7 @@ namespace mana
 
 	inline void Actor::CommandCompareNotEqualData(const std::shared_ptr<VM>& vm, Actor& self)
 	{
-		const int32_t size = vm->GetInt32FromMemory(self.mPc + 1 + sizeof(int32_t));
+		const uint32_t size = vm->GetUint32FromMemory(self.mPc + 1 + sizeof(int32_t));
 		const void* buf1 = self.mStack.GetAddress(size * 1 / sizeof(void*));
 		const void* buf2 = self.mStack.GetAddress(size * 2 / sizeof(void*));
 		self.mStack.Remove(size * 2 / sizeof(void*));
@@ -1556,16 +1482,16 @@ namespace mana
 
 	inline void Actor::CommandCompareLessEqualData(const std::shared_ptr<VM>& vm, Actor& self)
 	{
-		const int32_t size = vm->GetInt32FromMemory(self.mPc + 1 + sizeof(int32_t));
+		const uint32_t size = vm->GetUint32FromMemory(self.mPc + 1 + sizeof(int32_t));
 		const void* buf1 = self.mStack.GetAddress(size * 1 / sizeof(void*));
 		const void* buf2 = self.mStack.GetAddress(size * 2 / sizeof(void*));
 		self.mStack.Remove(size * 2 / sizeof(void*));
 		self.mStack.Push(std::memcmp(buf1, buf2, size) <= 0);
 	}
 
-	inline void Actor::CommandCompareLessdata(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandCompareLessData(const std::shared_ptr<VM>& vm, Actor& self)
 	{
-		const int32_t size = vm->GetInt32FromMemory(self.mPc + 1 + sizeof(int32_t));
+		const uint32_t size = vm->GetUint32FromMemory(self.mPc + 1 + sizeof(int32_t));
 		const void* buf1 = self.mStack.GetAddress(size * 1 / sizeof(void*));
 		const void* buf2 = self.mStack.GetAddress(size * 2 / sizeof(void*));
 		self.mStack.Remove(size * 2 / sizeof(void*));
@@ -1574,21 +1500,21 @@ namespace mana
 
 	inline void Actor::CommandCall(const std::shared_ptr<VM>& vm, Actor& self)
 	{
-		uint32_t last_pc = self.mPc;
-		int32_t last_interrupt_level = self.mInterruptLevel;
+		const uint32_t lastPc = self.mPc;
+		const int32_t lastInterruptPriority = self.mInterruptPriority;
 
 		// 外部関数の実行
 		const char* functionName = vm->GetStringFromMemory(self.mPc + 1);
-		VM::ExternalFuntionType function = vm->FindFunction(functionName);
+		const VM::ExternalFunctionType function = vm->FindFunction(functionName);
 		function(self.shared_from_this());
 
 		if (self.IsRunning())
 		{
 			if (!self.IsRepeat())
 			{
-				bool bHasReturnValue = self.HasReturnValue(last_pc);
-				int32_t nNumberOfArguments = self.GetArgumentCountByAddress(last_pc);
-				int32_t nSizeOfArguments = self.GetArgumentSize(last_pc);
+				const bool bHasReturnValue = self.HasReturnValue(lastPc);
+				const int32_t nNumberOfArguments = self.GetArgumentCountByAddress(lastPc);
+				const int32_t nSizeOfArguments = self.GetArgumentSize(lastPc);
 
 				// スタックに入っているパラメータをpopする
 				self.mStack.Remove(nSizeOfArguments);
@@ -1627,12 +1553,12 @@ namespace mana
 				}
 
 				// 外部関数内でreq系の命令が実行された場合、スタックの状態を修正する
-				if (self.mInterruptLevel > last_interrupt_level)
+				if (self.mInterruptPriority > lastInterruptPriority)
 				{
 					// TODO:即値を使わないで下さい
-					self.mInterrupts[last_interrupt_level].mAddress = last_pc + 4 + 2 + 2 + 1 + (nNumberOfArguments * sizeof(int16_t));
-					self.mInterrupts[self.mInterruptLevel].mStackPointer = self.mStack.GetSize();
-					self.mInterrupts[self.mInterruptLevel].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
+					self.mInterrupts[lastInterruptPriority].mAddress = lastPc + 4 + 2 + 2 + 1 + (nNumberOfArguments * sizeof(int16_t));
+					self.mInterrupts[self.mInterruptPriority].mStackPointer = self.mStack.GetSize();
+					self.mInterrupts[self.mInterruptPriority].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
 				}
 			}
 		}
@@ -1640,43 +1566,43 @@ namespace mana
 
 	inline void Actor::CommandRequest(const std::shared_ptr<VM>& vm, Actor& self)
 	{
-		Actor* target_actor = self.mStack.Pop<Actor*>();
-		int_t level = self.mStack.Pop<int_t>();
+		Actor* targetActor = self.mStack.Pop<Actor*>();
+		const int_t priority = self.mStack.Pop<int_t>();
 		const char* action = vm->GetStringFromMemory(self.mPc + 1);
 
-		if (target_actor)
+		if (targetActor)
 		{
-			self.mInterrupts[self.mInterruptLevel].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
+			self.mInterrupts[self.mInterruptPriority].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
 			self.mPc += sizeof(int32_t) + 1;
-			target_actor->Request(level, action, self.shared_from_this());
+			targetActor->Request(priority, action, self.shared_from_this());
 		}
 	}
 
 	inline void Actor::CommandRequestWaitStarting(const std::shared_ptr<VM>& vm, Actor& self)
 	{
-		Actor* target_actor = static_cast<Actor*>(self.mStack.Get<void*>(0));
-		int_t level = self.mStack.Get<int_t>(1);
+		Actor* targetActor = static_cast<Actor*>(self.mStack.Get<void*>(0));
+		const int_t priority = self.mStack.Get<int_t>(1);
 		const char* action = vm->GetStringFromMemory(self.mPc + 1);
 
-		if (target_actor == nullptr)
+		if (targetActor == nullptr)
 		{
 			self.mStack.Remove(2);
 			return;
 		}
 
-		if (&self == target_actor)
+		if (&self == targetActor)
 		{
 			self.mStack.Remove(2);
 			return;
 		}
 
-		if (self.IsInit() && !target_actor->Request(level, action, self.shared_from_this()))
+		if (self.IsInit() && !targetActor->Request(priority, action, self.shared_from_this()))
 		{
 			self.mStack.Remove(2);
 			return;
 		}
 
-		if (target_actor->mInterruptLevel <= level)
+		if (targetActor->mInterruptPriority <= priority)
 		{
 			self.mStack.Remove(2);
 		}
@@ -1688,29 +1614,29 @@ namespace mana
 
 	inline void Actor::CommandRequestWaitEnding(const std::shared_ptr<VM>& vm, Actor& self)
 	{
-		Actor* target_actor = static_cast<Actor*>(self.mStack.Get<void*>(0));
-		int_t level = self.mStack.Get<int_t>(1);
+		Actor* targetActor = static_cast<Actor*>(self.mStack.Get<void*>(0));
+		const int_t priority = self.mStack.Get<int_t>(1);
 		const char* action = vm->GetStringFromMemory(self.mPc + 1);
 
-		if (target_actor == 0)
+		if (targetActor == nullptr)
 		{
 			self.mStack.Remove(2);
 			return;
 		}
 
-		if (&self == target_actor)
+		if (&self == targetActor)
 		{
 			self.mStack.Remove(2);
 			return;
 		}
 
-		if (self.IsInit() && !target_actor->Request(level, action, self.shared_from_this()))
+		if (self.IsInit() && !targetActor->Request(priority, action, self.shared_from_this()))
 		{
 			self.mStack.Remove(2);
 			return;
 		}
 
-		if (target_actor->mInterruptLevel < level)
+		if (targetActor->mInterruptPriority < priority)
 		{
 			self.mStack.Remove(2);
 		}
@@ -1720,21 +1646,21 @@ namespace mana
 		}
 	}
 
-	inline void Actor::Commanddynamic_request(const std::shared_ptr<VM>&, Actor&)
+	inline void Actor::CommandDynamicRequest(const std::shared_ptr<VM>&, Actor&)
 	{
 		MANA_NOT_IMPLEMENTED();
 		/*
 		CManaStack& Stack = actor->self.mStack;
 		const char* pszTarget, = Stack.PopString();
-		const int32_t level = Stack.PopInteger();
+		const int32_t priority = Stack.PopInteger();
 		const char* action = actor->GetStringFromMemory(1);
 
-		actor->self.mInterrupts[actor->GetInterruptLevel()].repeat = true;
+		actor->self.mInterrupts[actor->GetInterruptPriority()].repeat = true;
 		actor->self.mPc += sizeof(int32_t) + 1;
 
-		Actor* target_actor = actor->GetParent().GetActor(pszTarget,);
-		if(target_actor)
-		target_actor->Request(level, action, actor);
+		Actor* targetActor = actor->GetParent().GetActor(pszTarget,);
+		if(targetActor)
+		targetActor->Request(priority, action, actor);
 		*/
 	}
 
@@ -1744,26 +1670,26 @@ namespace mana
 		/*
 		CManaStack& Stack = actor->self.mStack;
 		const char* pszTarget, = Stack.GetString(0);
-		int32_t level = Stack.Get<int_t>(1);
+		int32_t priority = Stack.Get<int_t>(1);
 		const char* action = actor->GetStringFromMemory(1);
 
-		Actor* target_actor = actor->GetParent().GetActor(pszTarget,);
-		if(target_actor == 0)
+		Actor* targetActor = actor->GetParent().GetActor(pszTarget,);
+		if(targetActor == 0)
 		{
 		actor->self.mStack.Remove(2);
 		return;
 		}
-		if(actor == target_actor)
+		if(actor == targetActor)
 		{
 		actor->self.mStack.Remove(2);
 		return;
 		}
-		if(actor->IsInit() && !target_actor->Request(level, action, actor))
+		if(actor->IsInit() && !targetActor->Request(priority, action, actor))
 		{
 		actor->self.mStack.Remove(2);
 		return;
 		}
-		if(target_actor->GetInterruptLevel() <= level)
+		if(targetActor->GetInterruptPriority() <= priority)
 		{
 		actor->self.mStack.Remove(2);
 		}else{
@@ -1772,32 +1698,32 @@ namespace mana
 		*/
 	}
 
-	inline void Actor::Commanddynamic_request_wait_ending(const std::shared_ptr<VM>&, Actor&)
+	inline void Actor::CommandDynamicRequestWaitEnded(const std::shared_ptr<VM>&, Actor&)
 	{
 		MANA_NOT_IMPLEMENTED();
 		/*
 		CManaStack& Stack = actor->self.mStack;
 		const char* pszTarget, = Stack.GetString(0);
-		int32_t level = Stack.Get<int_t>(1);
+		int32_t priority = Stack.Get<int_t>(1);
 		const char* action = actor->GetStringFromMemory(1);
 
-		Actor* target_actor = actor->GetParent().GetActor(pszTarget,);
-		if(target_actor == 0)
+		Actor* targetActor = actor->GetParent().GetActor(pszTarget,);
+		if(targetActor == 0)
 		{
 		actor->self.mStack.Remove(2);
 		return;
 		}
-		if(actor == target_actor)
+		if(actor == targetActor)
 		{
 		actor->self.mStack.Remove(2);
 		return;
 		}
-		if(actor->IsInit() && !target_actor->Request(level, action, actor))
+		if(actor->IsInit() && !targetActor->Request(priority, action, actor))
 		{
 		actor->self.mStack.Remove(2);
 		return;
 		}
-		if(target_actor->self.mInterruptLevel < level)
+		if(targetActor->self.mInterruptPriority < priority)
 		{
 		actor->self.mStack.Remove(2);
 		}else{
@@ -1808,14 +1734,14 @@ namespace mana
 
 	inline void Actor::CommandJoin(const std::shared_ptr<VM>&, Actor& self)
 	{
-		Actor* target_actor = static_cast<Actor*>(self.mStack.Get<void*>(0));
-		if (target_actor == nullptr)
+		Actor* targetActor = static_cast<Actor*>(self.mStack.Get<void*>(0));
+		if (targetActor == nullptr)
 		{
 			self.mStack.Remove(2);
 			return;
 		}
 
-		if (target_actor->mInterruptLevel < self.mStack.Get<int_t>(1))
+		if (targetActor->mInterruptPriority < self.mStack.Get<int_t>(1))
 		{
 			self.mStack.Remove(2);
 		}
@@ -1829,21 +1755,20 @@ namespace mana
 	{
 		char message[1024];
 
-		int32_t message_pointer = 0;
-		int32_t number_of_arguments = vm->GetInt32FromMemory(self.mPc + 1);
+		int32_t messagePointer = 0;
+		const int32_t numberOfArguments = vm->GetInt32FromMemory(self.mPc + 1);
 
-		if (number_of_arguments > 0)
+		if (numberOfArguments > 0)
 		{
 			int32_t counter = 1;
-			char* format;
 
-			for (format = static_cast<char*>(self.mStack.Get<void*>(0)); *format; format++)
+			for (char* format = static_cast<char*>(self.mStack.Get<void*>(0)); *format; format++)
 			{
 				if (*format == '%')
 				{
-					if (counter > number_of_arguments)
+					if (counter > numberOfArguments)
 					{
-						message[message_pointer++] = '\n';
+						message[messagePointer++] = '\n';
 						break;
 					}
 
@@ -1853,53 +1778,53 @@ namespace mana
 					{
 					case 'd':
 #if __STDC_WANT_SECURE_LIB__
-						message_pointer += sprintf_s(&message[message_pointer], sizeof(message) - message_pointer, "%ld", self.mStack.Get<int_t>(counter++));
+						messagePointer += sprintf_s(&message[messagePointer], sizeof(message) - messagePointer, "%ld", self.mStack.Get<int_t>(counter++));
 #else
-						message_pointer += sprintf(&message[message_pointer], "%d", self.mStack.Get<int_t>(counter++));
+						messagePointer += sprintf(&message[messagePointer], "%d", self.mStack.Get<int_t>(counter++));
 #endif
 						break;
 
 					case 'f':
 #if __STDC_WANT_SECURE_LIB__
-						message_pointer += sprintf_s(&message[message_pointer], sizeof(message) - message_pointer, "%f", self.mStack.Get<float_t>(counter++));
+						messagePointer += sprintf_s(&message[messagePointer], sizeof(message) - messagePointer, "%f", self.mStack.Get<float_t>(counter++));
 #else
-						message_pointer += sprintf(&message[message_pointer], "%f", self.mStack.Get<float_t>(counter++));
+						messagePointer += sprintf(&message[messagePointer], "%f", self.mStack.Get<float_t>(counter++));
 #endif
 						break;
 
 					case 's':
 #if __STDC_WANT_SECURE_LIB__
-						message_pointer += sprintf_s(&message[message_pointer], sizeof(message) - message_pointer, self.mStack.Get<const char*>(counter++));
+						messagePointer += sprintf_s(&message[messagePointer], sizeof(message) - messagePointer, self.mStack.Get<const char*>(counter++));
 #else
-						message_pointer += sprintf(&message[message_pointer], "%s", self.mStack.Get<const char*>(counter++));
+						messagePointer += sprintf(&message[messagePointer], "%s", self.mStack.Get<const char*>(counter++));
 #endif
 						break;
 
 					case 'p':
 #if __STDC_WANT_SECURE_LIB__
-						message_pointer += sprintf_s(&message[message_pointer], sizeof(message) - message_pointer, "%p", self.mStack.Get<void*>(counter++));
+						messagePointer += sprintf_s(&message[messagePointer], sizeof(message) - messagePointer, "%p", self.mStack.Get<void*>(counter++));
 #else
-						message_pointer += sprintf(&message[message_pointer], "%p", self.mStack.Get<void*>(counter++));
+						messagePointer += sprintf(&message[messagePointer], "%p", self.mStack.Get<void*>(counter++));
 #endif
 						break;
 
 					default:
-						message[message_pointer] = *format;
-						message_pointer++;
+						message[messagePointer] = *format;
+						messagePointer++;
 						break;
 					}
 				}
 				else
 				{
-					message[message_pointer] = *format;
-					message_pointer++;
+					message[messagePointer] = *format;
+					messagePointer++;
 				}
 			}
 		}
-		message[message_pointer] = '\0';
+		message[messagePointer] = '\0';
 
 		MANA_PRINT(message);
 
-		self.mStack.Remove(number_of_arguments);
+		self.mStack.Remove(numberOfArguments);
 	}
 }

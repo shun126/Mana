@@ -6,9 +6,7 @@ mana (library)
 */
 
 #pragma once
-#include "Actor.h"
 #include "Plugin.h"
-#include "VM.h"
 
 namespace mana
 {
@@ -96,19 +94,19 @@ namespace mana
 		mPlugin->Load(filename);
 	}
 
-	inline void VM::LoadPlugins(const std::string& directoryname)
+	inline void VM::LoadPlugins(const std::string& directoryName)
 	{
 		if (mPlugin == nullptr)
 			mPlugin = std::make_shared<Plugin>(shared_from_this());
-		mPlugin->Regist(directoryname);
+		mPlugin->Register(directoryName);
 	}
 
-	inline void VM::RegistFunction(const std::string& name, ExternalFuntionType function)
+	inline void VM::RegisterFunction(const std::string& name, const ExternalFunctionType& function)
 	{
 		mFunctionHash[name] = function;
 	}
 
-	inline VM::ExternalFuntionType VM::FindFunction(const std::string& functionName) const
+	inline VM::ExternalFunctionType VM::FindFunction(const std::string& functionName) const
 	{
 		auto i = mFunctionHash.find(functionName);
 		if (i == mFunctionHash.end())
@@ -124,22 +122,22 @@ namespace mana
 
 		mProgram = program;
 
-		mFileHeader = reinterpret_cast<const FileHeader*>(mProgram.get());;
-		if (std::memcmp(SIGNATURE, mFileHeader->mHeader, sizeof(mFileHeader->mHeader)) != 0)
+		mFileHeader = reinterpret_cast<const FileHeader*>(mProgram.get());
+		if (std::memcmp(Signature, mFileHeader->mHeader, sizeof(mFileHeader->mHeader)) != 0)
 		{
 			throw std::invalid_argument("abnormal mana program loaded.");
 		}
-		if (mFileHeader->mMajorVersion != MAJOR_VERSION || mFileHeader->mMinorVersion != mana::MINOR_VERSION)
+		if (mFileHeader->mMajorVersion != MajorVersion || mFileHeader->mMinorVersion != mana::MinorVersion)
 		{
 			throw std::invalid_argument("file version error.");
 		}
 		{
 #if UINTPTR_MAX == UINT64_MAX
-			const uint8_t is64bit = 1 << FileHeader::Flag::Is64bit;
+			const uint8_t is64bit = 1 << FileHeader::Flag::Is64Bit;
 #else
 			const uint8_t is64bit = 0;
 #endif
-			if ((mFileHeader->mFlag & (1 << FileHeader::Flag::Is64bit)) != is64bit)
+			if ((mFileHeader->mFlag & (1 << FileHeader::Flag::Is64Bit)) != is64bit)
 			{
 				throw std::invalid_argument("different bit size by compiled.");
 			}
@@ -167,7 +165,7 @@ namespace mana
 			uint32_t program_counter = 0;
 			while (program_counter < mFileHeader->mSizeOfInstructionPool)
 			{
-				if (mInstructionPool[program_counter] == CALL)
+				if (mInstructionPool[program_counter] == Call)
 				{
 					const char* name = GetString(self, &self->mInstructionPool[program_counter + 1]);
 					mana_external_funtion_type* function = mana_hash_get(&mana_external_function_hash, name);
@@ -330,7 +328,7 @@ namespace mana
 		return false;
 	}
 
-	inline void VM::Execute(std::function<void()> function)
+	inline void VM::Execute(const std::function<void()>& function)
 	{
 		while (Run())
 		{
@@ -338,7 +336,7 @@ namespace mana
 		}
 	}
 
-	inline void VM::RequestAll(const uint32_t level, const char* actionName, const std::shared_ptr<Actor>& sender)
+	inline void VM::RequestAll(const int32_t level, const char* actionName, const std::shared_ptr<Actor>& sender) const
 	{
 		for (auto& actor : mActorHash)
 		{
@@ -346,7 +344,7 @@ namespace mana
 		}
 	}
 
-	inline bool VM::Request(const uint32_t level, const char* actorName, const char* actionName, const std::shared_ptr<Actor>& sender)
+	inline bool VM::Request(const int32_t level, const char* actorName, const char* actionName, const std::shared_ptr<Actor>& sender)
 	{
 		const std::shared_ptr<Actor>& actor = mActorHash[actorName];
 		if (actor == nullptr)
@@ -354,7 +352,7 @@ namespace mana
 		return actor->Request(level, actionName, sender);
 	}
 
-	inline void VM::yield()
+	inline void VM::YieldAll()
 	{
 		for (auto& actor : mActorHash)
 		{
@@ -523,7 +521,7 @@ namespace mana
 
 	inline int32_t VM::GetOpecode(const uint32_t address) const
 	{
-		MANA_ASSERT(address != nil);
+		MANA_ASSERT(address != Nil);
 		int32_t opecode = mInstructionPool[address];
 		MANA_ASSERT(address < mFileHeader->mSizeOfInstructionPool);
 		MANA_ASSERT(opecode >= 0 && opecode < IntermediateLanguageSize);
