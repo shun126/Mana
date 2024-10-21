@@ -6,6 +6,9 @@ mana (library)
 */
 
 #pragma once
+#include "String.h"
+#include <fstream>
+#include <cstring>
 
 namespace mana
 {
@@ -16,7 +19,7 @@ namespace mana
 
 	inline void OutputStream::ResizeBuffer(const size_t size)
 	{
-		static const size_t PageSize = 1024;
+		static constexpr size_t PageSize = 1024;
 
 		if (mAllocatedSize < mUsedSize + size)
 		{
@@ -51,7 +54,7 @@ namespace mana
 		mUsedSize += filesize;
 	}
 
-	inline void OutputStream::Save(const std::string& filename)
+	inline void OutputStream::Save(const std::string& filename) const
 	{
 		std::ofstream outfile(filename, std::ios::out);
 		if (!outfile.is_open())
@@ -119,7 +122,7 @@ namespace mana
 
 	inline void OutputStream::PopString(char* pointer, const size_t size)
 	{
-		pointer += GetString(pointer, size);
+		mPointer += GetString(pointer, size);
 	}
 
 	inline void OutputStream::PopData(void* pointer, const size_t size)
@@ -136,7 +139,7 @@ namespace mana
 		return value;
 	}
 
-	inline size_t OutputStream::GetString(char* pointer, const size_t size)
+	inline size_t OutputStream::GetString(char* pointer, const size_t size) const
 	{
 		if (mPointer >= mUsedSize)
 			throw std::range_error("buffer over");
@@ -168,7 +171,7 @@ namespace mana
 		return std::strlen(&weakBuffer[mPointer]);
 	}
 
-	inline void OutputStream::GetData(void* pointer, const size_t size)
+	inline void OutputStream::GetData(void* pointer, const size_t size) const
 	{
 		if (mPointer >= mUsedSize)
 			throw std::range_error("GetData");
@@ -195,6 +198,6 @@ namespace mana
 		if (newBuffer == nullptr)
 			throw std::bad_alloc();
 		std::memcpy(newBuffer, mBuffer.get(), mUsedSize);
-		return std::shared_ptr<const void>(newBuffer, std::free);
+		return { newBuffer, std::free };
 	}
 }

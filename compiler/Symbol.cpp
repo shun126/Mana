@@ -24,7 +24,7 @@ static char* symbol_data_type_id_name[NUMBER_OF] = {
 	"struct",											/* struct型 */
 	"actor",											/* actor型 */
 	"module",											/* module型 */
-	"nil",												/* nil型 */
+	"Nil",												/* Nil型 */
 	"incomplete",										/* 宣言が未完了の型 */
 };
 #endif
@@ -237,7 +237,7 @@ static char* symbol_data_type_id_name[NUMBER_OF] = {
 		mNumberOfParameters = static_cast<decltype(mNumberOfParameters)>(numberOfParameters);
 	}
 
-	void Symbol::symbol_check_undefine_recursive() const
+	void Symbol::CheckUndefineRecursive() const
 	{
 		switch (mClassTypeId)
 		{
@@ -245,7 +245,7 @@ static char* symbol_data_type_id_name[NUMBER_OF] = {
 			if (mTypeDescription->Is(TypeDescriptor::Id::Actor))
 			{
 				if (auto symbol = mTypeDescription->GetSymbolEntry())
-					symbol->symbol_check_undefine_recursive();
+					symbol->CheckUndefineRecursive();
 			}
 			break;
 
@@ -254,7 +254,7 @@ static char* symbol_data_type_id_name[NUMBER_OF] = {
 		}
 
 		if (mNext)
-			mNext->symbol_check_undefine_recursive();
+			mNext->CheckUndefineRecursive();
 	}
 
 	void Symbol::OnDump(std::ofstream& output, const int32_t level) const

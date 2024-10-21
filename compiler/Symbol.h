@@ -8,7 +8,6 @@ mana (compiler)
 #pragma once
 #include "../runner/common/Setup.h"
 #include "TypeDescriptor.h"
-#include <fstream>
 
 namespace mana
 {
@@ -38,22 +37,22 @@ namespace mana
 
 		static const std::string_view& GetClassTypeName(const ClassTypeId id)
 		{
-			static const std::string_view names[] = {
-				"new symbol",
-				"typedef",
-				"function",
-				"native function",
-				"member function",
-				"static variable",
-				"global variable",
-				"instance variable",
-				"local variable",
-				"constant integer",
-				"constant real",
-				"constant string",
-				"label",
+			static constexpr std::string_view Names[] = {
+				std::string_view("new symbol"),
+				std::string_view("typedef"),
+				std::string_view("function"),
+				std::string_view("native function"),
+				std::string_view("member function"),
+				std::string_view("static variable"),
+				std::string_view("global variable"),
+				std::string_view("instance variable"),
+				std::string_view("local variable"),
+				std::string_view("constant integer"),
+				std::string_view("constant real"),
+				std::string_view("constant string"),
+				std::string_view("label"),
 			};
-			return names[static_cast<size_t>(id)];
+			return Names[static_cast<size_t>(id)];
 		}
 
 		enum class MemoryTypeId : uint8_t
@@ -66,36 +65,36 @@ namespace mana
 	public:
 		~Symbol() = default;
 
-		bool IsValid() const;
-		bool IsValidVariable() const;
+		[[nodiscard]] bool IsValid() const;
+		[[nodiscard]] bool IsValidVariable() const;
 		
-		std::shared_ptr<Symbol> GetParameterList();
-		const std::shared_ptr<Symbol> GetParameterList() const;
+		[[nodiscard]] std::shared_ptr<Symbol> GetParameterList();
+		[[nodiscard]] const std::shared_ptr<Symbol> GetParameterList() const;
 		
-		std::shared_ptr<Symbol> GetNext();
-		const std::shared_ptr<Symbol> GetNext() const;
+		[[nodiscard]] std::shared_ptr<Symbol> GetNext();
+		[[nodiscard]] const std::shared_ptr<Symbol> GetNext() const;
 		
-		std::shared_ptr<TypeDescriptor> GetTypeDescriptor();
-		const std::shared_ptr<TypeDescriptor> GetTypeDescriptor() const;
+		[[nodiscard]] std::shared_ptr<TypeDescriptor> GetTypeDescriptor();
+		[[nodiscard]] const std::shared_ptr<TypeDescriptor> GetTypeDescriptor() const;
 		
-		ClassTypeId GetClassTypeId() const;
-		MemoryTypeId GetMemoryTypeId() const;
+		[[nodiscard]] ClassTypeId GetClassTypeId() const;
+		[[nodiscard]] MemoryTypeId GetMemoryTypeId() const;
 		
-		const std::string_view GetName() const;
-		int32_t GetAddress() const;
-		int32_t GetEtc() const;
-		float GetFloat() const;
-		const std::string_view GetString() const;
-		size_t GetBlockLevel() const;
-		uint8_t GetNumberOfParameters() const;
-		bool IsOverride() const;
-		bool IsUsed() const;
+		[[nodiscard]] const std::string_view GetName() const;
+		[[nodiscard]] int32_t GetAddress() const;
+		[[nodiscard]] int32_t GetEtc() const;
+		[[nodiscard]] float GetFloat() const;
+		[[nodiscard]] const std::string_view GetString() const;
+		[[nodiscard]] size_t GetBlockLevel() const;
+		[[nodiscard]] uint8_t GetNumberOfParameters() const;
+		[[nodiscard]] bool IsOverride() const;
+		[[nodiscard]] bool IsUsed() const;
 
 		void SetTypeDescription(const std::shared_ptr<TypeDescriptor>& typeDescription);
 		
 		void SetNumberOfParameters(const size_t numberOfParameters);
 
-		void symbol_check_undefine_recursive() const;
+		void CheckUndefineRecursive() const;
 		
 		void OnDump(std::ofstream& output, const int32_t level = 0) const;
 

@@ -20,24 +20,24 @@ namespace mana
 	/*
 	Data Section Class
 	*/
-	class DataBuffer final : private Noncopyable
+	class DataBuffer final : Noncopyable
 	{
 	public:
 		DataBuffer() noexcept;
 		~DataBuffer() = default;
 
-		const char* GetBuffer() const noexcept;
+		[[nodiscard]] const char* GetBuffer() const noexcept;
 
-		address_t GetSize() const noexcept;
+		[[nodiscard]] address_t GetSize() const noexcept;
 
-		address_t Get(const std::string_view& text) const noexcept;
+		[[nodiscard]] address_t Get(const std::string_view& text) const noexcept;
 
 		address_t Set(const std::string_view& text);
 
 		bool Write(OutputStream& stream) const;
 
 	private:
-		address_t Find(const std::string_view& text) const noexcept;
+		[[nodiscard]] address_t Find(const std::string_view& text) const noexcept;
 
 	private:
 		std::vector<address_t> mEntities;

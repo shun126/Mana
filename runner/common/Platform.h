@@ -45,7 +45,7 @@ mana (compiler/library)
 #define MANA_BUILD_TARGET MANA_BUILD_RELEASE
 #endif
 
-#define MANA_UNUSED_VAR(var)	((void)&var)
-#define MANA_ELEMENT_OF(var)	(sizeof(var) / sizeof(var[0]))
+#define MANA_UNUSED_VAR(var)	((void)&(var))
+#define MANA_ELEMENT_OF(var)	(sizeof(var) / sizeof((var)[0]))
 
 #include "Type.h"

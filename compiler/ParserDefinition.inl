@@ -15,6 +15,6 @@ namespace mana
 	*/
 	void Parser::error(const std::string& message)
 	{
-		mana::CompileError(message.c_str());
+		mana::CompileError(message);
 	}
 }

@@ -13,7 +13,7 @@ mana (compiler)
 
 namespace mana
 {
-	class SemanticAnalyzer : private Noncopyable
+	class SemanticAnalyzer : Noncopyable
 	{
 	public:
 		explicit SemanticAnalyzer(
@@ -22,7 +22,7 @@ namespace mana
 
 		virtual ~SemanticAnalyzer() = default;
 
-		void SetCurrentFileInfomation(const std::shared_ptr<SyntaxNode>& node);
+		void SetCurrentFileInformation(const std::shared_ptr<SyntaxNode>& node);
 			
 		/*!
 		mana_symbol_lookupを呼び出しmana_symbolを検索してnodeに設定します
@@ -46,14 +46,17 @@ namespace mana
 		/*!
 		mana_symbol_create_variableを呼び出し
 		mana_symbolをnewしてnodeに設定します
-		@param[in]	node	Declaratorノード
+		@param[in]	node				Declaratorノード
+		@param[in]	isStaticVariable	静的変数
 		*/
 		void ResolveDeclarator(const std::shared_ptr<SyntaxNode>& node, const bool isStaticVariable);
 
 		/*!
 		両辺のTypeDescriptionとDeclaratorを解決して
 		mana_symbol_allocate_memoryを使ってメモリを割り当てます
-		@param[in]	node	DeclareVariableノード
+		@param[in]	node				DeclareVariableノード
+		@param[in]	memoryTypeId		メモリタイプ
+		@param[in]	isStaticVariable	静的変数
 		*/
 		void ResolveVariableDescription(const std::shared_ptr<SyntaxNode>& node, const Symbol::MemoryTypeId memoryTypeId, const bool isStaticVariable);
 
@@ -64,7 +67,7 @@ namespace mana
 		void ResolveTypeFromChildNode(const std::shared_ptr<SyntaxNode>& node);
 
 	protected:
-		std::shared_ptr<Symbol> Lookup(const std::string_view name) const;
+		[[nodiscard]] std::shared_ptr<Symbol> Lookup(const std::string_view name) const;
 
 		const std::shared_ptr<SymbolFactory>& GetSymbolFactory();
 		const std::shared_ptr<TypeDescriptorFactory>& GetTypeDescriptorFactory();

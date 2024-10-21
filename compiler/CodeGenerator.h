@@ -16,7 +16,6 @@ mana (compiler)
 #include "SymbolFactory.h"
 #include "SyntaxNode.h"
 #include "TypeDescriptorFactory.h"
-#include <fstream>
 #include <memory>
 
 namespace mana
@@ -24,7 +23,7 @@ namespace mana
 	/*!
 	コード生成クラス
 	*/
-	class CodeGenerator final : private Noncopyable, public std::enable_shared_from_this<CodeGenerator>
+	class CodeGenerator final : Noncopyable, public std::enable_shared_from_this<CodeGenerator>
 	{
 	public:
 		explicit CodeGenerator(
@@ -39,15 +38,15 @@ namespace mana
 
 		/*!
 		ノードを辿りながら中間言語に翻訳します
-		@param	self			ノード
-		@param	enable_load		trueならばload命令は有効、falseならばload命令は無効
+		@param	node			ノード
+		@param	enableLoad		trueならばload命令は有効、falseならばload命令は無効
 		*/
-		void generator_genearte_code(std::shared_ptr<SyntaxNode> self, int32_t enable_load);
+		void GenerateCode(std::shared_ptr<SyntaxNode> node, const int32_t enableLoad);
 
 		/*!
 		ノードを巡りながら指揮を中間言語に翻訳します
 		*/
-		void generator_expression(std::shared_ptr<SyntaxNode> self, int32_t enable_assign);
+		void Expression(const std::shared_ptr<SyntaxNode>& tree, const int32_t enableAssign);
 
 		/*!
 		グローバルアドレスを解決する
@@ -59,24 +58,24 @@ namespace mana
 		*/
 		const std::shared_ptr<LocalAddressResolver>& GetLocalAddressResolver();
 
-		void Dump(std::ofstream& output);
+		void Dump(std::ofstream& output) const;
 
 	private:
-		void generator_resolve_load(std::shared_ptr<SyntaxNode> node);
-		void generator_resolve_store(std::shared_ptr<SyntaxNode> node);
-		void generator_return(std::shared_ptr<Symbol> func, std::shared_ptr<SyntaxNode> tree);
-		void generator_rollback(std::shared_ptr<SyntaxNode> tree);
-		int32_t generate_argument(int32_t count, std::shared_ptr<Symbol> param, std::shared_ptr<SyntaxNode> arg);
-		int32_t generator_call_argument_size(int32_t address, std::shared_ptr<Symbol> param, std::shared_ptr<SyntaxNode> arg);
-		int32_t generator_call_argument(int32_t address, std::shared_ptr<Symbol> param, std::shared_ptr<SyntaxNode> arg);
-		void generator_call(std::shared_ptr<SyntaxNode> node);
-		int32_t generator_call_print_generate_argument(int32_t argc, std::shared_ptr<SyntaxNode> node);
-		void generator_call_print(std::shared_ptr<SyntaxNode> node);
-		void generator_condition_check(std::shared_ptr<SyntaxNode> tree);
-		address_t generator_condition_core(std::shared_ptr<SyntaxNode> tree);
-		address_t generator_condition(std::shared_ptr<SyntaxNode> tree, const bool match);
-		void generator_generate_const_int(const TypeDescriptor::Id type_id, const int32_t value);
-		void generator_generate_const_float(const TypeDescriptor::Id type_id, const float value);
+		void ResolveLoad(const std::shared_ptr<SyntaxNode>& node) const;
+		void ResolveStore(const std::shared_ptr<SyntaxNode>& node) const;
+		void Return(const std::shared_ptr<Symbol>& function, const std::shared_ptr<SyntaxNode>& tree);
+		void Rollback(const std::shared_ptr<SyntaxNode>& tree);
+		int32_t Argument(int32_t count, const std::shared_ptr<Symbol>& param, std::shared_ptr<SyntaxNode> arg);
+		static int32_t CallArgumentSize(int32_t address, const std::shared_ptr<Symbol>& param, std::shared_ptr<SyntaxNode> arg);
+		int32_t CallArgument(int32_t address, const std::shared_ptr<Symbol>& param, std::shared_ptr<SyntaxNode> arg);
+		void Call(const std::shared_ptr<SyntaxNode>& node);
+		int32_t CallPrintGenerateArgument(int32_t argc, const std::shared_ptr<SyntaxNode>& node);
+		void CallPrint(const std::shared_ptr<SyntaxNode>& node);
+		void ConditionCheck(const std::shared_ptr<SyntaxNode>& tree);
+		address_t ConditionCore(const std::shared_ptr<SyntaxNode>& tree);
+		address_t Condition(const std::shared_ptr<SyntaxNode>& tree, const bool match);
+		void GenerateConstantInteger(const TypeDescriptor::Id typeId, const int32_t value) const;
+		void GenerateConstantFloat(const TypeDescriptor::Id typeId, const float value) const;
 
 	private:
 		std::shared_ptr<CodeBuffer> mCodeBuffer;
@@ -89,8 +88,8 @@ namespace mana
 		std::shared_ptr<SymbolFactory> mSymbolFactory;
 		std::shared_ptr<TypeDescriptorFactory> mTypeDescriptorFactory;
 
-		std::shared_ptr<Symbol> actor_symbol_entry_pointer;
-		std::shared_ptr<Symbol> function_symbol_entry_pointer;
+		std::shared_ptr<Symbol> mActorSymbolEntryPointer;
+		std::shared_ptr<Symbol> mFunctionSymbolEntryPointer;
 		//mana_hash* event_hash;
 		//bool static_block_opend;
 	};

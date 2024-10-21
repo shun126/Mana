@@ -18,7 +18,7 @@ namespace mana
 		GlobalSemanticAnalyzer(
 			const std::shared_ptr<SymbolFactory>& symbolFactory,
 			const std::shared_ptr<TypeDescriptorFactory>& typeDescriptorFactory);
-		~GlobalSemanticAnalyzer() = default;
+		~GlobalSemanticAnalyzer() override = default;
 
 		/*!
 		Registers symbol information while traversing nodes
@@ -30,6 +30,6 @@ namespace mana
 		size_t CalcArgumentCount(const size_t count, const std::shared_ptr<const SyntaxNode>& node) const;
 
 	private:
-		bool mStaticBlockOpend = false;
+		bool mStaticBlockOpened = false;
 	};	
 }

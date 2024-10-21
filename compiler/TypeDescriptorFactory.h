@@ -14,18 +14,18 @@ mana (compiler)
 
 namespace mana
 {
-	class TypeDescriptorFactory final : private Noncopyable
+	class TypeDescriptorFactory final : Noncopyable
 	{
 	public:
 		TypeDescriptorFactory();
 		~TypeDescriptorFactory() = default;
 
-		const std::shared_ptr<TypeDescriptor>& Get(const TypeDescriptor::Id id) const;
-		const std::shared_ptr<TypeDescriptor>& GetString() const;
+		[[nodiscard]] const std::shared_ptr<TypeDescriptor>& Get(const TypeDescriptor::Id id) const;
+		[[nodiscard]] const std::shared_ptr<TypeDescriptor>& GetString() const;
 
-		std::shared_ptr<TypeDescriptor> Create(const TypeDescriptor::Id tcons);
-		std::shared_ptr<TypeDescriptor> CreateReference(const std::shared_ptr<TypeDescriptor>& component);
-		std::shared_ptr<TypeDescriptor> CreateArray(const address_t arraySize);
+		[[nodiscard]] std::shared_ptr<TypeDescriptor> Create(const TypeDescriptor::Id tcons);
+		[[nodiscard]] std::shared_ptr<TypeDescriptor> CreateReference(const std::shared_ptr<TypeDescriptor>& component);
+		[[nodiscard]] std::shared_ptr<TypeDescriptor> CreateArray(const address_t arraySize);
 
 	private:
 		std::vector<std::shared_ptr<TypeDescriptor>> mTypeDescriptor;
