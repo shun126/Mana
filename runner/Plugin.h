@@ -15,7 +15,7 @@ namespace mana
 {
 	class VM;
 
-	class Plugin : private Noncopyable
+	class Plugin : Noncopyable
     {
 #if defined(MANA_TARGET_WINDOWS)
         using MODULE = HMODULE;
@@ -29,7 +29,7 @@ namespace mana
         virtual ~Plugin();
 
         void Load(const std::string& fileName);
-        void Regist(const std::string& directoryName);
+        void Register(const std::string& directoryName);
 
     private:
         std::vector<MODULE> mPlugins;

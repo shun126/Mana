@@ -143,24 +143,24 @@ namespace mana
 			case TypeDescriptor::Id::Int:
 			case TypeDescriptor::Id::Actor:
 				mCodeBuffer->AddOpecode(IntermediateLanguage::Duplicate);
-				codeGenerator->generator_expression(p->node, false);
-				mCodeBuffer->AddOpecode(IntermediateLanguage::COMPARE_EQ_INTEGER);
-				mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::BNE, p->address);
+				codeGenerator->Expression(p->node, false);
+				mCodeBuffer->AddOpecode(IntermediateLanguage::CompareEqualInteger);
+				mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::BranchNotEqual, p->address);
 				break;
 
 			case TypeDescriptor::Id::Float:
 				mCodeBuffer->AddOpecode(IntermediateLanguage::Duplicate);
-				codeGenerator->generator_expression(p->node, false);
-				mCodeBuffer->AddOpecode(IntermediateLanguage::COMPARE_EQ_FLOAT);
-				mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::BNE, p->address);
+				codeGenerator->Expression(p->node, false);
+				mCodeBuffer->AddOpecode(IntermediateLanguage::CompareEqualFloat);
+				mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::BranchNotEqual, p->address);
 				break;
 
 			case TypeDescriptor::Id::Struct:
 				size = p->node->GetTypeDescriptor()->GetMemorySize();
-				mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::DUPLICATE_DATA, size);
-				codeGenerator->generator_expression(p->node, false);
-				mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::COMPARE_EQ_DATA, size);
-				mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::BNE, p->address);
+				mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::DuplicateData, size);
+				codeGenerator->Expression(p->node, false);
+				mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::CompareEqualData, size);
+				mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::BranchNotEqual, p->address);
 				break;
 
 			default:
@@ -171,7 +171,7 @@ namespace mana
 
 		if (mJumpSwitchStack[mJumpSwitchStackPointer].default_address > 0)
 		{
-			mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::BRA, mJumpSwitchStack[mJumpSwitchStackPointer].default_address);
+			mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::Branch, mJumpSwitchStack[mJumpSwitchStackPointer].default_address);
 		}
 
 		mJumpSwitchEntryStackPointer = mJumpSwitchStack[mJumpSwitchStackPointer].stack_pointer;
@@ -186,11 +186,11 @@ namespace mana
 		case TypeDescriptor::Id::Int:
 		case TypeDescriptor::Id::Float:
 		case TypeDescriptor::Id::Actor:
-			mCodeBuffer->AddOpecode(IntermediateLanguage::REMOVE);
+			mCodeBuffer->AddOpecode(IntermediateLanguage::Remove);
 			break;
 
 		case TypeDescriptor::Id::Struct:
-			mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::REMOVE_DATA, mJumpSwitchStack[mJumpSwitchStackPointer].type->GetMemorySize());
+			mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::RemoveData, mJumpSwitchStack[mJumpSwitchStackPointer].type->GetMemorySize());
 			break;
 
 		default:

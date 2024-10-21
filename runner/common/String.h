@@ -7,10 +7,8 @@ mana (compiler/library)
 
 #pragma once
 #include "Platform.h"
-#include <cstdarg>
 #include <cstring>
 #include <iostream>
-#include <memory>
 #include <string>
 
 #if defined(MANA_TARGET_WINDOWS)
@@ -20,7 +18,7 @@ mana (compiler/library)
 
 namespace mana
 {
-	inline std::string Concat(std::initializer_list<std::string_view> r)
+	[[nodiscard]] inline std::string Concat(const std::initializer_list<std::string_view>& r)
 	{
 		std::size_t n = 0;
 		for (auto& it : r)
