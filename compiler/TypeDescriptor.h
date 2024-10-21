@@ -8,7 +8,6 @@ mana (compiler)
 #pragma once
 #include "../runner/common/Platform.h"
 #include <array>
-#include <fstream>
 #include <memory>
 #include <string_view>
 
@@ -45,7 +44,7 @@ namespace mana
 
 		static const char* GetDataTypeName(const Id id)
 		{
-			static const std::array<const char*, TypeIdSize> names = { {
+			static constexpr std::array<const char*, TypeIdSize> Names = { {
 				"void",
 				"char",
 				"short",
@@ -56,41 +55,41 @@ namespace mana
 				"struct",
 				"actor",
 				"module",
-				"nil",
+				"Nil",
 				"incomplete"
 			} };
-			return names.at(static_cast<size_t>(id));
+			return Names.at(static_cast<size_t>(id));
 		}
 
 	public:
 		~TypeDescriptor() = default;
 
-		bool Is(const Id id) const;
-		bool IsNot(const Id id) const;
-		Id GetId() const;
+		[[nodiscard]] bool Is(const Id id) const;
+		[[nodiscard]] bool IsNot(const Id id) const;
+		[[nodiscard]] Id GetId() const;
 
-		bool Compare(const std::shared_ptr<TypeDescriptor>& typeDescriptor) const;
-		bool Compatible(const std::shared_ptr<TypeDescriptor>& typeDescriptor) const;
+		[[nodiscard]] bool Compare(const std::shared_ptr<TypeDescriptor>& typeDescriptor) const;
+		[[nodiscard]] bool Compatible(const std::shared_ptr<TypeDescriptor>& typeDescriptor) const;
 
 		static bool Compare(const std::shared_ptr<TypeDescriptor>& left, const std::shared_ptr<TypeDescriptor>& right);
 		static bool Compatible(const std::shared_ptr<TypeDescriptor>& left, const std::shared_ptr<TypeDescriptor>& right);
 
 		void SetArray(const std::shared_ptr<TypeDescriptor>& arrayElementTypeDescriptor);
 
-		const std::string_view GetName() const;
+		[[nodiscard]] std::string_view GetName() const;
 
-		std::shared_ptr<Symbol> GetSymbolEntry() const;
+		[[nodiscard]] std::shared_ptr<Symbol> GetSymbolEntry() const;
 
-		std::shared_ptr<TypeDescriptor> GetComponent() const;
+		[[nodiscard]] std::shared_ptr<TypeDescriptor> GetComponent() const;
 
-		address_t GetArraySize() const;
-		address_t GetMemorySize() const;
-		address_t GetAlignmentMemorySize() const;
+		[[nodiscard]] address_t GetArraySize() const;
+		[[nodiscard]] address_t GetMemorySize() const;
+		[[nodiscard]] address_t GetAlignmentMemorySize() const;
 
-		address_t GetActionCount() const;
-		bool IsPhantom() const;
+		[[nodiscard]] address_t GetActionCount() const;
+		[[nodiscard]] bool IsPhantom() const;
 
-		const std::shared_ptr<Symbol>& GetParent() const;
+		[[nodiscard]] const std::shared_ptr<Symbol>& GetParent() const;
 		void SetParent(const std::shared_ptr<Symbol>& parent);
 
 		void Dump(std::ofstream& output) const;
@@ -107,7 +106,7 @@ namespace mana
 
 	private:
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
-		char magic[8];
+		char mMagic[8];
 #endif
 		std::shared_ptr<Symbol> mSymbolEntry;
 		std::shared_ptr<Symbol> mParent;
@@ -118,9 +117,9 @@ namespace mana
 		address_t mMemorySize = 0;
 		address_t mAlignmentMemorySize = 0;
 
-		union share
+		union Share
 		{
-			struct actor
+			struct Actor
 			{
 				bool mPhantom;
 			} mActor;

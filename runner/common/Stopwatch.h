@@ -19,7 +19,7 @@ mana (compiler/library)
 
 namespace mana
 {
-	inline uint64_t GetMicroSecond()
+	[[nodiscard]] inline uint64_t GetMicroSecond()
 	{
 #if defined(MANA_TARGET_WINDOWS)
 		LARGE_INTEGER frequency, counter;
@@ -27,14 +27,14 @@ namespace mana
 		if (!QueryPerformanceFrequency(&frequency) || !QueryPerformanceCounter(&counter))
 			return 0;
 
-		return (uint64_t)(counter.QuadPart * 1000000 / frequency.QuadPart);
+		return static_cast<uint64_t>(counter.QuadPart * 1000000 / frequency.QuadPart);
 #else
 		struct timeval current;
 		return (gettimeofday(&current, nullptr) == 0) ? current.tv_usec : 0;
 #endif
 	}
 
-	inline float_t GetSecond()
+	[[nodiscard]] inline float_t GetSecond()
 	{
 		return static_cast<float_t>(GetMicroSecond()) / static_cast<float_t>(1000000);
 	}

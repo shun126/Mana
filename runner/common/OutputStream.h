@@ -7,27 +7,28 @@ mana (library)
 
 #pragma once
 #include "Platform.h"
-#include "String.h"
-#include <fstream>
-#include <cstring>
 #include <memory>
 #include <stdexcept>
 
 namespace mana
 {
-	class OutputStream : Noncopyable
+	class OutputStream final : Noncopyable
 	{
 	public:
 		OutputStream();
-		virtual ~OutputStream() = default;
+		OutputStream(const OutputStream& other) = delete;
+		OutputStream(OutputStream&& other) noexcept;
+		OutputStream& operator=(const OutputStream& other) = delete;
+		OutputStream& operator=(OutputStream&& other) noexcept;
+		~OutputStream() = default;
 
 		void Load(const std::string& filename);
-		void Save(const std::string& filename);
+		void Save(const std::string& filename) const;
 	
-		const void* GetBuffer() const;
-		const void* IndexAt(const size_t index) const;
-		size_t GetAllocatedSize() const;
-		size_t GetUsedSize() const;
+		[[nodiscard]] const void* GetBuffer() const;
+		[[nodiscard]] const void* IndexAt(const size_t index) const;
+		[[nodiscard]] size_t GetAllocatedSize() const;
+		[[nodiscard]] size_t GetUsedSize() const;
 
 		template<typename T>
 		void Push(const T value);
@@ -35,21 +36,21 @@ namespace mana
 		void PushData(const void* pointer, const size_t size);
 
 		template<typename T>
-		T Pop();
+		[[nodiscard]] T Pop();
 		void PopString(char* pointer, const size_t size);
 		void PopData(void* pointer, const size_t size);
 
 		template<typename T>
-		T Get();
-		size_t GetString(char* pointer, const size_t size);
-		const char* GetStringPointer() const;
-		size_t GetStringLength() const;
-	 	void GetData(void* pointer, const size_t size);
+		[[nodiscard]] T Get();
+		[[nodiscard]] size_t GetString(char* pointer, const size_t size) const;
+		[[nodiscard]] const char* GetStringPointer() const;
+		[[nodiscard]] size_t GetStringLength() const;
+	 	void GetData(void* pointer, const size_t size) const;
 
 		void Rewind();
 		void Seek(const ssize_t offset);
 		
-		std::shared_ptr<const void> MakeShared() const;
+		[[nodiscard]] std::shared_ptr<const void> MakeShared() const;
 
 	private:
 		void ResizeBuffer(const size_t size);

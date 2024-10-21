@@ -6,7 +6,6 @@ mana (library)
 */
 
 #pragma once
-#include "Stack.h"
 
 namespace mana
 {
@@ -15,18 +14,21 @@ namespace mana
 	{
 	}
 
-	inline void Stack::Serialize(OutputStream* stream) const
+	inline void Stack::Serialize(const std::shared_ptr<OutputStream>& stream) const
 	{
 		stream->Push(mUsedSize);
 		stream->PushData(mBuffer.get(), mUsedSize);
 	}
 
-	inline void Stack::Deserialize(OutputStream* stream)
+	inline void Stack::Deserialize(const std::shared_ptr<OutputStream>& stream)
 	{
+		mBuffer.reset();
+		mAllocatedSize = 0;
+
 		mUsedSize = stream->Pop<address_t>();
-		mAllocatedSize = mUsedSize + 1;
-		//mBuffer.mVoidPointer = mana_realloc(mBuffer.mVoidPointer, mAllocatedSize);
-		//mana_stream_pop_data(stream, mBuffer.mVoidPointer, mUsedSize);
+		AllocateBegin(mUsedSize);
+		std::memcpy(mBuffer.get(), stream->GetBuffer(), mUsedSize);
+		AllocateEnd(mUsedSize);
 	}
 
 	inline void Stack::Clear()
@@ -48,6 +50,7 @@ namespace mana
 	template<typename T>
 	inline void Stack::Push(T value)
 	{
+		static_assert(std::is_arithmetic_v<T> == true || std::is_pointer_v<T> == true, "Specify the arithmetic or pointer type");
 		AllocateBegin(sizeof(T));
 		mBuffer.get()[mUsedSize].Set(value);
 		AllocateEnd(sizeof(T));
@@ -63,6 +66,7 @@ namespace mana
 	template<typename T>
 	inline T Stack::Pop()
 	{
+		static_assert(std::is_arithmetic_v<T> == true || std::is_pointer_v<T> == true, "Specify the arithmetic or pointer type");
 		Deallocate(sizeof(T));
 		return static_cast<T>(mBuffer.get()[mUsedSize]);
 	}
@@ -73,15 +77,10 @@ namespace mana
 		std::memcpy(buffer, &mBuffer.get()[mUsedSize], size);
 	}
 
-	inline void* Stack::PopAddress()
-	{
-		Deallocate(sizeof(void*));
-		return &mBuffer.get()[mUsedSize];
-	}
-
 	template<typename T>
 	inline T Stack::Get(const address_t index) const
 	{
+		static_assert(std::is_arithmetic_v<T> == true || std::is_pointer_v<T> == true, "Specify the arithmetic or pointer type");
 		const address_t pointer = mUsedSize - index - 1;
 		MANA_ASSERT(pointer < mAllocatedSize);
 		return static_cast<T>(mBuffer.get()[pointer]);
@@ -97,6 +96,7 @@ namespace mana
 	template<typename T>
 	inline void Stack::Set(const address_t index, T value)
 	{
+		static_assert(std::is_arithmetic_v<T> == true || std::is_pointer_v<T> == true, "Specify the arithmetic or pointer type");
 		const address_t pointer = mUsedSize - index - 1;
 		MANA_ASSERT(pointer < mAllocatedSize);
 		mBuffer.get()[pointer].Set(value);
@@ -120,12 +120,21 @@ namespace mana
 		return std::memcmp(mBuffer.get(), other.mBuffer.get(), mUsedSize) == 0;
 	}
 
+	/**
+	 * Get the size to match the memory alignment size.
+	 * @param[in]	size	Size.
+	 * @return		Size to fit memory alignment.
+	 */
 	inline address_t Stack::GetAlignmentSize(const address_t size)
 	{
-		static const address_t PageSize = 8;
+		constexpr address_t PageSize = sizeof(void*);
 		return (size + (PageSize - 1)) / PageSize * PageSize;
 	}
 
+	/**
+	 * Start of memory allocation
+	 * @param[in]	gainSize	Size to increase memory
+	 */
 	inline void Stack::AllocateBegin(const address_t gainSize)
 	{
 		const address_t allocateSize = GetAlignmentSize(mUsedSize + gainSize);
@@ -135,18 +144,26 @@ namespace mana
 
 			Buffer* newBuffer = static_cast<Buffer*>(std::realloc(mBuffer.get(), mAllocatedSize * sizeof(mBuffer)));
 			if (newBuffer == nullptr)
-				std::bad_alloc();
+				throw std::bad_alloc();
 			mBuffer.release();
 			mBuffer.reset(newBuffer);
 		}
 	}
 
+	/**
+	 * End of memory allocation
+	 * @param[in]	gainSize	Size to increase memory
+	 */
 	inline void Stack::AllocateEnd(const address_t gainSize)
 	{
 		mUsedSize += ((gainSize + sizeof(mBuffer) - 1) / sizeof(mBuffer));
 		MANA_ASSERT(mUsedSize < mAllocatedSize);
 	}
 
+	/**
+	 * Release memory
+	 * @param[in]	releaseSize		Size to release
+	 */
 	inline void Stack::Deallocate(const address_t releaseSize)
 	{
 		mUsedSize -= ((releaseSize + sizeof(mBuffer) - 1) / sizeof(mBuffer));

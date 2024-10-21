@@ -19,11 +19,11 @@ namespace mana
 	{
 	}
 
-	void SemanticAnalyzer::SetCurrentFileInfomation(const std::shared_ptr<SyntaxNode>& node)
+	void SemanticAnalyzer::SetCurrentFileInformation(const std::shared_ptr<SyntaxNode>& node)
 	{
 		MANA_ASSERT(node);
-		lexer_set_current_filename(node->GetFilename().data());
-		lexer_set_current_lineno(node->GetLineno());
+		lexer::SetCurrentFilename(node->GetFilename().data());
+		lexer::SetCurrentLineNo(node->GetLineno());
 	}
 
 	bool SemanticAnalyzer::SearchSymbolFromName(const std::shared_ptr<SyntaxNode>& node)
@@ -135,7 +135,7 @@ namespace mana
 	{
 		MANA_ASSERT(node);
 
-		MANA_ASSERT(node->GetLeftNode() && node->GetLeftNode()->Is(SyntaxNode::Id::TypeDescription));
+			MANA_ASSERT(node->GetLeftNode() && node->GetLeftNode()->Is(SyntaxNode::Id::TypeDescription));
 		ResolveTypeDescription(node->GetLeftNode());
 
 		MANA_ASSERT(node->GetRightNode() && node->GetRightNode()->Is(SyntaxNode::Id::Declarator));

@@ -16,8 +16,8 @@ namespace mana
 
 	inline bool IsBigEndian()
 	{
-		static const int16_t one = 1;
-		const char* pointer = (const char*)&one;
+		static constexpr int16_t One = 1;
+		const char* pointer = reinterpret_cast<const char*>(&One);
 		return pointer[0] == 0;
 	}
 

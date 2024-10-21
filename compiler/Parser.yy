@@ -119,7 +119,7 @@ program			: line
 						globalSemanticAnalyzer->Resolve($1);
 
 						auto codeGenerator = mParsingDriver->GetCodeGenerator();
-						codeGenerator->generator_genearte_code($1, true);
+						codeGenerator->GenerateCode($1, true);
 
 						auto globalAddressResolver = mParsingDriver->GetCodeGenerator()->GetGlobalAddressResolver();
 						globalAddressResolver->ResolveAddress();
@@ -149,9 +149,9 @@ declarations	: actor
 					{ $$ = mParsingDriver->CreateDeclareStaticMemory($3, $5); }
 
 				| tINCLUDE tSTRING ';'
-					{ $$ = nullptr; if(! lexer_open($2, false)){ YYABORT; } }
+					{ $$ = nullptr; if(! lexer::Open($2, false)){ YYABORT; } }
 				| tIMPORT tSTRING ';'
-					{ $$ = nullptr; if(! lexer_open($2, true)){ YYABORT; } }
+					{ $$ = nullptr; if(! lexer::Open($2, true)){ YYABORT; } }
 				;
 
 allocate_declarations
@@ -339,17 +339,17 @@ expression		: left_hand '=' expression
 				| expression tRSHFT expression
 					{ $$ = mParsingDriver->CreateRightShift($1, $3); }
 				| expression '>' expression
-					{ $$ = mParsingDriver->CreateGT($1, $3); }
+					{ $$ = mParsingDriver->CreateGreater($1, $3); }
 				| expression tGE expression
-					{ $$ = mParsingDriver->CreateGE($1, $3); }
+					{ $$ = mParsingDriver->CreateGreaterEqual($1, $3); }
 				| expression '<' expression
-					{ $$ = mParsingDriver->CreateLS($1, $3); }
+					{ $$ = mParsingDriver->CreateLess($1, $3); }
 				| expression tLE expression
-					{ $$ = mParsingDriver->CreateLE($1, $3); }
+					{ $$ = mParsingDriver->CreateLessEqual($1, $3); }
 				| expression tEQ expression
-					{ $$ = mParsingDriver->CreateEQ($1, $3); }
+					{ $$ = mParsingDriver->CreateEqual($1, $3); }
 				| expression tNE expression
-					{ $$ = mParsingDriver->CreateNE($1, $3); }
+					{ $$ = mParsingDriver->CreateNotEqual($1, $3); }
 				| tINC expression
 					{ $$ = mParsingDriver->CreateIncrement($2); }
 				| tDEC expression

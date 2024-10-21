@@ -79,9 +79,9 @@ namespace mana
 	{
 		FileHeader header;
 		memset(&header, 0, sizeof(FileHeader));
-		memcpy(&header.mHeader, SIGNATURE, sizeof(header.mHeader));
-		header.mMajorVersion = MAJOR_VERSION;
-		header.mMinorVersion = MINOR_VERSION;
+		memcpy(&header.mHeader, Signature, sizeof(header.mHeader));
+		header.mMajorVersion = MajorVersion;
+		header.mMinorVersion = MinorVersion;
 		/* TODO:Unimplemented
 		if (GetSize() > 0)
 			header.mFlag |= (1 << FileHeader::Flag::Resource);
@@ -89,7 +89,7 @@ namespace mana
 		if (IsBigEndian())
 			header.mFlag |= (1 << FileHeader::Flag::BigEndian);
 #if UINTPTR_MAX == UINT64_MAX
-		header.mFlag |= (1 << FileHeader::Flag::Is64bit);
+		header.mFlag |= (1 << FileHeader::Flag::Is64Bit);
 #endif
 		const size_t numberOfActors = parser->GetSymbolFactory()->GetNumberOfActors();
 		if (std::numeric_limits<uint32_t>::max() < numberOfActors)
@@ -156,7 +156,7 @@ namespace mana
 			if (parser == nullptr)
 				throw std::bad_alloc();
 
-			if (lexer_initialize(parser, mInputFilename))
+			if (lexer::Initialize(parser, mInputFilename))
 			{
 #if 0
 				// TODO:Unimplemented
@@ -214,7 +214,7 @@ namespace mana
 			mana::Fatal(e.what());
 		}
 
-		lexer_finalize();
+		lexer::Finalize();
 
 		return result;
 	}
@@ -356,7 +356,7 @@ namespace mana
 				char ext[_MAX_EXT];
 				splitpath(mInputFilename, drive, sizeof(drive), dir, sizeof(dir), fname, sizeof(fname), ext, sizeof(ext));
 
-				// output binary
+				// output Binary
 				if (outputBinary)
 				{
 					makepath(mOutputFilename, sizeof(mOutputFilename), drive, dir, fname, ".mx");
