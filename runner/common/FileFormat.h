@@ -7,7 +7,6 @@ mana (compiler/library)
 
 #pragma once
 #include "Platform.h"
-#include "Memory.h"
 
 #if MANA_BUILD_TARGET == MANA_BUILD_DEBUG
 #include "Assert.h"
@@ -19,9 +18,9 @@ mana (compiler/library)
 
 namespace mana
 {
-	static constexpr const char* SIGNATURE = "MaNa";				//!< manaファイル署名
-	static constexpr uint8_t MAJOR_VERSION = 0;						//!< manaファイルのメジャーバージョン番号
-	static constexpr const uint8_t MINOR_VERSION = 13;				//!< manaファイルのマイナーバージョン番号
+	static constexpr const char* Signature = "MaNa";		//!< manaファイル署名
+	static constexpr uint8_t MajorVersion = 0;				//!< manaファイルのメジャーバージョン番号
+	static constexpr uint8_t MinorVersion = 13;				//!< manaファイルのマイナーバージョン番号
 
 	/*!
 	manaファイルヘッダー
@@ -35,7 +34,7 @@ namespace mana
 		enum Flag : uint8_t
 		{
 			Resource,	//!< フラグ：リソースセクションあり
-			Is64bit,	//!< フラグ：64ビットでコンパイルされた
+			Is64Bit,	//!< フラグ：64ビットでコンパイルされた
 			BigEndian,	//!< フラグ：ビックエンディアンでコンパイルされた
 			Compiled	//!< フラグ：コンパイル済み
 		};
@@ -80,130 +79,130 @@ namespace mana
 	enum class IntermediateLanguage : uint8_t
 	{
 		/* thread */
-		RESTART = 0,							/* 00 */
-		HALT,									/* 01 */
-		YIELD,									/* 02 */
-		NONPREEMPTIVE,							/* 03 */
-		PREEMPTIVE,								/* 04 */
+		Restart = 0,							/* 00 */
+		Halt,									/* 01 */
+		Yield,									/* 02 */
+		NonPreEmptive,							/* 03 */
+		PreEmptive,								/* 04 */
 
 		/* jump */
-		BEQ,									/* 05 */
-		BNE,									/* 06 */
-		BRA,									/* 07 */
-		BSR,									/* 08 */
-		CALL,									/* 09 */
-		REQ,									/* 0A */
-		REQWS,									/* 0B */
-		REQWE,									/* 0C */
-		JOIN,									/* 0D */
-		COMPLY,									/* 0E */
-		REFUSE,									/* 0F */
-		LOAD_RETURN_ADDRESS,					/* 10 */
-		SAVE_RETURN_ADDRESS,					/* 11 */
-		RETURN_FROM_FUNCTION,					/* 12 */
-		RETURN_FROM_ACTION,						/* 13 */
-		ROLLBACK,								/* 14 */
+		BranchEqual,							/* 05 */
+		BranchNotEqual,							/* 06 */
+		Branch,									/* 07 */
+		BranchSubRoutine,						/* 08 */
+		Call,									/* 09 */
+		Request,								/* 0A */
+		RequestWaitStarting,					/* 0B */
+		RequestWaitEnded,						/* 0C */
+		Join,									/* 0D */
+		Comply,									/* 0E */
+		Refuse,									/* 0F */
+		LoadReturnAddress,						/* 10 */
+		SaveReturnAddress,						/* 11 */
+		ReturnFromFunction,						/* 12 */
+		ReturnFromAction,						/* 13 */
+		Rollback,								/* 14 */
 
 		/* constant */
-		PUSH_ZERO_INTEGER,						/* 15 */
-		PUSH_ZERO_FLOAT,						/* 16 */
-		PUSH_CHAR,								/* 17 */
-		PUSH_SHORT,								/* 18 */
-		PUSH_INTEGER,							/* 19 */
-		PUSH_SIZE,								/* 19 */
-		PUSH_FLOAT,								/* 1A */
-		PUSH_STRING,							/* 1B */
-		PUSH_PRIORITY,							/* 1C */
-		PUSH_ACTOR,								/* 1D */
-		PUSH_SELF,								/* 1E */
-		PUSH_SENDER,							/* 1F */
+		PushZeroInteger,						/* 15 */
+		PushZeroFloat,							/* 16 */
+		PushChar,								/* 17 */
+		PushShort,								/* 18 */
+		PushInteger,							/* 19 */
+		PushSize,								/* 19 */
+		PushFloat,								/* 1A */
+		PushString,								/* 1B */
+		PushPriority,							/* 1C */
+		PushActor,								/* 1D */
+		PushSelf,								/* 1E */
+		PushSender,								/* 1F */
 
 		/* stack */
-		ALLOCATE,								/* 20 */
-		FREE,									/* 21 */
+		Allocate,								/* 20 */
+		Free,									/* 21 */
 		Duplicate,								/* 22 */
-		DUPLICATE_DATA,							/* 23 */
-		REMOVE,									/* 24 */
-		REMOVE_DATA,							/* 25 */
-		LOAD_STATIC_ADDRESS,					/* 26 */
-		LOAD_GLOBAL_ADDRESS,					/* 27 */
-		LOAD_FRAME_ADDRESS,						/* 28 */
-		LOAD_SELF_ADDRESS,						/* 29 */
+		DuplicateData,							/* 23 */
+		Remove,									/* 24 */
+		RemoveData,								/* 25 */
+		LoadStaticAddress,						/* 26 */
+		LoadGlobalAddress,						/* 27 */
+		LoadFrameAddress,						/* 28 */
+		LoadSelfAddress,						/* 29 */
 
 		/* memory operation */
-		LOAD_CHAR,								/* 2A */
-		LOAD_SHORT,								/* 2B */
-		LOAD_INTEGER,							/* 2C */
-		LOAD_FLOAT,								/* 2D */
-		LOAD_REFFRENCE,							/* 2E */
-		LOAD_DATA,								/* 2F */
-		STORE_CHAR,								/* 30 */
-		STORE_SHORT,							/* 31 */
-		STORE_INTEGER,							/* 32 */
-		STORE_FLOAT,							/* 33 */
-		STORE_REFFRENCE,						/* 34 */
-		STORE_DATA,								/* 35 */
+		LoadChar,								/* 2A */
+		LoadShort,								/* 2B */
+		LoadInteger,							/* 2C */
+		LoadFloat,								/* 2D */
+		LoadReference,							/* 2E */
+		LoadData,								/* 2F */
+		StoreChar,								/* 30 */
+		StoreShort,								/* 31 */
+		StoreInteger,							/* 32 */
+		StoreFloat,								/* 33 */
+		StoreReference,							/* 34 */
+		StoreData,								/* 35 */
 
-		/* caluclation */
-		ADD_INTEGER,							/* 36 */
-		DIV_INTEGER,							/* 37 */
-		MINUS_INTEGER,							/* 38 */
-		MOD_INTEGER,							/* 39 */
-		MUL_INTEGER,							/* 3A */
-		SUB_INTEGER,							/* 3B */
+		/* calculation */
+		AddInteger,								/* 36 */
+		DivideInteger,							/* 37 */
+		MinusInteger,							/* 38 */
+		ModInteger,								/* 39 */
+		MultiInteger,							/* 3A */
+		SubtractInteger,						/* 3B */
 
-		ADD_FLOAT,								/* 3C */
-		DIV_FLOAT,								/* 3D */
-		MINUS_FLOAT,							/* 3E */
-		MOD_FLOAT,								/* 3F */
-		MUL_FLOAT,								/* 40 */
-		SUB_FLOAT,								/* 41 */
+		AddFloat,								/* 3C */
+		DivideFloat,							/* 3D */
+		MinusFloat,								/* 3E */
+		ModFloat,								/* 3F */
+		MultiFloat,								/* 40 */
+		SubtractFloat,							/* 41 */
 
-		AND,									/* 42 */
-		EOR,									/* 43 */
-		LAND,									/* 44 */
-		LOR,									/* 45 */
-		LNOT,									/* 46 */
-		NOT,									/* 47 */
-		OR,										/* 48 */
-		SHL,									/* 49 */
-		SHR,									/* 4A */
+		And,									/* 42 */
+		ExclusiveOr,							/* 43 */
+		LogicalAnd,								/* 44 */
+		LogicalOr,								/* 45 */
+		LogicalNot,								/* 46 */
+		Not,									/* 47 */
+		Or,										/* 48 */
+		ShiftLeft,								/* 49 */
+		ShiftRight,								/* 4A */
 
-		INT2FLOAT,								/* 4B */
-		FLOAT2INT,								/* 4C */
+		CastIntegerToFloat,						/* 4B */
+		CastFloatToInteger,						/* 4C */
 
 		/* compare and branch */
-		COMPARE_EQ_INTEGER,						/* 4D */
-		COMPARE_NE_INTEGER,						/* 4E */
-		COMPARE_GE_INTEGER,						/* 4F */
-		COMPARE_GT_INTEGER,						/* 50 */
-		COMPARE_LE_INTEGER,						/* 51 */
-		COMPARE_LS_INTEGER,						/* 52 */
+		CompareEqualInteger,					/* 4D */
+		CompareNotEqualInteger,					/* 4E */
+		CompareGreaterEqualInteger,				/* 4F */
+		CompareGreaterInteger,					/* 50 */
+		CompareLessEqualInteger,				/* 51 */
+		CompareLessInteger,						/* 52 */
 
-		COMPARE_EQ_FLOAT,						/* 53 */
-		COMPARE_NE_FLOAT,						/* 54 */
-		COMPARE_GE_FLOAT,						/* 55 */
-		COMPARE_GT_FLOAT,						/* 56 */
-		COMPARE_LE_FLOAT,						/* 57 */
-		COMPARE_LS_FLOAT,						/* 58 */
+		CompareEqualFloat,						/* 53 */
+		CompareNotEqualFloat,					/* 54 */
+		CompareGreaterEqualFloat,				/* 55 */
+		CompareGreaterFloat,					/* 56 */
+		CompareLessEqualFloat,					/* 57 */
+		CompareLessFloat,						/* 58 */
 
-		COMPARE_EQ_DATA,						/* 59 */
-		COMPARE_NE_DATA,						/* 5A */
-		COMPARE_GE_DATA,						/* 5B */
-		COMPARE_GT_DATA,						/* 5C */
-		COMPARE_LE_DATA,						/* 5D */
-		COMPARE_LS_DATA,						/* 5E */
+		CompareEqualData,						/* 59 */
+		CompareNotEqualData,					/* 5A */
+		CompareGreaterEqualData,				/* 5B */
+		CompareGreaterData,						/* 5C */
+		CompareLessEqualData,					/* 5D */
+		CompareLessData,						/* 5E */
 
 		/* utility */
-		PRINT,									/* 5F */
+		Print,									/* 5F */
 
 		/* under discussion */
-		DYNAMIC_REQ,							/* 60 */
-		DYNAMIC_REQWS,							/* 61 */
-		DYNAMIC_REQWE,							/* 62 */
+		DynamicRequest,							/* 60 */
+		DynamicRequestWaitStarting,				/* 61 */
+		DynamicRequestWaitEnded,				/* 62 */
 	};
 
-	static constexpr address_t IntermediateLanguageSize = static_cast<address_t>(IntermediateLanguage::DYNAMIC_REQWE) + 1;
+	static constexpr address_t IntermediateLanguageSize = static_cast<address_t>(IntermediateLanguage::DynamicRequestWaitEnded) + 1;
 
 	struct IntermediateLanguageProperty final
 	{
@@ -221,131 +220,131 @@ namespace mana
 
 	inline const IntermediateLanguageProperty& GetIntermediateLanguageProperty(const IntermediateLanguage code)
 	{
-		static const std::array<IntermediateLanguageProperty, static_cast<address_t>(IntermediateLanguageSize)> properties =
+		static constexpr std::array<IntermediateLanguageProperty, static_cast<address_t>(IntermediateLanguageSize)> properties =
 		{
 			{
 				// thread
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(RESTART, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(HALT, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(YIELD, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(NONPREEMPTIVE, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(PREEMPTIVE, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(Restart, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(Halt, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(Yield, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(NonPreEmptive, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(PreEmptive, 0) },
 
 				// jump
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(BEQ, sizeof(address_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(BNE, sizeof(address_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(BRA, sizeof(address_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(BSR, sizeof(address_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(CALL, sizeof(address_t) + sizeof(int16_t) + sizeof(int16_t) /* + (program[6] * sizeof(int16_t))*/)}, // 引数によってサイズが変わる
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(REQ, sizeof(address_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(REQWS, sizeof(address_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(REQWE, sizeof(address_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(JOIN, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(COMPLY, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(REFUSE, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(LOAD_RETURN_ADDRESS, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(SAVE_RETURN_ADDRESS, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(RETURN_FROM_FUNCTION, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(RETURN_FROM_ACTION, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(ROLLBACK, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(BranchEqual, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(BranchNotEqual, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(Branch, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(BranchSubRoutine, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(Call, sizeof(address_t) + sizeof(int16_t) + sizeof(int16_t) /* + (program[6] * sizeof(int16_t))*/)}, // 引数によってサイズが変わる
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(Request, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(RequestWaitStarting, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(RequestWaitEnded, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(Join, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(Comply, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(Refuse, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(LoadReturnAddress, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(SaveReturnAddress, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(ReturnFromFunction, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(ReturnFromAction, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(Rollback, 0) },
 
 				// constant
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(PUSH_ZERO_INTEGER, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(PUSH_ZERO_FLOAT, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(PUSH_CHAR, sizeof(int8_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(PUSH_SHORT, sizeof(int16_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(PUSH_INTEGER, sizeof(int32_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(PUSH_SIZE, sizeof(address_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(PUSH_FLOAT, sizeof(float)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(PUSH_STRING, sizeof(address_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(PUSH_PRIORITY, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(PUSH_ACTOR, sizeof(address_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(PUSH_SELF, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(PUSH_SENDER, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(PushZeroInteger, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(PushZeroFloat, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(PushChar, sizeof(int8_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(PushShort, sizeof(int16_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(PushInteger, sizeof(int32_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(PushSize, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(PushFloat, sizeof(float)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(PushString, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(PushPriority, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(PushActor, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(PushSelf, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(PushSender, 0) },
 
 				// stack
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(ALLOCATE, sizeof(address_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(FREE, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(Allocate, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(Free, sizeof(address_t)) },
 				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(Duplicate, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(DUPLICATE_DATA, sizeof(address_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(REMOVE, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(REMOVE_DATA, sizeof(address_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(LOAD_STATIC_ADDRESS, sizeof(address_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(LOAD_GLOBAL_ADDRESS, sizeof(address_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(LOAD_FRAME_ADDRESS, sizeof(address_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(LOAD_SELF_ADDRESS, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(DuplicateData, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(Remove, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(RemoveData, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(LoadStaticAddress, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(LoadGlobalAddress, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(LoadFrameAddress, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(LoadSelfAddress, sizeof(address_t)) },
 
 				// memory operation
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(LOAD_CHAR, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(LOAD_SHORT, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(LOAD_INTEGER, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(LOAD_FLOAT, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(LOAD_REFFRENCE, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(LOAD_DATA, sizeof(address_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(STORE_CHAR, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(STORE_SHORT, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(STORE_INTEGER, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(STORE_FLOAT, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(STORE_REFFRENCE, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(STORE_DATA, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(LoadChar, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(LoadShort, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(LoadInteger, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(LoadFloat, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(LoadReference, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(LoadData, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(StoreChar, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(StoreShort, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(StoreInteger, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(StoreFloat, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(StoreReference, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(StoreData, sizeof(address_t)) },
 
-				// caluclation
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(ADD_INTEGER, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(DIV_INTEGER, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MINUS_INTEGER, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MOD_INTEGER, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MUL_INTEGER, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(SUB_INTEGER, 0) },
+				// calculation
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(AddInteger, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(DivideInteger, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MinusInteger, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(ModInteger, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MultiInteger, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(SubtractInteger, 0) },
 
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(ADD_FLOAT, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(DIV_FLOAT, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MINUS_FLOAT, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MOD_FLOAT, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MUL_FLOAT, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(SUB_FLOAT, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(AddFloat, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(DivideFloat, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MinusFloat, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(ModFloat, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MultiFloat, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(SubtractFloat, 0) },
 
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(AND, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(EOR, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(LAND, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(LOR, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(LNOT, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(NOT, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(OR, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(SHL, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(SHR, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(And, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(ExclusiveOr, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(LogicalAnd, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(LogicalOr, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(LogicalNot, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(Not, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(Or, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(ShiftLeft, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(ShiftRight, 0) },
 
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(INT2FLOAT, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(FLOAT2INT, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(CastIntegerToFloat, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(CastFloatToInteger, 0) },
 
 				// compare and branch
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(COMPARE_EQ_INTEGER, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(COMPARE_NE_INTEGER, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(COMPARE_GE_INTEGER, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(COMPARE_GT_INTEGER, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(COMPARE_LE_INTEGER, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(COMPARE_LS_INTEGER, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(CompareEqualInteger, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(CompareNotEqualInteger, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(CompareGreaterEqualInteger, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(CompareGreaterInteger, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(CompareLessEqualInteger, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(CompareLessInteger, 0) },
 
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(COMPARE_EQ_FLOAT, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(COMPARE_NE_FLOAT, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(COMPARE_GE_FLOAT, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(COMPARE_GT_FLOAT, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(COMPARE_LE_FLOAT, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(COMPARE_LS_FLOAT, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(CompareEqualFloat, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(CompareNotEqualFloat, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(CompareGreaterEqualFloat, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(CompareGreaterFloat, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(CompareLessEqualFloat, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(CompareLessFloat, 0) },
 
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(COMPARE_EQ_DATA, sizeof(address_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(COMPARE_NE_DATA, sizeof(address_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(COMPARE_GE_DATA, sizeof(address_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(COMPARE_GT_DATA, sizeof(address_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(COMPARE_LE_DATA, sizeof(address_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(COMPARE_LS_DATA, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(CompareEqualData, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(CompareNotEqualData, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(CompareGreaterEqualData, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(CompareGreaterData, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(CompareLessEqualData, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(CompareLessData, sizeof(address_t)) },
 
 				// utility
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(PRINT, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(Print, sizeof(address_t)) },
 
 				// under discussion
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(DYNAMIC_REQ, sizeof(address_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(DYNAMIC_REQWS, sizeof(address_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(DYNAMIC_REQWE, sizeof(address_t)) }
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(DynamicRequest, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(DynamicRequestWaitStarting, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(DynamicRequestWaitEnded, sizeof(address_t)) }
 			}
 		 };
 
@@ -362,7 +361,7 @@ namespace mana
 	{
 		const uint8_t* program = &static_cast<const uint8_t*>(codeBuffer)[index];
 		const IntermediateLanguage code = static_cast<IntermediateLanguage>(*program);
-		if (IntermediateLanguage::CALL == code)
+		if (IntermediateLanguage::Call == code)
 		{
 			// Size varies depending on the argument.
 			return sizeof(address_t) + sizeof(int16_t) + sizeof(int16_t) + (program[6] * sizeof(int16_t));

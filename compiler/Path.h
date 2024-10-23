@@ -5,9 +5,9 @@ mana (compiler)
 @date	2003-
 */
 
+#pragma once
 #include "../runner/common/Setup.h"
 #if defined(MANA_TARGET_WINDOWS)
-#include <cstdlib>
 #endif
 
 #if !defined(_MAX_PATH)

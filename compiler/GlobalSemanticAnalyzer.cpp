@@ -203,7 +203,7 @@ namespace mana
 			return;
 
 	DO_RECURSIVE:
-		SetCurrentFileInfomation(node);
+		SetCurrentFileInformation(node);
 
 		switch (node->GetId())
 		{
@@ -247,16 +247,16 @@ namespace mana
 			// Nodes related to memory layout
 		case SyntaxNode::Id::Allocate:
 			{
-				int32_t allocatedSize = mStaticBlockOpend ? GetSymbolFactory()->GetStaticMemoryAddress() : GetSymbolFactory()->GetGlobalMemoryAddress();
+				int32_t allocatedSize = mStaticBlockOpened ? GetSymbolFactory()->GetStaticMemoryAddress() : GetSymbolFactory()->GetGlobalMemoryAddress();
 				allocatedSize += node->GetInt();
 
 				Resolve(node->GetLeftNode());
 
-				const int32_t address = mStaticBlockOpend ? GetSymbolFactory()->GetStaticMemoryAddress() : GetSymbolFactory()->GetGlobalMemoryAddress();
+				const int32_t address = mStaticBlockOpened ? GetSymbolFactory()->GetStaticMemoryAddress() : GetSymbolFactory()->GetGlobalMemoryAddress();
 				if (address >= allocatedSize)
 					CompileError("static variable range over");
 
-				if(mStaticBlockOpend)
+				if(mStaticBlockOpened)
 					GetSymbolFactory()->SetStaticMemoryAddress(allocatedSize);
 				else
 					GetSymbolFactory()->SetGlobalMemoryAddress(allocatedSize);
@@ -266,9 +266,9 @@ namespace mana
 			break;
 
 		case SyntaxNode::Id::Static:
-			mStaticBlockOpend = true;
+			mStaticBlockOpened = true;
 			Resolve(node->GetLeftNode());
-			mStaticBlockOpend = false;
+			mStaticBlockOpened = false;
 			MANA_ASSERT(node->GetRightNode() == nullptr);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			break;
@@ -332,7 +332,7 @@ namespace mana
 			break;
 
 		case SyntaxNode::Id::DeclareArgument:
-			ResolveVariableDescription(node->GetLeftNode(), Symbol::MemoryTypeId::Parameter, mStaticBlockOpend);
+			ResolveVariableDescription(node->GetLeftNode(), Symbol::MemoryTypeId::Parameter, mStaticBlockOpened);
 			Resolve(node->GetRightNode());
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			break;
@@ -370,7 +370,7 @@ namespace mana
 			node->Set(GetSymbolFactory()->CreateVariable(
 				node->GetString(),
 				nullptr,
-				mStaticBlockOpend,
+				mStaticBlockOpened,
 				GetSymbolFactory()->IsOpenBlock(),
 				GetSymbolFactory()->IsFunctionOpened()
 			));
@@ -380,7 +380,7 @@ namespace mana
 			break;
 
 		case SyntaxNode::Id::DeclareVariable:
-			ResolveVariableDescription(node, Symbol::MemoryTypeId::Normal, mStaticBlockOpend);
+			ResolveVariableDescription(node, Symbol::MemoryTypeId::Normal, mStaticBlockOpened);
 			MANA_ASSERT(node->GetLeftNode() && node->GetLeftNode()->Is(SyntaxNode::Id::TypeDescription));
 			MANA_ASSERT(node->GetRightNode() && node->GetRightNode()->Is(SyntaxNode::Id::Declarator));
 			break;

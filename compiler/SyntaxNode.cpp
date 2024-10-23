@@ -7,20 +7,18 @@ mana (compiler)
 
 #include "SyntaxNode.h"
 #include "Lexer.h"
-#include "Main.h"
 #include "Symbol.h"
 #include "TypeDescriptor.h"
 #include "TypeDescriptorFactory.h"
 #include <cstdarg>
-#include <cstring>
 
 namespace mana
 {
 	SyntaxNode::SyntaxNode(const Id id)
 		: mId(id)
 	{
-		mFilename = lexer_get_current_filename();
-		mLineno = lexer_get_current_lineno();
+		mFilename = lexer::GetCurrentFilename();
+		mLineNo = lexer::GetCurrentLineNo();
 
 #if MANA_BUILD_TARGET == MANA_BUILD_DEBUG
 		static size_t count = 0;
@@ -205,7 +203,7 @@ namespace mana
 
 	int32_t SyntaxNode::GetLineno() const
 	{
-		return mLineno;
+		return mLineNo;
 	}
 
 	void SyntaxNode::Set(const std::shared_ptr<Symbol>& symbol)

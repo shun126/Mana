@@ -9,7 +9,6 @@ mana (compiler)
 #include "../runner/common/Noncopyable.h"
 #include "Parser.hpp"
 #include <memory>
-#include <string_view>
 
 namespace mana
 {
@@ -22,13 +21,20 @@ namespace mana
 	class StringPool;
 	class TypeDescriptorFactory;
 
-	class ParsingDriver final : private Noncopyable, public std::enable_shared_from_this<ParsingDriver>
+	/**
+	 * Drive the Bison parser.
+	 */
+	class ParsingDriver final : Noncopyable, public std::enable_shared_from_this<ParsingDriver>
 	{
 	public:
 		ParsingDriver();
+		ParsingDriver(const ParsingDriver&) = delete;
+		ParsingDriver(ParsingDriver&&) noexcept = delete;
+		ParsingDriver& operator=(const ParsingDriver&) = delete;
+		ParsingDriver& operator=(ParsingDriver&&) noexcept = delete;
 		~ParsingDriver() = default;
 
-		int32_t Parse();
+		int32_t Parse() const;
 
 		const std::shared_ptr<CodeBuffer>& GetCodeBuffer();
 		const std::shared_ptr<CodeGenerator>& GetCodeGenerator();
@@ -39,112 +45,108 @@ namespace mana
 		const std::shared_ptr<TypeDescriptorFactory>& GetTypeDescriptorFactory();
 
 	protected:
-		/*
-		TODO: SyntaxNodeFactory class ?
-		*/
-
-		std::shared_ptr<SyntaxNode> Bind(std::shared_ptr<SyntaxNode> base, std::shared_ptr<SyntaxNode> next);
+		std::shared_ptr<SyntaxNode> Bind(const std::shared_ptr<SyntaxNode>& base, const std::shared_ptr<SyntaxNode>& next);
 
 		// declarations
-		std::shared_ptr<SyntaxNode> CreateNativeFunction(std::shared_ptr<SyntaxNode> returnExpression, const std::string_view identifier, std::shared_ptr<SyntaxNode> argument);
-		std::shared_ptr<SyntaxNode> CreateDeclareMemory(const int_t size, std::shared_ptr<SyntaxNode> allocateDeclarations);
-		std::shared_ptr<SyntaxNode> CreateDeclareStaticMemory(const int_t size, std::shared_ptr<SyntaxNode> allocateDeclarations);
+		static std::shared_ptr<SyntaxNode> CreateNativeFunction(const std::shared_ptr<SyntaxNode>& returnExpression, const std::string_view& identifier, const std::shared_ptr<SyntaxNode>& argument);
+		static std::shared_ptr<SyntaxNode> CreateDeclareMemory(const int_t size, const std::shared_ptr<SyntaxNode>& allocateDeclarations);
+		static std::shared_ptr<SyntaxNode> CreateDeclareStaticMemory(const int_t size, const std::shared_ptr<SyntaxNode>& allocateDeclarations);
 
 		// declaration
-		std::shared_ptr<SyntaxNode> CreateConstantNode(const std::string_view identifier, const int_t value);
-		std::shared_ptr<SyntaxNode> CreateConstantNode(const std::string_view identifier, const float_t value);
-		std::shared_ptr<SyntaxNode> CreateConstantNode(const std::string_view identifier, const std::string_view text);
-		std::shared_ptr<SyntaxNode> CreateDefineNode(const std::string_view identifier, const std::string_view text);
-		std::shared_ptr<SyntaxNode> CreateUndefineNode(const std::string_view identifier);
+		std::shared_ptr<SyntaxNode> CreateConstantNode(const std::string_view& identifier, const int_t value);
+		std::shared_ptr<SyntaxNode> CreateConstantNode(const std::string_view& identifier, const float_t value);
+		std::shared_ptr<SyntaxNode> CreateConstantNode(const std::string_view& identifier, const std::string_view& text);
+		std::shared_ptr<SyntaxNode> CreateDefineNode(const std::string_view& identifier, const std::string_view& text);
+		static std::shared_ptr<SyntaxNode> CreateUndefineNode(const std::string_view& identifier);
 
 		// actor
-		std::shared_ptr<SyntaxNode> CreateActor(const std::string_view identifier, std::shared_ptr<SyntaxNode> action);
-		std::shared_ptr<SyntaxNode> CreatePhantom(const std::string_view identifier, std::shared_ptr<SyntaxNode> action);
-		std::shared_ptr<SyntaxNode> CreateModule(const std::string_view identifier, std::shared_ptr<SyntaxNode> action);
+		static std::shared_ptr<SyntaxNode> CreateActor(const std::string_view& identifier, const std::shared_ptr<SyntaxNode>& action);
+		static std::shared_ptr<SyntaxNode> CreatePhantom(const std::string_view& identifier, const std::shared_ptr<SyntaxNode>& action);
+		static std::shared_ptr<SyntaxNode> CreateModule(const std::string_view& identifier, const std::shared_ptr<SyntaxNode>& action);
 
 		// action
-		std::shared_ptr<SyntaxNode> CreateAction(const std::string_view identifier, std::shared_ptr<SyntaxNode> block);
-		std::shared_ptr<SyntaxNode> CreateExtend(const std::string_view identifier);
+		std::shared_ptr<SyntaxNode> CreateAction(const std::string_view& identifier, const std::shared_ptr<SyntaxNode>& block);
+		static std::shared_ptr<SyntaxNode> CreateExtend(const std::string_view& identifier);
 
 		// struct
-		std::shared_ptr<SyntaxNode> CreateStruct(const std::string_view identifier, std::shared_ptr<SyntaxNode> member);
+		static std::shared_ptr<SyntaxNode> CreateStruct(const std::string_view& identifier, const std::shared_ptr<SyntaxNode>& member);
 
 		// function
-		std::shared_ptr<SyntaxNode> CreateInternalFunction(std::shared_ptr<SyntaxNode> returnExpression, const std::string_view identifier, std::shared_ptr<SyntaxNode> argument, std::shared_ptr<SyntaxNode> statement);
+		static std::shared_ptr<SyntaxNode> CreateInternalFunction(const std::shared_ptr<SyntaxNode>& returnExpression, const std::string_view& identifier, const std::shared_ptr<SyntaxNode>& argument, const std::shared_ptr<SyntaxNode>& statement);
 
 		// variable_type
 		std::shared_ptr<SyntaxNode> CreateActorTypeDescription();
-		std::shared_ptr<SyntaxNode> CreateTypeDescription(const std::string_view identifier);
-		std::shared_ptr<SyntaxNode> CreateTypeDescription(const std::shared_ptr<TypeDescriptor>& typeDescriptor);
+		static std::shared_ptr<SyntaxNode> CreateTypeDescription(const std::string_view& identifier);
+		static std::shared_ptr<SyntaxNode> CreateTypeDescription(const std::shared_ptr<TypeDescriptor>& typeDescriptor);
 
 		// block
-		std::shared_ptr<SyntaxNode> CreateBlock(std::shared_ptr<SyntaxNode> statement);
+		static std::shared_ptr<SyntaxNode> CreateBlock(const std::shared_ptr<SyntaxNode>& statement);
 
 		// statement	
-		std::shared_ptr<SyntaxNode> CreateIf(std::shared_ptr<SyntaxNode> condition, std::shared_ptr<SyntaxNode> statementIfTrue, std::shared_ptr<SyntaxNode> statementIfFalse);
-		std::shared_ptr<SyntaxNode> CreateSwitch(std::shared_ptr<SyntaxNode> condition, std::shared_ptr<SyntaxNode> statement);
-		std::shared_ptr<SyntaxNode> CreateWhile(std::shared_ptr<SyntaxNode> condition, std::shared_ptr<SyntaxNode> statement);
-		std::shared_ptr<SyntaxNode> CreateDoWhile(std::shared_ptr<SyntaxNode> statement, std::shared_ptr<SyntaxNode> condition);
-		std::shared_ptr<SyntaxNode> CreateFor(std::shared_ptr<SyntaxNode> initializeStatement, std::shared_ptr<SyntaxNode> condition, std::shared_ptr<SyntaxNode> iterationExpression, std::shared_ptr<SyntaxNode> statement);
-		std::shared_ptr<SyntaxNode> CreateFor(std::shared_ptr<SyntaxNode> declareVariable, std::shared_ptr<SyntaxNode> initializeStatement, std::shared_ptr<SyntaxNode> condition, std::shared_ptr<SyntaxNode> iterationExpression, std::shared_ptr<SyntaxNode> statement);
-		std::shared_ptr<SyntaxNode> CreateLoop(std::shared_ptr<SyntaxNode> statement);
-		std::shared_ptr<SyntaxNode> CreateLock(std::shared_ptr<SyntaxNode> statement);
-		std::shared_ptr<SyntaxNode> CreateGoto(const std::string_view labelName);
-		std::shared_ptr<SyntaxNode> CreateLabel(const std::string_view identifier);
-		std::shared_ptr<SyntaxNode> CreateReturn(std::shared_ptr<SyntaxNode> expression);
-		std::shared_ptr<SyntaxNode> CreateRollback(std::shared_ptr<SyntaxNode> expression);
-		std::shared_ptr<SyntaxNode> CreateBreak();
-		std::shared_ptr<SyntaxNode> CreateContinue();
-		std::shared_ptr<SyntaxNode> CreateHalt();
-		std::shared_ptr<SyntaxNode> CreateYield();
-		std::shared_ptr<SyntaxNode> CreateComply();	// consider the name
-		std::shared_ptr<SyntaxNode> CreateRefuse();	// consider the name
-		std::shared_ptr<SyntaxNode> CreatePrint(std::shared_ptr<SyntaxNode> argument);
-		std::shared_ptr<SyntaxNode> CreateRequest(std::shared_ptr<SyntaxNode> priority, std::shared_ptr<SyntaxNode> expression, const std::string_view actionName);
-		std::shared_ptr<SyntaxNode> CreateJoin(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand);
+		static std::shared_ptr<SyntaxNode> CreateIf(const std::shared_ptr<SyntaxNode>& condition, const std::shared_ptr<SyntaxNode>& statementIfTrue, const std::shared_ptr<SyntaxNode>& statementIfFalse);
+		static std::shared_ptr<SyntaxNode> CreateSwitch(const std::shared_ptr<SyntaxNode>& condition, const std::shared_ptr<SyntaxNode>& statement);
+		static std::shared_ptr<SyntaxNode> CreateWhile(const std::shared_ptr<SyntaxNode>& condition, const std::shared_ptr<SyntaxNode>& statement);
+		static std::shared_ptr<SyntaxNode> CreateDoWhile(const std::shared_ptr<SyntaxNode>& statement, const std::shared_ptr<SyntaxNode>& condition);
+		static std::shared_ptr<SyntaxNode> CreateFor(const std::shared_ptr<SyntaxNode>& initializeStatement, const std::shared_ptr<SyntaxNode>& condition, const std::shared_ptr<SyntaxNode>& iterationExpression, const std::shared_ptr<SyntaxNode>& statement);
+		static std::shared_ptr<SyntaxNode> CreateFor(const std::shared_ptr<SyntaxNode>& declareVariable, const std::shared_ptr<SyntaxNode>& initializeStatement, const std::shared_ptr<SyntaxNode>& condition, const std::shared_ptr<SyntaxNode>& iterationExpression, const std::shared_ptr<SyntaxNode>& statement);
+		static std::shared_ptr<SyntaxNode> CreateLoop(const std::shared_ptr<SyntaxNode>& statement);
+		static std::shared_ptr<SyntaxNode> CreateLock(const std::shared_ptr<SyntaxNode>& statement);
+		static std::shared_ptr<SyntaxNode> CreateGoto(const std::string_view& labelName);
+		static std::shared_ptr<SyntaxNode> CreateLabel(const std::string_view& labelName);
+		static std::shared_ptr<SyntaxNode> CreateReturn(const std::shared_ptr<SyntaxNode>& expression);
+		static std::shared_ptr<SyntaxNode> CreateRollback(const std::shared_ptr<SyntaxNode>& expression);
+		static std::shared_ptr<SyntaxNode> CreateBreak();
+		static std::shared_ptr<SyntaxNode> CreateContinue();
+		static std::shared_ptr<SyntaxNode> CreateHalt();
+		static std::shared_ptr<SyntaxNode> CreateYield();
+		static std::shared_ptr<SyntaxNode> CreateComply();	// TODO: consider the name
+		static std::shared_ptr<SyntaxNode> CreateRefuse();	// TODO: consider the name
+		static std::shared_ptr<SyntaxNode> CreatePrint(const std::shared_ptr<SyntaxNode>& argument);
+		static std::shared_ptr<SyntaxNode> CreateRequest(const std::shared_ptr<SyntaxNode>& priority, const std::shared_ptr<SyntaxNode>& expression, const std::string_view& actionName);
+		static std::shared_ptr<SyntaxNode> CreateJoin(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand);
 
 		// expression
-		std::shared_ptr<SyntaxNode> CreateAssign(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand);
-		std::shared_ptr<SyntaxNode> CreateLogicalAnd(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand);
-		std::shared_ptr<SyntaxNode> CreateLogicalOr(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand);
-		std::shared_ptr<SyntaxNode> CreateAdd(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand);
-		std::shared_ptr<SyntaxNode> CreateSub(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand);
-		std::shared_ptr<SyntaxNode> CreateMul(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand);
-		std::shared_ptr<SyntaxNode> CreateDiv(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand);
-		std::shared_ptr<SyntaxNode> CreateMod(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand);
-		std::shared_ptr<SyntaxNode> CreatePow(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand);
-		std::shared_ptr<SyntaxNode> CreateAnd(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand);
-		std::shared_ptr<SyntaxNode> CreateOr(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand);
-		std::shared_ptr<SyntaxNode> CreateXor(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand);
-		std::shared_ptr<SyntaxNode> CreateLeftShift(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand);
-		std::shared_ptr<SyntaxNode> CreateRightShift(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand);
-		std::shared_ptr<SyntaxNode> CreateGT(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand);
-		std::shared_ptr<SyntaxNode> CreateGE(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand);
-		std::shared_ptr<SyntaxNode> CreateLS(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand);
-		std::shared_ptr<SyntaxNode> CreateLE(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand);
-		std::shared_ptr<SyntaxNode> CreateEQ(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand);
-		std::shared_ptr<SyntaxNode> CreateNE(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand);
-		std::shared_ptr<SyntaxNode> CreateAddAndAssign(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand);
-		std::shared_ptr<SyntaxNode> CreateSubAndAssign(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand);
-		std::shared_ptr<SyntaxNode> CreateMulAndAssign(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand);
-		std::shared_ptr<SyntaxNode> CreateDivAndAssign(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand);
-		std::shared_ptr<SyntaxNode> CreateModAndAssign(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand);
-		std::shared_ptr<SyntaxNode> CreatePowAndAssign(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand);
-		std::shared_ptr<SyntaxNode> CreateAndAndAssign(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand);
-		std::shared_ptr<SyntaxNode> CreateOrAndAssign(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand);
-		std::shared_ptr<SyntaxNode> CreateXorAndAssign(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand);
-		std::shared_ptr<SyntaxNode> CreateLeftShiftAndAssign(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand);
-		std::shared_ptr<SyntaxNode> CreateRightShiftAndAssign(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand);
-		std::shared_ptr<SyntaxNode> CreateIncrement(std::shared_ptr<SyntaxNode> expression);
-		std::shared_ptr<SyntaxNode> CreateDecrement(std::shared_ptr<SyntaxNode> expression);
-		std::shared_ptr<SyntaxNode> CreateExpressionIf(std::shared_ptr<SyntaxNode> condition, std::shared_ptr<SyntaxNode> trueStatement, std::shared_ptr<SyntaxNode> falseStatement);
+		static std::shared_ptr<SyntaxNode> CreateAssign(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand);
+		static std::shared_ptr<SyntaxNode> CreateLogicalAnd(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand);
+		static std::shared_ptr<SyntaxNode> CreateLogicalOr(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand);
+		static std::shared_ptr<SyntaxNode> CreateAdd(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand);
+		static std::shared_ptr<SyntaxNode> CreateSub(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand);
+		static std::shared_ptr<SyntaxNode> CreateMul(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand);
+		static std::shared_ptr<SyntaxNode> CreateDiv(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand);
+		static std::shared_ptr<SyntaxNode> CreateMod(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand);
+		static std::shared_ptr<SyntaxNode> CreatePow(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand);
+		static std::shared_ptr<SyntaxNode> CreateAnd(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand);
+		static std::shared_ptr<SyntaxNode> CreateOr(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand);
+		static std::shared_ptr<SyntaxNode> CreateXor(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand);
+		static std::shared_ptr<SyntaxNode> CreateLeftShift(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand);
+		static std::shared_ptr<SyntaxNode> CreateRightShift(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand);
+		static std::shared_ptr<SyntaxNode> CreateGreater(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand);
+		static std::shared_ptr<SyntaxNode> CreateGreaterEqual(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand);
+		static std::shared_ptr<SyntaxNode> CreateLess(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand);
+		static std::shared_ptr<SyntaxNode> CreateLessEqual(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand);
+		static std::shared_ptr<SyntaxNode> CreateEqual(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand);
+		static std::shared_ptr<SyntaxNode> CreateNotEqual(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand);
+		static std::shared_ptr<SyntaxNode> CreateAddAndAssign(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand);
+		static std::shared_ptr<SyntaxNode> CreateSubAndAssign(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand);
+		static std::shared_ptr<SyntaxNode> CreateMulAndAssign(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand);
+		static std::shared_ptr<SyntaxNode> CreateDivAndAssign(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand);
+		static std::shared_ptr<SyntaxNode> CreateModAndAssign(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand);
+		static std::shared_ptr<SyntaxNode> CreatePowAndAssign(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand);
+		static std::shared_ptr<SyntaxNode> CreateAndAndAssign(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand);
+		static std::shared_ptr<SyntaxNode> CreateOrAndAssign(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand);
+		static std::shared_ptr<SyntaxNode> CreateXorAndAssign(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand);
+		static std::shared_ptr<SyntaxNode> CreateLeftShiftAndAssign(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand);
+		static std::shared_ptr<SyntaxNode> CreateRightShiftAndAssign(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand);
+		std::shared_ptr<SyntaxNode> CreateIncrement(const std::shared_ptr<SyntaxNode>& expression);
+		std::shared_ptr<SyntaxNode> CreateDecrement(const std::shared_ptr<SyntaxNode>& expression);
+		static std::shared_ptr<SyntaxNode> CreateExpressionIf(const std::shared_ptr<SyntaxNode>& condition, const std::shared_ptr<SyntaxNode>& trueStatement, const std::shared_ptr<SyntaxNode>& falseStatement);
 
 		// primary
-		std::shared_ptr<SyntaxNode> CreateNegative(std::shared_ptr<SyntaxNode> expression);
-		std::shared_ptr<SyntaxNode> CreateNot(std::shared_ptr<SyntaxNode> expression);
-		std::shared_ptr<SyntaxNode> CreateComplement1(std::shared_ptr<SyntaxNode> expression);
-		std::shared_ptr<SyntaxNode> CreateSizeOf(std::shared_ptr<SyntaxNode> variableType);
-		std::shared_ptr<SyntaxNode> CreateCall(const std::string_view identifier, std::shared_ptr<SyntaxNode> argument);
+		static std::shared_ptr<SyntaxNode> CreateNegative(const std::shared_ptr<SyntaxNode>& expression);
+		static std::shared_ptr<SyntaxNode> CreateNot(const std::shared_ptr<SyntaxNode>& expression);
+		static std::shared_ptr<SyntaxNode> CreateComplement1(const std::shared_ptr<SyntaxNode>& expression);
+		static std::shared_ptr<SyntaxNode> CreateSizeOf(const std::shared_ptr<SyntaxNode>& variableType);
+		static std::shared_ptr<SyntaxNode> CreateCall(const std::string_view& identifier, const std::shared_ptr<SyntaxNode>& argument);
 
 		// constant
 		std::shared_ptr<SyntaxNode> CreatePriority();
@@ -153,39 +155,39 @@ namespace mana
 		std::shared_ptr<SyntaxNode> CreateNil();
 		std::shared_ptr<SyntaxNode> CreateInteger(const int_t value);
 		std::shared_ptr<SyntaxNode> CreateFloat(const float_t value);
-		std::shared_ptr<SyntaxNode> CreateString(const std::string_view text);
+		std::shared_ptr<SyntaxNode> CreateString(const std::string_view& text);
 
 		// left hand
-		std::shared_ptr<SyntaxNode> CreateMemberVariable(std::shared_ptr<SyntaxNode> leftHand, const std::string_view identifier);
-		std::shared_ptr<SyntaxNode> CreateMemberFunction(std::shared_ptr<SyntaxNode> leftHand, const std::string_view identifier, std::shared_ptr<SyntaxNode> argument);
-		std::shared_ptr<SyntaxNode> CreateArray(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> expression);
-		std::shared_ptr<SyntaxNode> CreateIdentifier(const std::string_view identifier);
+		static std::shared_ptr<SyntaxNode> CreateMemberVariable(const std::shared_ptr<SyntaxNode>& leftHand, const std::string_view& identifier);
+		static std::shared_ptr<SyntaxNode> CreateMemberFunction(const std::shared_ptr<SyntaxNode>& leftHand, const std::string_view& identifier, const std::shared_ptr<SyntaxNode>& argument);
+		static std::shared_ptr<SyntaxNode> CreateArray(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& expression);
+		static std::shared_ptr<SyntaxNode> CreateIdentifier(const std::string_view& identifier);
 
 		// cases
-		std::shared_ptr<SyntaxNode> BindCaseNode(std::shared_ptr<SyntaxNode> next, std::shared_ptr<SyntaxNode> kase);
+		static std::shared_ptr<SyntaxNode> BindCaseNode(const std::shared_ptr<SyntaxNode>& next, const std::shared_ptr<SyntaxNode>& kase);
 
 		// case
-		std::shared_ptr<SyntaxNode> CreateSwitchCaseNode(std::shared_ptr<SyntaxNode> expression, std::shared_ptr<SyntaxNode> statements);
-		std::shared_ptr<SyntaxNode> CreateSwitchDefaultNode(std::shared_ptr<SyntaxNode> statements);
+		static std::shared_ptr<SyntaxNode> CreateSwitchCaseNode(const std::shared_ptr<SyntaxNode>& expression, const std::shared_ptr<SyntaxNode>& statements);
+		static std::shared_ptr<SyntaxNode> CreateSwitchDefaultNode(const std::shared_ptr<SyntaxNode>& statements);
 
 		// arg_calls
-		std::shared_ptr<SyntaxNode> CreateArgumentNode(std::shared_ptr<SyntaxNode> expression);
-		std::shared_ptr<SyntaxNode> CreateArgumentNode(std::shared_ptr<SyntaxNode> nextArgument, std::shared_ptr<SyntaxNode> expression);
+		static std::shared_ptr<SyntaxNode> CreateArgumentNode(const std::shared_ptr<SyntaxNode>& expression);
+		static std::shared_ptr<SyntaxNode> CreateArgumentNode(const std::shared_ptr<SyntaxNode>& nextArgument, const std::shared_ptr<SyntaxNode>& expression);
 
 		// arg_decls
-		std::shared_ptr<SyntaxNode> CreateDeclareArgumentNode(std::shared_ptr<SyntaxNode> declareVariable);
-		std::shared_ptr<SyntaxNode> CreateDeclareArgumentNode(std::shared_ptr<SyntaxNode> nextDeclareArgument, std::shared_ptr<SyntaxNode> declareVariable);
+		static std::shared_ptr<SyntaxNode> CreateDeclareArgumentNode(const std::shared_ptr<SyntaxNode>& declareVariable);
+		static std::shared_ptr<SyntaxNode> CreateDeclareArgumentNode(const std::shared_ptr<SyntaxNode>& nextDeclareArgument, const std::shared_ptr<SyntaxNode>& declareVariable);
 
 		// variable_decl
-		std::shared_ptr<SyntaxNode> CreateDeclareVariableNode(std::shared_ptr<SyntaxNode> variableType, std::shared_ptr<SyntaxNode> declarator, std::shared_ptr<SyntaxNode> expression);
+		static std::shared_ptr<SyntaxNode> CreateDeclareVariableNode(const std::shared_ptr<SyntaxNode>& variableType, const std::shared_ptr<SyntaxNode>& declarator, const std::shared_ptr<SyntaxNode>& expression);
 
 		// declarator
-		std::shared_ptr<SyntaxNode> CreateDeclaratorNode(const std::string_view identifier);
-		std::shared_ptr<SyntaxNode> CreateDeclaratorNode(const std::string_view identifier, std::shared_ptr<SyntaxNode> variableSizeNode);
+		static std::shared_ptr<SyntaxNode> CreateDeclaratorNode(const std::string_view& identifier);
+		static std::shared_ptr<SyntaxNode> CreateDeclaratorNode(const std::string_view& identifier, const std::shared_ptr<SyntaxNode>& variableSizeNode);
 
 		// variable_size
-		std::shared_ptr<SyntaxNode> CreateVariableSizeNode(const size_t size);
-		std::shared_ptr<SyntaxNode> CreateVariableSizeNode(const std::string_view identifier);
+		static std::shared_ptr<SyntaxNode> CreateVariableSizeNode(const size_t size);
+		static std::shared_ptr<SyntaxNode> CreateVariableSizeNode(const std::string_view& identifier);
 
 	private:
 		std::unique_ptr<Parser> mParser;

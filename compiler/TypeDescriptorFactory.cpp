@@ -18,29 +18,29 @@ namespace mana
 		address_t mAlignmentSize;
 	};
 
-	static const std::array<InitializeType, TypeDescriptor::TypeIdSize> mInitializeType = { {
-		{ "void", sizeof(int32_t), sizeof(int32_t) },
-		{ "char", sizeof(int8_t), sizeof(int8_t) },
-		{ "short", sizeof(int16_t), sizeof(int16_t) },
-		{ "int", sizeof(int32_t), sizeof(int32_t) },
-		{ "float", sizeof(float), sizeof(float) },
-		{ "reference", sizeof(void*), sizeof(void*) },
-		{ "array", sizeof(void*), sizeof(void*) },
-		{ "struct", sizeof(void*), sizeof(void*) },
-		{ "actor", sizeof(void*), sizeof(void*) },
-		{ "module", sizeof(void*), sizeof(void*) },
-		{ "nil", sizeof(void*), sizeof(void*) },
-		{ "unknown", sizeof(void*), sizeof(void*) }
+	static constexpr std::array<InitializeType, TypeDescriptor::TypeIdSize> InitializeType = { {
+		{ std::string_view("void"), sizeof(int32_t), sizeof(int32_t) },
+		{ std::string_view("char"), sizeof(int8_t), sizeof(int8_t) },
+		{ std::string_view("short"), sizeof(int16_t), sizeof(int16_t) },
+		{ std::string_view("int"), sizeof(int32_t), sizeof(int32_t) },
+		{ std::string_view("float"), sizeof(float), sizeof(float) },
+		{ std::string_view("reference"), sizeof(void*), sizeof(void*) },
+		{ std::string_view("array"), sizeof(void*), sizeof(void*) },
+		{ std::string_view("struct"), sizeof(void*), sizeof(void*) },
+		{ std::string_view("actor"), sizeof(void*), sizeof(void*) },
+		{ std::string_view("module"), sizeof(void*), sizeof(void*) },
+		{ std::string_view("Nil"), sizeof(void*), sizeof(void*) },
+		{ std::string_view("unknown"), sizeof(void*), sizeof(void*) }
 	} };
 
 	TypeDescriptorFactory::TypeDescriptorFactory()
 	{
-		for(size_t i = 0; i < mInitializeType.size(); ++i)
+		for(size_t i = 0; i < InitializeType.size(); ++i)
 		{
 			auto typeDescriptor = std::shared_ptr<TypeDescriptor>(new TypeDescriptor(static_cast<TypeDescriptor::Id>(i)));
-			typeDescriptor->SetName(mInitializeType[i].mName);
-			typeDescriptor->SetMemorySize(mInitializeType[i].mMemorySize);
-			typeDescriptor->SetAlignmentMemorySize(mInitializeType[i].mAlignmentSize);
+			typeDescriptor->SetName(InitializeType[i].mName);
+			typeDescriptor->SetMemorySize(InitializeType[i].mMemorySize);
+			typeDescriptor->SetAlignmentMemorySize(InitializeType[i].mAlignmentSize);
 			mTypeDescriptor.push_back(std::move(typeDescriptor));
 		}
 

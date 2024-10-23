@@ -36,7 +36,7 @@ namespace mana
 	/*!
 	Determine if the address is invalid.
 	*/
-	inline bool IsValid(const address_t address)
+	[[nodiscard]] inline bool IsValid(const address_t address)
 	{
 		return address != InvalidAddress;
 	}
@@ -45,7 +45,7 @@ namespace mana
 	Check the value range and cast to address_t
 	*/
 	template<typename T>
-	inline address_t ToAddress(const T size)
+	[[nodiscard]] inline address_t ToAddress(const T size)
 	{
 		if constexpr (std::is_signed<T>())
 		{
@@ -72,7 +72,7 @@ namespace mana
 	Check the value range and cast to offset_t
 	*/
 	template<typename T>
-	inline offset_t ToOffset(const T size)
+	[[nodiscard]] inline offset_t ToOffset(const T size)
 	{
 		if constexpr (std::is_signed<T>())
 		{

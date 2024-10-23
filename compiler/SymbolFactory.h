@@ -10,11 +10,9 @@ mana (compiler)
 #include "StringPool.h"
 #include "Symbol.h"
 #include "TypeDescriptorFactory.h"
-#include <fstream>
 #include <functional>
 #include <memory>
 #include <stack>
-#include <string>
 #include <unordered_map>
 #include <vector>
 
@@ -28,7 +26,7 @@ namespace mana
 	class SyntaxNode;
 	class TypeDescriptorFactory;
 
-	class SymbolFactory final : private Noncopyable
+	class SymbolFactory final : Noncopyable
 	{
 	public:
 		// deprecated
@@ -49,7 +47,7 @@ namespace mana
 		std::shared_ptr<Symbol> CreateConstString(const std::string_view name, const std::string_view text);
 		std::shared_ptr<Symbol> CreateVariable(const std::string_view name, const std::shared_ptr<TypeDescriptor>& type, const bool staticVariable, const bool isBlockOpened, const bool isFunctionOpened);
 		std::shared_ptr<Symbol> CreateLabel(const std::string_view name);
-		std::shared_ptr<Symbol> CreateFunction(const std::string_view name, const bool isActorOrStructerOpened, const bool isModuleBlockOpened);
+		std::shared_ptr<Symbol> CreateFunction(const std::string_view name, const bool isActorOrStructOpened, const bool isModuleBlockOpened);
 		std::shared_ptr<Symbol> CreateType(const std::string_view name, const std::shared_ptr<TypeDescriptor>& type);
 		void Destroy(const std::string_view name);
 
