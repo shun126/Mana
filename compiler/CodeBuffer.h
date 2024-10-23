@@ -8,6 +8,7 @@ mana (compiler)
 #pragma once
 #include "../runner/common/Platform.h"
 #include "../runner/common/FileFormat.h"
+#include "../runner/common/Memory.h"
 #include "../runner/common/Noncopyable.h"
 #include <cstdlib>
 #include <memory>
@@ -20,7 +21,7 @@ namespace mana
 	/*
 	Code Section Class
 	*/
-	class CodeBuffer final : private Noncopyable
+	class CodeBuffer final : Noncopyable
 	{
 	public:
 		CodeBuffer() = default;

@@ -12,7 +12,7 @@ mana (library)
 
 namespace mana
 {
-	class SystemRandom : private Noncopyable
+	class SystemRandom : Noncopyable
 	{
 	public:
 		static SystemRandom& GetInstance()
@@ -23,11 +23,11 @@ namespace mana
 
 		std::mt19937_64& Get()
 		{
-			return systemRandom;
+			return mSystemRandom;
 		}
 
 	private:
-		std::mt19937_64 systemRandom;
+		std::mt19937_64 mSystemRandom;
 	};
 
 	inline void srand(const int_t seed)
@@ -48,13 +48,22 @@ namespace mana
 	}
 
 	template<typename T>
-	const T Pi() { return static_cast<T>(3.1415926535897932384626433832795028841971693993751); }
+	constexpr T Pi()
+	{
+		return static_cast<T>(3.1415926535897932384626433832795028841971693993751);
+	}
 
 	template<typename T>
-	T ToRadian(T degree) { return degree * (Pi<T>() / static_cast<T>(180.0)); }
+	constexpr T ToRadian(T degree)
+	{
+		return degree * (Pi<T>() / static_cast<T>(180.0));
+	}
 
 	template<typename T>
-	T ToDegree(T radian) { return radian * (static_cast<T>(180.0) / Pi<T>()); }
+	constexpr T ToDegree(T radian)
+	{
+		return radian * (static_cast<T>(180.0) / Pi<T>());
+	}
 
 	template <typename T>
 	T AngleMod(const T x, const T div)

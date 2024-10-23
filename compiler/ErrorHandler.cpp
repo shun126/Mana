@@ -9,7 +9,6 @@ mana (compiler)
 #include "ErrorHandler.h"
 #include "Lexer.h"
 #include "Main.h"
-#include <cstdio>
 
 namespace mana
 {
@@ -22,9 +21,9 @@ namespace mana
 	void CompileError(const std::string& message)
 	{
 #if defined(MANA_TARGET_WINDOWS)
-		Trace({ lexer_get_current_filename(), "(", std::to_string(lexer_get_current_lineno()), "): error: ", message, "\n" });
+		Trace({ lexer::GetCurrentFilename(), "(", std::to_string(lexer::GetCurrentLineNo()), "): error: ", message, "\n" });
 #else
-		Trace({ lexer_get_current_filename(), ":", std::to_string(lexer_get_current_lineno()), " error: ", message, "\n" });
+		Trace({ lexer::GetCurrentFilename(), ":", std::to_string(lexer::GetCurrentLineNo()), " error: ", message, "\n" });
 #endif
 		++yynerrs;
 	}
@@ -37,9 +36,9 @@ namespace mana
 	void CompileWarning(const std::string& message)
 	{
 #if defined(MANA_TARGET_WINDOWS)
-		Trace({ lexer_get_current_filename(), "(", std::to_string(lexer_get_current_lineno()), "): warning: ", message, "\n" });
+		Trace({ lexer::GetCurrentFilename(), "(", std::to_string(lexer::GetCurrentLineNo()), "): warning: ", message, "\n" });
 #else
-		Trace({ lexer_get_current_filename(), ":", std::to_string(lexer_get_current_lineno()), " warning: ", message, "\n" });
+		Trace({ lexer::GetCurrentFilename(), ":", std::to_string(lexer::GetCurrentLineNo()), " warning: ", message, "\n" });
 #endif
 	}
 

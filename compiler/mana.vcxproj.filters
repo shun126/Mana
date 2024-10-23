@@ -104,6 +104,9 @@
     <ClInclude Include="..\runner\common\Type.h">
       <Filter>runner\common</Filter>
     </ClInclude>
+    <ClInclude Include="..\runner\Event.h">
+      <Filter>runner</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Parser.cpp" />

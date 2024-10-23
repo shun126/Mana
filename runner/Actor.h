@@ -7,6 +7,7 @@ mana (library)
 
 #pragma once
 #include "Buffer.h"
+#include "Event.h"
 #include "Stack.h"
 
 #include <bitset>
@@ -14,8 +15,6 @@ mana (library)
 #include <string>
 #include <unordered_map>
 
-#include <cfloat>
-#include <cmath>
 #include <cstdio>
 #include <cstring>
 
@@ -26,7 +25,7 @@ namespace mana
 	/*!
 	Actor class
 	*/
-	class Actor : private Noncopyable, public std::enable_shared_from_this<Actor>
+	class Actor : Noncopyable, public std::enable_shared_from_this<Actor>
 	{
 		friend class VM;
 
@@ -38,6 +37,10 @@ namespace mana
 		using Callback = int32_t (*)(const std::shared_ptr<Actor>& actor, void* parameter);
 				
 	public:
+		Actor(const Actor&) = delete;
+		Actor(Actor&&) noexcept = delete;
+		Actor& operator=(const Actor&) = delete;
+		Actor& operator=(Actor&&) noexcept = delete;
 		virtual ~Actor() = default;
 		
 		std::shared_ptr<Actor> Clone() const;
@@ -46,28 +49,28 @@ namespace mana
 		//void Deserialize(mana_stream* stream);
 				
 		bool Run();
-		bool SyncCall(const int32_t level, const char* action, const std::shared_ptr<Actor>& sender);
-		bool AsyncCall(const int32_t level, const char* action, const std::shared_ptr<Actor>& sender);
+		bool SyncCall(const int32_t priority, const char* action, const std::shared_ptr<Actor>& sender);
+		bool AsyncCall(const int32_t priority, const char* action, const std::shared_ptr<Actor>& sender);
 		
-		bool Request(const int32_t level, const char* mName, const std::shared_ptr<Actor>& sender);
-		void Rollback(const int32_t level);
+		bool Request(const int32_t priority, const char* action, const std::shared_ptr<Actor>& sender);
+		void Rollback(const int32_t priority);
 		void Restart();
 
 		const std::string_view& GetName();
 		uint32_t GetAction(const std::string_view& actionName) const;
 
-		int32_t GetCounter() const;
+		[[nodiscard]] int32_t GetCounter() const;
 		void SetCounter(const int32_t counter);
-		int32_t GetArgumentCount() const;
-		int32_t GetArgumentCountByAddress(const uint32_t address) const;
-		int32_t GetArgumentSize(const uint32_t address);
-		bool HasReturnValue(const uint32_t address);
-		int32_t GetParameterInteger(const int32_t value);
-		float GetParameterFloat(const int32_t value);
-		const char* GetParameterString(const int32_t value);
-		Actor* GetParameterActor(const int32_t value);
-		void* GetParameterPointer(const int32_t value);
-		void* GetParameterAddress(const int32_t value);
+		[[nodiscard]] int32_t GetArgumentCount() const;
+		[[nodiscard]] int32_t GetArgumentCountByAddress(const uint32_t address) const;
+		[[nodiscard]] int32_t GetArgumentSize(const uint32_t address);
+		[[nodiscard]] bool HasReturnValue(const uint32_t address);
+		[[nodiscard]] int32_t GetParameterInteger(const int32_t value);
+		[[nodiscard]] float GetParameterFloat(const int32_t value);
+		[[nodiscard]] const char* GetParameterString(const int32_t value);
+		[[nodiscard]] Actor* GetParameterActor(const int32_t value);
+		[[nodiscard]] void* GetParameterPointer(const int32_t value);
+		[[nodiscard]] void* GetParameterAddress(const int32_t value);
 		void SetReturnInteger(const int32_t value);
 		void SetReturnFloat(const float value);
 		void SetReturnString(const char* string);
@@ -76,16 +79,16 @@ namespace mana
 		void SetReturnData(const void* pointer, const int32_t size);
 
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
-		std::string_view GetActorName() const;
+		[[nodiscard]] std::string_view GetActorName() const;
 		void SetActorName(const std::string_view& name);
-		std::string GetActionName() const;
-		const std::string_view GetFunctionName() const;
+		[[nodiscard]] std::string GetActionName() const;
+		[[nodiscard]] const std::string_view GetFunctionName() const;
 #endif
 
 		std::shared_ptr<VM> GetVirtualMachine() const;
-		bool IsInit();
-		bool IsRepeat();
-		bool IsRunning();
+		[[nodiscard]] bool IsInit();
+		[[nodiscard]] bool IsRepeat();
+		[[nodiscard]] bool IsRunning();
 		void Repeat(const bool initialComplete);
 		void Again();
 		void Halt();
@@ -93,41 +96,30 @@ namespace mana
 		void yield();
 		void Accept();
 		void Refuse();
-		int32_t GetInterruptLevel() const;
-		bool IsSynchronized() const;
+		[[nodiscard]] int32_t GetInterruptPriority() const;
+		[[nodiscard]] bool IsSynchronized() const;
 		void SetSynchronized(const bool synchronized);
-		void SetSynchronizedWithLevel(const int32_t level, const bool synchronized);
+		void SetSynchronizedWithPriority(const int32_t priority, const bool synchronized);
 		
-#if 0
-		void GetData(const int32_t resouce_id, const void** buffer, size_t* size);
-		
-		fileCallback* GetFileCallback(void);
-		
-		void SetFileCallback(fileCallback* function);
-		void* GetFileCallbackParameter(int32_t level);
-		void SetFileCallbackParameter(int32_t level, void* parameter);
-		void SetRequestCallback(Callback* function);
-		void SetRequestCallbackParameter(void* parameter);
-		void SetRollbackCallback(Callback* function);
-		void SetRollbackCallbackParameter(void* parameter);
-#endif
+		[[nodiscard]] EventNameType AddRequestEvent(const std::function<void(int32_t)>& function);
+		void RemoveRequestEvent(const EventNameType eventName);
+		[[nodiscard]] EventNameType AddRollbackEvent(const std::function<void(int32_t)>& function);
+		void RemoveRollbackEvent(const EventNameType eventName);
 
-		uintptr_t GetUserData() const;
+		[[nodiscard]] uintptr_t GetUserData() const;
 		void SetUserData(const uintptr_t userData);
-		void* GetUserPointer() const;
+		[[nodiscard]] void* GetUserPointer() const;
 		void SetUserPointer(void* userPointer);
 
-		Stack& GetStack();
-		const Stack& GetStack() const;
+		[[nodiscard]] Stack& GetStack();
+		[[nodiscard]] const Stack& GetStack() const;
 
 	private:
 		void SetAction(const std::string_view& actionName, const uint32_t address);
 		//void Initialize(const ActionInfoHeader* actionInfo);
 
 	private:
-		static const uint32_t nil = static_cast<uint32_t>(~0);
-
-		static const size_t MANA_ACTOR_MAX_INTERRUPT_LEVEL = 32;
+		static constexpr uint32_t Nil = static_cast<uint32_t>(~0);
 
 		//! 割り込みテーブル
 		struct Interrupt final
@@ -159,19 +151,25 @@ namespace mana
 		{
 			union
 			{
-				int_t mIntegerValue;			//!< 整数値
-				float_t mFloatValue;			//!< 実数値
-				const char* mStringValue;		//!< 文字列
-				void* mPointerValue;			//!< 構造体
-				Actor* mActorValue;				//!< アクター
+				int_t mIntegerValue;				//!< 整数値
+				float_t mFloatValue;				//!< 実数値
+				const char* mStringValue;			//!< 文字列
+				void* mPointerValue;				//!< 構造体
+				Actor* mActorValue;					//!< アクター
 			} mValues;
-			int32_t mSize;						//!< サイズ(mPointerValue)
+			int32_t mSize;							//!< サイズ(mPointerValue)
 
 			static constexpr int32_t Invalid = 0;	/*!< 戻り値：無効 */
 			static constexpr int32_t Actor = -1;	/*!< 戻り値：アクターへの参照 */
 			static constexpr int32_t Integer = -2;	/*!< 戻り値：整数 */
 			static constexpr int32_t Float = -3;	/*!< 戻り値：小数 */
 			static constexpr int32_t String = -4;	/*!< 戻り値：文字列への参照 */
+
+			ReturnValue()
+				: mSize(0)
+			{
+				mValues.mPointerValue = nullptr;
+			}
 		};
 
 		std::weak_ptr<VM> mVM;
@@ -180,24 +178,23 @@ namespace mana
 		Stack mStack;
 		std::map<int32_t, Interrupt> mInterrupts;
 		ReturnValue mReturnValue;
-
-		void* mRequestCallbackParameter;			/*!< リクエストコールバック */
-		void* mRollbackCallbackParameter;			/*!< ロールバックコールバック */
-		Buffer mVariable;	// 将来的にBufferクラスへ
-		address_t mPc;								/*!< プログラムカウンタ */
-		int32_t mInterruptLevel;					/*!< 割り込みレベル */
-		std::bitset<8> mFlag;
+		Event<int32_t> mRequestEvent;
+		Event<int32_t> mRollbackEvent;
+		Buffer mVariable;
+		address_t mPc = Nil;						/*!< プログラムカウンタ */
+		int32_t mInterruptPriority = 0;				/*!< 割り込みレベル */
+		std::bitset<8> mFlag = 0;
 		enum class Flag : uint8_t
 		{
-			HALT,			//!< 停止フラグ
-			RUNNING,		//!< 実行フラグ
-			TOUCHED,		//!< 接触フラグ
-			HIDED,			//!< 非表示フラグ
-			REQUESTED,		//!< リクエストフラグ
-			REFUSED			//!< リクエスト禁止フラグ
+			Halt,			//!< 停止フラグ
+			Running,		//!< 実行フラグ
+			Touched,		//!< 接触フラグ
+			Hided,			//!< 非表示フラグ
+			Requested,		//!< リクエストフラグ
+			Refused			//!< リクエスト禁止フラグ
 		};
-		uintptr_t mUserData;										//!< ユーザーデータ
-		void* mUserPointer;											//!< ユーザーポインター
+		uintptr_t mUserData = 0;					//!< ユーザーデータ
+		void* mUserPointer = nullptr;				//!< ユーザーポインター
 
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
 		std::string_view mName;
@@ -231,12 +228,12 @@ namespace mana
 		static void CommandLoadInt16(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandLoadInt32(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandLoadFloat(const std::shared_ptr<VM>& vm, Actor& self);
-		static void CommandLoadReffrence(const std::shared_ptr<VM>& vm, Actor& self);
+		static void CommandLoadReference(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandStoreInt8(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandStoreInt16(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandStoreInt32(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandStoreFloat(const std::shared_ptr<VM>& vm, Actor& self);
-		static void CommandStoreReffrence(const std::shared_ptr<VM>& vm, Actor& self);
+		static void CommandStoreReference(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandBranchEqual(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandBranchNotEqual(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandBranchAway(const std::shared_ptr<VM>& vm, Actor& self);
@@ -245,9 +242,9 @@ namespace mana
 		static void CommandRequest(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandRequestWaitStarting(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandRequestWaitEnding(const std::shared_ptr<VM>& vm, Actor& self);
-		static void Commanddynamic_request(const std::shared_ptr<VM>& vm, Actor& self);
+		static void CommandDynamicRequest(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandDynamicRequestWaitStarting(const std::shared_ptr<VM>& vm, Actor& self);
-		static void Commanddynamic_request_wait_ending(const std::shared_ptr<VM>& vm, Actor& self);
+		static void CommandDynamicRequestWaitEnded(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandJoin(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandComply(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandRefuse(const std::shared_ptr<VM>& vm, Actor& self);
@@ -263,7 +260,7 @@ namespace mana
 		static void CommandMinusInteger(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandMinusFloat(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandModInteger(const std::shared_ptr<VM>& vm, Actor& self);
-		static void CommandModfloat(const std::shared_ptr<VM>& vm, Actor& self);
+		static void CommandModFloat(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandMultiplyInteger(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandMultiplyFloat(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandSubtractInteger(const std::shared_ptr<VM>& vm, Actor& self);
@@ -273,7 +270,7 @@ namespace mana
 		static void CommandLogicalAnd(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandLogicalOr(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandNot(const std::shared_ptr<VM>& vm, Actor& self);
-		static void Commandlogical_not(const std::shared_ptr<VM>& vm, Actor& self);
+		static void CommandLogicalNot(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandOr(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandShiftLeft(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandShiftRight(const std::shared_ptr<VM>& vm, Actor& self);
@@ -298,10 +295,10 @@ namespace mana
 		static void CommandRemoveData(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandCompareEqualData(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandCompareGreaterEqualData(const std::shared_ptr<VM>& vm, Actor& self);
-		static void CommandCompareGreaterdata(const std::shared_ptr<VM>& vm, Actor& self);
+		static void CommandCompareGreaterData(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandCompareNotEqualData(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandCompareLessEqualData(const std::shared_ptr<VM>& vm, Actor& self);
-		static void CommandCompareLessdata(const std::shared_ptr<VM>& vm, Actor& self);
+		static void CommandCompareLessData(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandPrint(const std::shared_ptr<VM>& vm, Actor& self);
 	};
 }
@@ -320,14 +317,14 @@ namespace mana
 #else
 /*! 引数の数を調べ、一致しない場合は警告を表示してreturnします */
 #define MANA_ASSERT_PARAMETER(P, I)	\
-	if(P->GetArgumentCount() != I){	\
-		 MANA_PRINT({ "ERROR: ", P->GetName(), ": function ", P->GetFunctionName(), " number of arguments ", std::to_string(P->GetArgumentCount()), " correct ", std::to_string(I), "\n" });\
+	if((P)->GetArgumentCount() != (I)){	\
+		 MANA_PRINT({ "ERROR: ", (P)->GetName(), ": function ", (P)->GetFunctionName(), " number of arguments ", std::to_string((P)->GetArgumentCount()), " correct ", std::to_string(I), "\n" });\
 		 return;					\
 	}
 /*! initアクション中ならば警告を表示してreturnします */
 #define MANA_ASSERT_CANT_CALL_IN_INIT_ACTION(P)			\
-	if(P->GetVirtualMachine()->IsInInitAction()){		\
-		MANA_PRINT({ "ERROR: ", P->GetName(), ": init action ", P->GetFunctionName()," can not call\n" });\
+	if((P)->GetVirtualMachine()->IsInInitAction()){		\
+		MANA_PRINT({ "ERROR: ", (P)->GetName(), ": init action ", (P)->GetFunctionName()," can not call\n" });\
 		return;											\
 	}
 #endif

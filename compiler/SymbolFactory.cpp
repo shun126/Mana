@@ -10,7 +10,6 @@ mana (compiler)
 #include "CodeGenerator.h"
 #include "DataBuffer.h"
 #include "ErrorHandler.h"
-#include "Path.h"
 #include "StringPool.h"
 #include "Symbol.h"
 #include "SyntaxNode.h"
@@ -35,21 +34,21 @@ namespace mana
 		*/		
 	}
 
-	std::shared_ptr<Symbol> SymbolFactory::CreateSymbol(const std::string_view name, const Symbol::ClassTypeId class_type)
+	std::shared_ptr<Symbol> SymbolFactory::CreateSymbol(const std::string_view name, const Symbol::ClassTypeId classType)
 	{
-		return CreateSymbolWithLevel(name, class_type, GetBlockDepth());
+		return CreateSymbolWithLevel(name, classType, GetBlockDepth());
 	}
 
-	std::shared_ptr<Symbol> SymbolFactory::CreateSymbolWithAddress(const std::string_view name, const Symbol::ClassTypeId class_type, const int32_t address)
+	std::shared_ptr<Symbol> SymbolFactory::CreateSymbolWithAddress(const std::string_view name, const Symbol::ClassTypeId classType, const int32_t address)
 	{
-		std::shared_ptr<Symbol> symbol = CreateSymbol(name, class_type);
+		std::shared_ptr<Symbol> symbol = CreateSymbol(name, classType);
 		symbol->SetAddress(address);
 		return symbol;
 	}
 
-	std::shared_ptr<Symbol> SymbolFactory::CreateSymbolWithLevel(const std::string_view name, Symbol::ClassTypeId class_type, const size_t level)
+	std::shared_ptr<Symbol> SymbolFactory::CreateSymbolWithLevel(const std::string_view name, Symbol::ClassTypeId classType, const size_t level)
 	{
-		std::shared_ptr<Symbol> symbol = std::make_shared<Symbol>(name, class_type, level);
+		std::shared_ptr<Symbol> symbol = std::make_shared<Symbol>(name, classType, level);
 		mSymbolEntries.push_back(symbol);
 		
 		Define(name, symbol);
@@ -169,19 +168,19 @@ namespace mana
 		return symbol;
 	}
 
-	std::shared_ptr<Symbol> SymbolFactory::CreateFunction(const std::string_view name, const bool isActorOrStructerOpened, const bool isModuleBlockOpened)
+	std::shared_ptr<Symbol> SymbolFactory::CreateFunction(const std::string_view name, const bool isActorOrStructOpened, const bool isModuleBlockOpened)
 	{
-		const Symbol::ClassTypeId class_type = isActorOrStructerOpened
+		const Symbol::ClassTypeId classType = isActorOrStructOpened
 			? Symbol::ClassTypeId::MemberFunction : Symbol::ClassTypeId::Function;
 
 		std::shared_ptr<Symbol> symbol = Lookup(name);
 		if (symbol == nullptr)
 		{
-			symbol = CreateSymbolWithAddress(name, class_type, 0);
-			symbol->SetClassTypeId(class_type);
+			symbol = CreateSymbolWithAddress(name, classType, 0);
+			symbol->SetClassTypeId(classType);
 			symbol->SetOverride(mModuleBlockOpened /* TODO:不要？  isModuleBlockOpened*/);
 		}
-		else if (symbol->IsOverride() == false || symbol->GetClassTypeId() != class_type)
+		else if (symbol->IsOverride() == false || symbol->GetClassTypeId() != classType)
 		{
 			CompileError({ "function '", symbol->GetName(), "' already declared" });
 		}
@@ -527,12 +526,12 @@ TODO:
 		mFunctionBlockLevel = GetBlockDepth();
 
 		// frame bufferの確保する命令を発行
-		mFrameSizeList = mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::ALLOCATE, InvalidAddress);
+		mFrameSizeList = mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::Allocate, InvalidAddress);
 
 		if (!isAction)
 		{
 			// return addressをframe bufferに保存する命令を発行
-			mCodeBuffer->AddOpecode(IntermediateLanguage::SAVE_RETURN_ADDRESS);
+			mCodeBuffer->AddOpecode(IntermediateLanguage::SaveReturnAddress);
 		}
 
 		// returnのジャンプ先リンクを初期化
@@ -548,34 +547,34 @@ TODO:
 	{
 		for (std::shared_ptr<const Symbol> symbol = function->GetParameterList(); symbol; symbol = symbol->GetNext())
 		{
-			mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::LOAD_FRAME_ADDRESS, symbol->GetAddress());
+			mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::LoadFrameAddress, symbol->GetAddress());
 
 			switch (symbol->GetTypeDescriptor()->GetId())
 			{
 			case TypeDescriptor::Id::Char:
-				mCodeBuffer->AddOpecode(IntermediateLanguage::STORE_CHAR);
+				mCodeBuffer->AddOpecode(IntermediateLanguage::StoreChar);
 				break;
 
 			case TypeDescriptor::Id::Short:
-				mCodeBuffer->AddOpecode(IntermediateLanguage::STORE_SHORT);
+				mCodeBuffer->AddOpecode(IntermediateLanguage::StoreShort);
 				break;
 
 			case TypeDescriptor::Id::Int:
-				mCodeBuffer->AddOpecode(IntermediateLanguage::STORE_INTEGER);
+				mCodeBuffer->AddOpecode(IntermediateLanguage::StoreInteger);
 				break;
 
 			case TypeDescriptor::Id::Float:
-				mCodeBuffer->AddOpecode(IntermediateLanguage::STORE_FLOAT);
+				mCodeBuffer->AddOpecode(IntermediateLanguage::StoreFloat);
 				break;
 
 			case TypeDescriptor::Id::Actor:
-				mCodeBuffer->AddOpecode(IntermediateLanguage::STORE_INTEGER);
+				mCodeBuffer->AddOpecode(IntermediateLanguage::StoreInteger);
 				break;
 
 			default:
 				if (symbol->GetTypeDescriptor()->GetMemorySize() <= 0)
 					CompileError("missing size information on parameter");
-				mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::STORE_DATA, symbol->GetTypeDescriptor()->GetMemorySize());
+				mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::StoreData, symbol->GetTypeDescriptor()->GetMemorySize());
 				break;
 			}
 		}
@@ -604,23 +603,23 @@ TODO:
 		// 直後のジャンプは削除
 		if (mReturnAddressList != InvalidAddress)
 		{
-			mCodeBuffer->Reduce(GetIntermediateLanguageProperty(IntermediateLanguage::BRA).mSize);
+			mCodeBuffer->Reduce(GetIntermediateLanguageProperty(IntermediateLanguage::Branch).mSize);
 		}
 
 		// アクションならばGetEtcは0以外
 		if (node->GetSymbol()->GetEtc() == 0)
 		{
 			// return addressをレジスタに復帰する命令を発行
-			mCodeBuffer->AddOpecode(IntermediateLanguage::LOAD_RETURN_ADDRESS);
+			mCodeBuffer->AddOpecode(IntermediateLanguage::LoadReturnAddress);
 		}
 
 		// free命令の発行
-		mFrameSizeList = mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::FREE, mFrameSizeList);
+		mFrameSizeList = mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::Free, mFrameSizeList);
 
 		// return命令の発行
 		if (IsActorOrStructerOpened())
 		{
-			mCodeBuffer->AddOpecode(IntermediateLanguage::RETURN_FROM_ACTION);
+			mCodeBuffer->AddOpecode(IntermediateLanguage::ReturnFromAction);
 		}
 		else
 		{
@@ -630,7 +629,7 @@ TODO:
 				if (!node->GetSymbol()->IsUsed())
 					CompileError("meaningless return value specification");
 			}
-			mCodeBuffer->AddOpecode(IntermediateLanguage::RETURN_FROM_FUNCTION);
+			mCodeBuffer->AddOpecode(IntermediateLanguage::ReturnFromFunction);
 		}
 
 		/*
@@ -781,7 +780,7 @@ TODO:
 			// typeがactorまたはmoduleではない場合、続行不可能
 			if (type->GetId() != TypeDescriptor::Id::Actor && type->GetId() != TypeDescriptor::Id::Module)
 			{
-				CompileError({ symbol->GetName(), " is NOT actor!" });
+				CompileError({ symbol->GetName(), " is Not actor!" });
 			}
 			else
 			{
@@ -891,7 +890,7 @@ TODO:
 			// typeがactorではない場合、続行不可能
 			if (type->GetId() != TypeDescriptor::Id::Actor && type->GetId() != TypeDescriptor::Id::Module)
 			{
-				CompileError({ symbol->GetName(), "%s is NOT actor!" });
+				CompileError({ symbol->GetName(), "%s is Not actor!" });
 			}
 			else
 			{
@@ -953,7 +952,7 @@ TODO:
 			// typeがactorではない場合、続行不可能
 			if (type->IsNot(TypeDescriptor::Id::Actor) && type->IsNot(TypeDescriptor::Id::Module))
 			{
-				CompileError({ parentSymbol->GetName(), " is NOT modeule!" });
+				CompileError({ parentSymbol->GetName(), " is Not modeule!" });
 			}
 			else
 			{
@@ -1054,7 +1053,7 @@ TODO:
 			switch (actor->GetTypeDescriptor()->GetId())
 			{
 			case TypeDescriptor::Id::Actor:
-				codeGenerator->generator_expression(actor, false);
+				codeGenerator->Expression(actor, false);
 				mCodeBuffer->AddOpecodeAndOperand(opcode, mDataBuffer->Set(action));
 				return;
 
@@ -1064,19 +1063,19 @@ TODO:
 					IntermediateLanguage code;
 					switch (opcode)
 					{
-					case IntermediateLanguage::REQ:
-						code = IntermediateLanguage::DYNAMIC_REQ;
+					case IntermediateLanguage::Request:
+						code = IntermediateLanguage::DynamicRequest;
 						break;
-					case IntermediateLanguage::REQWS:
-						code = IntermediateLanguage::DYNAMIC_REQWS;
+					case IntermediateLanguage::RequestWaitStarting:
+						code = IntermediateLanguage::DynamicRequestWaitStarting;
 						break;
-					case IntermediateLanguage::REQWE:
-						code = IntermediateLanguage::DYNAMIC_REQWE;
+					case IntermediateLanguage::RequestWaitEnded:
+						code = IntermediateLanguage::DynamicRequestWaitEnded;
 						break;
 					default:
 						goto ABORT;
 					}
-					codeGenerator->generator_expression(actor, false);
+					codeGenerator->Expression(actor, false);
 					mCodeBuffer->AddOpecodeAndOperand(code, mDataBuffer->Set(action));
 					return;
 				}
@@ -1100,9 +1099,9 @@ TODO:
 					break;
 
 			case TypeDescriptor::Id::Actor:
-				codeGenerator->generator_expression(actor, false);
-				codeGenerator->generator_expression(level, false);
-				mCodeBuffer->AddOpecode(IntermediateLanguage::JOIN);
+				codeGenerator->Expression(actor, false);
+				codeGenerator->Expression(level, false);
+				mCodeBuffer->AddOpecode(IntermediateLanguage::Join);
 				return;
 
 			default:
@@ -1244,7 +1243,7 @@ TODO:
 			if (symbol->GetBlockLevel() > 0)
 				return true;
 
-			symbol->symbol_check_undefine_recursive();
+			symbol->CheckUndefineRecursive();
 
 			return true;
 			});

@@ -12,12 +12,16 @@ namespace mana
 	/*!
 	non copyable class
 
-	class Foo : private Noncopyable {};
+	class Foo : Noncopyable {};
 	*/
     struct Noncopyable
     {
         Noncopyable() = default;
         Noncopyable(const Noncopyable&) = delete;
-        Noncopyable& operator=(const Noncopyable&) = delete;
+        Noncopyable(Noncopyable&&) noexcept = delete;
+        ~Noncopyable() = default;
+
+    	Noncopyable& operator=(const Noncopyable&) = delete;
+        Noncopyable& operator=(Noncopyable&&) noexcept = delete;
     };
 }
