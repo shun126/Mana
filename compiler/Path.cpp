@@ -7,7 +7,6 @@ mana (compiler)
 
 #include "Path.h"
 #if defined(MANA_TARGET_WINDOWS)
-#include <cstdlib>
 #include <direct.h>
 #else
 #include <limits.h>

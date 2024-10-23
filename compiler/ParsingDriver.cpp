@@ -10,7 +10,6 @@ mana (compiler)
 #include "CodeBuffer.h"
 #include "CodeGenerator.h"
 #include "DataBuffer.h"
-#include "GlobalAddressResolver.h"
 #include "GlobalSemanticAnalyzer.h"
 #include "LocalAddressResolver.h"
 #include "LocalSemanticAnalyzer.h"
@@ -42,7 +41,7 @@ namespace mana
 		);
 	}
 
-	int32_t ParsingDriver::Parse()
+	int32_t ParsingDriver::Parse() const
 	{
 		return mParser->parse();
 	}
@@ -83,7 +82,7 @@ namespace mana
 	}
 
 	//if ($1) { $$ = $1; $$->left = $2; } else { $$ = $2; }
-	std::shared_ptr<SyntaxNode> ParsingDriver::Bind(std::shared_ptr<SyntaxNode> base, std::shared_ptr<SyntaxNode> next)
+	std::shared_ptr<SyntaxNode> ParsingDriver::Bind(const std::shared_ptr<SyntaxNode>& base, const std::shared_ptr<SyntaxNode>& next)
 	{
 		std::shared_ptr<SyntaxNode> result;
 		if (base)
@@ -100,7 +99,7 @@ namespace mana
 	}
 
 	// declarations
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateNativeFunction(std::shared_ptr<SyntaxNode> returnExpression, const std::string_view identifier, std::shared_ptr<SyntaxNode> argument)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateNativeFunction(const std::shared_ptr<SyntaxNode>& returnExpression, const std::string_view& identifier, const std::shared_ptr<SyntaxNode>& argument)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::NativeFunction);
 		node->SetLeftNode(returnExpression);
@@ -109,7 +108,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateDeclareMemory(const int_t size, std::shared_ptr<SyntaxNode> allocateDeclarations)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateDeclareMemory(const int_t size, const std::shared_ptr<SyntaxNode>& allocateDeclarations)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Allocate);
 		node->SetLeftNode(allocateDeclarations);
@@ -117,7 +116,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateDeclareStaticMemory(const int_t size, std::shared_ptr<SyntaxNode> allocateDeclarations)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateDeclareStaticMemory(const int_t size, const std::shared_ptr<SyntaxNode>& allocateDeclarations)
 	{
 		std::shared_ptr<SyntaxNode> staticNode = std::make_shared<SyntaxNode>(SyntaxNode::Id::Static);
 
@@ -137,7 +136,7 @@ namespace mana
 	}
 
 	// declaration
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateConstantNode(const std::string_view identifier, const int_t value)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateConstantNode(const std::string_view& identifier, const int_t value)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::DefineConstant);
 		node->Set(identifier);
@@ -146,7 +145,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateConstantNode(const std::string_view identifier, const float_t value)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateConstantNode(const std::string_view& identifier, const float_t value)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::DefineConstant);
 		node->Set(identifier);
@@ -155,7 +154,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateConstantNode(const std::string_view identifier, const std::string_view text)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateConstantNode(const std::string_view& identifier, const std::string_view& text)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::DefineConstant);
 		node->Set(identifier);
@@ -164,13 +163,13 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateDefineNode(const std::string_view identifier, const std::string_view text)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateDefineNode(const std::string_view& identifier, const std::string_view& text)
 	{
 		// HACK: シンボルを検索した方が良い？
 		return CreateConstantNode(identifier, text);
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateUndefineNode(const std::string_view identifier)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateUndefineNode(const std::string_view& identifier)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::UndefineConstant);
 		node->Set(identifier);
@@ -178,7 +177,7 @@ namespace mana
 	}
 
 	// actor
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateActor(const std::string_view identifier, std::shared_ptr<SyntaxNode> action)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateActor(const std::string_view& identifier, const std::shared_ptr<SyntaxNode>& action)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Actor);
 		node->Set(identifier);
@@ -186,7 +185,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreatePhantom(const std::string_view identifier, std::shared_ptr<SyntaxNode> action)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreatePhantom(const std::string_view& identifier, const std::shared_ptr<SyntaxNode>& action)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Phantom);
 		node->Set(identifier);
@@ -194,7 +193,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateModule(const std::string_view identifier, std::shared_ptr<SyntaxNode> action)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateModule(const std::string_view& identifier, const std::shared_ptr<SyntaxNode>& action)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Module);
 		node->Set(identifier);
@@ -203,7 +202,7 @@ namespace mana
 	}
 
 	// action
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateAction(const std::string_view identifier, std::shared_ptr<SyntaxNode> block)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateAction(const std::string_view& identifier, const std::shared_ptr<SyntaxNode>& block)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Action);
 		node->SetLeftNode(block);
@@ -212,7 +211,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateExtend(const std::string_view identifier)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateExtend(const std::string_view& identifier)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Extend);
 		node->Set(identifier);
@@ -220,7 +219,7 @@ namespace mana
 	}
 
 	// struct
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateStruct(const std::string_view identifier, std::shared_ptr<SyntaxNode> member)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateStruct(const std::string_view& identifier, const std::shared_ptr<SyntaxNode>& member)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Struct);
 		node->Set(identifier);
@@ -229,7 +228,7 @@ namespace mana
 	}
 
 	// function
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateInternalFunction(std::shared_ptr<SyntaxNode> returnExpression, const std::string_view identifier, std::shared_ptr<SyntaxNode> argument, std::shared_ptr<SyntaxNode> statement)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateInternalFunction(const std::shared_ptr<SyntaxNode>& returnExpression, const std::string_view& identifier, const std::shared_ptr<SyntaxNode>& argument, const std::shared_ptr<SyntaxNode>& statement)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::DeclareFunction);
 		node->Set(identifier);
@@ -256,7 +255,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateTypeDescription(const std::string_view identifier)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateTypeDescription(const std::string_view& identifier)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::TypeDescription);
 		node->Set(identifier);
@@ -271,7 +270,7 @@ namespace mana
 	}
 
 	// block
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateBlock(std::shared_ptr<SyntaxNode> statement)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateBlock(const std::shared_ptr<SyntaxNode>& statement)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Block);
 		node->SetLeftNode(statement);
@@ -279,7 +278,7 @@ namespace mana
 	}
 
 	// statement
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateIf(std::shared_ptr<SyntaxNode> condition, std::shared_ptr<SyntaxNode> statementIfTrue, std::shared_ptr<SyntaxNode> statementIfFalse)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateIf(const std::shared_ptr<SyntaxNode>& condition, const std::shared_ptr<SyntaxNode>& statementIfTrue, const std::shared_ptr<SyntaxNode>& statementIfFalse)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::If);
 		node->SetLeftNode(statementIfTrue);
@@ -288,7 +287,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateSwitch(std::shared_ptr<SyntaxNode> condition, std::shared_ptr<SyntaxNode> statement)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateSwitch(const std::shared_ptr<SyntaxNode>& condition, const std::shared_ptr<SyntaxNode>& statement)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Switch);
 		node->SetLeftNode(condition);
@@ -296,7 +295,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateWhile(std::shared_ptr<SyntaxNode> condition, std::shared_ptr<SyntaxNode> statement)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateWhile(const std::shared_ptr<SyntaxNode>& condition, const std::shared_ptr<SyntaxNode>& statement)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::While);
 		node->SetLeftNode(condition);
@@ -304,7 +303,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateDoWhile(std::shared_ptr<SyntaxNode> statement, std::shared_ptr<SyntaxNode> condition)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateDoWhile(const std::shared_ptr<SyntaxNode>& statement, const std::shared_ptr<SyntaxNode>& condition)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Do);
 		node->SetLeftNode(statement);
@@ -312,7 +311,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateFor(std::shared_ptr<SyntaxNode> initializeStatement, std::shared_ptr<SyntaxNode> condition, std::shared_ptr<SyntaxNode> iterationExpression, std::shared_ptr<SyntaxNode> statement)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateFor(const std::shared_ptr<SyntaxNode>& initializeStatement, const std::shared_ptr<SyntaxNode>& condition, const std::shared_ptr<SyntaxNode>& iterationExpression, const std::shared_ptr<SyntaxNode>& statement)
 	{
 		std::shared_ptr<SyntaxNode> forNode = std::make_shared<SyntaxNode>(SyntaxNode::Id::For);
 		forNode->SetLeftNode(condition);
@@ -345,7 +344,7 @@ namespace mana
 		*/
 }
 #endif
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateFor(std::shared_ptr<SyntaxNode> declareVariable, std::shared_ptr<SyntaxNode> initializeStatement, std::shared_ptr<SyntaxNode> condition, std::shared_ptr<SyntaxNode> iterationExpression, std::shared_ptr<SyntaxNode> statement)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateFor(const std::shared_ptr<SyntaxNode>& declareVariable, const std::shared_ptr<SyntaxNode>& initializeStatement, const std::shared_ptr<SyntaxNode>& condition, const std::shared_ptr<SyntaxNode>& iterationExpression, const std::shared_ptr<SyntaxNode>& statement)
 	{
 		MANA_ASSERT(declareVariable->GetRightNode() != nullptr);
 		//MANA_ASSERT(declareVariable->GetRightNode()->GetString());
@@ -364,42 +363,42 @@ namespace mana
 		return blockNode;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateLoop(std::shared_ptr<SyntaxNode> statement)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateLoop(const std::shared_ptr<SyntaxNode>& statement)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Loop);
 		node->SetLeftNode(statement);
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateLock(std::shared_ptr<SyntaxNode> statement)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateLock(const std::shared_ptr<SyntaxNode>& statement)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Lock);
 		node->SetLeftNode(statement);
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateGoto(const std::string_view labelName)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateGoto(const std::string_view& labelName)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Goto);
 		node->Set(labelName);
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateLabel(const std::string_view labelName)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateLabel(const std::string_view& labelName)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Label);
 		node->Set(labelName);
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateReturn(std::shared_ptr<SyntaxNode> expression)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateReturn(const std::shared_ptr<SyntaxNode>& expression)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Return);
 		node->SetLeftNode(expression);
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateRollback(std::shared_ptr<SyntaxNode> expression)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateRollback(const std::shared_ptr<SyntaxNode>& expression)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Rollback);
 		node->SetLeftNode(expression);
@@ -442,14 +441,14 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreatePrint(std::shared_ptr<SyntaxNode> argument)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreatePrint(const std::shared_ptr<SyntaxNode>& argument)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Print);
 		node->SetLeftNode(argument);
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateRequest(std::shared_ptr<SyntaxNode> priority, std::shared_ptr<SyntaxNode> expression, const std::string_view actionName)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateRequest(const std::shared_ptr<SyntaxNode>& priority, const std::shared_ptr<SyntaxNode>& expression, const std::string_view& actionName)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Request);
 		node->SetLeftNode(priority);
@@ -458,7 +457,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateJoin(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateJoin(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Join);
 		node->SetLeftNode(leftHand);
@@ -467,7 +466,7 @@ namespace mana
 	}
 
 	// expression
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateAssign(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateAssign(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Assign);
 		node->SetLeftNode(leftHand);
@@ -475,7 +474,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateLogicalAnd(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateLogicalAnd(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::LogicalAnd);
 		node->SetLeftNode(leftHand);
@@ -483,7 +482,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateLogicalOr(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateLogicalOr(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::LogicalOr);
 		node->SetLeftNode(leftHand);
@@ -491,7 +490,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateAdd(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateAdd(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Add);
 		node->SetLeftNode(leftHand);
@@ -499,7 +498,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateSub(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateSub(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Sub);
 		node->SetLeftNode(leftHand);
@@ -507,7 +506,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateMul(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateMul(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Mul);
 		node->SetLeftNode(leftHand);
@@ -515,7 +514,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateDiv(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateDiv(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Div);
 		node->SetLeftNode(leftHand);
@@ -523,7 +522,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateMod(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateMod(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Rem);
 		node->SetLeftNode(leftHand);
@@ -531,7 +530,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreatePow(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreatePow(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Pow);
 		node->SetLeftNode(leftHand);
@@ -539,7 +538,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateAnd(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateAnd(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::And);
 		node->SetLeftNode(leftHand);
@@ -547,7 +546,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateOr(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateOr(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Or);
 		node->SetLeftNode(leftHand);
@@ -555,7 +554,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateXor(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateXor(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Xor);
 		node->SetLeftNode(leftHand);
@@ -563,7 +562,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateLeftShift(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateLeftShift(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::LeftShift);
 		node->SetLeftNode(leftHand);
@@ -571,7 +570,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateRightShift(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateRightShift(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::RightShift);
 		node->SetLeftNode(leftHand);
@@ -579,7 +578,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateGT(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateGreater(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Greater);
 		node->SetLeftNode(leftHand);
@@ -587,7 +586,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateGE(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateGreaterEqual(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::GreaterEqual);
 		node->SetLeftNode(leftHand);
@@ -595,7 +594,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateLS(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateLess(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Less);
 		node->SetLeftNode(leftHand);
@@ -603,7 +602,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateLE(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateLessEqual(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::LessEqual);
 		node->SetLeftNode(leftHand);
@@ -611,7 +610,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateEQ(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateEqual(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Equal);
 		node->SetLeftNode(leftHand);
@@ -619,7 +618,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateNE(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateNotEqual(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::NotEqual);
 		node->SetLeftNode(leftHand);
@@ -627,7 +626,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateAddAndAssign(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateAddAndAssign(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand)
 	{
 		std::shared_ptr<SyntaxNode> node = CreateAssign(
 			leftHand,
@@ -636,7 +635,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateSubAndAssign(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateSubAndAssign(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand)
 	{
 		std::shared_ptr<SyntaxNode> node = CreateAssign(
 			leftHand,
@@ -645,7 +644,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateMulAndAssign(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateMulAndAssign(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand)
 	{
 		std::shared_ptr<SyntaxNode> node = CreateAssign(
 			leftHand,
@@ -654,7 +653,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateDivAndAssign(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateDivAndAssign(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand)
 	{
 		std::shared_ptr<SyntaxNode> node = CreateAssign(
 			leftHand,
@@ -663,7 +662,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateModAndAssign(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateModAndAssign(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand)
 	{
 		std::shared_ptr<SyntaxNode> node = CreateAssign(
 			leftHand,
@@ -672,7 +671,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreatePowAndAssign(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreatePowAndAssign(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand)
 	{
 		std::shared_ptr<SyntaxNode> node = CreateAssign(
 			leftHand,
@@ -681,7 +680,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateAndAndAssign(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateAndAndAssign(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand)
 	{
 		std::shared_ptr<SyntaxNode> node = CreateAssign(
 			leftHand,
@@ -690,7 +689,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateOrAndAssign(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateOrAndAssign(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand)
 	{
 		std::shared_ptr<SyntaxNode> node = CreateAssign(
 			leftHand,
@@ -699,7 +698,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateXorAndAssign(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateXorAndAssign(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand)
 	{
 		std::shared_ptr<SyntaxNode> node = CreateAssign(
 			leftHand,
@@ -708,7 +707,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateLeftShiftAndAssign(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateLeftShiftAndAssign(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand)
 	{
 		std::shared_ptr<SyntaxNode> node = CreateAssign(
 			leftHand,
@@ -717,7 +716,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateRightShiftAndAssign(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> rightHand)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateRightShiftAndAssign(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand)
 	{
 		std::shared_ptr<SyntaxNode> node = CreateAssign(
 			leftHand,
@@ -726,7 +725,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateIncrement(std::shared_ptr<SyntaxNode> expression)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateIncrement(const std::shared_ptr<SyntaxNode>& expression)
 	{
 		std::shared_ptr<SyntaxNode> node = CreateAssign(
 			expression,
@@ -735,7 +734,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateDecrement(std::shared_ptr<SyntaxNode> expression)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateDecrement(const std::shared_ptr<SyntaxNode>& expression)
 	{
 		std::shared_ptr<SyntaxNode> node = CreateAssign(
 			expression,
@@ -744,7 +743,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateExpressionIf(std::shared_ptr<SyntaxNode> condition, std::shared_ptr<SyntaxNode> trueStatement, std::shared_ptr<SyntaxNode> falseStatement)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateExpressionIf(const std::shared_ptr<SyntaxNode>& condition, const std::shared_ptr<SyntaxNode>& trueStatement, const std::shared_ptr<SyntaxNode>& falseStatement)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::ExpressionIf);
 		node->SetLeftNode(trueStatement);
@@ -754,35 +753,35 @@ namespace mana
 	}
 
 	// primary
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateNegative(std::shared_ptr<SyntaxNode> expression)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateNegative(const std::shared_ptr<SyntaxNode>& expression)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Neg);
 		node->SetLeftNode(expression);
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateNot(std::shared_ptr<SyntaxNode> expression)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateNot(const std::shared_ptr<SyntaxNode>& expression)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::LogicalNot);
 		node->SetLeftNode(expression);
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateComplement1(std::shared_ptr<SyntaxNode> expression)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateComplement1(const std::shared_ptr<SyntaxNode>& expression)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Not);
 		node->SetLeftNode(expression);
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateSizeOf(std::shared_ptr<SyntaxNode> variableType)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateSizeOf(const std::shared_ptr<SyntaxNode>& variableType)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Sizeof);
 		node->SetRightNode(variableType);
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateCall(const std::string_view identifier, std::shared_ptr<SyntaxNode> argument)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateCall(const std::string_view& identifier, const std::shared_ptr<SyntaxNode>& argument)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Call);
 		node->Set(identifier);
@@ -844,7 +843,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateString(const std::string_view text)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateString(const std::string_view& text)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::String);
 		const int_t offset = static_cast<int_t>(GetDataBuffer()->Set(text));
@@ -854,7 +853,7 @@ namespace mana
 	}
 
 	// left hand
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateMemberVariable(std::shared_ptr<SyntaxNode> leftHand, const std::string_view identifier)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateMemberVariable(const std::shared_ptr<SyntaxNode>& leftHand, const std::string_view& identifier)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::MemberVariable);
 		node->SetLeftNode(leftHand);
@@ -862,7 +861,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateMemberFunction(std::shared_ptr<SyntaxNode> leftHand, const std::string_view identifier, std::shared_ptr<SyntaxNode> argument)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateMemberFunction(const std::shared_ptr<SyntaxNode>& leftHand, const std::string_view& identifier, const std::shared_ptr<SyntaxNode>& argument)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::MemberFunction);
 		node->SetLeftNode(leftHand);
@@ -871,7 +870,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateArray(std::shared_ptr<SyntaxNode> leftHand, std::shared_ptr<SyntaxNode> expression)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateArray(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& expression)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Array);
 		node->SetLeftNode(leftHand);
@@ -879,7 +878,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateIdentifier(const std::string_view identifier)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateIdentifier(const std::string_view& identifier)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Identifier);
 		node->Set(identifier);
@@ -887,7 +886,7 @@ namespace mana
 	}
 
 	// cases
-	std::shared_ptr<SyntaxNode> ParsingDriver::BindCaseNode(std::shared_ptr<SyntaxNode> next, std::shared_ptr<SyntaxNode> kase)
+	std::shared_ptr<SyntaxNode> ParsingDriver::BindCaseNode(const std::shared_ptr<SyntaxNode>& next, const std::shared_ptr<SyntaxNode>& kase)
 	{
 		std::shared_ptr<SyntaxNode> result = kase;
 		result->SetNextNode(next);
@@ -895,7 +894,7 @@ namespace mana
 	}
 
 	// case
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateSwitchCaseNode(std::shared_ptr<SyntaxNode> expression, std::shared_ptr<SyntaxNode> statements)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateSwitchCaseNode(const std::shared_ptr<SyntaxNode>& expression, const std::shared_ptr<SyntaxNode>& statements)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Case);
 		node->SetLeftNode(expression);
@@ -903,7 +902,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateSwitchDefaultNode(std::shared_ptr<SyntaxNode> statements)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateSwitchDefaultNode(const std::shared_ptr<SyntaxNode>& statements)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Default);
 		node->SetBodyNode(statements);
@@ -911,14 +910,14 @@ namespace mana
 	}
 
 	// arg_calls
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateArgumentNode(std::shared_ptr<SyntaxNode> expression)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateArgumentNode(const std::shared_ptr<SyntaxNode>& expression)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::CallArgument);
 		node->SetLeftNode(expression);
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateArgumentNode(std::shared_ptr<SyntaxNode> nextArgument, std::shared_ptr<SyntaxNode> expression)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateArgumentNode(const std::shared_ptr<SyntaxNode>& nextArgument, const std::shared_ptr<SyntaxNode>& expression)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::CallArgument);
 		node->SetLeftNode(nextArgument);
@@ -927,14 +926,14 @@ namespace mana
 	}
 
 	//arg_decls
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateDeclareArgumentNode(std::shared_ptr<SyntaxNode> declareVariable)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateDeclareArgumentNode(const std::shared_ptr<SyntaxNode>& declareVariable)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::DeclareArgument);
 		node->SetLeftNode(declareVariable);
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateDeclareArgumentNode(std::shared_ptr<SyntaxNode> nextDeclareArgument, std::shared_ptr<SyntaxNode> declareVariable)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateDeclareArgumentNode(const std::shared_ptr<SyntaxNode>& nextDeclareArgument, const std::shared_ptr<SyntaxNode>& declareVariable)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::DeclareArgument);
 		node->SetLeftNode(declareVariable);
@@ -943,7 +942,7 @@ namespace mana
 	}
 
 	// variable_decl
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateDeclareVariableNode(std::shared_ptr<SyntaxNode> variableType, std::shared_ptr<SyntaxNode> declarator, std::shared_ptr<SyntaxNode> expression)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateDeclareVariableNode(const std::shared_ptr<SyntaxNode>& variableType, const std::shared_ptr<SyntaxNode>& declarator, const std::shared_ptr<SyntaxNode>& expression)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::DeclareVariable);
 		node->SetLeftNode(variableType);
@@ -975,14 +974,14 @@ namespace mana
 	}
 
 	// declarator
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateDeclaratorNode(const std::string_view identifier)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateDeclaratorNode(const std::string_view& identifier)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Declarator);
 		node->Set(identifier);
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateDeclaratorNode(const std::string_view identifier, std::shared_ptr<SyntaxNode> variableSizeNode)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateDeclaratorNode(const std::string_view& identifier, const std::shared_ptr<SyntaxNode>& variableSizeNode)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Declarator);
 		node->Set(identifier);
@@ -998,7 +997,7 @@ namespace mana
 		return node;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CreateVariableSizeNode(const std::string_view identifier)
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateVariableSizeNode(const std::string_view& identifier)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::VariableSize);
 		node->Set(identifier);

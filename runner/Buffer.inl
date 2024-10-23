@@ -6,7 +6,6 @@ mana (library)
 */
 
 #pragma once
-#include "Buffer.h"
 
 namespace mana
 {
@@ -86,7 +85,7 @@ namespace mana
 	{
 		MANA_ASSERT(index < mUsedSize);
 		void* address = static_cast<uint8_t*>(mBuffer.get()) + (index);
-		return reinterpret_cast<T*>(address);
+		return static_cast<T*>(address);
 	}
 
 	template<typename T>
@@ -94,7 +93,7 @@ namespace mana
 	{
 		MANA_ASSERT(0 < index && index <= mUsedSize);
 		void* address = static_cast<uint8_t*>(mBuffer.get()) + (mUsedSize - index);
-		return reinterpret_cast<T*>(address);
+		return static_cast<T*>(address);
 	}
 
 	inline address_t Buffer::GetSize() const
