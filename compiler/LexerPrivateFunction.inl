@@ -1,7 +1,6 @@
 /*!
 mana (compiler)
 
-@file	LexerPrivateFunction.h
 @author	Shun Moriya
 @date	2017-
 */
@@ -25,7 +24,7 @@ namespace mana
 		}
 	}
 
-	bool Lexer::Open(const std::string_view filename, const bool check)
+	bool Lexer::Open(const std::string_view& filename, const bool check)
 	{
 		char path[_MAX_PATH];
 		char drive[_MAX_DRIVE];
@@ -33,7 +32,7 @@ namespace mana
 		char fname[_MAX_FNAME];
 		char ext[_MAX_EXT];
 
-		if (mana::fullpath(path, filename.data(), _MAX_PATH) == NULL)
+		if (mana::fullpath(path, filename.data(), _MAX_PATH) == nullptr)
 		{
 			if (mCurrentPath.empty())
 				mana::CompileError({ "unable to open \"", path, "\"" });
@@ -59,7 +58,7 @@ namespace mana
 			#endif
 			*/
 
-		if ((check == true) && (mLexer->IsOpened(path) == false))
+		if (check == true && LexerInstance->IsOpened(path) == false)
 			return true;
 
 #if defined(__STDC_WANT_SECURE_LIB__)
@@ -83,7 +82,7 @@ namespace mana
 		// save lineno
 		if (!mContext.empty())
 		{
-			mContext.top()->mLineno = yylineno;
+			mContext.top()->mLineNo = yylineno;
 		}
 
 		// switch!
@@ -95,7 +94,7 @@ namespace mana
 		std::unique_ptr<Context> nextContext = std::make_unique<Context>();
 		nextContext->mBufferState = newBufferState;
 		nextContext->mPath = pathPtr;
-		nextContext->mLineno = yylineno;
+		nextContext->mLineNo = yylineno;
 		mContext.push(std::move(nextContext));
 
 		// set currect directory
@@ -106,7 +105,7 @@ namespace mana
 		return true;
 	}
 
-	bool Lexer::IsOpened(const std::string_view path)
+	bool Lexer::IsOpened(const std::string_view& path)
 	{
 		if (mPathSet.find(path) == mPathSet.end())
 		{
@@ -138,7 +137,7 @@ namespace mana
 		{
 			yy_switch_to_buffer(mContext.top()->mBufferState);
 			mCurrentPath = mContext.top()->mPath;
-			yylineno = mContext.top()->mLineno;
+			yylineno = mContext.top()->mLineNo;
 
 			// set currect directory
 			mana::splitpath(mCurrentPath.data(), drive, sizeof(drive), dir, sizeof(dir), fname, sizeof(fname), ext, sizeof(ext));
@@ -159,7 +158,7 @@ namespace mana
 		mCurrentPath = filename;
 	}
 
-	mana::int_t Lexer::binary(const char* text)
+	mana::int_t Lexer::Binary(const char* text)
 	{
 		text += 2;		// skip '0b'
 		const char* sp = text;

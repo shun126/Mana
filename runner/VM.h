@@ -17,23 +17,27 @@ namespace mana
 	class Actor;
 	class Plugin;
 
-    class VM : private Noncopyable, public std::enable_shared_from_this<VM>
+    class VM final : Noncopyable, public std::enable_shared_from_this<VM>
 	{
 		friend class Actor;
 
-		static const uint32_t nil = static_cast<uint32_t>(~0);
+		static constexpr uint32_t Nil = static_cast<uint32_t>(~0);
 
 	public:
-		using ExternalFuntionType = std::function<void(const std::shared_ptr<Actor>&)>;
+		using ExternalFunctionType = std::function<void(const std::shared_ptr<Actor>&)>;
 
 	public:
 		VM();
-		virtual ~VM();
+		VM(const VM&) = delete;
+		VM(VM&&) noexcept = delete;
+		VM& operator=(const VM&) = delete;
+		VM& operator=(VM&&) noexcept = delete;
+		~VM();
 		
 		void LoadPlugin(const std::string& filename);
-		void LoadPlugins(const std::string& directoryname);
+		void LoadPlugins(const std::string& directoryName);
 
-		void RegistFunction(const std::string& name, ExternalFuntionType function);
+		void RegisterFunction(const std::string& name, const ExternalFunctionType& function);
 
 #if 0
 		void Serialize(mana_stream* stream);
@@ -45,46 +49,46 @@ namespace mana
 				
 		void Restart();
 		bool Run();
-		bool IsRunning() const;
+		[[nodiscard]] bool IsRunning() const;
 
-		void Execute(std::function<void()> function);
+		void Execute(const std::function<void()>& function);
 
-		void RequestAll(const uint32_t level, const char* actionName, const std::shared_ptr<Actor>& sender);
-		bool Request(const uint32_t level, const char* actorName, const char* actionName, const std::shared_ptr<Actor>& sender);
-		void yield();
-		const std::shared_ptr<Actor>& GetActor(const char* name);
-		const std::string_view& GetActorName(const std::shared_ptr<Actor>& actor) const;
-		std::shared_ptr<Actor> CloneActor(const std::shared_ptr<Actor>& actor, const char* newName);
-		std::shared_ptr<Actor> CreateActor(const char* name, const char* newName);
-		std::shared_ptr<Actor> CreateActorFromPhantom(const char* name, const char* newName);
-		bool IsInInitAction() const;
-		bool IsFinishInitAction() const;
+		void RequestAll(const int32_t level, const char* actionName, const std::shared_ptr<Actor>& sender) const;
+		bool Request(const int32_t level, const char* actorName, const char* actionName, const std::shared_ptr<Actor>& sender);
+		void YieldAll();
+		[[nodiscard]] const std::shared_ptr<Actor>& GetActor(const char* name);
+		[[nodiscard]] const std::string_view& GetActorName(const std::shared_ptr<Actor>& actor) const;
+		[[nodiscard]] std::shared_ptr<Actor> CloneActor(const std::shared_ptr<Actor>& actor, const char* newName);
+		[[nodiscard]] std::shared_ptr<Actor> CreateActor(const char* name, const char* newName);
+		[[nodiscard]] std::shared_ptr<Actor> CreateActorFromPhantom(const char* name, const char* newName);
+		[[nodiscard]] bool IsInInitAction() const;
+		[[nodiscard]] bool IsFinishInitAction() const;
 		
 		void SetSystemRequest(const bool enable);
-		bool IsSystemRequestEnabled() const;
+		[[nodiscard]] bool IsSystemRequestEnabled() const;
 		
-		uint32_t GetFrameCounter() const;
-		float_t GetDeltaTime() const;
-		bool IsFrameChanged() const;
+		[[nodiscard]] uint32_t GetFrameCounter() const;
+		[[nodiscard]] float_t GetDeltaTime() const;
+		[[nodiscard]] bool IsFrameChanged() const;
 		
 	private:
-		int8_t GetInt8FromMemory(const uint32_t address) const;
-		uint8_t GetUint8FromMemory(const uint32_t address) const;
-		int16_t GetInt16FromMemory(const uint32_t address) const;
-		uint16_t GetUint16FromMemory(const uint32_t address) const;
-		int32_t GetInt32FromMemory(const uint32_t address) const;
-		uint32_t GetUint32FromMemory(const uint32_t address) const;
-		float GetFloatFromMemory(const uint32_t address) const;
-		const char* GetStringFromMemory(const uint32_t address) const;
-		//char* GetStringFromData(const uint32_t address);
-		int32_t GetOpecode(const uint32_t address) const;
+		[[nodiscard]] int8_t GetInt8FromMemory(const uint32_t address) const;
+		[[nodiscard]] uint8_t GetUint8FromMemory(const uint32_t address) const;
+		[[nodiscard]] int16_t GetInt16FromMemory(const uint32_t address) const;
+		[[nodiscard]] uint16_t GetUint16FromMemory(const uint32_t address) const;
+		[[nodiscard]] int32_t GetInt32FromMemory(const uint32_t address) const;
+		[[nodiscard]] uint32_t GetUint32FromMemory(const uint32_t address) const;
+		[[nodiscard]] float GetFloatFromMemory(const uint32_t address) const;
+		[[nodiscard]] const char* GetStringFromMemory(const uint32_t address) const;
+		//[[nodiscard]] char* GetStringFromData(const uint32_t address);
+		[[nodiscard]] int32_t GetOpecode(const uint32_t address) const;
 
 	private:
-		ExternalFuntionType FindFunction(const std::string& functionName) const;
-		Buffer& GetGlobalVariables() noexcept;
-		const Buffer& GetGlobalVariables() const noexcept;
-		Buffer& GetStaticVariables() noexcept;
-		const Buffer& GetStaticVariables() const noexcept;
+		[[nodiscard]] ExternalFunctionType FindFunction(const std::string& functionName) const;
+		[[nodiscard]] Buffer& GetGlobalVariables() noexcept;
+		[[nodiscard]] const Buffer& GetGlobalVariables() const noexcept;
+		[[nodiscard]] Buffer& GetStaticVariables() noexcept;
+		[[nodiscard]] const Buffer& GetStaticVariables() const noexcept;
 
 	private:
 		std::shared_ptr<Plugin> mPlugin;
@@ -93,7 +97,7 @@ namespace mana
 		const uint8_t* mInstructionPool = nullptr;
 		const char* mConstantPool = nullptr;
 		//std::vector<,*> m,Array;					//!< , オブジェクトへの配列
-		std::unordered_map<std::string, ExternalFuntionType> mFunctionHash;
+		std::unordered_map<std::string, ExternalFunctionType> mFunctionHash;
 		std::unordered_map<std::string_view, std::shared_ptr<Actor>> mActorHash;		//!< , オブジェクトへの連想配列
 		std::unordered_map<std::string_view, const ActorInfoHeader*> mPhantomHash;		//!< phantomを表すmana_actor オブジェクトへの連想配列
 		Buffer mGlobalVariables;

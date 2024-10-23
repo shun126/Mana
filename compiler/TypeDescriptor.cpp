@@ -17,7 +17,7 @@ namespace mana
 	{
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
 		static uint32_t count = 0;
-		snprintf(magic, sizeof(magic), "T%d", count);
+		snprintf(mMagic, sizeof(mMagic), "T%d", count);
 		++count;
 #endif
 	}
@@ -175,7 +175,7 @@ namespace mana
 #endif
 	}
 
-	const std::string_view TypeDescriptor::GetName() const
+	std::string_view TypeDescriptor::GetName() const
 	{
 		return mName;
 	}

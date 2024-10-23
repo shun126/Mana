@@ -16,7 +16,7 @@ namespace mana
 {
 	class CodeGenerator;
 
-	class LocalAddressResolver final : private Noncopyable
+	class LocalAddressResolver final : Noncopyable
 	{
 	public:
 		enum class JumpChainStatus : uint8_t

@@ -410,6 +410,7 @@
     <ClInclude Include="..\runner\common\Stopwatch.h" />
     <ClInclude Include="..\runner\common\String.h" />
     <ClInclude Include="..\runner\common\Type.h" />
+    <ClInclude Include="..\runner\Event.h" />
     <ClInclude Include="..\runner\Function.h" />
     <ClInclude Include="..\runner\Mana.h" />
     <ClInclude Include="..\runner\Plugin.h" />

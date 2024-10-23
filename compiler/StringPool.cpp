@@ -10,11 +10,18 @@ mana (compiler)
 
 namespace mana
 {
+	static constexpr size_t AllocatePageSize = 4096;
+
 	StringPool::StringPool()
 		: mBuffer(nullptr, std::free)
 	{
 	}
 
+	/**
+	 * Searches for a string and returns a registered address. Returns InvalidAddress when searching for an unregistered string.
+	 * @param[in]	text	String to search for
+	 * @return				Registered address
+	 */
 	address_t StringPool::Find(const std::string_view& text) const noexcept
 	{
 		if (!text.empty())
@@ -28,31 +35,36 @@ namespace mana
 		return InvalidAddress;
 	}
 
-	const std::string_view StringPool::Text(const address_t address) const
+	/**
+	 * Get the string pointed to by the address. If an out-of-range address is specified, a range_error exception is thrown.
+	 * @param[in]	address	Registered address
+	 * @return		String pointed to by address
+	 */
+	std::string_view StringPool::Text(const address_t address) const
 	{
 		if (address == InvalidAddress)
-			return std::string_view();
+			return "";
 
 		if (address >= mUsedSize)
 			throw std::range_error("out of range");
 
-		return std::string_view(static_cast<const char*>(&mBuffer.get()[address]));
+		return { static_cast<const char*>(&mBuffer.get()[address]) };
 	}
 
-	const std::string_view StringPool::Get(const std::string_view text) const
+	std::string_view StringPool::Get(const std::string_view& text) const
 	{
 		return Text(Find(text));
 	}
 
-	const std::string_view StringPool::Set(const std::string_view text)
+	std::string_view StringPool::Set(const std::string_view& text)
 	{
 		address_t address = Find(text);
 		if (address == InvalidAddress)
 		{
-			address_t length = ToAddress(text.length() + 1);
+			const address_t length = ToAddress(text.length() + 1);
 			if (mUsedSize + length >= mAllocatedSize)
 			{
-				mAllocatedSize += (mUsedSize + length + 4096);
+				mAllocatedSize += (mUsedSize + length + AllocatePageSize);
 
 				auto* newBuffer = static_cast<char*>(std::realloc(mBuffer.release(), mAllocatedSize));
 				if (newBuffer == nullptr)
