@@ -70,7 +70,7 @@ namespace mana
 	{
 		switch (mTcons)
 		{
-	#if 0
+#if 0
 		case Id::Char:
 			if(typeDescriptor->mTcons == Id::Char)
 				return true;
@@ -86,10 +86,10 @@ namespace mana
 				break;
 			}
 			break;
-	#else
+#else
 		case Id::Char:
 		case Id::Short:
-	#endif
+#endif
 		case Id::Int:
 			switch(typeDescriptor->mTcons)
 			{

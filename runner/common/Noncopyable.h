@@ -10,9 +10,9 @@ mana (compiler/library)
 namespace mana
 {
 	/*!
-	non copyable class
+	non-copyable class.
 
-	class Foo : Noncopyable {};
+	class Foo : private Noncopyable {};
 	*/
     struct Noncopyable
     {

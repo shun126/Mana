@@ -35,28 +35,28 @@ namespace mana
 
 	inline void OutputStream::Load(const std::string& filename)
 	{
-		std::ifstream infile(filename, std::ios::in | std::ios::ate);
+		std::ifstream infile(filename, std::ios::in | std::ios::binary);
 
 		if (!infile.is_open())
 			throw std::runtime_error("file open failed");
 
-		//infile.seekg(std::fstream::end);
-		const size_t filesize = static_cast<size_t>(infile.tellg());
+		infile.seekg(0, std::fstream::end);
+		const size_t fileSize = static_cast<size_t>(infile.tellg());
 		infile.clear();
 		infile.seekg(0, std::fstream::beg);
 
-		ResizeBuffer(filesize);
+		ResizeBuffer(fileSize);
 
 		char* weakBuffer = reinterpret_cast<char*>(mBuffer.get());
-		infile.read(weakBuffer, filesize);
+		infile.read(weakBuffer, fileSize);
 		//	throw std::runtime_error("file read error");
 
-		mUsedSize += filesize;
+		mUsedSize += fileSize;
 	}
 
 	inline void OutputStream::Save(const std::string& filename) const
 	{
-		std::ofstream outfile(filename, std::ios::out);
+		std::ofstream outfile(filename, std::ios::out | std::ios::binary);
 		if (!outfile.is_open())
 			throw std::runtime_error("file open failed");
 
