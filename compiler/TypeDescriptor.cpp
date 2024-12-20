@@ -17,7 +17,7 @@ namespace mana
 	{
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
 		static uint32_t count = 0;
-		snprintf(mMagic, sizeof(mMagic), "T%d", count);
+		snprintf(mMagic, sizeof(mMagic), "T%u", count);
 		++count;
 #endif
 	}
