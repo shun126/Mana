@@ -43,8 +43,9 @@ namespace mana
 		void Serialize(mana_stream* stream);
 		void Deserialize(mana_stream* stream);
 #endif
-		
-        void LoadProgram(const std::shared_ptr<const void>& program);
+
+		void LoadProgram(const std::string& path);
+		void LoadProgram(const std::shared_ptr<const void>& program);
 		void UnloadProgram();
 				
 		void Restart();

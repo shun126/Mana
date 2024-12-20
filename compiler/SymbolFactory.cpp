@@ -155,9 +155,7 @@ namespace mana
 
 	std::shared_ptr<Symbol> SymbolFactory::CreateLabel(const std::string_view name)
 	{
-		std::shared_ptr<Symbol> symbol;
-
-		symbol = Lookup(name);
+		std::shared_ptr<Symbol> symbol = Lookup(name);
 		if(symbol == nullptr)
 		{
 			symbol = CreateSymbolWithLevel(name, Symbol::ClassTypeId::Label, 0/* TODO:mFunctionBlockLevel*/);
@@ -543,7 +541,7 @@ TODO:
 	関数の引数をフレームバッファ領域へコピーするコードを出力する
 	@param[in]	function	関数を表すSymbol
 	*/
-	void SymbolFactory::OpenFunction2(const std::shared_ptr<const Symbol>& function)
+	void SymbolFactory::OpenFunction2(const std::shared_ptr<const Symbol>& function) const
 	{
 		for (std::shared_ptr<const Symbol> symbol = function->GetParameterList(); symbol; symbol = symbol->GetNext())
 		{

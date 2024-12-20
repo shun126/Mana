@@ -9,6 +9,7 @@ mana (library)
 #include "common/Setup.h"
 #include "Actor.h"
 #include "Buffer.h"
+#include "Event.h"
 #include "Function.h"
 #include "Plugin.h"
 #include "Stack.h"

@@ -27,9 +27,9 @@ mana (compiler)
 	#include "SyntaxNode.h"
 	#include "TypeDescriptor.h"
 
-    namespace mana {
-        class ParsingDriver;
-    }
+	namespace mana {
+		class ParsingDriver;
+	}
 }
 
 %code top
@@ -38,7 +38,7 @@ mana (compiler)
 	#include "ErrorHandler.h"
 	#include "Lexer.h"
 	#include "Main.h"
-    #include "ParsingDriver.h"
+	#include "ParsingDriver.h"
 	#include "Symbol.h"
 	#include "SyntaxNode.h"
 	#include "TypeDescriptor.h"
