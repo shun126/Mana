@@ -71,6 +71,43 @@ actor Child
 mana sample/sample.mn
 ````
 
+# How to Use
+
+When you specify the source file at runtime, it will compile and execute it.
+
+```bash
+mana source_file
+```
+
+If you specify the `-o` option, it will output the compiled binary file.
+
+```bash
+mana source_file -o binary_file
+```
+
+If you specify the `--execute` option, it will execute the binary file.
+
+```bash
+mana --execute binary_file
+mana -e binary_file
+```
+
+# How to Embed the Virtual Machine
+
+1. Copy the `runner` directory to your preferred location in your project.
+1. Add `#include "runner/Mana.h"` to your code.
+1. Create the VM class and load the program.
+1. Tick the VM.
+
+```cpp
+auto vm = std::make_shared<mana::VM>();
+vm->LoadPlugins(".");
+vm->LoadProgram(path);
+// Tick
+while (vm->Run())
+    ;
+```
+
 ---
 Shun Moriya
 
