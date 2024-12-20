@@ -19,10 +19,11 @@ mana (compiler)
 
 namespace mana
 {
-	static char mInputFilename[_MAX_PATH];
-	static char mOutputFilename[_MAX_PATH];
-	int32_t mDebug;
-	int32_t mRelease;
+	char mInputFilename[_MAX_PATH];
+	char mOutputFilename[_MAX_PATH];
+	bool mExecute;
+	bool mDebug;
+	bool mRelease;
 
 	std::ofstream mVariableHeaderFile;
 
@@ -50,15 +51,15 @@ namespace mana
 
 	static void Dump(const std::shared_ptr<ParsingDriver>& parser)
 	{
-		char filename[_MAX_PATH];
 		char drive[_MAX_DRIVE];
 		char dir[_MAX_DIR];
-		char fname[_MAX_FNAME];
+		char fileName[_MAX_FNAME];
 		char ext[_MAX_EXT];
-		splitpath(mInputFilename, drive, sizeof(drive), dir, sizeof(dir), fname, sizeof(fname), ext, sizeof(ext));
-		makepath(filename, sizeof(filename), drive, dir, fname, ".md");
+		char path[_MAX_PATH];
+		splitpath(mInputFilename, drive, sizeof(drive), dir, sizeof(dir), fileName, sizeof(fileName), ext, sizeof(ext));
+		makepath(path, sizeof(path), drive, dir, fileName, ".md");
 
-		std::ofstream log(filename);
+		std::ofstream log(path);
 		if (log.is_open())
 		{
 			{
@@ -135,7 +136,7 @@ namespace mana
 		 return true;
 	}
 
-	static bool Execute(const std::shared_ptr<const void> program)
+	bool Execute(const std::shared_ptr<const void> program)
 	{
 		std::shared_ptr<VM> vm = std::make_shared<VM>();
 		vm->LoadPlugins(".");
@@ -145,8 +146,17 @@ namespace mana
 		return true;
 	}
 
+	int Execute(const std::string& path)
+	{
+		std::shared_ptr<VM> vm = std::make_shared<VM>();
+		vm->LoadPlugins(".");
+		vm->LoadProgram(path);
+		while (vm->Run())
+			;
+		return 0;
+	}
 
-	static int Generate()
+	int Generate()
 	{
 		int result = 0;
 
@@ -202,7 +212,7 @@ namespace mana
 				}
 				else
 				{
-					if (mOutputFilename[0] != '\0' && result != 0)
+					if (mOutputFilename[0] != '\0')
 					{
 						std::remove(mOutputFilename);
 					}
@@ -233,21 +243,22 @@ namespace mana
 
 	static void PrintUsage()
 	{
-		std::cout << "usage:mana [switch] infile" << std::endl;
-		std::cout << "            -o filename     specify output file name" << std::endl;
-		std::cout << "            -i dirname      specify program header directory name" << std::endl;
-		std::cout << "            --help          print this message" << std::endl;
-		std::cout << "            --copyright     print copyright holder" << std::endl;
-		std::cout << "            --version       print the version" << std::endl;
-		std::cout << std::endl;
-		std::cout << "Report bugs to https://github.com/shun126/Mana/issues" << std::endl;
+		std::cout << "usage:mana [switch] infile\n";
+		std::cout << "            -o filename     specify output binary file name\n";
+		std::cout << "            -i dirname      specify program header directory name\n";
+		std::cout << "            --execute       read infile as a binary file and execute it\n";
+		std::cout << "            --help          print this message\n";
+		std::cout << "            --copyright     print copyright holder\n";
+		std::cout << "            --version       print the version\n";
+		std::cout << "\n";
+		std::cout << "Report bugs to https://github.com/shun126/Mana/issues\n";
 	}
 
 	static bool ParseArguments(int argc, char* argv[])
 	{
 		if (argc < 2)
 		{
-			std::cerr << "No input files" << std::endl;
+			std::cerr << "No input files\n";
 			return false;
 		}
 		else
@@ -257,6 +268,7 @@ namespace mana
 
 			mInputFilename[0] = '\0';
 			mOutputFilename[0] = '\0';
+			mExecute = false;
 			mDebug = false;
 			mRelease = false;
 
@@ -272,7 +284,7 @@ namespace mana
 						cmdcnt++;
 						if (cmdcnt >= argc)
 						{
-							std::cerr << "no output file name" << std::endl;
+							std::cerr << "no output file name\n";
 							return false;
 						}
 						else
@@ -301,39 +313,49 @@ namespace mana
 							filename[length + 1] = '\0';
 						}
 						globalTypeHeaderDirectoryName = filename;
+
+						break;
 					}
-					break;
+
+					case 'e':
+						mExecute = true;
+						break;
 
 					case '-':
 						cmdptr++;
+						if (strcmp(cmdptr, "execute") == 0)
+						{
+							mExecute = true;
+							break;
+						}
 						if (strcmp(cmdptr, "copyright") == 0)
 						{
 							PrintCopyright();
 							return false;
 						}
-						else if (strcmp(cmdptr, "version") == 0)
+						if (strcmp(cmdptr, "version") == 0)
 						{
 							PrintTitle();
 							return false;
 						}
-						else if (strcmp(cmdptr, "help") == 0)
+						if (strcmp(cmdptr, "help") == 0)
 						{
 							PrintUsage();
 							return false;
 						}
-						else if (strcmp(cmdptr, "debug") == 0)
+						if (strcmp(cmdptr, "debug") == 0)
 						{
 							mDebug = true;
 							break;
 						}
-						else if (strcmp(cmdptr, "release") == 0)
+						if (strcmp(cmdptr, "release") == 0)
 						{
 							mRelease = true;
 							break;
 						}
-
+						//[[fallthrough]]
 					default:
-						std::cerr << "unrecognized option" << std::endl;
+						std::cerr << "unrecognized option\n";
 						return false;
 					}
 				}
@@ -343,7 +365,7 @@ namespace mana
 				}
 				else
 				{
-					std::cerr << "unrecognized option" << std::endl;
+					std::cerr << "unrecognized option\n";
 					return false;
 				}
 			}
@@ -352,26 +374,26 @@ namespace mana
 			{
 				char drive[_MAX_DRIVE];
 				char dir[_MAX_DIR];
-				char fname[_MAX_FNAME];
+				char fileName[_MAX_FNAME];
 				char ext[_MAX_EXT];
-				splitpath(mInputFilename, drive, sizeof(drive), dir, sizeof(dir), fname, sizeof(fname), ext, sizeof(ext));
+				splitpath(mInputFilename, drive, sizeof(drive), dir, sizeof(dir), fileName, sizeof(fileName), ext, sizeof(ext));
 
 				// output Binary
 				if (outputBinary)
 				{
-					makepath(mOutputFilename, sizeof(mOutputFilename), drive, dir, fname, ".mx");
+					makepath(mOutputFilename, sizeof(mOutputFilename), drive, dir, fileName, ".mx");
 				}
 
 				// output global types
 				if (!globalTypeHeaderDirectoryName.empty())
 				{
-					globalTypeHeaderDirectoryName += fname;
+					globalTypeHeaderDirectoryName += fileName;
 					globalTypeHeaderDirectoryName += ".h";
 
 					mVariableHeaderFile.open(globalTypeHeaderDirectoryName, std::ios::out);
 					if (!mVariableHeaderFile.is_open())
 					{
-						std::cerr << "'" << globalTypeHeaderDirectoryName << "' open failed." << std::endl;
+						std::cerr << "'" << globalTypeHeaderDirectoryName << "' open failed.\n";
 						return false;
 					}
 				}
@@ -396,7 +418,10 @@ int main(int argc, char* argv[])
 
 	if (mana::ParseArguments(argc, argv))
 	{
-		result = mana::Generate();
+		if (mana::mExecute)
+			result = mana::Execute(mana::mInputFilename);
+		else
+			result = mana::Generate();
 	}
 
 #if MANA_TARGET_WINDOWS && MANA_BUILD_TARGET < MANA_BUILD_RELEASE

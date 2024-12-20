@@ -284,7 +284,7 @@
     <None Include="..\runner\Plugin.inl" />
     <None Include="..\runner\Stack.inl" />
     <None Include="..\runner\VM.inl" />
-    <CustomBuild Include="lexer.l">
+    <CustomBuild Include="Lexer.l">
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">if defined GNU_FLEX_BIN (
  if exist "$(GNU_FLEX_BIN)" (

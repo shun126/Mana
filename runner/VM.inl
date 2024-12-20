@@ -116,13 +116,34 @@ namespace mana
 		return i->second;
 	}
 
+	inline void VM::LoadProgram(const std::string& path)
+	{
+		std::ifstream infile(path, std::ios::in | std::ios::binary);
+
+		if (!infile.is_open())
+			throw std::runtime_error("file open failed");
+
+		infile.seekg(0, std::fstream::end);
+		const size_t fileSize = static_cast<size_t>(infile.tellg());
+		infile.clear();
+		infile.seekg(0, std::fstream::beg);
+
+		const auto program = std::shared_ptr<char[]>(new char[fileSize]);
+		if (program == nullptr)
+			throw std::bad_alloc();
+
+		infile.read(program.get(), fileSize);
+
+		LoadProgram(program);
+	}
+
 	inline void VM::LoadProgram(const std::shared_ptr<const void>& program)
 	{
 		UnloadProgram();
 
 		mProgram = program;
 
-		mFileHeader = reinterpret_cast<const FileHeader*>(mProgram.get());
+		mFileHeader = static_cast<const FileHeader*>(mProgram.get());
 		if (std::memcmp(Signature, mFileHeader->mHeader, sizeof(mFileHeader->mHeader)) != 0)
 		{
 			throw std::invalid_argument("abnormal mana program loaded.");
