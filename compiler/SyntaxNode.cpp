@@ -72,50 +72,50 @@ namespace mana
 	{
 		switch (mId)
 		{
-		case Id::Const:		// 定数
-		case Id::Identifier:	// 変数
-									// 参照のactorか、actorの実体か判定できるようにする
+		case Id::Const:				// 定数
+		case Id::Identifier:		// 変数
+			// 参照のactorか、actorの実体か判定できるようにする
 			return mType->Is(TypeDescriptor::Id::Actor) ? sizeof(void*) : mType->GetMemorySize();
 
-		case Id::Array:			/* variable[argument] = */
-		case Id::MemberVariable:			/* X.variable */
-		case Id::Neg:			/* ±符号反転 */
+		case Id::Array:				// variable[argument] =
+		case Id::MemberVariable:	// X.variable
+		case Id::Neg:				// ±符号反転
 			return mType->Is(TypeDescriptor::Id::Actor) ? sizeof(void*) : mType->GetMemorySize();
-			/*		return node_get_memory_size(self->left);	*/
+			// return node_get_memory_size(self->left);
 
-		case Id::Self:			/* self (actor) */
-		case Id::Priority:		/* runlevel (integer) */
+		case Id::Self:				// self (actor)
+		case Id::Priority:			// runlevel (integer)
 			return sizeof(void*);
 
-		case Id::Assign:			/* = */
-		case Id::CallArgument:		/* 呼び出し側引数 */
-		case Id::Call:			/* 関数呼び出し */
-		case Id::Add:			/* 加算 */
-		case Id::Sub:			/* 減算 */
-		case Id::Mul:			/* 乗算 */
-		case Id::Div:			/* 除算 */
-		case Id::Rem:			/* 余剰 */
-		case Id::Pow:			/* べき乗 */
-		case Id::Not:			/* ~ */
-		case Id::LogicalNot:			/* ! */
-		case Id::And:			/* & */
-		case Id::Or:				/* | */
-		case Id::Xor:			/* ^ */
-		case Id::LeftShift:			/* << */
-		case Id::RightShift:			/* >> */
-		case Id::Less:				/* < */
-		case Id::LessEqual:				/* <= */
-		case Id::Equal:				/* == */
-		case Id::NotEqual:				/* != */
-		case Id::GreaterEqual:				/* >= */
-		case Id::Greater:				/* > */
-		case Id::String:			/* 文字列 */
-		case Id::IntegerToFloat:			/* 整数から実数へ変換 */
-		case Id::FloatToInteger:			/* 実数から整数へ変換 */
-		case Id::LogicalOr:			/* || */
-		case Id::LogicalAnd:			/* && */
-		case Id::Sender:			/* sender (actor) */
-		case Id::ExpressionIf:	/* 三項演算子 '?' */
+		case Id::Assign:			// =
+		case Id::CallArgument:		// 呼び出し側引数
+		case Id::Call:				// 関数呼び出し
+		case Id::Add:				// 加算
+		case Id::Sub:				// 減算
+		case Id::Mul:				// 乗算
+		case Id::Div:				// 除算
+		case Id::Rem:				// 余剰
+		case Id::Pow:				// べき乗
+		case Id::Not:				// ~
+		case Id::LogicalNot:		// !
+		case Id::And:				// &
+		case Id::Or:				// |
+		case Id::Xor:				// ^
+		case Id::LeftShift:			// <<
+		case Id::RightShift:		// >>
+		case Id::Less:				// <
+		case Id::LessEqual:			// <=
+		case Id::Equal:				// ==
+		case Id::NotEqual:			// !=
+		case Id::GreaterEqual:		// >=
+		case Id::Greater:			// >
+		case Id::String:			// 文字列
+		case Id::IntegerToFloat:	// 整数から実数へ変換
+		case Id::FloatToInteger:	// 実数から整数へ変換
+		case Id::LogicalOr:			// ||
+		case Id::LogicalAnd:		// &&
+		case Id::Sender:			// sender (actor)
+		case Id::ExpressionIf:		// 三項演算子 '?'
 		default:
 #if 1
 			return mType->GetMemorySize();
@@ -191,12 +191,12 @@ namespace mana
 		return mReal;
 	}
 
-	const std::string_view SyntaxNode::GetString() const
+	const std::string_view& SyntaxNode::GetString() const
 	{
 		return mString;
 	}
 
-	const std::string_view SyntaxNode::GetFilename() const
+	const std::string_view& SyntaxNode::GetFilename() const
 	{
 		return mFilename;
 	}
@@ -312,27 +312,29 @@ namespace mana
 	}
 
 
-
-	static bool node_dump_format_flag_ = false;
-
-	static void node_dump_format_(FILE* file, const char* format, ...)
+	namespace
 	{
-		if (node_dump_format_flag_)
+		static bool NodeDumpFormatFlag = false;
+
+		static void NodeDumpFormat(FILE* file, const char* format, ...)
 		{
-			node_dump_format_flag_ = false;
-			fputc(',', file);
-		}
+			if (NodeDumpFormatFlag)
+			{
+				NodeDumpFormatFlag = false;
+				fputc(',', file);
+			}
 
-		va_list arg;
-		va_start(arg, format);
+			va_list arg;
+			va_start(arg, format);
 #if __STDC_WANT_SECURE_LIB__
-		vfprintf_s(file, format, arg);
+			vfprintf_s(file, format, arg);
 #else
-		vfprintf(file, format, arg);
+			vfprintf(file, format, arg);
 #endif
-		va_end(arg);
+			va_end(arg);
 
-		node_dump_format_flag_ = true;
+			NodeDumpFormatFlag = true;
+		}
 	}
 
 	void SyntaxNode::Dump() const
@@ -356,11 +358,11 @@ namespace mana
 	{
 		// TODO:Idと並びを合わせてください
 		static const char* name[IdSize] = {
-			"Array",								//!< variable[argument] =
-			"Assign",								//!< =
+			"Array",							//!< variable[argument] =
+			"Assign",							//!< =
 			"CallArgument",						//!< 引数（呼び出し）
 			"DeclareArgument",					//!< 引数（宣言）
-			"Const",								//!< 定数
+			"Const",							//!< 定数
 			"Call",								//!< 関数呼び出し
 			"Add",								//!< 加算
 			"Sub",								//!< 減算
@@ -371,49 +373,49 @@ namespace mana
 			"Pow",								//!< べき乗
 			"Not",								//!< ~
 			"And",								//!< &
-			"Or",									//!< |
+			"Or",								//!< |
 			"Xor",								//!< ^
-			"LeftShift",							//!< <<
-			"RightShift",							//!< >>
+			"LeftShift",						//!< <<
+			"RightShift",						//!< >>
 			"Less",								//!< <
-			"LessEqual",							//!< <=
-			"Equal",								//!< ==
+			"LessEqual",						//!< <=
+			"Equal",							//!< ==
 			"NotEqual",							//!< !=
 			"GreaterEqual",						//!< >=
 			"Greater",							//!< >
-			"String",								//!< 文字列
-			"IntegerToFloat",						//!< 整数から実数へ変換
-			"FloatToInteger",						//!< 実数から整数へ変換
-			"LogicalOr",							//!< ||
-			"LogicalAnd",							//!< &&
-			"LogicalNot",							//!< !
+			"String",							//!< 文字列
+			"IntegerToFloat",					//!< 整数から実数へ変換
+			"FloatToInteger",					//!< 実数から整数へ変換
+			"LogicalOr",						//!< ||
+			"LogicalAnd",						//!< &&
+			"LogicalNot",						//!< !
 			"Halt",								//!< halt
-			"Yield",								//!< yield
+			"Yield",							//!< yield
 			"Request",							//!< req
-			"Accept",								//!< comply (req許可)
-			"Reject",								//!< refuse (req拒否)
+			"Accept",							//!< comply (req許可)
+			"Reject",							//!< refuse (req拒否)
 			"Join",								//!< join
-			"Sender",								//!< sender (actor)
+			"Sender",							//!< sender (actor)
 			"Self",								//!< self (actor)
 			"Priority",							//!< priority (integer)
 			"ExpressionIf",						//!< 三項演算子 '?'
-			"Print",								//!< print
-			"Return",								//!< return
+			"Print",							//!< print
+			"Return",							//!< return
 			"Rollback",							//!< rollback
 
-			"Block",								//!< ブロック
-			"If",									//!< if
-			"Switch",								//!< switch
+			"Block",							//!< ブロック
+			"If",								//!< if
+			"Switch",							//!< switch
 			"Case",								//!< case
 			"Default",							//!< default
-			"While",								//!< while
-			"Do",									//!< do while
+			"While",							//!< while
+			"Do",								//!< do while
 			"For",								//!< for
 			"Loop",								//!< loop
 			"Lock",								//!< lock
 			"Goto",								//!< goto
-			"Label",								//!< label
-			"Break",								//!< break
+			"Label",							//!< label
+			"Break",							//!< break
 			"Continue",							//!< continue
 
 			"Identifier",
@@ -423,7 +425,7 @@ namespace mana
 			"DeclareVariable",
 			"Sizeof",
 
-			"Actor",								//!< アクターの宣言
+			"Actor",							//!< アクターの宣言
 			"Phantom",
 			"Module",
 			"Struct",
@@ -442,52 +444,52 @@ namespace mana
 		};
 
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
-		node_dump_format_(file, "\"mMagic\": \"%s\"", mMagic);
+		NodeDumpFormat(file, "\"mMagic\": \"%s\"", mMagic);
 #endif
 
 		if (static_cast<uint8_t>(mId) < (sizeof(name) / sizeof(name[0])))
 		{
-			node_dump_format_(file, "\"Name\": \"%s\"", name[static_cast<uint8_t>(mId)]);
+			NodeDumpFormat(file, "\"Name\": \"%s\"", name[static_cast<uint8_t>(mId)]);
 		}
 		else
 		{
-			node_dump_format_(file, "\"Name\": \"%d\"", mId);
+			NodeDumpFormat(file, "\"Name\": \"%d\"", mId);
 		}
 
 		if (!mString.empty())
 		{
-			node_dump_format_(file, "\"String\": \"%s\"", mString.data());
+			NodeDumpFormat(file, "\"String\": \"%s\"", mString.data());
 		}
 		if (mType)
 		{
-			node_dump_format_(file, "\"Type\": \"%s\"", mType->GetName().data());
+			NodeDumpFormat(file, "\"Type\": \"%s\"", mType->GetName().data());
 		}
 
 		if (mLeft)
 		{
-			node_dump_format_(file, "\"Left\": {\n");
-			node_dump_format_flag_ = false;
+			NodeDumpFormat(file, "\"Left\": {\n");
+			NodeDumpFormatFlag = false;
 			mLeft->OnDump(file);
 			fprintf(file, "}\n");
 		}
 		if (mRight)
 		{
-			node_dump_format_(file, "\"Right\": {\n");
-			node_dump_format_flag_ = false;
+			NodeDumpFormat(file, "\"Right\": {\n");
+			NodeDumpFormatFlag = false;
 			mRight->OnDump(file);
 			fprintf(file, "}\n");
 		}
 		if (mBody)
 		{
-			node_dump_format_(file, "\"Body\": {\n");
-			node_dump_format_flag_ = false;
+			NodeDumpFormat(file, "\"Body\": {\n");
+			NodeDumpFormatFlag = false;
 			mBody->OnDump(file);
 			fprintf(file, "}\n");
 		}
 		if (mNext)
 		{
-			node_dump_format_(file, "\"Next\": {\n");
-			node_dump_format_flag_ = false;
+			NodeDumpFormat(file, "\"Next\": {\n");
+			NodeDumpFormatFlag = false;
 			mNext->OnDump(file);
 			fprintf(file, "}\n");
 		}
