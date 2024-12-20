@@ -105,7 +105,7 @@ namespace mana
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		// function
 		void OpenFunction(const std::shared_ptr<SyntaxNode>& node, const bool is_action);
-		void OpenFunction2(const std::shared_ptr<const Symbol>& function);
+		void OpenFunction2(const std::shared_ptr<const Symbol>& function) const;
 		void CloseFunction(const std::shared_ptr<SyntaxNode>& node, const bool is_action);
 		bool IsFunctionOpened() const { return mIsFunctionOpened; }
 

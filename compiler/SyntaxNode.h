@@ -143,9 +143,9 @@ namespace mana
 		IntermediateLanguage GetOpecode() const;
 		int_t GetInt() const;
 		float_t GetFloat() const;
-		const std::string_view GetString() const;
+		const std::string_view& GetString() const;
 
-		const std::string_view GetFilename() const;
+		const std::string_view& GetFilename() const;
 		int32_t GetLineno() const;
 
 		void Set(const std::shared_ptr<Symbol>& symbol);
