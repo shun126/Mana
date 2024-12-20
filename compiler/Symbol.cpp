@@ -36,7 +36,7 @@ static char* symbol_data_type_id_name[NUMBER_OF] = {
 	{
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
 		static uint32_t count = 0;
-		snprintf(mMagic, sizeof(mMagic), "S%d", count);
+		snprintf(mMagic, sizeof(mMagic), "S%u", count);
 		++count;
 #endif
 	}

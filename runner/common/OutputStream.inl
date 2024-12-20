@@ -194,10 +194,10 @@ namespace mana
 
 	inline std::shared_ptr<const void> OutputStream::MakeShared() const
 	{
-		uint8_t* newBuffer = static_cast<uint8_t*>(malloc(mUsedSize));
+		void* newBuffer = malloc(mUsedSize);
 		if (newBuffer == nullptr)
 			throw std::bad_alloc();
 		std::memcpy(newBuffer, mBuffer.get(), mUsedSize);
-		return { newBuffer, std::free };
+		return std::shared_ptr<const void>(newBuffer, std::free);
 	}
 }
