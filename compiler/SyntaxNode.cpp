@@ -16,10 +16,9 @@ namespace mana
 {
 	SyntaxNode::SyntaxNode(const Id id)
 		: mId(id)
+		, mFilename(lexer::GetCurrentFilename())
+		, mLineNo(lexer::GetCurrentLineNo())
 	{
-		mFilename = lexer::GetCurrentFilename();
-		mLineNo = lexer::GetCurrentLineNo();
-
 #if MANA_BUILD_TARGET == MANA_BUILD_DEBUG
 		static size_t count = 0;
 		const std::string magic = "N" + std::to_string(count);
