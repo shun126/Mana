@@ -8,7 +8,6 @@ mana (library)
 #pragma once
 #include "Platform.h"
 #include <memory>
-#include <stdexcept>
 
 namespace mana
 {
