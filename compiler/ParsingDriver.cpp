@@ -450,7 +450,25 @@ namespace mana
 
 	std::shared_ptr<SyntaxNode> ParsingDriver::CreateRequest(const std::shared_ptr<SyntaxNode>& priority, const std::shared_ptr<SyntaxNode>& expression, const std::string_view& actionName)
 	{
-		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Request);
+		auto node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Request);
+		node->SetLeftNode(priority);
+		node->SetRightNode(expression);
+		node->Set(actionName);
+		return node;
+	}
+
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateAwaitStart(const std::shared_ptr<SyntaxNode>& priority, const std::shared_ptr<SyntaxNode>& expression, const std::string_view& actionName)
+	{
+		auto node = std::make_shared<SyntaxNode>(SyntaxNode::Id::AwaitStart);
+		node->SetLeftNode(priority);
+		node->SetRightNode(expression);
+		node->Set(actionName);
+		return node;
+	}
+
+std::shared_ptr<SyntaxNode> ParsingDriver::CreateAwaitCompletion(const std::shared_ptr<SyntaxNode>& priority, const std::shared_ptr<SyntaxNode>& expression, const std::string_view& actionName)
+	{
+		auto node = std::make_shared<SyntaxNode>(SyntaxNode::Id::AwaitCompletion);
 		node->SetLeftNode(priority);
 		node->SetRightNode(expression);
 		node->Set(actionName);
@@ -952,22 +970,14 @@ namespace mana
 			MANA_ASSERT(variableType);
 			MANA_ASSERT(variableType->GetTypeDescriptor());
 			MANA_ASSERT(declarator);
-			//MANA_ASSERT(declarator->GetString());
+			MANA_ASSERT(declarator->GetString().data());
 
-			std::shared_ptr<SyntaxNode> identifierNode = CreateIdentifier(declarator->GetString());
+			const std::shared_ptr<SyntaxNode> identifierNode = CreateIdentifier(declarator->GetString());
 			identifierNode->Set(variableType->GetTypeDescriptor());
 
-			std::shared_ptr<SyntaxNode> assignNode = CreateAssign(identifierNode, expression);
+			const std::shared_ptr<SyntaxNode> assignNode = CreateAssign(identifierNode, expression);
 			assignNode->Set(variableType->GetTypeDescriptor());
-	#if 0
 
-			/*
-			if($2->class_type != MANA_CLASS_TYPE_VARIABLE_LOCAL)
-			mana_compile_error("can initialize variable in local space only");
-			mana_symbol_allocate_memory($2, $1, MANA_NORMAL);
-			mana_linker_expression(node_create_node(MANA_NODE_TYPE_ASSIGN, node_create_leaf($2->name), $4), MANA_TRUE);
-			*/
-	#endif
 			node->SetBodyNode(assignNode);
 		}
 		return node;

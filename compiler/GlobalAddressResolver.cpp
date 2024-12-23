@@ -21,7 +21,6 @@ namespace mana
 		mCallList.emplace_back(std::make_unique<CallList>(address, symbol));
 	}
 
-	// mana_linker_resolve_address
 	void GlobalAddressResolver::ResolveAddress() const
 	{
 		for (const auto& callList : mCallList)

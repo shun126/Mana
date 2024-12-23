@@ -10,83 +10,11 @@ mana (library)
 
 namespace mana
 {
-	inline VM::VM()
-	{
-	}
-
 	inline VM::~VM()
 	{
 		UnloadProgram();
 	}
 
-#if 0
-	inline void Serialize(mana* self, mana_stream* stream)
-	{
-		mana_hash_iterator iterator;
-
-		assert(self && stream);
-
-		{
-			mana_hash_iterator_rewind(&iterator);
-
-			while (mana_hash_iterator_hash_next(&self->mActorHash, &iterator))
-			{
-				mana_actor_serialize(mana_hash_iterator_get_value(&iterator), stream);
-			}
-			/*
-			m,Array
-			*/
-		}
-#if 0
-		mana_stream_push_string(stream, GetActorName(self, self->map_actor));
-		mana_stream_push_string(stream, GetActorName(self, self->player_actor));
-#endif
-		mana_stream_push_integer(stream, self->mFrameCounter);
-
-		mana_stream_push_unsigned_char(stream, self->mFlag);
-	}
-
-	inline void Deserialize(mana* self, mana_stream* stream)
-	{
-		mana_hash_iterator iterator;
-
-		assert(self && stream);
-
-		{
-			mana_hash_iterator_rewind(&iterator);
-
-			while (mana_hash_iterator_hash_next(&self->mActorHash, &iterator))
-			{
-				mana_actor_deserialize(mana_hash_iterator_get_value(&iterator), stream);
-			}
-		}
-		/*
-	m,Array
-		*/
-#if 0
-		{
-			size_t size = mana_stream_get_string_length(stream) + 1;
-			void* string = alloca(size);
-
-			mana_stream_pop_string(stream, string, size);
-
-			self->map_actor = GetActor(self, string);
-		}
-
-		{
-			size_t size = mana_stream_get_string_length(stream) + 1;
-			void* string = alloca(size);
-
-			mana_stream_pop_string(stream, string, size);
-
-			self->player_actor = GetActor(self, string);
-		}
-#endif
-		self->mFrameCounter = mana_stream_pop_integer(stream);
-
-		self->mFlag = mana_stream_pop_unsigned_char(stream);
-	}
-#endif
 	inline void VM::LoadPlugin(const std::string& filename)
 	{
 		if (mPlugin == nullptr)
@@ -108,7 +36,7 @@ namespace mana
 
 	inline VM::ExternalFunctionType VM::FindFunction(const std::string& functionName) const
 	{
-		auto i = mFunctionHash.find(functionName);
+		const auto i = mFunctionHash.find(functionName);
 		if (i == mFunctionHash.end())
 		{
 			MANA_ERROR({ "An external function called ", functionName, " was not found.\n" });
@@ -179,6 +107,8 @@ namespace mana
 		mConstantPool = reinterpret_cast<const char*>(actorInfo);
 
 		mInstructionPool = reinterpret_cast<const uint8_t*>(mConstantPool + mFileHeader->mSizeOfConstantPool);
+
+		// TODO 外部関数の名前をアドレスに置き換えて、実行時の検索時間を短縮して下さい
 #if 0
 		if (!(mFileHeader->mFlag & FileHeader::FLAG_COMPILED))
 		{
@@ -303,8 +233,6 @@ namespace mana
 
 		mFlag.set(Flag::FrameChanged);
 		mFlag.reset(Flag::Requested);
-
-		//mana_actor_set_delta_time(second);
 
 		for (auto& actor : mActorHash)
 		{

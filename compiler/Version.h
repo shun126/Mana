@@ -17,9 +17,9 @@ namespace mana
 	{
 		static constexpr int32_t Year = 2024;
 		static constexpr int32_t Month = 12;
-		static constexpr int32_t Day = 20;
-		static constexpr int32_t Hour = 17;
-		static constexpr int32_t Minute = 33;
+		static constexpr int32_t Day = 24;
+		static constexpr int32_t Hour = 0;
+		static constexpr int32_t Minute = 59;
 		static const char* MajorVersion = "0";
 		static const char* MinorVersion = "9.7";
 	}

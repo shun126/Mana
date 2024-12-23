@@ -352,6 +352,20 @@ DO_RECURSIVE:
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			break;
 
+		case SyntaxNode::Id::AwaitStart:
+		case SyntaxNode::Id::AwaitCompletion:
+			PostResolverResolve(node->GetLeftNode());
+			PostResolverResolve(node->GetRightNode());
+			MANA_ASSERT(node->GetBodyNode() == nullptr);
+			if (const auto& currentBlockTypeDescriptor = GetSymbolFactory()->GetCurrentBlockTypeDescriptor())
+			{
+				if (currentBlockTypeDescriptor->Compare(node->GetRightNode()->GetTypeDescriptor()))
+				{
+					CompileError({ "Cannot specify the type of self. Use 'request' instead." });
+				}
+			}
+			break;
+
 		case SyntaxNode::Id::Yield:
 			MANA_ASSERT(node->GetLeftNode() == nullptr);
 			MANA_ASSERT(node->GetRightNode() == nullptr);
@@ -375,7 +389,7 @@ DO_RECURSIVE:
 				{
 					if (t1 < TypeDescriptor::Id::Char || t1 > TypeDescriptor::Id::Float || t2 < TypeDescriptor::Id::Char || t2 > TypeDescriptor::Id::Float)
 					{
-						CompileError("imcompatible GetTypeDescriptor() operation in expression");
+						CompileError("incompatible GetTypeDescriptor() operation in expression");
 					}
 					else
 					{
@@ -399,7 +413,7 @@ DO_RECURSIVE:
 				if (GetNodeType(&t1, &t2, node))
 				{
 					if (t1 < TypeDescriptor::Id::Char || t1 > TypeDescriptor::Id::Int || t2 < TypeDescriptor::Id::Char || t2 > TypeDescriptor::Id::Int)
-						CompileError("imcompatible GetTypeDescriptor() operation in expression");
+						CompileError("incompatible GetTypeDescriptor() operation in expression");
 				}
 			}
 			break;
@@ -413,7 +427,7 @@ DO_RECURSIVE:
 				if (GetNodeType(&t1, &t2, node))
 				{
 					if (t1 < TypeDescriptor::Id::Char || t1 > TypeDescriptor::Id::Int || t2 < TypeDescriptor::Id::Char || t2 > TypeDescriptor::Id::Int)
-						CompileError("imcompatible GetTypeDescriptor() operation in expression");
+						CompileError("incompatible GetTypeDescriptor() operation in expression");
 					// TODO
 					//node->Set( = IntermediateLanguage::LogicalAnd;
 				}
@@ -429,7 +443,7 @@ DO_RECURSIVE:
 				if (GetNodeType(&t1, &t2, node))
 				{
 					if (t1 < TypeDescriptor::Id::Char || t1 > TypeDescriptor::Id::Int || t2 < TypeDescriptor::Id::Char || t2 > TypeDescriptor::Id::Int)
-						CompileError("imcompatible GetTypeDescriptor() operation in expression");
+						CompileError("incompatible GetTypeDescriptor() operation in expression");
 					node->Set(IntermediateLanguage::LogicalOr);
 				}
 			}
@@ -460,7 +474,8 @@ DO_RECURSIVE:
 						node->Set(IntermediateLanguage::CompareEqualData);
 						break;
 					default:
-						MANA_BUG("illigal data GetTypeDescriptor()");
+						MANA_BUG("illegal data GetTypeDescriptor()");
+						break;
 					}
 					node->Set(GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Char));
 				}
@@ -492,7 +507,8 @@ DO_RECURSIVE:
 						node->Set(IntermediateLanguage::CompareGreaterEqualData);
 						break;
 					default:
-						MANA_BUG("illigal data GetTypeDescriptor()");
+						MANA_BUG("illegal data GetTypeDescriptor()");
+						break;
 					}
 					node->Set(GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Char));
 				}
@@ -524,7 +540,8 @@ DO_RECURSIVE:
 						node->Set(IntermediateLanguage::CompareGreaterData);
 						break;
 					default:
-						MANA_BUG("illigal data GetTypeDescriptor()");
+						MANA_BUG("illegal data GetTypeDescriptor()");
+						break;
 					}
 					node->Set(GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Char));
 				}
@@ -556,7 +573,8 @@ DO_RECURSIVE:
 						node->Set(IntermediateLanguage::CompareLessEqualData);
 						break;
 					default:
-						MANA_BUG("illigal data GetTypeDescriptor()");
+						MANA_BUG("illegal data GetTypeDescriptor()");
+						break;
 					}
 					node->Set(GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Char));
 				}
@@ -588,7 +606,8 @@ DO_RECURSIVE:
 						node->Set(IntermediateLanguage::CompareLessData);
 						break;
 					default:
-						MANA_BUG("illigal data GetTypeDescriptor()");
+						MANA_BUG("illegal data GetTypeDescriptor()");
+						break;
 					}
 					node->Set(GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Char));
 				}
@@ -620,7 +639,8 @@ DO_RECURSIVE:
 						node->Set(IntermediateLanguage::CompareNotEqualData);
 						break;
 					default:
-						MANA_BUG("illigal data GetTypeDescriptor()");
+						MANA_BUG("illegal data GetTypeDescriptor()");
+						break;
 					}
 					node->Set(GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Char));
 				}
@@ -638,7 +658,7 @@ DO_RECURSIVE:
 				if (GetNodeType(&t1, &t2, node))
 				{
 					if (t1 < TypeDescriptor::Id::Char || t1 > TypeDescriptor::Id::Int)
-						CompileError("imcompatible GetTypeDescriptor() operation in expression");
+						CompileError("incompatible GetTypeDescriptor() operation in expression");
 					node->Set(IntermediateLanguage::LogicalNot);
 				}
 			}
@@ -653,7 +673,7 @@ DO_RECURSIVE:
 				if (GetNodeType(&t1, &t2, node))
 				{
 					if (t1 < TypeDescriptor::Id::Char || t1 > TypeDescriptor::Id::Int)
-						CompileError("imcompatible GetTypeDescriptor() operation in expression");
+						CompileError("incompatible GetTypeDescriptor() operation in expression");
 					node->Set(IntermediateLanguage::Not);
 				}
 			}
@@ -668,7 +688,7 @@ DO_RECURSIVE:
 				if (GetNodeType(&t1, &t2, node))
 				{
 					if (t1 < TypeDescriptor::Id::Char || t1 > TypeDescriptor::Id::Float)
-						CompileError("imcompatible GetTypeDescriptor() operation in expression");
+						CompileError("incompatible GetTypeDescriptor() operation in expression");
 				}
 			}
 			break;
@@ -726,20 +746,13 @@ DO_RECURSIVE:
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			{
 				SearchSymbolFromName(node);
-#if 0
-				mana_generator_event_funtion_type* function = mana_hash_get(mana_generator_object.event_hash, node->GetSymbol()->name);
-				if (function)
-				{
-					node = (*function)(node);
-				}
 
-				if (node->GetSymbol()->class_type != ClassTypeId::Function &&
-					node->GetSymbol()->class_type != ClassTypeId::NativeFunction &&
-					node->GetSymbol()->class_type != ClassTypeId::MemberFunction)
+				if (node->GetSymbol()->GetClassTypeId() != Symbol::ClassTypeId::Function &&
+					node->GetSymbol()->GetClassTypeId() != Symbol::ClassTypeId::NativeFunction &&
+					node->GetSymbol()->GetClassTypeId() != Symbol::ClassTypeId::MemberFunction)
 				{
-					CompileError("trying to call non-funcation");
+					CompileError("trying to call non-function");
 				}
-#endif
 			}
 			break;
 
@@ -774,7 +787,7 @@ DO_RECURSIVE:
 				if (GetNodeType(&t1, &t2, node))
 				{
 					if (t1 < TypeDescriptor::Id::Char || t1 > TypeDescriptor::Id::Int)
-						CompileError("imcompatible GetTypeDescriptor() operation in expression");
+						CompileError("incompatible TypeDescriptor operation in expression");
 				}
 			}
 			break;
@@ -788,7 +801,7 @@ DO_RECURSIVE:
 				if (GetNodeType(&t1, &t2, node))
 				{
 					if (t1 != TypeDescriptor::Id::Float)
-						CompileError("imcompatible GetTypeDescriptor() operation in expression");
+						CompileError("incompatible TypeDescriptor operation in expression");
 				}
 			}
 			break;
@@ -838,7 +851,7 @@ DO_RECURSIVE:
 
 				case Symbol::ClassTypeId::NewSymbol:
 				default:
-					CompileError("illigal data GetTypeDescriptor()");
+					CompileError("illegal data GetTypeDescriptor()");
 					break;
 				}
 			}
@@ -866,8 +879,7 @@ DO_RECURSIVE:
 				}
 				if (type->Is(TypeDescriptor::Id::Struct))
 				{
-					// TODO
-					//while (type)
+					while (type)
 					{
 						for (std::shared_ptr<Symbol> symbol = type->GetSymbolEntry(); symbol; symbol = symbol->GetNext())
 						{
@@ -878,7 +890,7 @@ DO_RECURSIVE:
 								goto ESCAPE;
 							}
 						}
-						//type = type->parent;
+						type = std::reinterpret_pointer_cast<TypeDescriptor>(type->GetParent());
 					}
 					CompileError({ "reference to undefined field '", node->GetString(), "'" });
 				}
@@ -912,7 +924,7 @@ DO_RECURSIVE:
 			break;
 
 		default:
-			MANA_BUG("illigal node detect");
+			MANA_BUG("illegal node detect");
 		}
 
 		// 子ノードから型を継承する
@@ -920,8 +932,7 @@ DO_RECURSIVE:
 
 		if (node->GetNextNode())
 		{
-			// 末尾再帰なのでgotoにて処理する
-			//PostResolverResolve(node->GetNextNode());
+			// PostResolverResolve(node->GetNextNode()) が末尾再帰なのでgotoにて処理する
 			node = node->GetNextNode();
 			goto DO_RECURSIVE;
 		}

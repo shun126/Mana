@@ -25,7 +25,7 @@ namespace mana
 		void SetCurrentFileInformation(const std::shared_ptr<SyntaxNode>& node);
 			
 		/*!
-		mana_symbol_lookupを呼び出しmana_symbolを検索してnodeに設定します
+		Lookupを呼び出しSymbolを検索してNodeに設定します
 		@param	node	Identifierノード
 		*/
 		bool SearchSymbolFromName(const std::shared_ptr<SyntaxNode>& node);
@@ -44,8 +44,8 @@ namespace mana
 		std::shared_ptr<TypeDescriptor> ResolveVariableSize(const std::shared_ptr<SyntaxNode>& node);
 
 		/*!
-		mana_symbol_create_variableを呼び出し
-		mana_symbolをnewしてnodeに設定します
+		Symbol::CreateVariableを呼び出し
+		Symbolをnewしてnodeに設定します
 		@param[in]	node				Declaratorノード
 		@param[in]	isStaticVariable	静的変数
 		*/
@@ -53,7 +53,7 @@ namespace mana
 
 		/*!
 		両辺のTypeDescriptionとDeclaratorを解決して
-		mana_symbol_allocate_memoryを使ってメモリを割り当てます
+		SymbolFactory::AllocateMemoryを使ってメモリを割り当てます
 		@param[in]	node				DeclareVariableノード
 		@param[in]	memoryTypeId		メモリタイプ
 		@param[in]	isStaticVariable	静的変数
@@ -64,7 +64,7 @@ namespace mana
 		子ノードから型を継承する
 		@param[in]	node	ノード
 		*/
-		void ResolveTypeFromChildNode(const std::shared_ptr<SyntaxNode>& node);
+		void ResolveTypeFromChildNode(const std::shared_ptr<SyntaxNode>& node) const;
 
 	protected:
 		[[nodiscard]] std::shared_ptr<Symbol> Lookup(const std::string_view name) const;
