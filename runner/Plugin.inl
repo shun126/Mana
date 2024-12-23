@@ -6,21 +6,20 @@ mana (library)
 */
 
 #pragma once
+#include "common/Platform.h"
 
 #if defined(MANA_TARGET_WINDOWS)
+
 #define NOMINMAX
 #include <windows.h>
-#endif
-
-#if defined(MANA_TARGET_WINDOWS)
 /*! ダイナミックライブラリのハンドル */
 //#define MODULE				HMODULE
 /*! ダイナミックライブラリを読み込む */
-#define LOAD_LIBRARY(N)		LoadLibrary(N);
+#define LOAD_LIBRARY(N)		LoadLibrary(N)
 /*! ダイナミックライブラリを開放 */
-#define FREE_LIBRARY(M)		FreeLibrary(M);
+#define FREE_LIBRARY(M)		FreeLibrary(M)
 /*! ダイナミックライブラリ内の関数を取得 */
-#define GET_PROC_ADR(M, N)	GetProcAddress(M, N);
+#define GET_PROC_ADR(M, N)	GetProcAddress(M, N)
 
 #else
 
@@ -30,11 +29,12 @@ mana (library)
 #include <dlfcn.h>
 #include <unistd.h>
 /*! ダイナミックライブラリを読み込む */
-#define LOAD_LIBRARY(N)		dlopen(N, RTLD_LAZY);
+#define LOAD_LIBRARY(N)		dlopen(N, RTLD_LAZY)
 /*! ダイナミックライブラリを開放 */
-#define FREE_LIBRARY(M)		dlclose(M);
+#define FREE_LIBRARY(M)		dlclose(M)
 /*! ダイナミックライブラリ内の関数を取得 */
-#define GET_PROC_ADR(M, N)	dlsym(M, N);
+#define GET_PROC_ADR(M, N)	dlsym(M, N)
+
 #endif
 
 namespace mana
@@ -54,11 +54,10 @@ namespace mana
 
 		for (auto plugin : mPlugins)
 		{
-			typedef int32_t(*mana_finalize)(const std::shared_ptr<VM>&);
-			mana_finalize function = (mana_finalize)GET_PROC_ADR(plugin, "mana_finalize");
-			if (function)
+			typedef int32_t(*Finalize)(const std::shared_ptr<VM>&);
+			if (Finalize function = reinterpret_cast<Finalize>(GET_PROC_ADR(plugin, "Finalize")))
 				function(vm);
-			FREE_LIBRARY(plugin)
+			FREE_LIBRARY(plugin);
 		}
 	}
 
@@ -70,40 +69,39 @@ namespace mana
 			return;
 		}
 
-		MODULE module = LOAD_LIBRARY(fileName.c_str())
+		MODULE module = LOAD_LIBRARY(fileName.c_str());
 		if (module == nullptr)
 		{
 			return;
 		}
 
-		typedef int32_t(*mana_initialize)(const std::shared_ptr<VM>&);
-		mana_initialize function = (mana_initialize)GET_PROC_ADR(module, "mana_initialize")
+		typedef int32_t(*Initialize)(const std::shared_ptr<VM>&);
+		Initialize function = reinterpret_cast<Initialize>(GET_PROC_ADR(module, "Initialize"));
 		if (function && function(vm))
 		{
 			mPlugins.push_back(module);
 			return;
 		}
-		FREE_LIBRARY(module)
+		FREE_LIBRARY(module);
 	}
 
 	inline void Plugin::Register(const std::string& directoryName)
 	{
 #if defined(MANA_TARGET_WINDOWS)
 		{
-			HANDLE handle;
-			WIN32_FIND_DATA fd;
 			char entry[_MAX_PATH];
 
 			strcpy_s(entry, _MAX_PATH, directoryName.c_str());
 			strcat_s(entry, _MAX_PATH, "\\*.ml");
 
-			handle = FindFirstFile(entry, &fd);
-			if(handle != INVALID_HANDLE_VALUE)
+			WIN32_FIND_DATA fd;
+			const HANDLE handle = FindFirstFile(entry, &fd);
+			if (handle != INVALID_HANDLE_VALUE)
 			{
-				do{
-					if(strcmp(fd.cFileName, ".") && strcmp(fd.cFileName, ".."))
+				do {
+					if (strcmp(fd.cFileName, ".") && strcmp(fd.cFileName, ".."))
 					{
-						if(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+						if (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 						{
 							Register(fd.cFileName);
 						}
@@ -112,8 +110,7 @@ namespace mana
 							Load(fd.cFileName);
 						}
 					}
-				}
-				while(FindNextFile(handle, &fd));
+				} while (FindNextFile(handle, &fd));
 			}
 
 			FindClose(handle);

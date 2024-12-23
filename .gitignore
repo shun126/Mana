@@ -39,5 +39,6 @@
 
 # Mana
 *.mx
-/sample/*.json
-/test/*.json
+/sample/*.md
+/test/*.md
+

@@ -27,7 +27,7 @@ namespace mana
 		using ExternalFunctionType = std::function<void(const std::shared_ptr<Actor>&)>;
 
 	public:
-		VM();
+		VM() = default;
 		VM(const VM&) = delete;
 		VM(VM&&) noexcept = delete;
 		VM& operator=(const VM&) = delete;
@@ -38,11 +38,6 @@ namespace mana
 		void LoadPlugins(const std::string& directoryName);
 
 		void RegisterFunction(const std::string& name, const ExternalFunctionType& function);
-
-#if 0
-		void Serialize(mana_stream* stream);
-		void Deserialize(mana_stream* stream);
-#endif
 
 		void LoadProgram(const std::string& path);
 		void LoadProgram(const std::shared_ptr<const void>& program);
@@ -99,8 +94,8 @@ namespace mana
 		const char* mConstantPool = nullptr;
 		//std::vector<,*> m,Array;					//!< , オブジェクトへの配列
 		std::unordered_map<std::string, ExternalFunctionType> mFunctionHash;
-		std::unordered_map<std::string_view, std::shared_ptr<Actor>> mActorHash;		//!< , オブジェクトへの連想配列
-		std::unordered_map<std::string_view, const ActorInfoHeader*> mPhantomHash;		//!< phantomを表すmana_actor オブジェクトへの連想配列
+		std::unordered_map<std::string_view, std::shared_ptr<Actor>> mActorHash;		//!< オブジェクトへの連想配列
+		std::unordered_map<std::string_view, const ActorInfoHeader*> mPhantomHash;		//!< phantomを表すActorオブジェクトへの連想配列
 		Buffer mGlobalVariables;
 		Buffer mStaticVariables;
 		

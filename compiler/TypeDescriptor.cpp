@@ -17,7 +17,7 @@ namespace mana
 	{
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
 		static uint32_t count = 0;
-		snprintf(mMagic, sizeof(mMagic), "T%d", count);
+		snprintf(mMagic, sizeof(mMagic), "T%u", count);
 		++count;
 #endif
 	}
@@ -39,26 +39,24 @@ namespace mana
 
 	bool TypeDescriptor::Compare(const std::shared_ptr<TypeDescriptor>& typeDescriptor) const
 	{
-		if(mTcons != typeDescriptor->mTcons)
+		if (mTcons != typeDescriptor->mTcons)
 			return false;
 
-		switch(mTcons)
+		switch (mTcons)
 		{
 		case Id::Reference:
 			return mComponent->Compare(typeDescriptor->mComponent);
 
 		case Id::Array:
-			{
-				const address_t n1 = mArraySize;
-				const address_t n2 = typeDescriptor->mArraySize;
-				if (n1 != n2 )
-					CompileError("array size unmatched");
-				return mComponent->Compare(typeDescriptor->mComponent);
-			}
+		{
+			const address_t n1 = mArraySize;
+			const address_t n2 = typeDescriptor->mArraySize;
+			if (n1 != n2)
+				CompileError("array size unmatched");
+			return mComponent->Compare(typeDescriptor->mComponent);
+		}
 
 		case Id::Actor:
-			return true;
-
 		case Id::Struct:
 		case Id::Incomplete:
 		default:
@@ -72,12 +70,12 @@ namespace mana
 		{
 #if 0
 		case Id::Char:
-			if(typeDescriptor->mTcons == Id::Char)
+			if (typeDescriptor->mTcons == Id::Char)
 				return true;
 			break;
 
 		case Id::Short:
-			switch(typeDescriptor->mTcons)
+			switch (typeDescriptor->mTcons)
 			{
 			case Id::Char:
 			case Id::Short:
@@ -91,7 +89,7 @@ namespace mana
 		case Id::Short:
 #endif
 		case Id::Int:
-			switch(typeDescriptor->mTcons)
+			switch (typeDescriptor->mTcons)
 			{
 			case Id::Char:
 			case Id::Short:
@@ -103,26 +101,23 @@ namespace mana
 			break;
 
 		case Id::Float:
-			if(typeDescriptor->mTcons == Id::Float)
+			if (typeDescriptor->mTcons == Id::Float)
 				return true;
 			break;
 
 		case Id::Struct:
 		case Id::Array:
-			if(Compare(typeDescriptor))
+			if (Compare(typeDescriptor))
 				return true;
 			break;
 
 		case Id::Actor:
-			if(Compare(typeDescriptor))
-				return true;
-
-			if(typeDescriptor->mTcons == Id::Nil)
+			if (mTcons == typeDescriptor->mTcons)
 				return true;
 			break;
 
 		case Id::Reference:
-			if(this == typeDescriptor.get())
+			if (this == typeDescriptor.get())
 				return true;
 			break;
 

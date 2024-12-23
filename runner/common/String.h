@@ -38,7 +38,7 @@ namespace mana
 		std::cout << message;
 	}
 
-	inline void Trace(std::initializer_list<std::string_view> message)
+	inline void Trace(const std::initializer_list<std::string_view> message)
 	{
 		Trace(Concat(message));
 	}

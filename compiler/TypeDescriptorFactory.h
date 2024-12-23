@@ -14,6 +14,9 @@ mana (compiler)
 
 namespace mana
 {
+	/*
+	型の識別子を生成します
+	*/
 	class TypeDescriptorFactory final : Noncopyable
 	{
 	public:

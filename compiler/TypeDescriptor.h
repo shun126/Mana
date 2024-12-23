@@ -15,6 +15,9 @@ namespace mana
 {
 	class Symbol;
 
+	/*
+	型の識別子
+	*/
 	class TypeDescriptor final
 	{
 		friend class SemanticAnalyzer;
@@ -62,6 +65,7 @@ namespace mana
 		}
 
 	public:
+		TypeDescriptor() = delete;
 		~TypeDescriptor() = default;
 
 		[[nodiscard]] bool Is(const Id id) const;
