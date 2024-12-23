@@ -72,13 +72,15 @@ namespace mana
 		symbol = CreateSymbol(name, Symbol::ClassTypeId::ConstantInteger);
 		symbol->SetTypeDescription(mTypeDescriptorFactory->Get(TypeDescriptor::Id::Int));
 		symbol->SetEtc(value);
+
+		// TODO スクリプトのグローバル変数を構造体としてヘッダーに出力する必要があるか検討して下さい
 #if 0
-		// TODO
 		if(mana_variable_header_file)
 		{
 			fprintf(mana_variable_header_file, "#define _%s %d\n", name, value);
 		}
 #endif
+
 		return symbol;
 	}
 
@@ -91,13 +93,15 @@ namespace mana
 		symbol = CreateSymbol(name, Symbol::ClassTypeId::ConstantFloat);
 		symbol->SetTypeDescription(mTypeDescriptorFactory->Get(TypeDescriptor::Id::Float));
 		symbol->SetFloat(value);
+
+		// TODO スクリプトのグローバル変数を構造体としてヘッダーに出力する必要があるか検討して下さい
 #if 0
-		// TODO
 		if(mana_variable_header_file)
 		{
 			fprintf(mana_variable_header_file, "#define _%s %f\n", name, value);
 		}
 #endif
+
 		return symbol;
 	}
 
@@ -112,13 +116,15 @@ namespace mana
 		symbol = CreateSymbol(name, Symbol::ClassTypeId::ConstantString);
 		symbol->SetTypeDescription(mTypeDescriptorFactory->GetString());
 		symbol->SetString(value);
+
+		// TODO スクリプトのグローバル変数を構造体としてヘッダーに出力する必要があるか検討して下さい
 #if 0
-		// TODO
 		if(mana_variable_header_file)
 		{
 			fprintf(mana_variable_header_file, "#define _%s \"%s\"\n", name, value);
 		}
 #endif
+
 		return symbol;
 	}
 
@@ -166,7 +172,7 @@ namespace mana
 		return symbol;
 	}
 
-	std::shared_ptr<Symbol> SymbolFactory::CreateFunction(const std::string_view name, const bool isActorOrStructOpened, const bool isModuleBlockOpened)
+	std::shared_ptr<Symbol> SymbolFactory::CreateFunction(const std::string_view name, const bool isActorOrStructOpened)
 	{
 		const Symbol::ClassTypeId classType = isActorOrStructOpened
 			? Symbol::ClassTypeId::MemberFunction : Symbol::ClassTypeId::Function;
@@ -681,23 +687,22 @@ TODO:
 	////////////////////////////////////////////////////////////////////////////////
 	// structuer
 
-	// symbol_open_structure
-	void SymbolFactory::OpenStructure()
+	void SymbolFactory::BeginRegistrationStructure()
 	{
+		// TODO スクリプトのグローバル変数を構造体としてヘッダーに出力する必要があるか検討して下さい
 #if 0
-		// TODO
-				// 1) output header
+		// 1) output header
 		if (mana_variable_header_file)
 			PrintHeader();
 #endif
+
 		// 2) open block
 		OpenBlock(false);
 		++mActorOrStructureLevel;
 		mActorMemoryAddress = 0;
 	}
 
-	// symbol_close_structure
-	void SymbolFactory::CloseStructure(const std::string_view name)
+	void SymbolFactory::CommitRegistrationStructure(const std::string_view name)
 	{
 		MANA_ASSERT(GetBlockDepth() > 0);
 
@@ -734,12 +739,65 @@ TODO:
 		CloseBlock();
 
 		newType->SetMemorySize(symbol_align_size(mActorMemoryAddress, maxAligmentSize));
-#if 0 // TODO
+
+		// TODO スクリプトのグローバル変数を構造体としてヘッダーに出力する必要があるか検討して下さい
+#if 0
 		// 3) output header
 		if (mana_variable_header_file)
 			PrintFooter(name, newType);
 #endif
+
 		CreateType(name, newType);
+	}
+
+	// symbol_open_structure
+	void SymbolFactory::OpenStructure(const std::string_view name)
+	{
+		OpenBlock(false);
+		++mActorOrStructureLevel;
+
+		if (const std::shared_ptr<Symbol>& symbol = Lookup(name))
+		{
+			std::shared_ptr<TypeDescriptor> type;
+
+			for (type = symbol->GetTypeDescriptor(); type->GetId() == TypeDescriptor::Id::Array; type = type->GetComponent())
+				;
+
+			// typeがactorではない場合、続行不可能
+			if (type->GetId() != TypeDescriptor::Id::Struct)
+			{
+				CompileError({ symbol->GetName(), " is Not struct!" });
+			}
+			else
+			{
+				// symbol_close_blockでsymbol_hash_chain_tableを開放する
+				// TODO:mBlockTable.top().mHead = (const std::shared_ptr<Symbol>&)type->component;
+
+				// シンボルリストの末端からhashに登録
+				// TODO: symbol_open_actor_register_member((const std::shared_ptr<Symbol>&)type->component);
+			}
+
+			// instance変数サイズの再計算
+			mActorMemoryAddress = symbol->GetTypeDescriptor() ? symbol->GetTypeDescriptor()->GetMemorySize() : 0;
+
+			// 現在開いている型を記録
+			mBlockTypeDescriptor.push(type);
+		}
+		else
+		{
+			// instance変数サイズの再計算
+			mActorMemoryAddress = 0;
+		}
+	}
+
+	// symbol_close_structure
+	void SymbolFactory::CloseStructure()
+	{
+		--mActorOrStructureLevel;
+		CloseBlock();
+
+		// 現在開いている型をリセット
+		mBlockTypeDescriptor.pop();
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -873,12 +931,7 @@ TODO:
 		OpenBlock(false);
 		++mActorOrStructureLevel;
 
-		const std::shared_ptr<Symbol>& symbol = Lookup(name);
-		if (symbol == nullptr)
-		{
-
-		}
-		else
+		if (const std::shared_ptr<Symbol>& symbol = Lookup(name))
 		{
 			std::shared_ptr<TypeDescriptor> type;
 
@@ -888,7 +941,7 @@ TODO:
 			// typeがactorではない場合、続行不可能
 			if (type->GetId() != TypeDescriptor::Id::Actor && type->GetId() != TypeDescriptor::Id::Module)
 			{
-				CompileError({ symbol->GetName(), "%s is Not actor!" });
+				CompileError({ symbol->GetName(), " is Not actor!" });
 			}
 			else
 			{
@@ -898,16 +951,27 @@ TODO:
 				// シンボルリストの末端からhashに登録
 				// TODO: symbol_open_actor_register_member((const std::shared_ptr<Symbol>&)type->component);
 			}
-		}
 
-		// instance変数サイズの再計算
-		mActorMemoryAddress = (symbol && symbol->GetTypeDescriptor()) ? symbol->GetTypeDescriptor()->GetMemorySize() : 0;
+			// instance変数サイズの再計算
+			mActorMemoryAddress = symbol->GetTypeDescriptor() ? symbol->GetTypeDescriptor()->GetMemorySize() : 0;
+
+			// 現在開いている型を記録
+			mBlockTypeDescriptor.push(type);
+		}
+		else
+		{
+			// instance変数サイズの再計算
+			mActorMemoryAddress = 0;
+		}
 	}
 
 	void SymbolFactory::CloseActor()
 	{
 		--mActorOrStructureLevel;
 		CloseBlock();
+
+		// 現在開いている型をリセット
+		mBlockTypeDescriptor.pop();
 
 		/*
 		type->memory_size = symbol_align_size(mActorMemoryAddress, IBSZ);
@@ -999,11 +1063,39 @@ TODO:
 	void SymbolFactory::OpenModule(const std::shared_ptr<Symbol>& symbol)
 	{
 		MANA_UNUSED_VAR(symbol);
+
+		if (symbol)
+		{
+			std::shared_ptr<TypeDescriptor> type;
+
+			for (type = symbol->GetTypeDescriptor(); type->GetId() == TypeDescriptor::Id::Array; type = type->GetComponent())
+				;
+
+			// typeがactorではない場合、続行不可能
+			if (type->GetId() != TypeDescriptor::Id::Actor && type->GetId() != TypeDescriptor::Id::Module)
+			{
+				CompileError({ symbol->GetName(), " is Not actor!" });
+			}
+			else
+			{
+				// symbol_close_blockでsymbol_hash_chain_tableを開放する
+				// TODO:mBlockTable.top().mHead = (const std::shared_ptr<Symbol>&)type->component;
+
+				// シンボルリストの末端からhashに登録
+				// TODO: symbol_open_actor_register_member((const std::shared_ptr<Symbol>&)type->component);
+			}
+
+			// 現在開いている型を記録
+			mBlockTypeDescriptor.push(type);
+		}
 	}
 
 	void SymbolFactory::CloseModule(const std::string_view name)
 	{
 		MANA_UNUSED_VAR(name);
+
+		// 現在開いている型をリセット
+		mBlockTypeDescriptor.pop();
 	}
 
 	// symbol_extend_module
@@ -1042,9 +1134,9 @@ TODO:
 
 	////////////////////////////////////////////////////////////////////////////////
 	// request
-	void SymbolFactory::AddRequest(const std::shared_ptr<CodeGenerator>& codeGenerator, const IntermediateLanguage opcode, const std::shared_ptr<SyntaxNode>& level, const std::shared_ptr<SyntaxNode>& actor, const std::string_view action)
+	void SymbolFactory::AddRequest(const std::shared_ptr<CodeGenerator>& codeGenerator, const IntermediateLanguage opcode, const std::shared_ptr<SyntaxNode>& level, const std::shared_ptr<SyntaxNode>& actor, const std::string_view action) const
 	{
-		//mana_generator_expression(level, false);
+		codeGenerator->Expression(level, false);
 
 		if (actor && actor->GetTypeDescriptor())
 		{
@@ -1071,22 +1163,24 @@ TODO:
 						code = IntermediateLanguage::DynamicRequestWaitEnded;
 						break;
 					default:
-						goto ABORT;
+						CompileError("incompatible type of operand");
+						return;
 					}
 					codeGenerator->Expression(actor, false);
 					mCodeBuffer->AddOpecodeAndOperand(code, mDataBuffer->Set(action));
 					return;
 				}
+				break;
 
 			default:
 				break;
 			}
 		}
-	ABORT:
+
 		CompileError("incompatible type of operand");
 	}
 
-	void SymbolFactory::AddJoin(const std::shared_ptr<CodeGenerator>& codeGenerator, const std::shared_ptr<SyntaxNode>& level, const std::shared_ptr<SyntaxNode>& actor)
+	void SymbolFactory::AddJoin(const std::shared_ptr<CodeGenerator>& codeGenerator, const std::shared_ptr<SyntaxNode>& level, const std::shared_ptr<SyntaxNode>& actor) const
 	{
 		if (actor && actor->GetTypeDescriptor())
 		{
@@ -1117,8 +1211,9 @@ TODO:
 			CompileError("incomplete type name or void is used for declraration");
 			type = mTypeDescriptorFactory->Get(TypeDescriptor::Id::Int);
 		}
+
+		// TODO スクリプトのグローバル変数を構造体としてヘッダーに出力する必要があるか検討して下さい
 #if 0
-		// TODO
 		if (mana_variable_header_file)
 		{
 			PrintEntry(symbol, type);
@@ -1177,7 +1272,7 @@ TODO:
 		symbol->SetMemoryTypeId(parameter);
 	}
 
-	int32_t SymbolFactory::GetStaticMemoryAddress()
+	int32_t SymbolFactory::GetStaticMemoryAddress() const
 	{
 		return mStaticMemoryAddress;
 	}
@@ -1188,7 +1283,7 @@ TODO:
 			mStaticMemoryAddress = size;
 	}
 
-	int32_t SymbolFactory::GetGlobalMemoryAddress()
+	int32_t SymbolFactory::GetGlobalMemoryAddress() const
 	{
 		return mGlobalMemoryAddress;
 	}
@@ -1237,20 +1332,22 @@ TODO:
 
 	void SymbolFactory::CheckUndefine()
 	{
-		Each([](const std::shared_ptr<Symbol>& symbol) {
-			if (symbol->GetBlockLevel() > 0)
+		Each([](const std::shared_ptr<Symbol>& symbol)
+			{
+				if (symbol->GetBlockLevel() > 0)
+					return true;
+
+				symbol->CheckUndefineRecursive();
+
 				return true;
-
-			symbol->CheckUndefineRecursive();
-
-			return true;
-			});
+			}
+		);
 	}
 
 	void SymbolFactory::PrintHeader()
 	{
+		// TODO スクリプトのグローバル変数を構造体としてヘッダーに出力する必要があるか検討して下さい
 #if 0
-		// TODO
 		if (mana_variable_header_file)
 		{
 			int32_t i;
@@ -1266,11 +1363,9 @@ TODO:
 
 	void SymbolFactory::PrintFooter(const std::string_view name, const std::shared_ptr<TypeDescriptor>& type)
 	{
+		// TODO スクリプトのグローバル変数を構造体としてヘッダーに出力する必要があるか検討して下さい
 #if 0
-		// TODO
-		int32_t i;
-
-		for (i = 0; i <= GetBlockDepth(); i++)
+		for (int32_t i = 0; i <= GetBlockDepth(); i++)
 		{
 			fputc('\t', mana_variable_header_file);
 		}
@@ -1278,8 +1373,8 @@ TODO:
 #endif
 	}
 
+	// TODO スクリプトのグローバル変数を構造体としてヘッダーに出力する必要があるか検討して下さい
 #if 0
-	// TODO
 	static void SymbolFactory::symbol_print_entry_core(const std::shared_ptr<Symbol>& symbol, const std::shared_ptr<TypeDescriptor>& type)
 	{
 		int32_t i;
@@ -1303,8 +1398,8 @@ TODO:
 
 	void SymbolFactory::PrintEntry(const std::shared_ptr<Symbol>& symbol, const std::shared_ptr<TypeDescriptor>& type)
 	{
+		// TODO スクリプトのグローバル変数を構造体としてヘッダーに出力する必要があるか検討して下さい
 #if 0
-		// TODO
 		if (GetBlockDepth() <= 0)
 		{
 			symbol_print_entry_core(symbol, type);
@@ -1318,8 +1413,8 @@ TODO:
 
 	void SymbolFactory::PrintDummyGlobalVariable(size_t size)
 	{
+		// TODO スクリプトのグローバル変数を構造体としてヘッダーに出力する必要があるか検討して下さい
 #if 0
-		// TODO
 		if (mana_variable_header_file)
 		{
 			unsigned d1 = (unsigned)ftell(mana_variable_header_file);
@@ -1335,7 +1430,7 @@ TODO:
 #endif
 	}
 
-	bool SymbolFactory::GenerateActorInfomation(OutputStream& stream) const
+	bool SymbolFactory::GenerateActorInformation(OutputStream& stream) const
 	{
 		return Each([this, &stream](const std::shared_ptr<const Symbol>& symbol) {
 			if (symbol->GetBlockLevel() > 0)
@@ -1443,8 +1538,8 @@ TODO:
 
 	////////////////////////////////////////////////////////////////////////////////
 	// dump
+	// TODO スクリプトのグローバル変数を構造体としてヘッダーに出力する必要があるか検討して下さい
 #if 0
-// TODO
 	static void SymbolFactory::type_dump_core(FILE* fp, const const std::shared_ptr<TypeDescriptor>& type)
 	{
 		if (type)

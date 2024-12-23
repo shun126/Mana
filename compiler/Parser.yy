@@ -65,7 +65,7 @@ mana (compiler)
 %token	tDEFINE tUNDEF tINCLUDE tIMPORT
 %token	tNATIVE tSTRUCT tACTOR tACTOR2 tPHANTOM tACTION tMODULE tEXTEND
 %token	tFALSE tTRUE tPRIORITY tSELF tSENDER tNIL
-%token	tREQUEST tJOIN
+%token	tREQUEST tAwaitStart tAwaitCompletion tJOIN
 %token	tBREAK
 %token	tCONTINUE
 %token	tCASE
@@ -110,11 +110,12 @@ mana (compiler)
 %%
 program			: line
 					{
+#if defined(__STDC_WANT_SECURE_LIB__)
 						if ($1)
 						{
 							$1->Dump();
 						}
-
+#endif
 						auto globalSemanticAnalyzer = mParsingDriver->GetGlobalSemanticAnalyzer();
 						globalSemanticAnalyzer->Resolve($1);
 
@@ -123,7 +124,6 @@ program			: line
 
 						auto globalAddressResolver = mParsingDriver->GetCodeGenerator()->GetGlobalAddressResolver();
 						globalAddressResolver->ResolveAddress();
-						//globalAddressResolver->mana_linker_resolve_address();
 					}
 				;
 				
@@ -277,6 +277,10 @@ statement		: tIF '(' expression ')' statement
 					{ $$ = mParsingDriver->CreatePrint($3); }
 				| tREQUEST '(' expression ','  expression tDC tIDENTIFIER ')' ';'
 					{ $$ = mParsingDriver->CreateRequest($3, $5, $7); }
+				| tAwaitStart '(' expression ','  expression tDC tIDENTIFIER ')' ';'
+					{ $$ = mParsingDriver->CreateAwaitStart($3, $5, $7); }
+				| tAwaitCompletion '(' expression ','  expression tDC tIDENTIFIER ')' ';'
+					{ $$ = mParsingDriver->CreateAwaitCompletion($3, $5, $7); }
 				| tJOIN '(' expression ','  expression ')' ';'
 					{ $$ = mParsingDriver->CreateJoin($3, $5); }
 				| block

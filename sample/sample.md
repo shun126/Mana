@@ -58,18 +58,18 @@
   * id='local variable' type='array[short, a]' name='array' address=0x00000020
   * id='local variable' type='int' name='size' address=0x0000000c
 * id='typedef' type='actor { 0x00000004 bytes aligment 0x00000004 }' name='TestActor1' address=0x00000000
-  * id='member function' type='void' name='talk' address=0x000006c6
+  * id='member function' type='void' name='talk' address=0x000006c8
   * id='member function' type='void' name='main' address=0x0000067b
   * id='member function' type='void' name='init' address=0x00000656
   * id='instance variable' type='int' name='digitVariableInActor' address=0x00000000
 * id='typedef' type='module { 0x00000000 bytes aligment 0x00000008 }' name='Battler' address=0x00000000
 * id='typedef' type='actor { 0x00000000 bytes aligment 0x00000004 }' name='OtherTestActor' address=0x00000000
-  * id='member function' type='void' name='talk' address=0x000006f1
-  * id='member function' type='void' name='dead' address=0x000006e6
-  * id='member function' type='void' name='init' address=0x00000707
+  * id='member function' type='void' name='talk' address=0x000006f3
+  * id='member function' type='void' name='dead' address=0x000006e8
+  * id='member function' type='void' name='init' address=0x00000709
 * id='typedef' type='actor { 0x00000000 bytes aligment 0x00000004 }' name='Phantom' address=0x00000000
-  * id='member function' type='void' name='dead' address=0x000006e6
-  * id='member function' type='void' name='init' address=0x00000707
+  * id='member function' type='void' name='dead' address=0x000006e8
+  * id='member function' type='void' name='init' address=0x00000709
 
 # Code
 ```
@@ -655,39 +655,40 @@ TestActor1::main
 0x0000068c:load effective address 0x0000001c (frame)
 0x00000691:load (data) 20 byte(s)
 0x00000696:bsr 0x000003d4
-0x0000069b:push actor 'OtherTestActor'
-0x000006a0:req 'talk'
-0x000006a5:load effective address 0x000000a6 (data)
-0x000006aa:print argc=1
-0x000006af:push actor 'OtherTestActor'
-0x000006b4:push zero (integer)
-0x000006b5:join
-0x000006b6:load effective address 0x000000bb (data)
-0x000006bb:print argc=1
-0x000006c0:release  28 byte(s)
-0x000006c5:return from action
+0x0000069b:push 1 (char)
+0x0000069d:push actor 'OtherTestActor'
+0x000006a2:req 'talk'
+0x000006a7:load effective address 0x000000a6 (data)
+0x000006ac:print argc=1
+0x000006b1:push actor 'OtherTestActor'
+0x000006b6:push zero (integer)
+0x000006b7:join
+0x000006b8:load effective address 0x000000bb (data)
+0x000006bd:print argc=1
+0x000006c2:release  28 byte(s)
+0x000006c7:return from action
 TestActor1::talk
-0x000006c6:allocate 16 byte(s)
-0x000006cb:load effective address 0x000000d0 (data)
-0x000006d0:print argc=1
-0x000006d5:release  16 byte(s)
-0x000006da:return from action
-0x000006db:allocate 8 byte(s)
-0x000006e0:release  8 byte(s)
-0x000006e5:return from function
+0x000006c8:allocate 16 byte(s)
+0x000006cd:load effective address 0x000000d0 (data)
+0x000006d2:print argc=1
+0x000006d7:release  16 byte(s)
+0x000006dc:return from action
+0x000006dd:allocate 8 byte(s)
+0x000006e2:release  8 byte(s)
+0x000006e7:return from function
 OtherTestActor::dead
-0x000006e6:allocate 8 byte(s)
-0x000006eb:release  8 byte(s)
-0x000006f0:return from function
+0x000006e8:allocate 8 byte(s)
+0x000006ed:release  8 byte(s)
+0x000006f2:return from function
 OtherTestActor::talk
-0x000006f1:allocate 20 byte(s)
-0x000006f6:load effective address 0x000000da (data)
-0x000006fb:print argc=1
-0x00000700:yield
-0x00000701:release  20 byte(s)
-0x00000706:return from action
+0x000006f3:allocate 20 byte(s)
+0x000006f8:load effective address 0x000000da (data)
+0x000006fd:print argc=1
+0x00000702:yield
+0x00000703:release  20 byte(s)
+0x00000708:return from action
 OtherTestActor::init
-0x00000707:allocate 8 byte(s)
-0x0000070c:release  8 byte(s)
-0x00000711:return from action
+0x00000709:allocate 8 byte(s)
+0x0000070e:release  8 byte(s)
+0x00000713:return from action
 ```

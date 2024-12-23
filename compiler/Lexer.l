@@ -129,6 +129,8 @@ other		.
 <INITIAL>"while"	return mana::Parser::token::tWHILE;
 <INITIAL>"print"	return mana::Parser::token::tPRINT;
 <INITIAL>"request"	return mana::Parser::token::tREQUEST;
+<INITIAL>"awaitStart"		return mana::Parser::token::tAwaitStart;
+<INITIAL>"awaitCompletion"	return mana::Parser::token::tAwaitCompletion;
 <INITIAL>"yield"	return mana::Parser::token::tYIELD;
 
 <INITIAL>"sizeof"	return mana::Parser::token::tSIZEOF;

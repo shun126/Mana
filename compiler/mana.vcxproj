@@ -430,7 +430,6 @@
     <ClInclude Include="Parser.hpp" />
     <ClInclude Include="ParsingDriver.h" />
     <ClInclude Include="Path.h" />
-    <ClInclude Include="Runner.h" />
     <ClInclude Include="SemanticAnalyzer.h" />
     <ClInclude Include="StringPool.h" />
     <ClInclude Include="Symbol.h" />
@@ -460,7 +459,6 @@
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="ParsingDriver.cpp" />
     <ClCompile Include="Path.cpp" />
-    <ClCompile Include="Runner.cpp" />
     <ClCompile Include="SemanticAnalyzer.cpp" />
     <ClCompile Include="StringPool.cpp" />
     <ClCompile Include="Symbol.cpp" />

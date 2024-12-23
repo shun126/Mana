@@ -13,6 +13,9 @@ mana (compiler)
 
 namespace mana
 {
+	/*
+	アクションや関数などローカルな範囲の文法を解析します
+	*/
 	class LocalSemanticAnalyzer final : public SemanticAnalyzer
 	{
 	public:
