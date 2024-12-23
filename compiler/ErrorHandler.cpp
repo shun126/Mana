@@ -1,6 +1,9 @@
 /*!
 mana (compiler)
 
+@file	ErrorHandler.cpp
+@brief	エラーや警告に関係するソースファイル
+@detail	このファイルはエラーや警告に関係するソースファイルです。
 @author	Shun Moriya
 @date	2003-
 */

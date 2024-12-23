@@ -134,19 +134,17 @@ namespace mana
 	void SemanticAnalyzer::ResolveVariableDescription(const std::shared_ptr<SyntaxNode>& node, const Symbol::MemoryTypeId memoryTypeId, const bool isStaticVariable)
 	{
 		MANA_ASSERT(node);
-
-			MANA_ASSERT(node->GetLeftNode() && node->GetLeftNode()->Is(SyntaxNode::Id::TypeDescription));
+		MANA_ASSERT(node->GetLeftNode() && node->GetLeftNode()->Is(SyntaxNode::Id::TypeDescription));
 		ResolveTypeDescription(node->GetLeftNode());
 
 		MANA_ASSERT(node->GetRightNode() && node->GetRightNode()->Is(SyntaxNode::Id::Declarator));
 		ResolveDeclarator(node->GetRightNode(), isStaticVariable);
 
-		//if (node->right->symbol->class_type == LocalVariable)
 		GetSymbolFactory()->AllocateMemory(node->GetRightNode()->GetSymbol(), node->GetLeftNode()->GetTypeDescriptor(), memoryTypeId);
 		//symbol_allocate_memory(node->right->symbol, node->left->type, Parameter);
 	}
 
-	void SemanticAnalyzer::ResolveTypeFromChildNode(const std::shared_ptr<SyntaxNode>& node)
+	void SemanticAnalyzer::ResolveTypeFromChildNode(const std::shared_ptr<SyntaxNode>& node) const
 	{
 		MANA_ASSERT(node);
 

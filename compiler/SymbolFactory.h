@@ -26,6 +26,9 @@ namespace mana
 	class SyntaxNode;
 	class TypeDescriptorFactory;
 
+	/*
+	シンボルを生成します
+	*/
 	class SymbolFactory final : Noncopyable
 	{
 	public:
@@ -47,7 +50,7 @@ namespace mana
 		std::shared_ptr<Symbol> CreateConstString(const std::string_view name, const std::string_view text);
 		std::shared_ptr<Symbol> CreateVariable(const std::string_view name, const std::shared_ptr<TypeDescriptor>& type, const bool staticVariable, const bool isBlockOpened, const bool isFunctionOpened);
 		std::shared_ptr<Symbol> CreateLabel(const std::string_view name);
-		std::shared_ptr<Symbol> CreateFunction(const std::string_view name, const bool isActorOrStructOpened, const bool isModuleBlockOpened);
+		std::shared_ptr<Symbol> CreateFunction(const std::string_view name, const bool isActorOrStructOpened);
 		std::shared_ptr<Symbol> CreateType(const std::string_view name, const std::shared_ptr<TypeDescriptor>& type);
 		void Destroy(const std::string_view name);
 
@@ -114,8 +117,10 @@ namespace mana
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		// struct
-		void OpenStructure();
-		void CloseStructure(const std::string_view name);
+		void BeginRegistrationStructure();
+		void CommitRegistrationStructure(const std::string_view name);
+		void OpenStructure(const std::string_view name);
+		void CloseStructure();
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		// actor
@@ -138,26 +143,34 @@ namespace mana
 
 		void ExtendModule(const std::string_view name);
 
+
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		// TODO 適切な関数名を検討して下さい
+		std::shared_ptr<TypeDescriptor> GetCurrentBlockTypeDescriptor() const
+		{
+			return mBlockTypeDescriptor.top();
+		}
+
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 
-		void AddRequest(const std::shared_ptr<CodeGenerator>& codeGenerator, const IntermediateLanguage opcode, const std::shared_ptr<SyntaxNode>& level, const std::shared_ptr<SyntaxNode>& actor, const std::string_view action);
-		void AddJoin(const std::shared_ptr<CodeGenerator>& codeGenerator, const std::shared_ptr<SyntaxNode>& level, const std::shared_ptr<SyntaxNode>& actor);
+		void AddRequest(const std::shared_ptr<CodeGenerator>& codeGenerator, const IntermediateLanguage opcode, const std::shared_ptr<SyntaxNode>& level, const std::shared_ptr<SyntaxNode>& actor, const std::string_view action) const;
+		void AddJoin(const std::shared_ptr<CodeGenerator>& codeGenerator, const std::shared_ptr<SyntaxNode>& level, const std::shared_ptr<SyntaxNode>& actor) const;
 
 		void AllocateMemory(const std::shared_ptr<Symbol>& symbolEntry, std::shared_ptr<TypeDescriptor> type, Symbol::MemoryTypeId);
 
 
 		//const std::shared_ptr<Symbol>& symbol_get_head_symbol();
 
-		int32_t GetStaticMemoryAddress();
+		int32_t GetStaticMemoryAddress() const;
 		void SetStaticMemoryAddress(const int32_t size);
 
-		int32_t GetGlobalMemoryAddress();
+		int32_t GetGlobalMemoryAddress() const;
 		void SetGlobalMemoryAddress(const int32_t size);
 
 		void CheckUndefine();
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////
-		bool GenerateActorInfomation(OutputStream& stream) const;
+		bool GenerateActorInformation(OutputStream& stream) const;
 
 
 
@@ -239,6 +252,8 @@ namespace mana
 			{}
 		};
 		std::stack<std::unique_ptr<BlockTable>> mBlockTable;
+
+		std::stack<std::shared_ptr<TypeDescriptor>> mBlockTypeDescriptor;
 
 
 		ssize_t mActorOrStructureLevel = 0;

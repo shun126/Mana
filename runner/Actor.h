@@ -45,9 +45,6 @@ namespace mana
 		
 		std::shared_ptr<Actor> Clone() const;
 		
-		//void Serialize(mana_stream* stream);
-		//void Deserialize(mana_stream* stream);
-				
 		bool Run();
 		bool SyncCall(const int32_t priority, const char* action, const std::shared_ptr<Actor>& sender);
 		bool AsyncCall(const int32_t priority, const char* action, const std::shared_ptr<Actor>& sender);
@@ -59,8 +56,6 @@ namespace mana
 		const std::string_view& GetName();
 		uint32_t GetAction(const std::string_view& actionName) const;
 
-		[[nodiscard]] int32_t GetCounter() const;
-		void SetCounter(const int32_t counter);
 		[[nodiscard]] int32_t GetArgumentCount() const;
 		[[nodiscard]] int32_t GetArgumentCountByAddress(const uint32_t address) const;
 		[[nodiscard]] int32_t GetArgumentSize(const uint32_t address);
@@ -86,9 +81,9 @@ namespace mana
 #endif
 
 		std::shared_ptr<VM> GetVirtualMachine() const;
-		[[nodiscard]] bool IsInit();
-		[[nodiscard]] bool IsRepeat();
-		[[nodiscard]] bool IsRunning();
+		[[nodiscard]] bool IsCommandInitialized() const;
+		[[nodiscard]] bool IsCommandRepeat() const;
+		[[nodiscard]] bool IsRunning() const;
 		void Repeat(const bool initialComplete);
 		void Again();
 		void Halt();
@@ -124,17 +119,16 @@ namespace mana
 		//! 割り込みテーブル
 		struct Interrupt final
 		{
-			std::shared_ptr<Actor> mSender;			//!< 要求したmana_actor オブジェクト
-			uint32_t mAddress;						//!< 割り込み先アドレス
-			uint32_t mReturnAddress;				//!< リターンアドレス
-			int32_t mCounter;						//!< 汎用カウンタ
-			address_t mFramePointer;				//!< フレームポインタ
-			address_t mStackPointer;				//!< スタックポインタ
-			void* mFileCallbackParameter;			//!< ファイル終了コールバックパラメータ
+			std::shared_ptr<Actor> mSender;			//!< 要求したActorオブジェクト
+			uint32_t mAddress = Nil;				//!< 割り込み先アドレス
+			uint32_t mReturnAddress = Nil;			//!< リターンアドレス
+			address_t mFramePointer = Nil;			//!< フレームポインタ
+			address_t mStackPointer = Nil;			//!< スタックポインタ
+			void* mFileCallbackParameter = nullptr;	//!< ファイル終了コールバックパラメータ
+			std::bitset<8> mFlag = 0;
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
-			std::string mActionName;				//!< 実行中のアクション名 */
+			std::string mActionName;				//!< 実行中のアクション名
 #endif
-			std::bitset<8> mFlag;
 
 			enum class Flag : uint8_t
 			{
@@ -159,11 +153,11 @@ namespace mana
 			} mValues;
 			int32_t mSize;							//!< サイズ(mPointerValue)
 
-			static constexpr int32_t Invalid = 0;	/*!< 戻り値：無効 */
-			static constexpr int32_t Actor = -1;	/*!< 戻り値：アクターへの参照 */
-			static constexpr int32_t Integer = -2;	/*!< 戻り値：整数 */
-			static constexpr int32_t Float = -3;	/*!< 戻り値：小数 */
-			static constexpr int32_t String = -4;	/*!< 戻り値：文字列への参照 */
+			static constexpr int32_t Invalid = 0;	//!< 戻り値：無効
+			static constexpr int32_t Actor = -1;	//!< 戻り値：アクターへの参照
+			static constexpr int32_t Integer = -2;	//!< 戻り値：整数
+			static constexpr int32_t Float = -3;	//!< 戻り値：小数
+			static constexpr int32_t String = -4;	//!< 戻り値：文字列への参照
 
 			ReturnValue()
 				: mSize(0)
@@ -181,8 +175,8 @@ namespace mana
 		Event<int32_t> mRequestEvent;
 		Event<int32_t> mRollbackEvent;
 		Buffer mVariable;
-		address_t mPc = Nil;						/*!< プログラムカウンタ */
-		int32_t mInterruptPriority = 0;				/*!< 割り込みレベル */
+		address_t mPc = Nil;						//!< プログラムカウンタ
+		int32_t mInterruptPriority = 0;				//!< 割り込みレベル
 		std::bitset<8> mFlag = 0;
 		enum class Flag : uint8_t
 		{
@@ -304,24 +298,24 @@ namespace mana
 }
 
 #if MANA_BUILD_TARGET > MANA_BUILD_DEBUG
-/*! 引数の数を調べ、一致しない場合はreturnします */
+//! 引数の数を調べ、一致しない場合はreturnします
 #define MANA_ASSERT_PARAMETER(P, I) {					\
 	if(P->GetArgumentCount() != I)						\
 		return;											\
 }
-/*! initアクション中ならばreturnします */
+//! initアクション中ならばreturnします
 #define MANA_ASSERT_ILLIGAL_CALL_IN_INIT_ACTION(P) {	\
 	if(P->GetVirtualMachine()->IsInInitAction()){		\
 		return;											\
 }
 #else
-/*! 引数の数を調べ、一致しない場合は警告を表示してreturnします */
+//! 引数の数を調べ、一致しない場合は警告を表示してreturnします
 #define MANA_ASSERT_PARAMETER(P, I)	\
 	if((P)->GetArgumentCount() != (I)){	\
 		 MANA_PRINT({ "ERROR: ", (P)->GetName(), ": function ", (P)->GetFunctionName(), " number of arguments ", std::to_string((P)->GetArgumentCount()), " correct ", std::to_string(I), "\n" });\
 		 return;					\
 	}
-/*! initアクション中ならば警告を表示してreturnします */
+//! initアクション中ならば警告を表示してreturnします
 #define MANA_ASSERT_CANT_CALL_IN_INIT_ACTION(P)			\
 	if((P)->GetVirtualMachine()->IsInInitAction()){		\
 		MANA_PRINT({ "ERROR: ", (P)->GetName(), ": init action ", (P)->GetFunctionName()," can not call\n" });\

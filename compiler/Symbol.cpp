@@ -133,17 +133,22 @@ static char* symbol_data_type_id_name[NUMBER_OF] = {
 		return mMemoryTypeId;
 	}
 
-	void Symbol::SetMemoryTypeId(const MemoryTypeId MemoryTypeId)
+	void Symbol::SetMemoryTypeId(const MemoryTypeId memoryTypeId)
 	{
-		mMemoryTypeId = MemoryTypeId;
+		mMemoryTypeId = memoryTypeId;
 	}
 
-	const std::string_view Symbol::GetName() const
+	const std::string& Symbol::GetName() const
 	{
 		return mName;
 	}
 
-	void Symbol::SetName(const std::string_view name)
+	void Symbol::SetName(const std::string& name)
+	{
+		mName = name;
+	}
+
+	void Symbol::SetName(const std::string_view& name)
 	{
 		mName = name;
 	}

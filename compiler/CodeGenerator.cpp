@@ -635,10 +635,12 @@ DO_RECURSIVE:
 		break;
 
 		case SyntaxNode::Id::Struct:
+			mSymbolFactory->OpenStructure(node->GetString());
 			// node->GetLeftNode()
 			MANA_ASSERT(node->GetRightNode() == nullptr);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			mLocalSemanticAnalyzer->PostResolverResolve(node);
+			mSymbolFactory->CloseStructure();
 			break;
 
 			///////////////////////////////////////////////////////////////////////
@@ -965,6 +967,16 @@ DO_RECURSIVE:
 
 		case SyntaxNode::Id::Request:
 			mSymbolFactory->AddRequest(shared_from_this(), IntermediateLanguage::Request, node->GetLeftNode(), node->GetRightNode(), node->GetString());
+			MANA_ASSERT(node->GetBodyNode() == nullptr);
+			break;
+
+		case SyntaxNode::Id::AwaitStart:
+			mSymbolFactory->AddRequest(shared_from_this(), IntermediateLanguage::RequestWaitStarting, node->GetLeftNode(), node->GetRightNode(), node->GetString());
+			MANA_ASSERT(node->GetBodyNode() == nullptr);
+			break;
+
+		case SyntaxNode::Id::AwaitCompletion:
+			mSymbolFactory->AddRequest(shared_from_this(), IntermediateLanguage::RequestWaitEnded, node->GetLeftNode(), node->GetRightNode(), node->GetString());
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			break;
 

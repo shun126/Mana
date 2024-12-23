@@ -83,10 +83,12 @@ namespace mana
 		memcpy(&header.mHeader, Signature, sizeof(header.mHeader));
 		header.mMajorVersion = MajorVersion;
 		header.mMinorVersion = MinorVersion;
-		/* TODO:Unimplemented
+
+		// TODO バイナリファイルにアセットデータを結合する必要があるか検討して下さい
+#if 0
 		if (GetSize() > 0)
 			header.mFlag |= (1 << FileHeader::Flag::Resource);
-		*/
+#endif
 		if (IsBigEndian())
 			header.mFlag |= (1 << FileHeader::Flag::BigEndian);
 #if UINTPTR_MAX == UINT64_MAX
@@ -104,16 +106,16 @@ namespace mana
 
 		stream.PushData(&header, sizeof(header));
 
-		if (!parser->GetSymbolFactory()->GenerateActorInfomation(stream))
+		if (!parser->GetSymbolFactory()->GenerateActorInformation(stream))
 		{
 			return false;
 		}
 
 		parser->GetDataBuffer()->Write(stream);
 		parser->GetCodeBuffer()->Write(stream);
-#if 0
-		TODO:Unimplemented
 
+		// TODO バイナリファイルにアセットデータを結合する必要があるか検討して下さい
+#if 0
 		if (GetSize() > 0)
 		{
 			size_t position = mana_stream_get_used_size(stream);
@@ -125,7 +127,7 @@ namespace mana
 					mana_stream_push_unsigned_char(stream, (const uint8_t)rand());
 			}
 		}
-					if (!datalink_generator_write_data(stream))
+			if (!datalink_generator_write_data(stream))
 			{
 				result = 1;
 				goto ESCAPE;
@@ -168,18 +170,19 @@ namespace mana
 
 			if (lexer::Initialize(parser, mInputFilename))
 			{
+				// TODO スクリプトのグローバル変数を構造体としてヘッダーに出力する必要があるか検討して下さい
 #if 0
-				// TODO:Unimplemented
 				if (mVariableHeaderFile)
 				{
-					fprintf(mVariableHeaderFile, "#if !defined(___MANA_GLOBAL_H___)\n");
-					fprintf(mVariableHeaderFile, "#define ___MANA_GLOBAL_H___\n");
+					fprintf(mVariableHeaderFile, "#pragma once\n");
 					fprintf(mVariableHeaderFile, "typedef struct mana_global\n{\n");
 				}
 #endif
+
 				result = parser->Parse() != 0 || yynerrs != 0;
+
+				// TODO スクリプトのグローバル変数を構造体としてヘッダーに出力する必要があるか検討して下さい
 #if 0
-				// TODO:Unimplemented
 				if (mVariableHeaderFile)
 				{
 					fprintf(mVariableHeaderFile, "}mana_global;\n");
@@ -188,6 +191,7 @@ namespace mana
 					mVariableHeaderFile = NULL;
 				}
 #endif
+
 				if (mDebug)
 				{
 					Dump(parser);
