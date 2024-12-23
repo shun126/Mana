@@ -110,7 +110,7 @@ mana (compiler)
 %%
 program			: line
 					{
-#if defined(__STDC_WANT_SECURE_LIB__)
+#if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
 						if ($1)
 						{
 							$1->Dump();
