@@ -15,22 +15,16 @@ namespace mana
 {
 	/**
 	 * Pool strings while removing duplicate strings
+	 * 重複文字列を削除しながら文字列をプールします
 	 */
 	class StringPool final
 	{
 	public:
-		/**
-		 * Creates StringPool object
-		 */
 		StringPool();
 		StringPool(const StringPool& other) = delete;
 		StringPool(StringPool&& other) noexcept = delete;
 		StringPool& operator=(const StringPool& other) = delete;
 		StringPool& operator=(StringPool&& other) noexcept = delete;
-
-		/**
-		 * Destroy StringPool object
-		 */
 		~StringPool() = default;
 
 		/**

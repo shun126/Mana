@@ -16,6 +16,9 @@ namespace mana
 {
 	class CodeGenerator;
 
+	/*
+	ローカルアドレスを解決します
+	*/
 	class LocalAddressResolver final : Noncopyable
 	{
 	public:

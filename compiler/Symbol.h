@@ -13,6 +13,9 @@ namespace mana
 {
 	class SymbolFactory;
 
+	/*
+	シンボル
+	*/
 	class Symbol final
 	{
 		friend class SymbolFactory;
@@ -80,7 +83,7 @@ namespace mana
 		[[nodiscard]] ClassTypeId GetClassTypeId() const;
 		[[nodiscard]] MemoryTypeId GetMemoryTypeId() const;
 		
-		[[nodiscard]] const std::string_view GetName() const;
+		[[nodiscard]] const std::string& GetName() const;
 		[[nodiscard]] int32_t GetAddress() const;
 		[[nodiscard]] int32_t GetEtc() const;
 		[[nodiscard]] float GetFloat() const;
@@ -104,8 +107,9 @@ namespace mana
 		void SetParameterList(const std::shared_ptr<Symbol>& symbol);
 		void SetNext(const std::shared_ptr<Symbol>& symbol);
 		void SetClassTypeId(const ClassTypeId classTypeId);
-		void SetMemoryTypeId(const MemoryTypeId MemoryTypeId);
-		void SetName(const std::string_view name);
+		void SetMemoryTypeId(const MemoryTypeId memoryTypeId);
+		void SetName(const std::string& name);
+		void SetName(const std::string_view& name);
 		void SetAddress(const int32_t address);
 		void SetEtc(const int32_t etc);
 		void SetFloat(const float value);

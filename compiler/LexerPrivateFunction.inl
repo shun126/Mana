@@ -43,21 +43,6 @@ namespace mana
 
 		const std::string_view pathPtr = mParsingDriver->GetStringPool()->Set(path);
 
-		/*
-		if(mana_debug)
-			printf("lexer: %s\n", path);
-			*/
-			/*
-			#if defined(_MSC_VER)
-				char* path = path;
-				while(*pathPointer)
-				{
-					*pathPointer = toupper(*pathPointer);
-					++pathPointer;
-				}
-			#endif
-			*/
-
 		if (check == true && LexerInstance->IsOpened(path) == false)
 			return true;
 

@@ -15,20 +15,24 @@ namespace mana
 	class SystemRandom : Noncopyable
 	{
 	public:
-		static SystemRandom& GetInstance()
-		{
-			static SystemRandom instance;
-			return instance;
-		}
+		static SystemRandom& GetInstance();
 
-		std::mt19937_64& Get()
-		{
-			return mSystemRandom;
-		}
+		std::mt19937_64& Get();
 
 	private:
 		std::mt19937_64 mSystemRandom;
 	};
+
+	inline SystemRandom& SystemRandom::GetInstance()
+	{
+		static SystemRandom instance;
+		return instance;
+	}
+
+	inline std::mt19937_64& SystemRandom::Get()
+	{
+		return mSystemRandom;
+	}
 
 	inline void srand(const int_t seed)
 	{
@@ -73,13 +77,13 @@ namespace mana
 	}
 
 	template <typename T>
-	inline T Alignment(const T value, const T alignment)
+	T Alignment(const T value, const T alignment)
 	{
 		return (value + alignment - 1) / alignment;
 	}
 
 	template <typename T>
-	inline T AlignUp(const T value, const T alignment)
+	T AlignUp(const T value, const T alignment)
 	{
 		return Alignment(value, alignment) * alignment;
 	}

@@ -15,6 +15,9 @@ namespace mana
 	class CodeBuffer;
 	class Symbol;
 
+	/*
+	グローバルアドレスを解決します
+	*/
 	class GlobalAddressResolver final : Noncopyable
 	{
 	public:

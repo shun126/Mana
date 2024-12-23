@@ -20,25 +20,6 @@ namespace mana
 		Allocate(size);
 	}
 
-#if 0
-	inline void Buffer::Serialize(mana_stream* stream) const
-	{
-		assert(stream);
-		mana_stream_push_size(stream, self->mUsedSize);
-		mana_stream_push_data(stream, self->mBuffer, self->mUsedSize);
-	}
-
-	inline void Buffer::Deserialize(mana_stream* stream)
-	{
-		assert(stream);
-
-		mAllocatedSize = mUsedSize = mana_stream_pop_size(stream);
-		mBuffer = mana_realloc(mBuffer, mAllocatedSize);
-
-		mana_stream_pop_data(stream, mBuffer, mAllocatedSize);
-	}
-#endif
-
 	inline void Buffer::Clear()
 	{
 		mUsedSize = 0;

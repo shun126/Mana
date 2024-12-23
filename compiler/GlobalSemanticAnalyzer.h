@@ -12,6 +12,9 @@ namespace mana
 {
 	class SyntaxNode;
 
+	/*
+	構造体、アクター、モジュール、関数などグローバルな範囲の文法を解析します
+	*/
 	class GlobalSemanticAnalyzer final : public SemanticAnalyzer
 	{
 	public:

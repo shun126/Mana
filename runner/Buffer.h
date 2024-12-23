@@ -24,11 +24,6 @@ namespace mana
 		explicit Buffer(const address_t size);
 		~Buffer() = default;
 
-#if 0
-		void Serialize(mana_stream* stream) const;
-		void Deserialize(mana_stream* stream);
-#endif
-
 		/**
 		 * Set the size used to 0. No memory is released.
 		 */
