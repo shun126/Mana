@@ -19,7 +19,8 @@ namespace mana
 	class OutputStream;
 
 	/*
-	Code Section Class
+	Code Section
+	コードセクション
 	*/
 	class CodeBuffer final : Noncopyable
 	{

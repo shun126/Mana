@@ -26,6 +26,7 @@ namespace mana
 	class CodeGenerator final : Noncopyable, public std::enable_shared_from_this<CodeGenerator>
 	{
 	public:
+		CodeGenerator() = delete;
 		explicit CodeGenerator(
 			const std::shared_ptr<CodeBuffer>& codeBuffer,
 			const std::shared_ptr<DataBuffer>& dataBuffer,
@@ -33,8 +34,6 @@ namespace mana
 			const std::shared_ptr<LocalSemanticAnalyzer>& localSemanticAnalyzer,
 			const std::shared_ptr<SymbolFactory>& symbolFactory,
 			const std::shared_ptr<TypeDescriptorFactory>& typeDescriptorFactory);
-
-		~CodeGenerator() = default;
 
 		/*!
 		ノードを辿りながら中間言語に翻訳します
@@ -90,7 +89,5 @@ namespace mana
 
 		std::shared_ptr<Symbol> mActorSymbolEntryPointer;
 		std::shared_ptr<Symbol> mFunctionSymbolEntryPointer;
-		//mana_hash* event_hash;
-		//bool static_block_opend;
 	};
 }

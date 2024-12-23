@@ -10,16 +10,14 @@ mana (compiler)
 #include "Symbol.h"
 #include "TypeDescriptor.h"
 #include "TypeDescriptorFactory.h"
-#include <cstdarg>
 
 namespace mana
 {
 	SyntaxNode::SyntaxNode(const Id id)
 		: mId(id)
+		, mFilename(lexer::GetCurrentFilename())
+		, mLineNo(lexer::GetCurrentLineNo())
 	{
-		mFilename = lexer::GetCurrentFilename();
-		mLineNo = lexer::GetCurrentLineNo();
-
 #if MANA_BUILD_TARGET == MANA_BUILD_DEBUG
 		static size_t count = 0;
 		const std::string magic = "N" + std::to_string(count);
@@ -117,12 +115,7 @@ namespace mana
 		case Id::Sender:			// sender (actor)
 		case Id::ExpressionIf:		// 三項演算子 '?'
 		default:
-#if 1
 			return mType->GetMemorySize();
-#else
-			mana_compile_error("illigal node type detect");
-			return 0;
-#endif
 		}
 	}
 
@@ -311,112 +304,90 @@ namespace mana
 		return shared_from_this();
 	}
 
-
-	namespace
-	{
-		static bool NodeDumpFormatFlag = false;
-
-		static void NodeDumpFormat(FILE* file, const char* format, ...)
-		{
-			if (NodeDumpFormatFlag)
-			{
-				NodeDumpFormatFlag = false;
-				fputc(',', file);
-			}
-
-			va_list arg;
-			va_start(arg, format);
-#if __STDC_WANT_SECURE_LIB__
-			vfprintf_s(file, format, arg);
-#else
-			vfprintf(file, format, arg);
-#endif
-			va_end(arg);
-
-			NodeDumpFormatFlag = true;
-		}
-	}
-
+#if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
 	void SyntaxNode::Dump() const
 	{
 		FILE* file;
 #if defined(__STDC_WANT_SECURE_LIB__)
-		if (fopen_s(&file, "mana_node_dump.json", "wt") == 0)
+		if (fopen_s(&file, "mana_syntax_node_dump.md", "wt") == 0)
 #else
-		file = fopen("mana_node_dump.json", "wt");
+		file = fopen("mana_syntax_node_dump.md", "wt");
 		if (file)
 #endif
 		{
-			fputc('{', file);
+			fprintf(file, "```mermaid\n");
+			fprintf(file, "flowchart TD\n");
 			OnDump(file);
-			fputc('}', file);
+			fprintf(file, "```\n");
 			fclose(file);
 		}
 	}
 	
 	void SyntaxNode::OnDump(FILE* file) const
 	{
-		// TODO:Idと並びを合わせてください
-		static const char* name[IdSize] = {
-			"Array",							//!< variable[argument] =
-			"Assign",							//!< =
-			"CallArgument",						//!< 引数（呼び出し）
-			"DeclareArgument",					//!< 引数（宣言）
-			"Const",							//!< 定数
-			"Call",								//!< 関数呼び出し
-			"Add",								//!< 加算
-			"Sub",								//!< 減算
-			"Mul",								//!< 乗算
-			"Div",								//!< 除算
-			"Rem",								//!< 余剰
-			"Neg",								//!< ±符号反転
-			"Pow",								//!< べき乗
-			"Not",								//!< ~
-			"And",								//!< &
-			"Or",								//!< |
-			"Xor",								//!< ^
-			"LeftShift",						//!< <<
-			"RightShift",						//!< >>
-			"Less",								//!< <
-			"LessEqual",						//!< <=
-			"Equal",							//!< ==
-			"NotEqual",							//!< !=
-			"GreaterEqual",						//!< >=
-			"Greater",							//!< >
-			"String",							//!< 文字列
-			"IntegerToFloat",					//!< 整数から実数へ変換
-			"FloatToInteger",					//!< 実数から整数へ変換
-			"LogicalOr",						//!< ||
-			"LogicalAnd",						//!< &&
-			"LogicalNot",						//!< !
-			"Halt",								//!< halt
-			"Yield",							//!< yield
-			"Request",							//!< req
-			"Accept",							//!< comply (req許可)
-			"Reject",							//!< refuse (req拒否)
-			"Join",								//!< join
-			"Sender",							//!< sender (actor)
-			"Self",								//!< self (actor)
-			"Priority",							//!< priority (integer)
-			"ExpressionIf",						//!< 三項演算子 '?'
-			"Print",							//!< print
-			"Return",							//!< return
-			"Rollback",							//!< rollback
+		// Idと並びを合わせてください
+		static const char* name[] = {
+			"Array",
+			"Assign",
+			"CallArgument",
+			"DeclareArgument",
+			"Const",
+			"Call",
+			"Add",
+			"Sub",
+			"Mul",
+			"Div",
+			"Rem",
+			"Neg",
+			"Pow",
+			"Not",
+			"And",
+			"Or",
+			"Xor",
+			"LeftShift",
+			"RightShift",
+			"Less",
+			"LessEqual",
+			"Equal",
+			"NotEqual",
+			"GreaterEqual",
+			"Greater",
+			"String",
+			"IntegerToFloat",
+			"FloatToInteger",
+			"LogicalOr",
+			"LogicalAnd",
+			"LogicalNot",
+			"Halt",
+			"Yield",
+			"Request",
+			"AwaitStart",
+			"AwaitCompletion",
+			"Accept",
+			"Reject",
+			"Join",
+			"Sender",
+			"Self",
+			"Priority",
+			"ExpressionIf",
+			"Print",
+			"Return",
+			"Rollback",
 
-			"Block",							//!< ブロック
-			"If",								//!< if
-			"Switch",							//!< switch
-			"Case",								//!< case
-			"Default",							//!< default
-			"While",							//!< while
-			"Do",								//!< do while
-			"For",								//!< for
-			"Loop",								//!< loop
-			"Lock",								//!< lock
-			"Goto",								//!< goto
-			"Label",							//!< label
-			"Break",							//!< break
-			"Continue",							//!< continue
+			"Block",
+			"If",
+			"Switch",
+			"Case",
+			"Default",
+			"While",
+			"Do",
+			"For",
+			"Loop",
+			"Lock",
+			"Goto",
+			"Label",
+			"Break",
+			"Continue",
 
 			"Identifier",
 			"TypeDescription",
@@ -425,7 +396,7 @@ namespace mana
 			"DeclareVariable",
 			"Sizeof",
 
-			"Actor",							//!< アクターの宣言
+			"Actor",
 			"Phantom",
 			"Module",
 			"Struct",
@@ -442,56 +413,53 @@ namespace mana
 			"MemberFunction",
 			"MemberVariable",
 		};
+		constexpr size_t idNameSize = std::size(name);
+		static_assert(idNameSize == IdSize);
 
-#if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
-		NodeDumpFormat(file, "\"mMagic\": \"%s\"", mMagic);
-#endif
+		fprintf(file, "%s[\n", mMagic);
 
-		if (static_cast<uint8_t>(mId) < (sizeof(name) / sizeof(name[0])))
+		fprintf(file, "mMagic: %s\n", mMagic);
+
+		if (static_cast<uint8_t>(mId) < idNameSize)
 		{
-			NodeDumpFormat(file, "\"Name\": \"%s\"", name[static_cast<uint8_t>(mId)]);
+			fprintf(file, "Name: %s\n", name[static_cast<uint8_t>(mId)]);
 		}
 		else
 		{
-			NodeDumpFormat(file, "\"Name\": \"%d\"", mId);
+			fprintf(file, "Name: %d\n", mId);
 		}
 
 		if (!mString.empty())
 		{
-			NodeDumpFormat(file, "\"String\": \"%s\"", mString.data());
+			fprintf(file, "String: %s\n", mString.data());
 		}
 		if (mType)
 		{
-			NodeDumpFormat(file, "\"Type\": \"%s\"", mType->GetName().data());
+			fprintf(file, "Type: %s\n", mType->GetName().data());
 		}
+		fprintf(file, "]\n");
+
 
 		if (mLeft)
 		{
-			NodeDumpFormat(file, "\"Left\": {\n");
-			NodeDumpFormatFlag = false;
 			mLeft->OnDump(file);
-			fprintf(file, "}\n");
+			fprintf(file, "%s --> %s\n", mMagic, mLeft->mMagic);
 		}
 		if (mRight)
 		{
-			NodeDumpFormat(file, "\"Right\": {\n");
-			NodeDumpFormatFlag = false;
 			mRight->OnDump(file);
-			fprintf(file, "}\n");
+			fprintf(file, "%s --> %s\n", mMagic, mRight->mMagic);
 		}
 		if (mBody)
 		{
-			NodeDumpFormat(file, "\"Body\": {\n");
-			NodeDumpFormatFlag = false;
 			mBody->OnDump(file);
-			fprintf(file, "}\n");
+			fprintf(file, "%s --> %s\n", mMagic, mBody->mMagic);
 		}
 		if (mNext)
 		{
-			NodeDumpFormat(file, "\"Next\": {\n");
-			NodeDumpFormatFlag = false;
 			mNext->OnDump(file);
-			fprintf(file, "}\n");
+			fprintf(file, "%s --> %s\n", mMagic, mNext->mMagic);
 		}
 	}
+#endif
 }
