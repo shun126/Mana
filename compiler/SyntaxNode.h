@@ -59,6 +59,8 @@ namespace mana
 			Halt,								//!< halt
 			Yield,								//!< yield
 			Request,							//!< req
+			AwaitStart,							//!< reqsw
+			AwaitCompletion,					//!< reqew
 			Accept,								//!< comply (req許可)
 			Reject,								//!< refuse (req拒否)
 			Join,								//!< join
@@ -157,13 +159,18 @@ namespace mana
 
 		std::shared_ptr<SyntaxNode> Cast(const std::shared_ptr<TypeDescriptor>& type, const std::shared_ptr<TypeDescriptorFactory>& typeDescriptorFactory);
 
+#if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
 		void Dump() const;
+#endif
 
 	private:
 		SyntaxNode() = default;
 
 		std::shared_ptr<SyntaxNode> CreateCast(const std::shared_ptr<TypeDescriptor>& type, const std::shared_ptr<TypeDescriptorFactory>& typeDescriptorFactory);
+
+#if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
 		void OnDump(FILE* file) const;
+#endif
 
 	private:
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE

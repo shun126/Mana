@@ -3,20 +3,44 @@ mana (script)
 Copyright (c) 2017 Shun Moriya
 */
 
-// actor declarations
-actor TestActor1
+char a;
+short b;
+int c;
+float d;
+
+struct TestStruct1
 {
 	char a;
 	short b;
 	int c;
 	float d;
+}
 
+
+module TestModule
+{
+	action init
+	{
+		print("TestActor1::init\n");
+	}
+}
+
+// actor declarations
+actor TestActor1
+{
+ 	extend TestModule;
+
+	char a;
+	short b;
+	int c;
+	float d;
+	
 	action init
 	{
 		print("TestActor1::init\n");
 
 		char a;
-		short b;
+		short b = 1;
 		int c;
 		float d;
 	}
@@ -24,5 +48,26 @@ actor TestActor1
 	action main
 	{
 		print("TestActor1::main\n");
+		awaitStart(7, TestActor2::talk);
+		request(7, TestActor1::talk);
+		awaitCompletion(6, TestActor2::talk);
+	}
+
+	action talk
+	{
+		print("TestActor1::talk\n");
+	}
+
+	action sleep
+	{
+		print("TestActor1::sleep\n");
+	}
+}
+
+actor TestActor2
+{
+	action talk
+	{
+		print("TestActor2::talk\n");
 	}
 }

@@ -18,7 +18,8 @@ namespace mana
 	class OutputStream;
 
 	/*
-	Data Section Class
+	Data Section
+	データセクション
 	*/
 	class DataBuffer final : Noncopyable
 	{
