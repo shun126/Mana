@@ -73,7 +73,7 @@ namespace mana
 	T AngleMod(const T x, const T div)
 	{
 		const T div2 = div * static_cast<T>(2);
-		return x - static_cast<intptr_t>(((x >= 0) ? (x + div) : (x - div)) / div2) * div2;
+		return x - static_cast<T>(((x >= 0) ? (x + div) : (x - div)) / div2) * div2;
 	}
 
 	template <typename T>

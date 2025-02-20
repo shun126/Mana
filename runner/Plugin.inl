@@ -54,8 +54,8 @@ namespace mana
 
 		for (auto plugin : mPlugins)
 		{
-			typedef int32_t(*Finalize)(const std::shared_ptr<VM>&);
-			if (Finalize function = reinterpret_cast<Finalize>(GET_PROC_ADR(plugin, "Finalize")))
+			using Finalize = int32_t(*)(const std::shared_ptr<VM>&);
+			if (const auto function = reinterpret_cast<Finalize>(GET_PROC_ADR(plugin, "Finalize")))
 				function(vm);
 			FREE_LIBRARY(plugin);
 		}
@@ -63,20 +63,20 @@ namespace mana
 
 	inline void Plugin::Load(const std::string& fileName)
 	{
-		auto vm = mVM.lock();
+		const auto vm = mVM.lock();
 		if (vm == nullptr)
 		{
 			return;
 		}
 
-		MODULE module = LOAD_LIBRARY(fileName.c_str());
+		const MODULE module = LOAD_LIBRARY(fileName.c_str());
 		if (module == nullptr)
 		{
 			return;
 		}
 
-		typedef int32_t(*Initialize)(const std::shared_ptr<VM>&);
-		Initialize function = reinterpret_cast<Initialize>(GET_PROC_ADR(module, "Initialize"));
+		using Initialize = int32_t(*)(const std::shared_ptr<VM>&);
+		const auto function = reinterpret_cast<Initialize>(GET_PROC_ADR(module, "Initialize"));
 		if (function && function(vm))
 		{
 			mPlugins.push_back(module);

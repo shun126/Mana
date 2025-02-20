@@ -92,7 +92,7 @@ namespace mana
 			}
 		}
 
-		// ・ｽO・ｽ・ｽ・ｽ[・ｽo・ｽ・ｽ・ｽ・ｽ・ｽ・ｽﾑス・ｽ^・ｽe・ｽB・ｽb・ｽN・ｽﾏ撰ｿｽ・ｽﾌ茨ｿｽ・ｽ・ｽm・ｽﾛゑｿｽ・ｽﾜゑｿｽ
+		// グローバル変数、スタティック変数領域を確保します
 		mGlobalVariables.Allocate(mFileHeader->mSizeOfGlobalMemory);
 		mStaticVariables.Allocate(mFileHeader->mSizeOfStaticMemory);
 
@@ -108,8 +108,8 @@ namespace mana
 
 		mInstructionPool = reinterpret_cast<const uint8_t*>(mConstantPool + mFileHeader->mSizeOfConstantPool);
 
-		// TODO 外部関数の名前をアドレスに置き換えて、実行時の検索時間を短縮して下さい
 #if 0
+		// TODO 外部関数の名前をアドレスに置き換えて、実行時の検索時間を短縮して下さい
 		if (!(mFileHeader->mFlag & FileHeader::FLAG_COMPILED))
 		{
 			uint8_t* constantPool = (uint8_t*)mConstantPool;
@@ -173,12 +173,12 @@ namespace mana
 			}
 		}
 
-		// ・ｽt・ｽ・ｽ・ｽO・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ
+		// フラグを初期化
 		mFlag.set(Flag::InitializeActionRunning);
 		mFlag.set(Flag::Initialized);
 		mFlag.set(Flag::EnableSystemRequest);
 
-		// ・ｽS・ｽA・ｽN・ｽ^・ｽ[・ｽ・ｽ init・ｽ・ｽmain ・ｽA・ｽN・ｽV・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽs
+		// 全アクターの initとmain アクションを実行
 		Restart();
 		RequestAll(1, "init", nullptr);
 		RequestAll(0, "main", nullptr);
@@ -186,17 +186,17 @@ namespace mana
 
 	inline void VM::UnloadProgram()
 	{
-		/* ・ｽX・ｽN・ｽ・ｽ・ｽv・ｽg・ｽﾅ確・ｽﾛゑｿｽ・ｽ・ｽ・ｽ・ｽ・ｽ\・ｽ[・ｽX・ｽﾌ開・ｽ・ｽ */
+		// スクリプトで確保したリソースの開放
 		/*
 		GetResource().Clear();
 		*/
 
-		/* ・ｽC・ｽx・ｽ・ｽ・ｽg・ｽ{・ｽb・ｽN・ｽX・ｽﾌ開・ｽ・ｽ */
+		// イベントボックスの開放
 		/*
 		DestroyIntersections();
 		*/
 
-		// ・ｽﾏ撰ｿｽ・ｽﾌ擾ｿｽ・ｽ・ｽ・ｽ・ｽ
+		// フラグをリセット
 		mFlag.reset(Flag::InitializeActionRunning);
 		mFlag.reset(Flag::InitializeActionFinished);
 		mFlag.reset(Flag::Initialized);
@@ -205,11 +205,11 @@ namespace mana
 		mActorHash.clear();
 		mPhantomHash.clear();
 
-		// ・ｽﾏ撰ｿｽ・ｽﾌ茨ｿｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽﾜゑｿｽ
+		// グローバル変数、スタティック変数領域を解放します
 		mGlobalVariables.Reset();
 		mStaticVariables.Reset();
 
-		// ・ｽv・ｽ・ｽ・ｽO・ｽ・ｽ・ｽ・ｽ・ｽﾌ開・ｽ・ｽ
+		// プログラムの開放
 		mProgram.reset();
 		mFileHeader = nullptr;
 		mConstantPool = nullptr;
@@ -285,7 +285,7 @@ namespace mana
 		}
 	}
 
-	inline void VM::RequestAll(const int32_t level, const char* actionName, const std::shared_ptr<Actor>& sender) const
+	inline void VM::RequestAll(const int32_t level, const std::string_view& actionName, const std::shared_ptr<Actor>& sender) const
 	{
 		for (auto& actor : mActorHash)
 		{
@@ -293,7 +293,7 @@ namespace mana
 		}
 	}
 
-	inline bool VM::Request(const int32_t level, const char* actorName, const char* actionName, const std::shared_ptr<Actor>& sender)
+	inline bool VM::Request(const int32_t level, const std::string_view& actorName, const std::string_view& actionName, const std::shared_ptr<Actor>& sender)
 	{
 		const std::shared_ptr<Actor>& actor = mActorHash[actorName];
 		if (actor == nullptr)
@@ -309,7 +309,7 @@ namespace mana
 		}
 	}
 
-	inline const std::shared_ptr<Actor>& VM::GetActor(const char* name)
+	inline const std::shared_ptr<Actor>& VM::GetActor(const std::string_view& name)
 	{
 		return mActorHash[name];
 	}
@@ -325,11 +325,11 @@ namespace mana
 			}
 		}
 
-		static const std::string_view empty;
-		return empty;
+		static constexpr std::string_view Empty;
+		return Empty;
 	}
 
-	inline std::shared_ptr<Actor> VM::CloneActor(const std::shared_ptr<Actor>& actor, const char* newName)
+	inline std::shared_ptr<Actor> VM::CloneActor(const std::shared_ptr<Actor>& actor, const std::string_view& newName)
 	{
 		if (actor->mVM.lock() != shared_from_this())
 			throw std::runtime_error("It is not possible to duplicate actors of different VMs");
@@ -342,12 +342,12 @@ namespace mana
 		return newActor;
 	}
 
-	inline std::shared_ptr<Actor> VM::CreateActor(const char* name, const char* newName)
+	inline std::shared_ptr<Actor> VM::CreateActor(const std::string_view& name, const std::string_view& newName)
 	{
 		return CloneActor(GetActor(name), newName);
 	}
 
-	inline std::shared_ptr<Actor> VM::CreateActorFromPhantom(const char* name, const char* newName)
+	inline std::shared_ptr<Actor> VM::CreateActorFromPhantom(const std::string_view& name, const std::string_view& newName)
 	{
 		const ActorInfoHeader* actorInfo = mPhantomHash[name];
 		if (actorInfo == nullptr)
@@ -471,9 +471,9 @@ namespace mana
 	inline int32_t VM::GetOpecode(const uint32_t address) const
 	{
 		MANA_ASSERT(address != Nil);
-		int32_t opecode = mInstructionPool[address];
+		const auto opecode = mInstructionPool[address];
 		MANA_ASSERT(address < mFileHeader->mSizeOfInstructionPool);
-		MANA_ASSERT(opecode >= 0 && opecode < IntermediateLanguageSize);
+		MANA_ASSERT(opecode < IntermediateLanguageSize);
 		return opecode;
 	}
 

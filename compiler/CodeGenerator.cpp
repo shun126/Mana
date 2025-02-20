@@ -539,7 +539,6 @@ namespace mana
 
 			default:
 				MANA_BUG("illegal type of expression");
-				break;
 			}
 		}
 

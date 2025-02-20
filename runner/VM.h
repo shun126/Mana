@@ -49,14 +49,14 @@ namespace mana
 
 		void Execute(const std::function<void()>& function);
 
-		void RequestAll(const int32_t level, const char* actionName, const std::shared_ptr<Actor>& sender) const;
-		bool Request(const int32_t level, const char* actorName, const char* actionName, const std::shared_ptr<Actor>& sender);
+		void RequestAll(const int32_t level, const std::string_view& actionName, const std::shared_ptr<Actor>& sender) const;
+		bool Request(const int32_t level, const std::string_view& actorName, const std::string_view& actionName, const std::shared_ptr<Actor>& sender);
 		void YieldAll();
-		[[nodiscard]] const std::shared_ptr<Actor>& GetActor(const char* name);
+		[[nodiscard]] const std::shared_ptr<Actor>& GetActor(const std::string_view& name);
 		[[nodiscard]] const std::string_view& GetActorName(const std::shared_ptr<Actor>& actor) const;
-		[[nodiscard]] std::shared_ptr<Actor> CloneActor(const std::shared_ptr<Actor>& actor, const char* newName);
-		[[nodiscard]] std::shared_ptr<Actor> CreateActor(const char* name, const char* newName);
-		[[nodiscard]] std::shared_ptr<Actor> CreateActorFromPhantom(const char* name, const char* newName);
+		[[nodiscard]] std::shared_ptr<Actor> CloneActor(const std::shared_ptr<Actor>& actor, const std::string_view& newName);
+		[[nodiscard]] std::shared_ptr<Actor> CreateActor(const std::string_view& name, const std::string_view& newName);
+		[[nodiscard]] std::shared_ptr<Actor> CreateActorFromPhantom(const std::string_view& name, const std::string_view& newName);
 		[[nodiscard]] bool IsInInitAction() const;
 		[[nodiscard]] bool IsFinishInitAction() const;
 		

@@ -1,6 +1,7 @@
 /*!
 mana (library)
 
+@file	Actor.h
 @author	Shun Moriya
 @date	2003-
 */
@@ -15,15 +16,12 @@ mana (library)
 #include <string>
 #include <unordered_map>
 
-#include <cstdio>
-#include <cstring>
-
 namespace mana
 {
 	class VM;
 
 	/*!
-	Actor class
+	@brief	Actor class
 	*/
 	class Actor : Noncopyable, public std::enable_shared_from_this<Actor>
 	{
@@ -46,10 +44,10 @@ namespace mana
 		std::shared_ptr<Actor> Clone() const;
 		
 		bool Run();
-		bool SyncCall(const int32_t priority, const char* action, const std::shared_ptr<Actor>& sender);
-		bool AsyncCall(const int32_t priority, const char* action, const std::shared_ptr<Actor>& sender);
+		bool SyncCall(const int32_t priority, const std::string_view& action, const std::shared_ptr<Actor>& sender);
+		bool AsyncCall(const int32_t priority, const std::string_view& action, const std::shared_ptr<Actor>& sender);
 		
-		bool Request(const int32_t priority, const char* action, const std::shared_ptr<Actor>& sender);
+		bool Request(const int32_t priority, const std::string_view& action, const std::shared_ptr<Actor>& sender);
 		void Rollback(const int32_t priority);
 		void Restart();
 
@@ -58,14 +56,14 @@ namespace mana
 
 		[[nodiscard]] int32_t GetArgumentCount() const;
 		[[nodiscard]] int32_t GetArgumentCountByAddress(const uint32_t address) const;
-		[[nodiscard]] int32_t GetArgumentSize(const uint32_t address);
-		[[nodiscard]] bool HasReturnValue(const uint32_t address);
-		[[nodiscard]] int32_t GetParameterInteger(const int32_t value);
-		[[nodiscard]] float GetParameterFloat(const int32_t value);
-		[[nodiscard]] const char* GetParameterString(const int32_t value);
-		[[nodiscard]] Actor* GetParameterActor(const int32_t value);
-		[[nodiscard]] void* GetParameterPointer(const int32_t value);
-		[[nodiscard]] void* GetParameterAddress(const int32_t value);
+		[[nodiscard]] int32_t GetArgumentSize(const uint32_t address) const;
+		[[nodiscard]] bool HasReturnValue(const uint32_t address) const;
+		[[nodiscard]] int32_t GetParameterInteger(const int32_t value) const;
+		[[nodiscard]] float GetParameterFloat(const int32_t value) const;
+		[[nodiscard]] const char* GetParameterString(const int32_t value) const;
+		[[nodiscard]] Actor* GetParameterActor(const int32_t value) const;
+		[[nodiscard]] void* GetParameterPointer(const int32_t value) const;
+		[[nodiscard]] void* GetParameterAddress(const int32_t value) const;
 		void SetReturnInteger(const int32_t value);
 		void SetReturnFloat(const float value);
 		void SetReturnString(const char* string);

@@ -22,7 +22,7 @@ namespace mana
 #if UINTPTR_MAX == UINT64_MAX
 #elif UINTPTR_MAX == UINT32_MAX
 #else
-#error "unsupport pointer size"
+#error "unsupported pointer size"
 #endif
 */
 	using float_t = float;

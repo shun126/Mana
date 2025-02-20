@@ -1,6 +1,7 @@
 /*!
 mana (library)
 
+@file	Buffer.h
 @author	Shun Moriya
 @date	2003-
 */
@@ -11,7 +12,7 @@ mana (library)
 namespace mana
 {
 	/**
-	 * frame heap
+	 * @brief	frame heap
 	 */
 	class Buffer final : Noncopyable
 	{

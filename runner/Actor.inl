@@ -220,7 +220,7 @@ namespace mana
 		return mFlag.test(static_cast<uint8_t>(Flag::Running));
 	}
 
-	inline bool Actor::SyncCall(const int32_t priority, const char* action, const std::shared_ptr<Actor>& sender)
+	inline bool Actor::SyncCall(const int32_t priority, const std::string_view& action, const std::shared_ptr<Actor>& sender)
 	{
 		if (Request(priority, action, sender))
 		{
@@ -235,7 +235,7 @@ namespace mana
 		return false;
 	}
 
-	inline bool Actor::AsyncCall(const int32_t priority, const char* action, const std::shared_ptr<Actor>& sender)
+	inline bool Actor::AsyncCall(const int32_t priority, const std::string_view& action, const std::shared_ptr<Actor>& sender)
 	{
 		if (Request(priority, action, sender))
 		{
@@ -250,7 +250,7 @@ namespace mana
 		return false;
 	}
 
-	inline bool Actor::Request(const int32_t priority, const char* action, const std::shared_ptr<Actor>& sender)
+	inline bool Actor::Request(const int32_t priority, const std::string_view& action, const std::shared_ptr<Actor>& sender)
 	{
 		if (mFlag.test(static_cast<uint8_t>(Flag::Halt)))
 		{
@@ -523,17 +523,17 @@ namespace mana
 		return (int32_t)mVM.lock()->GetUint8FromMemory(address + 1 + sizeof(int32_t) + sizeof(uint8_t));
 	}
 
-	inline int32_t Actor::GetArgumentSize(const uint32_t address)
+	inline int32_t Actor::GetArgumentSize(const uint32_t address) const
 	{
 		return (int32_t)mVM.lock()->GetUint16FromMemory(address + 1 + sizeof(int32_t) + sizeof(uint8_t) + sizeof(uint8_t));
 	}
 
-	inline bool Actor::HasReturnValue(const uint32_t address)
+	inline bool Actor::HasReturnValue(const uint32_t address) const
 	{
 		return mVM.lock()->GetUint8FromMemory(address + 1 + sizeof(int32_t)) ? true : false;
 	}
 
-	inline int32_t Actor::GetParameterInteger(const int32_t value)
+	inline int32_t Actor::GetParameterInteger(const int32_t value) const
 	{
 		MANA_ASSERT(GetArgumentCount() > value);
 
@@ -541,30 +541,30 @@ namespace mana
 		return mStack.Get<int_t>(mVM.lock()->GetUint16FromMemory(address));
 	}
 
-	inline float Actor::GetParameterFloat(const int32_t value)
+	inline float Actor::GetParameterFloat(const int32_t value) const
 	{
 		MANA_ASSERT(GetArgumentCount() > value);
 		return mStack.Get<float_t>(mVM.lock()->GetInt16FromMemory(mPc + 5 + sizeof(int16_t) + sizeof(int16_t) + (value * sizeof(int16_t))));
 	}
 
-	inline const char* Actor::GetParameterString(const int32_t value)
+	inline const char* Actor::GetParameterString(const int32_t value) const
 	{
 		MANA_ASSERT(GetArgumentCount() > value);
 		return mStack.Get<const char*>(mVM.lock()->GetInt16FromMemory(mPc + 5 + sizeof(int16_t) + sizeof(int16_t) + (value * sizeof(int16_t))));
 	}
 
-	inline Actor* Actor::GetParameterActor(const int32_t value)
+	inline Actor* Actor::GetParameterActor(const int32_t value) const
 	{
 		return static_cast<Actor*>(GetParameterPointer(value));
 	}
 
-	inline void* Actor::GetParameterPointer(const int32_t value)
+	inline void* Actor::GetParameterPointer(const int32_t value) const
 	{
 		MANA_ASSERT(GetArgumentCount() > value);
 		return mStack.Get<void*>(mVM.lock()->GetInt16FromMemory(mPc + 5 + sizeof(int16_t) + sizeof(int16_t) + (value * sizeof(int16_t))));
 	}
 
-	inline void* Actor::GetParameterAddress(const int32_t value)
+	inline void* Actor::GetParameterAddress(const int32_t value) const
 	{
 		MANA_ASSERT(GetArgumentCount() > value);
 		return mStack.GetAddress(mVM.lock()->GetInt16FromMemory(mPc + 5 + sizeof(int16_t) + sizeof(int16_t) + (value * sizeof(int16_t))) + 1);
@@ -1363,54 +1363,54 @@ namespace mana
 	inline void Actor::CommandCompareEqualData(const std::shared_ptr<VM>& vm, Actor& self)
 	{
 		const uint32_t size = vm->GetUint32FromMemory(self.mPc + 1 + sizeof(int32_t));
-		const void* buf1 = self.mStack.GetAddress(size * 1 / sizeof(void*));
-		const void* buf2 = self.mStack.GetAddress(size * 2 / sizeof(void*));
-		self.mStack.Remove(size * 2 / sizeof(void*));
+		const void* buf1 = self.mStack.GetAddress(size * 1u / static_cast<uint32_t>(sizeof(void*)));
+		const void* buf2 = self.mStack.GetAddress(size * 2u / static_cast<uint32_t>(sizeof(void*)));
+		self.mStack.Remove(size * 2u / static_cast<uint32_t>(sizeof(void*)));
 		self.mStack.Push(std::memcmp(buf1, buf2, size) == 0);
 	}
 
 	inline void Actor::CommandCompareGreaterEqualData(const std::shared_ptr<VM>& vm, Actor& self)
 	{
 		const uint32_t size = vm->GetUint32FromMemory(self.mPc + 1 + sizeof(int32_t));
-		const void* buf1 = self.mStack.GetAddress(size * 1 / sizeof(void*));
-		const void* buf2 = self.mStack.GetAddress(size * 2 / sizeof(void*));
-		self.mStack.Remove(size * 2 / sizeof(void*));
+		const void* buf1 = self.mStack.GetAddress(size * 1u / static_cast<uint32_t>(sizeof(void*)));
+		const void* buf2 = self.mStack.GetAddress(size * 2u / static_cast<uint32_t>(sizeof(void*)));
+		self.mStack.Remove(size * 2u / static_cast<uint32_t>(sizeof(void*)));
 		self.mStack.Push(std::memcmp(buf1, buf2, size) >= 0);
 	}
 
 	inline void Actor::CommandCompareGreaterData(const std::shared_ptr<VM>& vm, Actor& self)
 	{
 		const uint32_t size = vm->GetUint32FromMemory(self.mPc + 1 + sizeof(int32_t));
-		const void* buf1 = self.mStack.GetAddress(size * 1 / sizeof(void*));
-		const void* buf2 = self.mStack.GetAddress(size * 2 / sizeof(void*));
-		self.mStack.Remove(size * 2 / sizeof(void*));
+		const void* buf1 = self.mStack.GetAddress(size * 1u / static_cast<uint32_t>(sizeof(void*)));
+		const void* buf2 = self.mStack.GetAddress(size * 2u / static_cast<uint32_t>(sizeof(void*)));
+		self.mStack.Remove(size * 2u / static_cast<uint32_t>(sizeof(void*)));
 		self.mStack.Push(std::memcmp(buf1, buf2, size) > 0);
 	}
 
 	inline void Actor::CommandCompareNotEqualData(const std::shared_ptr<VM>& vm, Actor& self)
 	{
 		const uint32_t size = vm->GetUint32FromMemory(self.mPc + 1 + sizeof(int32_t));
-		const void* buf1 = self.mStack.GetAddress(size * 1 / sizeof(void*));
-		const void* buf2 = self.mStack.GetAddress(size * 2 / sizeof(void*));
-		self.mStack.Remove(size * 2 / sizeof(void*));
+		const void* buf1 = self.mStack.GetAddress(size * 1u / static_cast<uint32_t>(sizeof(void*)));
+		const void* buf2 = self.mStack.GetAddress(size * 2u / static_cast<uint32_t>(sizeof(void*)));
+		self.mStack.Remove(size * 2u / static_cast<uint32_t>(sizeof(void*)));
 		self.mStack.Push(std::memcmp(buf1, buf2, size) != 0);
 	}
 
 	inline void Actor::CommandCompareLessEqualData(const std::shared_ptr<VM>& vm, Actor& self)
 	{
 		const uint32_t size = vm->GetUint32FromMemory(self.mPc + 1 + sizeof(int32_t));
-		const void* buf1 = self.mStack.GetAddress(size * 1 / sizeof(void*));
-		const void* buf2 = self.mStack.GetAddress(size * 2 / sizeof(void*));
-		self.mStack.Remove(size * 2 / sizeof(void*));
+		const void* buf1 = self.mStack.GetAddress(size * 1u / static_cast<uint32_t>(sizeof(void*)));
+		const void* buf2 = self.mStack.GetAddress(size * 2u / static_cast<uint32_t>(sizeof(void*)));
+		self.mStack.Remove(size * 2u / static_cast<uint32_t>(sizeof(void*)));
 		self.mStack.Push(std::memcmp(buf1, buf2, size) <= 0);
 	}
 
 	inline void Actor::CommandCompareLessData(const std::shared_ptr<VM>& vm, Actor& self)
 	{
 		const uint32_t size = vm->GetUint32FromMemory(self.mPc + 1 + sizeof(int32_t));
-		const void* buf1 = self.mStack.GetAddress(size * 1 / sizeof(void*));
-		const void* buf2 = self.mStack.GetAddress(size * 2 / sizeof(void*));
-		self.mStack.Remove(size * 2 / sizeof(void*));
+		const void* buf1 = self.mStack.GetAddress(size * 1u / static_cast<uint32_t>(sizeof(void*)));
+		const void* buf2 = self.mStack.GetAddress(size * 2u / static_cast<uint32_t>(sizeof(void*)));
+		self.mStack.Remove(size * 2u / static_cast<uint32_t>(sizeof(void*)));
 		self.mStack.Push(std::memcmp(buf1, buf2, size) < 0);
 	}
 
@@ -1552,7 +1552,7 @@ namespace mana
 		}
 	}
 
-	inline void Actor::CommandDynamicRequest(const std::shared_ptr<VM>&, Actor&)
+	[[noreturn]] inline void Actor::CommandDynamicRequest(const std::shared_ptr<VM>&, Actor&)
 	{
 		MANA_NOT_IMPLEMENTED();
 		/*
@@ -1570,7 +1570,7 @@ namespace mana
 		*/
 	}
 
-	inline void Actor::CommandDynamicRequestWaitStarting(const std::shared_ptr<VM>&, Actor&)
+	[[noreturn]] inline void Actor::CommandDynamicRequestWaitStarting(const std::shared_ptr<VM>&, Actor&)
 	{
 		MANA_NOT_IMPLEMENTED();
 		/*
@@ -1604,7 +1604,7 @@ namespace mana
 		*/
 	}
 
-	inline void Actor::CommandDynamicRequestWaitEnded(const std::shared_ptr<VM>&, Actor&)
+	[[noreturn]] inline void Actor::CommandDynamicRequestWaitEnded(const std::shared_ptr<VM>&, Actor&)
 	{
 		MANA_NOT_IMPLEMENTED();
 		/*

@@ -1,6 +1,7 @@
 /*!
 mana (library)
 
+@file	Assert.h
 @author	Shun Moriya
 @date	2003-
 */

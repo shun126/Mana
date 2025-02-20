@@ -103,6 +103,13 @@ mana -e binary_file
 auto vm = std::make_shared<mana::VM>();
 vm->LoadPlugins(".");
 vm->LoadProgram(path);
+
+// Request
+if (const auto& actor = vm->GetActor("someone"))
+{
+    actor->Request(100, "something", nullptr);
+}
+
 // Tick
 while (vm->Run())
     ;

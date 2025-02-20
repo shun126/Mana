@@ -145,7 +145,7 @@ namespace mana
 		{
 			MANA_ASSERT_PARAMETER(actor, 1);
 
-			const char* name = actor->GetParameterString(0);
+			const std::string_view name = actor->GetParameterString(0);
 			actor->SetReturnActor(actor->GetVirtualMachine()->GetActor(name));
 		}
 	}

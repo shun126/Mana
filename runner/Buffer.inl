@@ -1,6 +1,7 @@
 /*!
 mana (library)
 
+@file	Buffer.inl
 @author	Shun Moriya
 @date	2003-
 */
