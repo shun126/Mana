@@ -1,10 +1,18 @@
-# Mana
-Actor-oriented scripting language Mana 
-
-[![stars](https://img.shields.io/github/stars/shun126/Mana?style=social)](https://github.com/shun126/Mana/stargazers)
-[![license](https://img.shields.io/github/license/shun126/Mana)](https://github.com/shun126/Mana/blob/main/LICENSE)
-[![release](https://img.shields.io/github/v/release/shun126/Mana)](https://github.com/shun126/Mana/releases)
-[![downloads](https://img.shields.io/github/downloads/shun126/Mana/total)](https://github.com/shun126/Mana/releases)
+<div align="center">
+<h1>Actor-oriented scripting language Mana</h1>
+<p>
+<a href="https://github.com/shun126/Mana/issues">Issues</a>,
+<a href="https://github.com/shun126/Mana/discussions">Discussions</a>,
+<a href="https://github.com/shun126/Mana/wiki">Wiki</a>,
+<a href="https://mnu.sakura.ne.jp/_doxygen/mana">Doxygen</a>
+</p>
+<p>
+<a href="https://github.com/shun126/Mana/stargazers"><img src="https://img.shields.io/github/stars/shun126/Mana?style=social"></a>
+<a href="https://github.com/shun126/Mana/blob/main/LICENSE"><img src="https://img.shields.io/github/license/shun126/Mana"></a>
+<a href="https://github.com/shun126/Mana/releases"><img src="https://img.shields.io/github/v/release/shun126/Mana"></a>
+<a href="https://github.com/shun126/Mana/releases"><img src="https://img.shields.io/github/downloads/shun126/Mana/total"></a>
+</p>
+</div>
 
 This scripting language was developed with the aim of developing a character's action using actor model.
 You can implement the execution engine easily into your computer game program.
@@ -107,8 +115,18 @@ vm->LoadProgram(path);
 while (vm->Run())
     ;
 ```
+# License
 
----
-Shun Moriya
+MIT License
+
+# 👀 See also
+* [Issues](https://github.com/shun126/Mana/issues)
+* [Discussions](https://github.com/shun126/Mana/discussions)
+* [Wiki](https://github.com/shun126/Mana/wiki)
+* [DeepWiki](https://deepwiki.com/shun126/Mana)
+* [Doxygen](https://mnu.sakura.ne.jp/_doxygen/mana/index.html)
+
+# Author
+* Shun Moriya ([X.com](https://x.com/monjiro1972))
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/M4M413XDXB)
