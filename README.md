@@ -5,6 +5,7 @@ Actor-oriented scripting language Mana
 [![license](https://img.shields.io/github/license/shun126/Mana)](https://github.com/shun126/Mana/blob/main/LICENSE)
 [![release](https://img.shields.io/github/v/release/shun126/Mana)](https://github.com/shun126/Mana/releases)
 [![downloads](https://img.shields.io/github/downloads/shun126/Mana/total)](https://github.com/shun126/Mana/releases)
+[![doxygen](https://img.shields.io/badge/document-doxygen-brightgreen)](https://mnu.sakura.ne.jp/_doxygen/mana)
 
 This scripting language was developed with the aim of developing a character's action using actor model.
 You can implement the execution engine easily into your computer game program.
