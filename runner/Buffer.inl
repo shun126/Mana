@@ -35,7 +35,7 @@ namespace mana
 	{
 		const address_t newSize = mUsedSize + size;
 
-		if (mUsedSize >= mAllocatedSize)
+                if (newSize > mAllocatedSize)
 		{
 			void* newBuffer = realloc(mBuffer.get(), newSize);
 			if (newBuffer == nullptr)
