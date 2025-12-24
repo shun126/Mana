@@ -54,17 +54,7 @@ namespace mana
 		std::shared_ptr<Symbol> CreateType(const std::string_view name, const std::shared_ptr<TypeDescriptor>& type);
 		void Destroy(const std::string_view name);
 
-		bool Each(std::function<bool(const std::shared_ptr<Symbol>&)> function)
-		{
-			for (auto& symbol : mSymbolEntries)
-			{
-				if (!function(symbol))
-					return false;
-			}
-			return true;
-		}
-
-		bool Each(std::function<bool(const std::shared_ptr<const Symbol>&)> function) const
+		bool Each(const std::function<bool(const std::shared_ptr<Symbol>&)>& function) const
 		{
 			for (auto& symbol : mSymbolEntries)
 			{

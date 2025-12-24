@@ -14,6 +14,7 @@ mana (compiler)
 #include "Symbol.h"
 #include "SyntaxNode.h"
 #include "TypeDescriptorFactory.h"
+#include <algorithm>
 
 namespace mana
 {
@@ -48,7 +49,7 @@ namespace mana
 
 	std::shared_ptr<Symbol> SymbolFactory::CreateSymbolWithLevel(const std::string_view name, Symbol::ClassTypeId classType, const size_t level)
 	{
-		std::shared_ptr<Symbol> symbol = std::make_shared<Symbol>(name, classType, level);
+		auto symbol = std::make_shared<Symbol>(name, classType, level);
 		mSymbolEntries.push_back(symbol);
 		
 		Define(name, symbol);
@@ -230,7 +231,7 @@ namespace mana
 
 	void SymbolFactory::Destroy(const std::string_view name)
 	{
-		const auto i = std::remove_if(mSymbolEntries.begin(), mSymbolEntries.end(), [&name](const std::shared_ptr<Symbol>& symbol)
+		const auto i = std::remove_if(mSymbolEntries.begin(), mSymbolEntries.end(), [name](const auto& symbol)
 		{
 			return name == symbol->GetName();
 		});
@@ -447,7 +448,17 @@ TODO:
 				}
 				break;
 
-			default:
+			case Symbol::ClassTypeId::NewSymbol:
+			case Symbol::ClassTypeId::NativeFunction:
+			case Symbol::ClassTypeId::MemberFunction:
+			case Symbol::ClassTypeId::StaticVariable:
+			case Symbol::ClassTypeId::GlobalVariable:
+			case Symbol::ClassTypeId::ActorVariable:
+			case Symbol::ClassTypeId::LocalVariable:
+			case Symbol::ClassTypeId::ConstantInteger:
+			case Symbol::ClassTypeId::ConstantFloat:
+			case Symbol::ClassTypeId::ConstantString:
+			case Symbol::ClassTypeId::Label:
 				break;
 			}
 		}
