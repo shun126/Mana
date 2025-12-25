@@ -46,6 +46,7 @@ namespace mana
 
 		// create symbol
 		std::shared_ptr<Symbol> CreateConstInt(const std::string_view name, const int32_t value);
+		std::shared_ptr<Symbol> CreateConstBool(const std::string_view name, const bool value);
 		std::shared_ptr<Symbol> CreateConstFloat(const std::string_view name, const float value);
 		std::shared_ptr<Symbol> CreateConstString(const std::string_view name, const std::string_view text);
 		std::shared_ptr<Symbol> CreateVariable(const std::string_view name, const std::shared_ptr<TypeDescriptor>& type, const bool staticVariable, const bool isBlockOpened, const bool isFunctionOpened);

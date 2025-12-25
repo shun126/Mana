@@ -137,14 +137,15 @@ namespace mana
 			int32_t size;
 
 			switch (p->node->GetTypeDescriptor()->GetId())
-			{
-			case TypeDescriptor::Id::Char:
-			case TypeDescriptor::Id::Short:
-			case TypeDescriptor::Id::Int:
-			case TypeDescriptor::Id::Actor:
-				mCodeBuffer->AddOpecode(IntermediateLanguage::Duplicate);
-				codeGenerator->Expression(p->node, false);
-				mCodeBuffer->AddOpecode(IntermediateLanguage::CompareEqualInteger);
+		{
+		case TypeDescriptor::Id::Char:
+		case TypeDescriptor::Id::Short:
+		case TypeDescriptor::Id::Bool:
+		case TypeDescriptor::Id::Int:
+		case TypeDescriptor::Id::Actor:
+			mCodeBuffer->AddOpecode(IntermediateLanguage::Duplicate);
+			codeGenerator->Expression(p->node, false);
+			mCodeBuffer->AddOpecode(IntermediateLanguage::CompareEqualInteger);
 				mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::BranchNotEqual, p->address);
 				break;
 
@@ -183,6 +184,7 @@ namespace mana
 		{
 		case TypeDescriptor::Id::Char:
 		case TypeDescriptor::Id::Short:
+		case TypeDescriptor::Id::Bool:
 		case TypeDescriptor::Id::Int:
 		case TypeDescriptor::Id::Float:
 		case TypeDescriptor::Id::Actor:

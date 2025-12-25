@@ -66,6 +66,10 @@ namespace mana
 			mCodeBuffer->AddOpecode(IntermediateLanguage::LoadShort);
 			break;
 
+		case TypeDescriptor::Id::Bool:
+			mCodeBuffer->AddOpecode(IntermediateLanguage::LoadChar);
+			break;
+
 		case TypeDescriptor::Id::Int:
 			mCodeBuffer->AddOpecode(IntermediateLanguage::LoadInteger);
 			break;
@@ -114,6 +118,10 @@ namespace mana
 
 		case TypeDescriptor::Id::Short:
 			mCodeBuffer->AddOpecode(IntermediateLanguage::StoreShort);
+			break;
+
+		case TypeDescriptor::Id::Bool:
+			mCodeBuffer->AddOpecode(IntermediateLanguage::StoreChar);
 			break;
 
 		case TypeDescriptor::Id::Int:
@@ -452,6 +460,17 @@ namespace mana
 			}
 			break;
 
+		case TypeDescriptor::Id::Bool:
+			if (value == 0)
+			{
+				mCodeBuffer->AddOpecode(IntermediateLanguage::PushZeroInteger);
+			}
+			else {
+				mCodeBuffer->AddOpecode(IntermediateLanguage::PushChar);
+				mCodeBuffer->Add(static_cast<int8_t>(value));
+			}
+			break;
+
 		case TypeDescriptor::Id::Int:
 			if (value == 0)
 			{
@@ -527,6 +546,7 @@ namespace mana
 
 			case TypeDescriptor::Id::Char:
 			case TypeDescriptor::Id::Short:
+			case TypeDescriptor::Id::Bool:
 			case TypeDescriptor::Id::Int:
 			case TypeDescriptor::Id::Float:
 			case TypeDescriptor::Id::Actor:
@@ -1148,6 +1168,7 @@ DO_RECURSIVE:
 			{
 			case TypeDescriptor::Id::Char:
 			case TypeDescriptor::Id::Short:
+			case TypeDescriptor::Id::Bool:
 			case TypeDescriptor::Id::Int:
 				GenerateConstantInteger(node->GetTypeDescriptor()->GetId(), node->GetInt());
 				break;
