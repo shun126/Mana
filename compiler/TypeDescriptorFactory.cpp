@@ -22,6 +22,7 @@ namespace mana
 		{ std::string_view("void"), sizeof(int32_t), sizeof(int32_t) },
 		{ std::string_view("char"), sizeof(int8_t), sizeof(int8_t) },
 		{ std::string_view("short"), sizeof(int16_t), sizeof(int16_t) },
+		{ std::string_view("bool"), sizeof(bool), sizeof(bool) },
 		{ std::string_view("int"), sizeof(int32_t), sizeof(int32_t) },
 		{ std::string_view("float"), sizeof(float), sizeof(float) },
 		{ std::string_view("reference"), sizeof(void*), sizeof(void*) },

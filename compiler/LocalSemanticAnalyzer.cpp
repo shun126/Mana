@@ -463,6 +463,7 @@ DO_RECURSIVE:
 					{
 					case TypeDescriptor::Id::Char:
 					case TypeDescriptor::Id::Short:
+					case TypeDescriptor::Id::Bool:
 					case TypeDescriptor::Id::Int:
 					case TypeDescriptor::Id::Actor:
 						node->Set(IntermediateLanguage::CompareEqualInteger);
@@ -496,6 +497,7 @@ DO_RECURSIVE:
 					{
 					case TypeDescriptor::Id::Char:
 					case TypeDescriptor::Id::Short:
+					case TypeDescriptor::Id::Bool:
 					case TypeDescriptor::Id::Int:
 					case TypeDescriptor::Id::Actor:
 						node->Set(IntermediateLanguage::CompareGreaterEqualInteger);
@@ -529,6 +531,7 @@ DO_RECURSIVE:
 					{
 					case TypeDescriptor::Id::Char:
 					case TypeDescriptor::Id::Short:
+					case TypeDescriptor::Id::Bool:
 					case TypeDescriptor::Id::Int:
 					case TypeDescriptor::Id::Actor:
 						node->Set(IntermediateLanguage::CompareGreaterInteger);
@@ -562,6 +565,7 @@ DO_RECURSIVE:
 					{
 					case TypeDescriptor::Id::Char:
 					case TypeDescriptor::Id::Short:
+					case TypeDescriptor::Id::Bool:
 					case TypeDescriptor::Id::Int:
 					case TypeDescriptor::Id::Actor:
 						node->Set(IntermediateLanguage::CompareLessEqualInteger);
@@ -595,6 +599,7 @@ DO_RECURSIVE:
 					{
 					case TypeDescriptor::Id::Char:
 					case TypeDescriptor::Id::Short:
+					case TypeDescriptor::Id::Bool:
 					case TypeDescriptor::Id::Int:
 					case TypeDescriptor::Id::Actor:
 						node->Set(IntermediateLanguage::CompareLessInteger);
@@ -628,6 +633,7 @@ DO_RECURSIVE:
 					{
 					case TypeDescriptor::Id::Char:
 					case TypeDescriptor::Id::Short:
+					case TypeDescriptor::Id::Bool:
 					case TypeDescriptor::Id::Int:
 					case TypeDescriptor::Id::Actor:
 						node->Set(IntermediateLanguage::CompareNotEqualInteger);
@@ -714,7 +720,8 @@ DO_RECURSIVE:
 							MANA_ASSERT(
 								node->GetRightNode()->GetTypeDescriptor() == GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Char) ||
 								node->GetRightNode()->GetTypeDescriptor() == GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Short) ||
-								node->GetRightNode()->GetTypeDescriptor() == GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Int));
+								node->GetRightNode()->GetTypeDescriptor() == GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Int) ||
+								node->GetRightNode()->GetTypeDescriptor() == GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Bool));
 
 							if (ToAddress(node->GetRightNode()->GetInt()) >= (node->GetLeftNode()->GetTypeDescriptor())->GetArraySize())
 								CompileError("subscript range over");
@@ -819,7 +826,8 @@ DO_RECURSIVE:
 				switch (node->GetSymbol()->GetClassTypeId())
 				{
 				case Symbol::ClassTypeId::ConstantInteger:
-					node->GetSymbol()->SetTypeDescription(GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Int));
+					if (node->GetSymbol()->GetTypeDescriptor() == nullptr)
+						node->GetSymbol()->SetTypeDescription(GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Int));
 					break;
 
 				case Symbol::ClassTypeId::ConstantFloat:

@@ -54,6 +54,7 @@ namespace mana
 
 		// declaration
 		std::shared_ptr<SyntaxNode> CreateConstantNode(const std::string_view& identifier, const int_t value);
+		std::shared_ptr<SyntaxNode> CreateConstantNode(const std::string_view& identifier, const bool value);
 		std::shared_ptr<SyntaxNode> CreateConstantNode(const std::string_view& identifier, const float_t value);
 		std::shared_ptr<SyntaxNode> CreateConstantNode(const std::string_view& identifier, const std::string_view& text);
 		std::shared_ptr<SyntaxNode> CreateDefineNode(const std::string_view& identifier, const std::string_view& text);
@@ -155,6 +156,7 @@ namespace mana
 		std::shared_ptr<SyntaxNode> CreateSelf();
 		std::shared_ptr<SyntaxNode> CreateSender();
 		std::shared_ptr<SyntaxNode> CreateNil();
+		std::shared_ptr<SyntaxNode> CreateBool(const bool value);
 		std::shared_ptr<SyntaxNode> CreateInteger(const int_t value);
 		std::shared_ptr<SyntaxNode> CreateFloat(const float_t value);
 		std::shared_ptr<SyntaxNode> CreateString(const std::string_view& text);

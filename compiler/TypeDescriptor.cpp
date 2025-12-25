@@ -86,13 +86,15 @@ namespace mana
 			break;
 #else
 		case Id::Char:
-		case Id::Short:
+	case Id::Short:
 #endif
+		case Id::Bool:
 		case Id::Int:
 			switch (typeDescriptor->mTcons)
 			{
 			case Id::Char:
 			case Id::Short:
+			case Id::Bool:
 			case Id::Int:
 				return true;
 			default:

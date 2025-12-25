@@ -166,6 +166,10 @@ declaration		: variable_decl
 					{ $$ = mParsingDriver->CreateConstantNode($2, $3); }
 				| tDEFINE tIDENTIFIER tREAL
 					{ $$ = mParsingDriver->CreateConstantNode($2, $3); }
+				| tDEFINE tIDENTIFIER tFALSE
+					{ $$ = mParsingDriver->CreateConstantNode($2, false); }
+				| tDEFINE tIDENTIFIER tTRUE
+					{ $$ = mParsingDriver->CreateConstantNode($2, true); }
 				| tDEFINE tIDENTIFIER '-' tDIGIT
 					{ $$ = mParsingDriver->CreateConstantNode($2, -$4); }
 				| tDEFINE tIDENTIFIER '-' tREAL
@@ -384,9 +388,9 @@ primary			: '-' expression %prec tUMINUS
 				;
 
 constant		: tFALSE
-					{ $$ = mParsingDriver->CreateInteger(0); }
+					{ $$ = mParsingDriver->CreateBool(false); }
 				| tTRUE
-					{ $$ = mParsingDriver->CreateInteger(1); }
+					{ $$ = mParsingDriver->CreateBool(true); }
 				| tPRIORITY
 					{ $$ = mParsingDriver->CreatePriority(); }
 				| tSELF

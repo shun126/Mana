@@ -227,6 +227,9 @@ namespace mana
 			case TypeDescriptor::Id::Int:
 				GetSymbolFactory()->CreateConstInt(node->GetString(), node->GetInt());
 				break;
+			case TypeDescriptor::Id::Bool:
+				GetSymbolFactory()->CreateConstBool(node->GetString(), node->GetInt() != 0);
+				break;
 			case TypeDescriptor::Id::Float:
 				GetSymbolFactory()->CreateConstFloat(node->GetString(), node->GetFloat());
 				break;

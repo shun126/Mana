@@ -84,6 +84,11 @@ namespace mana
 			return LexerInstance->mParsingDriver->GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Int);
 		}
 
+		inline static std::shared_ptr<TypeDescriptor> GetBoolTypeDescriptor()
+		{
+			return LexerInstance->mParsingDriver->GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Bool);
+		}
+
 		inline static std::shared_ptr<TypeDescriptor> GetFloat32TypeDescriptor()
 		{
 			return LexerInstance->mParsingDriver->GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float);

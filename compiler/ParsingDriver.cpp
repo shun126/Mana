@@ -145,6 +145,15 @@ namespace mana
 		return node;
 	}
 
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateConstantNode(const std::string_view& identifier, const bool value)
+	{
+		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::DefineConstant);
+		node->Set(identifier);
+		node->Set(static_cast<int_t>(value));
+		node->Set(GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Bool));
+		return node;
+	}
+
 	std::shared_ptr<SyntaxNode> ParsingDriver::CreateConstantNode(const std::string_view& identifier, const float_t value)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::DefineConstant);
@@ -834,6 +843,14 @@ std::shared_ptr<SyntaxNode> ParsingDriver::CreateAwaitCompletion(const std::shar
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Const);
 		node->Set(GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Nil));
+		return node;
+	}
+
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateBool(const bool value)
+	{
+		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Const);
+		node->Set(static_cast<int_t>(value));
+		node->Set(GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Bool));
 		return node;
 	}
 
