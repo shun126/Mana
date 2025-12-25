@@ -58,6 +58,7 @@ namespace mana
 		static std::shared_ptr<TypeDescriptor> GetVoidTypeDescriptor();
 		static std::shared_ptr<TypeDescriptor> GetInt8TypeDescriptor();
 		static std::shared_ptr<TypeDescriptor> GetInt16TypeDescriptor();
+		static std::shared_ptr<TypeDescriptor> GetBoolTypeDescriptor();
 		static std::shared_ptr<TypeDescriptor> GetInt32TypeDescriptor();
 		static std::shared_ptr<TypeDescriptor> GetFloat32TypeDescriptor();
 		static std::shared_ptr<TypeDescriptor> GetStringTypeDescriptor();
