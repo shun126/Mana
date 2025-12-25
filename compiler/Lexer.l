@@ -85,6 +85,7 @@ other		.
 <INITIAL>"void"		{ yylval->build<std::shared_ptr<mana::TypeDescriptor>>() = mana::lexer::GetVoidTypeDescriptor(); return mana::Parser::token::tTYPE; }
 <INITIAL>"char"		{ yylval->build<std::shared_ptr<mana::TypeDescriptor>>() = mana::lexer::GetInt8TypeDescriptor(); return mana::Parser::token::tTYPE; }
 <INITIAL>"short"	{ yylval->build<std::shared_ptr<mana::TypeDescriptor>>() = mana::lexer::GetInt16TypeDescriptor(); return mana::Parser::token::tTYPE; }
+<INITIAL>"bool"		{ yylval->build<std::shared_ptr<mana::TypeDescriptor>>() = mana::lexer::GetBoolTypeDescriptor(); return mana::Parser::token::tTYPE; }
 <INITIAL>"int"		{ yylval->build<std::shared_ptr<mana::TypeDescriptor>>() = mana::lexer::GetInt32TypeDescriptor(); return mana::Parser::token::tTYPE; }
 <INITIAL>"float"	{ yylval->build<std::shared_ptr<mana::TypeDescriptor>>() = mana::lexer::GetFloat32TypeDescriptor(); return mana::Parser::token::tTYPE; }
 <INITIAL>"string"	{ yylval->build<std::shared_ptr<mana::TypeDescriptor>>() = mana::lexer::GetStringTypeDescriptor(); return mana::Parser::token::tTYPE; }

@@ -245,7 +245,7 @@ namespace mana
 		else
 		{
 			newNode = std::make_shared<SyntaxNode>(SyntaxNode::Id::FloatToInteger);
-			newNode->mType = typeDescriptorFactory->Get(TypeDescriptor::Id::Int);
+			newNode->mType = type;
 		}
 
 		newNode->SetLeftNode(shared_from_this());
@@ -260,6 +260,7 @@ namespace mana
 		{
 		case TypeDescriptor::Id::Char:
 		case TypeDescriptor::Id::Short:
+		case TypeDescriptor::Id::Bool:
 		case TypeDescriptor::Id::Int:
 			if (type->GetId() == TypeDescriptor::Id::Float)
 			{
@@ -280,15 +281,17 @@ namespace mana
 			{
 			case TypeDescriptor::Id::Char:
 			case TypeDescriptor::Id::Short:
+			case TypeDescriptor::Id::Bool:
 			case TypeDescriptor::Id::Int:
 				if (GetId() == SyntaxNode::Id::Const)
 				{
 					mDigit = static_cast<int_t>(mReal);
-					mType = typeDescriptorFactory->Get(TypeDescriptor::Id::Int);
+					mType = type->GetId() == TypeDescriptor::Id::Bool ? typeDescriptorFactory->Get(TypeDescriptor::Id::Bool) : typeDescriptorFactory->Get(TypeDescriptor::Id::Int);
 				}
 				else
 				{
-					return CreateCast(typeDescriptorFactory->Get(TypeDescriptor::Id::Int), typeDescriptorFactory);
+					const auto targetType = type->GetId() == TypeDescriptor::Id::Bool ? typeDescriptorFactory->Get(TypeDescriptor::Id::Bool) : typeDescriptorFactory->Get(TypeDescriptor::Id::Int);
+					return CreateCast(targetType, typeDescriptorFactory);
 				}
 				break;
 

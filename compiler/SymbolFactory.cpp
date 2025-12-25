@@ -85,6 +85,19 @@ namespace mana
 		return symbol;
 	}
 
+	std::shared_ptr<Symbol> SymbolFactory::CreateConstBool(const std::string_view name, const bool value)
+	{
+		std::shared_ptr<Symbol> symbol = Lookup(name);
+		if (symbol)
+			CompileError({ "duplicated declaration '", name, "'" });
+
+		symbol = CreateSymbol(name, Symbol::ClassTypeId::ConstantInteger);
+		symbol->SetTypeDescription(mTypeDescriptorFactory->Get(TypeDescriptor::Id::Bool));
+		symbol->SetEtc(static_cast<int32_t>(value));
+
+		return symbol;
+	}
+
 	std::shared_ptr<Symbol> SymbolFactory::CreateConstFloat(const std::string_view name, const float value)
 	{
 		std::shared_ptr<Symbol> symbol = Lookup(name);
@@ -572,6 +585,10 @@ TODO:
 
 			case TypeDescriptor::Id::Short:
 				mCodeBuffer->AddOpecode(IntermediateLanguage::StoreShort);
+				break;
+
+			case TypeDescriptor::Id::Bool:
+				mCodeBuffer->AddOpecode(IntermediateLanguage::StoreChar);
 				break;
 
 			case TypeDescriptor::Id::Int:
