@@ -115,6 +115,19 @@ vm->LoadProgram(path);
 while (vm->Run())
     ;
 ```
+
+### Binding native code
+
+Register C-style callbacks or bind methods on existing C++ objects to the same `native` entry points in Mana scripts.
+
+```cpp
+// Plain function binding
+vm->RegisterFunction("nativeFunction", &NativeFunction);
+
+// Bind a member function that matches mana::VM::ExternalFunctionType
+auto instance = std::make_shared<MyPlugin>();
+vm->RegisterMemberFunction("pluginCallback", instance, &MyPlugin::OnCall);
+```
 # License
 
 MIT License
