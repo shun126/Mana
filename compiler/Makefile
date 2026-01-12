@@ -72,6 +72,7 @@ all:
 
 clean:
 	$(RM) $(TARGET) $(SECOUND) $(OBJECTS)
+	$(MAKE) -C ../test/gtest clean
 
 depend:
 	makedepend -Y -- $(CFLAGS) -- $(SOURCES)
@@ -82,6 +83,9 @@ cppcheck:
 test:
 	./$(TARGET) --debug ../sample/sample.mn
 	cd ../test/ && python3 test.py
+
+gtest:
+	$(MAKE) -C ../test/gtest
 
 version:
 	python3 Version.py

@@ -8,7 +8,9 @@ jobs:
       - run: echo "This job is now running on a ${{ runner.os }} server hosted by GitHub!"
       - run: echo "The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
       - name: Install dependencies
-        run: sudo apt update
+        run: |
+          sudo apt update
+          sudo apt install -y libgtest-dev pkg-config
       - name: Check out repository code
         uses: actions/checkout@v3
       - run: echo "The ${{ github.repository }} repository has been cloned to the runner."
@@ -18,6 +20,10 @@ jobs:
         run: make --directory=${{ github.workspace }}/compiler
       - name: Test Mana compiler
         run: make --directory=${{ github.workspace }}/compiler test
+      - name: Run unit tests
+        run: |
+          make --directory=${{ github.workspace }}/compiler gtest
+          ${{ github.workspace }}/test/gtest/mana_gtests
   BuildOnWindows:
     runs-on: windows-latest
     steps:
