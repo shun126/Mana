@@ -455,6 +455,8 @@ namespace mana
 			// Nodes paired with intermediate languages
 		case SyntaxNode::Id::Array:
 		case SyntaxNode::Id::Assign:
+			MANA_BUG("illigal node detect");
+			break;
 		case SyntaxNode::Id::Const:
 		case SyntaxNode::Id::ExpressionIf:
 		case SyntaxNode::Id::MemberFunction:
