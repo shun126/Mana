@@ -1,0 +1,29 @@
+/*
+mana (script)
+Copyright (c) 2003 Shun Moriya
+*/
+
+// global initializers
+int constValue = 3 + 4;
+float constFloat = 1.5;
+int orderedA = 1;
+int orderedB = orderedA + 1;
+
+int RuntimeValue()
+{
+	return 42;
+}
+
+int runtimeValue = RuntimeValue();
+
+actor Test
+{
+	action init
+	{
+		// touch globals so code generation exercises references
+		constValue = constValue + orderedB;
+		constFloat = constFloat + 0.5;
+		orderedB = orderedA + 2;
+		runtimeValue = RuntimeValue();
+	}
+}

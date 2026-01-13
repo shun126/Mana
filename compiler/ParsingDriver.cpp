@@ -10,6 +10,7 @@ mana (compiler)
 #include "CodeBuffer.h"
 #include "CodeGenerator.h"
 #include "DataBuffer.h"
+#include "ErrorHandler.h"
 #include "GlobalSemanticAnalyzer.h"
 #include "LocalAddressResolver.h"
 #include "LocalSemanticAnalyzer.h"
@@ -21,6 +22,12 @@ mana (compiler)
 
 namespace mana
 {
+	namespace
+	{
+		constexpr std::string_view kInitGlobalsActorName = "__init_globals";
+		constexpr std::string_view kInitGlobalsActionName = "init";
+	}
+
 	ParsingDriver::ParsingDriver()
 		: mParser(std::make_unique<Parser>(this))
 		, mCodeBuffer(std::make_shared<CodeBuffer>())
@@ -81,6 +88,28 @@ namespace mana
 		return mTypeDescriptorFactory;
 	}
 
+	std::shared_ptr<SyntaxNode> ParsingDriver::InjectGlobalInitializers(const std::shared_ptr<SyntaxNode>& root)
+	{
+		if (root == nullptr)
+			return root;
+
+		if (HasGlobalNameConflict(root, kInitGlobalsActorName))
+		{
+			CompileError({ "reserved name is already used: ", kInitGlobalsActorName });
+			return root;
+		}
+
+		const std::shared_ptr<SyntaxNode> initializerStatements = CollectGlobalInitializerStatements(root);
+		if (initializerStatements == nullptr)
+			return root;
+
+		const std::shared_ptr<SyntaxNode> initBlock = CreateBlock(initializerStatements);
+		const std::shared_ptr<SyntaxNode> initAction = CreateAction(kInitGlobalsActionName, initBlock);
+		const std::shared_ptr<SyntaxNode> initActor = CreateActor(kInitGlobalsActorName, initAction);
+
+		return AppendNode(root, initActor);
+	}
+
 	//if ($1) { $$ = $1; $$->left = $2; } else { $$ = $2; }
 	std::shared_ptr<SyntaxNode> ParsingDriver::Bind(const std::shared_ptr<SyntaxNode>& base, const std::shared_ptr<SyntaxNode>& next)
 	{
@@ -96,6 +125,99 @@ namespace mana
 			result = next;
 		}
 		return result;
+	}
+
+	std::shared_ptr<SyntaxNode> ParsingDriver::AppendNode(const std::shared_ptr<SyntaxNode>& base, const std::shared_ptr<SyntaxNode>& next) const
+	{
+		if (base == nullptr)
+			return next;
+		if (next == nullptr)
+			return base;
+
+		std::shared_ptr<SyntaxNode> tail = base;
+		while (tail->GetNextNode())
+		{
+			tail = tail->GetNextNode();
+		}
+		tail->SetNextNode(next);
+		return base;
+	}
+
+	std::shared_ptr<SyntaxNode> ParsingDriver::CollectGlobalInitializerStatements(const std::shared_ptr<SyntaxNode>& root) const
+	{
+		std::shared_ptr<SyntaxNode> statements;
+
+		for (std::shared_ptr<SyntaxNode> node = root; node; node = node->GetNextNode())
+		{
+			switch (node->GetId())
+			{
+			case SyntaxNode::Id::DeclareVariable:
+				statements = AppendNode(statements, CollectInitializerStatementsFromDeclarations(node));
+				break;
+
+			case SyntaxNode::Id::Allocate:
+			case SyntaxNode::Id::Static:
+				statements = AppendNode(statements, CollectInitializerStatementsFromDeclarations(node->GetLeftNode()));
+				break;
+
+			default:
+				break;
+			}
+		}
+
+		return statements;
+	}
+
+	std::shared_ptr<SyntaxNode> ParsingDriver::CollectInitializerStatementsFromDeclarations(const std::shared_ptr<SyntaxNode>& node) const
+	{
+		std::shared_ptr<SyntaxNode> statements;
+
+		for (std::shared_ptr<SyntaxNode> current = node; current; current = current->GetNextNode())
+		{
+			if (current->Is(SyntaxNode::Id::DeclareVariable))
+			{
+				const std::shared_ptr<SyntaxNode> initializer = current->GetBodyNode();
+				if (initializer)
+					statements = AppendNode(statements, initializer->Clone());
+			}
+		}
+
+		return statements;
+	}
+
+	bool ParsingDriver::HasGlobalNameConflict(const std::shared_ptr<SyntaxNode>& root, const std::string_view& name) const
+	{
+		for (std::shared_ptr<SyntaxNode> node = root; node; node = node->GetNextNode())
+		{
+			switch (node->GetId())
+			{
+			case SyntaxNode::Id::Actor:
+			case SyntaxNode::Id::Phantom:
+			case SyntaxNode::Id::Module:
+			case SyntaxNode::Id::Struct:
+			case SyntaxNode::Id::DeclareFunction:
+			case SyntaxNode::Id::NativeFunction:
+			case SyntaxNode::Id::DefineConstant:
+				if (node->GetString() == name)
+					return true;
+				break;
+
+			case SyntaxNode::Id::DeclareVariable:
+				if (node->GetRightNode() && node->GetRightNode()->GetString() == name)
+					return true;
+				break;
+
+			case SyntaxNode::Id::Allocate:
+			case SyntaxNode::Id::Static:
+				if (HasGlobalNameConflict(node->GetLeftNode(), name))
+					return true;
+				break;
+
+			default:
+				break;
+			}
+		}
+		return false;
 	}
 
 	// declarations
