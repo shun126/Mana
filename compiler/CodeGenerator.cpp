@@ -11,6 +11,8 @@ mana (compiler)
 #include "Symbol.h"
 #include "TypeDescriptor.h"
 
+#include <cstring>
+
 namespace mana
 {
 	CodeGenerator::CodeGenerator(
@@ -29,6 +31,407 @@ namespace mana
 		, mSymbolFactory(symbolFactory)
 		, mTypeDescriptorFactory(typeDescriptorFactory)
 	{
+	}
+
+	namespace
+	{
+		constexpr const char* kGlobalInitActorName = "__global";
+		constexpr const char* kGlobalInitActionName = "__global_init";
+	}
+
+	const std::vector<uint8_t>& CodeGenerator::GetGlobalInitData() const noexcept
+	{
+		return mGlobalInitData;
+	}
+
+	void CodeGenerator::FinalizeGlobalInitializers()
+	{
+		if (!mGlobalRuntimeInitializers.empty())
+		{
+			EmitGlobalInitActor();
+		}
+
+		if (mHasGlobalInitData)
+		{
+			const auto size = static_cast<size_t>(mSymbolFactory->GetGlobalMemoryAddress());
+			EnsureGlobalInitDataSize(size);
+		}
+	}
+
+	void CodeGenerator::EnsureGlobalInitDataSize(const size_t size)
+	{
+		if (mGlobalInitData.size() < size)
+		{
+			mGlobalInitData.resize(size, 0);
+		}
+	}
+
+	void CodeGenerator::StoreGlobalInitValue(const std::shared_ptr<Symbol>& symbol, const ConstantValue& value)
+	{
+		const std::shared_ptr<TypeDescriptor>& type = symbol->GetTypeDescriptor();
+		const size_t address = static_cast<size_t>(symbol->GetAddress());
+		const size_t size = static_cast<size_t>(type->GetMemorySize());
+
+		EnsureGlobalInitDataSize(address + size);
+
+		uint8_t* dest = mGlobalInitData.data() + address;
+		switch (type->GetId())
+		{
+		case TypeDescriptor::Id::Char:
+		{
+			const int8_t stored = static_cast<int8_t>(value.mIsFloat ? value.mFloat : value.mInt);
+			std::memcpy(dest, &stored, sizeof(stored));
+			break;
+		}
+		case TypeDescriptor::Id::Short:
+		{
+			const int16_t stored = static_cast<int16_t>(value.mIsFloat ? value.mFloat : value.mInt);
+			std::memcpy(dest, &stored, sizeof(stored));
+			break;
+		}
+		case TypeDescriptor::Id::Int:
+		case TypeDescriptor::Id::Actor:
+		{
+			const int32_t stored = static_cast<int32_t>(value.mIsFloat ? value.mFloat : value.mInt);
+			std::memcpy(dest, &stored, sizeof(stored));
+			break;
+		}
+		case TypeDescriptor::Id::Float:
+		{
+			const float stored = value.mIsFloat ? value.mFloat : static_cast<float>(value.mInt);
+			std::memcpy(dest, &stored, sizeof(stored));
+			break;
+		}
+		default:
+			MANA_ASSERT_MESSAGE(false, "unsupported global init type");
+			break;
+		}
+	}
+
+	bool CodeGenerator::TryHandleGlobalConstInitializer(
+		const std::shared_ptr<Symbol>& symbol,
+		const std::shared_ptr<SyntaxNode>& expression)
+	{
+		if (!expression)
+			return false;
+
+		const auto type = symbol->GetTypeDescriptor();
+		if (!type)
+			return false;
+
+		switch (type->GetId())
+		{
+		case TypeDescriptor::Id::Char:
+		case TypeDescriptor::Id::Short:
+		case TypeDescriptor::Id::Int:
+		case TypeDescriptor::Id::Float:
+		case TypeDescriptor::Id::Actor:
+			break;
+		default:
+			return false;
+		}
+
+		ConstantValue value;
+		if (!TryEvaluateConstantExpression(expression, value))
+			return false;
+
+		StoreGlobalInitValue(symbol, value);
+		mHasGlobalInitData = true;
+		return true;
+	}
+
+	void CodeGenerator::QueueGlobalRuntimeInitializer(const std::shared_ptr<SyntaxNode>& expression)
+	{
+		if (expression)
+		{
+			mGlobalRuntimeInitializers.push_back(expression);
+		}
+	}
+
+	void CodeGenerator::EmitGlobalInitActor()
+	{
+		const auto existing = mSymbolFactory->Lookup(kGlobalInitActorName);
+		if (existing)
+		{
+			CompileError({ "reserved actor name used for global initialization: ", kGlobalInitActorName });
+		}
+
+		std::shared_ptr<SyntaxNode> firstStatement;
+		std::shared_ptr<SyntaxNode> lastStatement;
+		for (const auto& statement : mGlobalRuntimeInitializers)
+		{
+			if (!statement)
+				continue;
+
+			if (!firstStatement)
+			{
+				firstStatement = statement;
+				lastStatement = statement;
+			}
+			else
+			{
+				lastStatement->SetNextNode(statement);
+				lastStatement = statement;
+			}
+		}
+
+		std::shared_ptr<SyntaxNode> block = std::make_shared<SyntaxNode>(SyntaxNode::Id::Block);
+		block->SetLeftNode(firstStatement);
+
+		std::shared_ptr<SyntaxNode> action = std::make_shared<SyntaxNode>(SyntaxNode::Id::Action);
+		action->Set(kGlobalInitActionName);
+		action->SetLeftNode(block);
+		action->Set(mTypeDescriptorFactory->Get(TypeDescriptor::Id::Void));
+
+		std::shared_ptr<SyntaxNode> actor = std::make_shared<SyntaxNode>(SyntaxNode::Id::Actor);
+		actor->Set(kGlobalInitActorName);
+		actor->SetLeftNode(action);
+
+		mGlobalSemanticAnalyzer->Resolve(actor);
+		GenerateCode(actor, true);
+	}
+
+	bool CodeGenerator::TryEvaluateConstantExpression(const std::shared_ptr<SyntaxNode>& node, ConstantValue& value) const
+	{
+		if (!node)
+			return false;
+
+		switch (node->GetId())
+		{
+		case SyntaxNode::Id::Const:
+		{
+			if (!node->GetTypeDescriptor())
+				return false;
+
+			switch (node->GetTypeDescriptor()->GetId())
+			{
+			case TypeDescriptor::Id::Float:
+				value.mIsFloat = true;
+				value.mFloat = node->GetFloat();
+				return true;
+			case TypeDescriptor::Id::Nil:
+				value.mIsFloat = false;
+				value.mInt = 0;
+				return true;
+			default:
+				value.mIsFloat = false;
+				value.mInt = static_cast<int32_t>(node->GetInt());
+				return true;
+			}
+		}
+		case SyntaxNode::Id::Identifier:
+		{
+			const auto symbol = node->GetSymbol();
+			if (!symbol)
+				return false;
+
+			switch (symbol->GetClassTypeId())
+			{
+			case Symbol::ClassTypeId::ConstantInteger:
+				value.mIsFloat = false;
+				value.mInt = symbol->GetEtc();
+				return true;
+			case Symbol::ClassTypeId::ConstantFloat:
+				value.mIsFloat = true;
+				value.mFloat = symbol->GetFloat();
+				return true;
+			default:
+				return false;
+			}
+		}
+		case SyntaxNode::Id::IntegerToFloat:
+		{
+			ConstantValue inner;
+			if (!TryEvaluateConstantExpression(node->GetLeftNode(), inner))
+				return false;
+			value.mIsFloat = true;
+			value.mFloat = inner.mIsFloat ? inner.mFloat : static_cast<float>(inner.mInt);
+			return true;
+		}
+		case SyntaxNode::Id::FloatToInteger:
+		{
+			ConstantValue inner;
+			if (!TryEvaluateConstantExpression(node->GetLeftNode(), inner))
+				return false;
+			value.mIsFloat = false;
+			value.mInt = inner.mIsFloat ? static_cast<int32_t>(inner.mFloat) : inner.mInt;
+			return true;
+		}
+		case SyntaxNode::Id::Neg:
+		{
+			ConstantValue inner;
+			if (!TryEvaluateConstantExpression(node->GetLeftNode(), inner))
+				return false;
+			if (inner.mIsFloat)
+			{
+				value.mIsFloat = true;
+				value.mFloat = -inner.mFloat;
+			}
+			else
+			{
+				value.mIsFloat = false;
+				value.mInt = -inner.mInt;
+			}
+			return true;
+		}
+		case SyntaxNode::Id::LogicalNot:
+		case SyntaxNode::Id::Not:
+		{
+			ConstantValue inner;
+			if (!TryEvaluateConstantExpression(node->GetLeftNode(), inner))
+				return false;
+			const int32_t operand = inner.mIsFloat ? static_cast<int32_t>(inner.mFloat) : inner.mInt;
+			value.mIsFloat = false;
+			value.mInt = node->GetId() == SyntaxNode::Id::LogicalNot ? (operand == 0) : ~operand;
+			return true;
+		}
+		case SyntaxNode::Id::ExpressionIf:
+		{
+			ConstantValue condition;
+			if (!TryEvaluateConstantExpression(node->GetBodyNode(), condition))
+				return false;
+			const bool predicate = (condition.mIsFloat ? condition.mFloat : static_cast<float>(condition.mInt)) != 0.0f;
+			return TryEvaluateConstantExpression(predicate ? node->GetLeftNode() : node->GetRightNode(), value);
+		}
+		case SyntaxNode::Id::LogicalAnd:
+		case SyntaxNode::Id::LogicalOr:
+		case SyntaxNode::Id::Equal:
+		case SyntaxNode::Id::NotEqual:
+		case SyntaxNode::Id::Less:
+		case SyntaxNode::Id::LessEqual:
+		case SyntaxNode::Id::Greater:
+		case SyntaxNode::Id::GreaterEqual:
+		{
+			ConstantValue left;
+			ConstantValue right;
+			if (!TryEvaluateConstantExpression(node->GetLeftNode(), left) ||
+				!TryEvaluateConstantExpression(node->GetRightNode(), right))
+				return false;
+
+			const float leftValue = left.mIsFloat ? left.mFloat : static_cast<float>(left.mInt);
+			const float rightValue = right.mIsFloat ? right.mFloat : static_cast<float>(right.mInt);
+
+			bool result = false;
+			switch (node->GetId())
+			{
+			case SyntaxNode::Id::LogicalAnd:
+				result = (leftValue != 0.0f) && (rightValue != 0.0f);
+				break;
+			case SyntaxNode::Id::LogicalOr:
+				result = (leftValue != 0.0f) || (rightValue != 0.0f);
+				break;
+			case SyntaxNode::Id::Equal:
+				result = leftValue == rightValue;
+				break;
+			case SyntaxNode::Id::NotEqual:
+				result = leftValue != rightValue;
+				break;
+			case SyntaxNode::Id::Less:
+				result = leftValue < rightValue;
+				break;
+			case SyntaxNode::Id::LessEqual:
+				result = leftValue <= rightValue;
+				break;
+			case SyntaxNode::Id::Greater:
+				result = leftValue > rightValue;
+				break;
+			case SyntaxNode::Id::GreaterEqual:
+				result = leftValue >= rightValue;
+				break;
+			default:
+				return false;
+			}
+
+			value.mIsFloat = false;
+			value.mInt = result ? 1 : 0;
+			return true;
+		}
+		case SyntaxNode::Id::Add:
+		case SyntaxNode::Id::Sub:
+		case SyntaxNode::Id::Mul:
+		case SyntaxNode::Id::Div:
+		case SyntaxNode::Id::Rem:
+		case SyntaxNode::Id::And:
+		case SyntaxNode::Id::Or:
+		case SyntaxNode::Id::Xor:
+		case SyntaxNode::Id::LeftShift:
+		case SyntaxNode::Id::RightShift:
+		{
+			ConstantValue left;
+			ConstantValue right;
+			if (!TryEvaluateConstantExpression(node->GetLeftNode(), left) ||
+				!TryEvaluateConstantExpression(node->GetRightNode(), right))
+				return false;
+
+			const bool useFloat = left.mIsFloat || right.mIsFloat || (node->GetTypeDescriptor() && node->GetTypeDescriptor()->GetId() == TypeDescriptor::Id::Float);
+			if (useFloat)
+			{
+				const float leftValue = left.mIsFloat ? left.mFloat : static_cast<float>(left.mInt);
+				const float rightValue = right.mIsFloat ? right.mFloat : static_cast<float>(right.mInt);
+				value.mIsFloat = true;
+				switch (node->GetId())
+				{
+				case SyntaxNode::Id::Add:
+					value.mFloat = leftValue + rightValue;
+					return true;
+				case SyntaxNode::Id::Sub:
+					value.mFloat = leftValue - rightValue;
+					return true;
+				case SyntaxNode::Id::Mul:
+					value.mFloat = leftValue * rightValue;
+					return true;
+				case SyntaxNode::Id::Div:
+					value.mFloat = leftValue / rightValue;
+					return true;
+				default:
+					return false;
+				}
+			}
+			else
+			{
+				const int32_t leftValue = left.mIsFloat ? static_cast<int32_t>(left.mFloat) : left.mInt;
+				const int32_t rightValue = right.mIsFloat ? static_cast<int32_t>(right.mFloat) : right.mInt;
+				value.mIsFloat = false;
+				switch (node->GetId())
+				{
+				case SyntaxNode::Id::Add:
+					value.mInt = leftValue + rightValue;
+					return true;
+				case SyntaxNode::Id::Sub:
+					value.mInt = leftValue - rightValue;
+					return true;
+				case SyntaxNode::Id::Mul:
+					value.mInt = leftValue * rightValue;
+					return true;
+				case SyntaxNode::Id::Div:
+					value.mInt = leftValue / rightValue;
+					return true;
+				case SyntaxNode::Id::Rem:
+					value.mInt = leftValue % rightValue;
+					return true;
+				case SyntaxNode::Id::And:
+					value.mInt = leftValue & rightValue;
+					return true;
+				case SyntaxNode::Id::Or:
+					value.mInt = leftValue | rightValue;
+					return true;
+				case SyntaxNode::Id::Xor:
+					value.mInt = leftValue ^ rightValue;
+					return true;
+				case SyntaxNode::Id::LeftShift:
+					value.mInt = leftValue << rightValue;
+					return true;
+				case SyntaxNode::Id::RightShift:
+					value.mInt = leftValue >> rightValue;
+					return true;
+				default:
+					return false;
+				}
+			}
+		}
+		default:
+			return false;
+		}
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -718,7 +1121,30 @@ DO_RECURSIVE:
 			if (node->GetBodyNode())
 			{
 				// initializer
-				GenerateCode(node->GetBodyNode(), enableLoad);
+				const auto symbol = node->GetRightNode()->GetSymbol();
+				switch (symbol->GetClassTypeId())
+				{
+				case Symbol::ClassTypeId::LocalVariable:
+					GenerateCode(node->GetBodyNode(), enableLoad);
+					break;
+				case Symbol::ClassTypeId::GlobalVariable:
+				case Symbol::ClassTypeId::StaticVariable:
+				{
+					const auto assignNode = node->GetBodyNode();
+					if (assignNode && assignNode->GetId() == SyntaxNode::Id::Assign)
+					{
+						const auto initializer = assignNode->GetRightNode();
+						if (!TryHandleGlobalConstInitializer(symbol, initializer))
+						{
+							QueueGlobalRuntimeInitializer(assignNode);
+						}
+					}
+					break;
+				}
+				default:
+					GenerateCode(node->GetBodyNode(), enableLoad);
+					break;
+				}
 			}
 			//resolver_resolve_variable_description(node, Normal);
 			/*

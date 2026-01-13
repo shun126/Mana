@@ -20,7 +20,7 @@ namespace mana
 {
 	static constexpr const char* Signature = "MaNa";		//!< manaファイル署名
 	static constexpr uint8_t MajorVersion = 0;				//!< manaファイルのメジャーバージョン番号
-	static constexpr uint8_t MinorVersion = 13;				//!< manaファイルのマイナーバージョン番号
+	static constexpr uint8_t MinorVersion = 14;				//!< manaファイルのマイナーバージョン番号
 
 	/*!
 	manaファイルヘッダー
@@ -44,6 +44,7 @@ namespace mana
 		uint32_t mSizeOfInstructionPool;
 		uint32_t mSizeOfStaticMemory;
 		uint32_t mSizeOfGlobalMemory;
+		uint32_t mSizeOfGlobalInitData;
 		uint32_t mRandomSeedNumber;
 	};
 

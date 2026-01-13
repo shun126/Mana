@@ -121,9 +121,10 @@ namespace mana
 			InitializeActionFinished,	//!< initアクション終了フラグ
 			Initialized,				//!< 初期化済みフラグ
 			Requested,					//!< リクエスト発生済みフラグ
-			EnableSystemRequest			//!< システムリクエスト許可フラグ
+			EnableSystemRequest,		//!< システムリクエスト許可フラグ
+			GlobalInitDone				//!< グローバル初期化済みフラグ
 		};
-		std::bitset<8> mFlag;
+		std::bitset<9> mFlag;
 	};
 }
 

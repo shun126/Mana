@@ -7,6 +7,7 @@ mana (library)
 
 #pragma once
 #include "Plugin.h"
+#include <cstring>
 
 namespace mana
 {
@@ -175,8 +176,17 @@ namespace mana
 		}
 
 		mConstantPool = reinterpret_cast<const char*>(actorInfo);
+		const uint8_t* globalInitData = reinterpret_cast<const uint8_t*>(mConstantPool + mFileHeader->mSizeOfConstantPool);
+		mInstructionPool = globalInitData + mFileHeader->mSizeOfGlobalInitData;
 
-		mInstructionPool = reinterpret_cast<const uint8_t*>(mConstantPool + mFileHeader->mSizeOfConstantPool);
+		if (mFileHeader->mSizeOfGlobalInitData > 0)
+		{
+			MANA_ASSERT(mFileHeader->mSizeOfGlobalInitData <= mFileHeader->mSizeOfGlobalMemory);
+			std::memcpy(
+				mGlobalVariables.GetAddressFromTop<uint8_t>(0),
+				globalInitData,
+				mFileHeader->mSizeOfGlobalInitData);
+		}
 
 		// TODO 外部関数の名前をアドレスに置き換えて、実行時の検索時間を短縮して下さい
 #if 0
@@ -250,6 +260,22 @@ namespace mana
 
 		// ・ｽS・ｽA・ｽN・ｽ^・ｽ[・ｽ・ｽ init・ｽ・ｽmain ・ｽA・ｽN・ｽV・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽs
 		Restart();
+		bool hasGlobalInit = false;
+		for (auto& actor : mActorHash)
+		{
+			if (actor.second->GetAction("__global_init") != Nil)
+			{
+				hasGlobalInit = true;
+				break;
+			}
+		}
+
+		if (hasGlobalInit && !mFlag.test(static_cast<uint8_t>(Flag::GlobalInitDone)))
+		{
+			RequestAll(1, "__global_init", nullptr);
+			mFlag.set(static_cast<uint8_t>(Flag::GlobalInitDone));
+		}
+
 		RequestAll(1, "init", nullptr);
 		RequestAll(0, "main", nullptr);
 	}
@@ -271,6 +297,7 @@ namespace mana
 		mFlag.reset(Flag::InitializeActionFinished);
 		mFlag.reset(Flag::Initialized);
 		mFlag.reset(Flag::EnableSystemRequest);
+		mFlag.reset(Flag::GlobalInitDone);
 
 		mActorHash.clear();
 		mPhantomHash.clear();

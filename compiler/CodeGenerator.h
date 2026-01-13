@@ -17,6 +17,7 @@ mana (compiler)
 #include "SyntaxNode.h"
 #include "TypeDescriptorFactory.h"
 #include <memory>
+#include <vector>
 
 namespace mana
 {
@@ -59,7 +60,25 @@ namespace mana
 
 		void Dump(std::ofstream& output) const;
 
+		void FinalizeGlobalInitializers();
+
+		[[nodiscard]] const std::vector<uint8_t>& GetGlobalInitData() const noexcept;
+
 	private:
+		struct ConstantValue final
+		{
+			bool mIsFloat = false;
+			int32_t mInt = 0;
+			float mFloat = 0.0f;
+		};
+
+		bool TryEvaluateConstantExpression(const std::shared_ptr<SyntaxNode>& node, ConstantValue& value) const;
+		bool TryHandleGlobalConstInitializer(const std::shared_ptr<Symbol>& symbol, const std::shared_ptr<SyntaxNode>& expression);
+		void StoreGlobalInitValue(const std::shared_ptr<Symbol>& symbol, const ConstantValue& value);
+		void EnsureGlobalInitDataSize(const size_t size);
+		void QueueGlobalRuntimeInitializer(const std::shared_ptr<SyntaxNode>& expression);
+		void EmitGlobalInitActor();
+
 		void ResolveLoad(const std::shared_ptr<SyntaxNode>& node) const;
 		void ResolveStore(const std::shared_ptr<SyntaxNode>& node) const;
 		void Return(const std::shared_ptr<Symbol>& function, const std::shared_ptr<SyntaxNode>& tree);
@@ -89,5 +108,9 @@ namespace mana
 
 		std::shared_ptr<Symbol> mActorSymbolEntryPointer;
 		std::shared_ptr<Symbol> mFunctionSymbolEntryPointer;
+
+		std::vector<uint8_t> mGlobalInitData;
+		std::vector<std::shared_ptr<SyntaxNode>> mGlobalRuntimeInitializers;
+		bool mHasGlobalInitData = false;
 	};
 }

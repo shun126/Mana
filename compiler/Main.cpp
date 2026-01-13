@@ -102,6 +102,7 @@ namespace mana
 		header.mSizeOfInstructionPool = parser->GetCodeBuffer()->GetSize();
 		header.mSizeOfStaticMemory = parser->GetSymbolFactory()->GetStaticMemoryAddress();
 		header.mSizeOfGlobalMemory = parser->GetSymbolFactory()->GetGlobalMemoryAddress();
+		header.mSizeOfGlobalInitData = static_cast<uint32_t>(parser->GetCodeGenerator()->GetGlobalInitData().size());
 		header.mRandomSeedNumber = static_cast<uint32_t>(time(NULL));
 
 		stream.PushData(&header, sizeof(header));
@@ -112,6 +113,11 @@ namespace mana
 		}
 
 		parser->GetDataBuffer()->Write(stream);
+		if (header.mSizeOfGlobalInitData > 0)
+		{
+			const auto& initData = parser->GetCodeGenerator()->GetGlobalInitData();
+			stream.PushData(initData.data(), initData.size());
+		}
 		parser->GetCodeBuffer()->Write(stream);
 
 		// TODO バイナリファイルにアセットデータを結合する必要があるか検討して下さい

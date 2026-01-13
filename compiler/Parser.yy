@@ -121,6 +121,7 @@ program			: line
 
 						auto codeGenerator = mParsingDriver->GetCodeGenerator();
 						codeGenerator->GenerateCode($1, true);
+						codeGenerator->FinalizeGlobalInitializers();
 
 						auto globalAddressResolver = mParsingDriver->GetCodeGenerator()->GetGlobalAddressResolver();
 						globalAddressResolver->ResolveAddress();

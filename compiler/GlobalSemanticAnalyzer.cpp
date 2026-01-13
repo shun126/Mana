@@ -383,9 +383,18 @@ namespace mana
 			MANA_ASSERT(node->GetLeftNode() && node->GetLeftNode()->Is(SyntaxNode::Id::TypeDescription));
 			MANA_ASSERT(node->GetRightNode() && node->GetRightNode()->Is(SyntaxNode::Id::Declarator));
 			ResolveVariableDescription(node, Symbol::MemoryTypeId::Normal, mStaticBlockOpened);
-			if (node->GetBodyNode() != nullptr) // 同様 if (node->GetRightNode()->GetSymbol()->GetClassTypeId() != Symbol::ClassTypeId::LocalVariable)
+			if (node->GetBodyNode() != nullptr)
 			{
-				CompileError({ "can initialize variable in local space only" });
+				switch (node->GetRightNode()->GetSymbol()->GetClassTypeId())
+				{
+				case Symbol::ClassTypeId::GlobalVariable:
+				case Symbol::ClassTypeId::StaticVariable:
+					Resolve(node->GetBodyNode());
+					break;
+				default:
+					CompileError({ "can initialize variable in global space only" });
+					break;
+				}
 			}
 			break;
 

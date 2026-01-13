@@ -1,0 +1,16 @@
+/*
+mana (script)
+Copyright (c) 2003 Shun Moriya
+*/
+
+int constValue = 3 + 4;
+float constFloat = 1.5;
+int orderedA = 1;
+int orderedB = orderedA + 1;
+
+int RuntimeValue()
+{
+	return 42;
+}
+
+int runtimeValue = RuntimeValue();
