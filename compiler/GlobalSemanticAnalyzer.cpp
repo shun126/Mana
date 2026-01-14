@@ -385,7 +385,13 @@ namespace mana
 			ResolveVariableDescription(node, Symbol::MemoryTypeId::Normal, mStaticBlockOpened);
 			if (node->GetBodyNode() != nullptr) // 同様 if (node->GetRightNode()->GetSymbol()->GetClassTypeId() != Symbol::ClassTypeId::LocalVariable)
 			{
-				CompileError({ "can initialize variable in local space only" });
+				const std::shared_ptr<Symbol> symbol = node->GetRightNode()->GetSymbol();
+				if (symbol == nullptr ||
+					(symbol->GetClassTypeId() != Symbol::ClassTypeId::GlobalVariable &&
+						symbol->GetClassTypeId() != Symbol::ClassTypeId::StaticVariable))
+				{
+					CompileError({ "can initialize variable in local space only" });
+				}
 			}
 			break;
 
