@@ -25,7 +25,7 @@ namespace mana
 	namespace
 	{
 		constexpr std::string_view kInitGlobalsActorName = "__init_globals";
-		constexpr std::string_view kInitGlobalsActionName = "init";
+		constexpr std::string_view kInitGlobalsActionName = "__init";
 	}
 
 	ParsingDriver::ParsingDriver()
@@ -156,8 +156,12 @@ namespace mana
 				break;
 
 			case SyntaxNode::Id::Allocate:
-			case SyntaxNode::Id::Static:
 				statements = AppendNode(statements, CollectInitializerStatementsFromDeclarations(node->GetLeftNode()));
+				break;
+
+			case SyntaxNode::Id::Static:
+				if (const auto& allocateNode = node->GetLeftNode())
+					statements = AppendNode(statements, CollectInitializerStatementsFromDeclarations(allocateNode->GetLeftNode()));
 				break;
 
 			default:
@@ -176,8 +180,7 @@ namespace mana
 		{
 			if (current->Is(SyntaxNode::Id::DeclareVariable))
 			{
-				const std::shared_ptr<SyntaxNode> initializer = current->GetBodyNode();
-				if (initializer)
+				if (const std::shared_ptr<SyntaxNode> initializer = current->GetBodyNode())
 					statements = AppendNode(statements, initializer->Clone());
 			}
 		}

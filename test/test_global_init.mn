@@ -11,7 +11,7 @@ int orderedB = orderedA + 1;
 
 int RuntimeValue()
 {
-	return 42;
+	return 563;
 }
 
 int runtimeValue = RuntimeValue();
@@ -20,6 +20,11 @@ actor Test
 {
 	action init
 	{
+		print("constValue: %d\n", constValue);
+		print("constFloat: %f\n", constFloat);
+		print("orderedB: %d\n", orderedB);
+		print("runtimeValue: %d\n", runtimeValue);
+
 		// touch globals so code generation exercises references
 		constValue = constValue + orderedB;
 		constFloat = constFloat + 0.5;
