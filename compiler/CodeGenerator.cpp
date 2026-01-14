@@ -717,8 +717,12 @@ DO_RECURSIVE:
 			// node->GetRightNode()
 			if (node->GetBodyNode())
 			{
-				// initializer
-				GenerateCode(node->GetBodyNode(), enableLoad);
+				const std::shared_ptr<Symbol> symbol = node->GetRightNode()->GetSymbol();
+				if (symbol && symbol->GetClassTypeId() == Symbol::ClassTypeId::LocalVariable)
+				{
+					// initializer
+					GenerateCode(node->GetBodyNode(), enableLoad);
+				}
 			}
 			//resolver_resolve_variable_description(node, Normal);
 			/*

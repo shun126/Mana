@@ -43,6 +43,7 @@ namespace mana
 		const std::shared_ptr<SymbolFactory>& GetSymbolFactory();
 		const std::shared_ptr<StringPool>& GetStringPool();
 		const std::shared_ptr<TypeDescriptorFactory>& GetTypeDescriptorFactory();
+		std::shared_ptr<SyntaxNode> InjectGlobalInitializers(const std::shared_ptr<SyntaxNode>& root);
 
 	protected:
 		std::shared_ptr<SyntaxNode> Bind(const std::shared_ptr<SyntaxNode>& base, const std::shared_ptr<SyntaxNode>& next);
@@ -192,6 +193,11 @@ namespace mana
 		static std::shared_ptr<SyntaxNode> CreateVariableSizeNode(const std::string_view& identifier);
 
 	private:
+		std::shared_ptr<SyntaxNode> AppendNode(const std::shared_ptr<SyntaxNode>& base, const std::shared_ptr<SyntaxNode>& next) const;
+		std::shared_ptr<SyntaxNode> CollectGlobalInitializerStatements(const std::shared_ptr<SyntaxNode>& root) const;
+		std::shared_ptr<SyntaxNode> CollectInitializerStatementsFromDeclarations(const std::shared_ptr<SyntaxNode>& node) const;
+		bool HasGlobalNameConflict(const std::shared_ptr<SyntaxNode>& root, const std::string_view& name) const;
+
 		std::unique_ptr<Parser> mParser;
 
 		std::shared_ptr<CodeBuffer> mCodeBuffer;
