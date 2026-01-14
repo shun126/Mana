@@ -65,9 +65,9 @@ namespace mana
 		return newTypeDescriptor;
 	}
 
-	std::shared_ptr<TypeDescriptor> TypeDescriptorFactory::CreateReference(const std::shared_ptr<TypeDescriptor>& component)
+	std::shared_ptr<TypeDescriptor> TypeDescriptorFactory::CreateReference(std::shared_ptr<TypeDescriptor> component)
 	{
-		const auto& referenceTypeDescriptor = Get(TypeDescriptor::Id::Reference);
+		auto referenceTypeDescriptor = Get(TypeDescriptor::Id::Reference);
 
 		auto newTypeDescriptor = Create(TypeDescriptor::Id::Reference);
 		newTypeDescriptor->SetTypeDescriptor(component);
