@@ -250,6 +250,13 @@ namespace mana
 
 		// ・ｽS・ｽA・ｽN・ｽ^・ｽ[・ｽ・ｽ init・ｽ・ｽmain ・ｽA・ｽN・ｽV・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽs
 		Restart();
+
+		// Initialize global variables
+		if (Request(1, "__init_globals", "__init", nullptr))
+		{
+			Execute([]() {});
+		}
+
 		RequestAll(1, "init", nullptr);
 		RequestAll(0, "main", nullptr);
 	}
@@ -365,9 +372,14 @@ namespace mana
 
 	inline bool VM::Request(const int32_t level, const char* actorName, const char* actionName, const std::shared_ptr<Actor>& sender)
 	{
-		const std::shared_ptr<Actor>& actor = mActorHash[actorName];
+		auto i = mActorHash.find(actorName);
+		if (i == mActorHash.end())
+			return false;
+
+		const std::shared_ptr<Actor>& actor = i->second;
 		if (actor == nullptr)
 			return false;
+
 		return actor->Request(level, actionName, sender);
 	}
 
