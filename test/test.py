@@ -63,6 +63,6 @@ success('test_bool_01.mn')
 fail('test_function_02.mn', 'incomplete type name')
 success('test_struct_01.mn')
 success('test_variable_01.mn')
-
+success('test_global_init.mn')
 ################################################################################
 exit(Result)

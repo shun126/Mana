@@ -38,6 +38,19 @@ namespace mana
 		void LoadPlugins(const std::string& directoryName);
 
 		void RegisterFunction(const std::string& name, const ExternalFunctionType& function);
+		//! Register C++ member functions without writing a manual wrapper. The method signature must match ExternalFunctionType.
+		template <class T>
+		void RegisterMemberFunction(const std::string& name, T* instance, void (T::*method)(const std::shared_ptr<Actor>&));
+		template <class T>
+		void RegisterMemberFunction(const std::string& name, const T* instance, void (T::*method)(const std::shared_ptr<Actor>&) const);
+		template <class T>
+		void RegisterMemberFunction(const std::string& name, const std::shared_ptr<T>& instance, void (T::*method)(const std::shared_ptr<Actor>&));
+		template <class T>
+		void RegisterMemberFunction(const std::string& name, const std::shared_ptr<T>& instance, void (T::*method)(const std::shared_ptr<Actor>&) const);
+		template <class T>
+		void RegisterMemberFunction(const std::string& name, const std::weak_ptr<T>& instance, void (T::*method)(const std::shared_ptr<Actor>&));
+		template <class T>
+		void RegisterMemberFunction(const std::string& name, const std::weak_ptr<T>& instance, void (T::*method)(const std::shared_ptr<Actor>&) const);
 
 		void LoadProgram(const std::string& path);
 		void LoadProgram(const std::shared_ptr<const void>& program);
