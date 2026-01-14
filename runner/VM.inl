@@ -34,6 +34,76 @@ namespace mana
 		mFunctionHash[name] = function;
 	}
 
+	template <class T>
+	inline void VM::RegisterMemberFunction(const std::string& name, T* instance, void (T::*method)(const std::shared_ptr<Actor>&))
+	{
+		MANA_ASSERT(instance);
+		RegisterFunction(name, [instance, method](const std::shared_ptr<Actor>& actor)
+			{
+				(instance->*method)(actor);
+			});
+	}
+
+	template <class T>
+	inline void VM::RegisterMemberFunction(const std::string& name, const T* instance, void (T::*method)(const std::shared_ptr<Actor>&) const)
+	{
+		MANA_ASSERT(instance);
+		RegisterFunction(name, [instance, method](const std::shared_ptr<Actor>& actor)
+			{
+				(instance->*method)(actor);
+			});
+	}
+
+	template <class T>
+	inline void VM::RegisterMemberFunction(const std::string& name, const std::shared_ptr<T>& instance, void (T::*method)(const std::shared_ptr<Actor>&))
+	{
+		MANA_ASSERT(instance);
+		const std::weak_ptr<T> weakInstance = instance;
+		RegisterMemberFunction(name, weakInstance, method);
+	}
+
+	template <class T>
+	inline void VM::RegisterMemberFunction(const std::string& name, const std::shared_ptr<T>& instance, void (T::*method)(const std::shared_ptr<Actor>&) const)
+	{
+		MANA_ASSERT(instance);
+		const std::weak_ptr<T> weakInstance = instance;
+		RegisterMemberFunction(name, weakInstance, method);
+	}
+
+	template <class T>
+	inline void VM::RegisterMemberFunction(const std::string& name, const std::weak_ptr<T>& instance, void (T::*method)(const std::shared_ptr<Actor>&))
+	{
+		const std::string functionName = name;
+		RegisterFunction(name, [instance, method, functionName](const std::shared_ptr<Actor>& actor)
+			{
+				if (const auto locked = instance.lock())
+				{
+					(locked.get()->*method)(actor);
+				}
+				else
+				{
+					MANA_ERROR({ "The object bound to external function ", functionName, " has already been released.\n" });
+				}
+			});
+	}
+
+	template <class T>
+	inline void VM::RegisterMemberFunction(const std::string& name, const std::weak_ptr<T>& instance, void (T::*method)(const std::shared_ptr<Actor>&) const)
+	{
+		const std::string functionName = name;
+		RegisterFunction(name, [instance, method, functionName](const std::shared_ptr<Actor>& actor)
+			{
+				if (const auto locked = instance.lock())
+				{
+					(locked.get()->*method)(actor);
+				}
+				else
+				{
+					MANA_ERROR({ "The object bound to external function ", functionName, " has already been released.\n" });
+				}
+			});
+	}
+
 	inline VM::ExternalFunctionType VM::FindFunction(const std::string& functionName) const
 	{
 		const auto i = mFunctionHash.find(functionName);
@@ -180,6 +250,13 @@ namespace mana
 
 		// ・ｽS・ｽA・ｽN・ｽ^・ｽ[・ｽ・ｽ init・ｽ・ｽmain ・ｽA・ｽN・ｽV・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽs
 		Restart();
+
+		// Initialize global variables
+		if (Request(1, "__init_globals", "__init", nullptr))
+		{
+			Execute([]() {});
+		}
+
 		RequestAll(1, "init", nullptr);
 		RequestAll(0, "main", nullptr);
 	}
@@ -295,9 +372,14 @@ namespace mana
 
 	inline bool VM::Request(const int32_t level, const char* actorName, const char* actionName, const std::shared_ptr<Actor>& sender)
 	{
-		const std::shared_ptr<Actor>& actor = mActorHash[actorName];
+		auto i = mActorHash.find(actorName);
+		if (i == mActorHash.end())
+			return false;
+
+		const std::shared_ptr<Actor>& actor = i->second;
 		if (actor == nullptr)
 			return false;
+
 		return actor->Request(level, actionName, sender);
 	}
 

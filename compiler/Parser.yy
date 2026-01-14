@@ -116,11 +116,13 @@ program			: line
 							$1->Dump();
 						}
 #endif
+						std::shared_ptr<mana::SyntaxNode> root = mParsingDriver->InjectGlobalInitializers($1);
+
 						auto globalSemanticAnalyzer = mParsingDriver->GetGlobalSemanticAnalyzer();
-						globalSemanticAnalyzer->Resolve($1);
+						globalSemanticAnalyzer->Resolve(root);
 
 						auto codeGenerator = mParsingDriver->GetCodeGenerator();
-						codeGenerator->GenerateCode($1, true);
+						codeGenerator->GenerateCode(root, true);
 
 						auto globalAddressResolver = mParsingDriver->GetCodeGenerator()->GetGlobalAddressResolver();
 						globalAddressResolver->ResolveAddress();
