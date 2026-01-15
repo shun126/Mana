@@ -1228,6 +1228,7 @@ DO_RECURSIVE:
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			if (node->GetSymbol())
 			{
+				bool loadRequested = false;
 				switch (node->GetSymbol()->GetClassTypeId())
 				{
 				case Symbol::ClassTypeId::ConstantInteger:
@@ -1244,18 +1245,22 @@ DO_RECURSIVE:
 
 				case Symbol::ClassTypeId::StaticVariable:
 					mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::LoadStaticAddress, node->GetSymbol()->GetAddress());
+					loadRequested = true;
 					break;
 
 				case Symbol::ClassTypeId::GlobalVariable:
 					mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::LoadGlobalAddress, node->GetSymbol()->GetAddress());
+					loadRequested = true;
 					break;
 
 				case Symbol::ClassTypeId::ActorVariable:
 					mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::LoadSelfAddress, node->GetSymbol()->GetAddress());
+					loadRequested = true;
 					break;
 
 				case Symbol::ClassTypeId::LocalVariable:
 					mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::LoadFrameAddress, node->GetSymbol()->GetAddress());
+					loadRequested = true;
 					break;
 
 				case Symbol::ClassTypeId::Type:
@@ -1268,7 +1273,7 @@ DO_RECURSIVE:
 					break;
 				}
 
-				if (enableLoad)
+				if (loadRequested && enableLoad)
 					ResolveLoad(node);
 			}
 			break;

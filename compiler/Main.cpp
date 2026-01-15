@@ -68,6 +68,10 @@ namespace mana
 				log << "\n";
 			}
 			{
+				log << "# Syntax Node\n";
+				parser->GetRootSyntaxNode()->Dump(log);
+			}
+			{
 				log << "# Code\n";
 				log << "```\n";
 				parser->GetCodeGenerator()->Dump(log);
