@@ -73,6 +73,16 @@ namespace mana
 		return mGlobalSemanticAnalyzer;
 	}
 
+	const std::shared_ptr<SyntaxNode>& ParsingDriver::GetRootSyntaxNode() const
+	{
+		return mRootSyntaxNode;
+	}
+
+	void ParsingDriver::SetRootSyntaxNode(const std::shared_ptr<SyntaxNode>& rootSyntaxNode)
+	{
+		mRootSyntaxNode = rootSyntaxNode;
+	}
+
 	const std::shared_ptr<SymbolFactory>& ParsingDriver::GetSymbolFactory()
 	{
 		return mSymbolFactory;
@@ -629,6 +639,7 @@ std::shared_ptr<SyntaxNode> ParsingDriver::CreateAwaitCompletion(const std::shar
 	std::shared_ptr<SyntaxNode> ParsingDriver::CreateLogicalAnd(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::LogicalAnd);
+		node->Set(IntermediateLanguage::LogicalAnd);
 		node->SetLeftNode(leftHand);
 		node->SetRightNode(rightHand);
 		return node;
@@ -637,6 +648,7 @@ std::shared_ptr<SyntaxNode> ParsingDriver::CreateAwaitCompletion(const std::shar
 	std::shared_ptr<SyntaxNode> ParsingDriver::CreateLogicalOr(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::LogicalOr);
+		node->Set(IntermediateLanguage::LogicalOr);
 		node->SetLeftNode(leftHand);
 		node->SetRightNode(rightHand);
 		return node;

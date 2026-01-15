@@ -20,6 +20,11 @@ actor BoolActor
 		if (localFlag && flagInitialized)
 		{
 			localFlag = false;
+			print("success\n");
+		}
+		else
+		{
+			print("fail\n");
 		}
 	}
 }

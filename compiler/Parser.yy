@@ -110,13 +110,8 @@ mana (compiler)
 %%
 program			: line
 					{
-#if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
-						if ($1)
-						{
-							$1->Dump();
-						}
-#endif
-						std::shared_ptr<mana::SyntaxNode> root = mParsingDriver->InjectGlobalInitializers($1);
+						auto root = mParsingDriver->InjectGlobalInitializers($1);
+						mParsingDriver->SetRootSyntaxNode(root);
 
 						auto globalSemanticAnalyzer = mParsingDriver->GetGlobalSemanticAnalyzer();
 						globalSemanticAnalyzer->Resolve(root);

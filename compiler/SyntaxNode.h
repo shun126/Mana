@@ -8,7 +8,6 @@ mana (compiler)
 #pragma once
 #include "../runner/common/Setup.h"
 #include <memory>
-#include <vector>
 
 namespace mana
 {
@@ -159,24 +158,16 @@ namespace mana
 
 		std::shared_ptr<SyntaxNode> Cast(const std::shared_ptr<TypeDescriptor>& type, const std::shared_ptr<TypeDescriptorFactory>& typeDescriptorFactory);
 
-#if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
-		void Dump() const;
-#endif
+		void Dump(std::ofstream& output) const;
 
 	private:
 		SyntaxNode() = default;
 
 		std::shared_ptr<SyntaxNode> CreateCast(const std::shared_ptr<TypeDescriptor>& type, const std::shared_ptr<TypeDescriptorFactory>& typeDescriptorFactory);
 
-#if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
-		void OnDump(FILE* file) const;
-#endif
+		std::string GetMagic() const;
+		void DumpRecursive(std::ofstream& output) const;
 
-	private:
-#if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
-		char mMagic[8] = "";
-#endif
-		Id mId = Id::VariableSize;
 		std::shared_ptr<SyntaxNode> mLeft;
 		std::shared_ptr<SyntaxNode> mRight;
 		std::shared_ptr<SyntaxNode> mBody;
@@ -185,12 +176,18 @@ namespace mana
 		std::shared_ptr<Symbol> mSymbol;
 		std::shared_ptr<TypeDescriptor> mType;
 
+		uint32_t mMagic;
+
+		Id mId = Id::VariableSize;
+
 		IntermediateLanguage mCode = IntermediateLanguage::Halt;
+
+		int16_t mLineNo = -1;
+		
 		int_t mDigit = 0;
 		float_t mReal = 0;
 		std::string_view mString;
 
 		std::string_view mFilename;
-		int32_t mLineNo = -1;
 	};
 }

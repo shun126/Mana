@@ -40,6 +40,7 @@ namespace mana
 		const std::shared_ptr<CodeGenerator>& GetCodeGenerator();
 		const std::shared_ptr<DataBuffer>& GetDataBuffer();
 		const std::shared_ptr<GlobalSemanticAnalyzer>& GetGlobalSemanticAnalyzer();
+		const std::shared_ptr<SyntaxNode>& GetRootSyntaxNode() const;
 		const std::shared_ptr<SymbolFactory>& GetSymbolFactory();
 		const std::shared_ptr<StringPool>& GetStringPool();
 		const std::shared_ptr<TypeDescriptorFactory>& GetTypeDescriptorFactory();
@@ -199,6 +200,7 @@ namespace mana
 		std::shared_ptr<SyntaxNode> CollectGlobalInitializerStatements(const std::shared_ptr<SyntaxNode>& root) const;
 		std::shared_ptr<SyntaxNode> CollectInitializerStatementsFromDeclarations(const std::shared_ptr<SyntaxNode>& node) const;
 		bool HasGlobalNameConflict(const std::shared_ptr<SyntaxNode>& root, const std::string_view& name) const;
+		void SetRootSyntaxNode(const std::shared_ptr<SyntaxNode>& rootSyntaxNode);
 
 		std::unique_ptr<Parser> mParser;
 
@@ -207,6 +209,7 @@ namespace mana
 		std::shared_ptr<DataBuffer> mDataBuffer;
 		std::shared_ptr<GlobalSemanticAnalyzer> mGlobalSemanticAnalyzer;
 		std::shared_ptr<LocalSemanticAnalyzer> mLocalSemanticAnalyzer;
+		std::shared_ptr<SyntaxNode> mRootSyntaxNode;
 		std::shared_ptr<SymbolFactory> mSymbolFactory;
 		std::shared_ptr<StringPool> mStringPool;
 		std::shared_ptr<TypeDescriptorFactory> mTypeDescriptorFactory;
