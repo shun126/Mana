@@ -81,7 +81,7 @@ cppcheck:
 
 test:
 	./$(TARGET) --debug ../sample/sample.mn
-	cd ../test/ && python3 test.py
+	cd ../test/ && python3 test.py ../compiler/$(TARGET)
 
 version:
 	python3 Version.py

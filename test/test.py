@@ -11,11 +11,15 @@
 
 import subprocess
 import os
+import sys
 
 cwd = os.getcwd()
 print("pwd:" + cwd)
 
-MANA = '../compiler/mana'
+if len(sys.argv) < 2:
+	MANA = '../compiler/mana'
+else:
+	MANA = sys.argv[1]
 
 ################################################################################
 def success(argument):

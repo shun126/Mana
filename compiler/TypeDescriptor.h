@@ -75,7 +75,7 @@ namespace mana
 		[[nodiscard]] Id GetId() const;
 
 		[[nodiscard]] bool Compare(const std::shared_ptr<TypeDescriptor>& typeDescriptor) const;
-		[[nodiscard]] bool Compatible(const std::shared_ptr<TypeDescriptor>& typeDescriptor) const;
+		bool Compatible(const std::shared_ptr<TypeDescriptor>& typeDescriptor) const;
 
 		static bool Compare(const std::shared_ptr<TypeDescriptor>& left, const std::shared_ptr<TypeDescriptor>& right);
 		static bool Compatible(const std::shared_ptr<TypeDescriptor>& left, const std::shared_ptr<TypeDescriptor>& right);

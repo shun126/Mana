@@ -254,19 +254,19 @@ namespace mana
 	{
 		if (mFlag.test(static_cast<uint8_t>(Flag::Halt)))
 		{
-			MANA_TRACE({ "MANA: priority ", std::to_string(priority), ", ", GetName(), "::", action, " request failed. reason: halt\n" });
+			MANA_TRACE({ "mana:request: priority ", std::to_string(priority), ", ", GetName(), "::", action, " request failed. reason: halt\n" });
 			return false;
 		}
 
 		if (mFlag.test(static_cast<uint8_t>(Flag::Refused)))
 		{
-			MANA_TRACE({ "MANA: priority ", std::to_string(priority), ", ", GetName(), "::", action, " request failed. reason: refuse\n" });
+			MANA_TRACE({ "mana:request: priority ", std::to_string(priority), ", ", GetName(), "::", action, " request failed. reason: refuse\n" });
 			return false;
 		}
 
 		if (mInterrupts.find(priority) != mInterrupts.end())
 		{
-			MANA_TRACE({ "MANA: priority ", std::to_string(priority), ", ", GetName(), "::", action, " request failed.\n" });
+			MANA_TRACE({ "mana:request: priority ", std::to_string(priority), ", ", GetName(), "::", action, " request failed.\n" });
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
 			if (mInterrupts[priority].mActionName.empty() == false)
 				MANA_TRACE({ "reason : ", mInterrupts[priority].mActionName," running" });
@@ -278,7 +278,7 @@ namespace mana
 		uint32_t address = GetAction(action);
 		if (address == Nil)
 		{
-			MANA_TRACE({ "MANA: priority ", std::to_string(priority), ",", GetName(), "::", action, " request failed.reason: not found\n" });
+			MANA_TRACE({ "mana:request: priority ", std::to_string(priority), ",", GetName(), "::", action, " request failed.reason: not found\n" });
 			return false;
 		}
 
@@ -415,7 +415,7 @@ namespace mana
 				/* ファイルエントリの削除 */
 				if (mAsyncFileCallback && mInterrupts->mFileCallbackParameter)
 				{
-					MANA_TRACE("Rollback: %d: waitting for file loading\n", currentLevel);
+					MANA_TRACE("mana:rollback: %d: waiting for file loading\n", currentLevel);
 
 					mAsyncFileCallback(MANA_FILE_COMMAND_CLOSE, interrupt->mFileCallbackParameter);
 					interrupt->mFileCallbackParameter = nullptr;
