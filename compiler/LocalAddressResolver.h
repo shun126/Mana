@@ -55,10 +55,10 @@ namespace mana
 		void OpenSwitchBlock(const std::shared_ptr<TypeDescriptor>& type);
 
 		//! caseの登録
-		void RegistSwitchCase(const std::shared_ptr<SyntaxNode>& node);
+		void RegisterSwitchCase(const std::shared_ptr<SyntaxNode>& node);
 
 		//! defaultの登録
-		void RegistSwitchDefault();
+		void RegisterSwitchDefault();
 
 		//! switchブロックをバイナリーコードに変換
 		void ResolveSwitchBlock(const std::shared_ptr<CodeGenerator>& codeGenerator);
@@ -77,19 +77,19 @@ namespace mana
 		//! ジャンプチェインテーブル
 		struct JumpChainTable
 		{
-			JumpChainStatus status;				/*!< ジャンプチェインの状態 */
-			int32_t break_chain;				/*!< breakチェインの位置 */
-			int32_t continue_chain;				/*!< continueチェインの位置 */
-			int32_t start_address;				/*!< ブロック開始位置 */
+			JumpChainStatus mStatus;			/*!< ジャンプチェインの状態 */
+			int32_t mBreakChain;				/*!< breakチェインの位置 */
+			int32_t mContinueChain;				/*!< continueチェインの位置 */
+			int32_t mStartAddress;				/*!< ブロック開始位置 */
 		};
 		std::array<JumpChainTable, JumpChainTableSize> mJumpChainTable;
 		int32_t mJumpChainTablePointer;			/*!< JumpChainTable の位置 */
 
-												/*! switchブロック内のエントリー */
+		/*! switchブロック内のエントリー */
 		struct JumpSwitchEntry
 		{
-			std::shared_ptr<SyntaxNode> node;	/*!< expressionを表す SyntaxNode */
-			int32_t address;					/*!< アドレス */
+			std::shared_ptr<SyntaxNode> mNode;	/*!< expressionを表す SyntaxNode */
+			int32_t mAddress;					/*!< アドレス */
 		};
 
 		//! switchブロック内のエントリースタック
@@ -101,9 +101,9 @@ namespace mana
 		//! switchブロックスタック */
 		struct JumpSwitchStack
 		{
-			JumpSwitchEntry* stack_pointer;			//!< switchブロック内のエントリースタック
-			std::shared_ptr<TypeDescriptor> type;	//!< TypeDescriptor
-			int32_t default_address;				//!< @biref defaultへのアドレス
+			JumpSwitchEntry* mStackPointer;			//!< switchブロック内のエントリースタック
+			std::shared_ptr<TypeDescriptor> mType;	//!< TypeDescriptor
+			int32_t mDefaultAddress;				//!< defaultへのアドレス
 		};
 		std::array<JumpSwitchStack, JumpSwitchStackSize> mJumpSwitchStack;
 

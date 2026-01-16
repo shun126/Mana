@@ -98,7 +98,7 @@ namespace mana
 			break;
 
 		default:
-			MANA_BUG("illigal data GetTypeDescriptor()");
+			MANA_BUG("illegal data GetTypeDescriptor()");
 		}
 	}
 
@@ -415,6 +415,7 @@ namespace mana
 	/*!
 	判別式の評価
 	@param	tree	評価式のSyntaxNode
+	@param	match	trueなら一致、falseなら不一致を判定
 	@return	現在のプログラムアドレス
 	*/
 	address_t CodeGenerator::Condition(const std::shared_ptr<SyntaxNode>& tree, const bool match)
@@ -445,7 +446,7 @@ namespace mana
 			}
 			else {
 				mCodeBuffer->AddOpecode(IntermediateLanguage::PushChar);
-				mCodeBuffer->Add((int8_t)value);
+				mCodeBuffer->Add(static_cast<int8_t>(value));
 			}
 			break;
 
@@ -456,7 +457,7 @@ namespace mana
 			}
 			else {
 				mCodeBuffer->AddOpecode(IntermediateLanguage::PushShort);
-				mCodeBuffer->Add((int16_t)value);
+				mCodeBuffer->Add(static_cast<int16_t>(value));
 			}
 			break;
 
@@ -796,7 +797,7 @@ DO_RECURSIVE:
 			break;
 
 		case SyntaxNode::Id::Case:
-			mLocalAddressResolver->RegistSwitchCase(node->GetLeftNode());
+			mLocalAddressResolver->RegisterSwitchCase(node->GetLeftNode());
 			if (node->GetLeftNode() && node->GetLeftNode()->GetTypeDescriptor())
 				node->Set(node->GetLeftNode()->GetTypeDescriptor());
 			GenerateCode(node->GetRightNode(), enableLoad);
@@ -813,7 +814,7 @@ DO_RECURSIVE:
 		case SyntaxNode::Id::Default:
 			MANA_ASSERT(node->GetLeftNode() == nullptr);
 			MANA_ASSERT(node->GetRightNode() == nullptr);
-			mLocalAddressResolver->RegistSwitchDefault();
+			mLocalAddressResolver->RegisterSwitchDefault();
 			break;
 
 		case SyntaxNode::Id::Do:
@@ -1197,11 +1198,10 @@ DO_RECURSIVE:
 		case SyntaxNode::Id::ExpressionIf:
 			// 三項演算子
 		{
-			int32_t pc1, pc2;
 			ConditionCore(node->GetNextNode());
-			pc1 = mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::BranchEqual);
+			const int32_t pc1 = mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::BranchEqual);
 			GenerateCode(node->GetLeftNode(), enableLoad);
-			pc2 = mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::Branch);
+			const int32_t pc2 = mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::Branch);
 			mCodeBuffer->ReplaceAddressAll(pc1, mCodeBuffer->GetSize());
 			GenerateCode(node->GetRightNode(), enableLoad);
 			mCodeBuffer->ReplaceAddressAll(pc2, mCodeBuffer->GetSize());
@@ -1228,39 +1228,38 @@ DO_RECURSIVE:
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			if (node->GetSymbol())
 			{
-				bool loadRequested = false;
+				bool loadRequested = true;
 				switch (node->GetSymbol()->GetClassTypeId())
 				{
 				case Symbol::ClassTypeId::ConstantInteger:
 					GenerateConstantInteger(node->GetSymbol()->GetTypeDescriptor()->GetId(), node->GetSymbol()->GetEtc());
+					loadRequested = false;
 					break;
 
 				case Symbol::ClassTypeId::ConstantFloat:
 					GenerateConstantFloat(node->GetSymbol()->GetTypeDescriptor()->GetId(), node->GetSymbol()->GetFloat());
+					loadRequested = false;
 					break;
 
 				case Symbol::ClassTypeId::ConstantString:
 					GenerateConstantInteger(node->GetSymbol()->GetTypeDescriptor()->GetId(), node->GetSymbol()->GetAddress());
+					loadRequested = false;
 					break;
 
 				case Symbol::ClassTypeId::StaticVariable:
 					mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::LoadStaticAddress, node->GetSymbol()->GetAddress());
-					loadRequested = true;
 					break;
 
 				case Symbol::ClassTypeId::GlobalVariable:
 					mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::LoadGlobalAddress, node->GetSymbol()->GetAddress());
-					loadRequested = true;
 					break;
 
 				case Symbol::ClassTypeId::ActorVariable:
 					mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::LoadSelfAddress, node->GetSymbol()->GetAddress());
-					loadRequested = true;
 					break;
 
 				case Symbol::ClassTypeId::LocalVariable:
 					mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::LoadFrameAddress, node->GetSymbol()->GetAddress());
-					loadRequested = true;
 					break;
 
 				case Symbol::ClassTypeId::Type:
@@ -1269,7 +1268,7 @@ DO_RECURSIVE:
 				case Symbol::ClassTypeId::NewSymbol:
 
 				default:
-					CompileError("illigal data GetTypeDescriptor()");
+					CompileError("illegal data GetTypeDescriptor()");
 					break;
 				}
 
@@ -1291,8 +1290,7 @@ DO_RECURSIVE:
 				//generator_resolve_symbol(node->GetLeftNode());
 				/////resolver_search_symbol_from_name(node);
 
-				std::shared_ptr<TypeDescriptor> type = node->GetLeftNode()->GetTypeDescriptor();
-				if (type)
+				if (const std::shared_ptr<TypeDescriptor> type = node->GetLeftNode()->GetTypeDescriptor())
 				{
 					if (type->Is(TypeDescriptor::Id::Struct))
 					{
@@ -1459,7 +1457,7 @@ DO_RECURSIVE:
 	void CodeGenerator::Dump(std::ofstream& output) const
 	{
 		const auto codeBuffer = mCodeBuffer->Copy();
-		if (codeBuffer.get())
+		if (codeBuffer)
 		{
 			address_t pc = 0;
 			while (pc < mCodeBuffer->GetSize())

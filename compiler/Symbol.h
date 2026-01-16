@@ -72,13 +72,13 @@ namespace mana
 		[[nodiscard]] bool IsValidVariable() const;
 		
 		[[nodiscard]] std::shared_ptr<Symbol> GetParameterList();
-		[[nodiscard]] const std::shared_ptr<Symbol> GetParameterList() const;
+		[[nodiscard]] std::shared_ptr<Symbol> GetParameterList() const;
 		
 		[[nodiscard]] std::shared_ptr<Symbol> GetNext();
-		[[nodiscard]] const std::shared_ptr<Symbol> GetNext() const;
+		[[nodiscard]] std::shared_ptr<Symbol> GetNext() const;
 		
 		[[nodiscard]] std::shared_ptr<TypeDescriptor> GetTypeDescriptor();
-		[[nodiscard]] const std::shared_ptr<TypeDescriptor> GetTypeDescriptor() const;
+		[[nodiscard]] std::shared_ptr<TypeDescriptor> GetTypeDescriptor() const;
 		
 		[[nodiscard]] ClassTypeId GetClassTypeId() const;
 		[[nodiscard]] MemoryTypeId GetMemoryTypeId() const;
@@ -87,7 +87,7 @@ namespace mana
 		[[nodiscard]] int32_t GetAddress() const;
 		[[nodiscard]] int32_t GetEtc() const;
 		[[nodiscard]] float GetFloat() const;
-		[[nodiscard]] const std::string_view GetString() const;
+		[[nodiscard]] std::string_view GetString() const;
 		[[nodiscard]] size_t GetBlockLevel() const;
 		[[nodiscard]] uint8_t GetNumberOfParameters() const;
 		[[nodiscard]] bool IsOverride() const;

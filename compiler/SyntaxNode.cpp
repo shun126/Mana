@@ -15,8 +15,8 @@ namespace mana
 {
 	SyntaxNode::SyntaxNode(const Id id)
 		: mId(id)
-		, mFilename(lexer::GetCurrentFilename())
 		, mLineNo(static_cast<int16_t>(lexer::GetCurrentLineNo()))
+		, mFilename(lexer::GetCurrentFilename())
 	{
 		static uint32_t count = 0;
 		mMagic = ++count;
@@ -24,7 +24,7 @@ namespace mana
 
 	std::shared_ptr<SyntaxNode> SyntaxNode::Clone() const
 	{
-		std::shared_ptr<SyntaxNode> self = std::make_shared<SyntaxNode>(mId);
+		auto self = std::make_shared<SyntaxNode>(mId);
 
 		if (mLeft != nullptr)
 			self->mLeft = mLeft->Clone();

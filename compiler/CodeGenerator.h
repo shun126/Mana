@@ -70,7 +70,7 @@ namespace mana
 		void Call(const std::shared_ptr<SyntaxNode>& node);
 		int32_t CallPrintGenerateArgument(int32_t argc, const std::shared_ptr<SyntaxNode>& node);
 		void CallPrint(const std::shared_ptr<SyntaxNode>& node);
-		void ConditionCheck(const std::shared_ptr<SyntaxNode>& tree);
+		static void ConditionCheck(const std::shared_ptr<SyntaxNode>& tree);
 		address_t ConditionCore(const std::shared_ptr<SyntaxNode>& tree);
 		address_t Condition(const std::shared_ptr<SyntaxNode>& tree, const bool match);
 		void GenerateConstantInteger(const TypeDescriptor::Id typeId, const int32_t value) const;

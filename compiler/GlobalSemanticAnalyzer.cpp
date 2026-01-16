@@ -187,7 +187,7 @@ namespace mana
 #endif
 	}
 
-	size_t GlobalSemanticAnalyzer::CalcArgumentCount(const size_t count, const std::shared_ptr<const SyntaxNode>& node) const
+	size_t GlobalSemanticAnalyzer::CalcArgumentCount(const size_t count, const std::shared_ptr<const SyntaxNode>& node)
 	{
 		if (node == nullptr)
 			return count;
@@ -411,8 +411,7 @@ namespace mana
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			if (!node->GetString().empty())
 			{
-				std::shared_ptr<Symbol> symbol = Lookup(node->GetString());
-				if (symbol)
+				if (const std::shared_ptr<Symbol> symbol = Lookup(node->GetString()))
 					node->Set(static_cast<int_t>(symbol->GetAddress()));
 				else
 					CompileError({ "undefined GetSymbol() '", node->GetString(), "'" });
@@ -489,7 +488,7 @@ namespace mana
 		case SyntaxNode::Id::Self:
 		case SyntaxNode::Id::Priority:
 		default:
-			MANA_BUG("illigal node detect");
+			MANA_BUG("illegal node detect");
 		}
 
 		// Inherit type from a child node

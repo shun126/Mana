@@ -13,7 +13,7 @@ namespace mana
 	print error message
 	@param	message		error message
 	*/
-	void Parser::error(const std::string& message)
+	inline void Parser::error(const std::string& message)
 	{
 		mana::CompileError(message);
 	}

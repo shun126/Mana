@@ -9,6 +9,7 @@ mana (compiler)
 #include "../runner/common/Platform.h"
 #include <array>
 #include <memory>
+#include <string>
 #include <string_view>
 
 namespace mana
@@ -68,6 +69,7 @@ namespace mana
 
 	public:
 		TypeDescriptor() = delete;
+		explicit TypeDescriptor(const Id tcons);
 		~TypeDescriptor() = default;
 
 		[[nodiscard]] bool Is(const Id id) const;
@@ -101,7 +103,6 @@ namespace mana
 		void Dump(std::ofstream& output) const;
 
 	private:
-		explicit TypeDescriptor(const Id tcons);
 		void SetTypeDescriptor(const std::shared_ptr<TypeDescriptor>& component);
 		void SetName(const std::string_view name);
 		void SetSymbolEntry(const std::shared_ptr<Symbol>& symbolEntry);

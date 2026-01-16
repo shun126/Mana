@@ -10,12 +10,12 @@ mana (compiler)
 
 namespace mana
 {
-	Lexer::Lexer(const std::shared_ptr<mana::ParsingDriver>& parsingDriver)
+	inline Lexer::Lexer(const std::shared_ptr<mana::ParsingDriver>& parsingDriver)
 		: mParsingDriver(parsingDriver)
 	{
 	}
 
-	Lexer::~Lexer()
+	inline Lexer::~Lexer()
 	{
 		if (!mContext.empty())
 		{
@@ -24,7 +24,7 @@ namespace mana
 		}
 	}
 
-	bool Lexer::Open(const std::string_view& filename, const bool check)
+	inline bool Lexer::Open(const std::string_view& filename, const bool check)
 	{
 		char path[_MAX_PATH];
 		char drive[_MAX_DRIVE];
@@ -90,7 +90,7 @@ namespace mana
 		return true;
 	}
 
-	bool Lexer::IsOpened(const std::string_view& path)
+	inline bool Lexer::IsOpened(const std::string_view& path)
 	{
 		if (mPathSet.find(path) == mPathSet.end())
 		{
@@ -103,7 +103,7 @@ namespace mana
 		}
 	}
 
-	bool Lexer::Close()
+	inline bool Lexer::Close()
 	{
 		char path[_MAX_PATH];
 		char drive[_MAX_DRIVE];
@@ -133,17 +133,17 @@ namespace mana
 		}
 	}
 
-	const std::string& Lexer::GetCurrentFilename()
+	inline const std::string& Lexer::GetCurrentFilename()
 	{
 		return mCurrentPath;
 	}
 
-	void Lexer::SetCurrentFilename(const std::string& filename)
+	inline void Lexer::SetCurrentFilename(const std::string& filename)
 	{
 		mCurrentPath = filename;
 	}
 
-	mana::int_t Lexer::Binary(const char* text)
+	inline int_t Lexer::Binary(const char* text)
 	{
 		text += 2;		// skip '0b'
 		const char* sp = text;
