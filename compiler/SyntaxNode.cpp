@@ -15,24 +15,16 @@ namespace mana
 {
 	SyntaxNode::SyntaxNode(const Id id)
 		: mId(id)
+		, mLineNo(static_cast<int16_t>(lexer::GetCurrentLineNo()))
 		, mFilename(lexer::GetCurrentFilename())
-		, mLineNo(lexer::GetCurrentLineNo())
 	{
-#if MANA_BUILD_TARGET == MANA_BUILD_DEBUG
-		static size_t count = 0;
-		const std::string magic = "N" + std::to_string(count);
-#if defined(MANA_TARGET_WINDOWS)
-		strncpy_s(mMagic, sizeof(mMagic), magic.c_str(), sizeof(mMagic));
-#else
-		std::strncpy(mMagic, magic.c_str(), sizeof(mMagic));
-#endif
-		++count;
-#endif
+		static uint32_t count = 0;
+		mMagic = ++count;
 	}
 
 	std::shared_ptr<SyntaxNode> SyntaxNode::Clone() const
 	{
-		std::shared_ptr<SyntaxNode> self = std::make_shared<SyntaxNode>(mId);
+		auto self = std::make_shared<SyntaxNode>(mId);
 
 		if (mLeft != nullptr)
 			self->mLeft = mLeft->Clone();
@@ -245,7 +237,7 @@ namespace mana
 		else
 		{
 			newNode = std::make_shared<SyntaxNode>(SyntaxNode::Id::FloatToInteger);
-			newNode->mType = typeDescriptorFactory->Get(TypeDescriptor::Id::Int);
+			newNode->mType = type;
 		}
 
 		newNode->SetLeftNode(shared_from_this());
@@ -260,6 +252,7 @@ namespace mana
 		{
 		case TypeDescriptor::Id::Char:
 		case TypeDescriptor::Id::Short:
+		case TypeDescriptor::Id::Bool:
 		case TypeDescriptor::Id::Int:
 			if (type->GetId() == TypeDescriptor::Id::Float)
 			{
@@ -280,15 +273,17 @@ namespace mana
 			{
 			case TypeDescriptor::Id::Char:
 			case TypeDescriptor::Id::Short:
+			case TypeDescriptor::Id::Bool:
 			case TypeDescriptor::Id::Int:
 				if (GetId() == SyntaxNode::Id::Const)
 				{
 					mDigit = static_cast<int_t>(mReal);
-					mType = typeDescriptorFactory->Get(TypeDescriptor::Id::Int);
+					mType = type->GetId() == TypeDescriptor::Id::Bool ? typeDescriptorFactory->Get(TypeDescriptor::Id::Bool) : typeDescriptorFactory->Get(TypeDescriptor::Id::Int);
 				}
 				else
 				{
-					return CreateCast(typeDescriptorFactory->Get(TypeDescriptor::Id::Int), typeDescriptorFactory);
+					const auto targetType = type->GetId() == TypeDescriptor::Id::Bool ? typeDescriptorFactory->Get(TypeDescriptor::Id::Bool) : typeDescriptorFactory->Get(TypeDescriptor::Id::Int);
+					return CreateCast(targetType, typeDescriptorFactory);
 				}
 				break;
 
@@ -304,26 +299,20 @@ namespace mana
 		return shared_from_this();
 	}
 
-#if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
-	void SyntaxNode::Dump() const
+	std::string SyntaxNode::GetMagic() const
 	{
-		FILE* file;
-#if defined(__STDC_WANT_SECURE_LIB__)
-		if (fopen_s(&file, "mana_syntax_node_dump.md", "wt") == 0)
-#else
-		file = fopen("mana_syntax_node_dump.md", "wt");
-		if (file)
-#endif
-		{
-			fprintf(file, "```mermaid\n");
-			fprintf(file, "flowchart TD\n");
-			OnDump(file);
-			fprintf(file, "```\n");
-			fclose(file);
-		}
+		return "N" + std::to_string(mMagic);
+	}
+
+	void SyntaxNode::Dump(std::ofstream& output) const
+	{
+		output << "```mermaid\n";
+		output << "flowchart TD\n";
+		DumpRecursive(output);
+		output << "```\n";
 	}
 	
-	void SyntaxNode::OnDump(FILE* file) const
+	void SyntaxNode::DumpRecursive(std::ofstream& output) const
 	{
 		// Idと並びを合わせてください
 		static const char* name[] = {
@@ -416,50 +405,48 @@ namespace mana
 		constexpr size_t idNameSize = std::size(name);
 		static_assert(idNameSize == IdSize);
 
-		fprintf(file, "%s[\n", mMagic);
-
-		fprintf(file, "mMagic: %s\n", mMagic);
+		const auto magic = GetMagic();
+		output << magic << "[\n";
+		output << "mMagic: " << magic << "\n";
 
 		if (static_cast<uint8_t>(mId) < idNameSize)
 		{
-			fprintf(file, "Name: %s\n", name[static_cast<uint8_t>(mId)]);
+			output << "Name: " << name[static_cast<uint8_t>(mId)] << "\n";
 		}
 		else
 		{
-			fprintf(file, "Name: %d\n", mId);
+			output << "Name: invalid node id\n";
 		}
 
 		if (!mString.empty())
 		{
-			fprintf(file, "String: %s\n", mString.data());
+			output << "String: " << mString << "\n";
 		}
 		if (mType)
 		{
-			fprintf(file, "Type: %s\n", mType->GetName().data());
+			output << "Type: " << mType->GetName() << "\n";
 		}
-		fprintf(file, "]\n");
-
+		output << "]\n";
 
 		if (mLeft)
 		{
-			mLeft->OnDump(file);
-			fprintf(file, "%s --> %s\n", mMagic, mLeft->mMagic);
+			mLeft->DumpRecursive(output);
+			output << magic << " --> " << mLeft->GetMagic() << "\n";
 		}
 		if (mRight)
 		{
-			mRight->OnDump(file);
-			fprintf(file, "%s --> %s\n", mMagic, mRight->mMagic);
+			mRight->DumpRecursive(output);
+			output << magic << " --> " << mRight->GetMagic() << "\n";
 		}
 		if (mBody)
 		{
-			mBody->OnDump(file);
-			fprintf(file, "%s --> %s\n", mMagic, mBody->mMagic);
+			mBody->DumpRecursive(output);
+			output << magic << " --> " << mBody->GetMagic() << "\n";
 		}
 		if (mNext)
 		{
-			mNext->OnDump(file);
-			fprintf(file, "%s --> %s\n", mMagic, mNext->mMagic);
+			mNext->DumpRecursive(output);
+			output << magic << " --> " << mNext->GetMagic() << "\n";
 		}
 	}
-#endif
 }

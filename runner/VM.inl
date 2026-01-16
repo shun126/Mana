@@ -152,7 +152,7 @@ namespace mana
 		}
 		{
 #if UINTPTR_MAX == UINT64_MAX
-			const uint8_t is64bit = 1 << FileHeader::Flag::Is64Bit;
+			constexpr uint8_t is64bit = 1 << FileHeader::Flag::Is64Bit;
 #else
 			const uint8_t is64bit = 0;
 #endif
@@ -225,7 +225,7 @@ namespace mana
 			}
 			else
 			{
-				std::shared_ptr<Actor> actor = std::shared_ptr<Actor>(new Actor(shared_from_this(), actorInfo->mVariableSize));
+				std::shared_ptr<Actor> actor = std::make_shared<Actor>(shared_from_this(), actorInfo->mVariableSize);
 
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
 				actor->SetActorName(actorName);
@@ -383,7 +383,7 @@ namespace mana
 		return actor->Request(level, actionName, sender);
 	}
 
-	inline void VM::YieldAll()
+	inline void VM::YieldAll() const
 	{
 		for (auto& actor : mActorHash)
 		{
@@ -407,8 +407,8 @@ namespace mana
 			}
 		}
 
-		static const std::string_view empty;
-		return empty;
+		static constexpr std::string_view Empty;
+		return Empty;
 	}
 
 	inline std::shared_ptr<Actor> VM::CloneActor(const std::shared_ptr<Actor>& actor, const char* newName)
@@ -438,9 +438,7 @@ namespace mana
 		if ((actorInfo->mFlag & (1 << ActorInfoHeader::Flag::Phantom)) == 0)
 			throw std::runtime_error("It is not a phantom");
 
-		std::shared_ptr<Actor> newActor = std::shared_ptr<Actor>(
-			new Actor(shared_from_this(), actorInfo->mVariableSize)
-		);
+		std::shared_ptr<Actor> newActor = std::make_shared<Actor>(shared_from_this(), actorInfo->mVariableSize);
 		mActorHash[newName] = newActor;
 
 		{
@@ -457,12 +455,10 @@ namespace mana
 
 	inline uint16_t VM::GetUint16FromMemory(const uint32_t address) const
 	{
-		uint8_t* pointer;
-		uint16_t value;
-
 		MANA_ASSERT(address < mFileHeader->mSizeOfInstructionPool);
 
-		pointer = (uint8_t*)&value;
+		uint16_t value;
+		auto pointer = reinterpret_cast<uint8_t*>(&value);
 
 		if (IsBigEndian())
 		{
@@ -480,12 +476,10 @@ namespace mana
 
 	inline uint32_t VM::GetUint32FromMemory(const uint32_t address) const
 	{
-		uint8_t* pointer;
-		uint32_t value;
-
 		MANA_ASSERT(address < mFileHeader->mSizeOfInstructionPool);
 
-		pointer = (uint8_t*)&value;
+		uint32_t value;
+		uint8_t* pointer = reinterpret_cast<uint8_t*>(&value);
 
 		if (IsBigEndian())
 		{
@@ -507,12 +501,10 @@ namespace mana
 
 	inline float VM::GetFloatFromMemory(const uint32_t address) const
 	{
-		uint8_t* pointer;
-		float value;
-
 		MANA_ASSERT(address < mFileHeader->mSizeOfInstructionPool);
 
-		pointer = (uint8_t*)&value;
+		float value;
+		uint8_t* pointer = reinterpret_cast<uint8_t*>(&value);
 
 		if (IsBigEndian())
 		{

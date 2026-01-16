@@ -11,12 +11,8 @@ mana (library)
 #include "Stack.h"
 
 #include <bitset>
-#include <map>
 #include <string>
 #include <unordered_map>
-
-#include <cstdio>
-#include <cstring>
 
 namespace mana
 {
@@ -29,14 +25,14 @@ namespace mana
 	{
 		friend class VM;
 
-		//! Constructor
-		explicit Actor(const std::shared_ptr<VM>& vm, const address_t variableSize);
-
 	public:
 		//! request / rollbackコールバック
 		using Callback = int32_t (*)(const std::shared_ptr<Actor>& actor, void* parameter);
 				
 	public:
+		//! Constructor
+		explicit Actor(const std::shared_ptr<VM>& vm, const address_t variableSize);
+
 		Actor(const Actor&) = delete;
 		Actor(Actor&&) noexcept = delete;
 		Actor& operator=(const Actor&) = delete;
@@ -58,14 +54,14 @@ namespace mana
 
 		[[nodiscard]] int32_t GetArgumentCount() const;
 		[[nodiscard]] int32_t GetArgumentCountByAddress(const uint32_t address) const;
-		[[nodiscard]] int32_t GetArgumentSize(const uint32_t address);
-		[[nodiscard]] bool HasReturnValue(const uint32_t address);
-		[[nodiscard]] int32_t GetParameterInteger(const int32_t value);
-		[[nodiscard]] float GetParameterFloat(const int32_t value);
-		[[nodiscard]] const char* GetParameterString(const int32_t value);
-		[[nodiscard]] Actor* GetParameterActor(const int32_t value);
-		[[nodiscard]] void* GetParameterPointer(const int32_t value);
-		[[nodiscard]] void* GetParameterAddress(const int32_t value);
+		[[nodiscard]] int32_t GetArgumentSize(const uint32_t address) const;
+		[[nodiscard]] bool HasReturnValue(const uint32_t address) const;
+		[[nodiscard]] int32_t GetParameterInteger(const int32_t value) const;
+		[[nodiscard]] float GetParameterFloat(const int32_t value) const;
+		[[nodiscard]] const char* GetParameterString(const int32_t value) const;
+		[[nodiscard]] Actor* GetParameterActor(const int32_t value) const;
+		[[nodiscard]] void* GetParameterPointer(const int32_t value) const;
+		[[nodiscard]] void* GetParameterAddress(const int32_t value) const;
 		void SetReturnInteger(const int32_t value);
 		void SetReturnFloat(const float value);
 		void SetReturnString(const char* string);
@@ -77,7 +73,7 @@ namespace mana
 		[[nodiscard]] std::string_view GetActorName() const;
 		void SetActorName(const std::string_view& name);
 		[[nodiscard]] std::string GetActionName() const;
-		[[nodiscard]] const std::string_view GetFunctionName() const;
+		[[nodiscard]] std::string_view GetFunctionName() const;
 #endif
 
 		std::shared_ptr<VM> GetVirtualMachine() const;
@@ -170,7 +166,7 @@ namespace mana
 		std::unordered_map <std::string_view, uint32_t> mActions;
 		Buffer mFrame;
 		Stack mStack;
-		std::map<int32_t, Interrupt> mInterrupts;
+		std::unordered_map<int32_t, Interrupt> mInterrupts;
 		ReturnValue mReturnValue;
 		Event<int32_t> mRequestEvent;
 		Event<int32_t> mRollbackEvent;

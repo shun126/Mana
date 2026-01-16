@@ -9,6 +9,7 @@ mana (compiler)
 #include "../runner/common/Platform.h"
 #include <array>
 #include <memory>
+#include <string>
 #include <string_view>
 
 namespace mana
@@ -31,6 +32,7 @@ namespace mana
 			Void,
 			Char,
 			Short,
+			Bool,
 			Int,
 			Float,
 			Reference,
@@ -51,6 +53,7 @@ namespace mana
 				"void",
 				"char",
 				"short",
+				"bool",
 				"int",
 				"float",
 				"ref",
@@ -66,6 +69,7 @@ namespace mana
 
 	public:
 		TypeDescriptor() = delete;
+		explicit TypeDescriptor(const Id tcons);
 		~TypeDescriptor() = default;
 
 		[[nodiscard]] bool Is(const Id id) const;
@@ -73,7 +77,7 @@ namespace mana
 		[[nodiscard]] Id GetId() const;
 
 		[[nodiscard]] bool Compare(const std::shared_ptr<TypeDescriptor>& typeDescriptor) const;
-		[[nodiscard]] bool Compatible(const std::shared_ptr<TypeDescriptor>& typeDescriptor) const;
+		bool Compatible(const std::shared_ptr<TypeDescriptor>& typeDescriptor) const;
 
 		static bool Compare(const std::shared_ptr<TypeDescriptor>& left, const std::shared_ptr<TypeDescriptor>& right);
 		static bool Compatible(const std::shared_ptr<TypeDescriptor>& left, const std::shared_ptr<TypeDescriptor>& right);
@@ -99,7 +103,6 @@ namespace mana
 		void Dump(std::ofstream& output) const;
 
 	private:
-		explicit TypeDescriptor(const Id tcons);
 		void SetTypeDescriptor(const std::shared_ptr<TypeDescriptor>& component);
 		void SetName(const std::string_view name);
 		void SetSymbolEntry(const std::shared_ptr<Symbol>& symbolEntry);

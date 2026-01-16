@@ -98,8 +98,7 @@ namespace mana
 
 		if (!node->GetString().empty())
 		{
-			std::shared_ptr<Symbol> symbol = Lookup(node->GetString());
-			if (symbol)
+			if (const std::shared_ptr<Symbol> symbol = Lookup(node->GetString()))
 			{
 				if (symbol->GetClassTypeId() == Symbol::ClassTypeId::ConstantInteger)
 				{
@@ -144,7 +143,7 @@ namespace mana
 		//symbol_allocate_memory(node->right->symbol, node->left->type, Parameter);
 	}
 
-	void SemanticAnalyzer::ResolveTypeFromChildNode(const std::shared_ptr<SyntaxNode>& node) const
+	void SemanticAnalyzer::ResolveTypeFromChildNode(const std::shared_ptr<SyntaxNode>& node)
 	{
 		MANA_ASSERT(node);
 
