@@ -82,8 +82,7 @@ namespace mana
 
 	static bool GenerateBinary(OutputStream& stream, const std::shared_ptr<ParsingDriver>& parser)
 	{
-		FileHeader header;
-		memset(&header, 0, sizeof(FileHeader));
+		FileHeader header = {};
 		memcpy(&header.mHeader, Signature, sizeof(header.mHeader));
 		header.mMajorVersion = MajorVersion;
 		header.mMinorVersion = MinorVersion;
@@ -106,7 +105,7 @@ namespace mana
 		header.mSizeOfInstructionPool = parser->GetCodeBuffer()->GetSize();
 		header.mSizeOfStaticMemory = parser->GetSymbolFactory()->GetStaticMemoryAddress();
 		header.mSizeOfGlobalMemory = parser->GetSymbolFactory()->GetGlobalMemoryAddress();
-		header.mRandomSeedNumber = static_cast<uint32_t>(time(NULL));
+		header.mRandomSeedNumber = static_cast<uint32_t>(time(nullptr));
 
 		stream.PushData(&header, sizeof(header));
 
@@ -142,7 +141,7 @@ namespace mana
 		 return true;
 	}
 
-	bool Execute(const std::shared_ptr<const void> program)
+	static bool Execute(const std::shared_ptr<const void>& program)
 	{
 		std::shared_ptr<VM> vm = std::make_shared<VM>();
 		vm->LoadPlugins(".");

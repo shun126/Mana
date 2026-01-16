@@ -6,7 +6,6 @@ mana (compiler/library)
 */
 
 #pragma once
-#include <cstddef>
 #include <cstdint>
 #include <limits>
 #include <stdexcept>

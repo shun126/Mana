@@ -28,7 +28,7 @@ namespace mana
 		void PostResolverResolve(std::shared_ptr<SyntaxNode> node);
 
 	private:
-		bool GetNodeType(TypeDescriptor::Id* t1, TypeDescriptor::Id* t2, const std::shared_ptr<const SyntaxNode>& node);
+		static bool GetNodeType(TypeDescriptor::Id* t1, TypeDescriptor::Id* t2, const std::shared_ptr<const SyntaxNode>& node);
 		void AutoCast(const std::shared_ptr<SyntaxNode>& node);
 	};
 }

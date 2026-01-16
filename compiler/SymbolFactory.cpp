@@ -251,7 +251,7 @@ namespace mana
 		mSymbolEntries.erase(i, mSymbolEntries.end());
 	}
 
-	bool SymbolFactory::IsValid(std::shared_ptr<Symbol> symbol)
+	bool SymbolFactory::IsValid(const std::shared_ptr<Symbol>& symbol)
 	{
 		if (symbol &&
 			symbol->GetClassTypeId() != Symbol::ClassTypeId::StaticVariable &&
@@ -292,12 +292,12 @@ TODO:
 	}
 #endif
 
-	void SymbolFactory::Define(const std::string_view name, std::shared_ptr<Symbol> symbolEntry)
+	void SymbolFactory::Define(const std::string_view name, const std::shared_ptr<Symbol>& symbolEntry)
 	{
 		mHashChainTable[name] = symbolEntry;
 	}
 
-	void SymbolFactory::Define(std::shared_ptr<Symbol> symbolEntry)
+	void SymbolFactory::Define(const std::shared_ptr<Symbol>& symbolEntry)
 	{
 		mHashChainTable[symbolEntry->GetName()] = symbolEntry;
 	}
@@ -307,7 +307,7 @@ TODO:
 		mHashChainTable.erase(name);
 	}
 
-	void SymbolFactory::Undefine(std::shared_ptr<Symbol> symbolEntry)
+	void SymbolFactory::Undefine(const std::shared_ptr<Symbol>& symbolEntry)
 	{
 		mHashChainTable.erase(symbolEntry->GetName());
 	}
@@ -355,7 +355,7 @@ TODO:
 		return mBlockTable.size();
 	}
 
-	void SymbolFactory::EachBlock(std::function<void(const std::shared_ptr<Symbol>&)> function)
+	void SymbolFactory::EachBlock(const std::function<void(const std::shared_ptr<Symbol>&)>& function)
 	{
 		if (!mBlockTable.empty())
 		{
@@ -603,6 +603,13 @@ TODO:
 				mCodeBuffer->AddOpecode(IntermediateLanguage::StoreInteger);
 				break;
 
+			case TypeDescriptor::Id::Void:
+			case TypeDescriptor::Id::Reference:
+			case TypeDescriptor::Id::Array:
+			case TypeDescriptor::Id::Struct:
+			case TypeDescriptor::Id::Module:
+			case TypeDescriptor::Id::Nil:
+			case TypeDescriptor::Id::Incomplete:
 			default:
 				if (symbol->GetTypeDescriptor()->GetMemorySize() <= 0)
 					CompileError("missing size information on parameter");
@@ -740,8 +747,7 @@ TODO:
 		EachBlock([&maxAligmentSize](const std::shared_ptr<Symbol>& symbol)
 			{
 				const std::shared_ptr<TypeDescriptor>& typeDescriptor = symbol->GetTypeDescriptor();
-				if (maxAligmentSize < typeDescriptor->GetAlignmentMemorySize())
-					maxAligmentSize = typeDescriptor->GetAlignmentMemorySize();
+				maxAligmentSize = std::max(maxAligmentSize, typeDescriptor->GetAlignmentMemorySize());
 			});
 #if 0
 		if (!mBlockTable.top()->mHead.empty())
@@ -885,10 +891,9 @@ TODO:
 	void SymbolFactory::CommitRegistrationActor(const std::string_view name, const std::string_view parent, const std::shared_ptr<TypeDescriptor>& td, const bool phantom)
 	{
 		std::shared_ptr<TypeDescriptor> type;
-		std::shared_ptr<TypeDescriptor> parent_type;
+		//std::shared_ptr<TypeDescriptor> parent_type;
 
-		const std::shared_ptr<Symbol>& symbol = Lookup(name);
-		if (symbol)
+		if (const std::shared_ptr<Symbol>& symbol = Lookup(name))
 		{
 			for (type = symbol->GetTypeDescriptor(); type->Is(TypeDescriptor::Id::Array); type = type->GetComponent())
 				;
@@ -907,7 +912,7 @@ TODO:
 		}
 
 		mDataBuffer->Set(name);
-
+		/*
 		if (!parent.empty())
 		{
 			const std::shared_ptr<Symbol>& parent_symbol = Lookup(parent);
@@ -917,10 +922,10 @@ TODO:
 		{
 			parent_type = nullptr;
 		}
-
+		*/
 		type = mTypeDescriptorFactory->Create(TypeDescriptor::Id::Actor);
 		type->SetSymbolEntry(GetLastSymbolEntryInBlock());
-		//TODO:  parent_type);
+		//TODO:  parent_type;
 		type->SetName(name);
 		type->SetAlignmentMemorySize(sizeof(uint32_t));
 		type->mShare.mActor.mPhantom = phantom;
@@ -1133,25 +1138,22 @@ TODO:
 		//const std::shared_ptr<Symbol>& symbol = Lookup(name);
 		if (symbol && symbol->GetTypeDescriptor() && symbol->GetTypeDescriptor()->Is(TypeDescriptor::Id::Module))
 		{
-			// TODO: const std::shared_ptr<Symbol>& action_symbol = (const std::shared_ptr<Symbol>&)(symbol->GetTypeDescriptor()->component);
-			const std::shared_ptr<Symbol>& action_symbol = symbol->GetTypeDescriptor()->GetParent();
-
 			/* シンボルリストの末端からhashに登録 */
-			if (action_symbol)
+			if (const std::shared_ptr<Symbol>& actionSymbol = symbol->GetTypeDescriptor()->GetParent())
 			{
 				//ExtendModule(action_symbol);
 
-				std::shared_ptr<Symbol> last_symbol = action_symbol;
-				while (last_symbol->GetNext())
+				std::shared_ptr<Symbol> lastSymbol = actionSymbol;
+				while (lastSymbol->GetNext())
 				{
-					last_symbol = last_symbol->GetNext();
+					lastSymbol = lastSymbol->GetNext();
 				}
-				last_symbol->SetNext(mBlockTable.top()->mHead.mSymbolEntry);
+				lastSymbol->SetNext(mBlockTable.top()->mHead.mSymbolEntry);
 
 				/* symbol_close_blockでsymbol_hash_chain_tableを開放する為 */
-				mBlockTable.top()->mHead.mSymbolEntry = action_symbol;
+				mBlockTable.top()->mHead.mSymbolEntry = actionSymbol;
 
-				symbol_open_actor_register_member(action_symbol);
+				symbol_open_actor_register_member(actionSymbol);
 			}
 		}
 		else
@@ -1200,6 +1202,17 @@ TODO:
 				}
 				break;
 
+			case TypeDescriptor::Id::Void:
+			case TypeDescriptor::Id::Char:
+			case TypeDescriptor::Id::Short:
+			case TypeDescriptor::Id::Bool:
+			case TypeDescriptor::Id::Int:
+			case TypeDescriptor::Id::Float:
+			case TypeDescriptor::Id::Array:
+			case TypeDescriptor::Id::Struct:
+			case TypeDescriptor::Id::Module:
+			case TypeDescriptor::Id::Nil:
+			case TypeDescriptor::Id::Incomplete:
 			default:
 				break;
 			}
@@ -1224,6 +1237,17 @@ TODO:
 				mCodeBuffer->AddOpecode(IntermediateLanguage::Join);
 				return;
 
+			case TypeDescriptor::Id::Void:
+			case TypeDescriptor::Id::Char:
+			case TypeDescriptor::Id::Short:
+			case TypeDescriptor::Id::Bool:
+			case TypeDescriptor::Id::Int:
+			case TypeDescriptor::Id::Float:
+			case TypeDescriptor::Id::Array:
+			case TypeDescriptor::Id::Struct:
+			case TypeDescriptor::Id::Module:
+			case TypeDescriptor::Id::Nil:
+			case TypeDescriptor::Id::Incomplete:
 			default:
 				break;
 			}
@@ -1286,9 +1310,17 @@ TODO:
 				mLocalMemoryAddress = symbol->GetAddress();
 				break;
 
+			case Symbol::ClassTypeId::NewSymbol:
+			case Symbol::ClassTypeId::Type:
+			case Symbol::ClassTypeId::Function:
+			case Symbol::ClassTypeId::NativeFunction:
+			case Symbol::ClassTypeId::MemberFunction:
+			case Symbol::ClassTypeId::ConstantInteger:
+			case Symbol::ClassTypeId::ConstantFloat:
+			case Symbol::ClassTypeId::ConstantString:
+			case Symbol::ClassTypeId::Label:
 			default:
 				MANA_BUG("ivalid class type detect");
-				break;
 			}
 		}
 		else
@@ -1347,6 +1379,17 @@ TODO:
 						++count;
 					break;
 
+				case TypeDescriptor::Id::Void:
+				case TypeDescriptor::Id::Char:
+				case TypeDescriptor::Id::Short:
+				case TypeDescriptor::Id::Bool:
+				case TypeDescriptor::Id::Int:
+				case TypeDescriptor::Id::Float:
+				case TypeDescriptor::Id::Reference:
+				case TypeDescriptor::Id::Struct:
+				case TypeDescriptor::Id::Module:
+				case TypeDescriptor::Id::Nil:
+				case TypeDescriptor::Id::Incomplete:
 				default:
 					break;
 				}
@@ -1358,7 +1401,7 @@ TODO:
 		return count;
 	}
 
-	void SymbolFactory::CheckUndefine()
+	void SymbolFactory::CheckUndefine() const
 	{
 		Each([](const std::shared_ptr<Symbol>& symbol)
 			{
@@ -1460,52 +1503,76 @@ TODO:
 
 	bool SymbolFactory::GenerateActorInformation(OutputStream& stream) const
 	{
-		return Each([this, &stream](const std::shared_ptr<const Symbol>& symbol) {
-			if (symbol->GetBlockLevel() > 0)
-				return true;
-
-			MANA_VERIFY_MESSAGE(symbol->GetTypeDescriptor(), "Null pointer error in Write,Infomation");
-			switch (symbol->GetTypeDescriptor()->GetId())
+		return Each([this, &stream](const std::shared_ptr<const Symbol>& symbol)
 			{
-			case TypeDescriptor::Id::Actor:
-				if (symbol->GetClassTypeId() == Symbol::ClassTypeId::Type && symbol->GetTypeDescriptor()->GetId() == TypeDescriptor::Id::Actor)
-				{
-					if (!GenerateActorEntity(stream, symbol, symbol->GetTypeDescriptor()))
-						return false;
-				}
-				break;
+				if (symbol->GetBlockLevel() > 0)
+					return true;
 
-			case TypeDescriptor::Id::Array:
-			{
-				//size_t arraySize = symbol->GetTypeDescriptor()->GetArraySize();
-				for (
-					std::shared_ptr<TypeDescriptor> nested_type = symbol->GetTypeDescriptor()->GetComponent();
-					nested_type != nullptr;
-					nested_type = nested_type->GetComponent())
+				MANA_VERIFY_MESSAGE(symbol->GetTypeDescriptor(), "Null pointer error in Write,Information");
+				switch (symbol->GetTypeDescriptor()->GetId())
 				{
-					switch (nested_type->GetId())
+				case TypeDescriptor::Id::Actor:
+					if (symbol->GetClassTypeId() == Symbol::ClassTypeId::Type && symbol->GetTypeDescriptor()->GetId() == TypeDescriptor::Id::Actor)
 					{
-					case TypeDescriptor::Id::Actor:
-						if (symbol->GetClassTypeId() == Symbol::ClassTypeId::Type && nested_type->GetId() == TypeDescriptor::Id::Actor)
-							if (!GenerateActorEntity(stream, symbol, nested_type/*, arraySize*/))
-								return false;
-						goto ESCAPE;
+						if (!GenerateActorEntity(stream, symbol, symbol->GetTypeDescriptor()))
+							return false;
+					}
+					break;
 
-					case TypeDescriptor::Id::Array:
-						//arraySize *= nested_type->GetArraySize();
-						break;
+				case TypeDescriptor::Id::Array:
+				{
+					//size_t arraySize = symbol->GetTypeDescriptor()->GetArraySize();
+					for (
+						std::shared_ptr<TypeDescriptor> nested_type = symbol->GetTypeDescriptor()->GetComponent();
+						nested_type != nullptr;
+						nested_type = nested_type->GetComponent())
+					{
+						switch (nested_type->GetId())
+						{
+						case TypeDescriptor::Id::Actor:
+							if (symbol->GetClassTypeId() == Symbol::ClassTypeId::Type && nested_type->GetId() == TypeDescriptor::Id::Actor)
+								if (!GenerateActorEntity(stream, symbol, nested_type/*, arraySize*/))
+									return false;
+							goto ESCAPE;
 
-					default:
-						break;
+						case TypeDescriptor::Id::Array:
+							//arraySize *= nested_type->GetArraySize();
+							break;
+
+						case TypeDescriptor::Id::Void:
+						case TypeDescriptor::Id::Char:
+						case TypeDescriptor::Id::Short:
+						case TypeDescriptor::Id::Bool:
+						case TypeDescriptor::Id::Int:
+						case TypeDescriptor::Id::Float:
+						case TypeDescriptor::Id::Reference:
+						case TypeDescriptor::Id::Struct:
+						case TypeDescriptor::Id::Module:
+						case TypeDescriptor::Id::Nil:
+						case TypeDescriptor::Id::Incomplete:
+						default:
+							break;
+						}
 					}
 				}
+ESCAPE:
+				case TypeDescriptor::Id::Void:
+				case TypeDescriptor::Id::Char:
+				case TypeDescriptor::Id::Short:
+				case TypeDescriptor::Id::Bool:
+				case TypeDescriptor::Id::Int:
+				case TypeDescriptor::Id::Float:
+				case TypeDescriptor::Id::Reference:
+				case TypeDescriptor::Id::Struct:
+				case TypeDescriptor::Id::Module:
+				case TypeDescriptor::Id::Nil:
+				case TypeDescriptor::Id::Incomplete:
+				default:
+					break;
+				}
+				return true;
 			}
-		ESCAPE:
-			default:
-				break;
-			}
-			return true;
-			});
+		);
 	}
 
 	bool SymbolFactory::GenerateActorEntity(OutputStream& stream, const std::shared_ptr<const Symbol>& symbol, const std::shared_ptr<const TypeDescriptor>& type) const
@@ -1521,11 +1588,11 @@ TODO:
 
 		memset(&actorInfoHeader, 0, sizeof(actorInfoHeader));
 		actorInfoHeader.mName = mDataBuffer->Get(symbol->GetName());
-		actorInfoHeader.mNumberOfActions = (uint16_t)number_of_actions;
-		actorInfoHeader.mNumberOfInstances = (uint8_t)type->GetArraySize();
+		actorInfoHeader.mNumberOfActions = static_cast<uint16_t>(number_of_actions);
+		actorInfoHeader.mNumberOfInstances = static_cast<uint8_t>(type->GetArraySize());
 		actorInfoHeader.mVariableSize = type->GetMemorySize();
 
-		if (actorInfoHeader.mName == (uint32_t)-1)
+		if (actorInfoHeader.mName == static_cast<uint32_t>(-1))
 		{
 			LinkerError({ "Can't find actor '", symbol->GetName(), "'\n" });
 			return false;
@@ -1542,13 +1609,11 @@ TODO:
 		{
 			if (component_symbol->GetClassTypeId() == Symbol::ClassTypeId::MemberFunction)
 			{
-				ActionInfoHeader actionInfoHeader;
-
-				memset(&actionInfoHeader, 0, sizeof(actionInfoHeader));
+				ActionInfoHeader actionInfoHeader = {};
 				actionInfoHeader.mName = mDataBuffer->Get(component_symbol->GetName());
 				actionInfoHeader.mAddress = component_symbol->GetAddress();
 
-				if (actionInfoHeader.mName == (uint32_t)-1)
+				if (actionInfoHeader.mName == static_cast<uint32_t>(-1))
 				{
 					LinkerError({ "Can't find action '", component_symbol->GetName(), "'\n" });
 					return false;

@@ -22,7 +22,7 @@ namespace mana
 
 		virtual ~SemanticAnalyzer() = default;
 
-		void SetCurrentFileInformation(const std::shared_ptr<SyntaxNode>& node);
+		static void SetCurrentFileInformation(const std::shared_ptr<SyntaxNode>& node);
 			
 		/*!
 		Lookupを呼び出しSymbolを検索してNodeに設定します
@@ -64,7 +64,7 @@ namespace mana
 		子ノードから型を継承する
 		@param[in]	node	ノード
 		*/
-		void ResolveTypeFromChildNode(const std::shared_ptr<SyntaxNode>& node) const;
+		static void ResolveTypeFromChildNode(const std::shared_ptr<SyntaxNode>& node);
 
 	protected:
 		[[nodiscard]] std::shared_ptr<Symbol> Lookup(const std::string_view name) const;

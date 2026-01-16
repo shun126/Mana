@@ -20,9 +20,7 @@ namespace mana
 
 	inline std::shared_ptr<Actor> Actor::Clone() const
 	{
-		std::shared_ptr<Actor> sharedActor = std::shared_ptr<Actor>(
-			new Actor(mVM.lock(), mVariable.GetSize())
-		);
+		std::shared_ptr<Actor> sharedActor = std::make_shared<Actor>(mVM.lock(), mVariable.GetSize());
 		sharedActor->mActions = mActions;
 
 		return sharedActor;
@@ -439,43 +437,47 @@ namespace mana
 		// 中断されたアクションの再開
 		while (currentLevel >= 0)
 		{
-			Interrupt* interrupt = &mInterrupts[currentLevel];
-			if (interrupt->mAddress != Nil)
+			const auto interruptIterator = mInterrupts.find(mInterruptPriority);
+			if (interruptIterator != mInterrupts.end())
 			{
-				// 中断していた場所から復帰させます
-				mPc = interrupt->mAddress;
+				auto interrupt = &interruptIterator->second;
+				if (interrupt->mAddress != Nil)
+				{
+					// 中断していた場所から復帰させます
+					mPc = interrupt->mAddress;
 #if 0
-				// コールバック関数を呼びます
-				if (mRollbackCallback)
-					mRollbackCallback(mRollbackCallbackParameter);
+					// コールバック関数を呼びます
+					if (mRollbackCallback)
+						mRollbackCallback(mRollbackCallbackParameter);
 #endif			
-				// 優先度(高いほど優先)変更
-				mInterruptPriority = currentLevel;
+					// 優先度(高いほど優先)変更
+					mInterruptPriority = currentLevel;
 
-				// 次回のTickでプログラムカウンターを加算しない
-				interrupt->mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
+					// 次回のTickでプログラムカウンターを加算しない
+					interrupt->mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
 
-				// SyncCall中ならばTickを抜ける
-				if (inSyncCall)
-					yield();
+					// SyncCall中ならばTickを抜ける
+					if (inSyncCall)
+						yield();
 
-				MANA_TRACE(
-					{
-						"mana:rollback: ", GetName(),
-						" priority ", std::to_string(lastInterruptPriority), " ", lastActionName,
-						" =>",
-						" priority ", std::to_string(mInterruptPriority), " ", interrupt->mActionName,
-						" succeed\n"
-					}
-				);
+					MANA_TRACE(
+						{
+							"mana:rollback: ", GetName(),
+							" priority ", std::to_string(lastInterruptPriority), " ", lastActionName,
+							" =>",
+							" priority ", std::to_string(mInterruptPriority), " ", interrupt->mActionName,
+							" succeed\n"
+						}
+					);
 
-				/*
-				 MANA_ASSERT(
-				 mPc >= GetParent().instruction_pool &&
-				 mPc < &GetParent().instruction_pool[GetParent().file_header->size_of_instruction_pool]);
-				 */
+					/*
+					 MANA_ASSERT(
+					 mPc >= GetParent().instruction_pool &&
+					 mPc < &GetParent().instruction_pool[GetParent().file_header->size_of_instruction_pool]);
+					 */
 
-				return;
+					return;
+				}
 			}
 			--currentLevel;
 		}
@@ -523,17 +525,17 @@ namespace mana
 		return (int32_t)mVM.lock()->GetUint8FromMemory(address + 1 + sizeof(int32_t) + sizeof(uint8_t));
 	}
 
-	inline int32_t Actor::GetArgumentSize(const uint32_t address)
+	inline int32_t Actor::GetArgumentSize(const uint32_t address) const
 	{
 		return (int32_t)mVM.lock()->GetUint16FromMemory(address + 1 + sizeof(int32_t) + sizeof(uint8_t) + sizeof(uint8_t));
 	}
 
-	inline bool Actor::HasReturnValue(const uint32_t address)
+	inline bool Actor::HasReturnValue(const uint32_t address) const
 	{
 		return mVM.lock()->GetUint8FromMemory(address + 1 + sizeof(int32_t)) ? true : false;
 	}
 
-	inline int32_t Actor::GetParameterInteger(const int32_t value)
+	inline int32_t Actor::GetParameterInteger(const int32_t value) const
 	{
 		MANA_ASSERT(GetArgumentCount() > value);
 
@@ -541,30 +543,30 @@ namespace mana
 		return mStack.Get<int_t>(mVM.lock()->GetUint16FromMemory(address));
 	}
 
-	inline float Actor::GetParameterFloat(const int32_t value)
+	inline float Actor::GetParameterFloat(const int32_t value) const
 	{
 		MANA_ASSERT(GetArgumentCount() > value);
 		return mStack.Get<float_t>(mVM.lock()->GetInt16FromMemory(mPc + 5 + sizeof(int16_t) + sizeof(int16_t) + (value * sizeof(int16_t))));
 	}
 
-	inline const char* Actor::GetParameterString(const int32_t value)
+	inline const char* Actor::GetParameterString(const int32_t value) const
 	{
 		MANA_ASSERT(GetArgumentCount() > value);
 		return mStack.Get<const char*>(mVM.lock()->GetInt16FromMemory(mPc + 5 + sizeof(int16_t) + sizeof(int16_t) + (value * sizeof(int16_t))));
 	}
 
-	inline Actor* Actor::GetParameterActor(const int32_t value)
+	inline Actor* Actor::GetParameterActor(const int32_t value) const
 	{
 		return static_cast<Actor*>(GetParameterPointer(value));
 	}
 
-	inline void* Actor::GetParameterPointer(const int32_t value)
+	inline void* Actor::GetParameterPointer(const int32_t value) const
 	{
 		MANA_ASSERT(GetArgumentCount() > value);
 		return mStack.Get<void*>(mVM.lock()->GetInt16FromMemory(mPc + 5 + sizeof(int16_t) + sizeof(int16_t) + (value * sizeof(int16_t))));
 	}
 
-	inline void* Actor::GetParameterAddress(const int32_t value)
+	inline void* Actor::GetParameterAddress(const int32_t value) const
 	{
 		MANA_ASSERT(GetArgumentCount() > value);
 		return mStack.GetAddress(mVM.lock()->GetInt16FromMemory(mPc + 5 + sizeof(int16_t) + sizeof(int16_t) + (value * sizeof(int16_t))) + 1);
@@ -631,7 +633,7 @@ namespace mana
 		return interrupt.mActionName;
 	}
 
-	inline const std::string_view Actor::GetFunctionName() const
+	inline std::string_view Actor::GetFunctionName() const
 	{
 		return std::string_view(mVM.lock()->GetStringFromMemory(mPc + 1));
 	}
@@ -1640,14 +1642,15 @@ namespace mana
 
 	inline void Actor::CommandJoin(const std::shared_ptr<VM>&, Actor& self)
 	{
-		Actor* targetActor = static_cast<Actor*>(self.mStack.Get<void*>(0));
+		const auto* targetActor = static_cast<Actor*>(self.mStack.Get<void*>(1));
 		if (targetActor == nullptr)
 		{
 			self.mStack.Remove(2);
 			return;
 		}
 
-		if (targetActor->mInterruptPriority < self.mStack.Get<int_t>(1))
+		const auto interruptPriority = self.mStack.Get<int_t>(0);
+		if (targetActor->mInterruptPriority <= interruptPriority)
 		{
 			self.mStack.Remove(2);
 		}
@@ -1674,7 +1677,8 @@ namespace mana
 				{
 					if (counter > numberOfArguments)
 					{
-						message[messagePointer++] = '\n';
+						message[messagePointer] = '\n';
+						++messagePointer;
 						break;
 					}
 

@@ -10,7 +10,6 @@ mana (compiler)
 #include "../runner/common/FileFormat.h"
 #include "../runner/common/Memory.h"
 #include "../runner/common/Noncopyable.h"
-#include <cstdlib>
 #include <memory>
 #include <vector>
 

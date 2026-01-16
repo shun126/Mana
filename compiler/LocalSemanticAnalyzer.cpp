@@ -476,7 +476,6 @@ DO_RECURSIVE:
 						break;
 					default:
 						MANA_BUG("illegal data GetTypeDescriptor()");
-						break;
 					}
 					node->Set(GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Char));
 				}
@@ -510,7 +509,6 @@ DO_RECURSIVE:
 						break;
 					default:
 						MANA_BUG("illegal data GetTypeDescriptor()");
-						break;
 					}
 					node->Set(GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Char));
 				}
@@ -544,7 +542,6 @@ DO_RECURSIVE:
 						break;
 					default:
 						MANA_BUG("illegal data GetTypeDescriptor()");
-						break;
 					}
 					node->Set(GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Char));
 				}
@@ -578,7 +575,6 @@ DO_RECURSIVE:
 						break;
 					default:
 						MANA_BUG("illegal data GetTypeDescriptor()");
-						break;
 					}
 					node->Set(GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Char));
 				}
@@ -612,7 +608,6 @@ DO_RECURSIVE:
 						break;
 					default:
 						MANA_BUG("illegal data GetTypeDescriptor()");
-						break;
 					}
 					node->Set(GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Char));
 				}
@@ -646,7 +641,6 @@ DO_RECURSIVE:
 						break;
 					default:
 						MANA_BUG("illegal data GetTypeDescriptor()");
-						break;
 					}
 					node->Set(GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Char));
 				}

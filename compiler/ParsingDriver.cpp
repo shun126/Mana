@@ -137,7 +137,7 @@ namespace mana
 		return result;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::AppendNode(const std::shared_ptr<SyntaxNode>& base, const std::shared_ptr<SyntaxNode>& next) const
+	std::shared_ptr<SyntaxNode> ParsingDriver::AppendNode(const std::shared_ptr<SyntaxNode>& base, const std::shared_ptr<SyntaxNode>& next)
 	{
 		if (base == nullptr)
 			return next;
@@ -182,7 +182,7 @@ namespace mana
 		return statements;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CollectInitializerStatementsFromDeclarations(const std::shared_ptr<SyntaxNode>& node) const
+	std::shared_ptr<SyntaxNode> ParsingDriver::CollectInitializerStatementsFromDeclarations(const std::shared_ptr<SyntaxNode>& node)
 	{
 		std::shared_ptr<SyntaxNode> statements;
 
@@ -198,7 +198,7 @@ namespace mana
 		return statements;
 	}
 
-	bool ParsingDriver::HasGlobalNameConflict(const std::shared_ptr<SyntaxNode>& root, const std::string_view& name) const
+	bool ParsingDriver::HasGlobalNameConflict(const std::shared_ptr<SyntaxNode>& root, const std::string_view& name)
 	{
 		for (std::shared_ptr<SyntaxNode> node = root; node; node = node->GetNextNode())
 		{
