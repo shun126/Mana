@@ -22,7 +22,7 @@ mana (compiler/library)
 		#if defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
 			#define MANA_TARGET_IPHONE (1)
 			#define MANA_TARGET_EMBEDDED (1)
-		#elif defined(__MAC_OS_X_VERSION_MIN_REQUIRED)
+		#elif defined(__MAC_OS_X_VERSION_MIN_REQUIRED) || defined(__MACH__)
 			#define MANA_TARGET_MAC_OSX (1)
 		#else
 			#error Platform Not Supported.

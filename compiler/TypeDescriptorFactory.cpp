@@ -18,7 +18,7 @@ namespace mana
 		address_t mAlignmentSize;
 	};
 
-	static constexpr std::array<InitializeType, TypeDescriptor::TypeIdSize> InitializeType = { {
+	static constexpr std::array<InitializeType, TypeDescriptor::TypeIdSize> initializeType = { {
 		{ std::string_view("void"), sizeof(int32_t), sizeof(int32_t) },
 		{ std::string_view("char"), sizeof(int8_t), sizeof(int8_t) },
 		{ std::string_view("short"), sizeof(int16_t), sizeof(int16_t) },
@@ -36,36 +36,36 @@ namespace mana
 
 	TypeDescriptorFactory::TypeDescriptorFactory()
 	{
-		for(size_t i = 0; i < InitializeType.size(); ++i)
+		for(size_t i = 0; i < initializeType.size(); ++i)
 		{
-			auto typeDescriptor = std::shared_ptr<TypeDescriptor>(new TypeDescriptor(static_cast<TypeDescriptor::Id>(i)));
-			typeDescriptor->SetName(InitializeType[i].mName);
-			typeDescriptor->SetMemorySize(InitializeType[i].mMemorySize);
-			typeDescriptor->SetAlignmentMemorySize(InitializeType[i].mAlignmentSize);
-			mTypeDescriptor.push_back(std::move(typeDescriptor));
+			auto typeDescriptor = std::make_shared<TypeDescriptor>(static_cast<TypeDescriptor::Id>(i));
+			typeDescriptor->SetName(initializeType[i].mName);
+			typeDescriptor->SetMemorySize(initializeType[i].mMemorySize);
+			typeDescriptor->SetAlignmentMemorySize(initializeType[i].mAlignmentSize);
+			mTypeDescriptor.push_back(typeDescriptor);
 		}
 
 		mStringTypeDescriptor = CreateReference(Get(TypeDescriptor::Id::Char));
 	}
 
-	const std::shared_ptr<TypeDescriptor>& TypeDescriptorFactory::Get(const TypeDescriptor::Id id) const
+	std::shared_ptr<TypeDescriptor> TypeDescriptorFactory::Get(const TypeDescriptor::Id id) const
 	{
 		return mTypeDescriptor.at(static_cast<size_t>(id));
 	}
 
-	const std::shared_ptr<TypeDescriptor>& TypeDescriptorFactory::GetString() const
+	std::shared_ptr<TypeDescriptor> TypeDescriptorFactory::GetString() const
 	{
 		return mStringTypeDescriptor;
 	}
 
 	std::shared_ptr<TypeDescriptor> TypeDescriptorFactory::Create(const TypeDescriptor::Id tcons)
 	{
-		auto newTypeDescriptor = std::shared_ptr<TypeDescriptor>(new TypeDescriptor(tcons));
+		auto newTypeDescriptor = std::make_shared<TypeDescriptor>(tcons);
 		mTypeDescriptor.push_back(newTypeDescriptor);
 		return newTypeDescriptor;
 	}
 
-	std::shared_ptr<TypeDescriptor> TypeDescriptorFactory::CreateReference(std::shared_ptr<TypeDescriptor> component)
+	std::shared_ptr<TypeDescriptor> TypeDescriptorFactory::CreateReference(const std::shared_ptr<TypeDescriptor>& component)
 	{
 		auto referenceTypeDescriptor = Get(TypeDescriptor::Id::Reference);
 

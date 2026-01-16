@@ -201,7 +201,7 @@ Main.o: ../runner/common/Noncopyable.h DataBuffer.h GlobalAddressResolver.h
 Main.o: GlobalSemanticAnalyzer.h SemanticAnalyzer.h Symbol.h TypeDescriptor.h
 Main.o: SymbolFactory.h StringPool.h TypeDescriptorFactory.h SyntaxNode.h
 Main.o: LocalAddressResolver.h LocalSemanticAnalyzer.h ErrorHandler.h Lexer.h
-Main.o: Path.h ParsingDriver.h Version.h ../runner/Mana.h
+Main.o: Path.h ParsingDriver.h Parser.hpp Version.h ../runner/Mana.h
 Main.o: ../runner/common/Setup.h ../runner/Actor.h ../runner/Buffer.h
 Main.o: ../runner/common/Platform.h ../runner/Buffer.inl ../runner/Event.h
 Main.o: ../runner/Stack.h ../runner/common/Noncopyable.h
@@ -216,13 +216,14 @@ ParsingDriver.o: ../runner/common/Math.h ../runner/common/Noncopyable.h
 ParsingDriver.o: ../runner/common/Memory.h ../runner/common/OutputStream.h
 ParsingDriver.o: ../runner/common/OutputStream.inl
 ParsingDriver.o: ../runner/common/Stopwatch.h ParsingDriver.h
-ParsingDriver.o: ../runner/common/Noncopyable.h CodeBuffer.h
-ParsingDriver.o: ../runner/common/Platform.h ../runner/common/FileFormat.h
-ParsingDriver.o: ../runner/common/Memory.h CodeGenerator.h DataBuffer.h
-ParsingDriver.o: GlobalAddressResolver.h GlobalSemanticAnalyzer.h
-ParsingDriver.o: SemanticAnalyzer.h Symbol.h TypeDescriptor.h SymbolFactory.h
-ParsingDriver.o: StringPool.h TypeDescriptorFactory.h SyntaxNode.h
+ParsingDriver.o: ../runner/common/Noncopyable.h Parser.hpp SyntaxNode.h
+ParsingDriver.o: TypeDescriptor.h ../runner/common/Platform.h CodeBuffer.h
+ParsingDriver.o: ../runner/common/FileFormat.h ../runner/common/Memory.h
+ParsingDriver.o: CodeGenerator.h DataBuffer.h GlobalAddressResolver.h
+ParsingDriver.o: GlobalSemanticAnalyzer.h SemanticAnalyzer.h Symbol.h
+ParsingDriver.o: SymbolFactory.h StringPool.h TypeDescriptorFactory.h
 ParsingDriver.o: LocalAddressResolver.h LocalSemanticAnalyzer.h
+ParsingDriver.o: ErrorHandler.h
 Path.o: Path.h ../runner/common/Setup.h ../runner/common/Platform.h
 Path.o: ../runner/common/Type.h ../runner/common/Assert.h
 Path.o: ../runner/common/String.h ../runner/common/FileFormat.h
