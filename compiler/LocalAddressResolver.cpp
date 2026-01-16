@@ -13,6 +13,8 @@ namespace mana
 {
 	LocalAddressResolver::LocalAddressResolver(const std::shared_ptr<CodeBuffer>& codeBuffer)
 		: mCodeBuffer(codeBuffer)
+		, mJumpChainTable()
+		, mJumpSwitchStack()
 	{
 		mJumpChainTablePointer = 0;
 
@@ -23,10 +25,10 @@ namespace mana
 	void LocalAddressResolver::OpenChain(JumpChainStatus status)
 	{
 		++mJumpChainTablePointer;
-		mJumpChainTable[mJumpChainTablePointer].status = status;
-		mJumpChainTable[mJumpChainTablePointer].break_chain = -1;
-		mJumpChainTable[mJumpChainTablePointer].continue_chain = -1;
-		mJumpChainTable[mJumpChainTablePointer].start_address = mCodeBuffer->GetSize();
+		mJumpChainTable[mJumpChainTablePointer].mStatus = status;
+		mJumpChainTable[mJumpChainTablePointer].mBreakChain = -1;
+		mJumpChainTable[mJumpChainTablePointer].mContinueChain = -1;
+		mJumpChainTable[mJumpChainTablePointer].mStartAddress = mCodeBuffer->GetSize();
 	}
 
 	int32_t LocalAddressResolver::Break(const int32_t newPc)
@@ -35,8 +37,8 @@ namespace mana
 
 		if (mJumpChainTablePointer > 0)
 		{
-			oldPc = mJumpChainTable[mJumpChainTablePointer].break_chain;
-			mJumpChainTable[mJumpChainTablePointer].break_chain = newPc;
+			oldPc = mJumpChainTable[mJumpChainTablePointer].mBreakChain;
+			mJumpChainTable[mJumpChainTablePointer].mBreakChain = newPc;
 		}
 		else
 		{
@@ -51,12 +53,12 @@ namespace mana
 		int32_t i;
 		int32_t oldPc = -1;
 
-		for (i = mJumpChainTablePointer; i > 0 && mJumpChainTable[i].status == JumpChainStatus::Switch; i--)
+		for (i = mJumpChainTablePointer; i > 0 && mJumpChainTable[i].mStatus == JumpChainStatus::Switch; i--)
 			;
 		if (i > 0)
 		{
-			oldPc = mJumpChainTable[i].continue_chain;
-			mJumpChainTable[i].continue_chain = newPc;
+			oldPc = mJumpChainTable[i].mContinueChain;
+			mJumpChainTable[i].mContinueChain = newPc;
 		}
 		else
 		{
@@ -69,20 +71,20 @@ namespace mana
 	void LocalAddressResolver::CloseContinueOnly(void)
 	{
 		mCodeBuffer->ReplaceAddressAll(
-			mJumpChainTable[mJumpChainTablePointer].continue_chain,
+			mJumpChainTable[mJumpChainTablePointer].mContinueChain,
 			mCodeBuffer->GetSize()
 		);
-		mJumpChainTable[mJumpChainTablePointer].continue_chain = -1;
+		mJumpChainTable[mJumpChainTablePointer].mContinueChain = -1;
 	}
 
 	void LocalAddressResolver::CloseChain(void)
 	{
 		mCodeBuffer->ReplaceAddressAll(
-			mJumpChainTable[mJumpChainTablePointer].continue_chain,
-			mJumpChainTable[mJumpChainTablePointer].start_address
+			mJumpChainTable[mJumpChainTablePointer].mContinueChain,
+			mJumpChainTable[mJumpChainTablePointer].mStartAddress
 		);
 		mCodeBuffer->ReplaceAddressAll(
-			mJumpChainTable[mJumpChainTablePointer].break_chain,
+			mJumpChainTable[mJumpChainTablePointer].mBreakChain,
 			mCodeBuffer->GetSize()
 		);
 		--mJumpChainTablePointer;
@@ -91,22 +93,22 @@ namespace mana
 	void LocalAddressResolver::OpenSwitchBlock(const std::shared_ptr<TypeDescriptor>& type)
 	{
 		++mJumpSwitchStackPointer;
-		mJumpSwitchStack[mJumpSwitchStackPointer].stack_pointer = mJumpSwitchEntryStackPointer;
-		mJumpSwitchStack[mJumpSwitchStackPointer].default_address = -1;
-		mJumpSwitchStack[mJumpSwitchStackPointer].type = type;
+		mJumpSwitchStack[mJumpSwitchStackPointer].mStackPointer = mJumpSwitchEntryStackPointer;
+		mJumpSwitchStack[mJumpSwitchStackPointer].mDefaultAddress = -1;
+		mJumpSwitchStack[mJumpSwitchStackPointer].mType = type;
 	}
 
-	void LocalAddressResolver::RegistSwitchCase(const std::shared_ptr<SyntaxNode>& node)
+	void LocalAddressResolver::RegisterSwitchCase(const std::shared_ptr<SyntaxNode>& node)
 	{
 		if (mJumpSwitchStackPointer > 0)
 		{
 			JumpSwitchEntry *p;
-			mJumpSwitchEntryStackPointer->node = node;
-			for (p = mJumpSwitchStack[mJumpSwitchStackPointer].stack_pointer; p->node != node; p++)
+			mJumpSwitchEntryStackPointer->mNode = node;
+			for (p = mJumpSwitchStack[mJumpSwitchStackPointer].mStackPointer; p->mNode != node; p++)
 				;
 			if (p >= mJumpSwitchEntryStackPointer)
 			{
-				mJumpSwitchEntryStackPointer->address = mCodeBuffer->GetSize();
+				mJumpSwitchEntryStackPointer->mAddress = mCodeBuffer->GetSize();
 				mJumpSwitchEntryStackPointer++;
 			}
 			else
@@ -116,11 +118,11 @@ namespace mana
 		}
 	}
 
-	void LocalAddressResolver::RegistSwitchDefault(void)
+	void LocalAddressResolver::RegisterSwitchDefault(void)
 	{
-		if (mJumpSwitchStackPointer > 0 && mJumpSwitchStack[mJumpSwitchStackPointer].default_address < 0)
+		if (mJumpSwitchStackPointer > 0 && mJumpSwitchStack[mJumpSwitchStackPointer].mDefaultAddress < 0)
 		{
-			mJumpSwitchStack[mJumpSwitchStackPointer].default_address = mCodeBuffer->GetSize();
+			mJumpSwitchStack[mJumpSwitchStackPointer].mDefaultAddress = mCodeBuffer->GetSize();
 		}
 		else
 		{
@@ -130,59 +132,64 @@ namespace mana
 
 	void LocalAddressResolver::ResolveSwitchBlock(const std::shared_ptr<CodeGenerator>& codeGenerator)
 	{
-		JumpSwitchEntry *p;
-
-		for (p = mJumpSwitchStack[mJumpSwitchStackPointer].stack_pointer; p < mJumpSwitchEntryStackPointer; p++)
+		for (const auto* p = mJumpSwitchStack[mJumpSwitchStackPointer].mStackPointer; p < mJumpSwitchEntryStackPointer; p++)
 		{
-			int32_t size;
-
-			switch (p->node->GetTypeDescriptor()->GetId())
+			switch (p->mNode->GetTypeDescriptor()->GetId())
 			{
 			case TypeDescriptor::Id::Char:
 			case TypeDescriptor::Id::Short:
+			case TypeDescriptor::Id::Bool:
 			case TypeDescriptor::Id::Int:
 			case TypeDescriptor::Id::Actor:
 				mCodeBuffer->AddOpecode(IntermediateLanguage::Duplicate);
-				codeGenerator->Expression(p->node, false);
+				codeGenerator->Expression(p->mNode, false);
 				mCodeBuffer->AddOpecode(IntermediateLanguage::CompareEqualInteger);
-				mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::BranchNotEqual, p->address);
+				mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::BranchNotEqual, p->mAddress);
 				break;
 
 			case TypeDescriptor::Id::Float:
 				mCodeBuffer->AddOpecode(IntermediateLanguage::Duplicate);
-				codeGenerator->Expression(p->node, false);
+				codeGenerator->Expression(p->mNode, false);
 				mCodeBuffer->AddOpecode(IntermediateLanguage::CompareEqualFloat);
-				mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::BranchNotEqual, p->address);
+				mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::BranchNotEqual, p->mAddress);
 				break;
 
 			case TypeDescriptor::Id::Struct:
-				size = p->node->GetTypeDescriptor()->GetMemorySize();
+			{
+				const auto size = p->mNode->GetTypeDescriptor()->GetMemorySize();
 				mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::DuplicateData, size);
-				codeGenerator->Expression(p->node, false);
+				codeGenerator->Expression(p->mNode, false);
 				mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::CompareEqualData, size);
-				mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::BranchNotEqual, p->address);
+				mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::BranchNotEqual, p->mAddress);
 				break;
+			}
 
+			case TypeDescriptor::Id::Void:
+			case TypeDescriptor::Id::Reference:
+			case TypeDescriptor::Id::Array:
+			case TypeDescriptor::Id::Module:
+			case TypeDescriptor::Id::Nil:
+			case TypeDescriptor::Id::Incomplete:
 			default:
-				MANA_BUG("Illigal type");
-				break;
+				MANA_BUG("Illegal type");
 			}
 		}
 
-		if (mJumpSwitchStack[mJumpSwitchStackPointer].default_address > 0)
+		if (mJumpSwitchStack[mJumpSwitchStackPointer].mDefaultAddress > 0)
 		{
-			mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::Branch, mJumpSwitchStack[mJumpSwitchStackPointer].default_address);
+			mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::Branch, mJumpSwitchStack[mJumpSwitchStackPointer].mDefaultAddress);
 		}
 
-		mJumpSwitchEntryStackPointer = mJumpSwitchStack[mJumpSwitchStackPointer].stack_pointer;
+		mJumpSwitchEntryStackPointer = mJumpSwitchStack[mJumpSwitchStackPointer].mStackPointer;
 	}
 
 	void LocalAddressResolver::CloseSwitchBlock(void)
 	{
-		switch (mJumpSwitchStack[mJumpSwitchStackPointer].type->GetId())
+		switch (mJumpSwitchStack[mJumpSwitchStackPointer].mType->GetId())
 		{
 		case TypeDescriptor::Id::Char:
 		case TypeDescriptor::Id::Short:
+		case TypeDescriptor::Id::Bool:
 		case TypeDescriptor::Id::Int:
 		case TypeDescriptor::Id::Float:
 		case TypeDescriptor::Id::Actor:
@@ -190,12 +197,17 @@ namespace mana
 			break;
 
 		case TypeDescriptor::Id::Struct:
-			mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::RemoveData, mJumpSwitchStack[mJumpSwitchStackPointer].type->GetMemorySize());
+			mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::RemoveData, mJumpSwitchStack[mJumpSwitchStackPointer].mType->GetMemorySize());
 			break;
 
+		case TypeDescriptor::Id::Void:
+		case TypeDescriptor::Id::Reference:
+		case TypeDescriptor::Id::Array:
+		case TypeDescriptor::Id::Module:
+		case TypeDescriptor::Id::Nil:
+		case TypeDescriptor::Id::Incomplete:
 		default:
-			MANA_BUG("Illigal type");
-			break;
+			MANA_BUG("Illegal type");
 		}
 
 		--mJumpSwitchStackPointer;

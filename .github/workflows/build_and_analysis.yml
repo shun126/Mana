@@ -45,10 +45,16 @@ jobs:
       - name: Generate Mana version infomation
         working-directory: ./compiler
         run: ${{env.PYTHON_BIN}} Version.py
-      - name: Build Mana 32bit compiler
-        run: msbuild mana.sln /t:build /p:Configuration=Release /p:Platform=Win32
       - name: Build Mana 64bit compiler
         run: msbuild mana.sln /t:build /p:Configuration=Release /p:Platform=x64
+      - name: Test Mana 64bit compiler
+        working-directory: ./test
+        run: ${{env.PYTHON_BIN}} test.py ../x64/Release/mana.exe
+      - name: Build Mana 32bit compiler
+        run: msbuild mana.sln /t:build /p:Configuration=Release /p:Platform=Win32
+      - name: Test Mana 32bit compiler
+        working-directory: ./test
+        run: ${{env.PYTHON_BIN}} test.py ../Win32/Release/mana.exe
   cppcheck:
     runs-on: ubuntu-latest
     steps:

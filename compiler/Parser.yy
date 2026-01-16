@@ -110,13 +110,8 @@ mana (compiler)
 %%
 program			: line
 					{
-#if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
-						if ($1)
-						{
-							$1->Dump();
-						}
-#endif
-						std::shared_ptr<mana::SyntaxNode> root = mParsingDriver->InjectGlobalInitializers($1);
+						auto root = mParsingDriver->InjectGlobalInitializers($1);
+						mParsingDriver->SetRootSyntaxNode(root);
 
 						auto globalSemanticAnalyzer = mParsingDriver->GetGlobalSemanticAnalyzer();
 						globalSemanticAnalyzer->Resolve(root);
@@ -168,6 +163,10 @@ declaration		: variable_decl
 					{ $$ = mParsingDriver->CreateConstantNode($2, $3); }
 				| tDEFINE tIDENTIFIER tREAL
 					{ $$ = mParsingDriver->CreateConstantNode($2, $3); }
+				| tDEFINE tIDENTIFIER tFALSE
+					{ $$ = mParsingDriver->CreateConstantNode($2, false); }
+				| tDEFINE tIDENTIFIER tTRUE
+					{ $$ = mParsingDriver->CreateConstantNode($2, true); }
 				| tDEFINE tIDENTIFIER '-' tDIGIT
 					{ $$ = mParsingDriver->CreateConstantNode($2, -$4); }
 				| tDEFINE tIDENTIFIER '-' tREAL
@@ -386,9 +385,9 @@ primary			: '-' expression %prec tUMINUS
 				;
 
 constant		: tFALSE
-					{ $$ = mParsingDriver->CreateInteger(0); }
+					{ $$ = mParsingDriver->CreateBool(false); }
 				| tTRUE
-					{ $$ = mParsingDriver->CreateInteger(1); }
+					{ $$ = mParsingDriver->CreateBool(true); }
 				| tPRIORITY
 					{ $$ = mParsingDriver->CreatePriority(); }
 				| tSELF

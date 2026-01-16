@@ -33,7 +33,7 @@ namespace mana
 	{
 	public:
 		// deprecated
-		bool IsValid(std::shared_ptr<Symbol> symbolEntry);
+		static bool IsValid(const std::shared_ptr<Symbol>& symbolEntry);
 
 
 		SymbolFactory(
@@ -46,6 +46,7 @@ namespace mana
 
 		// create symbol
 		std::shared_ptr<Symbol> CreateConstInt(const std::string_view name, const int32_t value);
+		std::shared_ptr<Symbol> CreateConstBool(const std::string_view name, const bool value);
 		std::shared_ptr<Symbol> CreateConstFloat(const std::string_view name, const float value);
 		std::shared_ptr<Symbol> CreateConstString(const std::string_view name, const std::string_view text);
 		std::shared_ptr<Symbol> CreateVariable(const std::string_view name, const std::shared_ptr<TypeDescriptor>& type, const bool staticVariable, const bool isBlockOpened, const bool isFunctionOpened);
@@ -68,16 +69,16 @@ namespace mana
 		std::shared_ptr<Symbol> Lookup(const std::string_view name) const;
 		//std::shared_ptr<Symbol> LookupOrCreateDummy(const std::string_view name);
 
-		void Define(const std::string_view name, std::shared_ptr<Symbol> symbolEntry);
-		void Define(std::shared_ptr<Symbol> symbolEntry);
+		void Define(const std::string_view name, const std::shared_ptr<Symbol>& symbolEntry);
+		void Define(const std::shared_ptr<Symbol>& symbolEntry);
 		void Undefine(const std::string_view name);
-		void Undefine(std::shared_ptr<Symbol> symbolEntry);
+		void Undefine(const std::shared_ptr<Symbol>& symbolEntry);
 
 		// Block management
 		void OpenBlock(const int32_t address);
 		int32_t CloseBlock();
 		size_t GetBlockDepth() const;
-		void EachBlock(std::function<void(const std::shared_ptr<Symbol>&)> function);
+		void EachBlock(const std::function<void(const std::shared_ptr<Symbol>&)>& function);
 
 
 		// TODO:相応しい名前か検討して下さい
@@ -157,7 +158,7 @@ namespace mana
 		int32_t GetGlobalMemoryAddress() const;
 		void SetGlobalMemoryAddress(const int32_t size);
 
-		void CheckUndefine();
+		void CheckUndefine() const;
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		bool GenerateActorInformation(OutputStream& stream) const;
@@ -166,7 +167,7 @@ namespace mana
 
 
 		void symbol_open_actor_register_member(const std::shared_ptr<Symbol>& symbol);
-		void symbol_open_actor_register_member(const std::shared_ptr<TypeDescriptor>& typeDescriptor);
+		static void symbol_open_actor_register_member(const std::shared_ptr<TypeDescriptor>& typeDescriptor);
 
 
 

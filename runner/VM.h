@@ -64,7 +64,7 @@ namespace mana
 
 		void RequestAll(const int32_t level, const char* actionName, const std::shared_ptr<Actor>& sender) const;
 		bool Request(const int32_t level, const char* actorName, const char* actionName, const std::shared_ptr<Actor>& sender);
-		void YieldAll();
+		void YieldAll() const;
 		[[nodiscard]] const std::shared_ptr<Actor>& GetActor(const char* name);
 		[[nodiscard]] const std::string_view& GetActorName(const std::shared_ptr<Actor>& actor) const;
 		[[nodiscard]] std::shared_ptr<Actor> CloneActor(const std::shared_ptr<Actor>& actor, const char* newName);
