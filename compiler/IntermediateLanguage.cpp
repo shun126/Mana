@@ -15,7 +15,7 @@ namespace mana
 	{
 		const char* data = static_cast<const char*>(buffer);
 		const address_t index = CodeBuffer::Raw<address_t>(program, address);
-		return index >= 0 ? &data[index] : "";
+		return &data[index];
 	}
 
 	extern const char* GetInstructionText(const char* data, const void* program, const address_t address)
@@ -27,7 +27,7 @@ namespace mana
 #endif
 		static char text[256];
 
-		const IntermediateLanguage opecode = reinterpret_cast<const IntermediateLanguage*>(program)[address];
+		const IntermediateLanguage opecode = static_cast<const IntermediateLanguage*>(program)[address];
 		switch (opecode)
 		{
 		// thread

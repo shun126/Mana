@@ -15,7 +15,7 @@ namespace mana
 {
 	namespace lexer
 	{
-		bool Initialize(const std::shared_ptr<mana::ParsingDriver>& parsingDriver, const std::string_view& filename)
+		extern bool Initialize(const std::shared_ptr<mana::ParsingDriver>& parsingDriver, const std::string_view& filename)
 		{
 			if (LexerInstance == nullptr)
 			{
@@ -25,7 +25,7 @@ namespace mana
 			return LexerInstance->Open(filename, true);
 		}
 
-		void Finalize()
+		extern void Finalize()
 		{
 			if (LexerInstance)
 			{
@@ -34,77 +34,82 @@ namespace mana
 			}
 		}
 
-		bool Open(const std::string_view& filename, const bool check)
+		extern bool Open(const std::string_view& filename, const bool check)
 		{
 			return LexerInstance->Open(filename, check);
 		}
 
-		bool Close()
+		extern bool Close()
 		{
 			return LexerInstance->Close();
 		}
 
-		const std::string& GetCurrentFilename()
+		extern const std::string& GetCurrentFilename()
 		{
 			return LexerInstance->GetCurrentFilename();
 		}
 
-		void SetCurrentFilename(const std::string& filename)
+		extern void SetCurrentFilename(const std::string& filename)
 		{
 			LexerInstance->SetCurrentFilename(filename);
 		}
 
-		int GetCurrentLineNo()
+		extern int GetCurrentLineNo()
 		{
 			return yylineno;
 		}
 
-		void SetCurrentLineNo(const int lineNo)
+		extern void SetCurrentLineNo(const int lineNo)
 		{
 			yylineno = lineNo;
 		}
 
-		inline static std::shared_ptr<TypeDescriptor> GetVoidTypeDescriptor()
+		inline std::shared_ptr<TypeDescriptor> GetVoidTypeDescriptor()
 		{
 			return LexerInstance->mParsingDriver->GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Void);
 		}
 
-		inline static std::shared_ptr<TypeDescriptor> GetInt8TypeDescriptor()
+		inline std::shared_ptr<TypeDescriptor> GetInt8TypeDescriptor()
 		{
 			return LexerInstance->mParsingDriver->GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Char);
 		}
 
-		inline static std::shared_ptr<TypeDescriptor> GetInt16TypeDescriptor()
+		inline std::shared_ptr<TypeDescriptor> GetInt16TypeDescriptor()
 		{
 			return LexerInstance->mParsingDriver->GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Short);
 		}
 
-		inline static std::shared_ptr<TypeDescriptor> GetInt32TypeDescriptor()
+		inline std::shared_ptr<TypeDescriptor> GetInt32TypeDescriptor()
 		{
 			return LexerInstance->mParsingDriver->GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Int);
 		}
 
-		inline static std::shared_ptr<TypeDescriptor> GetFloat32TypeDescriptor()
+		inline std::shared_ptr<TypeDescriptor> GetBoolTypeDescriptor()
+		{
+			return LexerInstance->mParsingDriver->GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Bool);
+		}
+
+		inline std::shared_ptr<TypeDescriptor> GetFloat32TypeDescriptor()
 		{
 			return LexerInstance->mParsingDriver->GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Float);
 		}
 
-		inline static std::shared_ptr<TypeDescriptor> GetStringTypeDescriptor()
+		inline std::shared_ptr<TypeDescriptor> GetStringTypeDescriptor()
 		{
 			return LexerInstance->mParsingDriver->GetTypeDescriptorFactory()->GetString();
 		}
 
-		inline static std::shared_ptr<TypeDescriptor> GetReferenceTypeDescriptor()
+		inline std::shared_ptr<TypeDescriptor> GetReferenceTypeDescriptor()
 		{
 			return LexerInstance->mParsingDriver->GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Reference);
 		}
 
-		inline static int_t ToInt(const std::string_view text)
+		inline int_t ToInt(const std::string_view text)
 		{
 			return static_cast<mana::int_t>(atoi(text.data()));
 		}
 
-		static int_t ToIntHex(const std::string_view text)
+		inline int_t ToIntHex(const std::string_view text)
 		{
 			mana::int_t integer;
 #if defined(MANA_TARGET_WINDOWS)
@@ -115,21 +120,17 @@ namespace mana
 			return integer;
 		}
 
-		inline static float_t ToFloat(const std::string_view text)
+		inline float_t ToFloat(const std::string_view text)
 		{
 			return static_cast<float_t>(atof(text.data()));
 		}
 
-		/*
-		*/
-		static std::string_view ToString(const char* text)
+		inline std::string_view ToString(const char* text)
 		{
 			return LexerInstance->mParsingDriver->GetStringPool()->Set(text);
 		}
 
-		/*
-		*/
-		static std::string_view LiteralToString(const char* text, const size_t length)
+		inline std::string_view LiteralToString(const char* text, const size_t length)
 		{
 			if ((text[0] == '\"') && (text[length - 1] == '\"'))
 			{
@@ -146,6 +147,7 @@ namespace mana
 						case 'n':	*q = '\n';	break;
 						case 't':	*q = '\t';	break;
 						case '\\':	*q = '\\';	break;
+						default: break;
 						}
 						break;
 

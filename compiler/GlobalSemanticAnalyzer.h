@@ -30,7 +30,7 @@ namespace mana
 		void Resolve(std::shared_ptr<SyntaxNode> node);
 
 	private:
-		size_t CalcArgumentCount(const size_t count, const std::shared_ptr<const SyntaxNode>& node) const;
+		static size_t CalcArgumentCount(const size_t count, const std::shared_ptr<const SyntaxNode>& node);
 
 	private:
 		bool mStaticBlockOpened = false;

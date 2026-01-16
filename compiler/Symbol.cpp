@@ -82,8 +82,8 @@ static char* symbol_data_type_id_name[NUMBER_OF] = {
 	{
 		return mParameterList;
 	}
-	
-	const std::shared_ptr<Symbol> Symbol::GetParameterList() const
+
+	std::shared_ptr<Symbol> Symbol::GetParameterList() const
 	{
 		return mParameterList;
 	}
@@ -103,7 +103,7 @@ static char* symbol_data_type_id_name[NUMBER_OF] = {
 		mNext = symbol;
 	}
 
-	const std::shared_ptr<Symbol> Symbol::GetNext() const
+	std::shared_ptr<Symbol> Symbol::GetNext() const
 	{
 		return mNext;
 	}
@@ -113,7 +113,7 @@ static char* symbol_data_type_id_name[NUMBER_OF] = {
 		return mTypeDescription;
 	}
 
-	const std::shared_ptr<TypeDescriptor> Symbol::GetTypeDescriptor() const
+	std::shared_ptr<TypeDescriptor> Symbol::GetTypeDescriptor() const
 	{
 		return mTypeDescription;
 	}
@@ -183,7 +183,7 @@ static char* symbol_data_type_id_name[NUMBER_OF] = {
 		mFloat = value;
 	}
 
-	const std::string_view Symbol::GetString() const
+	std::string_view Symbol::GetString() const
 	{
 		return mString;
 	}

@@ -11,11 +11,15 @@
 
 import subprocess
 import os
+import sys
 
 cwd = os.getcwd()
 print("pwd:" + cwd)
 
-MANA = '../compiler/mana'
+if len(sys.argv) < 2:
+	MANA = '../compiler/mana'
+else:
+	MANA = sys.argv[1]
 
 ################################################################################
 def success(argument):
@@ -58,11 +62,11 @@ success('--help')
 fail('test_missing_file.mn', 'unable to open')
 success('test_actor_01.mn')
 success('test_constant_01.mn')
+success('test_bool_01.mn')
 #success('test_function_01.mn')
 fail('test_function_02.mn', 'incomplete type name')
 success('test_struct_01.mn')
 success('test_variable_01.mn')
 success('test_global_init.mn')
-
 ################################################################################
 exit(Result)

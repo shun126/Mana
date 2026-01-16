@@ -40,13 +40,14 @@ namespace mana
 		const std::shared_ptr<CodeGenerator>& GetCodeGenerator();
 		const std::shared_ptr<DataBuffer>& GetDataBuffer();
 		const std::shared_ptr<GlobalSemanticAnalyzer>& GetGlobalSemanticAnalyzer();
+		const std::shared_ptr<SyntaxNode>& GetRootSyntaxNode() const;
 		const std::shared_ptr<SymbolFactory>& GetSymbolFactory();
 		const std::shared_ptr<StringPool>& GetStringPool();
 		const std::shared_ptr<TypeDescriptorFactory>& GetTypeDescriptorFactory();
 		std::shared_ptr<SyntaxNode> InjectGlobalInitializers(const std::shared_ptr<SyntaxNode>& root);
 
 	protected:
-		std::shared_ptr<SyntaxNode> Bind(const std::shared_ptr<SyntaxNode>& base, const std::shared_ptr<SyntaxNode>& next);
+		static std::shared_ptr<SyntaxNode> Bind(const std::shared_ptr<SyntaxNode>& base, const std::shared_ptr<SyntaxNode>& next);
 
 		// declarations
 		static std::shared_ptr<SyntaxNode> CreateNativeFunction(const std::shared_ptr<SyntaxNode>& returnExpression, const std::string_view& identifier, const std::shared_ptr<SyntaxNode>& argument);
@@ -55,6 +56,7 @@ namespace mana
 
 		// declaration
 		std::shared_ptr<SyntaxNode> CreateConstantNode(const std::string_view& identifier, const int_t value);
+		std::shared_ptr<SyntaxNode> CreateConstantNode(const std::string_view& identifier, const bool value);
 		std::shared_ptr<SyntaxNode> CreateConstantNode(const std::string_view& identifier, const float_t value);
 		std::shared_ptr<SyntaxNode> CreateConstantNode(const std::string_view& identifier, const std::string_view& text);
 		std::shared_ptr<SyntaxNode> CreateDefineNode(const std::string_view& identifier, const std::string_view& text);
@@ -156,6 +158,7 @@ namespace mana
 		std::shared_ptr<SyntaxNode> CreateSelf();
 		std::shared_ptr<SyntaxNode> CreateSender();
 		std::shared_ptr<SyntaxNode> CreateNil();
+		std::shared_ptr<SyntaxNode> CreateBool(const bool value);
 		std::shared_ptr<SyntaxNode> CreateInteger(const int_t value);
 		std::shared_ptr<SyntaxNode> CreateFloat(const float_t value);
 		std::shared_ptr<SyntaxNode> CreateString(const std::string_view& text);
@@ -193,10 +196,11 @@ namespace mana
 		static std::shared_ptr<SyntaxNode> CreateVariableSizeNode(const std::string_view& identifier);
 
 	private:
-		std::shared_ptr<SyntaxNode> AppendNode(const std::shared_ptr<SyntaxNode>& base, const std::shared_ptr<SyntaxNode>& next) const;
+		static std::shared_ptr<SyntaxNode> AppendNode(const std::shared_ptr<SyntaxNode>& base, const std::shared_ptr<SyntaxNode>& next);
 		std::shared_ptr<SyntaxNode> CollectGlobalInitializerStatements(const std::shared_ptr<SyntaxNode>& root) const;
-		std::shared_ptr<SyntaxNode> CollectInitializerStatementsFromDeclarations(const std::shared_ptr<SyntaxNode>& node) const;
-		bool HasGlobalNameConflict(const std::shared_ptr<SyntaxNode>& root, const std::string_view& name) const;
+		static std::shared_ptr<SyntaxNode> CollectInitializerStatementsFromDeclarations(const std::shared_ptr<SyntaxNode>& node);
+		static bool HasGlobalNameConflict(const std::shared_ptr<SyntaxNode>& root, const std::string_view& name);
+		void SetRootSyntaxNode(const std::shared_ptr<SyntaxNode>& rootSyntaxNode);
 
 		std::unique_ptr<Parser> mParser;
 
@@ -205,6 +209,7 @@ namespace mana
 		std::shared_ptr<DataBuffer> mDataBuffer;
 		std::shared_ptr<GlobalSemanticAnalyzer> mGlobalSemanticAnalyzer;
 		std::shared_ptr<LocalSemanticAnalyzer> mLocalSemanticAnalyzer;
+		std::shared_ptr<SyntaxNode> mRootSyntaxNode;
 		std::shared_ptr<SymbolFactory> mSymbolFactory;
 		std::shared_ptr<StringPool> mStringPool;
 		std::shared_ptr<TypeDescriptorFactory> mTypeDescriptorFactory;

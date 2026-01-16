@@ -14,6 +14,7 @@ namespace mana
 {
 	TypeDescriptor::TypeDescriptor(const Id tcons)
 		: mTcons(tcons)
+		, mShare()
 	{
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
 		static uint32_t count = 0;
@@ -59,6 +60,14 @@ namespace mana
 		case Id::Actor:
 		case Id::Struct:
 		case Id::Incomplete:
+		case Id::Void:
+		case Id::Char:
+		case Id::Short:
+		case Id::Bool:
+		case Id::Int:
+		case Id::Float:
+		case Id::Module:
+		case Id::Nil:
 		default:
 			return (this == typeDescriptor.get());
 		}
@@ -68,33 +77,26 @@ namespace mana
 	{
 		switch (mTcons)
 		{
-#if 0
-		case Id::Char:
-			if (typeDescriptor->mTcons == Id::Char)
-				return true;
-			break;
-
-		case Id::Short:
-			switch (typeDescriptor->mTcons)
-			{
-			case Id::Char:
-			case Id::Short:
-				return true;
-			default:
-				break;
-			}
-			break;
-#else
 		case Id::Char:
 		case Id::Short:
-#endif
+		case Id::Bool:
 		case Id::Int:
 			switch (typeDescriptor->mTcons)
 			{
 			case Id::Char:
 			case Id::Short:
+			case Id::Bool:
 			case Id::Int:
 				return true;
+			case Id::Void:
+			case Id::Float:
+			case Id::Reference:
+			case Id::Array:
+			case Id::Struct:
+			case Id::Actor:
+			case Id::Module:
+			case Id::Nil:
+			case Id::Incomplete:
 			default:
 				break;
 			}
@@ -121,6 +123,10 @@ namespace mana
 				return true;
 			break;
 
+		case Id::Void:
+		case Id::Module:
+		case Id::Nil:
+		case Id::Incomplete:
 		default:
 			break;
 		}
@@ -146,7 +152,6 @@ namespace mana
 
 	void TypeDescriptor::SetArray(const std::shared_ptr<TypeDescriptor>& arrayElementTypeDescriptor)
 	{
-#if 1
 		if (mComponent == nullptr)
 		{
 			if (this != arrayElementTypeDescriptor.get())
@@ -163,11 +168,6 @@ namespace mana
 			mAlignmentMemorySize = mComponent->mAlignmentMemorySize;
 			mMemorySize = mArraySize * mComponent->mMemorySize;
 		}
-#else
-		MANA_BUG("");
-		mAlignmentMemorySize = arrayElementTypeDescriptor->mAlignmentMemorySize;
-		mMemorySize = mArraySize * arrayElementTypeDescriptor->mMemorySize;
-#endif
 	}
 
 	std::string_view TypeDescriptor::GetName() const
@@ -272,15 +272,8 @@ namespace mana
 		case Id::Array:
 			output << '[';
 			mComponent->Dump(output);
-			if (mArraySize >= 0)
-			{
-				output << ", ";
-				output << mArraySize;
-			}
-			else
-			{
-				output << ", *";
-			}
+			output << ", ";
+			output << mArraySize;
 			output << ']';
 			break;
 
@@ -290,10 +283,18 @@ namespace mana
 			output << " { ";
 			output << "0x" << std::setfill('0') << std::hex << std::setw(8) << mMemorySize;
 			output << " bytes ";
-			output << "aligment 0x" << std::setfill('0') << std::hex << std::setw(8) << mAlignmentMemorySize;
+			output << "alignment 0x" << std::setfill('0') << std::hex << std::setw(8) << mAlignmentMemorySize;
 			output << " }";
 			break;
 
+		case Id::Void:
+		case Id::Char:
+		case Id::Short:
+		case Id::Bool:
+		case Id::Int:
+		case Id::Float:
+		case Id::Nil:
+		case Id::Incomplete:
 		default:
 			break;
 		}

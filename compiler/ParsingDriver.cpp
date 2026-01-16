@@ -73,6 +73,16 @@ namespace mana
 		return mGlobalSemanticAnalyzer;
 	}
 
+	const std::shared_ptr<SyntaxNode>& ParsingDriver::GetRootSyntaxNode() const
+	{
+		return mRootSyntaxNode;
+	}
+
+	void ParsingDriver::SetRootSyntaxNode(const std::shared_ptr<SyntaxNode>& rootSyntaxNode)
+	{
+		mRootSyntaxNode = rootSyntaxNode;
+	}
+
 	const std::shared_ptr<SymbolFactory>& ParsingDriver::GetSymbolFactory()
 	{
 		return mSymbolFactory;
@@ -127,7 +137,7 @@ namespace mana
 		return result;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::AppendNode(const std::shared_ptr<SyntaxNode>& base, const std::shared_ptr<SyntaxNode>& next) const
+	std::shared_ptr<SyntaxNode> ParsingDriver::AppendNode(const std::shared_ptr<SyntaxNode>& base, const std::shared_ptr<SyntaxNode>& next)
 	{
 		if (base == nullptr)
 			return next;
@@ -172,7 +182,7 @@ namespace mana
 		return statements;
 	}
 
-	std::shared_ptr<SyntaxNode> ParsingDriver::CollectInitializerStatementsFromDeclarations(const std::shared_ptr<SyntaxNode>& node) const
+	std::shared_ptr<SyntaxNode> ParsingDriver::CollectInitializerStatementsFromDeclarations(const std::shared_ptr<SyntaxNode>& node)
 	{
 		std::shared_ptr<SyntaxNode> statements;
 
@@ -188,7 +198,7 @@ namespace mana
 		return statements;
 	}
 
-	bool ParsingDriver::HasGlobalNameConflict(const std::shared_ptr<SyntaxNode>& root, const std::string_view& name) const
+	bool ParsingDriver::HasGlobalNameConflict(const std::shared_ptr<SyntaxNode>& root, const std::string_view& name)
 	{
 		for (std::shared_ptr<SyntaxNode> node = root; node; node = node->GetNextNode())
 		{
@@ -267,6 +277,15 @@ namespace mana
 		node->Set(identifier);
 		node->Set(value);
 		node->Set(GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Int));
+		return node;
+	}
+
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateConstantNode(const std::string_view& identifier, const bool value)
+	{
+		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::DefineConstant);
+		node->Set(identifier);
+		node->Set(static_cast<int_t>(value));
+		node->Set(GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Bool));
 		return node;
 	}
 
@@ -620,6 +639,7 @@ std::shared_ptr<SyntaxNode> ParsingDriver::CreateAwaitCompletion(const std::shar
 	std::shared_ptr<SyntaxNode> ParsingDriver::CreateLogicalAnd(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::LogicalAnd);
+		node->Set(IntermediateLanguage::LogicalAnd);
 		node->SetLeftNode(leftHand);
 		node->SetRightNode(rightHand);
 		return node;
@@ -628,6 +648,7 @@ std::shared_ptr<SyntaxNode> ParsingDriver::CreateAwaitCompletion(const std::shar
 	std::shared_ptr<SyntaxNode> ParsingDriver::CreateLogicalOr(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand)
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::LogicalOr);
+		node->Set(IntermediateLanguage::LogicalOr);
 		node->SetLeftNode(leftHand);
 		node->SetRightNode(rightHand);
 		return node;
@@ -959,6 +980,14 @@ std::shared_ptr<SyntaxNode> ParsingDriver::CreateAwaitCompletion(const std::shar
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Const);
 		node->Set(GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Nil));
+		return node;
+	}
+
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateBool(const bool value)
+	{
+		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Const);
+		node->Set(static_cast<int_t>(value));
+		node->Set(GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Bool));
 		return node;
 	}
 

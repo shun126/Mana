@@ -13,7 +13,6 @@ mana (compiler/library)
 #endif
 
 #include <array>
-#include <cstdio>
 #include <string_view>
 
 namespace mana

@@ -18,13 +18,16 @@ actor TestActor1
 	{
 		print("TestActor1::main\n");
 
+		print("TestActor1:section1\n");
 		short array[10];
 		test_sort(array, 10);
 
-		request(1, OtherTestActor::talk);
-		print("TestActor1:section1\n");
-		join(0, OtherTestActor);
 		print("TestActor1:section2\n");
+		request(1, OtherTestActor::talk);
+
+		print("TestActor1:section3\n");
+		join(0, OtherTestActor);
+		print("TestActor1:section4\n");
 	}
 
 	action talk

@@ -23,8 +23,8 @@ namespace mana
 		TypeDescriptorFactory();
 		~TypeDescriptorFactory() = default;
 
-		[[nodiscard]] const std::shared_ptr<TypeDescriptor>& Get(const TypeDescriptor::Id id) const;
-		[[nodiscard]] const std::shared_ptr<TypeDescriptor>& GetString() const;
+		[[nodiscard]] std::shared_ptr<TypeDescriptor> Get(const TypeDescriptor::Id id) const;
+		[[nodiscard]] std::shared_ptr<TypeDescriptor> GetString() const;
 
 		[[nodiscard]] std::shared_ptr<TypeDescriptor> Create(const TypeDescriptor::Id tcons);
 		[[nodiscard]] std::shared_ptr<TypeDescriptor> CreateReference(const std::shared_ptr<TypeDescriptor>& component);
