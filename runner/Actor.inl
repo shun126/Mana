@@ -197,7 +197,10 @@ namespace mana
 			if (!IsRunning())
 				return false;
 
-			Interrupt& currentInterrupt = mInterrupts[mInterruptPriority];
+			const auto currentInterruptIterator = mInterrupts.find(mInterruptPriority);
+			if (currentInterruptIterator == mInterrupts.end())
+				return false;
+			Interrupt& currentInterrupt = currentInterruptIterator->second;
 			if (currentInterrupt.mFlag.test(static_cast<uint8_t>(Interrupt::Flag::Repeat)))
 			{
 				currentInterrupt.mFlag.reset(static_cast<uint8_t>(Interrupt::Flag::Repeat));
@@ -222,7 +225,10 @@ namespace mana
 	{
 		if (Request(priority, action, sender))
 		{
-			mInterrupts[priority].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::IsInSyncCall));
+			const auto interruptIterator = mInterrupts.find(priority);
+			if (interruptIterator == mInterrupts.end())
+				return false;
+			interruptIterator->second.mFlag.set(static_cast<uint8_t>(Interrupt::Flag::IsInSyncCall));
 			while (true)
 			{
 				mVM.lock()->Run();
@@ -237,7 +243,10 @@ namespace mana
 	{
 		if (Request(priority, action, sender))
 		{
-			mInterrupts[priority].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::IsInSyncCall));
+			const auto interruptIterator = mInterrupts.find(priority);
+			if (interruptIterator == mInterrupts.end())
+				return false;
+			interruptIterator->second.mFlag.set(static_cast<uint8_t>(Interrupt::Flag::IsInSyncCall));
 			while (true)
 			{
 				Run();
@@ -250,6 +259,12 @@ namespace mana
 
 	inline bool Actor::Request(const int32_t priority, const char* action, const std::shared_ptr<Actor>& sender)
 	{
+		if (priority <= LowestInterruptPriority)
+		{
+			MANA_TRACE({ "mana:request: priority ", std::to_string(priority), ", ", GetName(), "::", action, " request ignored. reason: lowest priority or below\n" });
+			return false;
+		}
+
 		if (mFlag.test(static_cast<uint8_t>(Flag::Halt)))
 		{
 			MANA_TRACE({ "mana:request: priority ", std::to_string(priority), ", ", GetName(), "::", action, " request failed. reason: halt\n" });
@@ -266,8 +281,9 @@ namespace mana
 		{
 			MANA_TRACE({ "mana:request: priority ", std::to_string(priority), ", ", GetName(), "::", action, " request failed.\n" });
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
-			if (mInterrupts[priority].mActionName.empty() == false)
-				MANA_TRACE({ "reason : ", mInterrupts[priority].mActionName," running" });
+			const auto interruptIterator = mInterrupts.find(priority);
+			if (interruptIterator != mInterrupts.end() && interruptIterator->second.mActionName.empty() == false)
+				MANA_TRACE({ "reason : ", interruptIterator->second.mActionName," running" });
 #endif
 			MANA_TRACE("\n");
 			return false;
@@ -292,7 +308,11 @@ namespace mana
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
 		MANA_TRACE({ "mana:request: ", GetName(), " " });
 		if (mInterrupts.empty() == false)
-			MANA_TRACE({ "priority ", std::to_string(mInterruptPriority), " ", mInterrupts[mInterruptPriority].mActionName, " => " });
+		{
+			const auto interruptIterator = mInterrupts.find(mInterruptPriority);
+			if (interruptIterator != mInterrupts.end())
+				MANA_TRACE({ "priority ", std::to_string(mInterruptPriority), " ", interruptIterator->second.mActionName, " => " });
+		}
 		MANA_TRACE({ "priority ", std::to_string(priority), " ",  action , " (address:", std::to_string(address), ")\n" });
 
 		// 実行するアクション名を記録
@@ -307,7 +327,9 @@ namespace mana
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
 			if (mInterruptPriority)
 			{
-				MANA_TRACE({ "priority ", std::to_string(mInterruptPriority), " ", mInterrupts[mInterruptPriority].mActionName, " => " });
+				const auto interruptIterator = mInterrupts.find(mInterruptPriority);
+				if (interruptIterator != mInterrupts.end())
+					MANA_TRACE({ "priority ", std::to_string(mInterruptPriority), " ", interruptIterator->second.mActionName, " => " });
 			}
 #endif
 			MANA_TRACE({ "priority ", std::to_string(priority), " ", interrupt.mActionName, " succeed\n" });
@@ -324,7 +346,9 @@ namespace mana
 			if (mPc != Nil)
 			{
 				// 現在のプログラムカウンタを保存します
-				mInterrupts[mInterruptPriority].mAddress = mPc;
+				const auto interruptIterator = mInterrupts.find(mInterruptPriority);
+				if (interruptIterator != mInterrupts.end())
+					interruptIterator->second.mAddress = mPc;
 			}
 
 			// 新しい優先度(高いほど優先)とプログラムカウンタを設定します
@@ -339,8 +363,12 @@ namespace mana
 			// 現在よりも低い優先度(高いほど優先)の場合、現在のアクション終了後に実行
 
 			// 現在の優先度(高いほど優先)に入ったときのFPとSPを保存します
-			interrupt.mFramePointer = mInterrupts[mInterruptPriority].mFramePointer;
-			interrupt.mStackPointer = mInterrupts[mInterruptPriority].mStackPointer;
+			const auto interruptIterator = mInterrupts.find(mInterruptPriority);
+			if (interruptIterator != mInterrupts.end())
+			{
+				interrupt.mFramePointer = interruptIterator->second.mFramePointer;
+				interrupt.mStackPointer = interruptIterator->second.mStackPointer;
+			}
 
 			// 次のTickでプログラムカウンタを進める処理
 			interrupt.mFlag.reset(static_cast<uint8_t>(Interrupt::Flag::Repeat));
@@ -362,7 +390,10 @@ namespace mana
 		SetSynchronized(false);
 
 		// 現在実行中のリクエストを検索
-		Interrupt& currentInterrupt = mInterrupts[mInterruptPriority];
+		const auto currentInterruptIterator = mInterrupts.find(mInterruptPriority);
+		if (currentInterruptIterator == mInterrupts.end())
+			return;
+		Interrupt& currentInterrupt = currentInterruptIterator->second;
 
 		// リクエストが終了したことをsenderに通知する
 		if (currentInterrupt.mSender)
@@ -398,14 +429,28 @@ namespace mana
 		// 優先度開放
 		mInterrupts.erase(mInterruptPriority);
 
+		const int32_t targetPriority = (priority < LowestInterruptPriority) ? LowestInterruptPriority : priority;
+
 		// 優先度(高いほど優先)が指定されているならば、強制的に指定優先度まで戻る
-		int32_t currentLevel = mInterruptPriority - 1;
-		if (currentLevel > priority)
+		if (mInterruptPriority - 1 > targetPriority)
 		{
-			//for(auto i = mInterrupts.find(currentLevel); i != mInterrupts.end(); ++i)
-			while (currentLevel > priority)
+			std::vector<int32_t> prioritiesToRelease;
+			prioritiesToRelease.reserve(mInterrupts.size());
+
+			for (auto iterator = mInterrupts.rbegin(); iterator != mInterrupts.rend(); ++iterator)
 			{
-				Interrupt* interrupt = &mInterrupts[currentLevel];
+				if (iterator->first <= targetPriority)
+					break;
+				prioritiesToRelease.push_back(iterator->first);
+			}
+
+			for (const int32_t currentLevel : prioritiesToRelease)
+			{
+				const auto interruptIterator = mInterrupts.find(currentLevel);
+				if (interruptIterator == mInterrupts.end())
+					continue;
+
+				Interrupt* interrupt = &interruptIterator->second;
 
 				// 優先度開放
 				interrupt->mAddress = Nil;
@@ -426,7 +471,7 @@ namespace mana
 				/* コールバック関数を呼びます */
 				mRollbackEvent.Broadcast(currentLevel);
 
-				--currentLevel;
+				mInterrupts.erase(interruptIterator);
 			}
 		}
 
@@ -435,51 +480,46 @@ namespace mana
 		mStack.SetSize(stackPointer);
 
 		// 中断されたアクションの再開
-		while (currentLevel >= 0)
+		for (auto iterator = mInterrupts.rbegin(); iterator != mInterrupts.rend(); ++iterator)
 		{
-			const auto interruptIterator = mInterrupts.find(mInterruptPriority);
-			if (interruptIterator != mInterrupts.end())
-			{
-				auto interrupt = &interruptIterator->second;
-				if (interrupt->mAddress != Nil)
-				{
-					// 中断していた場所から復帰させます
-					mPc = interrupt->mAddress;
+			auto interrupt = &iterator->second;
+			if (interrupt->mAddress == Nil)
+				continue;
+
+			// 中断していた場所から復帰させます
+			mPc = interrupt->mAddress;
 #if 0
-					// コールバック関数を呼びます
-					if (mRollbackCallback)
-						mRollbackCallback(mRollbackCallbackParameter);
+			// コールバック関数を呼びます
+			if (mRollbackCallback)
+				mRollbackCallback(mRollbackCallbackParameter);
 #endif			
-					// 優先度(高いほど優先)変更
-					mInterruptPriority = currentLevel;
+			// 優先度(高いほど優先)変更
+			mInterruptPriority = iterator->first;
 
-					// 次回のTickでプログラムカウンターを加算しない
-					interrupt->mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
+			// 次回のTickでプログラムカウンターを加算しない
+			interrupt->mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
 
-					// SyncCall中ならばTickを抜ける
-					if (inSyncCall)
-						yield();
+			// SyncCall中ならばTickを抜ける
+			if (inSyncCall)
+				yield();
 
-					MANA_TRACE(
-						{
-							"mana:rollback: ", GetName(),
-							" priority ", std::to_string(lastInterruptPriority), " ", lastActionName,
-							" =>",
-							" priority ", std::to_string(mInterruptPriority), " ", interrupt->mActionName,
-							" succeed\n"
-						}
-					);
-
-					/*
-					 MANA_ASSERT(
-					 mPc >= GetParent().instruction_pool &&
-					 mPc < &GetParent().instruction_pool[GetParent().file_header->size_of_instruction_pool]);
-					 */
-
-					return;
+			MANA_TRACE(
+				{
+					"mana:rollback: ", GetName(),
+					" priority ", std::to_string(lastInterruptPriority), " ", lastActionName,
+					" =>",
+					" priority ", std::to_string(mInterruptPriority), " ", interrupt->mActionName,
+					" succeed\n"
 				}
-			}
-			--currentLevel;
+			);
+
+			/*
+			 MANA_ASSERT(
+			 mPc >= GetParent().instruction_pool &&
+			 mPc < &GetParent().instruction_pool[GetParent().file_header->size_of_instruction_pool]);
+			 */
+
+			return;
 		}
 
 		// 実行可能なアクションが無いので、アクターは停止する
@@ -490,7 +530,7 @@ namespace mana
 	inline void Actor::Restart()
 	{
 		mPc = Nil;
-		mInterruptPriority = 0;
+		mInterruptPriority = LowestInterruptPriority;
 		mFlag.reset(static_cast<uint8_t>(Flag::Halt));
 		mFlag.reset(static_cast<uint8_t>(Flag::Running));
 		mFlag.reset(static_cast<uint8_t>(Flag::Refused));
@@ -629,8 +669,10 @@ namespace mana
 
 	inline std::string Actor::GetActionName() const
 	{
-		const Interrupt& interrupt = const_cast<Actor*>(this)->mInterrupts[mInterruptPriority];
-		return interrupt.mActionName;
+		const auto interruptIterator = const_cast<Actor*>(this)->mInterrupts.find(mInterruptPriority);
+		if (interruptIterator == const_cast<Actor*>(this)->mInterrupts.end())
+			return std::string();
+		return interruptIterator->second.mActionName;
 	}
 
 	inline std::string_view Actor::GetFunctionName() const
@@ -669,7 +711,10 @@ namespace mana
 
 	inline void Actor::Repeat(const bool initialComplete)
 	{
-		auto& interrupt = mInterrupts[mInterruptPriority];
+		const auto interruptIterator = mInterrupts.find(mInterruptPriority);
+		if (interruptIterator == mInterrupts.end())
+			return;
+		auto& interrupt = interruptIterator->second;
 		if (initialComplete)
 			interrupt.mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Initialized));
 		else
@@ -690,7 +735,7 @@ namespace mana
 		yield();
 
 		mFlag.set(static_cast<uint8_t>(Flag::Halt));
-		mInterruptPriority = 0;
+		mInterruptPriority = LowestInterruptPriority;
 		mInterrupts.clear();
 	}
 
@@ -701,8 +746,10 @@ namespace mana
 
 	inline void Actor::yield()
 	{
-		auto& interrupt = mInterrupts[mInterruptPriority];
-		interrupt.mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Suspend));
+		const auto interruptIterator = mInterrupts.find(mInterruptPriority);
+		if (interruptIterator == mInterrupts.end())
+			return;
+		interruptIterator->second.mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Suspend));
 	}
 	
 	inline void Actor::Accept()
@@ -730,20 +777,24 @@ namespace mana
 
 	inline void Actor::SetSynchronized(const bool synchronized)
 	{
-		auto& interrupt = mInterrupts[mInterruptPriority];
+		const auto interruptIterator = mInterrupts.find(mInterruptPriority);
+		if (interruptIterator == mInterrupts.end())
+			return;
 		if (synchronized)
-			interrupt.mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Synchronized));
+			interruptIterator->second.mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Synchronized));
 		else
-			interrupt.mFlag.reset(static_cast<uint8_t>(Interrupt::Flag::Synchronized));
+			interruptIterator->second.mFlag.reset(static_cast<uint8_t>(Interrupt::Flag::Synchronized));
 	}
 
 	inline void Actor::SetSynchronizedWithPriority(const int32_t priority, const bool synchronized)
 	{
-		auto& interrupt = mInterrupts[priority];
+		const auto interruptIterator = mInterrupts.find(priority);
+		if (interruptIterator == mInterrupts.end())
+			return;
 		if (synchronized)
-			interrupt.mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Synchronized));
+			interruptIterator->second.mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Synchronized));
 		else
-			interrupt.mFlag.reset(static_cast<uint8_t>(Interrupt::Flag::Synchronized));
+			interruptIterator->second.mFlag.reset(static_cast<uint8_t>(Interrupt::Flag::Synchronized));
 	}
 
 	inline EventNameType Actor::AddRequestEvent(const std::function<void(int32_t)>& function)
@@ -870,7 +921,9 @@ namespace mana
 
 	inline void Actor::CommandPushSender(const std::shared_ptr<VM>&, Actor& self)
 	{
-		self.mStack.Push(self.mInterrupts[self.mInterruptPriority].mSender.get());
+		const auto interruptIterator = self.mInterrupts.find(self.mInterruptPriority);
+		if (interruptIterator != self.mInterrupts.end())
+			self.mStack.Push(interruptIterator->second.mSender.get());
 	}
 
 	inline void Actor::CommandAllocate(const std::shared_ptr<VM>& vm, Actor& self)
@@ -993,7 +1046,9 @@ namespace mana
 		if (!self.mStack.Pop<int_t>())
 		{
 			self.mPc = vm->GetUint32FromMemory(self.mPc + 1);
-			self.mInterrupts[self.mInterruptPriority].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
+			const auto interruptIterator = self.mInterrupts.find(self.mInterruptPriority);
+			if (interruptIterator != self.mInterrupts.end())
+				interruptIterator->second.mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
 
 			MANA_ASSERT(self.mPc < vm->mFileHeader->mSizeOfInstructionPool);
 		}
@@ -1004,7 +1059,9 @@ namespace mana
 		if (self.mStack.Pop<int_t>())
 		{
 			self.mPc = vm->GetUint32FromMemory(self.mPc + 1);
-			self.mInterrupts[self.mInterruptPriority].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
+			const auto interruptIterator = self.mInterrupts.find(self.mInterruptPriority);
+			if (interruptIterator != self.mInterrupts.end())
+				interruptIterator->second.mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
 
 			MANA_ASSERT(self.mPc < vm->mFileHeader->mSizeOfInstructionPool);
 		}
@@ -1013,15 +1070,21 @@ namespace mana
 	inline void Actor::CommandBranchAway(const std::shared_ptr<VM>& vm, Actor& self)
 	{
 		self.mPc = vm->GetUint32FromMemory(self.mPc + 1);
-		self.mInterrupts[self.mInterruptPriority].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
+		const auto interruptIterator = self.mInterrupts.find(self.mInterruptPriority);
+		if (interruptIterator != self.mInterrupts.end())
+			interruptIterator->second.mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
 
 		MANA_ASSERT(self.mPc < vm->mFileHeader->mSizeOfInstructionPool);
 	}
 
 	inline void Actor::CommandBranchSubRoutine(const std::shared_ptr<VM>& vm, Actor& self)
 	{
-		self.mInterrupts[self.mInterruptPriority].mReturnAddress = self.mPc + 4 + 1; // saved return program address
-		self.mInterrupts[self.mInterruptPriority].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
+		const auto interruptIterator = self.mInterrupts.find(self.mInterruptPriority);
+		if (interruptIterator != self.mInterrupts.end())
+		{
+			interruptIterator->second.mReturnAddress = self.mPc + 4 + 1; // saved return program address
+			interruptIterator->second.mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
+		}
 		self.mPc = vm->GetUint32FromMemory(self.mPc + 1);
 
 		MANA_ASSERT(self.mPc < vm->mFileHeader->mSizeOfInstructionPool);
@@ -1040,19 +1103,27 @@ namespace mana
 	inline void Actor::CommandLoadReturnAddress(const std::shared_ptr<VM>&, Actor& self)
 	{
 		uint32_t* pointer = self.mFrame.GetAddressFromBottom<uint32_t>(sizeof(int32_t));
-		self.mInterrupts[self.mInterruptPriority].mReturnAddress = *pointer;
+		const auto interruptIterator = self.mInterrupts.find(self.mInterruptPriority);
+		if (interruptIterator != self.mInterrupts.end())
+			interruptIterator->second.mReturnAddress = *pointer;
 	}
 
 	inline void Actor::CommandStoreReturnAddress(const std::shared_ptr<VM>&, Actor& self)
 	{
 		uint32_t* pointer = self.mFrame.GetAddressFromBottom<uint32_t>(sizeof(int32_t));
-		*pointer = self.mInterrupts[self.mInterruptPriority].mReturnAddress;
+		const auto interruptIterator = self.mInterrupts.find(self.mInterruptPriority);
+		if (interruptIterator != self.mInterrupts.end())
+			*pointer = interruptIterator->second.mReturnAddress;
 	}
 
 	inline void Actor::CommandReturnFromFunction(const std::shared_ptr<VM>&, Actor& self)
 	{
-		self.mPc = self.mInterrupts[self.mInterruptPriority].mReturnAddress;
-		self.mInterrupts[self.mInterruptPriority].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
+		const auto interruptIterator = self.mInterrupts.find(self.mInterruptPriority);
+		if (interruptIterator != self.mInterrupts.end())
+		{
+			self.mPc = interruptIterator->second.mReturnAddress;
+			interruptIterator->second.mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
+		}
 	}
 
 	inline void Actor::CommandReturnFromAction(const std::shared_ptr<VM>&, Actor& self)
@@ -1474,9 +1545,15 @@ namespace mana
 				if (self.mInterruptPriority > lastInterruptPriority)
 				{
 					// TODO:即値を使わないで下さい
-					self.mInterrupts[lastInterruptPriority].mAddress = lastPc + 4 + 2 + 2 + 1 + (nNumberOfArguments * sizeof(int16_t));
-					self.mInterrupts[self.mInterruptPriority].mStackPointer = self.mStack.GetSize();
-					self.mInterrupts[self.mInterruptPriority].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
+					const auto lastInterruptIterator = self.mInterrupts.find(lastInterruptPriority);
+					if (lastInterruptIterator != self.mInterrupts.end())
+						lastInterruptIterator->second.mAddress = lastPc + 4 + 2 + 2 + 1 + (nNumberOfArguments * sizeof(int16_t));
+					const auto interruptIterator = self.mInterrupts.find(self.mInterruptPriority);
+					if (interruptIterator != self.mInterrupts.end())
+					{
+						interruptIterator->second.mStackPointer = self.mStack.GetSize();
+						interruptIterator->second.mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
+					}
 				}
 			}
 		}
@@ -1490,7 +1567,9 @@ namespace mana
 
 		if (targetActor)
 		{
-			self.mInterrupts[self.mInterruptPriority].mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
+			const auto interruptIterator = self.mInterrupts.find(self.mInterruptPriority);
+			if (interruptIterator != self.mInterrupts.end())
+				interruptIterator->second.mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
 			self.mPc += sizeof(int32_t) + 1;
 			targetActor->Request(priority, action, self.shared_from_this());
 		}
