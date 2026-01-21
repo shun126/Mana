@@ -25,7 +25,7 @@ else:
 def success(argument):
 	print(MANA + ' ' + argument, end='')
 	command = [MANA, argument]
-	cp = subprocess.run(command, capture_output=True, text=True)
+	cp = subprocess.run(command, capture_output=True, text=True, errors="ignore")
 	if cp.returncode == 0:
 		print(" ... Success")
 	else:
@@ -41,7 +41,7 @@ def success(argument):
 def fail(argument, error_message):
 	print(MANA + ' ' + argument, end='')
 	command = [MANA, argument]
-	cp = subprocess.run(command, capture_output=True, text=True)
+	cp = subprocess.run(command, capture_output=True, text=True, errors="ignore")
 	#if cp.returncode != 0 and (error_message in cp.stdout or error_message in cp.stderr):
 	if (error_message in cp.stdout or error_message in cp.stderr):
 		print(" ... OK")
