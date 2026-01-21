@@ -11,8 +11,10 @@ mana (library)
 #include "Stack.h"
 
 #include <bitset>
+#include <map>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 namespace mana
 {
@@ -110,6 +112,7 @@ namespace mana
 		//void Initialize(const ActionInfoHeader* actionInfo);
 
 	private:
+		static constexpr int32_t LowestInterruptPriority = 0;
 		static constexpr uint32_t Nil = static_cast<uint32_t>(~0);
 
 		//! 割り込みテーブル
@@ -166,7 +169,7 @@ namespace mana
 		std::unordered_map <std::string_view, uint32_t> mActions;
 		Buffer mFrame;
 		Stack mStack;
-		std::unordered_map<int32_t, Interrupt> mInterrupts;
+		std::map<int32_t, Interrupt> mInterrupts;
 		ReturnValue mReturnValue;
 		Event<int32_t> mRequestEvent;
 		Event<int32_t> mRollbackEvent;
