@@ -72,9 +72,9 @@ namespace mana
 	protected:
 		[[nodiscard]] std::shared_ptr<Symbol> Lookup(const std::string_view name) const;
 
-		const std::shared_ptr<SymbolFactory>& GetSymbolFactory();
-		const std::shared_ptr<StringPool>& GetStringPool();
-		const std::shared_ptr<TypeDescriptorFactory>& GetTypeDescriptorFactory();
+		const std::shared_ptr<SymbolFactory>& GetSymbolFactory() const;
+		const std::shared_ptr<StringPool>& GetStringPool() const;
+		const std::shared_ptr<TypeDescriptorFactory>& GetTypeDescriptorFactory() const;
 
 	private:
 		std::shared_ptr<SymbolFactory> mSymbolFactory;

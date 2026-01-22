@@ -179,17 +179,17 @@ namespace mana
 		return mSymbolFactory->Lookup(name);
 	}
 
-	const std::shared_ptr<SymbolFactory>& SemanticAnalyzer::GetSymbolFactory()
+	const std::shared_ptr<SymbolFactory>& SemanticAnalyzer::GetSymbolFactory() const
 	{
 		return mSymbolFactory;
 	}
 
-	const std::shared_ptr<StringPool>& SemanticAnalyzer::GetStringPool()
+	const std::shared_ptr<StringPool>& SemanticAnalyzer::GetStringPool() const
 	{
 		return mStringPool;
 	}
 
-	const std::shared_ptr<TypeDescriptorFactory>& SemanticAnalyzer::GetTypeDescriptorFactory()
+	const std::shared_ptr<TypeDescriptorFactory>& SemanticAnalyzer::GetTypeDescriptorFactory() const
 	{
 		return mTypeDescriptorFactory;
 	}
