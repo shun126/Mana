@@ -13,12 +13,15 @@ mana (compiler)
 
 namespace mana
 {
+	class StringPool;
+
 	class SemanticAnalyzer : Noncopyable
 	{
 	public:
 		explicit SemanticAnalyzer(
 			const std::shared_ptr<SymbolFactory>& symbolFactory,
-			const std::shared_ptr<TypeDescriptorFactory>& typeDescriptorFactory);
+			const std::shared_ptr<TypeDescriptorFactory>& typeDescriptorFactory,
+			const std::shared_ptr<StringPool>& stringPool);
 
 		virtual ~SemanticAnalyzer() = default;
 
@@ -70,10 +73,12 @@ namespace mana
 		[[nodiscard]] std::shared_ptr<Symbol> Lookup(const std::string_view name) const;
 
 		const std::shared_ptr<SymbolFactory>& GetSymbolFactory();
+		const std::shared_ptr<StringPool>& GetStringPool();
 		const std::shared_ptr<TypeDescriptorFactory>& GetTypeDescriptorFactory();
 
 	private:
 		std::shared_ptr<SymbolFactory> mSymbolFactory;
+		std::shared_ptr<StringPool> mStringPool;
 		std::shared_ptr<TypeDescriptorFactory> mTypeDescriptorFactory;
 	};
 }

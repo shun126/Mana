@@ -48,9 +48,9 @@ actor TestActor1
 	action main
 	{
 		print("TestActor1::main\n");
-		awaitStart(7, TestActor2::talk);
-		request(7, TestActor1::talk);
-		awaitCompletion(6, TestActor2::talk);
+		awaitStart(7, TestActor2->talk);
+		request(7, TestActor1->talk);
+		awaitCompletion(6, TestActor2->talk);
 	}
 
 	action talk

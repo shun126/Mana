@@ -308,31 +308,40 @@ continue文は、この文を含む最も内側のdo,forまたはwhile文で残�
 ### goto
 
 ```
-action Luyue::main
+actor Luyue
 {
-    if(flag == TRUE)
-        goto ABORT;
-    setAnime(KICK);
-    setMessage("I hate you!");
+    action main
+    {
+        if(flag == TRUE)
+            goto ABORT;
+        setAnime(KICK);
+        setMessage("I hate you!");
 ABORT:
+    }
 }
 ```
 ### request
 自分を含めたアクターにリクエストします。リクエスト先が同レベルのリクエストを実行または予約されていた場合はそのリクエストは無効になります。
 
-request(Priority, ActorName, ActionName);
+request(Priority, ActorRef->ActionName);
 Priority …　プライオリティ
-ActorName　…　アクター名
+ActorRef　…　アクター名
 ActionName … アクション名
 
 ```
-action Mom::main
+actor Mom
 {
-    request(8, Kid, cleaning);
+    action main
+    {
+        request(8, Kid->cleaning);
+    }
 }
-action Kid::cleaning
+actor Kid
 {
-    setAnimation(CLEANING);
+    action cleaning
+    {
+        setAnimation(CLEANING);
+    }
 }
 ```
 ###return
@@ -347,33 +356,39 @@ int function_value(int count, string name)
 {
     return 2;
 }
-action Dad::talk
+actor Dad
 {
-    if(sender != Mom)
-        return;
-    setAnimation(SLEEPING);
+    action talk
+    {
+        if(sender != Mom)
+            return;
+        setAnimation(SLEEPING);
+    }
 }
 ```
 ### rollback
 指定の優先順位未満のアクションまで戻ります。
 
 ```
-action Kid::main
+actor Kid
 {
-    request(5, self, sleep);
-}
-action Kid::sleep
-{
-}
-action Kid::work
-{
-}
-action Kid::talk
-{
-    if(sender == Boss)
+    action main
     {
-        rollback 4;             // cancel sleeping action
-        request(5, self, work); // request working action
+        request(5, Kid->sleep);
+    }
+    action sleep
+    {
+    }
+    action work
+    {
+    }
+    action talk
+    {
+        if(sender == Boss)
+        {
+            rollback 4;             // cancel sleeping action
+            request(5, Kid->work); // request working action
+        }
     }
 }
 ```
@@ -381,9 +396,12 @@ action Kid::talk
 アクターの優先度が指定レベル以下になるまで待ちます。
 
 ```
-action Boss::order
+actor Boss
 {
-    request(1, Employee, doWork);
-    join(1, Employee);  // 仕事が終了するまで待つ
+    action order
+    {
+        request(1, Employee->doWork);
+        join(1, Employee);  // 仕事が終了するまで待つ
+    }
 }
 ```
