@@ -162,19 +162,22 @@ namespace mana
 			if (IsActorSymbol(rawName))
 				addCandidate(rawName);
 		}
-		else
-		{
-			const std::string_view currentNamespace = GetCurrentNamespace();
-			if (!currentNamespace.empty())
+			else
 			{
-				const std::string_view qualified = JoinQualifiedName(currentNamespace, rawName);
-				if (IsActorSymbol(qualified))
-					addCandidate(qualified);
-			}
+				const std::string_view currentNamespace = GetCurrentNamespace();
+				if (!currentNamespace.empty())
+				{
+					const std::string_view qualified = JoinQualifiedName(currentNamespace, rawName);
+					if (IsActorSymbol(qualified))
+						addCandidate(qualified);
+				}
 
-			const std::string_view alias = ResolveAlias(rawName);
-			if (!alias.empty() && IsActorSymbol(alias))
-				addCandidate(alias);
+				if (IsActorSymbol(rawName))
+					addCandidate(rawName);
+
+				const std::string_view alias = ResolveAlias(rawName);
+				if (!alias.empty() && IsActorSymbol(alias))
+					addCandidate(alias);
 
 			for (auto scopeIt = mUsingScopes.rbegin(); scopeIt != mUsingScopes.rend(); ++scopeIt)
 			{
