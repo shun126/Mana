@@ -103,6 +103,8 @@ namespace mana
 			Static,
 			NativeFunction,
 			DeclareFunction,
+			Namespace,
+			Using,
 
 			DefineConstant,
 			UndefineConstant,

@@ -33,6 +33,7 @@ SOURCES	= \
 	LocalAddressResolver.cpp \
 	LocalSemanticAnalyzer.cpp \
 	Main.cpp \
+	NamespaceRegistry.cpp \
 	ParsingDriver.cpp \
 	Path.cpp \
 	SemanticAnalyzer.cpp \

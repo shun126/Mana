@@ -7,15 +7,237 @@ mana (compiler)
 
 #include "LocalSemanticAnalyzer.h"
 #include "ErrorHandler.h"
+#include "NamespaceRegistry.h"
+#include "StringPool.h"
 #include "SyntaxNode.h"
+#include <algorithm>
+#include <string>
 
 namespace mana
 {
 	LocalSemanticAnalyzer::LocalSemanticAnalyzer(
 		const std::shared_ptr<SymbolFactory>& symbolFactory,
-		const std::shared_ptr<TypeDescriptorFactory>& typeDescriptorFactory)
-		: SemanticAnalyzer(symbolFactory, typeDescriptorFactory)
+		const std::shared_ptr<TypeDescriptorFactory>& typeDescriptorFactory,
+		const std::shared_ptr<StringPool>& stringPool,
+		const std::shared_ptr<NamespaceRegistry>& namespaceRegistry)
+		: SemanticAnalyzer(symbolFactory, typeDescriptorFactory, stringPool)
+		, mNamespaceRegistry(namespaceRegistry)
 	{
+		mUsingScopes.emplace_back();
+	}
+
+	std::string_view LocalSemanticAnalyzer::JoinQualifiedName(const std::string_view& left, const std::string_view& right) const
+	{
+		if (left.empty())
+			return right;
+
+		std::string combined;
+		combined.reserve(left.size() + 2 + right.size());
+		combined.append(left);
+		combined.append("::");
+		combined.append(right);
+		return GetStringPool()->Set(combined);
+	}
+
+	std::string_view LocalSemanticAnalyzer::GetCurrentNamespace() const
+	{
+		if (mNamespaceStack.empty())
+			return {};
+		return mNamespaceStack.back();
+	}
+
+	bool LocalSemanticAnalyzer::IsQualifiedName(const std::string_view& name) const
+	{
+		return name.find("::") != std::string_view::npos;
+	}
+
+	std::string_view LocalSemanticAnalyzer::GetLastSegment(const std::string_view& name) const
+	{
+		const size_t delimiter = name.rfind("::");
+		if (delimiter == std::string_view::npos)
+			return name;
+		return name.substr(delimiter + 2);
+	}
+
+	bool LocalSemanticAnalyzer::IsActorSymbol(const std::string_view& name) const
+	{
+		const std::shared_ptr<Symbol>& symbol = GetSymbolFactory()->Lookup(name);
+		if (!symbol || symbol->GetClassTypeId() != Symbol::ClassTypeId::Type)
+			return false;
+
+		const std::shared_ptr<TypeDescriptor>& type = symbol->GetTypeDescriptor();
+		return type && (type->GetId() == TypeDescriptor::Id::Actor || type->GetId() == TypeDescriptor::Id::Module);
+	}
+
+	std::string_view LocalSemanticAnalyzer::ResolveAlias(const std::string_view& name) const
+	{
+		for (auto scopeIt = mUsingScopes.rbegin(); scopeIt != mUsingScopes.rend(); ++scopeIt)
+		{
+			const auto aliasIt = scopeIt->symbolAliases.find(name);
+			if (aliasIt != scopeIt->symbolAliases.end())
+				return aliasIt->second;
+		}
+		return {};
+	}
+
+	void LocalSemanticAnalyzer::EnterNamespace(const std::string_view& name)
+	{
+		const std::string_view fullName = JoinQualifiedName(GetCurrentNamespace(), name);
+		mNamespaceStack.push_back(fullName);
+		mUsingScopes.emplace_back();
+	}
+
+	void LocalSemanticAnalyzer::ExitNamespace()
+	{
+		if (!mNamespaceStack.empty())
+			mNamespaceStack.pop_back();
+		if (!mUsingScopes.empty())
+			mUsingScopes.pop_back();
+	}
+
+	void LocalSemanticAnalyzer::ResolveUsingDeclaration(const std::shared_ptr<SyntaxNode>& node)
+	{
+		const std::string_view name = node->GetString();
+		const std::string_view candidateName = IsQualifiedName(name)
+			? name
+			: JoinQualifiedName(GetCurrentNamespace(), name);
+
+		const bool isNamespace = mNamespaceRegistry && mNamespaceRegistry->IsNamespace(candidateName);
+		const bool isSymbol = IsActorSymbol(candidateName);
+
+		if (isNamespace && isSymbol)
+		{
+			CompileError({ "ambiguous using '", name, "'" });
+			return;
+		}
+
+		if (isNamespace)
+		{
+			if (!mUsingScopes.empty())
+				mUsingScopes.back().namespacePaths.push_back(candidateName);
+			return;
+		}
+
+		if (isSymbol)
+		{
+			const std::string_view alias = GetLastSegment(name);
+			if (mUsingScopes.empty())
+				return;
+
+			auto& aliases = mUsingScopes.back().symbolAliases;
+			if (aliases.find(alias) != aliases.end())
+			{
+				CompileError({ "duplicate using alias '", alias, "'" });
+				return;
+			}
+			aliases.emplace(alias, candidateName);
+			return;
+		}
+
+		CompileError({ "unresolved using '", name, "'" });
+	}
+
+	void LocalSemanticAnalyzer::ResolveActionReference(const std::shared_ptr<SyntaxNode>& node, const std::string_view& actionName)
+	{
+		const std::shared_ptr<SyntaxNode>& actorNode = node->GetRightNode();
+		if (!actorNode || actorNode->IsNot(SyntaxNode::Id::Identifier))
+		{
+			CompileError("illegal action reference");
+			return;
+		}
+
+		const std::string_view rawName = actorNode->GetString();
+		std::vector<std::string_view> candidates;
+
+		auto addCandidate = [&candidates](const std::string_view candidate)
+		{
+			if (candidate.empty())
+				return;
+			if (std::find(candidates.begin(), candidates.end(), candidate) == candidates.end())
+				candidates.push_back(candidate);
+		};
+
+		if (IsQualifiedName(rawName))
+		{
+			if (IsActorSymbol(rawName))
+				addCandidate(rawName);
+		}
+		else
+		{
+			const std::string_view currentNamespace = GetCurrentNamespace();
+			if (!currentNamespace.empty())
+			{
+				const std::string_view qualified = JoinQualifiedName(currentNamespace, rawName);
+				if (IsActorSymbol(qualified))
+					addCandidate(qualified);
+			}
+
+			const std::string_view alias = ResolveAlias(rawName);
+			if (!alias.empty() && IsActorSymbol(alias))
+				addCandidate(alias);
+
+			for (auto scopeIt = mUsingScopes.rbegin(); scopeIt != mUsingScopes.rend(); ++scopeIt)
+			{
+				for (const std::string_view& nsPath : scopeIt->namespacePaths)
+				{
+					const std::string_view qualified = JoinQualifiedName(nsPath, rawName);
+					if (IsActorSymbol(qualified))
+						addCandidate(qualified);
+				}
+			}
+		}
+
+		if (candidates.empty())
+		{
+			CompileError({ "unresolved actor reference '", rawName, "'" });
+			return;
+		}
+
+		if (candidates.size() > 1)
+		{
+			std::string message = "ambiguous actor reference '" + std::string(rawName) + "': ";
+			for (size_t index = 0; index < candidates.size(); ++index)
+			{
+				if (index > 0)
+					message += ", ";
+				message += std::string(candidates[index]);
+			}
+			CompileError(message);
+			return;
+		}
+
+		const std::string_view resolvedName = candidates.front();
+		actorNode->Set(resolvedName);
+		PostResolverResolve(actorNode);
+
+		const std::shared_ptr<Symbol>& actorSymbol = actorNode->GetSymbol();
+		if (!actorSymbol || actorSymbol->GetClassTypeId() != Symbol::ClassTypeId::Type)
+		{
+			CompileError({ "invalid actor reference '", resolvedName, "'" });
+			return;
+		}
+
+		if (!HasAction(actorSymbol, actionName))
+		{
+			CompileError({ "action not found '", actionName, "' on actor '", resolvedName, "'" });
+		}
+	}
+
+	bool LocalSemanticAnalyzer::HasAction(const std::shared_ptr<Symbol>& actorSymbol, const std::string_view& actionName)
+	{
+		if (!actorSymbol)
+			return false;
+
+		const std::shared_ptr<TypeDescriptor>& type = actorSymbol->GetTypeDescriptor();
+		if (!type)
+			return false;
+
+		for (std::shared_ptr<Symbol> member = type->GetSymbolEntry(); member; member = member->GetNext())
+		{
+			if (member->GetClassTypeId() == Symbol::ClassTypeId::MemberFunction && member->GetName() == actionName)
+				return true;
+		}
+		return false;
 	}
 
 	bool LocalSemanticAnalyzer::GetNodeType(TypeDescriptor::Id* t1, TypeDescriptor::Id* t2, const std::shared_ptr<const SyntaxNode>& node)
@@ -348,14 +570,14 @@ DO_RECURSIVE:
 
 		case SyntaxNode::Id::Request:
 			PostResolverResolve(node->GetLeftNode());
-			PostResolverResolve(node->GetRightNode());
+			ResolveActionReference(node, node->GetString());
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			break;
 
 		case SyntaxNode::Id::AwaitStart:
 		case SyntaxNode::Id::AwaitCompletion:
 			PostResolverResolve(node->GetLeftNode());
-			PostResolverResolve(node->GetRightNode());
+			ResolveActionReference(node, node->GetString());
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			if (const auto& currentBlockTypeDescriptor = GetSymbolFactory()->GetCurrentBlockTypeDescriptor())
 			{
@@ -367,6 +589,21 @@ DO_RECURSIVE:
 			break;
 
 		case SyntaxNode::Id::Yield:
+			MANA_ASSERT(node->GetLeftNode() == nullptr);
+			MANA_ASSERT(node->GetRightNode() == nullptr);
+			MANA_ASSERT(node->GetBodyNode() == nullptr);
+			break;
+
+		case SyntaxNode::Id::Namespace:
+			EnterNamespace(node->GetString());
+			PostResolverResolve(node->GetLeftNode());
+			ExitNamespace();
+			MANA_ASSERT(node->GetRightNode() == nullptr);
+			MANA_ASSERT(node->GetBodyNode() == nullptr);
+			break;
+
+		case SyntaxNode::Id::Using:
+			ResolveUsingDeclaration(node);
 			MANA_ASSERT(node->GetLeftNode() == nullptr);
 			MANA_ASSERT(node->GetRightNode() == nullptr);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
