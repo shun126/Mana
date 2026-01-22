@@ -1,0 +1,17 @@
+namespace A
+{
+	actor X
+	{
+		action f
+		{
+		}
+	}
+}
+
+actor Root
+{
+	action main
+	{
+		request(1, A::X->f);
+	}
+}

@@ -17,6 +17,7 @@ namespace mana
 	class DataBuffer;
 	class GlobalSemanticAnalyzer;
 	class LocalSemanticAnalyzer;
+	class NamespaceRegistry;
 	class SymbolFactory;
 	class StringPool;
 	class TypeDescriptorFactory;
@@ -40,6 +41,7 @@ namespace mana
 		const std::shared_ptr<CodeGenerator>& GetCodeGenerator();
 		const std::shared_ptr<DataBuffer>& GetDataBuffer();
 		const std::shared_ptr<GlobalSemanticAnalyzer>& GetGlobalSemanticAnalyzer();
+		const std::shared_ptr<NamespaceRegistry>& GetNamespaceRegistry();
 		const std::shared_ptr<SyntaxNode>& GetRootSyntaxNode() const;
 		const std::shared_ptr<SymbolFactory>& GetSymbolFactory();
 		const std::shared_ptr<StringPool>& GetStringPool();
@@ -53,6 +55,9 @@ namespace mana
 		static std::shared_ptr<SyntaxNode> CreateNativeFunction(const std::shared_ptr<SyntaxNode>& returnExpression, const std::string_view& identifier, const std::shared_ptr<SyntaxNode>& argument);
 		static std::shared_ptr<SyntaxNode> CreateDeclareMemory(const int_t size, const std::shared_ptr<SyntaxNode>& allocateDeclarations);
 		static std::shared_ptr<SyntaxNode> CreateDeclareStaticMemory(const int_t size, const std::shared_ptr<SyntaxNode>& allocateDeclarations);
+		std::shared_ptr<SyntaxNode> CreateNamespace(const std::string_view& name, const std::shared_ptr<SyntaxNode>& declarations);
+		static std::shared_ptr<SyntaxNode> CreateUsing(const std::string_view& name);
+		std::string_view CreateQualifiedName(const std::string_view& left, const std::string_view& right);
 
 		// declaration
 		std::shared_ptr<SyntaxNode> CreateConstantNode(const std::string_view& identifier, const int_t value);
@@ -213,6 +218,7 @@ namespace mana
 		std::shared_ptr<SymbolFactory> mSymbolFactory;
 		std::shared_ptr<StringPool> mStringPool;
 		std::shared_ptr<TypeDescriptorFactory> mTypeDescriptorFactory;
+		std::shared_ptr<NamespaceRegistry> mNamespaceRegistry;
 
 		friend class Parser;
 	};

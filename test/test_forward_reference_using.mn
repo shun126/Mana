@@ -1,0 +1,19 @@
+using A;
+
+actor Root
+{
+	action main
+	{
+		request(1, X->f);
+	}
+}
+
+namespace A
+{
+	actor X
+	{
+		action f
+		{
+		}
+	}
+}

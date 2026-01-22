@@ -29,7 +29,7 @@ actor Mother
     action main
     {
         print("Hi");
-        request(1, Child::talk);
+        request(1, Child->talk);
     }
 }
 
@@ -42,6 +42,32 @@ actor Child
     action talk
     {
         print("Hi");
+    }
+}
+````
+
+## Namespaces and action references
+
+Use `namespace` blocks to group actors, and `using` to import namespace paths or actor symbols. Action references use `->`, while `::` is reserved for namespace qualification.
+
+````mana
+namespace Game::AI
+{
+    actor Enemy
+    {
+        action think
+        {
+        }
+    }
+}
+
+using Game::AI;
+
+actor Controller
+{
+    action main
+    {
+        request(1, Enemy->think);
     }
 }
 ````

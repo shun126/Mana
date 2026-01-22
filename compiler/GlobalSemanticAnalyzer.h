@@ -7,9 +7,11 @@ mana (compiler)
 
 #pragma once
 #include "SemanticAnalyzer.h"
+#include <vector>
 
 namespace mana
 {
+	class NamespaceRegistry;
 	class SyntaxNode;
 
 	/*
@@ -20,7 +22,9 @@ namespace mana
 	public:
 		GlobalSemanticAnalyzer(
 			const std::shared_ptr<SymbolFactory>& symbolFactory,
-			const std::shared_ptr<TypeDescriptorFactory>& typeDescriptorFactory);
+			const std::shared_ptr<TypeDescriptorFactory>& typeDescriptorFactory,
+			const std::shared_ptr<StringPool>& stringPool,
+			const std::shared_ptr<NamespaceRegistry>& namespaceRegistry);
 		~GlobalSemanticAnalyzer() override = default;
 
 		/*!
@@ -31,8 +35,15 @@ namespace mana
 
 	private:
 		static size_t CalcArgumentCount(const size_t count, const std::shared_ptr<const SyntaxNode>& node);
+		std::string_view QualifyName(const std::string_view& name);
+		std::string_view QualifyNameIfUnqualified(const std::string_view& name);
+		void EnterNamespace(const std::string_view& name);
+		void ExitNamespace();
+		void RegisterNamespaceHierarchy(const std::string_view& fullName);
 
 	private:
 		bool mStaticBlockOpened = false;
+		std::vector<std::string_view> mNamespaceStack;
+		std::shared_ptr<NamespaceRegistry> mNamespaceRegistry;
 	};	
 }

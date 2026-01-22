@@ -611,6 +611,18 @@ DO_RECURSIVE:
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			break;
 
+		case SyntaxNode::Id::Namespace:
+			GenerateCode(node->GetLeftNode(), enableLoad);
+			MANA_ASSERT(node->GetRightNode() == nullptr);
+			MANA_ASSERT(node->GetBodyNode() == nullptr);
+			break;
+
+		case SyntaxNode::Id::Using:
+			MANA_ASSERT(node->GetLeftNode() == nullptr);
+			MANA_ASSERT(node->GetRightNode() == nullptr);
+			MANA_ASSERT(node->GetBodyNode() == nullptr);
+			break;
+
 			///////////////////////////////////////////////////////////////////////
 			// 構造に関するノード									
 		case SyntaxNode::Id::Actor:

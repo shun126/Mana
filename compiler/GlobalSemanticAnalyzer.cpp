@@ -7,14 +7,20 @@ mana (compiler)
 
 #include "GlobalSemanticAnalyzer.h"
 #include "ErrorHandler.h"
+#include "NamespaceRegistry.h"
+#include "StringPool.h"
 #include "SyntaxNode.h"
+#include <string>
 
 namespace mana
 {
 	GlobalSemanticAnalyzer::GlobalSemanticAnalyzer(
 		const std::shared_ptr<SymbolFactory>& symbolFactory,
-		const std::shared_ptr<TypeDescriptorFactory>& typeDescriptorFactory)
-		: SemanticAnalyzer(symbolFactory, typeDescriptorFactory)
+		const std::shared_ptr<TypeDescriptorFactory>& typeDescriptorFactory,
+		const std::shared_ptr<StringPool>& stringPool,
+		const std::shared_ptr<NamespaceRegistry>& namespaceRegistry)
+		: SemanticAnalyzer(symbolFactory, typeDescriptorFactory, stringPool)
+		, mNamespaceRegistry(namespaceRegistry)
 	{
 		{
 			// vec2
@@ -197,6 +203,68 @@ namespace mana
 		return CalcArgumentCount(count, node->GetRightNode()) + 1;
 	}
 
+	std::string_view GlobalSemanticAnalyzer::QualifyName(const std::string_view& name)
+	{
+		if (mNamespaceStack.empty())
+			return name;
+
+		const std::string_view& currentNamespace = mNamespaceStack.back();
+		std::string combined;
+		combined.reserve(currentNamespace.size() + 2 + name.size());
+		combined.append(currentNamespace);
+		combined.append("::");
+		combined.append(name);
+		return GetStringPool()->Set(combined);
+	}
+
+	std::string_view GlobalSemanticAnalyzer::QualifyNameIfUnqualified(const std::string_view& name)
+	{
+		if (name.find("::") != std::string_view::npos)
+			return name;
+		return QualifyName(name);
+	}
+
+	void GlobalSemanticAnalyzer::EnterNamespace(const std::string_view& name)
+	{
+		const std::string_view fullName = QualifyName(name);
+		RegisterNamespaceHierarchy(fullName);
+		mNamespaceStack.push_back(fullName);
+	}
+
+	void GlobalSemanticAnalyzer::ExitNamespace()
+	{
+		if (!mNamespaceStack.empty())
+			mNamespaceStack.pop_back();
+	}
+
+	void GlobalSemanticAnalyzer::RegisterNamespaceHierarchy(const std::string_view& fullName)
+	{
+		if (!mNamespaceRegistry)
+			return;
+
+		std::string_view remaining = fullName;
+		std::string_view prefix;
+		while (!remaining.empty())
+		{
+			const size_t delimiter = remaining.find("::");
+			if (delimiter == std::string_view::npos)
+			{
+				prefix = prefix.empty()
+					? remaining
+					: GetStringPool()->Set(std::string(prefix) + "::" + std::string(remaining));
+				mNamespaceRegistry->RegisterNamespace(prefix);
+				break;
+			}
+
+			const std::string_view segment = remaining.substr(0, delimiter);
+			prefix = prefix.empty()
+				? segment
+				: GetStringPool()->Set(std::string(prefix) + "::" + std::string(segment));
+			mNamespaceRegistry->RegisterNamespace(prefix);
+			remaining.remove_prefix(delimiter + 2);
+		}
+	}
+
 	void GlobalSemanticAnalyzer::Resolve(std::shared_ptr<SyntaxNode> node)
 	{
 		if (node == nullptr)
@@ -216,7 +284,7 @@ namespace mana
 			SearchSymbolFromName(node);
 			break;
 
-			// Nodes related to constant definitions
+		// Nodes related to constant definitions
 		case SyntaxNode::Id::DefineConstant:
 			MANA_ASSERT(node->GetTypeDescriptor());
 			MANA_ASSERT(node->GetLeftNode() == nullptr);
@@ -276,9 +344,24 @@ namespace mana
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			break;
 
+		case SyntaxNode::Id::Namespace:
+			EnterNamespace(node->GetString());
+			Resolve(node->GetLeftNode());
+			ExitNamespace();
+			MANA_ASSERT(node->GetRightNode() == nullptr);
+			MANA_ASSERT(node->GetBodyNode() == nullptr);
+			break;
+
+		case SyntaxNode::Id::Using:
+			MANA_ASSERT(node->GetLeftNode() == nullptr);
+			MANA_ASSERT(node->GetRightNode() == nullptr);
+			MANA_ASSERT(node->GetBodyNode() == nullptr);
+			break;
+
 			// Nodes related to structure
 		case SyntaxNode::Id::Actor:
 			{
+				node->Set(QualifyName(node->GetString()));
 				GetSymbolFactory()->BeginRegistrationActor(Lookup(node->GetString()));
 				Resolve(node->GetLeftNode());
 				GetSymbolFactory()->CommitRegistrationActor(node->GetString(), /*nullptr*/"", nullptr, false);
@@ -291,11 +374,13 @@ namespace mana
 			MANA_ASSERT(node->GetLeftNode() == nullptr);
 			MANA_ASSERT(node->GetRightNode() == nullptr);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
+			node->Set(QualifyNameIfUnqualified(node->GetString()));
 			GetSymbolFactory()->ExtendModule(node->GetString());
 			break;
 
 		case SyntaxNode::Id::Module:
 			{
+				node->Set(QualifyName(node->GetString()));
 				GetSymbolFactory()->BeginRegistrationModule(Lookup(node->GetString()));
 				Resolve(node->GetLeftNode());
 				GetSymbolFactory()->CommitRegistrationModule(node->GetString());
@@ -306,6 +391,7 @@ namespace mana
 
 		case SyntaxNode::Id::Phantom:
 			{
+				node->Set(QualifyName(node->GetString()));
 				GetSymbolFactory()->BeginRegistrationActor(Lookup(node->GetString()));
 				Resolve(node->GetLeftNode());
 				GetSymbolFactory()->CommitRegistrationActor(node->GetString(), /*nullptr*/"", nullptr, true);
