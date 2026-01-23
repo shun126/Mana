@@ -26,6 +26,16 @@ namespace mana
 		mUsingScopes.emplace_back();
 	}
 
+	void LocalSemanticAnalyzer::BeginNamespaceScope(const std::string_view& name)
+	{
+		EnterNamespace(name);
+	}
+
+	void LocalSemanticAnalyzer::EndNamespaceScope()
+	{
+		ExitNamespace();
+	}
+
 	std::string_view LocalSemanticAnalyzer::JoinQualifiedName(const std::string_view& left, const std::string_view& right) const
 	{
 		if (left.empty())
