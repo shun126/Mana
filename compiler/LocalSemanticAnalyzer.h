@@ -31,6 +31,9 @@ namespace mana
 		);
 		~LocalSemanticAnalyzer() override = default;
 
+		void BeginNamespaceScope(const std::string_view& name);
+		void EndNamespaceScope();
+
 		void PostResolverResolve(std::shared_ptr<SyntaxNode> node);
 
 	private:
