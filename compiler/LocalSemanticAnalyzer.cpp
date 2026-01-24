@@ -79,6 +79,12 @@ namespace mana
 		return type && (type->GetId() == TypeDescriptor::Id::Actor || type->GetId() == TypeDescriptor::Id::Module);
 	}
 
+	bool LocalSemanticAnalyzer::IsTypeSymbol(const std::string_view& name) const
+	{
+		const std::shared_ptr<Symbol>& symbol = GetSymbolFactory()->Lookup(name);
+		return symbol && symbol->GetClassTypeId() == Symbol::ClassTypeId::Type;
+	}
+
 	std::string_view LocalSemanticAnalyzer::ResolveAlias(const std::string_view& name) const
 	{
 		for (auto scopeIt = mUsingScopes.rbegin(); scopeIt != mUsingScopes.rend(); ++scopeIt)
@@ -88,6 +94,58 @@ namespace mana
 				return aliasIt->second;
 		}
 		return {};
+	}
+
+	std::string_view LocalSemanticAnalyzer::ResolveTypeName(const std::string_view& name) const
+	{
+		if (IsQualifiedName(name))
+			return name;
+
+		const std::string_view currentNamespace = GetCurrentNamespace();
+		if (!currentNamespace.empty())
+		{
+			const std::string_view qualified = JoinQualifiedName(currentNamespace, name);
+			if (IsTypeSymbol(qualified))
+				return qualified;
+		}
+
+		if (IsTypeSymbol(name))
+			return name;
+
+		for (auto scopeIt = mUsingScopes.rbegin(); scopeIt != mUsingScopes.rend(); ++scopeIt)
+		{
+			for (const std::string_view& nsPath : scopeIt->namespacePaths)
+			{
+				const std::string_view qualified = JoinQualifiedName(nsPath, name);
+				if (IsTypeSymbol(qualified))
+					return qualified;
+			}
+		}
+
+		return name;
+	}
+
+	void LocalSemanticAnalyzer::ResolveTypeDescriptionScoped(const std::shared_ptr<SyntaxNode>& node)
+	{
+		MANA_ASSERT(node);
+
+		const std::string_view resolvedName = ResolveTypeName(node->GetString());
+		if (resolvedName != node->GetString())
+			node->Set(resolvedName);
+
+		SemanticAnalyzer::ResolveTypeDescription(node);
+	}
+
+	void LocalSemanticAnalyzer::ResolveVariableDescription(const std::shared_ptr<SyntaxNode>& node, const Symbol::MemoryTypeId memoryTypeId, const bool isStaticVariable)
+	{
+		MANA_ASSERT(node);
+		MANA_ASSERT(node->GetLeftNode() && node->GetLeftNode()->Is(SyntaxNode::Id::TypeDescription));
+		ResolveTypeDescriptionScoped(node->GetLeftNode());
+
+		MANA_ASSERT(node->GetRightNode() && node->GetRightNode()->Is(SyntaxNode::Id::Declarator));
+		SemanticAnalyzer::ResolveDeclarator(node->GetRightNode(), isStaticVariable);
+
+		GetSymbolFactory()->AllocateMemory(node->GetRightNode()->GetSymbol(), node->GetLeftNode()->GetTypeDescriptor(), memoryTypeId);
 	}
 
 	void LocalSemanticAnalyzer::EnterNamespace(const std::string_view& name)
@@ -150,28 +208,30 @@ namespace mana
 	void LocalSemanticAnalyzer::ResolveActionReference(const std::shared_ptr<SyntaxNode>& node, const std::string_view& actionName)
 	{
 		const std::shared_ptr<SyntaxNode>& actorNode = node->GetRightNode();
-		if (!actorNode || actorNode->IsNot(SyntaxNode::Id::Identifier))
+		if (!actorNode)
 		{
 			CompileError("illegal action reference");
 			return;
 		}
 
-		const std::string_view rawName = actorNode->GetString();
-		std::vector<std::string_view> candidates;
-
-		auto addCandidate = [&candidates](const std::string_view candidate)
+		if (actorNode->Is(SyntaxNode::Id::Identifier))
 		{
-			if (candidate.empty())
-				return;
-			if (std::find(candidates.begin(), candidates.end(), candidate) == candidates.end())
-				candidates.push_back(candidate);
-		};
+			const std::string_view rawName = actorNode->GetString();
+			std::vector<std::string_view> candidates;
 
-		if (IsQualifiedName(rawName))
-		{
-			if (IsActorSymbol(rawName))
-				addCandidate(rawName);
-		}
+			auto addCandidate = [&candidates](const std::string_view candidate)
+			{
+				if (candidate.empty())
+					return;
+				if (std::find(candidates.begin(), candidates.end(), candidate) == candidates.end())
+					candidates.push_back(candidate);
+			};
+
+			if (IsQualifiedName(rawName))
+			{
+				if (IsActorSymbol(rawName))
+					addCandidate(rawName);
+			}
 			else
 			{
 				const std::string_view currentNamespace = GetCurrentNamespace();
@@ -189,51 +249,81 @@ namespace mana
 				if (!alias.empty() && IsActorSymbol(alias))
 					addCandidate(alias);
 
-			for (auto scopeIt = mUsingScopes.rbegin(); scopeIt != mUsingScopes.rend(); ++scopeIt)
-			{
-				for (const std::string_view& nsPath : scopeIt->namespacePaths)
+				for (auto scopeIt = mUsingScopes.rbegin(); scopeIt != mUsingScopes.rend(); ++scopeIt)
 				{
-					const std::string_view qualified = JoinQualifiedName(nsPath, rawName);
-					if (IsActorSymbol(qualified))
-						addCandidate(qualified);
+					for (const std::string_view& nsPath : scopeIt->namespacePaths)
+					{
+						const std::string_view qualified = JoinQualifiedName(nsPath, rawName);
+						if (IsActorSymbol(qualified))
+							addCandidate(qualified);
+					}
 				}
 			}
-		}
 
-		if (candidates.empty())
-		{
-			CompileError({ "unresolved actor reference '", rawName, "'" });
-			return;
-		}
-
-		if (candidates.size() > 1)
-		{
-			std::string message = "ambiguous actor reference '" + std::string(rawName) + "': ";
-			for (size_t index = 0; index < candidates.size(); ++index)
+			if (!candidates.empty())
 			{
-				if (index > 0)
-					message += ", ";
-				message += std::string(candidates[index]);
+				if (candidates.size() > 1)
+				{
+					std::string message = "ambiguous actor reference '" + std::string(rawName) + "': ";
+					for (size_t index = 0; index < candidates.size(); ++index)
+					{
+						if (index > 0)
+							message += ", ";
+						message += std::string(candidates[index]);
+					}
+					CompileError(message);
+					return;
+				}
+
+				const std::string_view resolvedName = candidates.front();
+				actorNode->Set(resolvedName);
+				PostResolverResolve(actorNode);
+
+				const std::shared_ptr<Symbol>& actorSymbol = actorNode->GetSymbol();
+				if (!actorSymbol || actorSymbol->GetClassTypeId() != Symbol::ClassTypeId::Type)
+				{
+					CompileError({ "invalid actor reference '", resolvedName, "'" });
+					return;
+				}
+
+				if (!HasAction(actorSymbol, actionName))
+				{
+					CompileError({ "action not found '", actionName, "' on actor '", resolvedName, "'" });
+				}
+				return;
 			}
-			CompileError(message);
-			return;
 		}
 
-		const std::string_view resolvedName = candidates.front();
-		actorNode->Set(resolvedName);
 		PostResolverResolve(actorNode);
 
-		const std::shared_ptr<Symbol>& actorSymbol = actorNode->GetSymbol();
-		if (!actorSymbol || actorSymbol->GetClassTypeId() != Symbol::ClassTypeId::Type)
+		const std::shared_ptr<TypeDescriptor>& actorType = actorNode->GetTypeDescriptor();
+		if (!actorType)
 		{
-			CompileError({ "invalid actor reference '", resolvedName, "'" });
+			CompileError("incompatible type of operand");
 			return;
 		}
 
-		if (!HasAction(actorSymbol, actionName))
+		if (actorType->GetId() == TypeDescriptor::Id::Actor)
 		{
-			CompileError({ "action not found '", actionName, "' on actor '", resolvedName, "'" });
+			const std::string_view typeName = actorType->GetName();
+			if (!typeName.empty() && typeName != "actor")
+			{
+				if (const std::shared_ptr<Symbol>& typeSymbol = GetSymbolFactory()->Lookup(typeName))
+				{
+					if (typeSymbol->GetClassTypeId() == Symbol::ClassTypeId::Type && !HasAction(typeSymbol, actionName))
+					{
+						CompileError({ "action not found '", actionName, "' on actor '", typeName, "'" });
+						return;
+					}
+				}
+			}
+			return;
 		}
+
+		if (actorType->GetId() == TypeDescriptor::Id::Reference && actorType->GetName() == "string")
+			return;
+
+		CompileError("incompatible type of operand");
 	}
 
 	bool LocalSemanticAnalyzer::HasAction(const std::shared_ptr<Symbol>& actorSymbol, const std::string_view& actionName)
@@ -434,7 +524,7 @@ DO_RECURSIVE:
 			MANA_ASSERT(node->GetLeftNode() == nullptr);
 			MANA_ASSERT(node->GetRightNode() == nullptr);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
-			ResolveTypeDescription(node);
+			ResolveTypeDescriptionScoped(node);
 			break;
 
 		case SyntaxNode::Id::VariableSize:

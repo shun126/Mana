@@ -90,17 +90,12 @@ actor Controller
 - make
 
 ## Building with MSVC
+- Set the path to bison in the environment variable GNU_BISON_BIN, and the path to flex in GNU_FLEX_BIN.
 - Install Microsoft Visual C++ 2022 Community (should work with other versions).
 - Run "Vistual Studio 2022 Command Prompt" from the "Visual Studio 2022" start menu.
-- cd to <download_path>\compiler
 - Open mana.sln
 
-## Building with Xcode
-- Install Xcode 8.3.2 (should work with other versions).
-- cd to <download_path>\compiler
-- Open mana.xcodeproj
-
-# Running Tests
+# Running Sample
 ````bash
 mana sample/sample.mn
 ````
