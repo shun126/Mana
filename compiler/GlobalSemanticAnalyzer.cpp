@@ -224,6 +224,38 @@ namespace mana
 		return QualifyName(name);
 	}
 
+	std::string_view GlobalSemanticAnalyzer::ResolveTypeName(const std::string_view& name)
+	{
+		if (name.find("::") != std::string_view::npos)
+			return name;
+
+		const std::string_view qualified = QualifyName(name);
+		return Lookup(qualified) ? qualified : name;
+	}
+
+	void GlobalSemanticAnalyzer::ResolveTypeDescriptionScoped(const std::shared_ptr<SyntaxNode>& node)
+	{
+		MANA_ASSERT(node);
+
+		const std::string_view resolvedName = ResolveTypeName(node->GetString());
+		if (resolvedName != node->GetString())
+			node->Set(resolvedName);
+
+		SemanticAnalyzer::ResolveTypeDescription(node);
+	}
+
+	void GlobalSemanticAnalyzer::ResolveVariableDescription(const std::shared_ptr<SyntaxNode>& node, const Symbol::MemoryTypeId memoryTypeId, const bool isStaticVariable)
+	{
+		MANA_ASSERT(node);
+		MANA_ASSERT(node->GetLeftNode() && node->GetLeftNode()->Is(SyntaxNode::Id::TypeDescription));
+		ResolveTypeDescriptionScoped(node->GetLeftNode());
+
+		MANA_ASSERT(node->GetRightNode() && node->GetRightNode()->Is(SyntaxNode::Id::Declarator));
+		SemanticAnalyzer::ResolveDeclarator(node->GetRightNode(), isStaticVariable);
+
+		GetSymbolFactory()->AllocateMemory(node->GetRightNode()->GetSymbol(), node->GetLeftNode()->GetTypeDescriptor(), memoryTypeId);
+	}
+
 	void GlobalSemanticAnalyzer::EnterNamespace(const std::string_view& name)
 	{
 		const std::string_view fullName = QualifyName(name);
@@ -401,6 +433,7 @@ namespace mana
 			break;
 
 		case SyntaxNode::Id::Struct:
+			node->Set(QualifyName(node->GetString()));
 			GetSymbolFactory()->BeginRegistrationStructure();
 			Resolve(node->GetLeftNode());
 			GetSymbolFactory()->CommitRegistrationStructure(node->GetString());
@@ -488,7 +521,7 @@ namespace mana
 			MANA_ASSERT(node->GetLeftNode() == nullptr);
 			MANA_ASSERT(node->GetRightNode() == nullptr);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
-			ResolveTypeDescription(node);
+			ResolveTypeDescriptionScoped(node);
 			break;
 
 		case SyntaxNode::Id::VariableSize:
