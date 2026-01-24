@@ -539,7 +539,7 @@ namespace mana
 		mStack.Clear();
 	}
 
-	inline const std::string_view& Actor::GetName()
+	inline std::string_view Actor::GetName()
 	{
 		return mVM.lock()->GetActorName(shared_from_this());
 	}
@@ -1403,7 +1403,7 @@ namespace mana
 		const char* pszActorName = vm->GetStringFromMemory(self.mPc + 1);
 		MANA_ASSERT(pszActorName);
 
-		const std::shared_ptr<Actor>& targetActor = vm->GetActor(pszActorName);
+		const std::shared_ptr<Actor>& targetActor = vm->FindActor(pszActorName);
 		self.mStack.Push(targetActor.get());
 	}
 
@@ -1645,7 +1645,7 @@ namespace mana
 		actor->self.mInterrupts[actor->GetInterruptPriority()].repeat = true;
 		actor->self.mPc += sizeof(int32_t) + 1;
 
-		Actor* targetActor = actor->GetParent().GetActor(pszTarget,);
+		Actor* targetActor = actor->GetParent().FindActor(pszTarget,);
 		if(targetActor)
 		targetActor->Request(priority, action, actor);
 		*/
@@ -1660,7 +1660,7 @@ namespace mana
 		int32_t priority = Stack.Get<int_t>(1);
 		const char* action = actor->GetStringFromMemory(1);
 
-		Actor* targetActor = actor->GetParent().GetActor(pszTarget,);
+		Actor* targetActor = actor->GetParent().FindActor(pszTarget,);
 		if(targetActor == 0)
 		{
 		actor->self.mStack.Remove(2);
@@ -1694,7 +1694,7 @@ namespace mana
 		int32_t priority = Stack.Get<int_t>(1);
 		const char* action = actor->GetStringFromMemory(1);
 
-		Actor* targetActor = actor->GetParent().GetActor(pszTarget,);
+		Actor* targetActor = actor->GetParent().FindActor(pszTarget,);
 		if(targetActor == 0)
 		{
 		actor->self.mStack.Remove(2);
