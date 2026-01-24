@@ -437,7 +437,12 @@ qualified_name	: tIDENTIFIER
 					{ $$ = mParsingDriver->CreateQualifiedName($1, $3); }
 				;
 
-action_ref		: qualified_name tARROW tIDENTIFIER
+action_ref		: expression tARROW tIDENTIFIER
+					{
+						$$.actor = $1;
+						$$.action = $3;
+					}
+				| qualified_name tARROW tIDENTIFIER
 					{
 						$$.actor = mParsingDriver->CreateIdentifier($1);
 						$$.action = $3;

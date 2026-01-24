@@ -37,6 +37,9 @@ namespace mana
 		static size_t CalcArgumentCount(const size_t count, const std::shared_ptr<const SyntaxNode>& node);
 		std::string_view QualifyName(const std::string_view& name);
 		std::string_view QualifyNameIfUnqualified(const std::string_view& name);
+		std::string_view ResolveTypeName(const std::string_view& name);
+		void ResolveTypeDescriptionScoped(const std::shared_ptr<SyntaxNode>& node);
+		void ResolveVariableDescription(const std::shared_ptr<SyntaxNode>& node, const Symbol::MemoryTypeId memoryTypeId, const bool isStaticVariable);
 		void EnterNamespace(const std::string_view& name);
 		void ExitNamespace();
 		void RegisterNamespaceHierarchy(const std::string_view& fullName);
