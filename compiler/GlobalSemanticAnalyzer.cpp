@@ -22,6 +22,8 @@ namespace mana
 		: SemanticAnalyzer(symbolFactory, typeDescriptorFactory, stringPool)
 		, mNamespaceRegistry(namespaceRegistry)
 	{
+		mUsingScopes.emplace_back();
+
 		{
 			// vec2
 			GetSymbolFactory()->BeginRegistrationStructure();
@@ -203,6 +205,66 @@ namespace mana
 		return CalcArgumentCount(count, node->GetRightNode()) + 1;
 	}
 
+	std::string_view GlobalSemanticAnalyzer::JoinQualifiedName(const std::string_view& left, const std::string_view& right) const
+	{
+		if (left.empty())
+			return right;
+
+		std::string combined;
+		combined.reserve(left.size() + 2 + right.size());
+		combined.append(left);
+		combined.append("::");
+		combined.append(right);
+		return GetStringPool()->Set(combined);
+	}
+
+	std::string_view GlobalSemanticAnalyzer::GetCurrentNamespace() const
+	{
+		if (mNamespaceStack.empty())
+			return {};
+		return mNamespaceStack.back();
+	}
+
+	bool GlobalSemanticAnalyzer::IsQualifiedName(const std::string_view& name) const
+	{
+		return name.find("::") != std::string_view::npos;
+	}
+
+	std::string_view GlobalSemanticAnalyzer::GetLastSegment(const std::string_view& name) const
+	{
+		const size_t delimiter = name.rfind("::");
+		if (delimiter == std::string_view::npos)
+			return name;
+		return name.substr(delimiter + 2);
+	}
+
+	bool GlobalSemanticAnalyzer::IsActorSymbol(const std::string_view& name) const
+	{
+		const std::shared_ptr<Symbol>& symbol = GetSymbolFactory()->Lookup(name);
+		if (!symbol || symbol->GetClassTypeId() != Symbol::ClassTypeId::Type)
+			return false;
+
+		const std::shared_ptr<TypeDescriptor>& type = symbol->GetTypeDescriptor();
+		return type && (type->GetId() == TypeDescriptor::Id::Actor || type->GetId() == TypeDescriptor::Id::Module);
+	}
+
+	bool GlobalSemanticAnalyzer::IsTypeSymbol(const std::string_view& name) const
+	{
+		const std::shared_ptr<Symbol>& symbol = GetSymbolFactory()->Lookup(name);
+		return symbol && symbol->GetClassTypeId() == Symbol::ClassTypeId::Type;
+	}
+
+	std::string_view GlobalSemanticAnalyzer::ResolveAlias(const std::string_view& name) const
+	{
+		for (auto scopeIt = mUsingScopes.rbegin(); scopeIt != mUsingScopes.rend(); ++scopeIt)
+		{
+			const auto aliasIt = scopeIt->symbolAliases.find(name);
+			if (aliasIt != scopeIt->symbolAliases.end())
+				return aliasIt->second;
+		}
+		return {};
+	}
+
 	std::string_view GlobalSemanticAnalyzer::QualifyName(const std::string_view& name)
 	{
 		if (mNamespaceStack.empty())
@@ -233,6 +295,39 @@ namespace mana
 		return Lookup(qualified) ? qualified : name;
 	}
 
+	std::string_view GlobalSemanticAnalyzer::ResolveExtendName(const std::string_view& name) const
+	{
+		if (IsQualifiedName(name))
+			return name;
+
+		const std::string_view currentNamespace = GetCurrentNamespace();
+		if (!currentNamespace.empty())
+		{
+			const std::string_view qualified = JoinQualifiedName(currentNamespace, name);
+			if (IsTypeSymbol(qualified))
+				return qualified;
+		}
+
+		if (IsTypeSymbol(name))
+			return name;
+
+		const std::string_view alias = ResolveAlias(name);
+		if (!alias.empty() && IsTypeSymbol(alias))
+			return alias;
+
+		for (auto scopeIt = mUsingScopes.rbegin(); scopeIt != mUsingScopes.rend(); ++scopeIt)
+		{
+			for (const std::string_view& nsPath : scopeIt->namespacePaths)
+			{
+				const std::string_view qualified = JoinQualifiedName(nsPath, name);
+				if (IsTypeSymbol(qualified))
+					return qualified;
+			}
+		}
+
+		return name;
+	}
+
 	void GlobalSemanticAnalyzer::ResolveTypeDescriptionScoped(const std::shared_ptr<SyntaxNode>& node)
 	{
 		MANA_ASSERT(node);
@@ -261,12 +356,15 @@ namespace mana
 		const std::string_view fullName = QualifyName(name);
 		RegisterNamespaceHierarchy(fullName);
 		mNamespaceStack.push_back(fullName);
+		mUsingScopes.emplace_back();
 	}
 
 	void GlobalSemanticAnalyzer::ExitNamespace()
 	{
 		if (!mNamespaceStack.empty())
 			mNamespaceStack.pop_back();
+		if (!mUsingScopes.empty())
+			mUsingScopes.pop_back();
 	}
 
 	void GlobalSemanticAnalyzer::RegisterNamespaceHierarchy(const std::string_view& fullName)
@@ -294,6 +392,40 @@ namespace mana
 				: GetStringPool()->Set(std::string(prefix) + "::" + std::string(segment));
 			mNamespaceRegistry->RegisterNamespace(prefix);
 			remaining.remove_prefix(delimiter + 2);
+		}
+	}
+
+	void GlobalSemanticAnalyzer::ResolveUsingDeclaration(const std::shared_ptr<SyntaxNode>& node)
+	{
+		const std::string_view name = node->GetString();
+		const std::string_view candidateName = IsQualifiedName(name)
+			? name
+			: JoinQualifiedName(GetCurrentNamespace(), name);
+
+		const bool isNamespace = mNamespaceRegistry && mNamespaceRegistry->IsNamespace(candidateName);
+		const bool isSymbol = IsActorSymbol(candidateName);
+
+		if (isNamespace && isSymbol)
+			return;
+
+		if (isNamespace)
+		{
+			if (!mUsingScopes.empty())
+				mUsingScopes.back().namespacePaths.push_back(candidateName);
+			return;
+		}
+
+		if (isSymbol)
+		{
+			const std::string_view alias = GetLastSegment(name);
+			if (mUsingScopes.empty())
+				return;
+
+			auto& aliases = mUsingScopes.back().symbolAliases;
+			if (aliases.find(alias) != aliases.end())
+				return;
+			aliases.emplace(alias, candidateName);
+			return;
 		}
 	}
 
@@ -385,6 +517,7 @@ namespace mana
 			break;
 
 		case SyntaxNode::Id::Using:
+			ResolveUsingDeclaration(node);
 			MANA_ASSERT(node->GetLeftNode() == nullptr);
 			MANA_ASSERT(node->GetRightNode() == nullptr);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
@@ -406,7 +539,7 @@ namespace mana
 			MANA_ASSERT(node->GetLeftNode() == nullptr);
 			MANA_ASSERT(node->GetRightNode() == nullptr);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
-			node->Set(QualifyNameIfUnqualified(node->GetString()));
+			node->Set(ResolveExtendName(node->GetString()));
 			GetSymbolFactory()->ExtendModule(node->GetString());
 			break;
 
