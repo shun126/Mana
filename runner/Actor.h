@@ -51,7 +51,7 @@ namespace mana
 		void Rollback(const int32_t priority);
 		void Restart();
 
-		const std::string_view& GetName();
+		std::string_view GetName();
 		uint32_t GetAction(const std::string_view& actionName) const;
 
 		[[nodiscard]] int32_t GetArgumentCount() const;

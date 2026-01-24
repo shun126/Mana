@@ -151,7 +151,7 @@ GlobalSemanticAnalyzer.o: TypeDescriptor.h ../runner/common/Platform.h
 GlobalSemanticAnalyzer.o: SymbolFactory.h StringPool.h
 GlobalSemanticAnalyzer.o: TypeDescriptorFactory.h
 GlobalSemanticAnalyzer.o: ../runner/common/Noncopyable.h SyntaxNode.h
-GlobalSemanticAnalyzer.o: ErrorHandler.h
+GlobalSemanticAnalyzer.o: ErrorHandler.h NamespaceRegistry.h
 IntermediateLanguage.o: IntermediateLanguage.h ../runner/common/Platform.h
 IntermediateLanguage.o: ../runner/common/Type.h CodeBuffer.h
 IntermediateLanguage.o: ../runner/common/FileFormat.h
@@ -189,7 +189,7 @@ LocalSemanticAnalyzer.o: ../runner/common/Stopwatch.h Symbol.h
 LocalSemanticAnalyzer.o: TypeDescriptor.h ../runner/common/Platform.h
 LocalSemanticAnalyzer.o: SymbolFactory.h StringPool.h TypeDescriptorFactory.h
 LocalSemanticAnalyzer.o: ../runner/common/Noncopyable.h SyntaxNode.h
-LocalSemanticAnalyzer.o: ErrorHandler.h
+LocalSemanticAnalyzer.o: ErrorHandler.h NamespaceRegistry.h
 Main.o: Main.h CodeGenerator.h ../runner/common/Setup.h
 Main.o: ../runner/common/Platform.h ../runner/common/Type.h
 Main.o: ../runner/common/Assert.h ../runner/common/String.h
@@ -202,7 +202,7 @@ Main.o: ../runner/common/Noncopyable.h DataBuffer.h GlobalAddressResolver.h
 Main.o: GlobalSemanticAnalyzer.h SemanticAnalyzer.h Symbol.h TypeDescriptor.h
 Main.o: SymbolFactory.h StringPool.h TypeDescriptorFactory.h SyntaxNode.h
 Main.o: LocalAddressResolver.h LocalSemanticAnalyzer.h ErrorHandler.h Lexer.h
-Main.o: Path.h ParsingDriver.h Parser.hpp Version.h ../runner/Mana.h
+Main.o: Path.h ParsingDriver.h Version.h ../runner/Mana.h
 Main.o: ../runner/common/Setup.h ../runner/Actor.h ../runner/Buffer.h
 Main.o: ../runner/common/Platform.h ../runner/Buffer.inl ../runner/Event.h
 Main.o: ../runner/Stack.h ../runner/common/Noncopyable.h
@@ -210,6 +210,8 @@ Main.o: ../runner/common/OutputStream.h ../runner/Stack.inl
 Main.o: ../runner/Actor.inl ../runner/VM.h ../runner/VM.inl
 Main.o: ../runner/Plugin.h ../runner/Plugin.inl ../runner/common/FileFormat.h
 Main.o: ../runner/Function.h
+NamespaceRegistry.o: NamespaceRegistry.h StringPool.h
+NamespaceRegistry.o: ../runner/common/Platform.h ../runner/common/Type.h
 ParsingDriver.o: ../runner/common/Setup.h ../runner/common/Platform.h
 ParsingDriver.o: ../runner/common/Type.h ../runner/common/Assert.h
 ParsingDriver.o: ../runner/common/String.h ../runner/common/FileFormat.h
@@ -217,14 +219,14 @@ ParsingDriver.o: ../runner/common/Math.h ../runner/common/Noncopyable.h
 ParsingDriver.o: ../runner/common/Memory.h ../runner/common/OutputStream.h
 ParsingDriver.o: ../runner/common/OutputStream.inl
 ParsingDriver.o: ../runner/common/Stopwatch.h ParsingDriver.h
-ParsingDriver.o: ../runner/common/Noncopyable.h Parser.hpp SyntaxNode.h
-ParsingDriver.o: TypeDescriptor.h ../runner/common/Platform.h CodeBuffer.h
-ParsingDriver.o: ../runner/common/FileFormat.h ../runner/common/Memory.h
-ParsingDriver.o: CodeGenerator.h DataBuffer.h GlobalAddressResolver.h
-ParsingDriver.o: GlobalSemanticAnalyzer.h SemanticAnalyzer.h Symbol.h
-ParsingDriver.o: SymbolFactory.h StringPool.h TypeDescriptorFactory.h
+ParsingDriver.o: ../runner/common/Noncopyable.h CodeBuffer.h
+ParsingDriver.o: ../runner/common/Platform.h ../runner/common/FileFormat.h
+ParsingDriver.o: ../runner/common/Memory.h CodeGenerator.h DataBuffer.h
+ParsingDriver.o: GlobalAddressResolver.h GlobalSemanticAnalyzer.h
+ParsingDriver.o: SemanticAnalyzer.h Symbol.h TypeDescriptor.h SymbolFactory.h
+ParsingDriver.o: StringPool.h TypeDescriptorFactory.h SyntaxNode.h
 ParsingDriver.o: LocalAddressResolver.h LocalSemanticAnalyzer.h
-ParsingDriver.o: ErrorHandler.h
+ParsingDriver.o: ErrorHandler.h NamespaceRegistry.h
 Path.o: Path.h ../runner/common/Setup.h ../runner/common/Platform.h
 Path.o: ../runner/common/Type.h ../runner/common/Assert.h
 Path.o: ../runner/common/String.h ../runner/common/FileFormat.h
