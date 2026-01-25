@@ -424,9 +424,25 @@ namespace mana
 
 		const bool isNamespace = mNamespaceRegistry && mNamespaceRegistry->IsNamespace(candidateName);
 		const bool isSymbol = IsActorSymbol(candidateName);
+		const bool isQualified = IsQualifiedName(name);
 
 		if (isNamespace && isSymbol)
 			return;
+
+		if (!isNamespace && !isSymbol)
+		{
+			if (!mUsingScopes.empty())
+				mUsingScopes.back().namespacePaths.push_back(candidateName);
+
+			if (isQualified && !mUsingScopes.empty())
+			{
+				const std::string_view alias = GetLastSegment(name);
+				auto& aliases = mUsingScopes.back().symbolAliases;
+				if (aliases.find(alias) == aliases.end())
+					aliases.emplace(alias, candidateName);
+			}
+			return;
+		}
 
 		if (isNamespace)
 		{
