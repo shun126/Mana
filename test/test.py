@@ -76,5 +76,6 @@ success('test_using_symbol.mn')
 success('test_forward_reference_using.mn')
 fail('test_using_ambiguous_actor.mn', 'ambiguous actor reference')
 fail('test_using_ambiguous_namespace_symbol.mn', 'ambiguous using')
+success('test_extend_namespace_resolution.mn')
 ################################################################################
 exit(Result)
