@@ -96,6 +96,7 @@
       <Filter>runner\common</Filter>
     </ClInclude>
     <ClInclude Include="Main.h" />
+    <ClInclude Include="NamespaceRegistry.h" />
     <ClInclude Include="ParsingDriver.h" />
     <ClInclude Include="Symbol.h" />
     <ClInclude Include="IntermediateLanguage.h" />
@@ -121,6 +122,7 @@
     <ClCompile Include="TypeDescriptor.cpp" />
     <ClCompile Include="TypeDescriptorFactory.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="NamespaceRegistry.cpp" />
     <ClCompile Include="DataBuffer.cpp" />
     <ClCompile Include="CodeBuffer.cpp" />
     <ClCompile Include="GlobalAddressResolver.cpp" />

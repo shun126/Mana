@@ -308,31 +308,40 @@ The continue statement skips the remaining statements in the innermost do, for o
 ### goto
 
 ```
-action Luyue::main
+actor Luyue
 {
-    if(flag == TRUE)
-        goto ABORT;
-    setAnime(KICK);
-    setMessage("I hate you!");
+    action main
+    {
+        if(flag == TRUE)
+            goto ABORT;
+        setAnime(KICK);
+        setMessage("I hate you!");
 ABORT:
+    }
 }
 ```
 ### request
 Requests an actor, including yourself. If the requestor has already executed or reserved a request of the same level, the request will be invalid.
 
-request(Priority, ActorName, ActionName);
+request(Priority, ActorRef->ActionName);
 Priority ... Priority
-ActorName ... Actor name
-ActionName ... action name
+ActorRef ... Actor name
+ActionName ... Action name
 
 ```
-action Mom::main
+actor Mom
 {
-    request(8, Kid, cleaning);
+    action main
+    {
+        request(8, Kid->cleaning);
+    }
 }
-action Kid::cleaning
+actor Kid
 {
-    setAnimation(CLEANING);
+    action cleaning
+    {
+        setAnimation(CLEANING);
+    }
 }
 ```
 ###return
@@ -347,33 +356,39 @@ int function_value(int count, string name)
 {
     return 2;
 }
-action Dad::talk
+actor Dad
 {
-    if(sender ! = Mom)
-        return;
-    setAnimation(SLEEPING);
+    action talk
+    {
+        if(sender ! = Mom)
+            return;
+        setAnimation(SLEEPING);
+    }
 }
 ```
 ### rollback
 Returns to actions below the specified priority.
 
 ```
-action Kid::main
+actor Kid
 {
-    request(5, self, sleep);
-}
-action Kid::sleep
-{
-}
-action Kid::work
-{
-}
-action Kid::talk
-{
-    if(sender == Boss)
+    action main
     {
-        rollback 4; // cancel sleeping action
-        request(5, self, work); // request working action
+        request(5, Kid->sleep);
+    }
+    action sleep
+    {
+    }
+    action work
+    {
+    }
+    action talk
+    {
+        if(sender == Boss)
+        {
+            rollback 4; // cancel sleeping action
+            request(5, Kid->work); // request working action
+        }
     }
 }
 ```
@@ -381,9 +396,12 @@ action Kid::talk
 Wait until the actor's priority is below the specified level.
 
 ```
-action Boss::order
+actor Boss
 {
-    request(1, Employee, doWork);
-    join(1, Employee); // wait until the job is finished
+    action order
+    {
+        request(1, Employee->doWork);
+        join(1, Employee); // wait until the job is finished
+    }
 }
 ```

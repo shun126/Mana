@@ -23,7 +23,7 @@ actor TestActor1
 		test_sort(array, 10);
 
 		print("TestActor1:section2\n");
-		request(1, OtherTestActor::talk);
+		request(1, OtherTestActor->talk);
 
 		print("TestActor1:section3\n");
 		join(0, OtherTestActor);
