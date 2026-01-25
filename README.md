@@ -48,7 +48,7 @@ actor Child
 
 ## Namespaces and action references
 
-Use `namespace` blocks to group actors, and `using` to import namespace paths or actor symbols. Action references use `->`, while `::` is reserved for namespace qualification.
+Use `namespace` blocks to group actors, and `using` to import namespace paths or actor symbols. Action references use `->`, while `::` is reserved for namespace qualification. `using` declarations are resolved after collecting declarations in the same scope, so forward references to namespaces/actors are supported; `using A::B` is decided during name resolution and reports ambiguity when both a namespace and symbol match.
 
 ````mana
 namespace Game::AI

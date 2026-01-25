@@ -37,10 +37,17 @@ namespace mana
 		void PostResolverResolve(std::shared_ptr<SyntaxNode> node);
 
 	private:
+		struct PendingUsing
+		{
+			std::shared_ptr<SyntaxNode> node;
+			std::string_view name;
+		};
+
 		struct UsingScope
 		{
 			std::vector<std::string_view> namespacePaths;
 			std::unordered_map<std::string_view, std::string_view> symbolAliases;
+			std::vector<PendingUsing> pendingUsings;
 		};
 
 		[[nodiscard]] std::string_view JoinQualifiedName(const std::string_view& left, const std::string_view& right) const;
@@ -56,7 +63,9 @@ namespace mana
 
 		void EnterNamespace(const std::string_view& name);
 		void ExitNamespace();
-		void ResolveUsingDeclaration(const std::shared_ptr<SyntaxNode>& node);
+		void QueueUsingDeclaration(const std::shared_ptr<SyntaxNode>& node);
+		bool TryResolveUsingDeclaration(const std::shared_ptr<SyntaxNode>& node, const std::string_view& name, const bool reportErrors);
+		void ResolvePendingUsings(const bool reportErrors);
 		void ResolveActionReference(const std::shared_ptr<SyntaxNode>& node, const std::string_view& actionName);
 		static bool HasAction(const std::shared_ptr<Symbol>& actorSymbol, const std::string_view& actionName);
 

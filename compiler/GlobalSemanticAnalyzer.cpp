@@ -415,41 +415,143 @@ namespace mana
 		}
 	}
 
-	void GlobalSemanticAnalyzer::ResolveUsingDeclaration(const std::shared_ptr<SyntaxNode>& node)
+	void GlobalSemanticAnalyzer::PredeclareActorSymbol(const std::string_view& name)
 	{
-		const std::string_view name = node->GetString();
+		if (name.empty())
+			return;
+		mPredeclaredActorSymbols.insert(name);
+	}
+
+	bool GlobalSemanticAnalyzer::IsPredeclaredActorSymbol(const std::string_view& name) const
+	{
+		return mPredeclaredActorSymbols.find(name) != mPredeclaredActorSymbols.end();
+	}
+
+	void GlobalSemanticAnalyzer::PredeclareScope(const std::shared_ptr<SyntaxNode>& node)
+	{
+		for (auto current = node; current; current = current->GetNextNode())
+		{
+			switch (current->GetId())
+			{
+			case SyntaxNode::Id::Namespace:
+			{
+				const std::string_view fullName = QualifyName(current->GetString());
+				RegisterNamespaceHierarchy(fullName);
+				mNamespaceStack.push_back(fullName);
+				PredeclareScope(current->GetLeftNode());
+				mNamespaceStack.pop_back();
+				break;
+			}
+			case SyntaxNode::Id::Actor:
+			case SyntaxNode::Id::Module:
+			case SyntaxNode::Id::Phantom:
+				PredeclareActorSymbol(QualifyName(current->GetString()));
+				break;
+			default:
+				break;
+			}
+		}
+	}
+
+	void GlobalSemanticAnalyzer::CollectPendingUsings(const std::shared_ptr<SyntaxNode>& node)
+	{
+		for (auto current = node; current; current = current->GetNextNode())
+		{
+			if (current->Is(SyntaxNode::Id::Using))
+				QueueUsingDeclaration(current);
+		}
+	}
+
+	void GlobalSemanticAnalyzer::QueueUsingDeclaration(const std::shared_ptr<SyntaxNode>& node)
+	{
+		if (!node || mUsingScopes.empty())
+			return;
+		mUsingScopes.back().pendingUsings.push_back({ node, node->GetString() });
+	}
+
+	bool GlobalSemanticAnalyzer::TryResolveUsingDeclaration(const std::shared_ptr<SyntaxNode>& node, const std::string_view& name, const bool reportErrors)
+	{
+		MANA_UNUSED_VAR(node);
 		const std::string_view candidateName = IsQualifiedName(name)
 			? name
 			: JoinQualifiedName(GetCurrentNamespace(), name);
 
 		const bool isNamespace = mNamespaceRegistry && mNamespaceRegistry->IsNamespace(candidateName);
-		const bool isSymbol = IsActorSymbol(candidateName);
+		const bool isSymbol = IsActorSymbol(candidateName) || IsPredeclaredActorSymbol(candidateName);
 
 		if (isNamespace && isSymbol)
-			return;
+		{
+			if (reportErrors)
+				CompileError({ "ambiguous using '", name, "'" });
+			return true;
+		}
 
 		if (isNamespace)
 		{
 			if (!mUsingScopes.empty())
 				mUsingScopes.back().namespacePaths.push_back(candidateName);
-			return;
+			return true;
 		}
 
 		if (isSymbol)
 		{
 			const std::string_view alias = GetLastSegment(name);
 			if (mUsingScopes.empty())
-				return;
+				return true;
 
 			auto& aliases = mUsingScopes.back().symbolAliases;
 			if (aliases.find(alias) != aliases.end())
-				return;
+			{
+				if (reportErrors)
+					CompileError({ "duplicate using alias '", alias, "'" });
+				return true;
+			}
 			aliases.emplace(alias, candidateName);
-			return;
+			return true;
 		}
+
+		if (reportErrors)
+			CompileError({ "unresolved using '", name, "'" });
+		return false;
+	}
+
+	void GlobalSemanticAnalyzer::ResolvePendingUsings(const bool reportErrors)
+	{
+		if (mUsingScopes.empty())
+			return;
+
+		auto& pending = mUsingScopes.back().pendingUsings;
+		std::vector<PendingUsing> remaining;
+		remaining.reserve(pending.size());
+
+		for (const auto& entry : pending)
+		{
+			SetCurrentFileInformation(entry.node);
+			if (!TryResolveUsingDeclaration(entry.node, entry.name, reportErrors))
+				remaining.push_back(entry);
+		}
+
+		pending.swap(remaining);
+	}
+
+	void GlobalSemanticAnalyzer::ResolveScope(const std::shared_ptr<SyntaxNode>& node)
+	{
+		if (node == nullptr)
+			return;
+
+		PredeclareScope(node);
+		CollectPendingUsings(node);
+		ResolvePendingUsings(false);
+		ResolveNodeList(node);
+		ResolvePendingUsings(true);
 	}
 
 	void GlobalSemanticAnalyzer::Resolve(std::shared_ptr<SyntaxNode> node)
+	{
+		ResolveScope(node);
+	}
+
+	void GlobalSemanticAnalyzer::ResolveNodeList(std::shared_ptr<SyntaxNode> node)
 	{
 		if (node == nullptr)
 			return;
@@ -505,7 +607,7 @@ namespace mana
 				int32_t allocatedSize = mStaticBlockOpened ? GetSymbolFactory()->GetStaticMemoryAddress() : GetSymbolFactory()->GetGlobalMemoryAddress();
 				allocatedSize += node->GetInt();
 
-				Resolve(node->GetLeftNode());
+				ResolveNodeList(node->GetLeftNode());
 
 				const int32_t address = mStaticBlockOpened ? GetSymbolFactory()->GetStaticMemoryAddress() : GetSymbolFactory()->GetGlobalMemoryAddress();
 				if (address >= allocatedSize)
@@ -522,7 +624,7 @@ namespace mana
 
 		case SyntaxNode::Id::Static:
 			mStaticBlockOpened = true;
-			Resolve(node->GetLeftNode());
+			ResolveNodeList(node->GetLeftNode());
 			mStaticBlockOpened = false;
 			MANA_ASSERT(node->GetRightNode() == nullptr);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
@@ -530,14 +632,13 @@ namespace mana
 
 		case SyntaxNode::Id::Namespace:
 			EnterNamespace(node->GetString());
-			Resolve(node->GetLeftNode());
+			ResolveScope(node->GetLeftNode());
 			ExitNamespace();
 			MANA_ASSERT(node->GetRightNode() == nullptr);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			break;
 
 		case SyntaxNode::Id::Using:
-			ResolveUsingDeclaration(node);
 			MANA_ASSERT(node->GetLeftNode() == nullptr);
 			MANA_ASSERT(node->GetRightNode() == nullptr);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
@@ -548,7 +649,7 @@ namespace mana
 			{
 				node->Set(QualifyName(node->GetString()));
 				GetSymbolFactory()->BeginRegistrationActor(Lookup(node->GetString()));
-				Resolve(node->GetLeftNode());
+				ResolveNodeList(node->GetLeftNode());
 				GetSymbolFactory()->CommitRegistrationActor(node->GetString(), /*nullptr*/"", nullptr, false);
 			}
 			MANA_ASSERT(node->GetRightNode() == nullptr);
@@ -567,7 +668,7 @@ namespace mana
 			{
 				node->Set(QualifyName(node->GetString()));
 				GetSymbolFactory()->BeginRegistrationModule(Lookup(node->GetString()));
-				Resolve(node->GetLeftNode());
+				ResolveNodeList(node->GetLeftNode());
 				GetSymbolFactory()->CommitRegistrationModule(node->GetString());
 			}
 			MANA_ASSERT(node->GetRightNode() == nullptr);
@@ -578,7 +679,7 @@ namespace mana
 			{
 				node->Set(QualifyName(node->GetString()));
 				GetSymbolFactory()->BeginRegistrationActor(Lookup(node->GetString()));
-				Resolve(node->GetLeftNode());
+				ResolveNodeList(node->GetLeftNode());
 				GetSymbolFactory()->CommitRegistrationActor(node->GetString(), /*nullptr*/"", nullptr, true);
 			}
 			MANA_ASSERT(node->GetRightNode() == nullptr);
@@ -588,7 +689,7 @@ namespace mana
 		case SyntaxNode::Id::Struct:
 			node->Set(QualifyName(node->GetString()));
 			GetSymbolFactory()->BeginRegistrationStructure();
-			Resolve(node->GetLeftNode());
+			ResolveNodeList(node->GetLeftNode());
 			GetSymbolFactory()->CommitRegistrationStructure(node->GetString());
 			MANA_ASSERT(node->GetRightNode() == nullptr);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
@@ -608,7 +709,7 @@ namespace mana
 
 		case SyntaxNode::Id::DeclareArgument:
 			ResolveVariableDescription(node->GetLeftNode(), Symbol::MemoryTypeId::Parameter, mStaticBlockOpened);
-			Resolve(node->GetRightNode());
+			ResolveNodeList(node->GetRightNode());
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			break;
 
@@ -616,7 +717,7 @@ namespace mana
 			{
 				MANA_ASSERT(node->GetSymbol() == nullptr);
 				// 関数の戻り値を評価
-				Resolve(node->GetLeftNode());
+				ResolveNodeList(node->GetLeftNode());
 				// シンボルの作成と型の定義
 				node->Set(GetSymbolFactory()->CreateFunction(node->GetString(), GetSymbolFactory()->IsActorOrStructerOpened()));
 				node->GetSymbol()->SetTypeDescription(node->GetLeftNode()->GetTypeDescriptor());
@@ -632,8 +733,8 @@ namespace mana
 				// シンボルの作成と型の定義
 				node->Set(GetSymbolFactory()->CreateFunction(node->GetString(), GetSymbolFactory()->IsActorOrStructerOpened()));
 				GetSymbolFactory()->BeginNativeFunction();
-				Resolve(node->GetLeftNode());
-				Resolve(node->GetRightNode());
+				ResolveNodeList(node->GetLeftNode());
+				ResolveNodeList(node->GetRightNode());
 				node->GetSymbol()->SetNumberOfParameters(CalcArgumentCount(0, node->GetRightNode()));
 				GetSymbolFactory()->CloseNativeFunction(node->GetSymbol(), node->GetLeftNode()->GetTypeDescriptor());
 			}

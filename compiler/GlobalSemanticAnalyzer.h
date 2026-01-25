@@ -8,6 +8,7 @@ mana (compiler)
 #pragma once
 #include "SemanticAnalyzer.h"
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 namespace mana
@@ -35,10 +36,17 @@ namespace mana
 		void Resolve(std::shared_ptr<SyntaxNode> node);
 
 	private:
+		struct PendingUsing
+		{
+			std::shared_ptr<SyntaxNode> node;
+			std::string_view name;
+		};
+
 		struct UsingScope
 		{
 			std::vector<std::string_view> namespacePaths;
 			std::unordered_map<std::string_view, std::string_view> symbolAliases;
+			std::vector<PendingUsing> pendingUsings;
 		};
 
 		static size_t CalcArgumentCount(const size_t count, const std::shared_ptr<const SyntaxNode>& node);
@@ -58,12 +66,21 @@ namespace mana
 		void EnterNamespace(const std::string_view& name);
 		void ExitNamespace();
 		void RegisterNamespaceHierarchy(const std::string_view& fullName);
-		void ResolveUsingDeclaration(const std::shared_ptr<SyntaxNode>& node);
+		void ResolveScope(const std::shared_ptr<SyntaxNode>& node);
+		void ResolveNodeList(std::shared_ptr<SyntaxNode> node);
+		void PredeclareScope(const std::shared_ptr<SyntaxNode>& node);
+		void CollectPendingUsings(const std::shared_ptr<SyntaxNode>& node);
+		void QueueUsingDeclaration(const std::shared_ptr<SyntaxNode>& node);
+		bool TryResolveUsingDeclaration(const std::shared_ptr<SyntaxNode>& node, const std::string_view& name, const bool reportErrors);
+		void ResolvePendingUsings(const bool reportErrors);
+		void PredeclareActorSymbol(const std::string_view& name);
+		[[nodiscard]] bool IsPredeclaredActorSymbol(const std::string_view& name) const;
 
 	private:
 		bool mStaticBlockOpened = false;
 		std::vector<std::string_view> mNamespaceStack;
 		std::vector<UsingScope> mUsingScopes;
+		std::unordered_set<std::string_view> mPredeclaredActorSymbols;
 		std::shared_ptr<NamespaceRegistry> mNamespaceRegistry;
 	};	
 }

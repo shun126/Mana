@@ -98,6 +98,7 @@ namespace mana
 
 	std::string_view LocalSemanticAnalyzer::ResolveTypeName(const std::string_view& name) const
 	{
+		const_cast<LocalSemanticAnalyzer*>(this)->ResolvePendingUsings(false);
 		if (IsQualifiedName(name))
 			return name;
 
@@ -160,12 +161,22 @@ namespace mana
 		if (!mNamespaceStack.empty())
 			mNamespaceStack.pop_back();
 		if (!mUsingScopes.empty())
+		{
+			ResolvePendingUsings(true);
 			mUsingScopes.pop_back();
+		}
 	}
 
-	void LocalSemanticAnalyzer::ResolveUsingDeclaration(const std::shared_ptr<SyntaxNode>& node)
+	void LocalSemanticAnalyzer::QueueUsingDeclaration(const std::shared_ptr<SyntaxNode>& node)
 	{
-		const std::string_view name = node->GetString();
+		if (!node || mUsingScopes.empty())
+			return;
+		mUsingScopes.back().pendingUsings.push_back({ node, node->GetString() });
+	}
+
+	bool LocalSemanticAnalyzer::TryResolveUsingDeclaration(const std::shared_ptr<SyntaxNode>& node, const std::string_view& name, const bool reportErrors)
+	{
+		MANA_UNUSED_VAR(node);
 		const std::string_view candidateName = IsQualifiedName(name)
 			? name
 			: JoinQualifiedName(GetCurrentNamespace(), name);
@@ -175,38 +186,62 @@ namespace mana
 
 		if (isNamespace && isSymbol)
 		{
-			CompileError({ "ambiguous using '", name, "'" });
-			return;
+			if (reportErrors)
+				CompileError({ "ambiguous using '", name, "'" });
+			return true;
 		}
 
 		if (isNamespace)
 		{
 			if (!mUsingScopes.empty())
 				mUsingScopes.back().namespacePaths.push_back(candidateName);
-			return;
+			return true;
 		}
 
 		if (isSymbol)
 		{
 			const std::string_view alias = GetLastSegment(name);
 			if (mUsingScopes.empty())
-				return;
+				return true;
 
 			auto& aliases = mUsingScopes.back().symbolAliases;
 			if (aliases.find(alias) != aliases.end())
 			{
-				CompileError({ "duplicate using alias '", alias, "'" });
-				return;
+				if (reportErrors)
+					CompileError({ "duplicate using alias '", alias, "'" });
+				return true;
 			}
 			aliases.emplace(alias, candidateName);
-			return;
+			return true;
 		}
 
-		CompileError({ "unresolved using '", name, "'" });
+		if (reportErrors)
+			CompileError({ "unresolved using '", name, "'" });
+		return false;
+	}
+
+	void LocalSemanticAnalyzer::ResolvePendingUsings(const bool reportErrors)
+	{
+		if (mUsingScopes.empty())
+			return;
+
+		auto& pending = mUsingScopes.back().pendingUsings;
+		std::vector<PendingUsing> remaining;
+		remaining.reserve(pending.size());
+
+		for (const auto& entry : pending)
+		{
+			SetCurrentFileInformation(entry.node);
+			if (!TryResolveUsingDeclaration(entry.node, entry.name, reportErrors))
+				remaining.push_back(entry);
+		}
+
+		pending.swap(remaining);
 	}
 
 	void LocalSemanticAnalyzer::ResolveActionReference(const std::shared_ptr<SyntaxNode>& node, const std::string_view& actionName)
 	{
+		ResolvePendingUsings(false);
 		const std::shared_ptr<SyntaxNode>& actorNode = node->GetRightNode();
 		if (!actorNode)
 		{
@@ -706,7 +741,8 @@ DO_RECURSIVE:
 			break;
 
 		case SyntaxNode::Id::Using:
-			ResolveUsingDeclaration(node);
+			QueueUsingDeclaration(node);
+			ResolvePendingUsings(false);
 			MANA_ASSERT(node->GetLeftNode() == nullptr);
 			MANA_ASSERT(node->GetRightNode() == nullptr);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);

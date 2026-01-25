@@ -1,0 +1,5 @@
+using A;
+
+actor A { action talk {} }
+
+actor C { action main { request(1, A->talk); } }
