@@ -48,6 +48,7 @@ other		.
 <INITIAL>"/*"		{ BEGIN COMMENT_BLOCK; }
 <INITIAL>"0x"		{ yymore(); BEGIN HEX; }
 <INITIAL>"0b"		{ yymore(); BEGIN BIN; }
+<INITIAL>"->"		return mana::Parser::token::tARROW;
 <INITIAL>{sym}		return yytext[0];
 <INITIAL>{ws}+		;
 <INITIAL>"\n"		yylineno++;
@@ -99,6 +100,8 @@ other		.
 <INITIAL>"action"	return mana::Parser::token::tACTION;
 <INITIAL>"module"	return mana::Parser::token::tMODULE;
 <INITIAL>"extend"	return mana::Parser::token::tEXTEND;
+<INITIAL>"namespace"	return mana::Parser::token::tNAMESPACE;
+<INITIAL>"using"		return mana::Parser::token::tUSING;
 <INITIAL>"static"	return mana::Parser::token::tSTATIC;
 <INITIAL>"allocate"	return mana::Parser::token::tALLOCATE;
 

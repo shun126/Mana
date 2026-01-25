@@ -29,7 +29,7 @@ actor Mother
     action main
     {
         print("Hi");
-        request(1, Child::talk);
+        request(1, Child->talk);
     }
 }
 
@@ -42,6 +42,32 @@ actor Child
     action talk
     {
         print("Hi");
+    }
+}
+````
+
+## Namespaces and action references
+
+Use `namespace` blocks to group actors, and `using` to import namespace paths or actor symbols. Action references use `->`, while `::` is reserved for namespace qualification.
+
+````mana
+namespace Game::AI
+{
+    actor Enemy
+    {
+        action think
+        {
+        }
+    }
+}
+
+using Game::AI;
+
+actor Controller
+{
+    action main
+    {
+        request(1, Enemy->think);
     }
 }
 ````
@@ -64,17 +90,12 @@ actor Child
 - make
 
 ## Building with MSVC
+- Set the path to bison in the environment variable GNU_BISON_BIN, and the path to flex in GNU_FLEX_BIN.
 - Install Microsoft Visual C++ 2022 Community (should work with other versions).
 - Run "Vistual Studio 2022 Command Prompt" from the "Visual Studio 2022" start menu.
-- cd to <download_path>\compiler
 - Open mana.sln
 
-## Building with Xcode
-- Install Xcode 8.3.2 (should work with other versions).
-- cd to <download_path>\compiler
-- Open mana.xcodeproj
-
-# Running Tests
+# Running Sample
 ````bash
 mana sample/sample.mn
 ````

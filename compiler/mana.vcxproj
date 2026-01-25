@@ -427,6 +427,7 @@
     <ClInclude Include="LocalAddressResolver.h" />
     <ClInclude Include="LocalSemanticAnalyzer.h" />
     <ClInclude Include="Main.h" />
+    <ClInclude Include="NamespaceRegistry.h" />
     <ClInclude Include="Parser.hpp" />
     <ClInclude Include="ParsingDriver.h" />
     <ClInclude Include="Path.h" />
@@ -456,6 +457,7 @@
     <ClCompile Include="LocalAddressResolver.cpp" />
     <ClCompile Include="LocalSemanticAnalyzer.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="NamespaceRegistry.cpp" />
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="ParsingDriver.cpp" />
     <ClCompile Include="Path.cpp" />

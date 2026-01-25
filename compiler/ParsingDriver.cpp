@@ -14,6 +14,7 @@ mana (compiler)
 #include "GlobalSemanticAnalyzer.h"
 #include "LocalAddressResolver.h"
 #include "LocalSemanticAnalyzer.h"
+#include "NamespaceRegistry.h"
 #include "Parser.hpp"
 #include "SymbolFactory.h"
 #include "SyntaxNode.h"
@@ -36,8 +37,17 @@ namespace mana
 		, mTypeDescriptorFactory(std::make_shared<TypeDescriptorFactory>())
 	{
 		mSymbolFactory = std::make_shared<SymbolFactory>(mCodeBuffer, mDataBuffer, mStringPool, mTypeDescriptorFactory);
-		mLocalSemanticAnalyzer = std::make_shared<LocalSemanticAnalyzer>(mSymbolFactory, mTypeDescriptorFactory);
-		mGlobalSemanticAnalyzer = std::make_shared<GlobalSemanticAnalyzer>(mSymbolFactory, mTypeDescriptorFactory);
+		mNamespaceRegistry = std::make_shared<NamespaceRegistry>(mStringPool);
+		mLocalSemanticAnalyzer = std::make_shared<LocalSemanticAnalyzer>(
+			mSymbolFactory,
+			mTypeDescriptorFactory,
+			mStringPool,
+			mNamespaceRegistry);
+		mGlobalSemanticAnalyzer = std::make_shared<GlobalSemanticAnalyzer>(
+			mSymbolFactory,
+			mTypeDescriptorFactory,
+			mStringPool,
+			mNamespaceRegistry);
 		mCodeGenerator = std::make_shared<CodeGenerator>(
 			mCodeBuffer,
 			mDataBuffer,
@@ -71,6 +81,11 @@ namespace mana
 	const std::shared_ptr<GlobalSemanticAnalyzer>& ParsingDriver::GetGlobalSemanticAnalyzer()
 	{
 		return mGlobalSemanticAnalyzer;
+	}
+
+	const std::shared_ptr<NamespaceRegistry>& ParsingDriver::GetNamespaceRegistry()
+	{
+		return mNamespaceRegistry;
 	}
 
 	const std::shared_ptr<SyntaxNode>& ParsingDriver::GetRootSyntaxNode() const
@@ -318,6 +333,31 @@ namespace mana
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::UndefineConstant);
 		node->Set(identifier);
 		return node;
+	}
+
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateNamespace(const std::string_view& name, const std::shared_ptr<SyntaxNode>& declarations)
+	{
+		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Namespace);
+		node->Set(name);
+		node->SetLeftNode(declarations);
+		return node;
+	}
+
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateUsing(const std::string_view& name)
+	{
+		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Using);
+		node->Set(name);
+		return node;
+	}
+
+	std::string_view ParsingDriver::CreateQualifiedName(const std::string_view& left, const std::string_view& right)
+	{
+		std::string combined;
+		combined.reserve(left.size() + 2 + right.size());
+		combined.append(left);
+		combined.append("::");
+		combined.append(right);
+		return GetStringPool()->Set(combined);
 	}
 
 	// actor

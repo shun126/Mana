@@ -29,6 +29,13 @@ mana (compiler)
 
 	namespace mana {
 		class ParsingDriver;
+
+		struct ActionReference
+		{
+			std::shared_ptr<mana::SyntaxNode> actor;
+			std::string_view action;
+			bool legacy = false;
+		};
 	}
 }
 
@@ -57,6 +64,8 @@ mana (compiler)
 }
 
 %type	<std::shared_ptr<mana::SyntaxNode>> block case cases left_hand constant expression statement statements variable_size variable_sizes variable_type function struct_member struct_members struct action actions actor declarator declaration allocate_declarations declarations primary arg_calls arg_decls variable_decl line
+%type	<std::string_view> qualified_name
+%type	<mana::ActionReference> action_ref
 %token	<mana::int_t> tDIGIT
 %token	<mana::float_t> tREAL
 %token	<std::string_view> tSTRING tIDENTIFIER
@@ -64,6 +73,7 @@ mana (compiler)
 
 %token	tDEFINE tUNDEF tINCLUDE tIMPORT
 %token	tNATIVE tSTRUCT tACTOR tACTOR2 tPHANTOM tACTION tMODULE tEXTEND
+%token	tNAMESPACE tUSING
 %token	tFALSE tTRUE tPRIORITY tSELF tSENDER tNIL
 %token	tREQUEST tAwaitStart tAwaitCompletion tJOIN
 %token	tBREAK
@@ -74,6 +84,7 @@ mana (compiler)
 %token	tHALT
 %token	tLOCK
 %token	tDC
+%token	tARROW
 %token	tDO
 %token	tELSE
 %token	tFOR
@@ -134,6 +145,10 @@ declarations	: actor
 				| struct
 				| function
 				| declaration ';'
+				| tNAMESPACE qualified_name '{' line '}'
+					{ $$ = mParsingDriver->CreateNamespace($2, $4); }
+				| tUSING qualified_name ';'
+					{ $$ = mParsingDriver->CreateUsing($2); }
 
 				| tNATIVE variable_type tIDENTIFIER '(' arg_decls ')' ';'
 					{ $$ = mParsingDriver->CreateNativeFunction($2, $3, $5); }
@@ -195,7 +210,7 @@ actions			: // empty
 
 action			: tACTION tIDENTIFIER block
 					{ $$ = mParsingDriver->CreateAction($2, $3); }
-				| tEXTEND tIDENTIFIER ';'
+				| tEXTEND qualified_name ';'
 					{ $$ = mParsingDriver->CreateExtend($2); }
 				| declaration ';'
 				;
@@ -219,7 +234,7 @@ function		: variable_type tIDENTIFIER '(' arg_decls ')' block
 
 variable_type	: tACTOR2
 					{ $$ = mParsingDriver->CreateActorTypeDescription(); }
-				| tIDENTIFIER
+				| qualified_name
 					{ $$ = mParsingDriver->CreateTypeDescription($1); }
 				| tTYPE
 					{ $$ = mParsingDriver->CreateTypeDescription($1); }
@@ -276,12 +291,12 @@ statement		: tIF '(' expression ')' statement
 					{ $$ = mParsingDriver->CreateRefuse(); }
 				| tPRINT '(' arg_calls ')' ';'
 					{ $$ = mParsingDriver->CreatePrint($3); }
-				| tREQUEST '(' expression ','  expression tDC tIDENTIFIER ')' ';'
-					{ $$ = mParsingDriver->CreateRequest($3, $5, $7); }
-				| tAwaitStart '(' expression ','  expression tDC tIDENTIFIER ')' ';'
-					{ $$ = mParsingDriver->CreateAwaitStart($3, $5, $7); }
-				| tAwaitCompletion '(' expression ','  expression tDC tIDENTIFIER ')' ';'
-					{ $$ = mParsingDriver->CreateAwaitCompletion($3, $5, $7); }
+				| tREQUEST '(' expression ',' action_ref ')' ';'
+					{ $$ = mParsingDriver->CreateRequest($3, $5.actor, $5.action); }
+				| tAwaitStart '(' expression ',' action_ref ')' ';'
+					{ $$ = mParsingDriver->CreateAwaitStart($3, $5.actor, $5.action); }
+				| tAwaitCompletion '(' expression ',' action_ref ')' ';'
+					{ $$ = mParsingDriver->CreateAwaitCompletion($3, $5.actor, $5.action); }
 				| tJOIN '(' expression ','  expression ')' ';'
 					{ $$ = mParsingDriver->CreateJoin($3, $5); }
 				| block
@@ -414,6 +429,38 @@ left_hand		: left_hand '.' tIDENTIFIER
 					{ $$ = mParsingDriver->CreateIdentifier($1); }
 				| '(' expression ')'
 					{ $$ = $2; }
+				;
+
+qualified_name	: tIDENTIFIER
+					{ $$ = $1; }
+				| qualified_name tDC tIDENTIFIER
+					{ $$ = mParsingDriver->CreateQualifiedName($1, $3); }
+				;
+
+action_ref		: expression tARROW tIDENTIFIER
+					{
+						$$.actor = $1;
+						$$.action = $3;
+					}
+				| qualified_name tARROW tIDENTIFIER
+					{
+						$$.actor = mParsingDriver->CreateIdentifier($1);
+						$$.action = $3;
+					}
+				| qualified_name tDC tIDENTIFIER
+					{
+						if ($1.find("::") != std::string_view::npos)
+						{
+							mana::CompileError({ "legacy action reference cannot use namespace '", $1, "'" });
+						}
+						else
+						{
+							mana::CompileWarning({ "legacy action reference '", $1, "::", $3, "' is deprecated. Use '->' instead." });
+						}
+						$$.actor = mParsingDriver->CreateIdentifier($1);
+						$$.action = $3;
+						$$.legacy = true;
+					}
 				;
 
 cases			: case
