@@ -288,11 +288,31 @@ namespace mana
 
 	std::string_view GlobalSemanticAnalyzer::ResolveTypeName(const std::string_view& name)
 	{
-		if (name.find("::") != std::string_view::npos)
+		if (IsQualifiedName(name))
 			return name;
 
-		const std::string_view qualified = QualifyName(name);
-		return Lookup(qualified) ? qualified : name;
+		const std::string_view currentNamespace = GetCurrentNamespace();
+		if (!currentNamespace.empty())
+		{
+			const std::string_view qualified = JoinQualifiedName(currentNamespace, name);
+			if (IsTypeSymbol(qualified))
+				return qualified;
+		}
+
+		if (IsTypeSymbol(name))
+			return name;
+
+		for (auto scopeIt = mUsingScopes.rbegin(); scopeIt != mUsingScopes.rend(); ++scopeIt)
+		{
+			for (const std::string_view& nsPath : scopeIt->namespacePaths)
+			{
+				const std::string_view qualified = JoinQualifiedName(nsPath, name);
+				if (IsTypeSymbol(qualified))
+					return qualified;
+			}
+		}
+
+		return name;
 	}
 
 	std::string_view GlobalSemanticAnalyzer::ResolveExtendName(const std::string_view& name) const
