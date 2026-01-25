@@ -12,6 +12,7 @@ mana (compiler)
 #include "SyntaxNode.h"
 #include <algorithm>
 #include <string>
+#include <vector>
 
 namespace mana
 {
@@ -112,14 +113,40 @@ namespace mana
 		if (IsTypeSymbol(name))
 			return name;
 
+		std::vector<std::string_view> candidates;
+		auto addCandidate = [&candidates](const std::string_view candidate)
+		{
+			if (candidate.empty())
+				return;
+			if (std::find(candidates.begin(), candidates.end(), candidate) == candidates.end())
+				candidates.push_back(candidate);
+		};
+
 		for (auto scopeIt = mUsingScopes.rbegin(); scopeIt != mUsingScopes.rend(); ++scopeIt)
 		{
 			for (const std::string_view& nsPath : scopeIt->namespacePaths)
 			{
 				const std::string_view qualified = JoinQualifiedName(nsPath, name);
 				if (IsTypeSymbol(qualified))
-					return qualified;
+					addCandidate(qualified);
 			}
+		}
+
+		if (!candidates.empty())
+		{
+			if (candidates.size() > 1)
+			{
+				std::string message = "ambiguous type reference '" + std::string(name) + "': ";
+				for (size_t index = 0; index < candidates.size(); ++index)
+				{
+					if (index > 0)
+						message += ", ";
+					message += std::string(candidates[index]);
+				}
+				CompileError(message);
+				return name;
+			}
+			return candidates.front();
 		}
 
 		return name;
