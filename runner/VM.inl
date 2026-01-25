@@ -31,7 +31,7 @@ namespace mana
 
 	inline void VM::RegisterFunction(const std::string& name, const ExternalFunctionType& function)
 	{
-		mFunctionHash[name] = function;
+		mFunctions[name] = function;
 	}
 
 	template <class T>
@@ -106,8 +106,8 @@ namespace mana
 
 	inline VM::ExternalFunctionType VM::FindFunction(const std::string& functionName) const
 	{
-		const auto i = mFunctionHash.find(functionName);
-		if (i == mFunctionHash.end())
+		const auto i = mFunctions.find(functionName);
+		if (i == mFunctions.end())
 		{
 			MANA_ERROR({ "An external function called ", functionName, " was not found.\n" });
 		}
@@ -219,7 +219,7 @@ namespace mana
 
 			if (actorInfo->mFlag & (1 << ActorInfoHeader::Flag::Phantom))
 			{
-				mPhantomHash[actorName] = actorInfo;
+				mPhantoms[actorName] = actorInfo;
 
 				actorInfo = reinterpret_cast<const ActorInfoHeader*>(actionInfo + actorInfo->mNumberOfActions);
 			}
@@ -237,7 +237,7 @@ namespace mana
 					++actionInfo;
 				}
 
-				mActorHash[actorName] = actor;
+				mActors[actorName] = actor;
 
 				actorInfo = reinterpret_cast<const ActorInfoHeader*>(actionInfo);
 			}
@@ -279,8 +279,8 @@ namespace mana
 		mFlag.reset(Flag::Initialized);
 		mFlag.reset(Flag::EnableSystemRequest);
 
-		mActorHash.clear();
-		mPhantomHash.clear();
+		mActors.clear();
+		mPhantoms.clear();
 
 		// ・ｽﾏ撰ｿｽ・ｽﾌ茨ｿｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽﾜゑｿｽ
 		mGlobalVariables.Reset();
@@ -295,7 +295,7 @@ namespace mana
 
 	inline void VM::Restart()
 	{
-		for (auto& actor : mActorHash)
+		for (auto& actor : mActors)
 		{
 			actor.second->Restart();
 		}
@@ -311,7 +311,7 @@ namespace mana
 		mFlag.set(Flag::FrameChanged);
 		mFlag.reset(Flag::Requested);
 
-		for (auto& actor : mActorHash)
+		for (auto& actor : mActors)
 		{
 			running |= actor.second->Run();
 		}
@@ -321,7 +321,7 @@ namespace mana
 		{
 			mFlag.reset(Flag::Requested);
 
-			for (auto& actor : mActorHash)
+			for (auto& actor : mActors)
 			{
 				if (actor.second->mFlag[Flag::Requested])
 				{
@@ -345,7 +345,7 @@ namespace mana
 	{
 		if (mFlag[Flag::Initialized])
 		{
-			for (auto& actor : mActorHash)
+			for (auto& actor : mActors)
 			{
 				if (actor.second->IsRunning())
 					return true;
@@ -364,7 +364,7 @@ namespace mana
 
 	inline void VM::RequestAll(const int32_t level, const char* actionName, const std::shared_ptr<Actor>& sender) const
 	{
-		for (auto& actor : mActorHash)
+		for (auto& actor : mActors)
 		{
 			actor.second->Request(level, actionName, sender);
 		}
@@ -372,8 +372,8 @@ namespace mana
 
 	inline bool VM::Request(const int32_t level, const char* actorName, const char* actionName, const std::shared_ptr<Actor>& sender)
 	{
-		auto i = mActorHash.find(actorName);
-		if (i == mActorHash.end())
+		auto i = mActors.find(actorName);
+		if (i == mActors.end())
 			return false;
 
 		const std::shared_ptr<Actor>& actor = i->second;
@@ -385,30 +385,31 @@ namespace mana
 
 	inline void VM::YieldAll() const
 	{
-		for (auto& actor : mActorHash)
+		for (auto& actor : mActors)
 		{
 			actor.second->yield();
 		}
 	}
 
-	inline const std::shared_ptr<Actor>& VM::GetActor(const char* name)
+	inline std::shared_ptr<Actor> VM::FindActor(const char* name)
 	{
-		return mActorHash[name];
+		const auto actor = mActors.find(name);
+		if (actor != mActors.end())
+			return actor->second;
+		return {};
 	}
 
-	inline const std::string_view& VM::GetActorName(const std::shared_ptr<Actor>& actor) const
+	inline std::string_view VM::GetActorName(const std::shared_ptr<Actor>& actor) const
 	{
 		if (mFlag[Flag::Initialized])
 		{
-			for (const auto& i : mActorHash)
+			for (const auto& i : mActors)
 			{
 				if (actor.get() == i.second.get())
 					return i.first;
 			}
 		}
-
-		static constexpr std::string_view Empty;
-		return Empty;
+		return {};
 	}
 
 	inline std::shared_ptr<Actor> VM::CloneActor(const std::shared_ptr<Actor>& actor, const char* newName)
@@ -416,22 +417,22 @@ namespace mana
 		if (actor->mVM.lock() != shared_from_this())
 			throw std::runtime_error("It is not possible to duplicate actors of different VMs");
 
-		if (mActorHash.find(newName) != mActorHash.end())
+		if (mActors.find(newName) != mActors.end())
 			throw std::invalid_argument("Symbol has already been registered");
 
 		const std::shared_ptr<Actor>& newActor = actor->Clone();
-		mActorHash[newName] = newActor;
+		mActors[newName] = newActor;
 		return newActor;
 	}
 
 	inline std::shared_ptr<Actor> VM::CreateActor(const char* name, const char* newName)
 	{
-		return CloneActor(GetActor(name), newName);
+		return CloneActor(FindActor(name), newName);
 	}
 
 	inline std::shared_ptr<Actor> VM::CreateActorFromPhantom(const char* name, const char* newName)
 	{
-		const ActorInfoHeader* actorInfo = mPhantomHash[name];
+		const ActorInfoHeader* actorInfo = mPhantoms[name];
 		if (actorInfo == nullptr)
 			throw std::runtime_error("Phantom not found");
 
@@ -439,7 +440,7 @@ namespace mana
 			throw std::runtime_error("It is not a phantom");
 
 		std::shared_ptr<Actor> newActor = std::make_shared<Actor>(shared_from_this(), actorInfo->mVariableSize);
-		mActorHash[newName] = newActor;
+		mActors[newName] = newActor;
 
 		{
 			const ActionInfoHeader* actionInfo = reinterpret_cast<const ActionInfoHeader*>(actorInfo + 1);

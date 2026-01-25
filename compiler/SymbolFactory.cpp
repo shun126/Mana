@@ -656,7 +656,7 @@ TODO:
 		mFrameSizeList = mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::Free, mFrameSizeList);
 
 		// return命令の発行
-		if (IsActorOrStructerOpened())
+		if (isAction)
 		{
 			mCodeBuffer->AddOpecode(IntermediateLanguage::ReturnFromAction);
 		}

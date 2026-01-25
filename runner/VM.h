@@ -65,8 +65,8 @@ namespace mana
 		void RequestAll(const int32_t level, const char* actionName, const std::shared_ptr<Actor>& sender) const;
 		bool Request(const int32_t level, const char* actorName, const char* actionName, const std::shared_ptr<Actor>& sender);
 		void YieldAll() const;
-		[[nodiscard]] const std::shared_ptr<Actor>& GetActor(const char* name);
-		[[nodiscard]] const std::string_view& GetActorName(const std::shared_ptr<Actor>& actor) const;
+		[[nodiscard]] std::shared_ptr<Actor> FindActor(const char* name);
+		[[nodiscard]] std::string_view GetActorName(const std::shared_ptr<Actor>& actor) const;
 		[[nodiscard]] std::shared_ptr<Actor> CloneActor(const std::shared_ptr<Actor>& actor, const char* newName);
 		[[nodiscard]] std::shared_ptr<Actor> CreateActor(const char* name, const char* newName);
 		[[nodiscard]] std::shared_ptr<Actor> CreateActorFromPhantom(const char* name, const char* newName);
@@ -106,9 +106,9 @@ namespace mana
 		const uint8_t* mInstructionPool = nullptr;
 		const char* mConstantPool = nullptr;
 		//std::vector<,*> m,Array;					//!< , オブジェクトへの配列
-		std::unordered_map<std::string, ExternalFunctionType> mFunctionHash;
-		std::unordered_map<std::string_view, std::shared_ptr<Actor>> mActorHash;		//!< オブジェクトへの連想配列
-		std::unordered_map<std::string_view, const ActorInfoHeader*> mPhantomHash;		//!< phantomを表すActorオブジェクトへの連想配列
+		std::unordered_map<std::string, ExternalFunctionType> mFunctions;
+		std::unordered_map<std::string_view, std::shared_ptr<Actor>> mActors;		//!< オブジェクトへの連想配列
+		std::unordered_map<std::string_view, const ActorInfoHeader*> mPhantoms;		//!< phantomを表すActorオブジェクトへの連想配列
 		Buffer mGlobalVariables;
 		Buffer mStaticVariables;
 		

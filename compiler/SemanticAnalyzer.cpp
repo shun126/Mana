@@ -8,13 +8,16 @@ mana (compiler)
 #include "SemanticAnalyzer.h"
 #include "Lexer.h"
 #include "ErrorHandler.h"
+#include "StringPool.h"
 
 namespace mana
 {
 	SemanticAnalyzer::SemanticAnalyzer(
 		const std::shared_ptr<SymbolFactory>& symbolFactory,
-		const std::shared_ptr<TypeDescriptorFactory>& typeDescriptorFactory)
+		const std::shared_ptr<TypeDescriptorFactory>& typeDescriptorFactory,
+		const std::shared_ptr<StringPool>& stringPool)
 		: mSymbolFactory(symbolFactory)
+		, mStringPool(stringPool)
 		, mTypeDescriptorFactory(typeDescriptorFactory)
 	{
 	}
@@ -176,12 +179,17 @@ namespace mana
 		return mSymbolFactory->Lookup(name);
 	}
 
-	const std::shared_ptr<SymbolFactory>& SemanticAnalyzer::GetSymbolFactory()
+	const std::shared_ptr<SymbolFactory>& SemanticAnalyzer::GetSymbolFactory() const
 	{
 		return mSymbolFactory;
 	}
 
-	const std::shared_ptr<TypeDescriptorFactory>& SemanticAnalyzer::GetTypeDescriptorFactory()
+	const std::shared_ptr<StringPool>& SemanticAnalyzer::GetStringPool() const
+	{
+		return mStringPool;
+	}
+
+	const std::shared_ptr<TypeDescriptorFactory>& SemanticAnalyzer::GetTypeDescriptorFactory() const
 	{
 		return mTypeDescriptorFactory;
 	}
