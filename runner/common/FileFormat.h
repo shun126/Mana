@@ -234,7 +234,7 @@ namespace mana
 				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(BranchNotEqual, sizeof(address_t)) },
 				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(Branch, sizeof(address_t)) },
 				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(BranchSubRoutine, sizeof(address_t)) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(Call, sizeof(address_t) + sizeof(int16_t) + sizeof(int16_t) /* + (program[6] * sizeof(int16_t))*/)}, // 引数によってサイズが変わる
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(Call, sizeof(address_t) + sizeof(uint8_t) + sizeof(uint8_t) + sizeof(uint8_t)) },
 				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(Request, sizeof(address_t)) },
 				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(RequestWaitStarting, sizeof(address_t)) },
 				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(RequestWaitEnded, sizeof(address_t)) },
@@ -360,14 +360,6 @@ namespace mana
 	{
 		const uint8_t* program = &static_cast<const uint8_t*>(codeBuffer)[index];
 		const IntermediateLanguage code = static_cast<IntermediateLanguage>(*program);
-		if (IntermediateLanguage::Call == code)
-		{
-			// Size varies depending on the argument.
-			return sizeof(address_t) + sizeof(int16_t) + sizeof(int16_t) + (program[6] * sizeof(int16_t));
-		}
-		else
-		{
-			return GetIntermediateLanguageProperty(code).mSize;
-		}
+		return GetIntermediateLanguageProperty(code).mSize;
 	}
 }

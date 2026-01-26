@@ -132,8 +132,8 @@ namespace mana
 			mCodeBuffer->AddOpecode(IntermediateLanguage::StoreFloat);
 			break;
 
-		case TypeDescriptor::Id::Reference:
 		case TypeDescriptor::Id::Actor:
+		case TypeDescriptor::Id::Reference:
 			mCodeBuffer->AddOpecode(IntermediateLanguage::StoreReference);
 			break;
 
@@ -265,11 +265,13 @@ namespace mana
 		if (param && arg)
 		{
 			address += CallArgumentSize(address, param->GetNext(), arg->GetRightNode());
+			if (address < std::numeric_limits<int16_t>::min() || std::numeric_limits<int16_t>::max() < address)
+				throw std::range_error("call argument size");
 
 			if (arg->Is(SyntaxNode::Id::CallArgument))
 				arg = arg->GetLeftNode();
 
-			address += Alignment(arg->GetMemorySize(), ToAddress(sizeof(int32_t)));
+			address += Alignment(arg->GetMemorySize(), ToAddress(sizeof(void*)));
 		}
 		return address;
 	}
@@ -288,12 +290,13 @@ namespace mana
 			address = CallArgument(address, param->GetNext(), arg->GetRightNode());
 			if (address < std::numeric_limits<int16_t>::min() || std::numeric_limits<int16_t>::max() < address)
 				throw std::range_error("call argument size");
+
 			mCodeBuffer->Add<int16_t>(static_cast<int16_t>(address));
 
 			if (arg->Is(SyntaxNode::Id::CallArgument))
 				arg = arg->GetLeftNode();
 
-			address -= Alignment(arg->GetMemorySize(), ToAddress(sizeof(int32_t)));
+			address -= Alignment(arg->GetMemorySize(), ToAddress(sizeof(void*)));
 		}
 		return address;
 	}
@@ -304,37 +307,40 @@ namespace mana
 	*/
 	void CodeGenerator::Call(const std::shared_ptr<SyntaxNode>& node)
 	{
-		std::shared_ptr<SyntaxNode> argument = node->GetRightNode();
-		int32_t argument_counter = Argument(0, (node->GetSymbol())->GetParameterList(), argument);
+		const auto& argument = node->GetRightNode();
+		const auto argumentDefinitionCount = Argument(0, node->GetSymbol()->GetParameterList(), argument);
 
-		// エラーチェック
-		if (argument_counter < 0 || std::numeric_limits<uint8_t>::max() < argument_counter)
+		// 引数の最大数をチェック
+		if (argumentDefinitionCount < 0 || std::numeric_limits<uint8_t>::max() < argumentDefinitionCount)
 		{
 			// 256以上の引数は指定できません
 			CompileError("Cannot specify more than 256 arguments.");
 		}
-		else if ((node->GetSymbol())->GetNumberOfParameters() != argument_counter)
+		// 宣言と引数の数が一致しているかチェック
+		else if ((node->GetSymbol())->GetNumberOfParameters() != argumentDefinitionCount)
 		{
 			// 引数の数が一致しない
 			CompileError("unmatched argument.");
 		}
+		// 外部関数か？
 		else if ((node->GetSymbol())->GetClassTypeId() == Symbol::ClassTypeId::NativeFunction)
 		{
 			// for external function
-			int32_t argument_size = CallArgumentSize(0, (node->GetSymbol())->GetParameterList(), argument);
+			const auto argumentDeclarationCount = CallArgumentSize(0, node->GetSymbol()->GetParameterList(), argument);
 
-			node->GetSymbol()->SetAddress(mDataBuffer->Set(node->GetSymbol()->GetName()));
+			const auto functionNameAddress = mDataBuffer->Set(node->GetSymbol()->GetName());
+			node->GetSymbol()->SetAddress(functionNameAddress);
 
-			mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::Call, (node->GetSymbol())->GetAddress());
+			mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::Call, functionNameAddress);
 			mCodeBuffer->Add<uint8_t>(((node->GetSymbol())->GetTypeDescriptor()->GetId() != TypeDescriptor::Id::Void));
-			mCodeBuffer->Add<uint8_t>(static_cast<uint8_t>(argument_counter));
-			mCodeBuffer->Add<uint16_t>(static_cast<uint16_t>(argument_size));
-			CallArgument(argument_size - 1, (node->GetSymbol())->GetParameterList(), argument);
+			mCodeBuffer->Add<uint8_t>(static_cast<uint8_t>(argumentDefinitionCount));
+			mCodeBuffer->Add<uint8_t>(static_cast<uint8_t>(argumentDeclarationCount));
 		}
+		// 内部関数か？
 		else
 		{
 			// for internal function
-			const int32_t address = mCodeBuffer->AddOpecodeAndOperand(
+			const auto address = mCodeBuffer->AddOpecodeAndOperand(
 				IntermediateLanguage::BranchSubRoutine,
 				node->GetSymbol()->GetAddress()
 			);
