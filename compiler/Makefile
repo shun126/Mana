@@ -73,6 +73,7 @@ all:
 
 clean:
 	$(RM) $(TARGET) $(SECOUND) $(OBJECTS)
+	cd ../test/ && make clean
 
 depend:
 	makedepend -Y -- $(CFLAGS) -- $(SOURCES)
@@ -82,6 +83,9 @@ cppcheck:
 
 test:
 	./$(TARGET) --debug ../sample/sample.mn
+	./$(TARGET) ../test/program_image_test.mn -o ../test/program_image_test.mx
+	cd ../test/ && make
+	cd ../test/ && ./ProgramImageTest program_image_test.mx
 	cd ../test/ && python3 test.py ../compiler/$(TARGET)
 
 version:
@@ -209,7 +213,8 @@ Main.o: ../runner/Stack.h ../runner/common/Noncopyable.h
 Main.o: ../runner/common/OutputStream.h ../runner/Stack.inl
 Main.o: ../runner/Actor.inl ../runner/VM.h ../runner/VM.inl
 Main.o: ../runner/Plugin.h ../runner/Plugin.inl ../runner/common/FileFormat.h
-Main.o: ../runner/Function.h
+Main.o: ../runner/Function.h ../runner/ProgramImage.h
+Main.o: ../runner/ProgramImage.inl
 NamespaceRegistry.o: NamespaceRegistry.h StringPool.h
 NamespaceRegistry.o: ../runner/common/Platform.h ../runner/common/Type.h
 ParsingDriver.o: ../runner/common/Setup.h ../runner/common/Platform.h
