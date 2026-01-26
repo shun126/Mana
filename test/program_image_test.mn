@@ -1,0 +1,22 @@
+/*
+mana (script)
+Copyright (c) 2024 Shun Moriya
+*/
+
+actor TestActor
+{
+	action init
+	{
+	}
+
+	action main
+	{
+	}
+}
+
+phantom TestPhantom
+{
+	action init
+	{
+	}
+}
