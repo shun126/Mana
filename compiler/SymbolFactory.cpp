@@ -600,11 +600,11 @@ TODO:
 				break;
 
 			case TypeDescriptor::Id::Actor:
-				mCodeBuffer->AddOpecode(IntermediateLanguage::StoreInteger);
+			case TypeDescriptor::Id::Reference:
+				mCodeBuffer->AddOpecode(IntermediateLanguage::StoreReference);
 				break;
 
 			case TypeDescriptor::Id::Void:
-			case TypeDescriptor::Id::Reference:
 			case TypeDescriptor::Id::Array:
 			case TypeDescriptor::Id::Struct:
 			case TypeDescriptor::Id::Module:

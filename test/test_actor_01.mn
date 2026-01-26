@@ -25,6 +25,13 @@ module TestModule
 	}
 }
 
+native void nativeFunctionTest(Actor a0, int a1, float a2);
+
+void functionTest(Actor a0, int a1, float a2)
+{
+	nativeFunctionTest(a0, a1, a2);
+}
+
 // actor declarations
 actor TestActor1
 {
@@ -38,6 +45,7 @@ actor TestActor1
 	action init
 	{
 		print("TestActor1::init\n");
+		functionTest(self, 1, 2.0);
 
 		char a;
 		short b = 1;
