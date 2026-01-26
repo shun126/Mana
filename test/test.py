@@ -87,6 +87,7 @@ success('test_using_resolve_namespace_path.mn')
 success('test_using_resolve_symbol_import.mn')
 success('test_using_scope_order.mn')
 fail('test_using_ambiguous_actor.mn', 'ambiguous actor reference')
+fail('test_using_ambiguous_type.mn', 'ambiguous type reference')
 fail('test_using_ambiguous_namespace_symbol.mn', 'ambiguous using')
 success('test_extend_namespace_resolution.mn')
 ################################################################################
