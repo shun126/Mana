@@ -13,4 +13,5 @@ mana (library)
 #include "Function.h"
 #include "Plugin.h"
 #include "Stack.h"
+#include "ProgramImage.h"
 #include "VM.h"
