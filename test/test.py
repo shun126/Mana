@@ -30,10 +30,16 @@ def success(argument):
 		print(" ... Success")
 	else:
 		print(" ... Failed")
+		if cp.returncode < 0:
+			print(f"Process killed by signal {-cp.returncode}")
+		else:
+			print(f"Process exited with code {cp.returncode}")
 		print('stdout :')
-		print(cp.stdout)
+		if len(cp.stdout) > 0:
+			print(cp.stdout)
 		print('stderr :')
-		print(cp.stderr)
+		if len(cp.stderr) > 0:
+			print(cp.stderr)
 		global Result
 		Result += 1
 
@@ -74,6 +80,12 @@ success('test_action_ref_expression.mn')
 success('test_using_namespace.mn')
 success('test_using_symbol.mn')
 success('test_forward_reference_using.mn')
+success('test_forward_using_namespace.mn')
+success('test_forward_using_namespace_nested.mn')
+success('test_forward_using_actor.mn')
+success('test_using_resolve_namespace_path.mn')
+success('test_using_resolve_symbol_import.mn')
+success('test_using_scope_order.mn')
 fail('test_using_ambiguous_actor.mn', 'ambiguous actor reference')
 fail('test_using_ambiguous_namespace_symbol.mn', 'ambiguous using')
 success('test_extend_namespace_resolution.mn')

@@ -1,0 +1,8 @@
+using A;
+
+namespace A {
+    struct S {
+    }
+}
+
+S value;
