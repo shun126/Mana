@@ -13,8 +13,8 @@ mana (compiler)
 namespace mana
 {
 	TypeDescriptor::TypeDescriptor(const Id tcons)
-		: mTcons(tcons)
-		, mShare()
+		: mShare()
+		, mTypeIdentifier(tcons)
 	{
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
 		static uint32_t count = 0;
@@ -25,25 +25,25 @@ namespace mana
 
 	bool TypeDescriptor::Is(const Id id) const
 	{
-		return mTcons == id;
+		return mTypeIdentifier == id;
 	}
 
 	bool TypeDescriptor::IsNot(const Id id) const
 	{
-		return mTcons != id;
+		return mTypeIdentifier != id;
 	}
 
 	TypeDescriptor::Id TypeDescriptor::GetId() const
 	{
-		return mTcons;
+		return mTypeIdentifier;
 	}
 
 	bool TypeDescriptor::Compare(const std::shared_ptr<TypeDescriptor>& typeDescriptor) const
 	{
-		if (mTcons != typeDescriptor->mTcons)
+		if (mTypeIdentifier != typeDescriptor->mTypeIdentifier)
 			return false;
 
-		switch (mTcons)
+		switch (mTypeIdentifier)
 		{
 		case Id::Reference:
 			return mComponent->Compare(typeDescriptor->mComponent);
@@ -75,13 +75,13 @@ namespace mana
 
 	bool TypeDescriptor::Compatible(const std::shared_ptr<TypeDescriptor>& typeDescriptor) const
 	{
-		switch (mTcons)
+		switch (mTypeIdentifier)
 		{
 		case Id::Char:
 		case Id::Short:
 		case Id::Bool:
 		case Id::Int:
-			switch (typeDescriptor->mTcons)
+			switch (typeDescriptor->mTypeIdentifier)
 			{
 			case Id::Char:
 			case Id::Short:
@@ -103,7 +103,7 @@ namespace mana
 			break;
 
 		case Id::Float:
-			if (typeDescriptor->mTcons == Id::Float)
+			if (typeDescriptor->mTypeIdentifier == Id::Float)
 				return true;
 			break;
 
@@ -114,7 +114,7 @@ namespace mana
 			break;
 
 		case Id::Actor:
-			if (mTcons == typeDescriptor->mTcons)
+			if (mTypeIdentifier == typeDescriptor->mTypeIdentifier)
 				return true;
 			break;
 
@@ -260,8 +260,8 @@ namespace mana
 
 	void TypeDescriptor::Dump(std::ofstream& output) const
 	{
-		output << GetDataTypeName(mTcons);
-		switch (mTcons)
+		output << GetDataTypeName(mTypeIdentifier);
+		switch (mTypeIdentifier)
 		{
 		case Id::Reference:
 			output << "\\<";
