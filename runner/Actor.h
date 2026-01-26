@@ -61,7 +61,8 @@ namespace mana
 		[[nodiscard]] int32_t GetParameterInteger(const int32_t value) const;
 		[[nodiscard]] float GetParameterFloat(const int32_t value) const;
 		[[nodiscard]] const char* GetParameterString(const int32_t value) const;
-		[[nodiscard]] Actor* GetParameterActor(const int32_t value) const;
+		[[nodiscard]] std::shared_ptr<Actor> GetParameterActor(const int32_t value) const;
+		[[nodiscard]] Actor* GetParameterActorPointer(const int32_t value) const;
 		[[nodiscard]] void* GetParameterPointer(const int32_t value) const;
 		[[nodiscard]] void* GetParameterAddress(const int32_t value) const;
 		void SetReturnInteger(const int32_t value);
