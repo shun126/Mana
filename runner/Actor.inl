@@ -595,9 +595,12 @@ namespace mana
 		return mStack.Get<const char*>(mVM.lock()->GetInt16FromMemory(mPc + 5 + sizeof(int16_t) + sizeof(int16_t) + (value * sizeof(int16_t))));
 	}
 
-	inline Actor* Actor::GetParameterActor(const int32_t value) const
+	inline std::shared_ptr<Actor> Actor::GetParameterActor(const int32_t value) const
 	{
-		return static_cast<Actor*>(GetParameterPointer(value));
+		Actor* actor = static_cast<Actor*>(GetParameterPointer(value));
+		if (actor == nullptr)
+			return nullptr;
+		return actor->shared_from_this();
 	}
 
 	inline void* Actor::GetParameterPointer(const int32_t value) const
