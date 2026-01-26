@@ -433,22 +433,22 @@ namespace mana
 		if (mLeft)
 		{
 			mLeft->DumpRecursive(output);
-			output << magic << " --> " << mLeft->GetMagic() << "\n";
+			output << magic << " --> |left|" << mLeft->GetMagic() << "\n";
 		}
 		if (mRight)
 		{
 			mRight->DumpRecursive(output);
-			output << magic << " --> " << mRight->GetMagic() << "\n";
+			output << magic << " --> |right|" << mRight->GetMagic() << "\n";
 		}
 		if (mBody)
 		{
 			mBody->DumpRecursive(output);
-			output << magic << " --> " << mBody->GetMagic() << "\n";
+			output << magic << " --> |body|" << mBody->GetMagic() << "\n";
 		}
 		if (mNext)
 		{
 			mNext->DumpRecursive(output);
-			output << magic << " --> " << mNext->GetMagic() << "\n";
+			output << magic << " --> |next|" << mNext->GetMagic() << "\n";
 		}
 	}
 }

@@ -62,15 +62,18 @@ namespace mana
 		std::ofstream log(path);
 		if (log.is_open())
 		{
+			if (parser->GetSymbolFactory())
 			{
 				log << "# Symbol Table\n";
 				parser->GetSymbolFactory()->Dump(log);
 				log << "\n";
 			}
+			if (parser->GetRootSyntaxNode())
 			{
 				log << "# Syntax Node\n";
 				parser->GetRootSyntaxNode()->Dump(log);
 			}
+			if (parser->GetCodeGenerator())
 			{
 				log << "# Code\n";
 				log << "```\n";
@@ -290,15 +293,9 @@ namespace mana
 					case 'o':
 						cmdcnt++;
 						if (cmdcnt >= argc)
-						{
-							std::cerr << "no output file name\n";
-							return false;
-						}
-						else
-						{
-							strcpy(mOutputFilename, sizeof(mOutputFilename), argv[cmdcnt]);
 							outputBinary = true;
-						}
+						else
+							strcpy(mOutputFilename, sizeof(mOutputFilename), argv[cmdcnt]);
 						break;
 
 					case 'i':
@@ -386,7 +383,7 @@ namespace mana
 				splitpath(mInputFilename, drive, sizeof(drive), dir, sizeof(dir), fileName, sizeof(fileName), ext, sizeof(ext));
 
 				// output Binary
-				if (!outputBinary)
+				if (outputBinary)
 				{
 					makepath(mOutputFilename, sizeof(mOutputFilename), drive, dir, fileName, ".mx");
 				}
