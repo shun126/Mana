@@ -6,7 +6,7 @@ mana (library)
 */
 
 #pragma once
-#include "common/Platform.h"
+#include "common/Setup.h"
 
 namespace mana
 {

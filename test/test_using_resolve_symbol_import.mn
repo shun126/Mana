@@ -1,0 +1,5 @@
+using A::X;
+
+namespace A { actor X { action talk {} } }
+
+actor Root { action main { request(1, X->talk); } }
