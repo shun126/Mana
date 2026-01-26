@@ -597,10 +597,15 @@ namespace mana
 
 	inline std::shared_ptr<Actor> Actor::GetParameterActor(const int32_t value) const
 	{
-		Actor* actor = static_cast<Actor*>(GetParameterPointer(value));
+		Actor* actor = GetParameterActorPointer(value);
 		if (actor == nullptr)
 			return nullptr;
 		return actor->shared_from_this();
+	}
+
+	inline Actor* Actor::GetParameterActorPointer(const int32_t value) const
+	{
+		return static_cast<Actor*>(GetParameterPointer(value));
 	}
 
 	inline void* Actor::GetParameterPointer(const int32_t value) const
