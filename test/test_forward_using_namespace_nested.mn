@@ -1,0 +1,5 @@
+using A::B;
+
+namespace A { namespace B { struct S {} } }
+
+S value;

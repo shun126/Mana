@@ -119,10 +119,9 @@ namespace mana
 		std::shared_ptr<Symbol> mParent;
 		std::shared_ptr<TypeDescriptor> mComponent;	//!< Array, link to original type of reference type
 		std::string mName;							//!< Type name
-		Id mTcons = Id::Incomplete;					//!< Type identifier
 		address_t mArraySize = 1;
 		address_t mMemorySize = 0;
-		address_t mAlignmentMemorySize = 0;
+		address_t mAlignmentMemorySize = 1;
 
 		union Share
 		{
@@ -131,5 +130,7 @@ namespace mana
 				bool mPhantom;
 			} mActor;
 		} mShare;
-	};
+
+		Id mTypeIdentifier = Id::Incomplete;		//!< Type identifier
+};
 }
