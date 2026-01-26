@@ -386,7 +386,7 @@ namespace mana
 				splitpath(mInputFilename, drive, sizeof(drive), dir, sizeof(dir), fileName, sizeof(fileName), ext, sizeof(ext));
 
 				// output Binary
-				if (outputBinary)
+				if (!outputBinary)
 				{
 					makepath(mOutputFilename, sizeof(mOutputFilename), drive, dir, fileName, ".mx");
 				}

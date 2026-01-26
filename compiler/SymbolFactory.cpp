@@ -741,13 +741,13 @@ TODO:
 	{
 		MANA_ASSERT(GetBlockDepth() > 0);
 
-		address_t maxAligmentSize = 0;
+		address_t maxAlignmentSize = 1;
 
 		// 最も大きいサイズのタイプにアライメントを合わせる
-		EachBlock([&maxAligmentSize](const std::shared_ptr<Symbol>& symbol)
+		EachBlock([&maxAlignmentSize](const std::shared_ptr<Symbol>& symbol)
 			{
 				const std::shared_ptr<TypeDescriptor>& typeDescriptor = symbol->GetTypeDescriptor();
-				maxAligmentSize = std::max(maxAligmentSize, typeDescriptor->GetAlignmentMemorySize());
+				maxAlignmentSize = std::max(maxAlignmentSize, typeDescriptor->GetAlignmentMemorySize());
 			});
 #if 0
 		if (!mBlockTable.top()->mHead.empty())
@@ -756,8 +756,8 @@ TODO:
 			while (symbol)
 			{
 				const std::shared_ptr<TypeDescriptor>& typeDescriptor = symbol->GetTypeDescriptor();
-				if (maxAligmentSize < typeDescriptor->GetAlignmentMemorySize())
-					maxAligmentSize = typeDescriptor->GetAlignmentMemorySize();
+				if (maxAlignmentSize < typeDescriptor->GetAlignmentMemorySize())
+					maxAlignmentSize = typeDescriptor->GetAlignmentMemorySize();
 				symbol = symbol->GetNext();
 			}
 		}
@@ -767,12 +767,12 @@ TODO:
 		std::shared_ptr<TypeDescriptor> newType = mTypeDescriptorFactory->Create(TypeDescriptor::Id::Struct);
 		newType->SetSymbolEntry(GetLastSymbolEntryInBlock());
 		newType->SetName(name);
-		newType->SetAlignmentMemorySize(maxAligmentSize);
+		newType->SetAlignmentMemorySize(maxAlignmentSize);
 
 		--mActorOrStructureLevel;
 		CloseBlock();
 
-		newType->SetMemorySize(symbol_align_size(mActorMemoryAddress, maxAligmentSize));
+		newType->SetMemorySize(symbol_align_size(mActorMemoryAddress, maxAlignmentSize));
 
 		// TODO スクリプトのグローバル変数を構造体としてヘッダーに出力する必要があるか検討して下さい
 #if 0
@@ -1260,7 +1260,7 @@ TODO:
 	{
 		if (type->Is(TypeDescriptor::Id::Incomplete) || type->Is(TypeDescriptor::Id::Void))
 		{
-			CompileError("incomplete type name or void is used for declraration");
+			CompileError("incomplete type name or void is used for declaration");
 			type = mTypeDescriptorFactory->Get(TypeDescriptor::Id::Int);
 		}
 
@@ -1280,52 +1280,45 @@ TODO:
 		{
 		}
 		else
-		{														// 配列型の変数の処理
-			symbol->GetTypeDescriptor()->SetArray(type);		// 配列型リストの設定
+		{												// 配列型の変数の処理
+			symbol->GetTypeDescriptor()->SetArray(type);// 配列型リストの設定
 			type = symbol->GetTypeDescriptor();
 		}
 
-		if (type->GetMemorySize() > 0)
+		switch (symbol->GetClassTypeId())
 		{
-			switch (symbol->GetClassTypeId())
-			{
-			case Symbol::ClassTypeId::StaticVariable:
-				symbol->SetAddress(symbol_align_size(mStaticMemoryAddress, type->GetAlignmentMemorySize()));
-				mStaticMemoryAddress = symbol->GetAddress() + type->GetMemorySize();
-				break;
+		case Symbol::ClassTypeId::StaticVariable:
+			symbol->SetAddress(symbol_align_size(mStaticMemoryAddress, type->GetAlignmentMemorySize()));
+			mStaticMemoryAddress = symbol->GetAddress() + type->GetMemorySize();
+			break;
 
-			case Symbol::ClassTypeId::GlobalVariable:
-				symbol->SetAddress(symbol_align_size(mGlobalMemoryAddress, type->GetAlignmentMemorySize()));
-				mGlobalMemoryAddress = symbol->GetAddress() + type->GetMemorySize();
-				break;
+		case Symbol::ClassTypeId::GlobalVariable:
+			symbol->SetAddress(symbol_align_size(mGlobalMemoryAddress, type->GetAlignmentMemorySize()));
+			mGlobalMemoryAddress = symbol->GetAddress() + type->GetMemorySize();
+			break;
 
-			case Symbol::ClassTypeId::ActorVariable:
-				symbol->SetAddress(symbol_align_size(mActorMemoryAddress, type->GetAlignmentMemorySize()));
-				mActorMemoryAddress = symbol->GetAddress() + type->GetMemorySize();
-				break;
+		case Symbol::ClassTypeId::ActorVariable:
+			symbol->SetAddress(symbol_align_size(mActorMemoryAddress, type->GetAlignmentMemorySize()));
+			mActorMemoryAddress = symbol->GetAddress() + type->GetMemorySize();
+			break;
 
-			case Symbol::ClassTypeId::LocalVariable:
-				// ローカル変数は後ろから確保される為、他の変数と計算が反対になるので注意
-				symbol->SetAddress(symbol_align_size(mLocalMemoryAddress, type->GetAlignmentMemorySize()) + type->GetMemorySize());
-				mLocalMemoryAddress = symbol->GetAddress();
-				break;
+		case Symbol::ClassTypeId::LocalVariable:
+			// ローカル変数は後ろから確保される為、他の変数と計算が反対になるので注意
+			symbol->SetAddress(symbol_align_size(mLocalMemoryAddress, type->GetAlignmentMemorySize()) + type->GetMemorySize());
+			mLocalMemoryAddress = symbol->GetAddress();
+			break;
 
-			case Symbol::ClassTypeId::NewSymbol:
-			case Symbol::ClassTypeId::Type:
-			case Symbol::ClassTypeId::Function:
-			case Symbol::ClassTypeId::NativeFunction:
-			case Symbol::ClassTypeId::MemberFunction:
-			case Symbol::ClassTypeId::ConstantInteger:
-			case Symbol::ClassTypeId::ConstantFloat:
-			case Symbol::ClassTypeId::ConstantString:
-			case Symbol::ClassTypeId::Label:
-			default:
-				MANA_BUG("ivalid class type detect");
-			}
-		}
-		else
-		{
-			CompileError("no storage allocated");
+		case Symbol::ClassTypeId::NewSymbol:
+		case Symbol::ClassTypeId::Type:
+		case Symbol::ClassTypeId::Function:
+		case Symbol::ClassTypeId::NativeFunction:
+		case Symbol::ClassTypeId::MemberFunction:
+		case Symbol::ClassTypeId::ConstantInteger:
+		case Symbol::ClassTypeId::ConstantFloat:
+		case Symbol::ClassTypeId::ConstantString:
+		case Symbol::ClassTypeId::Label:
+		default:
+			MANA_BUG("invalid class type detect");
 		}
 
 		// 仮引数の表示の格納
