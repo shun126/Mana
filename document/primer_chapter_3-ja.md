@@ -323,9 +323,9 @@ ABORT:
 ### request
 自分を含めたアクターにリクエストします。リクエスト先が同レベルのリクエストを実行または予約されていた場合はそのリクエストは無効になります。
 
-request(Priority, ActorRef->ActionName);
+request(Priority, actor->ActionName);
 Priority …　プライオリティ
-ActorRef　…　アクター名
+actor　…　アクター名
 ActionName … アクション名
 
 ```

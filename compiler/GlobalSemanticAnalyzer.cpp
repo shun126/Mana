@@ -357,6 +357,21 @@ namespace mana
 			node->Set(resolvedName);
 
 		SemanticAnalyzer::ResolveTypeDescription(node);
+		RejectActorTypeName(node);
+	}
+
+	void GlobalSemanticAnalyzer::RejectActorTypeName(const std::shared_ptr<SyntaxNode>& node)
+	{
+		MANA_ASSERT(node);
+		const std::shared_ptr<TypeDescriptor>& type = node->GetTypeDescriptor();
+		if (!type || type->GetId() != TypeDescriptor::Id::Actor)
+			return;
+
+		if (type == GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Actor))
+			return;
+
+		CompileError({ "actor name '", type->GetName(), "' cannot be used as a type. Use 'actor'." });
+		node->Set(GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Actor));
 	}
 
 	void GlobalSemanticAnalyzer::ResolveVariableDescription(const std::shared_ptr<SyntaxNode>& node, const Symbol::MemoryTypeId memoryTypeId, const bool isStaticVariable)
