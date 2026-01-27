@@ -560,14 +560,16 @@ namespace mana
 		return GetArgumentCountByAddress(mPc);
 	}
 
+	// argumentDefinitionCount
 	inline int32_t Actor::GetArgumentCountByAddress(const uint32_t address) const
 	{
-		return (int32_t)mVM.lock()->GetUint8FromMemory(address + 1 + sizeof(int32_t) + sizeof(uint8_t));
+		return mVM.lock()->GetUint8FromMemory(address + 1 + sizeof(int32_t) + sizeof(uint8_t));
 	}
 
+	// argumentDeclarationCount
 	inline int32_t Actor::GetArgumentSize(const uint32_t address) const
 	{
-		return (int32_t)mVM.lock()->GetUint16FromMemory(address + 1 + sizeof(int32_t) + sizeof(uint8_t) + sizeof(uint8_t));
+		return mVM.lock()->GetUint8FromMemory(address + 1 + sizeof(int32_t) + sizeof(uint8_t) + sizeof(uint8_t));
 	}
 
 	inline bool Actor::HasReturnValue(const uint32_t address) const
@@ -578,29 +580,26 @@ namespace mana
 	inline int32_t Actor::GetParameterInteger(const int32_t value) const
 	{
 		MANA_ASSERT(GetArgumentCount() > value);
-
-		uint32_t address = mPc + 5 + sizeof(int16_t) + sizeof(int16_t) + (value * sizeof(int16_t));
-		return mStack.Get<int_t>(mVM.lock()->GetUint16FromMemory(address));
+		return mStack.Get<int_t>(value);
 	}
 
 	inline float Actor::GetParameterFloat(const int32_t value) const
 	{
 		MANA_ASSERT(GetArgumentCount() > value);
-		return mStack.Get<float_t>(mVM.lock()->GetInt16FromMemory(mPc + 5 + sizeof(int16_t) + sizeof(int16_t) + (value * sizeof(int16_t))));
+		return mStack.Get<float_t>(value);
 	}
 
 	inline const char* Actor::GetParameterString(const int32_t value) const
 	{
 		MANA_ASSERT(GetArgumentCount() > value);
-		return mStack.Get<const char*>(mVM.lock()->GetInt16FromMemory(mPc + 5 + sizeof(int16_t) + sizeof(int16_t) + (value * sizeof(int16_t))));
+		return mStack.Get<const char*>(value);
 	}
 
 	inline std::shared_ptr<Actor> Actor::GetParameterActor(const int32_t value) const
 	{
-		Actor* actor = GetParameterActorPointer(value);
-		if (actor == nullptr)
-			return nullptr;
-		return actor->shared_from_this();
+		if (auto* actor = GetParameterActorPointer(value))
+			return actor->shared_from_this();
+		return nullptr;
 	}
 
 	inline Actor* Actor::GetParameterActorPointer(const int32_t value) const
@@ -611,13 +610,13 @@ namespace mana
 	inline void* Actor::GetParameterPointer(const int32_t value) const
 	{
 		MANA_ASSERT(GetArgumentCount() > value);
-		return mStack.Get<void*>(mVM.lock()->GetInt16FromMemory(mPc + 5 + sizeof(int16_t) + sizeof(int16_t) + (value * sizeof(int16_t))));
+		return mStack.Get<void*>(value);
 	}
 
 	inline void* Actor::GetParameterAddress(const int32_t value) const
 	{
 		MANA_ASSERT(GetArgumentCount() > value);
-		return mStack.GetAddress(mVM.lock()->GetInt16FromMemory(mPc + 5 + sizeof(int16_t) + sizeof(int16_t) + (value * sizeof(int16_t))) + 1);
+		return mStack.GetAddress(value);
 	}
 
 	inline void Actor::SetReturnInteger(const int32_t value)
@@ -679,7 +678,7 @@ namespace mana
 	{
 		const auto interruptIterator = const_cast<Actor*>(this)->mInterrupts.find(mInterruptPriority);
 		if (interruptIterator == const_cast<Actor*>(this)->mInterrupts.end())
-			return std::string();
+			return "";
 		return interruptIterator->second.mActionName;
 	}
 
@@ -922,6 +921,15 @@ namespace mana
 		self.mStack.Push<int_t>(self.mInterruptPriority);
 	}
 
+	inline void Actor::CommandPushActor(const std::shared_ptr<VM>& vm, Actor& self)
+	{
+		const char* pszActorName = vm->GetStringFromMemory(self.mPc + 1);
+		MANA_ASSERT(pszActorName);
+
+		const std::shared_ptr<Actor>& targetActor = vm->FindActor(pszActorName);
+		self.mStack.Push(targetActor.get());
+	}
+
 	inline void Actor::CommandPushSelf(const std::shared_ptr<VM>&, Actor& self)
 	{
 		self.mStack.Push(&self);
@@ -1010,8 +1018,8 @@ namespace mana
 
 	inline void Actor::CommandLoadReference(const std::shared_ptr<VM>&, Actor& self)
 	{
-		void* pointer = static_cast<void*>(self.mStack.Get<void*>(0));
-		self.mStack.Set(0, pointer);
+		const auto pointer = static_cast<void**>(self.mStack.Get<void*>(0));
+		self.mStack.Set(0, *pointer);
 	}
 
 	inline void Actor::CommandStoreInt8(const std::shared_ptr<VM>&, Actor& self)
@@ -1044,8 +1052,8 @@ namespace mana
 
 	inline void Actor::CommandStoreReference(const std::shared_ptr<VM>&, Actor& self)
 	{
-		//void* pointer = self.mStack.Get<void*>(0);
-		//*pointer = self.mStack.GetAddress(1);
+		const auto pointer = static_cast<void**>(self.mStack.Get<void*>(0));
+		*pointer = self.mStack.Get<void*>(1);
 		self.mStack.Remove(2);
 	}
 
@@ -1406,15 +1414,6 @@ namespace mana
 		self.mStack.Set(0, static_cast<int_t>(self.mStack.Get<float_t>(0)));
 	}
 
-	inline void Actor::CommandPushActor(const std::shared_ptr<VM>& vm, Actor& self)
-	{
-		const char* pszActorName = vm->GetStringFromMemory(self.mPc + 1);
-		MANA_ASSERT(pszActorName);
-
-		const std::shared_ptr<Actor>& targetActor = vm->FindActor(pszActorName);
-		self.mStack.Push(targetActor.get());
-	}
-
 	inline void Actor::CommandLoadData(const std::shared_ptr<VM>& vm, Actor& self)
 	{
 		const uint32_t size = vm->GetUint32FromMemory(self.mPc + 1);
@@ -1502,16 +1501,22 @@ namespace mana
 
 		// 外部関数の実行
 		const char* functionName = vm->GetStringFromMemory(self.mPc + 1);
-		const VM::ExternalFunctionType function = vm->FindFunction(functionName);
-		function(self.shared_from_this());
+		const auto function = vm->FindFunction(functionName);
+		if (function == nullptr)
+		{
+			// 戻り値があるなら、スタック操作ができないので強制停止
+			if (self.HasReturnValue(lastPc))
+				std::terminate();
+		}
 
 		if (self.IsRunning())
 		{
 			if (!self.IsCommandRepeat())
 			{
-				const bool bHasReturnValue = self.HasReturnValue(lastPc);
-				const int32_t nNumberOfArguments = self.GetArgumentCountByAddress(lastPc);
-				const int32_t nSizeOfArguments = self.GetArgumentSize(lastPc);
+				const auto bHasReturnValue = self.HasReturnValue(lastPc);
+				const auto nNumberOfArguments = self.GetArgumentCountByAddress(lastPc);
+				const auto
+				nSizeOfArguments = self.GetArgumentSize(lastPc);
 
 				// スタックに入っているパラメータをpopする
 				self.mStack.Remove(nSizeOfArguments);
@@ -1552,10 +1557,12 @@ namespace mana
 				// 外部関数内でreq系の命令が実行された場合、スタックの状態を修正する
 				if (self.mInterruptPriority > lastInterruptPriority)
 				{
-					// TODO:即値を使わないで下さい
 					const auto lastInterruptIterator = self.mInterrupts.find(lastInterruptPriority);
 					if (lastInterruptIterator != self.mInterrupts.end())
+					{
+						// TODO:即値を使わないで下さい
 						lastInterruptIterator->second.mAddress = lastPc + 4 + 2 + 2 + 1 + (nNumberOfArguments * sizeof(int16_t));
+					}
 					const auto interruptIterator = self.mInterrupts.find(self.mInterruptPriority);
 					if (interruptIterator != self.mInterrupts.end())
 					{
@@ -1773,9 +1780,17 @@ namespace mana
 
 					switch (*format)
 					{
+					case 'x':
+#if __STDC_WANT_SECURE_LIB__
+						messagePointer += sprintf_s(&message[messagePointer], sizeof(message) - messagePointer, "%x", self.mStack.Get<int_t>(counter++));
+#else
+						messagePointer += sprintf(&message[messagePointer], "%x", self.mStack.Get<int_t>(counter++));
+#endif
+						break;
+
 					case 'd':
 #if __STDC_WANT_SECURE_LIB__
-						messagePointer += sprintf_s(&message[messagePointer], sizeof(message) - messagePointer, "%ld", self.mStack.Get<int_t>(counter++));
+						messagePointer += sprintf_s(&message[messagePointer], sizeof(message) - messagePointer, "%d", self.mStack.Get<int_t>(counter++));
 #else
 						messagePointer += sprintf(&message[messagePointer], "%d", self.mStack.Get<int_t>(counter++));
 #endif

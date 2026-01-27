@@ -107,11 +107,11 @@ namespace mana
 	inline VM::ExternalFunctionType VM::FindFunction(const std::string& functionName) const
 	{
 		const auto i = mFunctions.find(functionName);
-		if (i == mFunctions.end())
-		{
-			MANA_ERROR({ "An external function called ", functionName, " was not found.\n" });
-		}
-		return i->second;
+		if (i != mFunctions.end())
+			return i->second;
+
+		MANA_ERROR({ "An external function called ", functionName, " was not found.\n" });
+		return nullptr;
 	}
 
 	inline void VM::LoadProgram(const std::string& path)

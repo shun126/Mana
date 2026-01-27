@@ -15,7 +15,7 @@ mana (library)
 /*! ダイナミックライブラリのハンドル */
 //#define MODULE				HMODULE
 /*! ダイナミックライブラリを読み込む */
-#define LOAD_LIBRARY(N)		LoadLibrary(N)
+#define LOAD_LIBRARY(N)		LoadLibraryA(N)
 /*! ダイナミックライブラリを開放 */
 #define FREE_LIBRARY(M)		FreeLibrary(M)
 /*! ダイナミックライブラリ内の関数を取得 */
@@ -94,8 +94,8 @@ namespace mana
 			strcpy_s(entry, _MAX_PATH, directoryName.c_str());
 			strcat_s(entry, _MAX_PATH, "\\*.ml");
 
-			WIN32_FIND_DATA fd;
-			const HANDLE handle = FindFirstFile(entry, &fd);
+			WIN32_FIND_DATAA fd;
+			const HANDLE handle = FindFirstFileA(entry, &fd);
 			if (handle != INVALID_HANDLE_VALUE)
 			{
 				do {
@@ -110,7 +110,7 @@ namespace mana
 							Load(fd.cFileName);
 						}
 					}
-				} while (FindNextFile(handle, &fd));
+				} while (FindNextFileA(handle, &fd));
 			}
 
 			FindClose(handle);
