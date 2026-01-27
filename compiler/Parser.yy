@@ -72,7 +72,7 @@ mana (compiler)
 %token	<std::shared_ptr<mana::TypeDescriptor>> tTYPE
 
 %token	tDEFINE tUNDEF tINCLUDE tIMPORT
-%token	tNATIVE tSTRUCT tACTOR tACTOR2 tPHANTOM tACTION tMODULE tEXTEND
+%token	tNATIVE tSTRUCT tACTOR tPHANTOM tACTION tMODULE tEXTEND
 %token	tNAMESPACE tUSING
 %token	tFALSE tTRUE tPRIORITY tSELF tSENDER tNIL
 %token	tREQUEST tAwaitStart tAwaitCompletion tJOIN
@@ -232,7 +232,7 @@ function		: variable_type tIDENTIFIER '(' arg_decls ')' block
 					{ $$ = mParsingDriver->CreateInternalFunction($1, $2, $4, $6); }
 				;
 
-variable_type	: tACTOR2
+variable_type	: tACTOR
 					{ $$ = mParsingDriver->CreateActorTypeDescription(); }
 				| qualified_name
 					{ $$ = mParsingDriver->CreateTypeDescription($1); }

@@ -161,6 +161,21 @@ namespace mana
 			node->Set(resolvedName);
 
 		SemanticAnalyzer::ResolveTypeDescription(node);
+		RejectActorTypeName(node);
+	}
+
+	void LocalSemanticAnalyzer::RejectActorTypeName(const std::shared_ptr<SyntaxNode>& node)
+	{
+		MANA_ASSERT(node);
+		const std::shared_ptr<TypeDescriptor>& type = node->GetTypeDescriptor();
+		if (!type || type->GetId() != TypeDescriptor::Id::Actor)
+			return;
+
+		if (type == GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Actor))
+			return;
+
+		CompileError({ "actor name '", type->GetName(), "' cannot be used as a type. Use 'actor'." });
+		node->Set(GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Actor));
 	}
 
 	void LocalSemanticAnalyzer::ResolveVariableDescription(const std::shared_ptr<SyntaxNode>& node, const Symbol::MemoryTypeId memoryTypeId, const bool isStaticVariable)
@@ -857,6 +872,11 @@ DO_RECURSIVE:
 				TypeDescriptor::Id t1, t2;
 				if (GetNodeType(&t1, &t2, node))
 				{
+					if (t1 == TypeDescriptor::Id::Actor || t2 == TypeDescriptor::Id::Actor)
+					{
+						CompileError("actor comparisons are limited to == and !=");
+						break;
+					}
 					AutoCast(node);
 					TypeDescriptor::Compatible(node->GetLeftNode()->GetTypeDescriptor(), node->GetRightNode()->GetTypeDescriptor());
 					switch (t1)
@@ -890,6 +910,11 @@ DO_RECURSIVE:
 				TypeDescriptor::Id t1, t2;
 				if (GetNodeType(&t1, &t2, node))
 				{
+					if (t1 == TypeDescriptor::Id::Actor || t2 == TypeDescriptor::Id::Actor)
+					{
+						CompileError("actor comparisons are limited to == and !=");
+						break;
+					}
 					AutoCast(node);
 					TypeDescriptor::Compatible(node->GetLeftNode()->GetTypeDescriptor(), node->GetRightNode()->GetTypeDescriptor());
 					switch (t1)
@@ -923,6 +948,11 @@ DO_RECURSIVE:
 				TypeDescriptor::Id t1, t2;
 				if (GetNodeType(&t1, &t2, node))
 				{
+					if (t1 == TypeDescriptor::Id::Actor || t2 == TypeDescriptor::Id::Actor)
+					{
+						CompileError("actor comparisons are limited to == and !=");
+						break;
+					}
 					AutoCast(node);
 					TypeDescriptor::Compatible(node->GetLeftNode()->GetTypeDescriptor(), node->GetRightNode()->GetTypeDescriptor());
 					switch (t1)
@@ -956,6 +986,11 @@ DO_RECURSIVE:
 				TypeDescriptor::Id t1, t2;
 				if (GetNodeType(&t1, &t2, node))
 				{
+					if (t1 == TypeDescriptor::Id::Actor || t2 == TypeDescriptor::Id::Actor)
+					{
+						CompileError("actor comparisons are limited to == and !=");
+						break;
+					}
 					AutoCast(node);
 					TypeDescriptor::Compatible(node->GetLeftNode()->GetTypeDescriptor(), node->GetRightNode()->GetTypeDescriptor());
 					switch (t1)
