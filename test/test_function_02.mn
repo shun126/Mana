@@ -3,7 +3,7 @@ mana (script)
 Copyright (c) 2003 Shun Moriya
 */
 
-native int nativeFunction(Actor a0, int a1, float a2);
+native int nativeFunction(actor a0, int a1, float a2);
 
 int callNativeFunction(int a1, float a2)
 {
