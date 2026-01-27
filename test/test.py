@@ -24,7 +24,7 @@ else:
 ################################################################################
 def success(argument):
 	print(MANA + ' ' + argument, end='')
-	command = [MANA, argument]
+	command = [MANA, argument, "--debug"]
 	cp = subprocess.run(command, capture_output=True, text=True, errors="ignore")
 	if cp.returncode == 0:
 		print(" ... Success")
@@ -50,9 +50,13 @@ def fail(argument, error_message):
 	cp = subprocess.run(command, capture_output=True, text=True, errors="ignore")
 	#if cp.returncode != 0 and (error_message in cp.stdout or error_message in cp.stderr):
 	if (error_message in cp.stdout or error_message in cp.stderr):
-		print(" ... OK")
+		print(" ... Success")
 	else:
-		print(" ... NG")
+		print(" ... Failed")
+		if cp.returncode < 0:
+			print(f"Process killed by signal {-cp.returncode}")
+		else:
+			print(f"Process exited with code {cp.returncode}")
 		print('stdout :')
 		print(cp.stdout)
 		print('stderr :')

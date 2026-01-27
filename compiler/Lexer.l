@@ -95,7 +95,6 @@ other		.
 <INITIAL>"native"	return mana::Parser::token::tNATIVE;
 <INITIAL>"struct"	return mana::Parser::token::tSTRUCT;
 <INITIAL>"actor"	return mana::Parser::token::tACTOR;
-<INITIAL>"Actor"	{ mana::CompileError("reserved keyword 'Actor' is not allowed"); return mana::Parser::token::tIDENTIFIER; }
 <INITIAL>"phantom"	return mana::Parser::token::tPHANTOM;
 <INITIAL>"action"	return mana::Parser::token::tACTION;
 <INITIAL>"module"	return mana::Parser::token::tMODULE;
