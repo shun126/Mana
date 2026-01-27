@@ -10,7 +10,7 @@ mana (library)
 #include "String.h"
 
 #define MANA_WARNING(...)	(void)(mana::Trace(__VA_ARGS__))
-#define MANA_ERROR(...)		(void)(mana::Trace(__VA_ARGS__), std::terminate())
+#define MANA_ERROR(...)		(void)(mana::Trace(__VA_ARGS__))
 #define MANA_BUG(...)		(void)(mana::Trace({ __FILE__, "(", std::to_string(__LINE__), "): BUG!: ", __VA_ARGS__, "\n" }), std::terminate())
 #if MANA_BUILD_TARGET == MANA_BUILD_DEBUG
 #define MANA_CHECK(expression) (void)( \

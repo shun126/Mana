@@ -111,7 +111,6 @@
   <ItemGroup>
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="Lexer.cpp" />
-    <ClCompile Include="CodeGenerator.cpp" />
     <ClCompile Include="ErrorHandler.cpp" />
     <ClCompile Include="GlobalSemanticAnalyzer.cpp" />
     <ClCompile Include="LocalSemanticAnalyzer.cpp" />
@@ -131,6 +130,7 @@
     <ClCompile Include="Symbol.cpp" />
     <ClCompile Include="IntermediateLanguage.cpp" />
     <ClCompile Include="LocalAddressResolver.cpp" />
+    <ClCompile Include="CodeGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Parser.yy" />
