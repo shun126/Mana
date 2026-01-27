@@ -18,7 +18,7 @@ actor Root
 
 	action main
 	{
-		Actor target;
+		actor target;
 		request(1, target->ping);
 		request(1, self->ping);
 		request(1, sender->ping);
