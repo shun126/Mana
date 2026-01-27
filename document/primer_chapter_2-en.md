@@ -1,9 +1,9 @@
 ## Chapter 2 Program Structure
 ## actor and action
-In Mana, one Actor block corresponds one-to-one to one character in the game.
-In other words, if there is no single Actor block in the source, there is no character in the game.
-Within the Actor block, an Action block is placed to define the character's behavior by describing the character's actions.
-Statements within an Action must always end with a ; or be enclosed in {}.
+In Mana, one actor block corresponds one-to-one to one character in the game.
+In other words, if there is no single actor block in the source, there is no character in the game.
+Within the actor block, an action block is placed to define the character's behavior by describing the character's actions.
+Statements within an action must always end with a ; or be enclosed in {}.
 The part enclosed in {} is called a block and can be treated as a whole process.
 
 ## Who called me?
@@ -58,7 +58,7 @@ actor Wife
 }
 ```
 
-## Actor Actions
+## actor actions
 Mana not only allows you to associate actors with characters, but also to associate them with space-defining objects to define actions that cannot be realized by characters.
 For example, a box can be placed in a space, and various conditions, such as "the character passes through the box," can trigger an interrupt. Using this function, it is easy to create a situation where "a box is placed on the road, and when an actor enters the box, the actor-guard will be alerted.
 

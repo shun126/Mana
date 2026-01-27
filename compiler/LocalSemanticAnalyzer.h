@@ -52,6 +52,7 @@ namespace mana
 		[[nodiscard]] std::string_view ResolveAlias(const std::string_view& name) const;
 		[[nodiscard]] std::string_view ResolveTypeName(const std::string_view& name) const;
 		void ResolveTypeDescriptionScoped(const std::shared_ptr<SyntaxNode>& node);
+		void RejectActorTypeName(const std::shared_ptr<SyntaxNode>& node);
 		void ResolveVariableDescription(const std::shared_ptr<SyntaxNode>& node, const Symbol::MemoryTypeId memoryTypeId, const bool isStaticVariable);
 
 		void EnterNamespace(const std::string_view& name);

@@ -323,9 +323,9 @@ ABORT:
 ### request
 Requests an actor, including yourself. If the requestor has already executed or reserved a request of the same level, the request will be invalid.
 
-request(Priority, ActorRef->ActionName);
+request(Priority, actor->ActionName);
 Priority ... Priority
-ActorRef ... Actor name
+actor ... actor name
 ActionName ... Action name
 
 ```

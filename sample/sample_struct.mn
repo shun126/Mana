@@ -10,7 +10,7 @@ struct TestStruct1
 	int digitValue;
 	string stringValue;
 	float realValue;
-	Actor actorValue;
+	actor actorValue;
 }
 
 struct TestStruct2
