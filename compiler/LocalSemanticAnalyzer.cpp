@@ -1134,6 +1134,13 @@ DO_RECURSIVE:
 			PostResolverResolve(node->GetRightNode());
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 
+			if (node->GetLeftNode()->Is(SyntaxNode::Id::Identifier) &&
+				node->GetLeftNode()->GetString() == "this")
+			{
+				CompileError("cannot assign to 'this'");
+				return;
+			}
+
 			if (node->GetLeftNode()->Is(SyntaxNode::Id::Const))
 			{
 				CompileError({ "already initialized constant '", node->GetLeftNode()->GetSymbol()->GetName(), "'" });
@@ -1265,7 +1272,40 @@ DO_RECURSIVE:
 			PostResolverResolve(node->GetLeftNode());
 			PostResolverResolve(node->GetRightNode());
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
-			abort();
+			{
+				std::shared_ptr<TypeDescriptor> type = node->GetLeftNode()->GetTypeDescriptor();
+				if (type)
+				{
+					while (type->Is(TypeDescriptor::Id::Array))
+					{
+						type = type->GetComponent();
+					}
+
+					if (type->Is(TypeDescriptor::Id::Reference))
+					{
+						type = type->GetComponent();
+					}
+
+					if (type->Is(TypeDescriptor::Id::Struct))
+					{
+						for (std::shared_ptr<Symbol> symbol = type->GetSymbolEntry(); symbol; symbol = symbol->GetNext())
+						{
+							if (symbol->GetName() == node->GetString() && symbol->GetClassTypeId() == Symbol::ClassTypeId::MemberFunction)
+							{
+								node->Set(symbol);
+								node->Set(symbol->GetTypeDescriptor());
+								goto ESCAPE_MEMBER_FUNCTION;
+							}
+						}
+						CompileError({ "unresolved method '", node->GetString(), "' for type '", type->GetName(), "'" });
+					}
+					else
+					{
+						CompileError("member call on non-struct type");
+					}
+				}
+			}
+		ESCAPE_MEMBER_FUNCTION:
 			break;
 
 		case SyntaxNode::Id::MemberVariable:
@@ -1278,6 +1318,10 @@ DO_RECURSIVE:
 			if (type)
 			{
 				while (type->Is(TypeDescriptor::Id::Array))
+				{
+					type = type->GetComponent();
+				}
+				if (type->Is(TypeDescriptor::Id::Reference))
 				{
 					type = type->GetComponent();
 				}

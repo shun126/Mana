@@ -20,6 +20,9 @@ namespace mana
 	{
 		static uint32_t count = 0;
 		mMagic = ++count;
+#if defined(MANA_MEMORY_LEAK_ANALYSIS)
+		snprintf(mMagicName, sizeof(mMagicName), "N%u", mMagic);
+#endif
 	}
 
 	std::shared_ptr<SyntaxNode> SyntaxNode::Clone() const
