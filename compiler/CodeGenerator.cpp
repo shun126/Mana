@@ -727,14 +727,24 @@ DO_RECURSIVE:
 			// 関数の戻り値を評価
 			GenerateCode(node->GetLeftNode(), enableLoad);
 			// シンボルの検索と型の定義
-			mFunctionSymbolEntryPointer = mSymbolFactory->Lookup(node->GetString());
+			mFunctionSymbolEntryPointer = node->GetSymbol();
+			if (!mFunctionSymbolEntryPointer)
+				mFunctionSymbolEntryPointer = mSymbolFactory->Lookup(node->GetString());
 			const bool isMemberFunction = mFunctionSymbolEntryPointer &&
 				mFunctionSymbolEntryPointer->GetClassTypeId() == Symbol::ClassTypeId::MemberFunction;
-			node->Set(mFunctionSymbolEntryPointer);
+			if (mFunctionSymbolEntryPointer)
+				node->Set(mFunctionSymbolEntryPointer);
 
 			// 引数の為にスコープを分ける
 			mSymbolFactory->OpenBlock(false);
 			{
+				if (!node->GetSymbol())
+				{
+					CompileError("function symbol is missing");
+					mSymbolFactory->CloseBlock();
+					mFunctionSymbolEntryPointer = nullptr;
+					break;
+				}
 				// 引数を登録
 				if (isMemberFunction)
 				{
