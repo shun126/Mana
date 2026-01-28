@@ -412,6 +412,7 @@
     <ClInclude Include="..\runner\common\Type.h" />
     <ClInclude Include="..\runner\Event.h" />
     <ClInclude Include="..\runner\Function.h" />
+    <ClInclude Include="..\runner\Log.h" />
     <ClInclude Include="..\runner\Mana.h" />
     <ClInclude Include="..\runner\Plugin.h" />
     <ClInclude Include="..\runner\Stack.h" />

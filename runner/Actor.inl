@@ -1508,6 +1508,7 @@ namespace mana
 			if (self.HasReturnValue(lastPc))
 				std::terminate();
 		}
+		function(self.shared_from_this());
 
 		if (self.IsRunning())
 		{
