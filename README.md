@@ -4,6 +4,7 @@
 <a href="https://github.com/shun126/Mana/issues">Issues</a>,
 <a href="https://github.com/shun126/Mana/discussions">Discussions</a>,
 <a href="https://github.com/shun126/Mana/wiki">Wiki</a>,
+<a href="https://deepwiki.com/shun126/Mana">DeepWiki</a>,
 <a href="https://mnu.sakura.ne.jp/_doxygen/mana">Doxygen</a>
 </p>
 <p>
