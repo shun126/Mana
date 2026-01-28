@@ -10,6 +10,7 @@ mana (compiler)
 #include "IntermediateLanguage.h"
 #include "Symbol.h"
 #include "TypeDescriptor.h"
+#include <vector>
 
 namespace mana
 {
@@ -243,10 +244,37 @@ namespace mana
 				}
 			}
 
-			// TODO:cast
-			arg = arg->Cast(param->GetTypeDescriptor(), mTypeDescriptorFactory);
-			param->GetTypeDescriptor()->Compatible(arg->GetTypeDescriptor());
-			GenerateCode(arg->Is(SyntaxNode::Id::CallArgument) ? arg->GetLeftNode() : arg, true);
+				const std::shared_ptr<SyntaxNode> valueNode = arg->Is(SyntaxNode::Id::CallArgument) ? arg->GetLeftNode() : arg;
+				const std::shared_ptr<TypeDescriptor>& paramType = param->GetTypeDescriptor();
+				const std::shared_ptr<TypeDescriptor>& valueType = valueNode->GetTypeDescriptor();
+
+				if (paramType && valueType &&
+					paramType->Is(TypeDescriptor::Id::Reference) &&
+					paramType->GetComponent())
+				{
+					if (paramType->GetComponent()->Compare(valueType))
+					{
+						GenerateCode(valueNode, false);
+						goto ARGUMENT_COMPLETE;
+					}
+
+					if (valueType->Is(TypeDescriptor::Id::Reference) &&
+						valueType->GetComponent() &&
+						paramType->GetComponent()->Compare(valueType->GetComponent()))
+					{
+						GenerateCode(valueNode, true);
+						goto ARGUMENT_COMPLETE;
+					}
+				}
+
+				{
+					// TODO:cast
+					arg = arg->Cast(param->GetTypeDescriptor(), mTypeDescriptorFactory);
+					param->GetTypeDescriptor()->Compatible(arg->GetTypeDescriptor());
+					GenerateCode(arg->Is(SyntaxNode::Id::CallArgument) ? arg->GetLeftNode() : arg, true);
+				}
+			ARGUMENT_COMPLETE:
+				;
 		}
 		if (arg)
 			++count;
@@ -678,10 +706,10 @@ DO_RECURSIVE:
 
 		case SyntaxNode::Id::Struct:
 			mSymbolFactory->OpenStructure(node->GetString());
-			// node->GetLeftNode()
+			mLocalSemanticAnalyzer->PostResolverResolve(node->GetLeftNode());
+			GenerateCode(node->GetLeftNode(), enableLoad);
 			MANA_ASSERT(node->GetRightNode() == nullptr);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
-			mLocalSemanticAnalyzer->PostResolverResolve(node);
 			mSymbolFactory->CloseStructure();
 			break;
 
@@ -712,26 +740,76 @@ DO_RECURSIVE:
 			// 関数の戻り値を評価
 			GenerateCode(node->GetLeftNode(), enableLoad);
 			// シンボルの検索と型の定義
-			mFunctionSymbolEntryPointer = mSymbolFactory->Lookup(node->GetString());
-			node->Set(mFunctionSymbolEntryPointer);
+			mFunctionSymbolEntryPointer = node->GetSymbol();
+			if (!mFunctionSymbolEntryPointer)
+				mFunctionSymbolEntryPointer = mSymbolFactory->Lookup(node->GetString());
+			const bool isMemberFunction = mFunctionSymbolEntryPointer &&
+				mFunctionSymbolEntryPointer->GetClassTypeId() == Symbol::ClassTypeId::MemberFunction;
+			if (mFunctionSymbolEntryPointer)
+				node->Set(mFunctionSymbolEntryPointer);
 
 			// 引数の為にスコープを分ける
 			mSymbolFactory->OpenBlock(false);
 			{
+				if (!node->GetSymbol())
+				{
+					CompileError("function symbol is missing");
+					mSymbolFactory->CloseBlock();
+					mFunctionSymbolEntryPointer = nullptr;
+					break;
+				}
 				// 引数を登録
-				mSymbolFactory->OpenFunction(node, false);
+				if (isMemberFunction)
+				{
+					const std::shared_ptr<TypeDescriptor>& receiverType = mSymbolFactory->GetCurrentBlockTypeDescriptor();
+					if (receiverType)
+					{
+						const std::shared_ptr<TypeDescriptor> thisType = mTypeDescriptorFactory->CreateReference(receiverType);
+						auto thisTypeNode = std::make_shared<SyntaxNode>(SyntaxNode::Id::TypeDescription);
+						thisTypeNode->Set(thisType);
+
+						auto thisDeclaratorNode = std::make_shared<SyntaxNode>(SyntaxNode::Id::Declarator);
+						thisDeclaratorNode->Set(std::string_view("this"));
+
+						auto thisDeclareVariableNode = std::make_shared<SyntaxNode>(SyntaxNode::Id::DeclareVariable);
+						thisDeclareVariableNode->SetLeftNode(thisTypeNode);
+						thisDeclareVariableNode->SetRightNode(thisDeclaratorNode);
+
+						auto thisDeclareArgumentNode = std::make_shared<SyntaxNode>(SyntaxNode::Id::DeclareArgument);
+						thisDeclareArgumentNode->SetLeftNode(thisDeclareVariableNode);
+
+						thisDeclareArgumentNode->SetRightNode(node->GetRightNode());
+						node->SetRightNode(thisDeclareArgumentNode);
+						node->GetSymbol()->SetNumberOfParameters(node->GetSymbol()->GetNumberOfParameters() + 1);
+					}
+				}
+
+				mSymbolFactory->OpenFunction(node, isMemberFunction);
 
 				//TODO
 				// pre_resolver_resolve
 				mGlobalSemanticAnalyzer->Resolve(node->GetRightNode());
 				//node->GetSymbol()->GetParameterList() = symbol_get_head_symbol();
 				node->GetSymbol()->SetParameterList(mSymbolFactory->GetLastSymbolEntryInBlock());
+				if (isMemberFunction)
+				{
+					std::shared_ptr<Symbol> current = node->GetSymbol()->GetParameterList();
+					std::shared_ptr<Symbol> reversed;
+					while (current)
+					{
+						std::shared_ptr<Symbol> next = current->GetNext();
+						current->SetNext(reversed);
+						reversed = current;
+						current = next;
+					}
+					node->GetSymbol()->SetParameterList(reversed);
+				}
 
 
 				mSymbolFactory->OpenFunction2(node->GetSymbol());
 
 				GenerateCode(node->GetBodyNode(), enableLoad);
-				mSymbolFactory->CloseFunction(node, false);
+				mSymbolFactory->CloseFunction(node, isMemberFunction);
 			}
 			mSymbolFactory->CloseBlock();
 
@@ -1299,9 +1377,39 @@ DO_RECURSIVE:
 			break;
 
 		case SyntaxNode::Id::MemberFunction:
-			// TODO:実装してください
-			GenerateCode(node->GetLeftNode(), enableLoad);
-			GenerateCode(node->GetRightNode(), enableLoad);
+			if (node->GetSymbol())
+			{
+				std::vector<std::shared_ptr<SyntaxNode>> arguments;
+				if (node->GetRightNode())
+				{
+					for (std::shared_ptr<SyntaxNode> arg = node->GetRightNode(); arg; arg = arg->GetRightNode())
+					{
+						arguments.push_back(arg->GetLeftNode());
+					}
+				}
+
+				std::vector<std::shared_ptr<SyntaxNode>> orderedArguments;
+				orderedArguments.reserve(arguments.size() + 1);
+				for (auto it = arguments.rbegin(); it != arguments.rend(); ++it)
+				{
+					orderedArguments.push_back(*it);
+				}
+				orderedArguments.push_back(node->GetLeftNode());
+
+				std::shared_ptr<SyntaxNode> argumentList;
+				for (auto it = orderedArguments.rbegin(); it != orderedArguments.rend(); ++it)
+				{
+					auto argumentNode = std::make_shared<SyntaxNode>(SyntaxNode::Id::CallArgument);
+					argumentNode->SetLeftNode(*it);
+					argumentNode->SetRightNode(argumentList);
+					argumentList = argumentNode;
+				}
+
+				auto callNode = std::make_shared<SyntaxNode>(SyntaxNode::Id::Call);
+				callNode->Set(node->GetSymbol());
+				callNode->SetRightNode(argumentList);
+				Call(callNode);
+			}
 			break;
 
 		case SyntaxNode::Id::MemberVariable:
@@ -1313,18 +1421,29 @@ DO_RECURSIVE:
 
 				if (const std::shared_ptr<TypeDescriptor> type = node->GetLeftNode()->GetTypeDescriptor())
 				{
-					if (type->Is(TypeDescriptor::Id::Struct))
+					std::shared_ptr<TypeDescriptor> baseType = type;
+					while (baseType->Is(TypeDescriptor::Id::Array))
+					{
+						baseType = baseType->GetComponent();
+					}
+					bool loadReference = false;
+					if (baseType->Is(TypeDescriptor::Id::Reference))
+					{
+						baseType = baseType->GetComponent();
+						loadReference = true;
+					}
+					if (baseType->Is(TypeDescriptor::Id::Struct))
 					{
 						// TODO
 						//while (type)
 						{
-							for (std::shared_ptr<Symbol> symbol = type->GetSymbolEntry(); symbol; symbol = symbol->GetNext())
+							for (std::shared_ptr<Symbol> symbol = baseType->GetSymbolEntry(); symbol; symbol = symbol->GetNext())
 							{
 								if (symbol->GetName() == node->GetString() && symbol->GetClassTypeId() == Symbol::ClassTypeId::ActorVariable)
 								{
 									// variable.member
 									mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::PushSize, symbol->GetAddress());
-									GenerateCode(node->GetLeftNode(), false);
+									GenerateCode(node->GetLeftNode(), loadReference ? true : false);
 									mCodeBuffer->AddOpecode(IntermediateLanguage::AddInteger);
 									if (enableLoad)
 										ResolveLoad(node);
