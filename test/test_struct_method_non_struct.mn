@@ -1,0 +1,9 @@
+/*
+ mana (script)
+*/
+
+void Main()
+{
+    int x;
+    x.F();
+}

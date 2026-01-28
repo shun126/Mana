@@ -74,7 +74,7 @@ mana (compiler)
 %token	tDEFINE tUNDEF tINCLUDE tIMPORT
 %token	tNATIVE tSTRUCT tACTOR tPHANTOM tACTION tMODULE tEXTEND
 %token	tNAMESPACE tUSING
-%token	tFALSE tTRUE tPRIORITY tSELF tSENDER tNIL
+%token	tFALSE tTRUE tPRIORITY tSELF tSENDER tTHIS tNIL
 %token	tREQUEST tAwaitStart tAwaitCompletion tJOIN
 %token	tBREAK
 %token	tCONTINUE
@@ -226,6 +226,7 @@ struct_members	: // empty
 				;
 
 struct_member	: variable_decl ';'
+				| function
 				;
 
 function		: variable_type tIDENTIFIER '(' arg_decls ')' block
@@ -427,6 +428,8 @@ left_hand		: left_hand '.' tIDENTIFIER
 					{ $$ = mParsingDriver->CreateArray($1, $3); }
 				| tIDENTIFIER
 					{ $$ = mParsingDriver->CreateIdentifier($1); }
+				| tTHIS
+					{ $$ = mParsingDriver->CreateThis(); }
 				| '(' expression ')'
 					{ $$ = $2; }
 				;

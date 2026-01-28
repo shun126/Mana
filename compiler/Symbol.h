@@ -119,10 +119,10 @@ namespace mana
 		void SetUsed(const bool used);
 
 	public:
-#if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
+#if defined(MANA_MEMORY_LEAK_ANALYSIS)
 		char mMagic[8];
 #endif
-		std::shared_ptr<Symbol> mParameterList;
+		std::weak_ptr<Symbol> mParameterList;
 		std::shared_ptr<Symbol> mNext;
 		std::shared_ptr<TypeDescriptor> mTypeDescription;
 		ClassTypeId mClassTypeId = ClassTypeId::NewSymbol;
