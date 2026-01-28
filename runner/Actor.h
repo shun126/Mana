@@ -113,7 +113,7 @@ namespace mana
 		//void Initialize(const ActionInfoHeader* actionInfo);
 
 	private:
-		static constexpr int32_t LowestInterruptPriority = 0;
+		static constexpr int32_t LowestInterruptPriority = std::numeric_limits<int32_t>::lowest();
 		static constexpr uint32_t Nil = static_cast<uint32_t>(~0);
 
 		//! 割り込みテーブル
