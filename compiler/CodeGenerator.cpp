@@ -244,24 +244,37 @@ namespace mana
 				}
 			}
 
-			const std::shared_ptr<SyntaxNode> valueNode = arg->Is(SyntaxNode::Id::CallArgument) ? arg->GetLeftNode() : arg;
-			const std::shared_ptr<TypeDescriptor>& paramType = param->GetTypeDescriptor();
-			const std::shared_ptr<TypeDescriptor>& valueType = valueNode->GetTypeDescriptor();
+				const std::shared_ptr<SyntaxNode> valueNode = arg->Is(SyntaxNode::Id::CallArgument) ? arg->GetLeftNode() : arg;
+				const std::shared_ptr<TypeDescriptor>& paramType = param->GetTypeDescriptor();
+				const std::shared_ptr<TypeDescriptor>& valueType = valueNode->GetTypeDescriptor();
 
-			if (paramType && valueType &&
-				paramType->Is(TypeDescriptor::Id::Reference) &&
-				paramType->GetComponent() &&
-				paramType->GetComponent()->Compare(valueType))
-			{
-				GenerateCode(valueNode, false);
-			}
-			else
-			{
-				// TODO:cast
-				arg = arg->Cast(param->GetTypeDescriptor(), mTypeDescriptorFactory);
-				param->GetTypeDescriptor()->Compatible(arg->GetTypeDescriptor());
-				GenerateCode(arg->Is(SyntaxNode::Id::CallArgument) ? arg->GetLeftNode() : arg, true);
-			}
+				if (paramType && valueType &&
+					paramType->Is(TypeDescriptor::Id::Reference) &&
+					paramType->GetComponent())
+				{
+					if (paramType->GetComponent()->Compare(valueType))
+					{
+						GenerateCode(valueNode, false);
+						goto ARGUMENT_COMPLETE;
+					}
+
+					if (valueType->Is(TypeDescriptor::Id::Reference) &&
+						valueType->GetComponent() &&
+						paramType->GetComponent()->Compare(valueType->GetComponent()))
+					{
+						GenerateCode(valueNode, true);
+						goto ARGUMENT_COMPLETE;
+					}
+				}
+
+				{
+					// TODO:cast
+					arg = arg->Cast(param->GetTypeDescriptor(), mTypeDescriptorFactory);
+					param->GetTypeDescriptor()->Compatible(arg->GetTypeDescriptor());
+					GenerateCode(arg->Is(SyntaxNode::Id::CallArgument) ? arg->GetLeftNode() : arg, true);
+				}
+			ARGUMENT_COMPLETE:
+				;
 		}
 		if (arg)
 			++count;
