@@ -162,6 +162,7 @@ namespace mana
 		std::shared_ptr<SyntaxNode> CreatePriority();
 		std::shared_ptr<SyntaxNode> CreateSelf();
 		std::shared_ptr<SyntaxNode> CreateSender();
+		std::shared_ptr<SyntaxNode> CreateThis();
 		std::shared_ptr<SyntaxNode> CreateNil();
 		std::shared_ptr<SyntaxNode> CreateBool(const bool value);
 		std::shared_ptr<SyntaxNode> CreateInteger(const int_t value);

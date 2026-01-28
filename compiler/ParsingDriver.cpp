@@ -1016,6 +1016,13 @@ std::shared_ptr<SyntaxNode> ParsingDriver::CreateAwaitCompletion(const std::shar
 		return node;
 	}
 
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateThis()
+	{
+		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Identifier);
+		node->Set(GetStringPool()->Set("this"));
+		return node;
+	}
+
 	std::shared_ptr<SyntaxNode> ParsingDriver::CreateNil()
 	{
 		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Const);
