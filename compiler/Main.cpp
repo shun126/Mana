@@ -16,6 +16,7 @@ mana (compiler)
 #include "../runner/Mana.h"
 
 #include <ctime>
+#include <vector>
 
 namespace mana
 {
@@ -26,6 +27,7 @@ namespace mana
 	bool mRelease;
 
 	std::ofstream mVariableHeaderFile;
+	std::vector<std::string> mForcedIncludeFiles;
 
 	const char* GetInputFilename()
 	{
@@ -176,6 +178,16 @@ namespace mana
 
 			if (lexer::Initialize(parser, mInputFilename))
 			{
+				bool forceIncludeResult = true;
+				for (auto it = mForcedIncludeFiles.rbegin(); it != mForcedIncludeFiles.rend(); ++it)
+				{
+					if (!lexer::Open(*it, false))
+					{
+						forceIncludeResult = false;
+						break;
+					}
+				}
+
 				// TODO スクリプトのグローバル変数を構造体としてヘッダーに出力する必要があるか検討して下さい
 #if 0
 				if (mVariableHeaderFile)
@@ -185,7 +197,14 @@ namespace mana
 				}
 #endif
 
-				result = parser->Parse() != 0 || yynerrs != 0;
+				if (forceIncludeResult)
+				{
+					result = parser->Parse() != 0 || yynerrs != 0;
+				}
+				else
+				{
+					result = 1;
+				}
 
 				// TODO スクリプトのグローバル変数を構造体としてヘッダーに出力する必要があるか検討して下さい
 #if 0
@@ -256,6 +275,7 @@ namespace mana
 		std::cout << "usage:mana [switch] infile\n";
 		std::cout << "            -o filename     specify output binary file name\n";
 		std::cout << "            -i dirname      specify program header directory name\n";
+		std::cout << "            -I filename     force include file (can be specified multiple times)\n";
 		std::cout << "            --execute       read infile as a binary file and execute it\n";
 		std::cout << "            --help          print this message\n";
 		std::cout << "            --copyright     print copyright holder\n";
@@ -281,6 +301,7 @@ namespace mana
 			mExecute = false;
 			mDebug = false;
 			mRelease = false;
+			mForcedIncludeFiles.clear();
 
 			for (int cmdcnt = 1; cmdcnt < argc; cmdcnt++)
 			{
@@ -318,6 +339,17 @@ namespace mana
 						}
 						globalTypeHeaderDirectoryName = filename;
 
+						break;
+					}
+					case 'I':
+					{
+						if (cmdcnt + 1 >= argc)
+						{
+							std::cerr << "missing include file for -I\n";
+							return false;
+						}
+						cmdcnt++;
+						mForcedIncludeFiles.emplace_back(argv[cmdcnt]);
 						break;
 					}
 
