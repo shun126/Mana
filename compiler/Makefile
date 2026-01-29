@@ -82,7 +82,7 @@ cppcheck:
 	cppcheck -D __unix__ --enable=all $(SOURCES) $(SECOUND)
 
 test:
-	./$(TARGET) --debug ../sample/sample.mn
+	./$(TARGET) --debug ../sample/sample.mn -I ../sample/function.mh
 	./$(TARGET) ../test/program_image_test.mn -o ../test/program_image_test.mx
 	cd ../test/ && make
 	cd ../test/ && ./ProgramImageTest program_image_test.mx
