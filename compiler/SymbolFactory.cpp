@@ -888,7 +888,7 @@ TODO:
 	}
 
 	// symbol_commit_registration_actor
-	void SymbolFactory::CommitRegistrationActor(const std::string_view name, const std::string_view parent, const std::shared_ptr<TypeDescriptor>& td, const bool phantom)
+	void SymbolFactory::CommitRegistrationActor(const std::string_view name, const std::shared_ptr<TypeDescriptor>& td, const bool phantom)
 	{
 		std::shared_ptr<TypeDescriptor> type;
 		//std::shared_ptr<TypeDescriptor> parent_type;

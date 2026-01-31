@@ -112,7 +112,7 @@ namespace mana
 
 
 	private:
-#if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
+#if defined(MANA_MEMORY_LEAK_ANALYSIS)
 		char mMagic[8];
 #endif
 		std::shared_ptr<Symbol> mSymbolEntry;

@@ -116,7 +116,7 @@ namespace mana
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		// actor
 		void BeginRegistrationActor(const std::shared_ptr<Symbol>& symbolEntry);
-		void CommitRegistrationActor(const std::string_view name, const std::string_view parent, const std::shared_ptr<TypeDescriptor>& type, const bool phantom);
+		void CommitRegistrationActor(const std::string_view name, const std::shared_ptr<TypeDescriptor>& type, const bool phantom);
 		bool IsActorOrStructerOpened() const;
 
 		void OpenActor(const std::string_view name);
