@@ -449,7 +449,13 @@ int main(int argc, char* argv[])
 	_CrtMemState stNewMemState;
 	_CrtMemState stDiffMemState;
 	_CrtMemCheckpoint(&stOldMemState);
-	/// _CrtSetBreakAlloc(363);
+
+	/*
+	 * メモリリーク番号が分かる場合は
+	 * _CrtSetBreakAlloc(メモリリーク番号);
+	 * で指定すると調べる事ができます
+	 */
+	//_CrtSetBreakAlloc(423);
 #endif
 
 	if (mana::ParseArguments(argc, argv))

@@ -170,6 +170,10 @@ namespace mana
 		std::string GetMagic() const;
 		void DumpRecursive(std::ofstream& output) const;
 
+#if defined(MANA_MEMORY_LEAK_ANALYSIS)
+		char mMagicName[8];
+#endif
+
 		std::shared_ptr<SyntaxNode> mLeft;
 		std::shared_ptr<SyntaxNode> mRight;
 		std::shared_ptr<SyntaxNode> mBody;

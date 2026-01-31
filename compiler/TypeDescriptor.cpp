@@ -16,7 +16,7 @@ namespace mana
 		: mShare()
 		, mTypeIdentifier(tcons)
 	{
-#if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
+#if defined(MANA_MEMORY_LEAK_ANALYSIS)
 		static uint32_t count = 0;
 		snprintf(mMagic, sizeof(mMagic), "T%u", count);
 		++count;

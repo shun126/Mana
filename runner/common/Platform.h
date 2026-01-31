@@ -48,4 +48,11 @@ mana (compiler/library)
 #define MANA_UNUSED_VAR(var)	((void)&(var))
 #define MANA_ELEMENT_OF(var)	(sizeof(var) / sizeof((var)[0]))
 
+#if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
+/*
+ * Enables the feature for detecting memory leaks.
+ */
+#define MANA_MEMORY_LEAK_ANALYSIS
+#endif
+
 #include "Type.h"

@@ -1,0 +1,20 @@
+/*
+ mana (script)
+*/
+
+struct S
+{
+    int v;
+
+    void Inc(int d)
+    {
+        this.v = this.v + d;
+    }
+}
+
+void Main()
+{
+    S s;
+    s.v = 1;
+    s.Inc(2);
+}
