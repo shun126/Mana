@@ -580,7 +580,7 @@ namespace mana
 				node->Set(QualifyName(node->GetString()));
 				GetSymbolFactory()->BeginRegistrationActor(Lookup(node->GetString()));
 				Resolve(node->GetLeftNode());
-				GetSymbolFactory()->CommitRegistrationActor(node->GetString(), /*nullptr*/"", nullptr, false);
+				GetSymbolFactory()->CommitRegistrationActor(node->GetString(), nullptr, false);
 			}
 			MANA_ASSERT(node->GetRightNode() == nullptr);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
@@ -610,7 +610,7 @@ namespace mana
 				node->Set(QualifyName(node->GetString()));
 				GetSymbolFactory()->BeginRegistrationActor(Lookup(node->GetString()));
 				Resolve(node->GetLeftNode());
-				GetSymbolFactory()->CommitRegistrationActor(node->GetString(), /*nullptr*/"", nullptr, true);
+				GetSymbolFactory()->CommitRegistrationActor(node->GetString(), nullptr, true);
 			}
 			MANA_ASSERT(node->GetRightNode() == nullptr);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);

@@ -110,6 +110,7 @@ other		.
 <INITIAL>"priority"	return mana::Parser::token::tPRIORITY;
 <INITIAL>"self"		return mana::Parser::token::tSELF;
 <INITIAL>"sender"	return mana::Parser::token::tSENDER;
+<INITIAL>"this"		return mana::Parser::token::tTHIS;
 
 <INITIAL>"break"	return mana::Parser::token::tBREAK;
 <INITIAL>"continue"	return mana::Parser::token::tCONTINUE;

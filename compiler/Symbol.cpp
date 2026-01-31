@@ -34,7 +34,7 @@ static char* symbol_data_type_id_name[NUMBER_OF] = {
 		, mName(name)
 		, mBlockLevel(blockLevel)
 	{
-#if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
+#if defined(MANA_MEMORY_LEAK_ANALYSIS)
 		static uint32_t count = 0;
 		snprintf(mMagic, sizeof(mMagic), "S%u", count);
 		++count;
@@ -80,12 +80,12 @@ static char* symbol_data_type_id_name[NUMBER_OF] = {
 
 	std::shared_ptr<Symbol> Symbol::GetParameterList()
 	{
-		return mParameterList;
+		return mParameterList.lock();
 	}
 
 	std::shared_ptr<Symbol> Symbol::GetParameterList() const
 	{
-		return mParameterList;
+		return mParameterList.lock();
 	}
 
 	void Symbol::SetParameterList(const std::shared_ptr<Symbol>& symbol)
@@ -268,7 +268,7 @@ static char* symbol_data_type_id_name[NUMBER_OF] = {
 			output << "  ";
 
 		output << "* ";
-#if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
+#if defined(MANA_MEMORY_LEAK_ANALYSIS)
 		output << mMagic;
 		output << " ";
 #endif
@@ -316,5 +316,4 @@ static char* symbol_data_type_id_name[NUMBER_OF] = {
 		if (GetNext())
 			GetNext()->OnDump(output, level);
 	}
-
 }
