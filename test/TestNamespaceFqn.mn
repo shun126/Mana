@@ -1,0 +1,19 @@
+define kRequestPriority 1;
+
+namespace A
+{
+    actor X
+    {
+        action f
+        {
+        }
+    }
+}
+
+actor Root
+{
+    action main
+    {
+        request(kRequestPriority, A::X->f);
+    }
+}

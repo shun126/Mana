@@ -1,0 +1,18 @@
+using A;
+
+define kRequestPriority 1;
+
+actor A
+{
+    action talk
+    {
+    }
+}
+
+actor C
+{
+    action main
+    {
+        request(kRequestPriority, A->talk);
+    }
+}

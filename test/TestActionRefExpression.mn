@@ -1,0 +1,29 @@
+/*
+mana (script)
+Copyright (c) 2003 Shun Moriya
+*/
+
+define kRequestPriority 1;
+
+actor Target
+{
+    action ping
+    {
+    }
+}
+
+actor Root
+{
+    action ping
+    {
+    }
+
+    action main
+    {
+        actor target;
+        request(kRequestPriority, target->ping);
+        request(kRequestPriority, self->ping);
+        request(kRequestPriority, sender->ping);
+        request(kRequestPriority, Target->ping);
+    }
+}

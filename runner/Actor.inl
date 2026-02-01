@@ -347,12 +347,12 @@ namespace mana
 					interruptIterator->second.mAddress = mPc;
 			}
 
+			// コールバック関数を呼びます
+			mOnPriorityChanged.Broadcast(priority, mInterruptPriority);
+
 			// 新しい優先度(高いほど優先)とプログラムカウンタを設定します
 			mInterruptPriority = priority;
 			mPc = address;
-
-			// コールバック関数を呼びます
-			mOnPriorityChanged.Broadcast(mInterruptPriority);
 
 			// 次のTickでプログラムカウンタを進めない処理
 			interrupt.mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
@@ -465,14 +465,14 @@ namespace mana
 			if (interrupt->mAddress == Nil)
 				continue;
 
+			// コールバック関数を呼びます
+			mOnPriorityChanged.Broadcast(iterator->first, mInterruptPriority);
+
 			// 中断していた場所から復帰させます
 			mPc = interrupt->mAddress;
 
 			// 優先度(高いほど優先)変更
 			mInterruptPriority = iterator->first;
-
-			// コールバック関数を呼びます
-			mOnPriorityChanged.Broadcast(mInterruptPriority);
 
 			// 次回のTickでプログラムカウンターを加算しない
 			interrupt->mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
@@ -501,6 +501,10 @@ namespace mana
 
 	inline void Actor::Restart()
 	{
+		// コールバック関数を呼びます
+		if (mInterruptPriority != LowestInterruptPriority)
+			mOnPriorityChanged.Broadcast(mInterruptPriority, LowestInterruptPriority);
+
 		mPc = Nil;
 		mInterruptPriority = LowestInterruptPriority;
 		mFlag.reset(static_cast<uint8_t>(Flag::Halt));
@@ -509,9 +513,6 @@ namespace mana
 		mInterrupts.clear();
 		mFrame.Clear();
 		mStack.Clear();
-
-		// コールバック関数を呼びます
-		mOnPriorityChanged.Broadcast(mInterruptPriority);
 	}
 
 	inline std::string_view Actor::GetName()
@@ -716,12 +717,13 @@ namespace mana
 		Stop();
 		yield();
 
+		// コールバック関数を呼びます
+		if (mInterruptPriority != LowestInterruptPriority)
+			mOnPriorityChanged.Broadcast(mInterruptPriority, LowestInterruptPriority);
+
 		mFlag.set(static_cast<uint8_t>(Flag::Halt));
 		mInterruptPriority = LowestInterruptPriority;
 		mInterrupts.clear();
-
-		// コールバック関数を呼びます
-		mOnPriorityChanged.Broadcast(mInterruptPriority);
 	}
 
 	inline void Actor::Stop()
@@ -782,7 +784,7 @@ namespace mana
 			interruptIterator->second.mFlag.reset(static_cast<uint8_t>(Interrupt::Flag::Synchronized));
 	}
 
-	inline EventNameType Actor::AddPriorityChangedEvent(const std::function<void(int32_t)>& function)
+	inline EventNameType Actor::AddPriorityChangedEvent(const std::function<void(int32_t, int32_t)>& function)
 	{
 		return mOnPriorityChanged.Add(function);
 	}

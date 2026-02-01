@@ -1,0 +1,10 @@
+/*
+mana (script)
+Copyright (c) 2003 Shun Moriya
+*/
+
+include "SampleConst.mn";
+include "SampleStruct.mn";
+include "SampleVariable.mn";
+include "SampleFunction.mn";
+include "SampleActor.mn";

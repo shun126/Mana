@@ -1,0 +1,21 @@
+/*
+ mana (script)
+*/
+
+define kRequestPriority 1;
+
+struct Helper
+{
+    void CallOther(actor a, int b)
+    {
+        request(kRequestPriority, a->talk);
+        yield();
+    }
+}
+
+void Main()
+{
+    Helper h;
+    actor a;
+    h.CallOther(a, 1);
+}
