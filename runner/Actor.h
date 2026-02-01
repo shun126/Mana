@@ -95,15 +95,8 @@ namespace mana
 		void SetSynchronized(const bool synchronized);
 		void SetSynchronizedWithPriority(const int32_t priority, const bool synchronized);
 		
-		[[nodiscard]] EventNameType AddRequestEvent(const std::function<void(int32_t)>& function);
-		void RemoveRequestEvent(const EventNameType eventName);
-		[[nodiscard]] EventNameType AddRollbackEvent(const std::function<void(int32_t)>& function);
-		void RemoveRollbackEvent(const EventNameType eventName);
-
-		[[nodiscard]] uintptr_t GetUserData() const;
-		void SetUserData(const uintptr_t userData);
-		[[nodiscard]] void* GetUserPointer() const;
-		void SetUserPointer(void* userPointer);
+		[[nodiscard]] EventNameType AddPriorityChangedEvent(const std::function<void(int32_t)>& function);
+		void RemovePriorityChangedEvent(const EventNameType eventName);
 
 		[[nodiscard]] Stack& GetStack();
 		[[nodiscard]] const Stack& GetStack() const;
@@ -124,7 +117,6 @@ namespace mana
 			uint32_t mReturnAddress = Nil;			//!< リターンアドレス
 			address_t mFramePointer = Nil;			//!< フレームポインタ
 			address_t mStackPointer = Nil;			//!< スタックポインタ
-			void* mFileCallbackParameter = nullptr;	//!< ファイル終了コールバックパラメータ
 			std::bitset<8> mFlag = 0;
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
 			std::string mActionName;				//!< 実行中のアクション名
@@ -172,8 +164,7 @@ namespace mana
 		Stack mStack;
 		std::map<int32_t, Interrupt> mInterrupts;
 		ReturnValue mReturnValue;
-		Event<int32_t> mRequestEvent;
-		Event<int32_t> mRollbackEvent;
+		Event<int32_t> mOnPriorityChanged;
 		Buffer mVariable;
 		address_t mPc = Nil;						//!< プログラムカウンタ
 		int32_t mInterruptPriority = 0;				//!< 割り込みレベル
@@ -187,8 +178,6 @@ namespace mana
 			Requested,		//!< リクエストフラグ
 			Refused			//!< リクエスト禁止フラグ
 		};
-		uintptr_t mUserData = 0;					//!< ユーザーデータ
-		void* mUserPointer = nullptr;				//!< ユーザーポインター
 
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
 		std::string_view mName;
