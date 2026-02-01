@@ -1,0 +1,22 @@
+/*
+mana (script)
+Copyright (c) 2018 Shun Moriya
+*/
+
+void test_statement_for()
+{
+    int j;
+    for(j = 0; j < 10; ++j)
+    {
+        print("%d\n", j);
+    }
+    for(int i = 0; i < 10; ++i)
+    {
+        print("%d\n", i);
+    }
+    for(int k = 0; k < 10; ++k)
+    {
+        print("%d\n", k);
+    }
+}
+

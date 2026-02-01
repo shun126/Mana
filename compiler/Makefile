@@ -82,10 +82,10 @@ cppcheck:
 	cppcheck -D __unix__ --enable=all $(SOURCES) $(SECOUND)
 
 test:
-	./$(TARGET) --debug ../sample/sample.mn -I ../sample/function.mh
-	./$(TARGET) ../test/program_image_test.mn -o ../test/program_image_test.mx
+	./$(TARGET) --debug ../sample/Sample.mn -I ../sample/Function.mh
+	./$(TARGET) ../test/ProgramImageTest.mn -o ../test/ProgramImageTest.mx
 	cd ../test/ && make
-	cd ../test/ && ./ProgramImageTest program_image_test.mx
+	cd ../test/ && ./ProgramImageTest ProgramImageTest.mx
 	cd ../test/ && python3 test.py ../compiler/$(TARGET)
 
 version:
