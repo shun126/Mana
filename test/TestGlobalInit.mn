@@ -1,0 +1,35 @@
+/*
+mana (script)
+Copyright (c) 2003 Shun Moriya
+*/
+
+// global initializers
+// Owned by Test::init
+int gConstValue = 3 + 4;
+float gConstFloat = 1.5;
+int gOrderedA = 1;
+int gOrderedB = gOrderedA + 1;
+
+int RuntimeValue()
+{
+    return 563;
+}
+
+int gRuntimeValue = RuntimeValue();
+
+actor Test
+{
+    action init
+    {
+        print("constValue: %d\n", gConstValue);
+        print("constFloat: %f\n", gConstFloat);
+        print("orderedB: %d\n", gOrderedB);
+        print("runtimeValue: %d\n", gRuntimeValue);
+
+        // touch globals so code generation exercises references
+        gConstValue = gConstValue + gOrderedB;
+        gConstFloat = gConstFloat + 0.5;
+        gOrderedB = gOrderedA + 2;
+        gRuntimeValue = RuntimeValue();
+    }
+}

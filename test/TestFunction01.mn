@@ -1,0 +1,14 @@
+/*
+mana (script)
+Copyright (c) 2003 Shun Moriya
+*/
+
+// undefined function sample
+void undefined()
+{
+    if(hoge)
+    {
+        print("%s\n", hoge);
+    }
+}
+

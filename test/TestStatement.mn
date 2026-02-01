@@ -1,0 +1,22 @@
+/*
+mana (script)
+Copyright (c) 2018 Shun Moriya
+*/
+
+include "TestStatementDo.mn";
+include "TestStatementFor.mn";
+include "TestStatementIf.mn";
+include "TestStatementLoop.mn";
+include "TestStatementSwitch.mn";
+include "TestStatementWhile.mn";
+
+void test_statement()
+{
+    test_statement_do();
+    test_statement_for();
+    test_statement_if();
+    test_statement_loop();
+    test_statement_switch();
+    test_statement_while();
+}
+

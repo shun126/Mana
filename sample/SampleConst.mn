@@ -1,0 +1,11 @@
+/*
+mana (script)
+Copyright (c) 2003 Shun Moriya
+*/
+
+define kDigit1 1;
+define kDigit2 -1;
+define kReal1 1.0;
+define kReal2 -1.0;
+define kDefileTest "Hoge";
+//alias MotionFile    "motion.anm";
