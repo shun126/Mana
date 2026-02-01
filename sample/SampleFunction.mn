@@ -1,0 +1,220 @@
+/*
+mana (script)
+Copyright (c) 2003 Shun Moriya
+*/
+
+native int nativeFunction(int a0, float a1);
+
+int callTest(char a, short b, int c, float d)
+{
+    if(a < 5)
+    {
+        print("%d %d %d %f\n", a, b, c, d);
+        return callTest(a + 1, b, c, d);
+    }
+    else
+    {
+        functionCallingTest();
+        expressionTest();
+        return 0;
+    }
+}
+
+void assignmentTest(float value)
+{
+    print("assignmentTest\n");
+
+    char c = 0b0001_1000;
+
+    TestStruct1 hoge[2];
+    hoge[1].realValue = 1.5;
+
+    vec3 vector;
+    vector.x = 0;
+    vector.y = 1;
+    vector.z = 2;
+
+    char i;
+    i = 1;
+    short j;
+    j = 65535;
+    int k;
+    k = 0xFFFFFF;
+    float l;
+    l = 4.0;
+    l = 5;
+    l = i;
+
+    short array[10];
+    array = array;
+}
+
+void expressionTest()
+{
+    print("expressionTest\n");
+
+    float f;
+    int i;
+
+    f = f + 1;
+    f = f - 1;
+    f = f * 1;
+    f = f / 1;
+    f = f % 1;
+
+    i = i + 1;
+    i = i - 1;
+    i = i * 1;
+    i = i / 1;
+    i = i % 1;
+
+    i = i & 1;
+    i = i | 1;
+    i = i ^ 1;
+
+    i = i && 1;
+    i = i || 1;
+    i = ~i;
+
+    i = i << 1;
+    i = i >> 1;
+}
+
+void statementTest()
+{
+    print("statementTest\n");
+
+    if(true)
+    {
+        int i;
+        i = 0;
+    }
+
+    if(false)
+    {
+        float j;
+        j = 0;
+    }
+    else
+    {
+        short k;
+        k = 0;
+    }
+
+    int count = 4;
+    while(count)
+    {
+        switch(count)
+        {
+        case 1:
+            //print("one\n");
+            break;
+        case 2:
+            //print("two\n");
+            break;
+        case 3:
+            //print("three\n");
+            break;
+        default:
+            //print("ready\n");
+        }
+        count--;
+    }
+
+    // loop
+    loop
+    {
+        int i;
+        i = 10;
+        while(i)
+        {
+            i--;
+        }
+
+        do
+        {
+            i++;
+        }
+        while (i < 10);
+
+        int j;
+        for(j = 0; j < 10; j++)
+        {
+            --i;            
+        }
+
+        break;
+    }
+}
+
+float functionCallingTest()
+{
+    print("functionCallingTest\n");
+
+    int value;
+    assignmentTest(value);
+
+    return value;
+}
+
+int test_sort(short array[10], int size)
+{
+    print("before\n");
+
+    for(int i = 0; i < size; i++)
+    {
+        array[i] = size - i;
+        print("%d: %d\n", i, array[i]);
+    }
+    print("-----\n");
+
+    int count = 0;
+    int finish;
+    do
+    {
+        finish = true;
+        for(int i = 0; i < size - 1; i++)
+        {
+            if(array[i] > array[i + 1])
+            {
+                print("%d <-> %d\n", array[i], array[i+1]);
+
+                short tmp = array[i];
+                array[i] = array[i + 1];
+                array[i + 1] = tmp;
+                finish = false;
+            }
+        }
+        count++;
+
+        for(int i = 0; i < size; i++)
+        {
+            print("%d: %d\n", i, array[i]);
+        }
+        print("%d----\n", count);
+    }
+    while(!finish);
+
+    print("after\n");
+    for(int i = 0; i < size; i++)
+    {
+        print("%d: %d\n", i, array[i]);
+    }
+
+    return count;
+}
+
+/*
+void test()
+{
+    // Forward declaration
+    short array[10];
+    //print("test_sort: %d\n", test_sort(array, 10));
+
+    test_if();
+
+    // Forward declaration
+    test_switch_while();
+}
+
+*/

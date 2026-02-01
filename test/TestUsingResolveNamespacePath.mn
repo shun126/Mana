@@ -1,0 +1,13 @@
+using A::X;
+
+namespace A
+{
+    namespace X
+    {
+        struct S
+        {
+        }
+    }
+}
+
+S value;

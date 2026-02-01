@@ -14,7 +14,6 @@ mana (library)
 #include <map>
 #include <string>
 #include <unordered_map>
-#include <vector>
 
 namespace mana
 {
@@ -27,10 +26,6 @@ namespace mana
 	{
 		friend class VM;
 
-	public:
-		//! request / rollbackコールバック
-		using Callback = int32_t (*)(const std::shared_ptr<Actor>& actor, void* parameter);
-				
 	public:
 		//! Constructor
 		explicit Actor(const std::shared_ptr<VM>& vm, const address_t variableSize);
@@ -95,7 +90,7 @@ namespace mana
 		void SetSynchronized(const bool synchronized);
 		void SetSynchronizedWithPriority(const int32_t priority, const bool synchronized);
 		
-		[[nodiscard]] EventNameType AddPriorityChangedEvent(const std::function<void(int32_t)>& function);
+		[[nodiscard]] EventNameType AddPriorityChangedEvent(const std::function<void(int32_t, int32_t)>& function);
 		void RemovePriorityChangedEvent(const EventNameType eventName);
 
 		[[nodiscard]] Stack& GetStack();
@@ -164,10 +159,10 @@ namespace mana
 		Stack mStack;
 		std::map<int32_t, Interrupt> mInterrupts;
 		ReturnValue mReturnValue;
-		Event<int32_t> mOnPriorityChanged;
+		Event<int32_t, int32_t> mOnPriorityChanged;
 		Buffer mVariable;
-		address_t mPc = Nil;						//!< プログラムカウンタ
-		int32_t mInterruptPriority = 0;				//!< 割り込みレベル
+		address_t mPc = Nil;									//!< プログラムカウンタ
+		int32_t mInterruptPriority = LowestInterruptPriority;	//!< 割り込みレベル
 		std::bitset<8> mFlag = 0;
 		enum class Flag : uint8_t
 		{

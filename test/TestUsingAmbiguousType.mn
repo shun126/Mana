@@ -1,0 +1,26 @@
+namespace A
+{
+    struct S
+    {
+        int a;
+    }
+}
+
+namespace B
+{
+    struct S
+    {
+        int b;
+    }
+}
+
+using A;
+using B;
+
+actor Root
+{
+    action main
+    {
+        S value;
+    }
+}

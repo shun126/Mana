@@ -1,0 +1,84 @@
+/*
+mana (script)
+Copyright (c) 2003 Shun Moriya
+*/
+
+define kTalkPriority 1;
+define kJoinPriority 0;
+
+// actor declarations
+actor TestActor1
+{
+    int mDigitVariableInActor;
+
+    action init
+    {
+        print("TestActor1::init\n");
+        callTest(1, 2, 3, 4.0);
+    }
+
+    action main
+    {
+        print("TestActor1::main\n");
+
+        print("TestActor1:section1\n");
+        short array[10];
+        test_sort(array, 10);
+
+        print("TestActor1:section2\n");
+        request(kTalkPriority, OtherTestActor->talk);
+
+        print("TestActor1:section3\n");
+        join(kJoinPriority, OtherTestActor);
+        print("TestActor1:section4\n");
+    }
+
+    action talk
+    {
+        vec2 test;
+        //test.x = 0;
+        print("Nin hao!\n");
+        /*
+        pointer p;
+        pointer q;
+        p = getUserPointer();
+        q = p;
+        setUserPointer(p);
+        */
+    }
+}
+
+module Battler
+{
+    action init
+    {
+    }
+
+    action dead
+    {
+    }
+}
+
+actor OtherTestActor
+{
+    extend Battler;
+
+    action talk
+    {
+        vec2 test;
+        float f;
+        //f = test.x;
+        print("Hello!\n");
+        yield();
+        //getUserData();
+    }
+}
+
+phantom Phantom
+{
+    extend Battler;
+
+    action init
+    {
+    }
+}
