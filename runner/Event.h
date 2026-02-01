@@ -8,7 +8,7 @@ mana (library)
 #pragma once
 #include "common/Setup.h"
 #include <functional>
-#include <unordered_map>
+#include <map>
 
 namespace mana
 {
@@ -51,6 +51,6 @@ namespace mana
 		}
 
 	private:
-		std::unordered_map<EventNameType, std::function<FunctionType>> mFunction;
+		std::map<EventNameType, std::function<FunctionType>> mFunction;
 	};
 }
