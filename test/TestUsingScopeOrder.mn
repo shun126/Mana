@@ -1,0 +1,15 @@
+using A;
+
+struct Dummy
+{
+    int value;
+}
+
+namespace A
+{
+    struct S
+    {
+    }
+}
+
+S value;
