@@ -1,0 +1,31 @@
+/*
+mana (script)
+Copyright (c) 2003 Shun Moriya
+*/
+
+import "TestStruct01.mn";
+
+////////////////////////////////////////////////////////////////////////////////
+// global variables
+// Owned by TestVariable02::init
+float gRealValue;
+int gDigitValue;
+
+allocate 1024
+{
+    TestStruct1 gStructValue;
+}
+short gShortValue;
+char gCharValue;
+
+////////////////////////////////////////////////////////////////////////////////
+// static variables
+static allocate 512
+{
+    int gStaticDigitValue;
+}
+
+static
+{
+    float gStaticRealValue;
+}

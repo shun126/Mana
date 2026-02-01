@@ -1,0 +1,41 @@
+/*
+mana (script)
+Copyright (c) 2003 Shun Moriya
+*/
+
+////////////////////////////////////////////////////////////////////////////////
+// global struct
+struct GlobalStruct
+{
+    int g;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// namespaced struct
+namespace A
+{
+    struct NsStruct
+    {
+        int n;
+    }
+}
+
+using A;
+
+////////////////////////////////////////////////////////////////////////////////
+// global variables
+// Owned by Root::main
+GlobalStruct gGlobalValue;
+A::NsStruct gNamespacedValue;
+
+////////////////////////////////////////////////////////////////////////////////
+// local variables (using namespace)
+actor Root
+{
+    action main
+    {
+        GlobalStruct localGlobal;
+        NsStruct localNamespaced;
+        A::NsStruct localQualified;
+    }
+}

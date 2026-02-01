@@ -1,0 +1,31 @@
+/*
+mana (script)
+Copyright (c) 2003 Shun Moriya
+*/
+
+define kBoolOn true;
+define kBoolOff false;
+
+// global variables
+// Owned by BoolActor::main
+bool gFlagDefault;
+bool gFlagInitialized = true;
+int gIntFromBool = kBoolOff;
+bool gFlagFromInt = 1;
+
+actor BoolActor
+{
+    action main
+    {
+        bool localFlag = kBoolOn;
+        if (localFlag && gFlagInitialized)
+        {
+            localFlag = false;
+            print("success\n");
+        }
+        else
+        {
+            print("fail\n");
+        }
+    }
+}
