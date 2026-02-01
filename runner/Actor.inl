@@ -303,7 +303,6 @@ namespace mana
 		interrupt.mReturnAddress = Nil;
 		interrupt.mAddress = address;
 		interrupt.mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Synchronized));
-		interrupt.mFileCallbackParameter = nullptr;
 
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
 		MANA_TRACE({ "mana:request: ", GetName(), " " });
@@ -334,9 +333,6 @@ namespace mana
 #endif
 			MANA_TRACE({ "priority ", std::to_string(priority), " ", interrupt.mActionName, " succeed\n" });
 
-			// コールバック関数を呼びます
-			mRequestEvent.Broadcast(priority);
-
 			Again();
 
 			// 現在のFPとSPを保存します
@@ -354,6 +350,9 @@ namespace mana
 			// 新しい優先度(高いほど優先)とプログラムカウンタを設定します
 			mInterruptPriority = priority;
 			mPc = address;
+
+			// コールバック関数を呼びます
+			mOnPriorityChanged.Broadcast(mInterruptPriority);
 
 			// 次のTickでプログラムカウンタを進めない処理
 			interrupt.mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
@@ -401,14 +400,6 @@ namespace mana
 			currentInterrupt.mSender->Again();
 			currentInterrupt.mSender = nullptr;
 		}
-#if 0
-		/* ファイル読み込み中ならば解放 */
-		if (mAsyncFileCallback && currentInterrupt.mFileCallbackParameter)
-		{
-			mAsyncFileCallback(MANA_FILE_COMMAND_CLOSE, currentInterrupt.mFileCallbackParameter);
-			currentInterrupt.mFileCallbackParameter = nullptr;
-		}
-#endif
 
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
 		const int32_t lastInterruptPriority = mInterruptPriority;
@@ -454,22 +445,10 @@ namespace mana
 
 				// 優先度開放
 				interrupt->mAddress = Nil;
-#if 0
-				/* ファイルエントリの削除 */
-				if (mAsyncFileCallback && mInterrupts->mFileCallbackParameter)
-				{
-					MANA_TRACE("mana:rollback: %d: waiting for file loading\n", currentLevel);
 
-					mAsyncFileCallback(MANA_FILE_COMMAND_CLOSE, interrupt->mFileCallbackParameter);
-					interrupt->mFileCallbackParameter = nullptr;
-				}
-#endif				
 				// フレームポインタとスタックポインタを取得
 				framePointer = interrupt->mFramePointer;
 				stackPointer = interrupt->mStackPointer;
-
-				/* コールバック関数を呼びます */
-				mRollbackEvent.Broadcast(currentLevel);
 
 				mInterrupts.erase(interruptIterator);
 			}
@@ -488,13 +467,12 @@ namespace mana
 
 			// 中断していた場所から復帰させます
 			mPc = interrupt->mAddress;
-#if 0
-			// コールバック関数を呼びます
-			if (mRollbackCallback)
-				mRollbackCallback(mRollbackCallbackParameter);
-#endif			
+
 			// 優先度(高いほど優先)変更
 			mInterruptPriority = iterator->first;
+
+			// コールバック関数を呼びます
+			mOnPriorityChanged.Broadcast(mInterruptPriority);
 
 			// 次回のTickでプログラムカウンターを加算しない
 			interrupt->mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
@@ -512,12 +490,6 @@ namespace mana
 					" succeed\n"
 				}
 			);
-
-			/*
-			 MANA_ASSERT(
-			 mPc >= GetParent().instruction_pool &&
-			 mPc < &GetParent().instruction_pool[GetParent().file_header->size_of_instruction_pool]);
-			 */
 
 			return;
 		}
@@ -537,6 +509,9 @@ namespace mana
 		mInterrupts.clear();
 		mFrame.Clear();
 		mStack.Clear();
+
+		// コールバック関数を呼びます
+		mOnPriorityChanged.Broadcast(mInterruptPriority);
 	}
 
 	inline std::string_view Actor::GetName()
@@ -744,6 +719,9 @@ namespace mana
 		mFlag.set(static_cast<uint8_t>(Flag::Halt));
 		mInterruptPriority = LowestInterruptPriority;
 		mInterrupts.clear();
+
+		// コールバック関数を呼びます
+		mOnPriorityChanged.Broadcast(mInterruptPriority);
 	}
 
 	inline void Actor::Stop()
@@ -804,44 +782,14 @@ namespace mana
 			interruptIterator->second.mFlag.reset(static_cast<uint8_t>(Interrupt::Flag::Synchronized));
 	}
 
-	inline EventNameType Actor::AddRequestEvent(const std::function<void(int32_t)>& function)
+	inline EventNameType Actor::AddPriorityChangedEvent(const std::function<void(int32_t)>& function)
 	{
-		return mRequestEvent.Add(function);
+		return mOnPriorityChanged.Add(function);
 	}
 
-	inline void Actor::RemoveRequestEvent(const EventNameType eventName)
+	inline void Actor::RemovePriorityChangedEvent(const EventNameType eventName)
 	{
-		mRequestEvent.Remove(eventName);
-	}
-
-	inline EventNameType Actor::AddRollbackEvent(const std::function<void(int32_t)>& function)
-	{
-		return mRollbackEvent.Add(function);
-	}
-
-	inline void Actor::RemoveRollbackEvent(const EventNameType eventName)
-	{
-		mRollbackEvent.Remove(eventName);
-	}
-
-	inline uintptr_t Actor::GetUserData() const
-	{
-		return mUserData;
-	}
-
-	inline void Actor::SetUserData(uintptr_t userData)
-	{
-		mUserData = userData;
-	}
-
-	inline void* Actor::GetUserPointer() const
-	{
-		return mUserPointer;
-	}
-
-	inline void Actor::SetUserPointer(void* userPointer)
-	{
-		mUserPointer = userPointer;
+		mOnPriorityChanged.Remove(eventName);
 	}
 
 	inline Stack& Actor::GetStack()
