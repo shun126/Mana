@@ -23,9 +23,12 @@ $(TARGET): $(OBJECTS)
 
 clean:
 	rm -f $(TARGET) $(OBJECTS)
+	rm -f *.h
+	rm -f *.md
 
 depend:
 	makedepend -Y -- $(CFLAGS) -- $(SOURCES)
+	
 # DO NOT DELETE
 
 ProgramImageTest.o: ../runner/ProgramImage.h ../runner/common/Setup.h
