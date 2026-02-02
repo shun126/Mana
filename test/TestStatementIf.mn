@@ -3,7 +3,7 @@ mana (script)
 Copyright (c) 2003 Shun Moriya
 */
 
-void test_statement_if()
+void TestStatementIf()
 {
     int flag = 1;
 
