@@ -79,6 +79,7 @@ other		.
 
 <INITIAL>"define"	return mana::Parser::token::tDEFINE;
 <INITIAL>"undef"	return mana::Parser::token::tUNDEF;
+<INITIAL>"const"	return mana::Parser::token::tCONST;
 
 <INITIAL>"include"	return mana::Parser::token::tINCLUDE;
 <INITIAL>"import"	return mana::Parser::token::tIMPORT;

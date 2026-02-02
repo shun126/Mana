@@ -9,9 +9,9 @@ short gShortValue;
 int gIntValue;
 float gFloatValue;
 
-define kStartPriority 7;
-define kTalkPriority 7;
-define kCompletionPriority 6;
+const int kStartPriority = 7;
+const int kTalkPriority = 7;
+const int kCompletionPriority = 6;
 
 struct TestStruct1
 {

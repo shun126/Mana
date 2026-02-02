@@ -3,7 +3,7 @@ mana (script)
 Copyright (c) 2003 Shun Moriya
 */
 
-define kRequestPriority 1;
+const int kRequestPriority = 1;
 
 actor Target
 {

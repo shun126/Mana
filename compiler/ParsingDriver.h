@@ -192,6 +192,7 @@ namespace mana
 
 		// variable_decl
 		static std::shared_ptr<SyntaxNode> CreateDeclareVariableNode(const std::shared_ptr<SyntaxNode>& variableType, const std::shared_ptr<SyntaxNode>& declarator, const std::shared_ptr<SyntaxNode>& expression);
+		static std::shared_ptr<SyntaxNode> CreateConstDeclarationNode(const std::shared_ptr<SyntaxNode>& variableType, const std::string_view& identifier, const std::shared_ptr<SyntaxNode>& expression);
 
 		// declarator
 		static std::shared_ptr<SyntaxNode> CreateDeclaratorNode(const std::string_view& identifier);

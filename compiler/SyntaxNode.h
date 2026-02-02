@@ -91,6 +91,7 @@ namespace mana
 			Declarator,
 
 			DeclareVariable,
+			ConstDeclaration,
 			Sizeof,
 
 			Actor,								//!< アクターの宣言

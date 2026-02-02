@@ -1,6 +1,6 @@
 namespace A
 {
-define kRequestPriority 1;
+const int kRequestPriority = 1;
 
 actor X
 {
