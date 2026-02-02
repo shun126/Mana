@@ -63,7 +63,7 @@ mana (compiler)
 	#include <string_view>
 }
 
-%type	<std::shared_ptr<mana::SyntaxNode>> block case cases left_hand constant expression statement statements variable_size variable_sizes variable_type function struct_member struct_members struct action actions actor declarator declaration allocate_declarations declarations primary arg_calls arg_decls variable_decl line
+%type	<std::shared_ptr<mana::SyntaxNode>> block case cases left_hand constant expression statement statements variable_size variable_sizes variable_type function struct_member struct_members struct action actions actor declarator declaration allocate_declarations declarations primary arg_calls arg_decls variable_decl const_decl line
 %type	<std::string_view> qualified_name
 %type	<mana::ActionReference> action_ref
 %token	<mana::int_t> tDIGIT
@@ -71,7 +71,7 @@ mana (compiler)
 %token	<std::string_view> tSTRING tIDENTIFIER
 %token	<std::shared_ptr<mana::TypeDescriptor>> tTYPE
 
-%token	tDEFINE tUNDEF tINCLUDE tIMPORT
+%token	tDEFINE tUNDEF tINCLUDE tIMPORT tCONST
 %token	tNATIVE tSTRUCT tACTOR tPHANTOM tACTION tMODULE tEXTEND
 %token	tNAMESPACE tUSING
 %token	tFALSE tTRUE tPRIORITY tSELF tSENDER tTHIS tNIL
@@ -174,24 +174,7 @@ allocate_declarations
 				;
 
 declaration		: variable_decl
-				| tDEFINE tIDENTIFIER tDIGIT
-					{ $$ = mParsingDriver->CreateConstantNode($2, $3); }
-				| tDEFINE tIDENTIFIER tREAL
-					{ $$ = mParsingDriver->CreateConstantNode($2, $3); }
-				| tDEFINE tIDENTIFIER tFALSE
-					{ $$ = mParsingDriver->CreateConstantNode($2, false); }
-				| tDEFINE tIDENTIFIER tTRUE
-					{ $$ = mParsingDriver->CreateConstantNode($2, true); }
-				| tDEFINE tIDENTIFIER '-' tDIGIT
-					{ $$ = mParsingDriver->CreateConstantNode($2, -$4); }
-				| tDEFINE tIDENTIFIER '-' tREAL
-					{ $$ = mParsingDriver->CreateConstantNode($2, -$4); }
-				| tDEFINE tIDENTIFIER tSTRING
-					{ $$ = mParsingDriver->CreateConstantNode($2, $3); }
-				| tDEFINE tIDENTIFIER tIDENTIFIER
-					{ $$ = mParsingDriver->CreateDefineNode($2, $3); }
-				| tUNDEF tIDENTIFIER
-					{ $$ = mParsingDriver->CreateUndefineNode($2); }
+				| const_decl
 				;
 
 actor			: tACTOR tIDENTIFIER '{' actions '}'
@@ -498,6 +481,10 @@ variable_decl	: variable_type declarator
 				| variable_type declarator '=' expression
 					{ $$ = mParsingDriver->CreateDeclareVariableNode($1, $2, $4); }
 				;
+				;
+
+const_decl		: tCONST variable_type tIDENTIFIER '=' expression
+					{ $$ = mParsingDriver->CreateConstDeclarationNode($2, $3, $5); }
 				;
 
 declarator		: tIDENTIFIER

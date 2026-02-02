@@ -1,0 +1,23 @@
+/*
+ * mana (script)
+ * Copyright (c) 2024 Shun Moriya
+ */
+
+const int A = 1;
+const int B = A + 2;
+
+namespace X
+{
+    const int C = 3;
+}
+
+using X;
+const int D = C + 1;
+
+actor Test
+{
+    action init
+    {
+        print("%d %d %d %d\n", A, B, C, D);
+    }
+}
