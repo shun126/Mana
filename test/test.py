@@ -21,10 +21,12 @@ if len(sys.argv) < 2:
 else:
 	MANA = sys.argv[1]
 
+Result = 0
+
 ################################################################################
 def success(argument):
 	print(MANA + ' ' + argument, end='')
-	command = [MANA, argument, "--debug"]
+	command = [MANA, argument, "-t", "--debug"]
 	cp = subprocess.run(command, capture_output=True, text=True, errors="ignore")
 	if cp.returncode == 0:
 		print(" ... Success")
@@ -65,43 +67,43 @@ def fail(argument, error_message):
 		Result += 1
 
 ################################################################################
-Result = 0
 success('--copyright')
 success('--version')
 success('--help')
-fail('TestMissingFile.mn', 'unable to open')
-success('TestActor01.mn')
-success('TestConstant01.mn')
-success('TestConstDeclOk.mn')
-success('TestBool01.mn')
-#success('TestFunction01.mn')
-fail('TestFunction02.mn', 'incomplete type name')
-success('TestStruct01.mn')
-success('TestStructMethod01.mn')
-success('TestStructMethodRequest.mn')
-success('TestStructNamespace.mn')
-success('TestVariable01.mn')
-success('TestGlobalInit.mn')
-success('TestNamespaceFqn.mn')
 success('TestActionRefExpression.mn')
-success('TestUsingNamespace.mn')
-success('TestUsingSymbol.mn')
+success('TestActor01.mn')
+success('TestBool01.mn')
+fail('TestConstDeclInvalidAssign.mn', 'cannot assign to const')
+fail('TestConstDeclInvalidCall.mn', 'constant expression')
+fail('TestConstDeclInvalidDefine.mn', 'syntax error')
+fail('TestConstDeclInvalidType.mn', 'incompatible type')
+success('TestConstDeclOk.mn')
+success('TestConstant01.mn')
+success('TestExtendNamespaceResolution.mn')
 success('TestForwardReferenceUsing.mn')
+success('TestForwardUsingActor.mn')
 success('TestForwardUsingNamespace.mn')
 success('TestForwardUsingNamespaceNested.mn')
-success('TestForwardUsingActor.mn')
+success('TestFunction01.mn')
+fail('TestFunction02.mn', 'incomplete type name')
+success('TestGlobalInit.mn')
+fail('TestMissingFile.mn', 'unable to open')
+success('TestNamespaceFqn.mn')
+success('TestStatement.mn')
+success('TestStruct01.mn')
+fail('TestStructMethodNonStruct.mn', 'member call on non-struct type')
+success('TestStructMethodRequest.mn')
+fail('TestStructMethodUnknown.mn', "unresolved method 'Unknown' for type 'S'")
+success('TestStructNamespace.mn')
+fail('TestUsingAmbiguousActor.mn', 'ambiguous actor reference')
+fail('TestUsingAmbiguousNamespaceSymbol.mn', 'ambiguous using')
+fail('TestUsingAmbiguousType.mn', 'ambiguous type reference')
+success('TestUsingNamespace.mn')
 success('TestUsingResolveNamespacePath.mn')
 success('TestUsingResolveSymbolImport.mn')
 success('TestUsingScopeOrder.mn')
-fail('TestUsingAmbiguousActor.mn', 'ambiguous actor reference')
-fail('TestUsingAmbiguousType.mn', 'ambiguous type reference')
-fail('TestUsingAmbiguousNamespaceSymbol.mn', 'ambiguous using')
-success('TestExtendNamespaceResolution.mn')
-fail('TestStructMethodNonStruct.mn', 'member call on non-struct type')
-fail('TestStructMethodUnknown.mn', "unresolved method 'Unknown' for type 'S'")
-fail('TestConstDeclInvalidDefine.mn', 'syntax error')
-fail('TestConstDeclInvalidCall.mn', 'constant expression')
-fail('TestConstDeclInvalidType.mn', 'incompatible type')
-fail('TestConstDeclInvalidAssign.mn', 'cannot assign to const')
+success('TestUsingSymbol.mn')
+success('TestVariable01.mn')
+success('TestVariable02.mn')
 ################################################################################
 exit(Result)
