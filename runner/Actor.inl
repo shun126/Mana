@@ -40,13 +40,15 @@ namespace mana
 			}
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
 			IntermediateLanguageCommand(IntermediateLanguage code, IntermediateLanguageFunction command)
-				: mCode(code)
-				, mCommand(command)
+				: mCommand(command)
+				, mCode(code)
 			{
 			}
-			IntermediateLanguage mCode = IntermediateLanguage::Halt;
 #endif
 			IntermediateLanguageFunction mCommand;
+#if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
+			IntermediateLanguage mCode = IntermediateLanguage::Halt;
+#endif
 		};
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
 #define MANA_ACTOR_SET_COMMAND(code, command)	IntermediateLanguageCommand(code, command)
@@ -420,17 +422,15 @@ namespace mana
 		// 優先度開放
 		mInterrupts.erase(mInterruptPriority);
 
-		const int32_t targetPriority = (priority < LowestInterruptPriority) ? LowestInterruptPriority : priority;
-
 		// 優先度(高いほど優先)が指定されているならば、強制的に指定優先度まで戻る
-		if (mInterruptPriority - 1 > targetPriority)
+		if (mInterruptPriority - 1 > priority)
 		{
 			std::vector<int32_t> prioritiesToRelease;
 			prioritiesToRelease.reserve(mInterrupts.size());
 
 			for (auto iterator = mInterrupts.rbegin(); iterator != mInterrupts.rend(); ++iterator)
 			{
-				if (iterator->first <= targetPriority)
+				if (iterator->first <= priority)
 					break;
 				prioritiesToRelease.push_back(iterator->first);
 			}
@@ -1451,14 +1451,16 @@ namespace mana
 
 		// 外部関数の実行
 		const char* functionName = vm->GetStringFromMemory(self.mPc + 1);
-		const auto function = vm->FindFunction(functionName);
-		if (function == nullptr)
+		if (const auto function = vm->FindFunction(functionName))
+		{
+			function(self.shared_from_this());
+		}
+		else
 		{
 			// 戻り値があるなら、スタック操作ができないので強制停止
 			if (self.HasReturnValue(lastPc))
 				std::terminate();
 		}
-		function(self.shared_from_this());
 
 		if (self.IsRunning())
 		{

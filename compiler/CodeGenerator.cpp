@@ -614,19 +614,25 @@ DO_RECURSIVE:
 
 		switch (node->GetId())
 		{
-			///////////////////////////////////////////////////////////////////////
-			// 定数定義に関するノード									
-		case SyntaxNode::Id::DefineConstant:
-			MANA_ASSERT(node->GetLeftNode() == nullptr);
-			MANA_ASSERT(node->GetRightNode() == nullptr);
-			MANA_ASSERT(node->GetBodyNode() == nullptr);
-			break;
+		///////////////////////////////////////////////////////////////////////
+		// 定数定義に関するノード									
+	case SyntaxNode::Id::DefineConstant:
+		MANA_ASSERT(node->GetLeftNode() == nullptr);
+		MANA_ASSERT(node->GetRightNode() == nullptr);
+		MANA_ASSERT(node->GetBodyNode() == nullptr);
+		break;
 
-		case SyntaxNode::Id::UndefineConstant:
-			MANA_ASSERT(node->GetLeftNode() == nullptr);
-			MANA_ASSERT(node->GetRightNode() == nullptr);
-			MANA_ASSERT(node->GetBodyNode() == nullptr);
-			break;
+	case SyntaxNode::Id::ConstDeclaration:
+		MANA_ASSERT(node->GetLeftNode());
+		MANA_ASSERT(node->GetRightNode());
+		MANA_ASSERT(node->GetBodyNode());
+		break;
+
+	case SyntaxNode::Id::UndefineConstant:
+		MANA_ASSERT(node->GetLeftNode() == nullptr);
+		MANA_ASSERT(node->GetRightNode() == nullptr);
+		MANA_ASSERT(node->GetBodyNode() == nullptr);
+		break;
 
 			///////////////////////////////////////////////////////////////////////
 			// メモリレイアウトに関するノード

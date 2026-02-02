@@ -3,9 +3,9 @@ mana (script)
 Copyright (c) 2003 Shun Moriya
 */
 
-define kDigit1 1;
-define kDigit2 -1;
-define kReal1 1.0;
-define kReal2 -1.0;
-define kDefileTest "Hoge";
+const int kDigit1 = 1;
+const int kDigit2 = -1;
+const float kReal1 = 1.0;
+const float kReal2 = -1.0;
+const string kDefileTest = "Hoge";
 //alias MotionFile    "motion.anm";

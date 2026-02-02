@@ -1,0 +1,10 @@
+/*
+ * mana (script)
+ */
+
+int f()
+{
+    return 1;
+}
+
+const int A = f();
