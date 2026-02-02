@@ -15,9 +15,98 @@ mana (compiler)
 #include "SyntaxNode.h"
 #include "TypeDescriptorFactory.h"
 #include <algorithm>
+#include <string_view>
+#include <vector>
 
 namespace mana
 {
+	namespace
+	{
+		struct RenderedType final
+		{
+			std::string mBase;
+			std::vector<address_t> mArraySizes;
+		};
+
+		std::string RenderBaseType(const std::shared_ptr<TypeDescriptor>& type)
+		{
+			if (!type)
+				return "void*";
+
+			switch (type->GetId())
+			{
+			case TypeDescriptor::Id::Void:
+				return "void";
+			case TypeDescriptor::Id::Char:
+				return "int8_t";
+			case TypeDescriptor::Id::Short:
+				return "int16_t";
+			case TypeDescriptor::Id::Bool:
+				return "bool";
+			case TypeDescriptor::Id::Int:
+				return "int32_t";
+			case TypeDescriptor::Id::Float:
+				return "float";
+			case TypeDescriptor::Id::Reference:
+			{
+				const std::shared_ptr<TypeDescriptor> component = type->GetComponent();
+				const std::string base = component ? RenderBaseType(component) : std::string("void");
+				return base + "*";
+			}
+			case TypeDescriptor::Id::Struct:
+			case TypeDescriptor::Id::Actor:
+			case TypeDescriptor::Id::Module:
+				return std::string(type->GetName());
+			case TypeDescriptor::Id::Array:
+			case TypeDescriptor::Id::Nil:
+			case TypeDescriptor::Id::Incomplete:
+			default:
+				return "void*";
+			}
+		}
+
+		RenderedType RenderType(const std::shared_ptr<TypeDescriptor>& type)
+		{
+			RenderedType rendered;
+			std::shared_ptr<TypeDescriptor> current = type;
+			while (current && current->Is(TypeDescriptor::Id::Array))
+			{
+				rendered.mArraySizes.push_back(current->GetArraySize());
+				current = current->GetComponent();
+			}
+			rendered.mBase = RenderBaseType(current);
+			return rendered;
+		}
+
+		void SplitQualifiedName(const std::string& name, std::vector<std::string_view>& namespaces, std::string_view& baseName)
+		{
+			namespaces.clear();
+			baseName = name;
+
+			size_t start = 0;
+			while (true)
+			{
+				const size_t pos = name.find("::", start);
+				if (pos == std::string::npos)
+				{
+					baseName = std::string_view(name.data() + start, name.size() - start);
+					return;
+				}
+
+				namespaces.emplace_back(name.data() + start, pos - start);
+				start = pos + 2;
+			}
+		}
+
+		void WriteArraySuffix(std::ofstream& output, const std::vector<address_t>& sizes)
+		{
+			for (address_t size : sizes)
+			{
+				output << "[" << size << "]";
+			}
+		}
+	}
+
 	SymbolFactory::SymbolFactory(
 		const std::shared_ptr<CodeBuffer>& codeBuffer,
 		const std::shared_ptr<DataBuffer>& dataBuffer,
@@ -84,14 +173,6 @@ namespace mana
 		symbol->SetTypeDescription(mTypeDescriptorFactory->Get(TypeDescriptor::Id::Int));
 		symbol->SetEtc(value);
 
-		// TODO スクリプトのグローバル変数を構造体としてヘッダーに出力する必要があるか検討して下さい
-#if 0
-		if(mana_variable_header_file)
-		{
-			fprintf(mana_variable_header_file, "#define _%s %d\n", name, value);
-		}
-#endif
-
 		return symbol;
 	}
 
@@ -138,14 +219,6 @@ namespace mana
 		symbol->SetTypeDescription(mTypeDescriptorFactory->Get(TypeDescriptor::Id::Float));
 		symbol->SetFloat(value);
 
-		// TODO スクリプトのグローバル変数を構造体としてヘッダーに出力する必要があるか検討して下さい
-#if 0
-		if(mana_variable_header_file)
-		{
-			fprintf(mana_variable_header_file, "#define _%s %f\n", name, value);
-		}
-#endif
-
 		return symbol;
 	}
 
@@ -169,14 +242,6 @@ namespace mana
 		symbol->SetTypeDescription(mTypeDescriptorFactory->GetString());
 		symbol->SetString(value);
 		symbol->SetAddress(static_cast<int32_t>(mDataBuffer->Set(value)));
-
-		// TODO スクリプトのグローバル変数を構造体としてヘッダーに出力する必要があるか検討して下さい
-#if 0
-		if(mana_variable_header_file)
-		{
-			fprintf(mana_variable_header_file, "#define _%s \"%s\"\n", name, value);
-		}
-#endif
 
 		return symbol;
 	}
@@ -516,6 +581,84 @@ TODO:
 		}
 	}
 
+	void SymbolFactory::WritePublicTypeDecl(std::ofstream& output) const
+	{
+		std::vector<std::string_view> currentNamespaces;
+		std::vector<std::string_view> nextNamespaces;
+		std::string_view baseName;
+
+		auto setNamespace = [&output, &currentNamespaces, &nextNamespaces](const std::vector<std::string_view>& target)
+		{
+			size_t common = 0;
+			while (common < currentNamespaces.size() && common < target.size())
+			{
+				if (currentNamespaces[common] != target[common])
+					break;
+				++common;
+			}
+
+			for (size_t i = currentNamespaces.size(); i > common; --i)
+			{
+				output << "}\n";
+			}
+
+			for (size_t i = common; i < target.size(); ++i)
+			{
+				output << "namespace " << target[i] << "\n{\n";
+			}
+
+			currentNamespaces.assign(target.begin(), target.end());
+		};
+
+		for (const std::shared_ptr<Symbol>& symbol : mSymbolEntries)
+		{
+			if (!symbol || symbol->GetBlockLevel() > 0)
+				continue;
+
+			const Symbol::ClassTypeId classType = symbol->GetClassTypeId();
+			if (classType == Symbol::ClassTypeId::Type)
+			{
+				const std::shared_ptr<TypeDescriptor>& type = symbol->GetTypeDescriptor();
+				if (!type || type->IsNot(TypeDescriptor::Id::Struct))
+					continue;
+
+				SplitQualifiedName(symbol->GetName(), nextNamespaces, baseName);
+				setNamespace(nextNamespaces);
+
+				output << "struct " << baseName << "\n{\n";
+				for (std::shared_ptr<Symbol> member = type->GetSymbolEntry(); member; member = member->GetNext())
+				{
+					const Symbol::ClassTypeId memberClass = member->GetClassTypeId();
+					if (memberClass != Symbol::ClassTypeId::ActorVariable &&
+						memberClass != Symbol::ClassTypeId::GlobalVariable &&
+						memberClass != Symbol::ClassTypeId::StaticVariable &&
+						memberClass != Symbol::ClassTypeId::LocalVariable)
+					{
+						continue;
+					}
+
+					const RenderedType rendered = RenderType(member->GetTypeDescriptor());
+					output << "\t" << rendered.mBase << " " << member->GetName();
+					WriteArraySuffix(output, rendered.mArraySizes);
+					output << ";\n";
+				}
+				output << "};\n";
+			}
+			else if (classType == Symbol::ClassTypeId::GlobalVariable || classType == Symbol::ClassTypeId::StaticVariable)
+			{
+				SplitQualifiedName(symbol->GetName(), nextNamespaces, baseName);
+				setNamespace(nextNamespaces);
+
+				const RenderedType rendered = RenderType(symbol->GetTypeDescriptor());
+				output << rendered.mBase << " " << baseName;
+				WriteArraySuffix(output, rendered.mArraySizes);
+				output << ";\n";
+			}
+		}
+
+		setNamespace({});
+	}
+
 
 	int32_t SymbolFactory::OpenBlock(const bool resetMaxFrameMemoryAddress)
 	{
@@ -763,14 +906,7 @@ TODO:
 
 	void SymbolFactory::BeginRegistrationStructure()
 	{
-		// TODO スクリプトのグローバル変数を構造体としてヘッダーに出力する必要があるか検討して下さい
-#if 0
-		// 1) output header
-		if (mana_variable_header_file)
-			PrintHeader();
-#endif
-
-		// 2) open block
+		// 1) open block
 		OpenBlock(false);
 		++mActorOrStructureLevel;
 		mActorMemoryAddress = 0;
@@ -812,13 +948,6 @@ TODO:
 		CloseBlock();
 
 		newType->SetMemorySize(symbol_align_size(mActorMemoryAddress, maxAlignmentSize));
-
-		// TODO スクリプトのグローバル変数を構造体としてヘッダーに出力する必要があるか検討して下さい
-#if 0
-		// 3) output header
-		if (mana_variable_header_file)
-			PrintFooter(name, newType);
-#endif
 
 		CreateType(name, newType);
 	}
@@ -1303,14 +1432,6 @@ TODO:
 			type = mTypeDescriptorFactory->Get(TypeDescriptor::Id::Int);
 		}
 
-		// TODO スクリプトのグローバル変数を構造体としてヘッダーに出力する必要があるか検討して下さい
-#if 0
-		if (mana_variable_header_file)
-		{
-			PrintEntry(symbol, type);
-		}
-#endif
-
 		if (symbol->GetTypeDescriptor() == nullptr)		// 配列型以外の変数 ?
 		{
 			symbol->SetTypeDescription(type);			// 型の設定
@@ -1447,92 +1568,6 @@ TODO:
 		);
 	}
 
-	void SymbolFactory::PrintHeader()
-	{
-		// TODO スクリプトのグローバル変数を構造体としてヘッダーに出力する必要があるか検討して下さい
-#if 0
-		if (mana_variable_header_file)
-		{
-			int32_t i;
-
-			for (i = 0; i <= GetBlockDepth(); i++)
-			{
-				fputc('\t', mana_variable_header_file);
-			}
-			fprintf(mana_variable_header_file, "typedef struct {\n");
-		}
-#endif
-	}
-
-	void SymbolFactory::PrintFooter(const std::string_view name, const std::shared_ptr<TypeDescriptor>& type)
-	{
-		// TODO スクリプトのグローバル変数を構造体としてヘッダーに出力する必要があるか検討して下さい
-#if 0
-		for (int32_t i = 0; i <= GetBlockDepth(); i++)
-		{
-			fputc('\t', mana_variable_header_file);
-		}
-		fprintf(mana_variable_header_file, "}%s; /* %d byte(s) */\n", name, type->memory_size);
-#endif
-	}
-
-	// TODO スクリプトのグローバル変数を構造体としてヘッダーに出力する必要があるか検討して下さい
-#if 0
-	static void SymbolFactory::symbol_print_entry_core(const std::shared_ptr<Symbol>& symbol, const std::shared_ptr<TypeDescriptor>& type)
-	{
-		int32_t i;
-
-		for (i = 0; i <= GetBlockDepth(); i++)
-		{
-			fputc('\t', mana_variable_header_file);
-		}
-		fprintf(mana_variable_header_file, "%s\t%s", type->name, symbol->name);
-		if (symbol->type != nullptr)
-		{
-			const std::shared_ptr<TypeDescriptor>& symbol_type;
-			for (symbol_type = symbol->type; symbol_type; symbol_type = symbol_type->component)
-			{
-				fprintf(mana_variable_header_file, "[%d]", symbol_type->GetArraySize());
-			}
-		}
-		fprintf(mana_variable_header_file, ";\n");
-	}
-#endif
-
-	void SymbolFactory::PrintEntry(const std::shared_ptr<Symbol>& symbol, const std::shared_ptr<TypeDescriptor>& type)
-	{
-		// TODO スクリプトのグローバル変数を構造体としてヘッダーに出力する必要があるか検討して下さい
-#if 0
-		if (GetBlockDepth() <= 0)
-		{
-			symbol_print_entry_core(symbol, type);
-		}
-		else if (IsActorOrStructerOpened())
-		{
-			symbol_print_entry_core(symbol, type);
-		}
-#endif
-	}
-
-	void SymbolFactory::PrintDummyGlobalVariable(size_t size)
-	{
-		// TODO スクリプトのグローバル変数を構造体としてヘッダーに出力する必要があるか検討して下さい
-#if 0
-		if (mana_variable_header_file)
-		{
-			unsigned d1 = (unsigned)ftell(mana_variable_header_file);
-			unsigned d2 = (unsigned)rand();
-			int32_t i;
-
-			for (i = 0; i <= GetBlockDepth(); i++)
-			{
-				fputc('\t', mana_variable_header_file);
-			}
-			fprintf(mana_variable_header_file, "int8_t\tdummy_%x_%x[%d];\n", d1, d2, (int32_t)size);
-		}
-#endif
-	}
-
 	bool SymbolFactory::GenerateActorInformation(OutputStream& stream) const
 	{
 		return Each([this, &stream](const std::shared_ptr<const Symbol>& symbol)
@@ -1657,26 +1692,4 @@ ESCAPE:
 
 		return true;
 	}
-
-	////////////////////////////////////////////////////////////////////////////////
-	// output
-
-	////////////////////////////////////////////////////////////////////////////////
-	// dump
-	// TODO スクリプトのグローバル変数を構造体としてヘッダーに出力する必要があるか検討して下さい
-#if 0
-	static void SymbolFactory::type_dump_core(FILE* fp, const const std::shared_ptr<TypeDescriptor>& type)
-	{
-		if (type)
-		{
-			fprintf(fp, "[%s]", symbol_data_type_id_name[type->GetId()]);
-			if (type->GetId() != TypeDescriptor::Id::Actor &&
-				type->GetId() != TypeDescriptor::Id::Module &&
-				type->GetId() != TypeDescriptor::Id::Struct)
-			{
-				type_dump_core(fp, type->component);
-			}
-		}
-	}
-#endif
 }

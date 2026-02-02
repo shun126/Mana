@@ -77,6 +77,7 @@ clean:
 
 depend:
 	makedepend -Y -- $(CFLAGS) -- $(SOURCES)
+	cd ../test/ && make depend
 
 cppcheck:
 	cppcheck -D __unix__ --enable=all $(SOURCES) $(SECOUND)
@@ -208,8 +209,8 @@ Main.o: SymbolFactory.h StringPool.h TypeDescriptorFactory.h SyntaxNode.h
 Main.o: LocalAddressResolver.h LocalSemanticAnalyzer.h ErrorHandler.h Lexer.h
 Main.o: Path.h ParsingDriver.h Version.h ../runner/Mana.h
 Main.o: ../runner/common/Setup.h ../runner/Actor.h ../runner/Buffer.h
-Main.o: ../runner/common/Platform.h ../runner/Buffer.inl ../runner/Event.h
-Main.o: ../runner/Stack.h ../runner/common/Noncopyable.h
+Main.o: ../runner/Buffer.inl ../runner/Event.h ../runner/Stack.h
+Main.o: ../runner/common/Platform.h ../runner/common/Noncopyable.h
 Main.o: ../runner/common/OutputStream.h ../runner/Stack.inl
 Main.o: ../runner/Actor.inl ../runner/VM.h ../runner/VM.inl
 Main.o: ../runner/Plugin.h ../runner/Plugin.inl ../runner/common/FileFormat.h
