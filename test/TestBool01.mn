@@ -3,8 +3,8 @@ mana (script)
 Copyright (c) 2003 Shun Moriya
 */
 
-define kBoolOn true;
-define kBoolOff false;
+const bool kBoolOn = true;
+const bool kBoolOff = false;
 
 // global variables
 // Owned by BoolActor::main

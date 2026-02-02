@@ -386,6 +386,7 @@ namespace mana
 			"Declarator",
 
 			"DeclareVariable",
+			"ConstDeclaration",
 			"Sizeof",
 
 			"Actor",

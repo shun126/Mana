@@ -152,6 +152,64 @@ namespace mana
 		return name;
 	}
 
+	std::string_view LocalSemanticAnalyzer::ResolveSymbolName(const std::string_view& name) const
+	{
+		if (IsQualifiedName(name))
+			return name;
+
+		std::vector<std::string_view> candidates;
+		auto addCandidate = [&candidates](const std::string_view candidate)
+		{
+			if (candidate.empty())
+				return;
+			if (std::find(candidates.begin(), candidates.end(), candidate) == candidates.end())
+				candidates.push_back(candidate);
+		};
+
+		const std::string_view currentNamespace = GetCurrentNamespace();
+		if (!currentNamespace.empty())
+		{
+			const std::string_view qualified = JoinQualifiedName(currentNamespace, name);
+			if (Lookup(qualified))
+				addCandidate(qualified);
+		}
+
+		if (Lookup(name))
+			addCandidate(name);
+
+		const std::string_view alias = ResolveAlias(name);
+		if (!alias.empty() && Lookup(alias))
+			addCandidate(alias);
+
+		for (auto scopeIt = mUsingScopes.rbegin(); scopeIt != mUsingScopes.rend(); ++scopeIt)
+		{
+			for (const std::string_view& nsPath : scopeIt->namespacePaths)
+			{
+				const std::string_view qualified = JoinQualifiedName(nsPath, name);
+				if (Lookup(qualified))
+					addCandidate(qualified);
+			}
+		}
+
+		if (candidates.empty())
+			return name;
+
+		if (candidates.size() > 1)
+		{
+			std::string message = "ambiguous symbol reference '" + std::string(name) + "': ";
+			for (size_t index = 0; index < candidates.size(); ++index)
+			{
+				if (index > 0)
+					message += ", ";
+				message += std::string(candidates[index]);
+			}
+			CompileError(message);
+			return name;
+		}
+
+		return candidates.front();
+	}
+
 	void LocalSemanticAnalyzer::ResolveTypeDescriptionScoped(const std::shared_ptr<SyntaxNode>& node)
 	{
 		MANA_ASSERT(node);
@@ -188,6 +246,81 @@ namespace mana
 		SemanticAnalyzer::ResolveDeclarator(node->GetRightNode(), isStaticVariable);
 
 		GetSymbolFactory()->AllocateMemory(node->GetRightNode()->GetSymbol(), node->GetLeftNode()->GetTypeDescriptor(), memoryTypeId);
+	}
+
+	std::string_view LocalSemanticAnalyzer::ResolveConstSymbolName(const std::string_view& name) const
+	{
+		if (IsQualifiedName(name))
+			return name;
+
+		std::vector<std::string_view> candidates;
+		auto addCandidate = [&candidates](const std::string_view candidate)
+		{
+			if (candidate.empty())
+				return;
+			if (std::find(candidates.begin(), candidates.end(), candidate) == candidates.end())
+				candidates.push_back(candidate);
+		};
+
+		const std::string_view currentNamespace = GetCurrentNamespace();
+		if (!currentNamespace.empty())
+		{
+			const std::string_view qualified = JoinQualifiedName(currentNamespace, name);
+			if (Lookup(qualified))
+				addCandidate(qualified);
+		}
+
+		if (Lookup(name))
+			addCandidate(name);
+
+		const std::string_view alias = ResolveAlias(name);
+		if (!alias.empty() && Lookup(alias))
+			addCandidate(alias);
+
+		for (auto scopeIt = mUsingScopes.rbegin(); scopeIt != mUsingScopes.rend(); ++scopeIt)
+		{
+			for (const std::string_view& nsPath : scopeIt->namespacePaths)
+			{
+				const std::string_view qualified = JoinQualifiedName(nsPath, name);
+				if (Lookup(qualified))
+					addCandidate(qualified);
+			}
+		}
+
+		if (candidates.empty())
+			return name;
+
+		if (candidates.size() > 1)
+		{
+			std::string message = "ambiguous constant reference '" + std::string(name) + "': ";
+			for (size_t index = 0; index < candidates.size(); ++index)
+			{
+				if (index > 0)
+					message += ", ";
+				message += std::string(candidates[index]);
+			}
+			CompileError(message);
+			return name;
+		}
+
+		return candidates.front();
+	}
+
+	void LocalSemanticAnalyzer::ResolveConstExpressionSymbols(const std::shared_ptr<SyntaxNode>& node)
+	{
+		if (!node)
+			return;
+
+		if (node->Is(SyntaxNode::Id::Identifier))
+		{
+			const std::string_view resolved = ResolveConstSymbolName(node->GetString());
+			if (resolved != node->GetString())
+				node->Set(resolved);
+		}
+
+		ResolveConstExpressionSymbols(node->GetLeftNode());
+		ResolveConstExpressionSymbols(node->GetRightNode());
+		ResolveConstExpressionSymbols(node->GetBodyNode());
 	}
 
 	void LocalSemanticAnalyzer::EnterNamespace(const std::string_view& name)
@@ -241,6 +374,15 @@ namespace mana
 				return;
 			}
 			aliases.emplace(alias, candidateName);
+
+			const size_t delimiter = candidateName.rfind("::");
+			if (delimiter != std::string_view::npos)
+			{
+				const std::string_view nsPath = candidateName.substr(0, delimiter);
+				auto& paths = mUsingScopes.back().namespacePaths;
+				if (std::find(paths.begin(), paths.end(), nsPath) == paths.end())
+					paths.push_back(nsPath);
+			}
 			return;
 		}
 
@@ -561,6 +703,33 @@ DO_RECURSIVE:
 			// node->GetRightNode()
 			PostResolverResolve(node->GetBodyNode());
 			break;
+
+		case SyntaxNode::Id::ConstDeclaration:
+		{
+			MANA_ASSERT(node->GetLeftNode() && node->GetLeftNode()->Is(SyntaxNode::Id::TypeDescription));
+			MANA_ASSERT(node->GetRightNode() && node->GetRightNode()->Is(SyntaxNode::Id::Declarator));
+
+			ResolveTypeDescriptionScoped(node->GetLeftNode());
+
+			if (!node->GetBodyNode())
+			{
+				CompileError("const declaration requires an initializer");
+				break;
+			}
+
+			ResolveConstExpressionSymbols(node->GetBodyNode());
+			ConstValue value;
+			if (EvaluateConstExpression(node->GetBodyNode(), value))
+			{
+				const auto& declaredType = node->GetLeftNode()->GetTypeDescriptor();
+				if (IsConstTypeCompatible(declaredType, value.type))
+				{
+					const std::shared_ptr<Symbol> symbol = CreateConstSymbol(node->GetRightNode()->GetString(), declaredType, value);
+					node->GetRightNode()->Set(symbol);
+				}
+			}
+			break;
+		}
 
 		case SyntaxNode::Id::TypeDescription:
 			MANA_ASSERT(node->GetLeftNode() == nullptr);
@@ -1146,6 +1315,18 @@ DO_RECURSIVE:
 				CompileError({ "already initialized constant '", node->GetLeftNode()->GetSymbol()->GetName(), "'" });
 				return;
 			}
+			if (node->GetLeftNode()->Is(SyntaxNode::Id::Identifier))
+			{
+				const auto& symbol = node->GetLeftNode()->GetSymbol();
+				if (symbol &&
+					(symbol->GetClassTypeId() == Symbol::ClassTypeId::ConstantInteger ||
+						symbol->GetClassTypeId() == Symbol::ClassTypeId::ConstantFloat ||
+						symbol->GetClassTypeId() == Symbol::ClassTypeId::ConstantString))
+				{
+					CompileError({ "cannot assign to const '", symbol->GetName(), "'" });
+					return;
+				}
+			}
 			AutoCast(node);
 			TypeDescriptor::Compatible(node->GetLeftNode()->GetTypeDescriptor(), node->GetRightNode()->GetTypeDescriptor());
 			break;
@@ -1220,6 +1401,13 @@ DO_RECURSIVE:
 			MANA_ASSERT(node->GetLeftNode() == nullptr);
 			MANA_ASSERT(node->GetRightNode() == nullptr);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
+
+			if (node->GetSymbol() == nullptr)
+			{
+				const std::string_view resolved = ResolveSymbolName(node->GetString());
+				if (resolved != node->GetString())
+					node->Set(resolved);
+			}
 
 			if (SearchSymbolFromName(node))
 			{
