@@ -10,13 +10,13 @@ include "TestStatementLoop.mn";
 include "TestStatementSwitch.mn";
 include "TestStatementWhile.mn";
 
-void test_statement()
+void Test_statement()
 {
-    test_statement_do();
-    test_statement_for();
-    test_statement_if();
-    test_statement_loop();
-    test_statement_switch();
-    test_statement_while();
+    TestStatementDo();
+    TestStatementFor();
+    TestStatementIf();
+    TestStatementLoop();
+    TestStatementSwitch();
+    TestStatementWhile();
 }
 

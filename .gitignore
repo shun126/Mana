@@ -40,6 +40,8 @@ compiler/mana
 
 # Mana
 *.mx
+/sample/*.h
 /sample/*.md
+/test/*.h
 /test/*.md
 
