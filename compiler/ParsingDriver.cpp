@@ -230,6 +230,11 @@ namespace mana
 					return true;
 				break;
 
+			case SyntaxNode::Id::ConstDeclaration:
+				if (node->GetRightNode() && node->GetRightNode()->GetString() == name)
+					return true;
+				break;
+
 			case SyntaxNode::Id::DeclareVariable:
 				if (node->GetRightNode() && node->GetRightNode()->GetString() == name)
 					return true;
@@ -1068,6 +1073,7 @@ std::shared_ptr<SyntaxNode> ParsingDriver::CreateAwaitCompletion(const std::shar
 		const int_t offset = static_cast<int_t>(GetDataBuffer()->Set(text));
 		node->Set(offset);
 		node->Set(GetTypeDescriptorFactory()->GetString());
+		node->Set(text);
 		return node;
 	}
 
@@ -1181,6 +1187,15 @@ std::shared_ptr<SyntaxNode> ParsingDriver::CreateAwaitCompletion(const std::shar
 
 			node->SetBodyNode(assignNode);
 		}
+		return node;
+	}
+
+	std::shared_ptr<SyntaxNode> ParsingDriver::CreateConstDeclarationNode(const std::shared_ptr<SyntaxNode>& variableType, const std::string_view& identifier, const std::shared_ptr<SyntaxNode>& expression)
+	{
+		std::shared_ptr<SyntaxNode> node = std::make_shared<SyntaxNode>(SyntaxNode::Id::ConstDeclaration);
+		node->SetLeftNode(variableType);
+		node->SetRightNode(CreateDeclaratorNode(identifier));
+		node->SetBodyNode(expression);
 		return node;
 	}
 

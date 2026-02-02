@@ -1,0 +1,13 @@
+/*
+ * mana (script)
+ */
+
+const int A = 1;
+
+actor Test
+{
+    action init
+    {
+        A = 2;
+    }
+}

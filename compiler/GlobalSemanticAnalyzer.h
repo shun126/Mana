@@ -56,6 +56,8 @@ namespace mana
 		void ResolveTypeDescriptionScoped(const std::shared_ptr<SyntaxNode>& node);
 		void RejectActorTypeName(const std::shared_ptr<SyntaxNode>& node);
 		void ResolveVariableDescription(const std::shared_ptr<SyntaxNode>& node, const Symbol::MemoryTypeId memoryTypeId, const bool isStaticVariable);
+		std::string_view ResolveConstSymbolName(const std::string_view& name) const;
+		void ResolveConstExpressionSymbols(const std::shared_ptr<SyntaxNode>& node);
 		void EnterNamespace(const std::string_view& name);
 		void ExitNamespace();
 		void RegisterNamespaceHierarchy(const std::string_view& fullName);
