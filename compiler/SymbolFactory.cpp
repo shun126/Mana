@@ -67,8 +67,18 @@ namespace mana
 	std::shared_ptr<Symbol> SymbolFactory::CreateConstInt(const std::string_view name, const int32_t value)
 	{
 		std::shared_ptr<Symbol> symbol = Lookup(name);
-		if(symbol)
-			CompileError({ "duplicated declaration '", name, "'" });
+		if (symbol)
+		{
+			if (symbol->GetClassTypeId() == Symbol::ClassTypeId::ConstantInteger &&
+				symbol->GetEtc() == value)
+			{
+				return symbol;
+			}
+			if (symbol->GetBlockLevel() >= GetBlockDepth())
+			{
+				CompileError({ "duplicated declaration '", name, "'" });
+			}
+		}
 
 		symbol = CreateSymbol(name, Symbol::ClassTypeId::ConstantInteger);
 		symbol->SetTypeDescription(mTypeDescriptorFactory->Get(TypeDescriptor::Id::Int));
@@ -89,7 +99,17 @@ namespace mana
 	{
 		std::shared_ptr<Symbol> symbol = Lookup(name);
 		if (symbol)
-			CompileError({ "duplicated declaration '", name, "'" });
+		{
+			if (symbol->GetClassTypeId() == Symbol::ClassTypeId::ConstantInteger &&
+				symbol->GetEtc() == static_cast<int32_t>(value))
+			{
+				return symbol;
+			}
+			if (symbol->GetBlockLevel() >= GetBlockDepth())
+			{
+				CompileError({ "duplicated declaration '", name, "'" });
+			}
+		}
 
 		symbol = CreateSymbol(name, Symbol::ClassTypeId::ConstantInteger);
 		symbol->SetTypeDescription(mTypeDescriptorFactory->Get(TypeDescriptor::Id::Bool));
@@ -101,8 +121,18 @@ namespace mana
 	std::shared_ptr<Symbol> SymbolFactory::CreateConstFloat(const std::string_view name, const float value)
 	{
 		std::shared_ptr<Symbol> symbol = Lookup(name);
-		if(symbol)
-			CompileError({ "duplicated declaration '", name, "'" });
+		if (symbol)
+		{
+			if (symbol->GetClassTypeId() == Symbol::ClassTypeId::ConstantFloat &&
+				symbol->GetFloat() == value)
+			{
+				return symbol;
+			}
+			if (symbol->GetBlockLevel() >= GetBlockDepth())
+			{
+				CompileError({ "duplicated declaration '", name, "'" });
+			}
+		}
 
 		symbol = CreateSymbol(name, Symbol::ClassTypeId::ConstantFloat);
 		symbol->SetTypeDescription(mTypeDescriptorFactory->Get(TypeDescriptor::Id::Float));
@@ -124,12 +154,21 @@ namespace mana
 		std::shared_ptr<Symbol> symbol = Lookup(name);
 		if (symbol)
 		{
-			CompileError({ "duplicated declaration '", name, "'" });
+			if (symbol->GetClassTypeId() == Symbol::ClassTypeId::ConstantString &&
+				symbol->GetString() == value)
+			{
+				return symbol;
+			}
+			if (symbol->GetBlockLevel() >= GetBlockDepth())
+			{
+				CompileError({ "duplicated declaration '", name, "'" });
+			}
 		}
 
 		symbol = CreateSymbol(name, Symbol::ClassTypeId::ConstantString);
 		symbol->SetTypeDescription(mTypeDescriptorFactory->GetString());
 		symbol->SetString(value);
+		symbol->SetAddress(static_cast<int32_t>(mDataBuffer->Set(value)));
 
 		// TODO スクリプトのグローバル変数を構造体としてヘッダーに出力する必要があるか検討して下さい
 #if 0

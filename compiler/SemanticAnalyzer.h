@@ -10,6 +10,7 @@ mana (compiler)
 #include "Symbol.h"
 #include "SymbolFactory.h"
 #include "SyntaxNode.h"
+#include "TypeDescriptor.h"
 
 namespace mana
 {
@@ -70,7 +71,18 @@ namespace mana
 		static void ResolveTypeFromChildNode(const std::shared_ptr<SyntaxNode>& node);
 
 	protected:
+		struct ConstValue
+		{
+			std::shared_ptr<TypeDescriptor> type;
+			int32_t intValue = 0;
+			float floatValue = 0.0f;
+			std::string_view stringValue;
+		};
+
 		[[nodiscard]] std::shared_ptr<Symbol> Lookup(const std::string_view name) const;
+		bool EvaluateConstExpression(const std::shared_ptr<SyntaxNode>& node, ConstValue& value);
+		bool IsConstTypeCompatible(const std::shared_ptr<TypeDescriptor>& declaredType, const std::shared_ptr<TypeDescriptor>& expressionType) const;
+		std::shared_ptr<Symbol> CreateConstSymbol(const std::string_view name, const std::shared_ptr<TypeDescriptor>& declaredType, const ConstValue& value);
 
 		const std::shared_ptr<SymbolFactory>& GetSymbolFactory() const;
 		const std::shared_ptr<StringPool>& GetStringPool() const;

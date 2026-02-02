@@ -1,0 +1,5 @@
+/*
+ * mana (script)
+ */
+
+const int A = 1.5;

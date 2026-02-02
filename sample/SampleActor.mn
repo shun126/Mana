@@ -3,8 +3,8 @@ mana (script)
 Copyright (c) 2003 Shun Moriya
 */
 
-define kTalkPriority 1;
-define kJoinPriority 0;
+const int kTalkPriority = 1;
+const int kJoinPriority = 0;
 
 // actor declarations
 actor TestActor1
