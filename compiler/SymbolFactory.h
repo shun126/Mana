@@ -11,6 +11,7 @@ mana (compiler)
 #include "Symbol.h"
 #include "TypeDescriptorFactory.h"
 #include <functional>
+#include <iosfwd>
 #include <memory>
 #include <stack>
 #include <unordered_map>
@@ -186,10 +187,10 @@ namespace mana
 		// Dump
 		void Dump(std::ofstream& output) const;
 		void DumpFunctionNameFromAddress(std::ofstream& output, const int32_t address) const;
+		void WritePublicTypeDecl(std::ofstream& output) const;
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		// debug
-		void PrintHeader();
 		void PrintFooter(const std::string_view, const std::shared_ptr<TypeDescriptor>& type);
 		void PrintEntry(const std::shared_ptr<Symbol>& symbolEntry, const std::shared_ptr<TypeDescriptor>& type);
 		void PrintDummyGlobalVariable(size_t size);
