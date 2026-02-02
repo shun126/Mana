@@ -6,10 +6,12 @@ mana (compiler)
 */
 
 #pragma once
+#include <iosfwd>
 
 namespace mana
 {
 	extern const char* GetInputFilename();
 	extern const char* GetOutputFilename();
 	extern const char* GetTargetFilename();
+	extern std::ofstream& GetPublicTypeDeclStream();
 }
