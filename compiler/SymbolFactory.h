@@ -203,7 +203,7 @@ namespace mana
 
 		bool GenerateActorEntity(OutputStream& stream, const std::shared_ptr<const Symbol>& symbol, const std::shared_ptr<const TypeDescriptor>& type) const;
 
-		static int32_t symbol_align_size(const int32_t X, const int32_t Y)
+		static int32_t AlignSize(const int32_t X, const int32_t Y)
 		{
 			return (X + Y - 1) / Y * Y;
 		}
