@@ -25,11 +25,15 @@ Result = 0
 
 ################################################################################
 def success(argument):
-	print(MANA + ' ' + argument, end='')
+	print('success test: ' + MANA + ' ' + argument, end='')
 	command = [MANA, argument, "-t", "--debug"]
 	cp = subprocess.run(command, capture_output=True, text=True, errors="ignore")
 	if cp.returncode == 0:
 		print(" ... Success")
+		if len(cp.stdout) > 0:
+			print(cp.stdout)
+		if len(cp.stderr) > 0:
+			print(cp.stderr)
 	else:
 		print(" ... Failed")
 		if cp.returncode < 0:
@@ -47,7 +51,7 @@ def success(argument):
 
 ################################################################################
 def fail(argument, error_message):
-	print(MANA + ' ' + argument, end='')
+	print('fail test: ' + MANA + ' ' + argument, end='')
 	command = [MANA, argument]
 	cp = subprocess.run(command, capture_output=True, text=True, errors="ignore")
 	#if cp.returncode != 0 and (error_message in cp.stdout or error_message in cp.stderr):
