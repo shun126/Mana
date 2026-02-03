@@ -333,6 +333,12 @@ ARGUMENT_COMPLETE:
 	void CodeGenerator::Call(const std::shared_ptr<SyntaxNode>& node)
 	{
 		const auto& argument = node->GetRightNode();
+		if ((node->GetSymbol())->GetClassTypeId() == Symbol::ClassTypeId::NativeFunction)
+		{
+			CallNativeFunction(node->GetSymbol(), argument, node->GetSymbol()->GetName(), nullptr);
+			return;
+		}
+
 		const auto argumentDefinitionCount = Argument(0, node->GetSymbol()->GetParameterList(), argument);
 
 		// 引数の最大数をチェック
@@ -348,20 +354,6 @@ ARGUMENT_COMPLETE:
 			CompileError("unmatched argument.");
 		}
 		// 外部関数か？
-		else if ((node->GetSymbol())->GetClassTypeId() == Symbol::ClassTypeId::NativeFunction)
-		{
-			// for external function
-			const auto argumentDeclarationCount = CallArgumentSize(0, node->GetSymbol()->GetParameterList(), argument);
-
-			const auto functionNameAddress = mDataBuffer->Set(node->GetSymbol()->GetName());
-			node->GetSymbol()->SetAddress(functionNameAddress);
-
-			mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::Call, functionNameAddress);
-			mCodeBuffer->Add<uint8_t>(((node->GetSymbol())->GetTypeDescriptor()->GetId() != TypeDescriptor::Id::Void));
-			mCodeBuffer->Add<uint8_t>(static_cast<uint8_t>(argumentDefinitionCount));
-			mCodeBuffer->Add<uint8_t>(static_cast<uint8_t>(argumentDeclarationCount));
-		}
-		// 内部関数か？
 		else
 		{
 			// for internal function
@@ -373,6 +365,42 @@ ARGUMENT_COMPLETE:
 				address + 1,
 				node->GetSymbol()
 			);
+		}
+	}
+
+	void CodeGenerator::CallNativeFunction(const std::shared_ptr<Symbol>& symbol, const std::shared_ptr<SyntaxNode>& argument, const std::string_view& externalName, const std::shared_ptr<SyntaxNode>& thisPointer)
+	{
+		if (thisPointer)
+		{
+			GenerateCode(thisPointer, false);
+		}
+		else
+		{
+			mCodeBuffer->AddOpecode(IntermediateLanguage::PushZeroInteger);
+		}
+
+		const auto argumentDefinitionCount = Argument(0, symbol->GetParameterList(), argument);
+
+		if (argumentDefinitionCount < 0 || std::numeric_limits<uint8_t>::max() < argumentDefinitionCount)
+		{
+			CompileError("Cannot specify more than 256 arguments.");
+		}
+		else if (symbol->GetNumberOfParameters() != argumentDefinitionCount)
+		{
+			CompileError("unmatched argument.");
+		}
+		else
+		{
+			auto argumentDeclarationCount = CallArgumentSize(0, symbol->GetParameterList(), argument);
+			argumentDeclarationCount += static_cast<int32_t>(Alignment(ToAddress(sizeof(void*)), ToAddress(sizeof(void*))));
+
+			const auto functionNameAddress = mDataBuffer->Set(externalName);
+			symbol->SetAddress(functionNameAddress);
+
+			mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::Call, functionNameAddress);
+			mCodeBuffer->Add<uint8_t>(symbol->GetTypeDescriptor()->GetId() != TypeDescriptor::Id::Void);
+			mCodeBuffer->Add<uint8_t>(static_cast<uint8_t>(argumentDefinitionCount));
+			mCodeBuffer->Add<uint8_t>(static_cast<uint8_t>(argumentDeclarationCount));
 		}
 	}
 
@@ -1382,6 +1410,26 @@ DO_RECURSIVE:
 		case SyntaxNode::Id::MemberFunction:
 			if (node->GetSymbol())
 			{
+				if (node->GetSymbol()->GetClassTypeId() == Symbol::ClassTypeId::NativeFunction)
+				{
+					std::shared_ptr<TypeDescriptor> type = node->GetLeftNode()->GetTypeDescriptor();
+					if (type)
+					{
+						while (type->Is(TypeDescriptor::Id::Array))
+						{
+							type = type->GetComponent();
+						}
+						if (type->Is(TypeDescriptor::Id::Reference))
+						{
+							type = type->GetComponent();
+						}
+					}
+
+					const auto externalName = Concat({ type ? type->GetName() : std::string_view(), "::", node->GetSymbol()->GetName() });
+					CallNativeFunction(node->GetSymbol(), node->GetRightNode(), externalName, node->GetLeftNode());
+					break;
+				}
+
 				std::vector<std::shared_ptr<SyntaxNode>> arguments;
 				if (node->GetRightNode())
 				{

@@ -210,6 +210,8 @@ struct_members	: // empty
 
 struct_member	: variable_decl ';'
 				| function
+				| tNATIVE variable_type tIDENTIFIER '(' arg_decls ')' ';'
+					{ $$ = mParsingDriver->CreateNativeFunction($2, $3, $5); }
 				;
 
 function		: variable_type tIDENTIFIER '(' arg_decls ')' block

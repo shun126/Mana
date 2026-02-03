@@ -1478,7 +1478,9 @@ DO_RECURSIVE:
 					{
 						for (std::shared_ptr<Symbol> symbol = type->GetSymbolEntry(); symbol; symbol = symbol->GetNext())
 						{
-							if (symbol->GetName() == node->GetString() && symbol->GetClassTypeId() == Symbol::ClassTypeId::MemberFunction)
+							if (symbol->GetName() == node->GetString() &&
+								(symbol->GetClassTypeId() == Symbol::ClassTypeId::MemberFunction ||
+									symbol->GetClassTypeId() == Symbol::ClassTypeId::NativeFunction))
 							{
 								node->Set(symbol);
 								node->Set(symbol->GetTypeDescriptor());
