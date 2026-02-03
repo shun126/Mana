@@ -141,7 +141,8 @@ namespace mana
 		case TypeDescriptor::Id::Array:
 			MANA_ASSERT(node->GetLeftNode() == nullptr);
 			MANA_ASSERT(node->GetRightNode() == nullptr);
-			[[fallthrough]];
+			[[fallthrough]]
+			;
 
 		case TypeDescriptor::Id::Struct:
 			mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::StoreData, node->GetTypeDescriptor()->GetMemorySize());
