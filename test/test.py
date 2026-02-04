@@ -25,11 +25,15 @@ Result = 0
 
 ################################################################################
 def success(argument):
-	print(MANA + ' ' + argument, end='')
+	print('success test: ' + MANA + ' ' + argument, end='')
 	command = [MANA, argument, "-t", "--debug"]
 	cp = subprocess.run(command, capture_output=True, text=True, errors="ignore")
 	if cp.returncode == 0:
 		print(" ... Success")
+		if len(cp.stdout) > 0:
+			print(cp.stdout)
+		if len(cp.stderr) > 0:
+			print(cp.stderr)
 	else:
 		print(" ... Failed")
 		if cp.returncode < 0:
@@ -47,7 +51,7 @@ def success(argument):
 
 ################################################################################
 def fail(argument, error_message):
-	print(MANA + ' ' + argument, end='')
+	print('fail test: ' + MANA + ' ' + argument, end='')
 	command = [MANA, argument]
 	cp = subprocess.run(command, capture_output=True, text=True, errors="ignore")
 	#if cp.returncode != 0 and (error_message in cp.stdout or error_message in cp.stderr):
@@ -91,10 +95,12 @@ fail('TestMissingFile.mn', 'unable to open')
 success('TestNamespaceFqn.mn')
 success('TestStatement.mn')
 success('TestStruct01.mn')
+success('TestStructNativeMethod.mn')
 fail('TestStructMethodNonStruct.mn', 'member call on non-struct type')
 success('TestStructMethodRequest.mn')
 fail('TestStructMethodUnknown.mn', "unresolved method 'Unknown' for type 'S'")
 success('TestStructNamespace.mn')
+fail('TestNativeFunctionBody.mn', 'syntax error')
 fail('TestUsingAmbiguousActor.mn', 'ambiguous actor reference')
 fail('TestUsingAmbiguousNamespaceSymbol.mn', 'ambiguous using')
 fail('TestUsingAmbiguousType.mn', 'ambiguous type reference')

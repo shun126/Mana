@@ -1,0 +1,7 @@
+/*
+ mana (script)
+*/
+
+native void f()
+{
+}

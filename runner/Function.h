@@ -35,17 +35,17 @@ namespace mana
 
 	namespace builtInFunction
 	{
-		inline void IsDebug(const std::shared_ptr<Actor>& actor)
+		inline void IsDebug(const std::shared_ptr<Actor>& actor, void*)
 		{
 			MANA_ASSERT_PARAMETER(actor, 0);
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
-				actor->SetReturnInteger(1);
+			actor->SetReturnInteger(1);
 #else
-				actor->SetReturnInteger(0);
+			actor->SetReturnInteger(0);
 #endif
 		}
 
-		inline void RandI(const std::shared_ptr<Actor>& actor)
+		inline void RandI(const std::shared_ptr<Actor>& actor, void*)
 		{
 			MANA_ASSERT_PARAMETER(actor, 2);
 
@@ -54,13 +54,13 @@ namespace mana
 			actor->SetReturnInteger(min_ + ((static_cast<uint32_t>(rand() & 32767) * (max_ - min_)) >> 15));
 		}
 
-		inline void RandF(const std::shared_ptr<Actor>& actor)
+		inline void RandF(const std::shared_ptr<Actor>& actor, void*)
 		{
 			MANA_ASSERT_PARAMETER(actor, 0);
 			actor->SetReturnFloat(static_cast<float>(rand() & 32767) / 32768.0f);
 		}
 
-		inline void Delay(const std::shared_ptr<Actor>& actor)
+		inline void Delay(const std::shared_ptr<Actor>& actor, void*)
 		{
 			MANA_ASSERT_PARAMETER(actor, 1);
 
@@ -77,7 +77,7 @@ namespace mana
 			}
 		}
 
-		inline void Sin(const std::shared_ptr<Actor>& actor)
+		inline void Sin(const std::shared_ptr<Actor>& actor, void*)
 		{
 			MANA_ASSERT_PARAMETER(actor, 1);
 
@@ -88,7 +88,7 @@ namespace mana
 			actor->SetReturnFloat(answer);
 		}
 
-		inline void Cos(const std::shared_ptr<Actor>& actor)
+		inline void Cos(const std::shared_ptr<Actor>& actor, void*)
 		{
 			MANA_ASSERT_PARAMETER(actor, 1);
 
@@ -99,7 +99,7 @@ namespace mana
 			actor->SetReturnFloat(answer);
 		}
 
-		inline void Atan2(const std::shared_ptr<Actor>& actor)
+		inline void Atan2(const std::shared_ptr<Actor>& actor, void*)
 		{
 			MANA_ASSERT_PARAMETER(actor, 2);
 
@@ -110,7 +110,7 @@ namespace mana
 			actor->SetReturnFloat(a);
 		}
 
-		inline void Tan(const std::shared_ptr<Actor>& actor)
+		inline void Tan(const std::shared_ptr<Actor>& actor, void*)
 		{
 			MANA_ASSERT_PARAMETER(actor, 1);
 
@@ -121,7 +121,7 @@ namespace mana
 			actor->SetReturnFloat(answer);
 		}
 
-		inline void AngleMod(const std::shared_ptr<Actor>& actor)
+		inline void AngleMod(const std::shared_ptr<Actor>& actor, void*)
 		{
 			MANA_ASSERT_PARAMETER(actor, 1);
 
@@ -131,7 +131,7 @@ namespace mana
 			actor->SetReturnFloat(answer);
 		}
 
-		inline void Sqrt(const std::shared_ptr<Actor>& actor)
+		inline void Sqrt(const std::shared_ptr<Actor>& actor, void*)
 		{
 			MANA_ASSERT_PARAMETER(actor, 1);
 
@@ -141,7 +141,7 @@ namespace mana
 			actor->SetReturnFloat(answer);
 		}
 
-		inline void FindActor(const std::shared_ptr<Actor>& actor)
+		inline void FindActor(const std::shared_ptr<Actor>& actor, void*)
 		{
 			MANA_ASSERT_PARAMETER(actor, 1);
 

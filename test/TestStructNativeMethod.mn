@@ -1,0 +1,14 @@
+/*
+ mana (script)
+*/
+
+struct S
+{
+    native void f();
+}
+
+void Main()
+{
+    S s;
+    s.f();
+}

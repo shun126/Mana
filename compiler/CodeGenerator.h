@@ -68,6 +68,7 @@ namespace mana
 		static int32_t CallArgumentSize(int32_t address, const std::shared_ptr<Symbol>& param, std::shared_ptr<SyntaxNode> arg);
 		int32_t CallArgument(int32_t address, const std::shared_ptr<Symbol>& param, std::shared_ptr<SyntaxNode> arg);
 		void Call(const std::shared_ptr<SyntaxNode>& node);
+		void CallNativeFunction(const std::shared_ptr<Symbol>& symbol, const std::shared_ptr<SyntaxNode>& argument, const std::string_view& externalName, const std::shared_ptr<SyntaxNode>& thisPointer);
 		int32_t CallPrintGenerateArgument(int32_t argc, const std::shared_ptr<SyntaxNode>& node);
 		void CallPrint(const std::shared_ptr<SyntaxNode>& node);
 		static void ConditionCheck(const std::shared_ptr<SyntaxNode>& tree);

@@ -205,7 +205,7 @@ namespace mana
 		if (symbol)
 		{
 			if (symbol->GetClassTypeId() == Symbol::ClassTypeId::ConstantFloat &&
-				symbol->GetFloat() == value)
+				std::abs(symbol->GetFloat() - value) < std::numeric_limits<float>::epsilon())
 			{
 				return symbol;
 			}
@@ -862,7 +862,7 @@ TODO:
 		*/
 		CloseBlock();
 		mIsFunctionOpened = false;
-		mCodeBuffer->ReplaceAddressAll(mFrameSizeList, symbol_align_size(mMaxLocalMemoryAddress, sizeof(uint32_t)));
+		mCodeBuffer->ReplaceAddressAll(mFrameSizeList, AlignSize(mMaxLocalMemoryAddress, sizeof(uint32_t)));
 	}
 
 	void SymbolFactory::BeginNativeFunction()
@@ -886,7 +886,8 @@ TODO:
 	void SymbolFactory::CloseNativeFunction(const std::shared_ptr<Symbol>& function, const std::shared_ptr<TypeDescriptor>& type)
 	{
 		// 1) check
-		if (GetBlockDepth() > 1)
+		const size_t maxBlockDepth = IsActorOrStructerOpened() ? 2 : 1;
+		if (GetBlockDepth() > maxBlockDepth)
 			CompileError("the prototype declaration ignored");
 
 		if (type->GetId() == TypeDescriptor::Id::Incomplete)
@@ -947,7 +948,7 @@ TODO:
 		--mActorOrStructureLevel;
 		CloseBlock();
 
-		newType->SetMemorySize(symbol_align_size(mActorMemoryAddress, maxAlignmentSize));
+		newType->SetMemorySize(AlignSize(mActorMemoryAddress, maxAlignmentSize));
 
 		CreateType(name, newType);
 	}
@@ -1102,7 +1103,7 @@ TODO:
 		--mActorOrStructureLevel;
 		CloseBlock();
 
-		type->SetMemorySize(symbol_align_size(mActorMemoryAddress, sizeof(uint32_t)));
+		type->SetMemorySize(AlignSize(mActorMemoryAddress, sizeof(uint32_t)));
 
 		if (td)
 		{
@@ -1175,7 +1176,7 @@ TODO:
 		mBlockTypeDescriptor.pop();
 
 		/*
-		type->memory_size = symbol_align_size(mActorMemoryAddress, IBSZ);
+		type->memory_size = AlignSize(mActorMemoryAddress, IBSZ);
 
 		if (td)
 		{
@@ -1255,8 +1256,8 @@ TODO:
 		mModuleBlockOpened = false;
 		CloseBlock();
 
-		//type->SetMemorySize(symbol_align_size(mActorMemoryAddress, IBSZ));
-		type->SetMemorySize(symbol_align_size(mActorMemoryAddress, sizeof(void*)));
+		//type->SetMemorySize(AlignSize(mActorMemoryAddress, IBSZ));
+		type->SetMemorySize(AlignSize(mActorMemoryAddress, sizeof(void*)));
 
 		CreateType(name, type);
 	}
@@ -1398,6 +1399,9 @@ TODO:
 			case TypeDescriptor::Id::Reference:
 				if (actor->GetTypeDescriptor()->GetName() == "string")
 					break;
+				
+				[[fallthrough]]
+				;
 
 			case TypeDescriptor::Id::Actor:
 				codeGenerator->Expression(actor, false);
@@ -1448,23 +1452,23 @@ TODO:
 		switch (symbol->GetClassTypeId())
 		{
 		case Symbol::ClassTypeId::StaticVariable:
-			symbol->SetAddress(symbol_align_size(mStaticMemoryAddress, type->GetAlignmentMemorySize()));
+			symbol->SetAddress(AlignSize(mStaticMemoryAddress, type->GetAlignmentMemorySize()));
 			mStaticMemoryAddress = symbol->GetAddress() + type->GetMemorySize();
 			break;
 
 		case Symbol::ClassTypeId::GlobalVariable:
-			symbol->SetAddress(symbol_align_size(mGlobalMemoryAddress, type->GetAlignmentMemorySize()));
+			symbol->SetAddress(AlignSize(mGlobalMemoryAddress, type->GetAlignmentMemorySize()));
 			mGlobalMemoryAddress = symbol->GetAddress() + type->GetMemorySize();
 			break;
 
 		case Symbol::ClassTypeId::ActorVariable:
-			symbol->SetAddress(symbol_align_size(mActorMemoryAddress, type->GetAlignmentMemorySize()));
+			symbol->SetAddress(AlignSize(mActorMemoryAddress, type->GetAlignmentMemorySize()));
 			mActorMemoryAddress = symbol->GetAddress() + type->GetMemorySize();
 			break;
 
 		case Symbol::ClassTypeId::LocalVariable:
 			// ローカル変数は後ろから確保される為、他の変数と計算が反対になるので注意
-			symbol->SetAddress(symbol_align_size(mLocalMemoryAddress, type->GetAlignmentMemorySize()) + type->GetMemorySize());
+			symbol->SetAddress(AlignSize(mLocalMemoryAddress, type->GetAlignmentMemorySize()) + type->GetMemorySize());
 			mLocalMemoryAddress = symbol->GetAddress();
 			break;
 

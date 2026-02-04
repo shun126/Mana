@@ -35,27 +35,27 @@ namespace mana
 	}
 
 	template <class T>
-	inline void VM::RegisterMemberFunction(const std::string& name, T* instance, void (T::*method)(const std::shared_ptr<Actor>&))
+	inline void VM::RegisterMemberFunction(const std::string& name, T* instance, void (T::*method)(const std::shared_ptr<Actor>&, void*))
 	{
 		MANA_ASSERT(instance);
-		RegisterFunction(name, [instance, method](const std::shared_ptr<Actor>& actor)
+		RegisterFunction(name, [instance, method](const std::shared_ptr<Actor>& actor, void* structPointer)
 			{
-				(instance->*method)(actor);
+				(instance->*method)(actor, structPointer);
 			});
 	}
 
 	template <class T>
-	inline void VM::RegisterMemberFunction(const std::string& name, const T* instance, void (T::*method)(const std::shared_ptr<Actor>&) const)
+	inline void VM::RegisterMemberFunction(const std::string& name, const T* instance, void (T::*method)(const std::shared_ptr<Actor>&, void*) const)
 	{
 		MANA_ASSERT(instance);
-		RegisterFunction(name, [instance, method](const std::shared_ptr<Actor>& actor)
+		RegisterFunction(name, [instance, method](const std::shared_ptr<Actor>& actor, void* structPointer)
 			{
-				(instance->*method)(actor);
+				(instance->*method)(actor, structPointer);
 			});
 	}
 
 	template <class T>
-	inline void VM::RegisterMemberFunction(const std::string& name, const std::shared_ptr<T>& instance, void (T::*method)(const std::shared_ptr<Actor>&))
+	inline void VM::RegisterMemberFunction(const std::string& name, const std::shared_ptr<T>& instance, void (T::*method)(const std::shared_ptr<Actor>&, void*))
 	{
 		MANA_ASSERT(instance);
 		const std::weak_ptr<T> weakInstance = instance;
@@ -63,7 +63,7 @@ namespace mana
 	}
 
 	template <class T>
-	inline void VM::RegisterMemberFunction(const std::string& name, const std::shared_ptr<T>& instance, void (T::*method)(const std::shared_ptr<Actor>&) const)
+	inline void VM::RegisterMemberFunction(const std::string& name, const std::shared_ptr<T>& instance, void (T::*method)(const std::shared_ptr<Actor>&, void*) const)
 	{
 		MANA_ASSERT(instance);
 		const std::weak_ptr<T> weakInstance = instance;
@@ -71,14 +71,14 @@ namespace mana
 	}
 
 	template <class T>
-	inline void VM::RegisterMemberFunction(const std::string& name, const std::weak_ptr<T>& instance, void (T::*method)(const std::shared_ptr<Actor>&))
+	inline void VM::RegisterMemberFunction(const std::string& name, const std::weak_ptr<T>& instance, void (T::*method)(const std::shared_ptr<Actor>&, void*))
 	{
 		const std::string functionName = name;
-		RegisterFunction(name, [instance, method, functionName](const std::shared_ptr<Actor>& actor)
+		RegisterFunction(name, [instance, method, functionName](const std::shared_ptr<Actor>& actor, void* structPointer)
 			{
 				if (const auto locked = instance.lock())
 				{
-					(locked.get()->*method)(actor);
+					(locked.get()->*method)(actor, structPointer);
 				}
 				else
 				{
@@ -88,14 +88,14 @@ namespace mana
 	}
 
 	template <class T>
-	inline void VM::RegisterMemberFunction(const std::string& name, const std::weak_ptr<T>& instance, void (T::*method)(const std::shared_ptr<Actor>&) const)
+	inline void VM::RegisterMemberFunction(const std::string& name, const std::weak_ptr<T>& instance, void (T::*method)(const std::shared_ptr<Actor>&, void*) const)
 	{
 		const std::string functionName = name;
-		RegisterFunction(name, [instance, method, functionName](const std::shared_ptr<Actor>& actor)
+		RegisterFunction(name, [instance, method, functionName](const std::shared_ptr<Actor>& actor, void* structPointer)
 			{
 				if (const auto locked = instance.lock())
 				{
-					(locked.get()->*method)(actor);
+					(locked.get()->*method)(actor, structPointer);
 				}
 				else
 				{
@@ -113,6 +113,7 @@ namespace mana
 		MANA_ERROR({ "An external function called ", functionName, " was not found.\n" });
 		return nullptr;
 	}
+
 
 	inline void VM::LoadProgram(const std::string& path)
 	{

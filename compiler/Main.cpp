@@ -354,7 +354,10 @@ namespace mana
 							mRelease = true;
 							break;
 						}
-						//[[fallthrough]]
+						
+						[[fallthrough]]
+						;
+
 					default:
 						std::cerr << "unrecognized option\n";
 						return false;
