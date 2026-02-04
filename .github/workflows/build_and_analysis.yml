@@ -26,19 +26,33 @@ jobs:
       - run: echo "The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
       - name: Add MSBuild to PATH
         uses: microsoft/setup-msbuild@v1.0.2
-      - name: Set up Cygwin
-        uses: egor-tensin/setup-cygwin@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
-          platform: x64
-          packages: bison flex python3 make clang
+          python-version: "3.9"
+      - name: Setup MSYS2 and install bison / flex
+        uses: msys2/setup-msys2@v2
+        with:
+          update: true
+          msystem: MINGW64
+          install: >-
+            bison
+            flex
       - name: Add Environment variables
         run: |
-          echo "GNU_BISON_BIN=C:\tools\cygwin\bin\bison.exe" >> $env:GITHUB_ENV
-          echo "GNU_FLEX_BIN=C:\tools\cygwin\bin\flex.exe" >> $env:GITHUB_ENV
-          echo "PYTHON_BIN=C:\tools\cygwin\bin\python3.9.exe" >> $env:GITHUB_ENV
+          echo "GNU_BISON_BIN=C:\msys64\usr\bin\bison.exe" >> $env:GITHUB_ENV
+          echo "GNU_FLEX_BIN=C:\msys64\usr\bin\flex.exe" >> $env:GITHUB_ENV
+          echo "PYTHON_BIN=python" >> $env:GITHUB_ENV
           echo $env:GNU_BISON_BIN
           echo $env:GNU_FLEX_BIN
           echo $env:PYTHON_BIN
+      - name: Verify bison / flex
+        shell: msys2 {0}
+        run: |
+          which bison
+          which flex
+          bison --version
+          flex --version
       - name: Check out repository code
         uses: actions/checkout@v2
       - run: echo "The ${{ github.repository }} repository has been cloned to the runner."
