@@ -24,7 +24,7 @@ namespace mana
 		static constexpr uint32_t Nil = static_cast<uint32_t>(~0);
 
 	public:
-		using ExternalFunctionType = std::function<void(const std::shared_ptr<Actor>&)>;
+		using ExternalFunctionType = std::function<void(const std::shared_ptr<Actor>& actor, void* structPointer)>;
 
 	public:
 		VM() = default;
@@ -40,17 +40,17 @@ namespace mana
 		void RegisterFunction(const std::string& name, const ExternalFunctionType& function);
 		//! Register C++ member functions without writing a manual wrapper. The method signature must match ExternalFunctionType.
 		template <class T>
-		void RegisterMemberFunction(const std::string& name, T* instance, void (T::*method)(const std::shared_ptr<Actor>&));
+		void RegisterMemberFunction(const std::string& name, T* instance, void (T::*method)(const std::shared_ptr<Actor>&, void*));
 		template <class T>
-		void RegisterMemberFunction(const std::string& name, const T* instance, void (T::*method)(const std::shared_ptr<Actor>&) const);
+		void RegisterMemberFunction(const std::string& name, const T* instance, void (T::*method)(const std::shared_ptr<Actor>&, void*) const);
 		template <class T>
-		void RegisterMemberFunction(const std::string& name, const std::shared_ptr<T>& instance, void (T::*method)(const std::shared_ptr<Actor>&));
+		void RegisterMemberFunction(const std::string& name, const std::shared_ptr<T>& instance, void (T::*method)(const std::shared_ptr<Actor>&, void*));
 		template <class T>
-		void RegisterMemberFunction(const std::string& name, const std::shared_ptr<T>& instance, void (T::*method)(const std::shared_ptr<Actor>&) const);
+		void RegisterMemberFunction(const std::string& name, const std::shared_ptr<T>& instance, void (T::*method)(const std::shared_ptr<Actor>&, void*) const);
 		template <class T>
-		void RegisterMemberFunction(const std::string& name, const std::weak_ptr<T>& instance, void (T::*method)(const std::shared_ptr<Actor>&));
+		void RegisterMemberFunction(const std::string& name, const std::weak_ptr<T>& instance, void (T::*method)(const std::shared_ptr<Actor>&, void*));
 		template <class T>
-		void RegisterMemberFunction(const std::string& name, const std::weak_ptr<T>& instance, void (T::*method)(const std::shared_ptr<Actor>&) const);
+		void RegisterMemberFunction(const std::string& name, const std::weak_ptr<T>& instance, void (T::*method)(const std::shared_ptr<Actor>&, void*) const);
 
 		void LoadProgram(const std::string& path);
 		void LoadProgram(const std::shared_ptr<const void>& program);
@@ -79,7 +79,6 @@ namespace mana
 		[[nodiscard]] uint32_t GetFrameCounter() const;
 		[[nodiscard]] float_t GetDeltaTime() const;
 		[[nodiscard]] bool IsFrameChanged() const;
-		
 	private:
 		[[nodiscard]] int8_t GetInt8FromMemory(const uint32_t address) const;
 		[[nodiscard]] uint8_t GetUint8FromMemory(const uint32_t address) const;
