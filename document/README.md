@@ -9,6 +9,7 @@ Welcome to the Mana script wiki!
   * [Chapter 4: Let's try using instructions](./primer_chapter_4-en)
   * [Chapter 5: Let's use it even more!](./primer_chapter_5-en)
   * [At the end](./primer_afterwords-en)
+* [Implementation-Based Reference (Undocumented Features)](./undocumented_features-en)
 
 ## 日本語
 * [はじめてのMana](./primer_introduction-ja)
@@ -18,3 +19,4 @@ Welcome to the Mana script wiki!
   * [第４章 命令を使ってみよう](./primer_chapter_4-ja)
   * [第５章 さらに使いこなしてみよう](./primer_chapter_5-ja)
   * [終わりに](./primer_afterwords-ja)
+* [実装に基づく補足リファレンス（未明文化機能）](./undocumented_features-ja)
