@@ -1453,7 +1453,12 @@ namespace mana
 		const char* functionName = vm->GetStringFromMemory(self.mPc + 1);
 		if (const auto function = vm->FindFunction(functionName))
 		{
-			function(self.shared_from_this());
+			void* thisPointer = nullptr;
+			const auto argumentCount = self.GetArgumentCountByAddress(lastPc);
+			if (argumentCount >= 0)
+				thisPointer = self.mStack.Get<void*>(static_cast<address_t>(argumentCount));
+
+			function(self.shared_from_this(), thisPointer);
 		}
 		else
 		{
