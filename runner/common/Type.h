@@ -17,32 +17,35 @@ namespace mana
 	//! Signed size integer type.
 	using ssize_t = intptr_t;
 #endif
-/*
+
 #if UINTPTR_MAX == UINT64_MAX
+	using float_t = double;
+	using int_t = std::int64_t;
 #elif UINTPTR_MAX == UINT32_MAX
-#else
-#error "unsupport pointer size"
-#endif
-*/
 	using float_t = float;
 	using int_t = std::int32_t;
+#else
+	#error "unsupported pointer size"
+#endif
 
 	using address_t = std::uint32_t;
 	static constexpr address_t InvalidAddress = static_cast<address_t>(~0);
 
 	using offset_t = std::int32_t;
 
+	static_assert(sizeof(address_t) == 4, "address_t must remain 32-bit");
+
 	/*!
-	Determine if the address is invalid.
-	*/
+	 * Determine if the address is invalid.
+	 */
 	[[nodiscard]] inline bool IsValid(const address_t address)
 	{
 		return address != InvalidAddress;
 	}
 
 	/*!
-	Check the value range and cast to address_t
-	*/
+	 * Check the value range and cast to address_t
+	 */
 	template<typename T>
 	[[nodiscard]] inline address_t ToAddress(const T size)
 	{
@@ -68,8 +71,8 @@ namespace mana
 	}
 
 	/*!
-	Check the value range and cast to offset_t
-	*/
+	 * Check the value range and cast to offset_t
+	 */
 	template<typename T>
 	[[nodiscard]] inline offset_t ToOffset(const T size)
 	{
