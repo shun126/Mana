@@ -12,6 +12,8 @@ mana (compiler)
 #include "ErrorHandler.h"
 #include "Lexer.h"
 
+#include <exception>
+
 namespace mana
 {
 	struct Message
@@ -120,7 +122,22 @@ namespace mana
 
 		if (mHandler)
 		{
-			mHandler(mDiagnostics.back());
+			// Compile() は例外が境界を越えない事を約束しているので、ハンドラが
+			// 投げても外へは出しません。Compile() の catch がこれを Fatal
+			// diagnostic に変換して同じハンドラをもう一度呼ぶ経路もここを通るので、
+			// 二重に投げてホストへ抜けるのも合わせて防げます。
+			try
+			{
+				mHandler(mDiagnostics.back());
+			}
+			catch (const std::exception& e)
+			{
+				Trace(TraceLevel::Error, { "mana: the diagnostic handler threw and was ignored: ", e.what(), "\n" });
+			}
+			catch (...)
+			{
+				Trace(TraceLevel::Error, { "mana: the diagnostic handler threw and was ignored\n" });
+			}
 		}
 	}
 
