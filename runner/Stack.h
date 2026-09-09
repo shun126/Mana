@@ -158,8 +158,18 @@ namespace mana
 			void Set(const double value) { mFloat = static_cast<float_t>(value); }
 			void Set(bool const value) { mBool = value; }
 		};
+		//! 1スロットのバイト数
+		static constexpr address_t SlotSize = static_cast<address_t>(sizeof(Buffer));
+
+		//! バイト数を、それを収めるのに必要なスロット数へ切り上げます
+		[[nodiscard]] static address_t ToSlotCount(const address_t byteSize);
+
 		std::unique_ptr<Buffer, decltype(&std::free)> mBuffer;
+
+		//! 確保済みのスロット数
 		address_t mAllocatedSize = 0;
+
+		//! 使用中のスロット数
 		address_t mUsedSize = 0;
 	};
 }
