@@ -8,6 +8,7 @@ mana (compiler)
 #include "Symbol.h"
 #include "ErrorHandler.h"
 #include <iomanip>
+#include <ostream>
 
 namespace mana
 {
@@ -262,7 +263,7 @@ static char* symbol_data_type_id_name[NUMBER_OF] = {
 			mNext->CheckUndefineRecursive();
 	}
 
-	void Symbol::OnDump(std::ofstream& output, const int32_t level) const
+	void Symbol::OnDump(std::ostream& output, const int32_t level) const
 	{
 		for (int32_t i = 0; i < level; i++)
 			output << "  ";

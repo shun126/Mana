@@ -15,9 +15,9 @@ jobs:
       - name: Generate Mana version infomation
         run: make --directory=${{ github.workspace }}/compiler version
       - name: Build Mana compiler
-        run: make --directory=${{ github.workspace }}/compiler
+        run: make --directory=${{ github.workspace }}
       - name: Test Mana compiler
-        run: make --directory=${{ github.workspace }}/compiler test
+        run: make --directory=${{ github.workspace }} test
   BuildOnWindows:
     runs-on: windows-latest
     steps:

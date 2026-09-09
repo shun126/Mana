@@ -185,9 +185,9 @@ namespace mana
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		// Dump
-		void Dump(std::ofstream& output) const;
-		void DumpFunctionNameFromAddress(std::ofstream& output, const int32_t address) const;
-		void WritePublicTypeDecl(std::ofstream& output) const;
+		void Dump(std::ostream& output) const;
+		void DumpFunctionNameFromAddress(std::ostream& output, const int32_t address) const;
+		void WritePublicTypeDecl(std::ostream& output) const;
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		// debug

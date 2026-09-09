@@ -1,15 +1,18 @@
 # mana (compiler)
 # Copyright (c) 2003 Shun Moriya
 #
+# アプリケーションへ組み込めるコンパイラ本体です。
+# コマンドラインインターフェースは ../driver にあります。
+#
 
-TARGET	= mana
+LIBRARY	= libmana.a
 
 #CC	= g++
 CC	= clang++
-CFLAGS	= --std=c++17 -O3 -Wall -D NDEBUG -c 
+CFLAGS	= --std=c++17 -O3 -Wall -D NDEBUG -c
 
-LK	= $(CC)
-LFLAGS	= --std=c++17 -O3 -Wall
+AR	= ar
+ARLIBFLAGS = rcs
 
 COVERAGE=
 
@@ -25,6 +28,7 @@ RM = rm -f
 SOURCES	= \
 	CodeBuffer.cpp \
 	CodeGenerator.cpp \
+	Compiler.cpp \
 	DataBuffer.cpp \
 	ErrorHandler.cpp \
 	GlobalAddressResolver.cpp \
@@ -32,7 +36,6 @@ SOURCES	= \
 	IntermediateLanguage.cpp \
 	LocalAddressResolver.cpp \
 	LocalSemanticAnalyzer.cpp \
-	Main.cpp \
 	NamespaceRegistry.cpp \
 	ParsingDriver.cpp \
 	Path.cpp \
@@ -56,8 +59,9 @@ SECOUND	= Parser.cpp Parser.hpp Lexer.cpp
 .SUFFIXES: .yy .l .cpp .o
 .SECOUNDLY: $(SECOUND)
 
-$(TARGET): $(SOURCES) $(PARSER) $(LEXER) $(SECOUND) $(OBJECTS)
-	$(LK) $(LFLAGS) $(COVERAGE) -o $(TARGET) $(OBJECTS) -ldl -lm
+$(LIBRARY): $(SOURCES) $(PARSER) $(LEXER) $(SECOUND) $(OBJECTS)
+	$(RM) $(LIBRARY)
+	$(AR) $(ARLIBFLAGS) $(LIBRARY) $(OBJECTS)
 
 .yy.cpp:
 	$(YACC) $(YFLAGS) -o $@ $<
@@ -69,25 +73,16 @@ $(TARGET): $(SOURCES) $(PARSER) $(LEXER) $(SECOUND) $(OBJECTS)
 	$(CC) $(CFLAGS) $(COVERAGE) -o $@ $<
 
 all:
-	$(TARGET)
+	$(LIBRARY)
 
 clean:
-	$(RM) $(TARGET) $(SECOUND) $(OBJECTS)
-	cd ../test/ && make clean
+	$(RM) $(LIBRARY) $(SECOUND) $(OBJECTS)
 
 depend:
 	makedepend -Y -- $(CFLAGS) -- $(SOURCES)
-	cd ../test/ && make depend
 
 cppcheck:
 	cppcheck -D __unix__ --enable=all $(SOURCES) $(SECOUND)
-
-test:
-	./$(TARGET) --debug ../sample/Sample.mn -I ../sample/Function.mh
-	./$(TARGET) ../test/ProgramImageTest.mn -o ../test/ProgramImageTest.mx
-	cd ../test/ && make
-	cd ../test/ && ./ProgramImageTest ProgramImageTest.mx
-	cd ../test/ && python3 test.py ../compiler/$(TARGET)
 
 version:
 	python3 Version.py
@@ -125,7 +120,7 @@ ErrorHandler.o: ../runner/common/String.h ../runner/common/FileFormat.h
 ErrorHandler.o: ../runner/common/Math.h ../runner/common/Noncopyable.h
 ErrorHandler.o: ../runner/common/Memory.h ../runner/common/OutputStream.h
 ErrorHandler.o: ../runner/common/OutputStream.inl
-ErrorHandler.o: ../runner/common/Stopwatch.h ErrorHandler.h Lexer.h Main.h
+ErrorHandler.o: ../runner/common/Stopwatch.h ErrorHandler.h Lexer.h
 GlobalAddressResolver.o: GlobalAddressResolver.h ../runner/common/Setup.h
 GlobalAddressResolver.o: ../runner/common/Platform.h ../runner/common/Type.h
 GlobalAddressResolver.o: ../runner/common/Assert.h ../runner/common/String.h
@@ -195,27 +190,6 @@ LocalSemanticAnalyzer.o: TypeDescriptor.h ../runner/common/Platform.h
 LocalSemanticAnalyzer.o: SymbolFactory.h StringPool.h TypeDescriptorFactory.h
 LocalSemanticAnalyzer.o: ../runner/common/Noncopyable.h SyntaxNode.h
 LocalSemanticAnalyzer.o: ErrorHandler.h NamespaceRegistry.h
-Main.o: Main.h CodeGenerator.h ../runner/common/Setup.h
-Main.o: ../runner/common/Platform.h ../runner/common/Type.h
-Main.o: ../runner/common/Assert.h ../runner/common/String.h
-Main.o: ../runner/common/FileFormat.h ../runner/common/Math.h
-Main.o: ../runner/common/Noncopyable.h ../runner/common/Memory.h
-Main.o: ../runner/common/OutputStream.h ../runner/common/OutputStream.inl
-Main.o: ../runner/common/Stopwatch.h CodeBuffer.h ../runner/common/Platform.h
-Main.o: ../runner/common/FileFormat.h ../runner/common/Memory.h
-Main.o: ../runner/common/Noncopyable.h DataBuffer.h GlobalAddressResolver.h
-Main.o: GlobalSemanticAnalyzer.h SemanticAnalyzer.h Symbol.h TypeDescriptor.h
-Main.o: SymbolFactory.h StringPool.h TypeDescriptorFactory.h SyntaxNode.h
-Main.o: LocalAddressResolver.h LocalSemanticAnalyzer.h ErrorHandler.h Lexer.h
-Main.o: Path.h ParsingDriver.h Version.h ../runner/Mana.h
-Main.o: ../runner/common/Setup.h ../runner/Actor.h ../runner/Buffer.h
-Main.o: ../runner/Buffer.inl ../runner/Event.h ../runner/Stack.h
-Main.o: ../runner/common/Platform.h ../runner/common/Noncopyable.h
-Main.o: ../runner/common/OutputStream.h ../runner/Stack.inl
-Main.o: ../runner/Actor.inl ../runner/VM.h ../runner/VM.inl
-Main.o: ../runner/Plugin.h ../runner/Plugin.inl ../runner/common/FileFormat.h
-Main.o: ../runner/Function.h ../runner/ProgramImage.h
-Main.o: ../runner/ProgramImage.inl
 NamespaceRegistry.o: NamespaceRegistry.h StringPool.h
 NamespaceRegistry.o: ../runner/common/Platform.h ../runner/common/Type.h
 ParsingDriver.o: ../runner/common/Setup.h ../runner/common/Platform.h
@@ -295,3 +269,15 @@ TypeDescriptor.o: ../runner/common/Stopwatch.h
 TypeDescriptorFactory.o: TypeDescriptorFactory.h ../runner/common/Platform.h
 TypeDescriptorFactory.o: ../runner/common/Type.h
 TypeDescriptorFactory.o: ../runner/common/Noncopyable.h TypeDescriptor.h
+Compiler.o: Compiler.h ErrorHandler.h ../runner/common/Setup.h
+Compiler.o: ../runner/common/Platform.h ../runner/common/Type.h
+Compiler.o: ../runner/common/Assert.h ../runner/common/String.h
+Compiler.o: ../runner/common/FileFormat.h ../runner/common/Math.h
+Compiler.o: ../runner/common/Noncopyable.h ../runner/common/Memory.h
+Compiler.o: ../runner/common/OutputStream.h ../runner/common/OutputStream.inl
+Compiler.o: ../runner/common/Stopwatch.h CodeGenerator.h CodeBuffer.h
+Compiler.o: DataBuffer.h GlobalAddressResolver.h GlobalSemanticAnalyzer.h
+Compiler.o: SemanticAnalyzer.h Symbol.h TypeDescriptor.h SymbolFactory.h
+Compiler.o: StringPool.h TypeDescriptorFactory.h SyntaxNode.h
+Compiler.o: LocalAddressResolver.h LocalSemanticAnalyzer.h Lexer.h
+Compiler.o: ParsingDriver.h Path.h
