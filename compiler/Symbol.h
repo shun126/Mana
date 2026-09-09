@@ -8,6 +8,7 @@ mana (compiler)
 #pragma once
 #include "../runner/common/Setup.h"
 #include "TypeDescriptor.h"
+#include <iosfwd>
 
 namespace mana
 {
@@ -99,7 +100,7 @@ namespace mana
 
 		void CheckUndefineRecursive() const;
 		
-		void OnDump(std::ofstream& output, const int32_t level = 0) const;
+		void OnDump(std::ostream& output, const int32_t level = 0) const;
 
 	//private:
 		Symbol(const std::string_view name, const ClassTypeId class_type, const size_t blockLevel);

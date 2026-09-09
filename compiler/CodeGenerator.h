@@ -17,6 +17,7 @@ mana (compiler)
 #include "SyntaxNode.h"
 #include "TypeDescriptorFactory.h"
 #include <memory>
+#include <iosfwd>
 
 namespace mana
 {
@@ -57,7 +58,7 @@ namespace mana
 		*/
 		const std::shared_ptr<LocalAddressResolver>& GetLocalAddressResolver();
 
-		void Dump(std::ofstream& output) const;
+		void Dump(std::ostream& output) const;
 
 	private:
 		void ResolveLoad(const std::shared_ptr<SyntaxNode>& node) const;

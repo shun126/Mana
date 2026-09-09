@@ -73,6 +73,16 @@ actor Controller
 }
 ````
 
+# Repository layout
+
+| Directory | Builds | Description |
+| --- | --- | --- |
+| `compiler` | `manac.lib` / `libmana.a` | The compiler itself. Free of command line and file output concerns, so it can be embedded in another application. |
+| `driver` | `mana` | The command line tool that drives the compiler. |
+| `runner` | header only | The virtual machine that executes a compiled program. |
+| `sample` | | Example scripts. |
+| `test` | | Test scripts and the test runner. |
+
 # Installing
 ## Requirements
 * [bison 3.8](https://www.gnu.org/software/bison/)
@@ -82,12 +92,12 @@ actor Controller
   * [Clang](https://clang.llvm.org/)
 
 ## Any Linux Distribution
-- cd to <download_path>\compiler
+- cd to <download_path>
 - make
 
 ## Building with Cygwin
 - Install Cygwin from: http://www.cygwin.com/
-- cd to <download_path>\compiler
+- cd to <download_path>
 - make
 
 ## Building with MSVC
@@ -150,6 +160,51 @@ vm->RegisterFunction("nativeFunction", &NativeFunction);
 auto instance = std::make_shared<MyPlugin>();
 vm->RegisterMemberFunction("pluginCallback", instance, &MyPlugin::OnCall);
 ```
+
+# How to Embed the Compiler
+
+The compiler is built as a static library (`manac.lib` on MSVC, `libmana.a` on
+make) that the `mana` command line tool links against. Applications that need to
+compile scripts themselves — an editor, an asset pipeline, a test harness — can
+link the same library instead of shelling out to the executable.
+
+1. Build the `manac` project (MSVC) or run `make` in the `compiler` directory.
+1. Add `#include "compiler/Compiler.h"` to your code.
+1. Fill in `mana::CompileOptions` and call `mana::Compile()`.
+
+`Compile()` writes no files. The program image, the generated C++ header and the
+debug dump are all returned by value, so the caller decides what to do with them.
+
+```cpp
+mana::CompileOptions options;
+options.mSourceFilename = "npc.mn";
+options.mForcedIncludeFiles.emplace_back("Function.mh");
+
+const mana::CompileResult result = mana::Compile(options);
+
+for (const mana::Diagnostic& diagnostic : result.mDiagnostics)
+{
+    // Structured: mSeverity, mFilename, mLineNo and mMessage are all available,
+    // so the host can render diagnostics in its own UI.
+    std::cout << diagnostic.ToString() << '\n';
+}
+
+if (result.mSucceeded)
+{
+    // Hand the program image straight to the virtual machine
+    auto image = std::make_shared<std::vector<uint8_t>>(std::move(result.mProgramImage));
+    vm->LoadProgram(std::shared_ptr<const void>(image, image->data()));
+}
+```
+
+`Compile()` never throws; exceptions raised inside the compiler are caught and
+reported as a fatal `mana::Diagnostic`. It also restores the working directory,
+which the scanner changes while resolving includes.
+
+> **Note**
+> The compiler still keeps global state, so `Compile()` must not be called from
+> more than one thread at a time.
+
 # License
 
 MIT License
