@@ -3,6 +3,12 @@ on: [push]
 jobs:
   BuildOnUbuntu:
     runs-on: ubuntu-latest
+    # DebugとReleaseの両方を回します。表明はReleaseのNDEBUGで消えるので、
+    # Releaseだけでは不変条件が壊れるバグを取り逃します。
+    strategy:
+      fail-fast: false
+      matrix:
+        configuration: [Debug, Release]
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
@@ -13,9 +19,9 @@ jobs:
       - name: Generate Mana version infomation
         run: make --directory=${{ github.workspace }}/compiler version
       - name: Build Mana compiler
-        run: make --directory=${{ github.workspace }}
+        run: make --directory=${{ github.workspace }} CONFIG=${{ matrix.configuration }}
       - name: Test Mana compiler
-        run: make --directory=${{ github.workspace }} test
+        run: make --directory=${{ github.workspace }} CONFIG=${{ matrix.configuration }} test
 
   BuildOnWindows:
     runs-on: windows-latest
