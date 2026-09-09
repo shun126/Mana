@@ -433,6 +433,7 @@
     <ClInclude Include="ParsingDriver.h" />
     <ClInclude Include="Path.h" />
     <ClInclude Include="SemanticAnalyzer.h" />
+    <ClInclude Include="SourceResolver.h" />
     <ClInclude Include="StringPool.h" />
     <ClInclude Include="Symbol.h" />
     <ClInclude Include="SymbolFactory.h" />
@@ -463,6 +464,7 @@
     <ClCompile Include="ParsingDriver.cpp" />
     <ClCompile Include="Path.cpp" />
     <ClCompile Include="SemanticAnalyzer.cpp" />
+    <ClCompile Include="SourceResolver.cpp" />
     <ClCompile Include="StringPool.cpp" />
     <ClCompile Include="Symbol.cpp" />
     <ClCompile Include="SymbolFactory.cpp" />

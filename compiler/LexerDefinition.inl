@@ -15,11 +15,11 @@ namespace mana
 {
 	namespace lexer
 	{
-		extern bool Initialize(const std::shared_ptr<mana::ParsingDriver>& parsingDriver, const std::string_view& filename)
+		extern bool Initialize(const std::shared_ptr<mana::ParsingDriver>& parsingDriver, const std::shared_ptr<SourceResolver>& sourceResolver, const std::string_view& filename)
 		{
 			if (LexerInstance == nullptr)
 			{
-				LexerInstance = std::make_shared<Lexer>(parsingDriver);
+				LexerInstance = std::make_shared<Lexer>(parsingDriver, sourceResolver);
 				yylineno = 1;
 			}
 			return LexerInstance->Open(filename, true);

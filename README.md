@@ -198,8 +198,48 @@ if (result.mSucceeded)
 ```
 
 `Compile()` never throws; exceptions raised inside the compiler are caught and
-reported as a fatal `mana::Diagnostic`. It also restores the working directory,
-which the scanner changes while resolving includes.
+reported as a fatal `mana::Diagnostic`. It touches no global process state such
+as the working directory either.
+
+### Supplying sources from somewhere other than disk
+
+Sources reach the compiler through `mana::SourceResolver`. The default,
+`mana::FileSourceResolver`, reads from the file system, resolving a relative
+`include` against the directory of the file that includes it. Implement the
+interface to compile from an editor buffer that has not been saved, from an
+archive, or from a game engine asset system.
+
+```cpp
+class MemorySourceResolver final : public mana::SourceResolver
+{
+public:
+    std::map<std::string, std::string, std::less<>> mFiles;
+
+    std::string Resolve(const std::string_view from, const std::string_view filename) const override
+    {
+        return std::string(filename);
+    }
+
+    bool Read(const std::string_view path, std::string& outText) const override
+    {
+        const auto it = mFiles.find(path);
+        if (it == mFiles.end())
+            return false;
+        outText = it->second;
+        return true;
+    }
+};
+
+auto resolver = std::make_shared<MemorySourceResolver>();
+resolver->mFiles["npc.mn"] = editorBufferText;
+
+mana::CompileOptions options;
+options.mSourceFilename = "npc.mn";
+options.mSourceResolver = resolver;
+```
+
+Line endings are normalised by the compiler, so a resolver may return text as
+it found it.
 
 > **Note**
 > The compiler still keeps global state, so `Compile()` must not be called from

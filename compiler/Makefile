@@ -40,6 +40,7 @@ SOURCES	= \
 	ParsingDriver.cpp \
 	Path.cpp \
 	SemanticAnalyzer.cpp \
+	SourceResolver.cpp \
 	StringPool.cpp \
 	Symbol.cpp \
 	SymbolFactory.cpp \
@@ -88,6 +89,9 @@ version:
 	python3 Version.py
 
 # DO NOT DELETE
+
+SourceResolver.o: SourceResolver.h Path.h ../runner/common/Setup.h
+SourceResolver.o: ../runner/common/Platform.h ../runner/common/Type.h
 
 CodeBuffer.o: CodeBuffer.h ../runner/common/Platform.h
 CodeBuffer.o: ../runner/common/Type.h ../runner/common/FileFormat.h
