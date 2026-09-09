@@ -281,13 +281,13 @@ namespace mana
 
 		if (mInterrupts.find(priority) != mInterrupts.end())
 		{
-			MANA_TRACE({ "mana:request: priority ", std::to_string(priority), ", ", GetName(), "::", action, " request failed.\n" });
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
+			std::string reason;
 			const auto interruptIterator = mInterrupts.find(priority);
 			if (interruptIterator != mInterrupts.end() && interruptIterator->second.mActionName.empty() == false)
-				MANA_TRACE({ "reason : ", interruptIterator->second.mActionName," running" });
+				reason = Concat({ " reason: ", interruptIterator->second.mActionName, " running" });
+			MANA_TRACE({ "mana:request: priority ", std::to_string(priority), ", ", GetName(), "::", action, " request failed.", reason, "\n" });
 #endif
-			MANA_TRACE("\n");
 			return false;
 		}
 
@@ -307,14 +307,14 @@ namespace mana
 		interrupt.mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Synchronized));
 
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
-		MANA_TRACE({ "mana:request: ", GetName(), " " });
+		std::string previous;
 		if (mInterrupts.empty() == false)
 		{
 			const auto interruptIterator = mInterrupts.find(mInterruptPriority);
 			if (interruptIterator != mInterrupts.end())
-				MANA_TRACE({ "priority ", std::to_string(mInterruptPriority), " ", interruptIterator->second.mActionName, " => " });
+				previous = Concat({ "priority ", std::to_string(mInterruptPriority), " ", interruptIterator->second.mActionName, " => " });
 		}
-		MANA_TRACE({ "priority ", std::to_string(priority), " ",  action , " (address:", std::to_string(address), ")\n" });
+		MANA_TRACE({ "mana:request: ", GetName(), " ", previous, "priority ", std::to_string(priority), " ", action, " (address:", std::to_string(address), ")\n" });
 
 		// 実行するアクション名を記録
 		interrupt.mActionName = action;
@@ -324,16 +324,16 @@ namespace mana
 		{
 			// 現在よりも高い優先度(高いほど優先)の場合、すぐに割り込む
 
-			MANA_TRACE({ "mana:request: ", GetName(), " " });
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
+			std::string previous;
 			if (mInterruptPriority)
 			{
 				const auto interruptIterator = mInterrupts.find(mInterruptPriority);
 				if (interruptIterator != mInterrupts.end())
-					MANA_TRACE({ "priority ", std::to_string(mInterruptPriority), " ", interruptIterator->second.mActionName, " => " });
+					previous = Concat({ "priority ", std::to_string(mInterruptPriority), " ", interruptIterator->second.mActionName, " => " });
 			}
+			MANA_TRACE({ "mana:request: ", GetName(), " ", previous, "priority ", std::to_string(priority), " ", interrupt.mActionName, " succeed\n" });
 #endif
-			MANA_TRACE({ "priority ", std::to_string(priority), " ", interrupt.mActionName, " succeed\n" });
 
 			Again();
 
