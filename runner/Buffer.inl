@@ -58,6 +58,7 @@ namespace mana
 
 	inline void Buffer::Release(const address_t size)
 	{
+		MANA_ASSERT(size <= mUsedSize);
 		mUsedSize -= size;
 	}
 
