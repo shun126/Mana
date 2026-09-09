@@ -19,6 +19,7 @@ mana (test)
 #include <cstdio>
 #include <map>
 #include <memory>
+#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -296,6 +297,54 @@ namespace
 		Check(found, "a diagnostic should point at broken.mn line 3");
 	}
 
+	/*!
+		診断ハンドラが例外を投げても Compile() の外へは出ない事を確かめます
+
+		Compile() は例外が境界を越えない事を約束しています。ハンドラの例外を
+		無視せず catch(const std::exception&) で捕まえてしまうと、その通知が
+		Fatal diagnostic に化けて DiagnosticBag::Add() から同じハンドラをもう
+		一度呼び、そこでまた投げられてホストまで抜けてしまう経路があったので、
+		それを塞いだ側の回帰試験です。
+	*/
+	void TestDiagnosticHandlerThrowIsContained()
+	{
+		BeginCase("DiagnosticHandlerThrowIsContained");
+
+		auto resolver = std::make_shared<MemorySourceResolver>();
+		resolver->mFiles["main.mn"] =
+			"actor Broken\n"
+			"{\n"
+			"    action main { this is not mana; }\n"
+			"}\n";
+
+		mana::CompileOptions options;
+		options.mSourceFilename = "main.mn";
+		options.mSourceResolver = resolver;
+
+		int handlerCalls = 0;
+		options.mDiagnosticHandler = [&handlerCalls](const mana::Diagnostic&)
+		{
+			++handlerCalls;
+			throw std::runtime_error("diagnostic handler failure");
+		};
+
+		bool escaped = false;
+		mana::CompileResult result;
+		try
+		{
+			result = mana::Compile(options);
+		}
+		catch (...)
+		{
+			escaped = true;
+		}
+
+		Check(!escaped, "an exception from the diagnostic handler must not cross Compile()");
+		Check(handlerCalls > 0, "the throwing handler should still have been invoked");
+		Check(!result.mSucceeded, "compile should still fail");
+		Check(!result.mDiagnostics.empty(), "the diagnostic should still be collected despite the handler throwing");
+	}
+
 	void TestLineEndingsAreNormalised()
 	{
 		BeginCase("LineEndingsAreNormalised");
@@ -563,6 +612,7 @@ int main()
 	TestCompileIsRepeatable();
 	TestMissingSourceIsReported();
 	TestDiagnosticCarriesPosition();
+	TestDiagnosticHandlerThrowIsContained();
 	TestLineEndingsAreNormalised();
 	TestTraceHandlerReceivesLevels();
 	TestFaultDoesNotEndProcess();
