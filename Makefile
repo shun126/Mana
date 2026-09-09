@@ -7,13 +7,17 @@
 
 .PHONY: all compiler driver clean depend cppcheck test
 
+# Debug / Release の切り替え。設定を変えたら clean してから作り直してください
+# (オブジェクトはタイムスタンプでしか再ビルドされず、CONFIG の違いは見ません)。
+CONFIG ?= Release
+
 all: driver
 
 compiler:
-	cd compiler && $(MAKE)
+	cd compiler && $(MAKE) CONFIG=$(CONFIG)
 
 driver: compiler
-	cd driver && $(MAKE)
+	cd driver && $(MAKE) CONFIG=$(CONFIG)
 
 clean:
 	cd driver && $(MAKE) clean
@@ -28,4 +32,4 @@ cppcheck:
 	cd driver && $(MAKE) cppcheck
 
 test: driver
-	cd driver && $(MAKE) test
+	cd driver && $(MAKE) CONFIG=$(CONFIG) test

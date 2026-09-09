@@ -9,12 +9,19 @@ TARGET	= mana
 COMPILER_DIR	= ../compiler
 LIBRARY	= $(COMPILER_DIR)/libmana.a
 
+CONFIG	?= Release
+
 #CC	= g++
 CC	= clang++
-CFLAGS	= --std=c++17 -O3 -Wall -D NDEBUG -c
+CFLAGS	= --std=c++17 -Wall -c
+ifeq ($(CONFIG),Debug)
+CFLAGS	+= -O0 -g
+else
+CFLAGS	+= -O3 -D NDEBUG
+endif
 
 LK	= $(CC)
-LFLAGS	= --std=c++17 -O3 -Wall
+LFLAGS	= --std=c++17 -Wall
 
 COVERAGE=
 
@@ -33,7 +40,7 @@ $(TARGET): $(LIBRARY) $(SOURCES) $(OBJECTS)
 
 # コンパイラ本体は compiler ディレクトリで組み立てます
 $(LIBRARY):
-	cd $(COMPILER_DIR) && $(MAKE)
+	cd $(COMPILER_DIR) && $(MAKE) CONFIG=$(CONFIG)
 
 .cpp.o:
 	$(CC) $(CFLAGS) $(COVERAGE) -o $@ $<
@@ -55,7 +62,7 @@ cppcheck:
 test:
 	./$(TARGET) --debug ../sample/Sample.mn -I ../sample/Function.mh
 	./$(TARGET) ../test/ProgramImageTest.mn -o ../test/ProgramImageTest.mx
-	cd ../test/ && $(MAKE)
+	cd ../test/ && $(MAKE) CONFIG=$(CONFIG)
 	cd ../test/ && ./ProgramImageTest ProgramImageTest.mx
 	cd ../test/ && ./EmbeddingTest
 	cd ../test/ && python3 test.py ../driver/$(TARGET)
