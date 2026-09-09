@@ -45,7 +45,16 @@ jobs:
         run: |
           echo "GNU_BISON_BIN=C:\tools\cygwin\bin\bison.exe" >> $env:GITHUB_ENV
           echo "GNU_FLEX_BIN=C:\tools\cygwin\bin\flex.exe" >> $env:GITHUB_ENV
-          echo "PYTHON_BIN=C:\tools\cygwin\bin\python3.9.exe" >> $env:GITHUB_ENV
+          # cygwinのpython3パッケージが指す既定バージョンは更新され得るので、
+          # python3.9 のように固定せず実際に入っている実行ファイルを探します。
+          $python = Get-ChildItem -Path C:\tools\cygwin\bin -Filter "python3.*.exe" |
+            Where-Object { $_.BaseName -match '^python3\.\d+$' } |
+            Sort-Object Name -Descending |
+            Select-Object -First 1
+          if (-not $python) {
+            throw "python3.x.exe not found under C:\tools\cygwin\bin"
+          }
+          echo "PYTHON_BIN=$($python.FullName)" >> $env:GITHUB_ENV
       - name: Check out repository code
         uses: actions/checkout@v4
       - name: Generate Mana version infomation
