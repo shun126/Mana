@@ -305,6 +305,21 @@ namespace mana
 		mFrameCounter = 0;
 	}
 
+	inline bool VM::RunActor(const std::shared_ptr<Actor>& actor)
+	{
+		try
+		{
+			return actor->Run();
+		}
+		catch (const std::exception& e)
+		{
+			// 停止したアクターは以後実行されません。他のアクターは動き続けます。
+			Trace(TraceLevel::Error, { "mana: actor ", actor->GetName(), " halted: ", e.what(), "\n" });
+			actor->Halt();
+			return false;
+		}
+	}
+
 	inline bool VM::Run()
 	{
 		bool running = false;
@@ -314,7 +329,7 @@ namespace mana
 
 		for (auto& actor : mActors)
 		{
-			running |= actor.second->Run();
+			running |= RunActor(actor.second);
 		}
 
 		mFlag.reset(Flag::FrameChanged);
@@ -326,7 +341,7 @@ namespace mana
 			{
 				if (actor.second->mFlag[Flag::Requested])
 				{
-					running |= actor.second->Run();
+					running |= RunActor(actor.second);
 				}
 			}
 		}

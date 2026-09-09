@@ -188,8 +188,42 @@ virtual machine runs: replacing it while output is in flight is not safe.
 
 The handler is not called once per line. A few execution traces build one line
 from several calls, so buffer until a newline if the destination is line
-oriented. `MANA_BUG` and the assertion macros terminate immediately after
-writing, so a handler must not throw.
+oriented. `MANA_BUG` and the assertion macros throw as soon as they have
+written, so a handler must not throw.
+
+### Faults never end the process
+
+A broken invariant inside mana - the sort of thing an assertion catches - is
+reported and then thrown as `mana::FatalError`. It is never `std::terminate`.
+A guest scripting engine has no business taking its host down with it, and in
+an editor that would cost someone their unsaved work.
+
+Two places catch it, because those are the two places where recovering means
+something:
+
+| Where | What survives |
+| --- | --- |
+| `mana::Compile` | The compile stops and reports a fatal `mana::Diagnostic`. |
+| `mana::VM::Run` | That one actor halts. Every other actor, the VM and the host carry on. |
+
+To stop at the fault instead of unwinding - which is what you want while
+working on mana itself - install a handler. It runs before the stack unwinds,
+so a breakpoint there still has the frames that caused it.
+
+```cpp
+void OnFault(void* userData, const char* file, const int line, const char* message)
+{
+    // break into the debugger, or log through the host
+}
+
+mana::SetFaultHandler(&OnFault, myHost);
+```
+
+The handler must not throw: `mana::FatalError` is thrown as soon as it returns.
+
+> **Note**
+> This covers mana's own invariants. Faults in a script itself - dividing by
+> zero, subscripting past the end of an array - are not checked yet.
 
 # How to Embed the Compiler
 

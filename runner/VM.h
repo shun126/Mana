@@ -92,6 +92,17 @@ namespace mana
 		[[nodiscard]] int32_t GetOpecode(const uint32_t address) const;
 
 	private:
+		/*!
+		アクターを1体実行します
+
+		内部の不変条件が壊れても呼び出し元へは伝えず、そのアクターだけを
+		停止します。1体の不具合でVM全体と組み込み先を巻き込まない為です。
+
+		@param[in]	actor	実行するアクター
+		@retval	true	実行を継続します
+		*/
+		bool RunActor(const std::shared_ptr<Actor>& actor);
+
 		[[nodiscard]] ExternalFunctionType FindFunction(const std::string& functionName) const;
 		[[nodiscard]] Buffer& GetGlobalVariables() noexcept;
 		[[nodiscard]] const Buffer& GetGlobalVariables() const noexcept;
