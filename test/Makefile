@@ -6,8 +6,15 @@
 
 TARGETS = ProgramImageTest EmbeddingTest
 
+CONFIG ?= Release
+
 CC = clang++
-CFLAGS = --std=c++17 -O2 -Wall
+CFLAGS = --std=c++17 -Wall
+ifeq ($(CONFIG),Debug)
+CFLAGS += -O0 -g
+else
+CFLAGS += -O2 -D NDEBUG
+endif
 
 COMPILER_DIR = ../compiler
 LIBRARY = $(COMPILER_DIR)/libmana.a
@@ -22,7 +29,7 @@ EmbeddingTest: EmbeddingTest.o $(LIBRARY)
 	$(CC) $(CFLAGS) -o $@ EmbeddingTest.o $(LIBRARY) -ldl -lm
 
 $(LIBRARY):
-	cd $(COMPILER_DIR) && $(MAKE)
+	cd $(COMPILER_DIR) && $(MAKE) CONFIG=$(CONFIG)
 
 %.o: %.cpp
 	$(CC) $(CFLAGS) -c -o $@ $<

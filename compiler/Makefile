@@ -7,9 +7,18 @@
 
 LIBRARY	= libmana.a
 
+# Debug では表明を有効なまま残し、Release では NDEBUG で無効にします。
+# 片方でしか回さないと、表明が無いと見えない不具合を取り逃します。
+CONFIG	?= Release
+
 #CC	= g++
 CC	= clang++
-CFLAGS	= --std=c++17 -O3 -Wall -D NDEBUG -c
+CFLAGS	= --std=c++17 -Wall -c
+ifeq ($(CONFIG),Debug)
+CFLAGS	+= -O0 -g
+else
+CFLAGS	+= -O3 -D NDEBUG
+endif
 
 AR	= ar
 ARLIBFLAGS = rcs
