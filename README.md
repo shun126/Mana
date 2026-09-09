@@ -161,6 +161,36 @@ auto instance = std::make_shared<MyPlugin>();
 vm->RegisterMemberFunction("pluginCallback", instance, &MyPlugin::OnCall);
 ```
 
+### Redirecting output
+
+Everything the virtual machine prints - the `print()` builtin, execution
+traces, errors and assertions - goes through `mana::Trace`, which writes to
+standard output by default. A host where standard output goes nowhere, such as
+a packaged game, can redirect it.
+
+```cpp
+void OnTrace(void* userData, const mana::TraceLevel level, const char* message, const std::size_t length)
+{
+    // message is NUL terminated UTF-8; length excludes the terminator
+    switch (level)
+    {
+    case mana::TraceLevel::Error:   /* log as an error */   break;
+    case mana::TraceLevel::Warning: /* log as a warning */  break;
+    default:                        /* log as info */       break;
+    }
+}
+
+mana::SetTraceHandler(&OnTrace, myHost);
+```
+
+Pass `nullptr` to go back to standard output. Set the handler once before the
+virtual machine runs: replacing it while output is in flight is not safe.
+
+The handler is not called once per line. A few execution traces build one line
+from several calls, so buffer until a newline if the destination is line
+oriented. `MANA_BUG` and the assertion macros terminate immediately after
+writing, so a handler must not throw.
+
 # How to Embed the Compiler
 
 The compiler is built as a static library (`manac.lib` on MSVC, `libmana.a` on
