@@ -11,11 +11,11 @@ mana (compiler/library)
 */
 
 #pragma once
-#include "Platform.h"
-#include "String.h"
 #include <exception>
 #include <stdexcept>
 #include <string>
+#include "Platform.h"
+#include "String.h"
 
 namespace mana
 {
@@ -121,5 +121,38 @@ namespace mana
 	[[noreturn]] inline void RaiseFault(const char* file, const int line, const std::initializer_list<std::string_view> message)
 	{
 		RaiseFault(file, line, Concat(message));
+	}
+
+	/*!
+	スクリプトの誤りを表す例外
+
+	manaの不具合ではなく、スクリプトを書いた側の誤りを表します。
+	0除算や配列の範囲外の様に、そのまま実行を続けられない場合に送出されます。
+	*/
+	class ScriptError final : public std::runtime_error
+	{
+	public:
+		explicit ScriptError(const std::string& message)
+			: std::runtime_error(message)
+		{
+		}
+	};
+
+	/*!
+	スクリプトの誤りを報告し、例外を送出します
+
+	プロセスは終了しません。VM::Runがそのアクターだけを停止させます。
+	manaの不変条件の破れとは異なるので、FaultHandlerは呼ばれません。
+
+	@param[in]	message	本文
+	*/
+	[[noreturn]] inline void RaiseScriptError(const std::string& message)
+	{
+		throw ScriptError(message);
+	}
+
+	[[noreturn]] inline void RaiseScriptError(const std::initializer_list<std::string_view> message)
+	{
+		RaiseScriptError(Concat(message));
 	}
 }

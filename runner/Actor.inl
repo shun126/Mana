@@ -6,6 +6,7 @@ mana (library)
 */
 
 #pragma once
+#include <limits>
 #include "VM.h"
 #include "common/FileFormat.h"
 
@@ -124,6 +125,7 @@ namespace mana
 			// caluclation
 			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::AddInteger, &CommandAddInteger),
 			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::AddAddress, &CommandAddAddress),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::AddArrayAddress, &CommandAddArrayAddress),
 			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::DivideInteger, &CommandDivideInteger),
 			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MinusInteger, &CommandMinusInteger),
 			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::ModInteger, &CommandModInteger),
@@ -1135,6 +1137,28 @@ namespace mana
 		self.mStack.Set(0, static_cast<void*>(address + offset));
 	}
 
+	/*!
+	配列の要素へのアドレスを求めます
+
+	オペランドは配列全体のバイト数です。添字が範囲外ならスクリプトエラーに
+	します。範囲外への読み書きは他の変数を壊すため、Releaseでも検査します。
+	*/
+	inline void Actor::CommandAddArrayAddress(const std::shared_ptr<VM>& vm, Actor& self)
+	{
+		const int_t size = static_cast<int_t>(vm->GetUint32FromMemory(self.mPc + 1));
+		uint8_t* address = static_cast<uint8_t*>(self.mStack.Get<void*>(0));
+		const int_t offset = self.mStack.Get<int_t>(1);
+
+		if (offset < 0 || offset >= size)
+		{
+			RaiseScriptError({ "subscript out of range: byte offset ", std::to_string(offset),
+				" is outside the array of ", std::to_string(size), " byte(s)" });
+		}
+
+		self.mStack.Remove(1);
+		self.mStack.Set(0, static_cast<void*>(address + offset));
+	}
+
 	inline void Actor::CommandAddFloat(const std::shared_ptr<VM>&, Actor& self)
 	{
 		const float_t left = self.mStack.Get<float_t>(1);
@@ -1147,6 +1171,10 @@ namespace mana
 	{
 		const int_t left = self.mStack.Get<int_t>(1);
 		const int_t right = self.mStack.Get<int_t>(0);
+		if (right == 0)
+			RaiseScriptError("division by zero");
+		if (left == std::numeric_limits<int_t>::min() && right == -1)
+			RaiseScriptError("division overflow");
 		self.mStack.Remove(1);
 		self.mStack.Set(0, left / right);
 	}
@@ -1173,6 +1201,10 @@ namespace mana
 	{
 		const int_t left = self.mStack.Get<int_t>(1);
 		const int_t right = self.mStack.Get<int_t>(0);
+		if (right == 0)
+			RaiseScriptError("remainder by zero");
+		if (left == std::numeric_limits<int_t>::min() && right == -1)
+			RaiseScriptError("remainder overflow");
 		self.mStack.Remove(1);
 		self.mStack.Set(0, left % right);
 	}
@@ -1584,7 +1616,8 @@ namespace mana
 			self.mStack.Remove(2);
 			return;
 		}
-		MANA_ASSERT(&self != targetActor);
+		if (&self == targetActor)
+			RaiseScriptError("cannot await an action of the actor itself");
 
 		if (self.IsCommandInitialized() == false && targetActor->Request(priority, action, self.shared_from_this()) == false)
 		{
@@ -1613,7 +1646,8 @@ namespace mana
 			self.mStack.Remove(2);
 			return;
 		}
-		MANA_ASSERT(&self != targetActor);
+		if (&self == targetActor)
+			RaiseScriptError("cannot await an action of the actor itself");
 
 		if (self.IsCommandInitialized() == false && targetActor->Request(priority, action, self.shared_from_this()) == false)
 		{
