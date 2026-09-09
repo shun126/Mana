@@ -15,7 +15,6 @@ mana (compiler)
 #include "ErrorHandler.h"
 #include "Lexer.h"
 #include "ParsingDriver.h"
-#include "Path.h"
 #include "SymbolFactory.h"
 #include "SyntaxNode.h"
 
@@ -30,38 +29,6 @@ namespace mana
 {
 	namespace
 	{
-		/*!
-		作業ディレクトリを退避し、スコープを抜ける時に復帰します
-
-		字句解析器はインクルードを解決する為に作業ディレクトリを変更します。
-		ライブラリとして組み込まれた場合、その変更が呼び出し元へ漏れると
-		予期しない不具合を招くため必ず復帰させます。
-		*/
-		class ScopedWorkingDirectory final
-		{
-		public:
-			ScopedWorkingDirectory()
-				: mPath(getcurrentdirectory())
-			{
-			}
-
-			~ScopedWorkingDirectory()
-			{
-				if (!mPath.empty())
-				{
-					chdir(mPath.c_str());
-				}
-			}
-
-			ScopedWorkingDirectory(const ScopedWorkingDirectory& other) = delete;
-			ScopedWorkingDirectory(ScopedWorkingDirectory&& other) noexcept = delete;
-			ScopedWorkingDirectory& operator=(const ScopedWorkingDirectory& other) = delete;
-			ScopedWorkingDirectory& operator=(ScopedWorkingDirectory&& other) noexcept = delete;
-
-		private:
-			std::string mPath;
-		};
-
 		/*!
 		字句解析器を確実に終了させます
 		*/
@@ -180,20 +147,21 @@ namespace mana
 			if (parser == nullptr)
 				throw std::bad_alloc();
 
+			// 指定が無ければファイルシステムから読み込みます
+			std::shared_ptr<SourceResolver> sourceResolver = options.mSourceResolver;
+			if (sourceResolver == nullptr)
+				sourceResolver = std::make_shared<FileSourceResolver>();
+
 			ScopedLexer scopedLexer;
 
-			if (!lexer::Initialize(parser, options.mSourceFilename))
+			if (!lexer::Initialize(parser, sourceResolver, options.mSourceFilename))
 				return;
 
 			// 先に指定されたファイルほど先に読み込まれるよう逆順に積みます
 			for (auto it = options.mForcedIncludeFiles.rbegin(); it != options.mForcedIncludeFiles.rend(); ++it)
 			{
 				if (!lexer::Open(*it, false))
-				{
-					// 入れ子のファイルを開けなかった場合、字句解析器は診断を報告しません
-					LinkerError({ "unable to open forced include file \"", *it, "\"" });
 					return;
-				}
 			}
 
 			const bool parsed = (parser->Parse() == 0) && (yynerrs == 0);
@@ -229,9 +197,6 @@ namespace mana
 	CompileResult Compile(const CompileOptions& options)
 	{
 		CompileResult result;
-
-		// 字句解析器が変更する作業ディレクトリを呼び出し元へ漏らしません
-		const ScopedWorkingDirectory scopedWorkingDirectory;
 
 		DiagnosticBag bag(options.mSourceFilename, options.mDiagnosticHandler);
 

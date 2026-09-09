@@ -40,6 +40,7 @@
     <ClInclude Include="LocalSemanticAnalyzer.h" />
     <ClInclude Include="Path.h" />
     <ClInclude Include="SemanticAnalyzer.h" />
+    <ClInclude Include="SourceResolver.h" />
     <ClInclude Include="StringPool.h" />
     <ClInclude Include="SymbolFactory.h" />
     <ClInclude Include="SyntaxNode.h" />
@@ -120,6 +121,7 @@
     <ClCompile Include="LocalSemanticAnalyzer.cpp" />
     <ClCompile Include="Path.cpp" />
     <ClCompile Include="SemanticAnalyzer.cpp" />
+    <ClCompile Include="SourceResolver.cpp" />
     <ClCompile Include="SymbolFactory.cpp" />
     <ClCompile Include="SyntaxNode.cpp" />
     <ClCompile Include="TypeDescriptor.cpp" />

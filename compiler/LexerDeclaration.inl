@@ -7,15 +7,17 @@ mana (compiler)
 
 #pragma once
 //#include "SystemHolder.h"
+#include "SourceResolver.h"
 #include "StringPool.h"
 #include <memory>
 #include <set>
 #include <stack>
+#include <string>
 
 struct Context
 {
 	YY_BUFFER_STATE mBufferState;
-	std::string_view mPath;
+	std::string mPath;
 	mana::int_t mLineNo;
 };
 
@@ -31,22 +33,24 @@ namespace mana
 		Lexer(Lexer&& other) noexcept = delete;
 		Lexer operator=(const Lexer& other) = delete;
 		Lexer operator=(Lexer&& other) noexcept = delete;
-		explicit Lexer(const std::shared_ptr<ParsingDriver>& parsingDriver);
+		Lexer(const std::shared_ptr<ParsingDriver>& parsingDriver, const std::shared_ptr<SourceResolver>& sourceResolver);
 		~Lexer();
 
 		bool Open(const std::string_view& filename, const bool check);
-		bool IsOpened(const std::string_view& path);
+		bool IsOpened(const std::string& path);
 		bool Close();
 
 		const std::string& GetCurrentFilename();
 		void SetCurrentFilename(const std::string& filename);
 
 		static int_t Binary(const char* text);
+		static void NormalizeNewlines(std::string& text);
 
 	public:
 		std::shared_ptr<ParsingDriver> mParsingDriver;
+		std::shared_ptr<SourceResolver> mSourceResolver;
 		std::stack<std::unique_ptr<Context>> mContext;
-		std::set<std::string_view> mPathSet;
+		std::set<std::string> mPathSet;
 		std::string mCurrentPath;
 	};
 }

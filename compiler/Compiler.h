@@ -12,7 +12,9 @@ mana (compiler)
 
 #pragma once
 #include "ErrorHandler.h"
+#include "SourceResolver.h"
 #include <cstdint>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -38,6 +40,15 @@ namespace mana
 
 		//! 真ならばC++の型宣言ヘッダーを生成します（-t 相当）
 		bool mGeneratePublicTypeDecl = false;
+
+		/*!
+		ソースの供給元
+
+		省略した場合はファイルシステムから読み込みます。
+		エディタの未保存バッファやアセット管理システムから
+		供給する場合に指定します。
+		*/
+		std::shared_ptr<SourceResolver> mSourceResolver;
 
 		/*!
 		診断が報告される度に呼ばれるコールバック
