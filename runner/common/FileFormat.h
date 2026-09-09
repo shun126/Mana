@@ -19,7 +19,7 @@ namespace mana
 {
 	static constexpr const char* Signature = "MaNa";		//!< manaファイル署名
 	static constexpr uint8_t MajorVersion = 0;				//!< manaファイルのメジャーバージョン番号
-	static constexpr uint8_t MinorVersion = 14;				//!< manaファイルのマイナーバージョン番号
+	static constexpr uint8_t MinorVersion = 15;				//!< manaファイルのマイナーバージョン番号
 
 	/*!
 	manaファイルヘッダー
@@ -145,61 +145,62 @@ namespace mana
 		/* calculation */
 		AddInteger,								/* 37 */
 		AddAddress,								/* 38 */
-		DivideInteger,							/* 39 */
-		MinusInteger,							/* 3A */
-		ModInteger,								/* 3B */
-		MultiInteger,							/* 3C */
-		SubtractInteger,						/* 3D */
+		AddArrayAddress,						/* 39 */
+		DivideInteger,							/* 3A */
+		MinusInteger,							/* 3B */
+		ModInteger,								/* 3C */
+		MultiInteger,							/* 3D */
+		SubtractInteger,						/* 3E */
 
-		AddFloat,								/* 3E */
-		DivideFloat,							/* 3F */
-		MinusFloat,								/* 40 */
-		ModFloat,								/* 41 */
-		MultiFloat,								/* 42 */
-		SubtractFloat,							/* 43 */
+		AddFloat,								/* 3F */
+		DivideFloat,							/* 40 */
+		MinusFloat,								/* 41 */
+		ModFloat,								/* 42 */
+		MultiFloat,								/* 43 */
+		SubtractFloat,							/* 44 */
 
-		And,									/* 44 */
-		ExclusiveOr,							/* 45 */
-		LogicalAnd,								/* 46 */
-		LogicalOr,								/* 47 */
-		LogicalNot,								/* 48 */
-		Not,									/* 49 */
-		Or,										/* 4A */
-		ShiftLeft,								/* 4B */
-		ShiftRight,								/* 4C */
+		And,									/* 45 */
+		ExclusiveOr,							/* 46 */
+		LogicalAnd,								/* 47 */
+		LogicalOr,								/* 48 */
+		LogicalNot,								/* 49 */
+		Not,									/* 4A */
+		Or,										/* 4B */
+		ShiftLeft,								/* 4C */
+		ShiftRight,								/* 4D */
 
-		CastIntegerToFloat,						/* 4D */
-		CastFloatToInteger,						/* 4E */
+		CastIntegerToFloat,						/* 4E */
+		CastFloatToInteger,						/* 4F */
 
 		/* compare and branch */
-		CompareEqualInteger,					/* 4F */
-		CompareNotEqualInteger,					/* 50 */
-		CompareGreaterEqualInteger,				/* 51 */
-		CompareGreaterInteger,					/* 52 */
-		CompareLessEqualInteger,				/* 53 */
-		CompareLessInteger,						/* 54 */
+		CompareEqualInteger,					/* 50 */
+		CompareNotEqualInteger,					/* 51 */
+		CompareGreaterEqualInteger,				/* 52 */
+		CompareGreaterInteger,					/* 53 */
+		CompareLessEqualInteger,				/* 54 */
+		CompareLessInteger,						/* 55 */
 
-		CompareEqualFloat,						/* 55 */
-		CompareNotEqualFloat,					/* 56 */
-		CompareGreaterEqualFloat,				/* 57 */
-		CompareGreaterFloat,					/* 58 */
-		CompareLessEqualFloat,					/* 59 */
-		CompareLessFloat,						/* 5A */
+		CompareEqualFloat,						/* 56 */
+		CompareNotEqualFloat,					/* 57 */
+		CompareGreaterEqualFloat,				/* 58 */
+		CompareGreaterFloat,					/* 59 */
+		CompareLessEqualFloat,					/* 5A */
+		CompareLessFloat,						/* 5B */
 
-		CompareEqualData,						/* 5B */
-		CompareNotEqualData,					/* 5C */
-		CompareGreaterEqualData,				/* 5D */
-		CompareGreaterData,						/* 5E */
-		CompareLessEqualData,					/* 5F */
-		CompareLessData,						/* 60 */
+		CompareEqualData,						/* 5C */
+		CompareNotEqualData,					/* 5D */
+		CompareGreaterEqualData,				/* 5E */
+		CompareGreaterData,						/* 5F */
+		CompareLessEqualData,					/* 60 */
+		CompareLessData,						/* 61 */
 
 		/* utility */
-		Print,									/* 61 */
+		Print,									/* 62 */
 
 		/* under discussion */
-		DynamicRequest,							/* 62 */
-		DynamicRequestWaitStarting,				/* 63 */
-		DynamicRequestWaitEnded,				/* 64 */
+		DynamicRequest,							/* 63 */
+		DynamicRequestWaitStarting,				/* 64 */
+		DynamicRequestWaitEnded,				/* 65 */
 	};
 
 	static constexpr address_t IntermediateLanguageSize = static_cast<address_t>(IntermediateLanguage::DynamicRequestWaitEnded) + 1;
@@ -291,6 +292,7 @@ namespace mana
 				// calculation
 				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(AddInteger, 0) },
 				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(AddAddress, 0) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(AddArrayAddress, sizeof(address_t)) },
 				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(DivideInteger, 0) },
 				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MinusInteger, 0) },
 				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(ModInteger, 0) },

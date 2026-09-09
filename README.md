@@ -221,9 +221,30 @@ mana::SetFaultHandler(&OnFault, myHost);
 
 The handler must not throw: `mana::FatalError` is thrown as soon as it returns.
 
-> **Note**
-> This covers mana's own invariants. Faults in a script itself - dividing by
-> zero, subscripting past the end of an array - are not checked yet.
+### Faults in a script
+
+A mistake in a script is not mana's own invariant breaking, so it is reported
+as a `mana::ScriptError` rather than a `mana::FatalError`, and the fault
+handler is left alone. The same boundary catches it, so the actor halts and
+everything else keeps running:
+
+```
+mana: actor Root halted: script error: division by zero
+mana: actor Root halted: script error: subscript out of range: byte offset 400 is outside the array of 16 byte(s)
+```
+
+Checked in every configuration, release included, because each of these would
+otherwise take the process with it or quietly overwrite another variable:
+
+| What | Why it cannot continue |
+| --- | --- |
+| Integer division or remainder by zero | Traps in the CPU, so no C++ handler ever sees it |
+| Integer division of the smallest value by -1 | Traps the same way |
+| A subscript outside its array | Reads or writes whatever happens to be next to it |
+| Awaiting an action of the actor doing the awaiting | Waits for something that cannot arrive |
+
+Floating point division by zero is left alone; it yields infinity, which is
+a value like any other.
 
 # How to Embed the Compiler
 

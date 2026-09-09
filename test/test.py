@@ -135,5 +135,7 @@ success('TestUsingSymbol.mn')
 success('TestVariable01.mn')
 success('TestVariable02.mn')
 output('TestAddressArithmetic.mn', 'field 11 22 33', 'array 100 200 400', 'copy 11 22 33')
+output('TestRuntimeDivideByZero.mn', 'before 10', 'script error: division by zero')
+output('TestRuntimeSubscriptRange.mn', 'before 1', 'script error: subscript out of range')
 ################################################################################
 exit(Result)

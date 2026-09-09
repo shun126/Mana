@@ -311,9 +311,16 @@ namespace mana
 		{
 			return actor->Run();
 		}
+		catch (const ScriptError& e)
+		{
+			// スクリプトの誤り。停止したアクターは以後実行されません。
+			Trace(TraceLevel::Error, { "mana: actor ", actor->GetName(), " halted: script error: ", e.what(), "\n" });
+			actor->Halt();
+			return false;
+		}
 		catch (const std::exception& e)
 		{
-			// 停止したアクターは以後実行されません。他のアクターは動き続けます。
+			// manaの不具合。他のアクターは動き続けます。
 			Trace(TraceLevel::Error, { "mana: actor ", actor->GetName(), " halted: ", e.what(), "\n" });
 			actor->Halt();
 			return false;
