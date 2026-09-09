@@ -401,6 +401,7 @@
     <ClInclude Include="..\runner\Buffer.h" />
     <ClInclude Include="..\runner\common\Assert.h" />
     <ClInclude Include="..\runner\common\FileFormat.h" />
+    <ClInclude Include="..\runner\common\Fault.h" />
     <ClInclude Include="..\runner\common\Math.h" />
     <ClInclude Include="..\runner\common\Memory.h" />
     <ClInclude Include="..\runner\common\Noncopyable.h" />
