@@ -7,6 +7,8 @@ mana (compiler)
 
 #pragma once
 #include "../runner/common/Setup.h"
+#include "SourceResolver.h"
+#include <memory>
 
 extern void yyerror(const char* message);
 extern int yynerrs;
@@ -20,11 +22,12 @@ namespace mana
 		/*!
 		initialize scanner
 		@param[in]	parsingDriver	Bison parser object
+		@param[in]	sourceResolver	source supplier
 		@param[in]	filename		file name
 		@retval		true			success
 		@retval		false			failed
 		*/
-		extern bool Initialize(const std::shared_ptr<mana::ParsingDriver>& parsingDriver, const std::string_view& filename);
+		extern bool Initialize(const std::shared_ptr<mana::ParsingDriver>& parsingDriver, const std::shared_ptr<SourceResolver>& sourceResolver, const std::string_view& filename);
 
 		/*!
 		finalize scanner
