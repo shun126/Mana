@@ -37,6 +37,20 @@ namespace mana
 		}
 
 		/*!
+		診断の重大度を Trace の重大度へ対応付けます
+		*/
+		[[nodiscard]] TraceLevel ToTraceLevel(const DiagnosticSeverity severity)
+		{
+			switch (severity)
+			{
+			case DiagnosticSeverity::Warning:	return TraceLevel::Warning;
+			case DiagnosticSeverity::Error:
+			case DiagnosticSeverity::Fatal:
+			default:							return TraceLevel::Error;
+			}
+		}
+
+		/*!
 		診断を収集先へ送ります
 
 		収集先が無い場合は従来通り標準出力へ出力します。
@@ -64,7 +78,7 @@ namespace mana
 			}
 			else
 			{
-				Trace({ diagnostic.ToString(), "\n" });
+				Trace(ToTraceLevel(diagnostic.mSeverity), { diagnostic.ToString(), "\n" });
 			}
 		}
 	}

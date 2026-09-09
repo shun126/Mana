@@ -114,7 +114,9 @@ namespace mana
 			// 診断は発生した順に表示します
 			options.mDiagnosticHandler = [](const Diagnostic& diagnostic)
 			{
-				Trace({ diagnostic.ToString(), "\n" });
+				const TraceLevel level = diagnostic.mSeverity == DiagnosticSeverity::Warning
+					? TraceLevel::Warning : TraceLevel::Error;
+				Trace(level, { diagnostic.ToString(), "\n" });
 			};
 
 			const CompileResult result = Compile(options);
