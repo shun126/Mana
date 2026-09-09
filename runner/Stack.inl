@@ -43,8 +43,8 @@ namespace mana
 
 	inline void Stack::Remove(const address_t size)
 	{
+		MANA_ASSERT(size <= mUsedSize);
 		mUsedSize -= size;
-		MANA_ASSERT(mAllocatedSize == 0 || mUsedSize < mAllocatedSize);
 	}
 
 	template<typename T>
@@ -109,8 +109,8 @@ namespace mana
 
 	inline void Stack::SetSize(const address_t size)
 	{
+		MANA_ASSERT(size <= mAllocatedSize);
 		mUsedSize = size;
-		MANA_ASSERT(mUsedSize <= mAllocatedSize);
 	}
 
 	inline bool Stack::operator==(const Stack& other) const

@@ -288,10 +288,10 @@ namespace mana
 		return;											\
 }
 //! initアクション中ならばreturnします
-#define MANA_ASSERT_ILLIGAL_CALL_IN_INIT_ACTION(P) {	\
-	if(P->GetVirtualMachine()->IsInInitAction()){		\
+#define MANA_ASSERT_CANT_CALL_IN_INIT_ACTION(P)			\
+	if((P)->GetVirtualMachine()->IsInInitAction()){		\
 		return;											\
-}
+	}
 #else
 //! 引数の数を調べ、一致しない場合は警告を表示してreturnします
 #define MANA_ASSERT_PARAMETER(P, I)	\
