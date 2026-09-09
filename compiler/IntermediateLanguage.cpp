@@ -96,6 +96,7 @@ namespace mana
 		case IntermediateLanguage::Rollback:			SPRINTF(text, "0x%08x:rollback", address); break;
 
 		// caluclation
+		case IntermediateLanguage::AddAddress:	SPRINTF(text, "0x%08x:add (address)", address); break;
 		case IntermediateLanguage::AddInteger:			SPRINTF(text, "0x%08x:add (integer)", address); break;
 		case IntermediateLanguage::DivideInteger:		SPRINTF(text, "0x%08x:div (integer)", address); break;
 		case IntermediateLanguage::MinusInteger:		SPRINTF(text, "0x%08x:neg (integer)", address); break;

@@ -1265,7 +1265,7 @@ DO_RECURSIVE:
 			mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::PushSize, (node->GetTypeDescriptor())->GetMemorySize());
 			mCodeBuffer->AddOpecode(IntermediateLanguage::MultiInteger);
 			GenerateCode(node->GetLeftNode(), false);
-			mCodeBuffer->AddOpecode(IntermediateLanguage::AddInteger);
+			mCodeBuffer->AddOpecode(IntermediateLanguage::AddAddress);
 			if (enableLoad)
 			{
 				ResolveLoad(node);
@@ -1497,7 +1497,7 @@ DO_RECURSIVE:
 									// variable.member
 									mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::PushSize, symbol->GetAddress());
 									GenerateCode(node->GetLeftNode(), loadReference ? true : false);
-									mCodeBuffer->AddOpecode(IntermediateLanguage::AddInteger);
+									mCodeBuffer->AddOpecode(IntermediateLanguage::AddAddress);
 									if (enableLoad)
 										ResolveLoad(node);
 									goto ESCAPE;
