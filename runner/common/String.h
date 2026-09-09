@@ -103,6 +103,13 @@ namespace mana
 		OutputDebugStringA(message.c_str());
 #endif
 		std::cout << message;
+
+		// アサートは出力の直後に終了するため、
+		// バッファに溜まったまま失われないよう書き出します
+		if (level != TraceLevel::Info)
+		{
+			std::cout.flush();
+		}
 	}
 
 	inline void Trace(const TraceLevel level, const std::initializer_list<std::string_view> message)
