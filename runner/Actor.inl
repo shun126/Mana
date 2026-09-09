@@ -87,7 +87,7 @@ namespace mana
 			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PushChar, &CommandPushChar),
 			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PushShort, &CommandPushShort),
 			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PushInteger, &CommandPushInteger),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PushSize, &CommandPushInteger),	// TODO:サイズに対応して下さい
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PushSize, &CommandPushSize),
 			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PushFloat, &CommandPushFloat),
 			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PushString, &CommandPushString),
 			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PushPriority, &CommandPushPriority),
@@ -123,6 +123,7 @@ namespace mana
 
 			// caluclation
 			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::AddInteger, &CommandAddInteger),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::AddAddress, &CommandAddAddress),
 			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::DivideInteger, &CommandDivideInteger),
 			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MinusInteger, &CommandMinusInteger),
 			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::ModInteger, &CommandModInteger),
@@ -856,6 +857,16 @@ namespace mana
 		self.mStack.Push<int_t>(vm->GetInt32FromMemory(self.mPc + 1));
 	}
 
+	/*!
+	サイズやオフセットを積みます
+
+	アドレス計算の項となるため、符号無しとして読み込みます。
+	*/
+	inline void Actor::CommandPushSize(const std::shared_ptr<VM>& vm, Actor& self)
+	{
+		self.mStack.Push<int_t>(static_cast<int_t>(vm->GetUint32FromMemory(self.mPc + 1)));
+	}
+
 	inline void Actor::CommandPushFloat(const std::shared_ptr<VM>& vm, Actor& self)
 	{
 		self.mStack.Push(vm->GetFloatFromMemory(self.mPc + 1));
@@ -1108,6 +1119,20 @@ namespace mana
 		const int_t right = self.mStack.Get<int_t>(0);
 		self.mStack.Remove(1);
 		self.mStack.Set(0, left + right);
+	}
+
+	/*!
+	アドレスにバイト数を加えます
+
+	アドレスは int_t を経由させません。int_t がポインタより
+	狭い環境で上位ビットが失われるためです。
+	*/
+	inline void Actor::CommandAddAddress(const std::shared_ptr<VM>&, Actor& self)
+	{
+		uint8_t* address = static_cast<uint8_t*>(self.mStack.Get<void*>(0));
+		const int_t offset = self.mStack.Get<int_t>(1);
+		self.mStack.Remove(1);
+		self.mStack.Set(0, static_cast<void*>(address + offset));
 	}
 
 	inline void Actor::CommandAddFloat(const std::shared_ptr<VM>&, Actor& self)

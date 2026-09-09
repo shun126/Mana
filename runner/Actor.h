@@ -189,6 +189,7 @@ namespace mana
 		static void CommandPushChar(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandPushShort(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandPushInteger(const std::shared_ptr<VM>& vm, Actor& self);
+		static void CommandPushSize(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandPushFloat(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandPushString(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandPushPriority(const std::shared_ptr<VM>& vm, Actor& self);
@@ -232,6 +233,7 @@ namespace mana
 		static void CommandReturnFromAction(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandRollback(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandAddInteger(const std::shared_ptr<VM>& vm, Actor& self);
+		static void CommandAddAddress(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandAddFloat(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandDivideInteger(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandDivideFloat(const std::shared_ptr<VM>& vm, Actor& self);
