@@ -981,8 +981,9 @@ TODO:
 				// TODO: symbol_open_actor_register_member((const std::shared_ptr<Symbol>&)type->component);
 			}
 
-			// instance変数サイズの再計算
-			mActorMemoryAddress = symbol->GetTypeDescriptor() ? symbol->GetTypeDescriptor()->GetMemorySize() : 0;
+			// メンバは同じ宣言から割り当て直されるので、先頭から数え直します。
+			// 型のサイズから数え始めると、構造体のサイズだけ後ろへずれた位置を指します。
+			mActorMemoryAddress = 0;
 
 			// 現在開いている型を記録
 			mBlockTypeDescriptor.push(type);
