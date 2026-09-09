@@ -547,8 +547,8 @@ namespace mana
 	inline int32_t VM::GetOpecode(const uint32_t address) const
 	{
 		MANA_ASSERT(address != Nil);
-		int32_t opecode = mInstructionPool[address];
 		MANA_ASSERT(address < mFileHeader->mSizeOfInstructionPool);
+		int32_t opecode = mInstructionPool[address];
 		MANA_ASSERT(opecode >= 0 && opecode < IntermediateLanguageSize);
 		return opecode;
 	}
