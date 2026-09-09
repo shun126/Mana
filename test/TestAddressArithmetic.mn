@@ -1,0 +1,40 @@
+/*
+mana (script)
+Copyright (c) 2003 Shun Moriya
+*/
+
+////////////////////////////////////////////////////////////////////////////////
+// 構造体メンバと配列要素のアドレス計算を、生成するだけでなく実行して検証します。
+// 実行されないと、オフセットの誤りを見逃します。
+struct TestAddressPoint
+{
+    int x;
+    int y;
+    int z;
+}
+
+actor TestAddressRoot
+{
+    action init
+    {
+    }
+
+    action main
+    {
+        TestAddressPoint point;
+        point.x = 11;
+        point.y = 22;
+        point.z = 33;
+        print("field %d %d %d\n", point.x, point.y, point.z);
+
+        int values[4];
+        values[0] = 100;
+        values[1] = 200;
+        values[3] = 400;
+        print("array %d %d %d\n", values[0], values[1], values[3]);
+
+        TestAddressPoint copied;
+        copied = point;
+        print("copy %d %d %d\n", copied.x, copied.y, copied.z);
+    }
+}
