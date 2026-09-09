@@ -84,7 +84,7 @@ namespace mana
 
 	inline void Buffer::SetSize(const address_t size)
 	{
-		MANA_ASSERT((mUsedSize + size) <= mAllocatedSize);
+		MANA_ASSERT(size <= mAllocatedSize);
 		mUsedSize = size;
 	}
 
