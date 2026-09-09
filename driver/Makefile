@@ -55,8 +55,9 @@ cppcheck:
 test:
 	./$(TARGET) --debug ../sample/Sample.mn -I ../sample/Function.mh
 	./$(TARGET) ../test/ProgramImageTest.mn -o ../test/ProgramImageTest.mx
-	cd ../test/ && make
+	cd ../test/ && $(MAKE)
 	cd ../test/ && ./ProgramImageTest ProgramImageTest.mx
+	cd ../test/ && ./EmbeddingTest
 	cd ../test/ && python3 test.py ../driver/$(TARGET)
 
 # DO NOT DELETE

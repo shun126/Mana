@@ -328,14 +328,14 @@ namespace mana
 			// 現在よりも高い優先度(高いほど優先)の場合、すぐに割り込む
 
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
-			std::string previous;
+			std::string interrupted;
 			if (mInterruptPriority)
 			{
 				const auto interruptIterator = mInterrupts.find(mInterruptPriority);
 				if (interruptIterator != mInterrupts.end())
-					previous = Concat({ "priority ", std::to_string(mInterruptPriority), " ", interruptIterator->second.mActionName, " => " });
+					interrupted = Concat({ "priority ", std::to_string(mInterruptPriority), " ", interruptIterator->second.mActionName, " => " });
 			}
-			MANA_TRACE({ "mana:request: ", GetName(), " ", previous, "priority ", std::to_string(priority), " ", interrupt.mActionName, " succeed\n" });
+			MANA_TRACE({ "mana:request: ", GetName(), " ", interrupted, "priority ", std::to_string(priority), " ", interrupt.mActionName, " succeed\n" });
 #endif
 
 			Again();

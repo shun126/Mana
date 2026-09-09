@@ -1,42 +1,62 @@
 # mana (test)
 #
-# Build ProgramImageTest
+# ProgramImageTest : 生成物の読み出しを確かめます
+# EmbeddingTest    : ライブラリとして組み込む経路を確かめます
 #
 
-TARGET = ProgramImageTest
+TARGETS = ProgramImageTest EmbeddingTest
 
 CC = clang++
 CFLAGS = --std=c++17 -O2 -Wall
 
-SOURCES = \
-	ProgramImageTest.cpp
+COMPILER_DIR = ../compiler
+LIBRARY = $(COMPILER_DIR)/libmana.a
 
-OBJECTS = $(SOURCES:%.cpp=%.o)
+all: $(TARGETS)
 
-all: $(TARGET)
+ProgramImageTest: ProgramImageTest.o
+	$(CC) $(CFLAGS) -o $@ $<
 
-$(TARGET): $(OBJECTS)
-	$(CC) $(CFLAGS) -o $(TARGET) $(OBJECTS)
+# 組み込み用インターフェースの試験はコンパイラ本体を必要とします
+EmbeddingTest: EmbeddingTest.o $(LIBRARY)
+	$(CC) $(CFLAGS) -o $@ EmbeddingTest.o $(LIBRARY) -ldl -lm
+
+$(LIBRARY):
+	cd $(COMPILER_DIR) && $(MAKE)
 
 %.o: %.cpp
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 clean:
-	rm -f $(TARGET) $(OBJECTS)
+	rm -f $(TARGETS) *.o
 	rm -f *.h
 	rm -f *.md
 
 depend:
-	makedepend -Y -- $(CFLAGS) -- $(SOURCES)
-	
+	makedepend -Y -- $(CFLAGS) -- ProgramImageTest.cpp EmbeddingTest.cpp
+
 # DO NOT DELETE
 
 ProgramImageTest.o: ../runner/ProgramImage.h ../runner/common/Setup.h
 ProgramImageTest.o: ../runner/common/Platform.h ../runner/common/Type.h
-ProgramImageTest.o: ../runner/common/Assert.h ../runner/common/String.h
-ProgramImageTest.o: ../runner/common/FileFormat.h ../runner/common/Math.h
-ProgramImageTest.o: ../runner/common/Noncopyable.h ../runner/common/Memory.h
-ProgramImageTest.o: ../runner/common/OutputStream.h
+ProgramImageTest.o: ../runner/common/Assert.h ../runner/common/Fault.h
+ProgramImageTest.o: ../runner/common/String.h ../runner/common/FileFormat.h
+ProgramImageTest.o: ../runner/common/Math.h ../runner/common/Noncopyable.h
+ProgramImageTest.o: ../runner/common/Memory.h ../runner/common/OutputStream.h
 ProgramImageTest.o: ../runner/common/OutputStream.inl
 ProgramImageTest.o: ../runner/common/Stopwatch.h ../runner/ProgramImage.inl
-ProgramImageTest.o: ../runner/ProgramImage.h
+EmbeddingTest.o: ../compiler/Compiler.h ../compiler/ErrorHandler.h
+EmbeddingTest.o: ../compiler/SourceResolver.h ../runner/Mana.h
+EmbeddingTest.o: ../runner/common/Setup.h ../runner/common/Platform.h
+EmbeddingTest.o: ../runner/common/Type.h ../runner/common/Assert.h
+EmbeddingTest.o: ../runner/common/Fault.h ../runner/common/String.h
+EmbeddingTest.o: ../runner/common/FileFormat.h ../runner/common/Math.h
+EmbeddingTest.o: ../runner/common/Noncopyable.h ../runner/common/Memory.h
+EmbeddingTest.o: ../runner/common/OutputStream.h
+EmbeddingTest.o: ../runner/common/OutputStream.inl
+EmbeddingTest.o: ../runner/common/Stopwatch.h ../runner/Actor.h
+EmbeddingTest.o: ../runner/Buffer.h ../runner/Buffer.inl ../runner/Event.h
+EmbeddingTest.o: ../runner/Stack.h ../runner/Stack.inl ../runner/Actor.inl
+EmbeddingTest.o: ../runner/VM.h ../runner/VM.inl ../runner/Plugin.h
+EmbeddingTest.o: ../runner/Plugin.inl ../runner/Function.h
+EmbeddingTest.o: ../runner/ProgramImage.h ../runner/ProgramImage.inl

@@ -106,6 +106,36 @@ actor Controller
 - Run "Vistual Studio 2022 Command Prompt" from the "Visual Studio 2022" start menu.
 - Open mana.sln
 
+# Testing
+
+Three suites, and all of them matter:
+
+| Suite | What it covers |
+| --- | --- |
+| `test/test.py` | The language, through the `mana` executable. Checks exit status, diagnostics and, for the cases that run, what the script printed. |
+| `test/EmbeddingTest` | The library interface: compiling from memory, diagnostics as data, redirected output, faults, script errors and native bindings. None of this is reachable from the command line. |
+| `test/ProgramImageTest` | Reading a compiled program image back. |
+
+`make test` from the top of the tree runs all three.
+
+On MSVC, open `mana.sln` and build - it holds `manac`, `mana` and both test
+programs - then run `EmbeddingTest.exe` and `ProgramImageTest.exe` from the
+configuration you built.
+
+### Run every configuration
+
+Bugs in this codebase have hidden in a single configuration more than once, so
+CI builds and tests all four combinations of 32 bit and 64 bit against debug
+and release, and nothing is allowed to skip one:
+
+* A pointer that survives a 32-bit build can be truncated in a 64-bit one, and
+  the other way round for anything sized against a pointer.
+* Assertions are compiled out of release builds, so a release-only run will
+  walk past a broken invariant without a word.
+
+`EmbeddingTest` prints the pointer and `int_t` widths it was built with, so a
+log makes plain which one ran.
+
 # Running Sample
 ````bash
 mana sample/sample.mn
