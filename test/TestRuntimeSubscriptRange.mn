@@ -1,0 +1,23 @@
+/*
+mana (script)
+Copyright (c) 2003 Shun Moriya
+*/
+
+////////////////////////////////////////////////////////////////////////////////
+// 実行時に決まる添字の範囲外は、他の変数を壊す前に停止します。
+actor TestSubscriptRangeRoot
+{
+    action init
+    {
+    }
+
+    action main
+    {
+        int values[4];
+        int index = 100;
+        values[0] = 1;
+        print("before %d\n", values[0]);
+        values[index] = 2;
+        print("unreachable\n");
+    }
+}

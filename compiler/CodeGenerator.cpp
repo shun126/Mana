@@ -1265,7 +1265,9 @@ DO_RECURSIVE:
 			mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::PushSize, (node->GetTypeDescriptor())->GetMemorySize());
 			mCodeBuffer->AddOpecode(IntermediateLanguage::MultiInteger);
 			GenerateCode(node->GetLeftNode(), false);
-			mCodeBuffer->AddOpecode(IntermediateLanguage::AddAddress);
+			// 実行時に添字を検査する為、配列全体のバイト数を渡します
+			mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::AddArrayAddress,
+				(node->GetLeftNode()->GetTypeDescriptor())->GetMemorySize());
 			if (enableLoad)
 			{
 				ResolveLoad(node);
