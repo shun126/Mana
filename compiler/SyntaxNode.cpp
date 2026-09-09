@@ -10,6 +10,7 @@ mana (compiler)
 #include "Symbol.h"
 #include "TypeDescriptor.h"
 #include "TypeDescriptorFactory.h"
+#include <ostream>
 
 namespace mana
 {
@@ -307,7 +308,7 @@ namespace mana
 		return "N" + std::to_string(mMagic);
 	}
 
-	void SyntaxNode::Dump(std::ofstream& output) const
+	void SyntaxNode::Dump(std::ostream& output) const
 	{
 		output << "```mermaid\n";
 		output << "flowchart TD\n";
@@ -315,7 +316,7 @@ namespace mana
 		output << "```\n";
 	}
 	
-	void SyntaxNode::DumpRecursive(std::ofstream& output) const
+	void SyntaxNode::DumpRecursive(std::ostream& output) const
 	{
 		// Idと並びを合わせてください
 		static const char* name[] = {

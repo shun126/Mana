@@ -28,6 +28,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Parser.hpp" />
+    <ClInclude Include="Compiler.h" />
     <ClInclude Include="Version.h" />
     <ClInclude Include="Lexer.h" />
     <ClInclude Include="CodeBuffer.h" />
@@ -95,7 +96,6 @@
     <ClInclude Include="..\runner\common\FileFormat.h">
       <Filter>runner\common</Filter>
     </ClInclude>
-    <ClInclude Include="Main.h" />
     <ClInclude Include="NamespaceRegistry.h" />
     <ClInclude Include="ParsingDriver.h" />
     <ClInclude Include="Symbol.h" />
@@ -112,6 +112,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Compiler.cpp" />
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="Lexer.cpp" />
     <ClCompile Include="ErrorHandler.cpp" />
@@ -123,7 +124,6 @@
     <ClCompile Include="SyntaxNode.cpp" />
     <ClCompile Include="TypeDescriptor.cpp" />
     <ClCompile Include="TypeDescriptorFactory.cpp" />
-    <ClCompile Include="Main.cpp" />
     <ClCompile Include="NamespaceRegistry.cpp" />
     <ClCompile Include="DataBuffer.cpp" />
     <ClCompile Include="CodeBuffer.cpp" />

@@ -9,6 +9,7 @@ mana (compiler)
 #include "ErrorHandler.h"
 #include "Symbol.h"
 #include <iomanip>
+#include <ostream>
 
 namespace mana
 {
@@ -258,7 +259,7 @@ namespace mana
 		mParent = parent;
 	}
 
-	void TypeDescriptor::Dump(std::ofstream& output) const
+	void TypeDescriptor::Dump(std::ostream& output) const
 	{
 		output << GetDataTypeName(mTypeIdentifier);
 		switch (mTypeIdentifier)

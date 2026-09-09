@@ -10,6 +10,7 @@ mana (compiler)
 #include "IntermediateLanguage.h"
 #include "Symbol.h"
 #include "TypeDescriptor.h"
+#include <ostream>
 #include <vector>
 
 namespace mana
@@ -1646,7 +1647,7 @@ DO_RECURSIVE:
 		return mLocalAddressResolver;
 	}
 
-	void CodeGenerator::Dump(std::ofstream& output) const
+	void CodeGenerator::Dump(std::ostream& output) const
 	{
 		const auto codeBuffer = mCodeBuffer->Copy();
 		if (codeBuffer)
