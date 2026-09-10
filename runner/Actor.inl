@@ -125,7 +125,7 @@ namespace mana
 			// caluclation
 			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::AddInteger, &CommandAddInteger),
 			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::AddAddress, &CommandAddAddress),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::AddArrayAddress, &CommandAddArrayAddress),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::CheckArrayIndex, &CommandCheckArrayIndex),
 			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::DivideInteger, &CommandDivideInteger),
 			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MinusInteger, &CommandMinusInteger),
 			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::ModInteger, &CommandModInteger),
@@ -1138,25 +1138,22 @@ namespace mana
 	}
 
 	/*!
-	配列の要素へのアドレスを求めます
+	配列の添字が範囲内か検査します
 
-	オペランドは配列全体のバイト数です。添字が範囲外ならスクリプトエラーに
-	します。範囲外への読み書きは他の変数を壊すため、Releaseでも検査します。
+	オペランドは配列の要素数です。バイト数へ変換する前の添字を検査するため、
+	変換時の桁あふれで検査をすり抜ける事がありません。検査した添字はそのまま
+	残します。範囲外への読み書きは他の変数を壊すため、Releaseでも検査します。
 	*/
-	inline void Actor::CommandAddArrayAddress(const std::shared_ptr<VM>& vm, Actor& self)
+	inline void Actor::CommandCheckArrayIndex(const std::shared_ptr<VM>& vm, Actor& self)
 	{
-		const int_t size = static_cast<int_t>(vm->GetUint32FromMemory(self.mPc + 1));
-		uint8_t* address = static_cast<uint8_t*>(self.mStack.Get<void*>(0));
-		const int_t offset = self.mStack.Get<int_t>(1);
+		const int_t count = static_cast<int_t>(vm->GetUint32FromMemory(self.mPc + 1));
+		const int_t index = self.mStack.Get<int_t>(0);
 
-		if (offset < 0 || offset >= size)
+		if (index < 0 || index >= count)
 		{
-			RaiseScriptError({ "subscript out of range: byte offset ", std::to_string(offset),
-				" is outside the array of ", std::to_string(size), " byte(s)" });
+			RaiseScriptError({ "subscript out of range: index ", std::to_string(index),
+				" is outside the array of ", std::to_string(count), " element(s)" });
 		}
-
-		self.mStack.Remove(1);
-		self.mStack.Set(0, static_cast<void*>(address + offset));
 	}
 
 	inline void Actor::CommandAddFloat(const std::shared_ptr<VM>&, Actor& self)

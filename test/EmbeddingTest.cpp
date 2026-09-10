@@ -499,6 +499,42 @@ namespace
 		Check(output.find("unreachable") == std::string::npos, "the halted actor should not continue");
 	}
 
+	/*!
+	バイトオフセットへ変換すると桁あふれする添字を確かめます
+
+	添字を要素サイズで乗じてから検査すると、1073741824 * 4 が 0 へ折り返って
+	検査を通り抜け、静かに要素0へ触れてしまいます。
+	*/
+	void TestSubscriptOverflowIsCaught()
+	{
+		BeginCase("SubscriptOverflowIsCaught");
+
+		const mana::CompileResult result = CompileSource({
+			{ "main.mn",
+			  "actor Root\n"
+			  "{\n"
+			  "    action init { }\n"
+			  "    action main\n"
+			  "    {\n"
+			  "        int values[4];\n"
+			  "        int index = 1073741824;\n"
+			  "        values[0] = 7;\n"
+			  "        print(\"before\\n\");\n"
+			  "        values[index] = 1;\n"
+			  "        print(\"unreachable\\n\");\n"
+			  "    }\n"
+			  "}\n" } }, "main.mn");
+
+		Check(result.mSucceeded, "compile should succeed");
+		if (!result.mSucceeded)
+			return;
+
+		const std::string output = RunProgram(result.mProgramImage);
+		CheckContains(output, "before", "the actor should run up to the fault");
+		CheckContains(output, "script error: subscript out of range", "the overflowing subscript should be reported");
+		Check(output.find("unreachable") == std::string::npos, "the halted actor should not continue");
+	}
+
 	////////////////////////////////////////////////////////////////////////////////
 	// アドレス計算
 
@@ -618,6 +654,7 @@ int main()
 	TestFaultDoesNotEndProcess();
 	TestScriptErrorHaltsOnlyThatActor();
 	TestSubscriptOutOfRangeIsCaught();
+	TestSubscriptOverflowIsCaught();
 	TestAddressArithmetic();
 	TestNativeFunctionBinding();
 
