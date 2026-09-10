@@ -234,7 +234,7 @@ namespace mana
 		static void CommandRollback(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandAddInteger(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandAddAddress(const std::shared_ptr<VM>& vm, Actor& self);
-		static void CommandAddArrayAddress(const std::shared_ptr<VM>& vm, Actor& self);
+		static void CommandCheckArrayIndex(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandAddFloat(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandDivideInteger(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandDivideFloat(const std::shared_ptr<VM>& vm, Actor& self);
