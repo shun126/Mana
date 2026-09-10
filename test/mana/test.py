@@ -17,7 +17,7 @@ cwd = os.getcwd()
 print("pwd:" + cwd)
 
 if len(sys.argv) < 2:
-	MANA = '../driver/mana'
+	MANA = '../../driver/mana'
 else:
 	MANA = sys.argv[1]
 

@@ -112,9 +112,12 @@ Three suites, and all of them matter:
 
 | Suite | What it covers |
 | --- | --- |
-| `test/test.py` | The language, through the `mana` executable. Checks exit status, diagnostics and, for the cases that run, what the script printed. |
-| `test/EmbeddingTest` | The library interface: compiling from memory, diagnostics as data, redirected output, faults, script errors and native bindings. None of this is reachable from the command line. |
-| `test/ProgramImageTest` | Reading a compiled program image back. |
+| `test/mana/test.py` | The language, through the `mana` executable. Checks exit status, diagnostics and, for the cases that run, what the script printed. |
+| `test/cpp/EmbeddingTest` | The library interface: compiling from memory, diagnostics as data, redirected output, faults, script errors and native bindings. None of this is reachable from the command line. |
+| `test/cpp/ProgramImageTest` | Reading a compiled program image back. |
+
+The scripts the language suite feeds to `mana` live in `test/mana/`; the C++
+suites and the program image they read live in `test/cpp/`.
 
 `make test` from the top of the tree runs all three.
 

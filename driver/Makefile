@@ -61,11 +61,11 @@ cppcheck:
 
 test:
 	./$(TARGET) --debug ../sample/Sample.mn -I ../sample/Function.mh
-	./$(TARGET) ../test/ProgramImageTest.mn -o ../test/ProgramImageTest.mx
-	cd ../test/ && $(MAKE) CONFIG=$(CONFIG)
-	cd ../test/ && ./ProgramImageTest ProgramImageTest.mx
-	cd ../test/ && ./EmbeddingTest
-	cd ../test/ && python3 test.py ../driver/$(TARGET)
+	./$(TARGET) ../test/cpp/ProgramImageTest.mn -o ../test/cpp/ProgramImageTest.mx
+	cd ../test/cpp/ && $(MAKE) CONFIG=$(CONFIG)
+	cd ../test/cpp/ && ./ProgramImageTest ProgramImageTest.mx
+	cd ../test/cpp/ && ./EmbeddingTest
+	cd ../test/mana/ && python3 test.py ../../driver/$(TARGET)
 
 # DO NOT DELETE
 

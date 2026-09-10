@@ -12,8 +12,8 @@ mana (test)
 @date	2026-
 */
 
-#include "../compiler/Compiler.h"
-#include "../runner/Mana.h"
+#include "../../compiler/Compiler.h"
+#include "../../runner/Mana.h"
 
 #include <cstdint>
 #include <cstdio>
