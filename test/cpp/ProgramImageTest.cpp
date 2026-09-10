@@ -5,7 +5,7 @@ mana (test)
 @date	2024-
 */
 
-#include "../runner/ProgramImage.h"
+#include "../../runner/ProgramImage.h"
 
 #include <algorithm>
 #include <cstddef>

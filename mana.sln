@@ -7,9 +7,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mana", "driver\mana.vcxproj
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "manac", "compiler\manac.vcxproj", "{7C1A9F84-2B65-4E0C-9D3A-1F6E5B0C4A21}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EmbeddingTest", "test\EmbeddingTest.vcxproj", "{3F2C8A17-5E64-4B92-A0D1-7C8B5E934F60}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EmbeddingTest", "test\cpp\EmbeddingTest.vcxproj", "{3F2C8A17-5E64-4B92-A0D1-7C8B5E934F60}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProgramImageTest", "test\ProgramImageTest.vcxproj", "{9B4D6C20-18AF-4E75-8D31-2A6F0C7B41E5}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProgramImageTest", "test\cpp\ProgramImageTest.vcxproj", "{9B4D6C20-18AF-4E75-8D31-2A6F0C7B41E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
