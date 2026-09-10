@@ -65,12 +65,12 @@ jobs:
       - name: Test the embedding interface
         run: .\${{ matrix.platform }}\${{ matrix.configuration }}\EmbeddingTest.exe
       - name: Build a program image for the reader test
-        run: .\${{ matrix.platform }}\${{ matrix.configuration }}\mana.exe test\ProgramImageTest.mn -o test\ProgramImageTest.mx
+        run: .\${{ matrix.platform }}\${{ matrix.configuration }}\mana.exe test\cpp\ProgramImageTest.mn -o test\cpp\ProgramImageTest.mx
       - name: Test the program image reader
-        run: .\${{ matrix.platform }}\${{ matrix.configuration }}\ProgramImageTest.exe test\ProgramImageTest.mx
+        run: .\${{ matrix.platform }}\${{ matrix.configuration }}\ProgramImageTest.exe test\cpp\ProgramImageTest.mx
       - name: Test the compiler
-        working-directory: ./test
-        run: ${{env.PYTHON_BIN}} test.py ../${{ matrix.platform }}/${{ matrix.configuration }}/mana.exe
+        working-directory: ./test/mana
+        run: ${{env.PYTHON_BIN}} test.py ../../${{ matrix.platform }}/${{ matrix.configuration }}/mana.exe
 
   cppcheck:
     runs-on: ubuntu-latest

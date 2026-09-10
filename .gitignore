@@ -42,6 +42,6 @@ driver/mana
 *.mx
 /sample/*.h
 /sample/*.md
-/test/*.h
-/test/*.md
+/test/**/*.h
+/test/**/*.md
 
