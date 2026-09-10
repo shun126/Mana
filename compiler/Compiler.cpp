@@ -198,31 +198,43 @@ namespace mana
 	{
 		CompileResult result;
 
-		DiagnosticBag bag(options.mSourceFilename, options.mDiagnosticHandler);
-
-		// 繰り返し呼び出せるようグローバルなエラー数を初期化します
-		yynerrs = 0;
-
+		// DiagnosticBagの構築もtryの内側に含めます。ファイル名とハンドラの
+		// 複製は確保に失敗する事があり、その例外も境界を越えさせません。
 		try
 		{
-			CompileCore(options, result);
-		}
-		catch (const std::exception& e)
-		{
-			Fatal(e.what());
+			DiagnosticBag bag(options.mSourceFilename, options.mDiagnosticHandler);
+
+			// 繰り返し呼び出せるようグローバルなエラー数を初期化します
+			yynerrs = 0;
+
+			try
+			{
+				CompileCore(options, result);
+			}
+			catch (const std::exception& e)
+			{
+				Fatal(e.what());
+			}
+			catch (...)
+			{
+				Fatal("unknown exception");
+			}
+
+			result.mSucceeded = (bag.GetErrorCount() == 0);
+			if (!result.mSucceeded)
+			{
+				result.mProgramImage.clear();
+				result.mPublicTypeDecl.clear();
+			}
+			result.mDiagnostics = bag.Release();
 		}
 		catch (...)
 		{
-			Fatal("unknown exception");
-		}
-
-		result.mSucceeded = (bag.GetErrorCount() == 0);
-		if (!result.mSucceeded)
-		{
+			// 収集先が用意できなかった場合は診断を残せません。失敗として返します。
+			result.mSucceeded = false;
 			result.mProgramImage.clear();
 			result.mPublicTypeDecl.clear();
 		}
-		result.mDiagnostics = bag.Release();
 
 		return result;
 	}
