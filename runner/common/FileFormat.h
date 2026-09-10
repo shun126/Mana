@@ -145,7 +145,7 @@ namespace mana
 		/* calculation */
 		AddInteger,								/* 37 */
 		AddAddress,								/* 38 */
-		AddArrayAddress,						/* 39 */
+		CheckArrayIndex,						/* 39 */
 		DivideInteger,							/* 3A */
 		MinusInteger,							/* 3B */
 		ModInteger,								/* 3C */
@@ -292,7 +292,7 @@ namespace mana
 				// calculation
 				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(AddInteger, 0) },
 				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(AddAddress, 0) },
-				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(AddArrayAddress, sizeof(address_t)) },
+				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(CheckArrayIndex, sizeof(address_t)) },
 				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(DivideInteger, 0) },
 				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(MinusInteger, 0) },
 				{ MANA_FILE_FORMAT_DEBUG_PARAMETER(ModInteger, 0) },

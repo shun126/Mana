@@ -1262,12 +1262,14 @@ DO_RECURSIVE:
 		case SyntaxNode::Id::Array:
 			/* variable[index] */
 			GenerateCode(node->GetRightNode(), true);
+			// 乗算の前に添字を検査します。バイト数へ変換してからでは、
+			// 大きな添字が int_t で桁あふれして検査をすり抜けます。
+			mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::CheckArrayIndex,
+				(node->GetLeftNode()->GetTypeDescriptor())->GetArraySize());
 			mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::PushSize, (node->GetTypeDescriptor())->GetMemorySize());
 			mCodeBuffer->AddOpecode(IntermediateLanguage::MultiInteger);
 			GenerateCode(node->GetLeftNode(), false);
-			// 実行時に添字を検査する為、配列全体のバイト数を渡します
-			mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::AddArrayAddress,
-				(node->GetLeftNode()->GetTypeDescriptor())->GetMemorySize());
+			mCodeBuffer->AddOpecode(IntermediateLanguage::AddAddress);
 			if (enableLoad)
 			{
 				ResolveLoad(node);
