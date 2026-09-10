@@ -11,7 +11,7 @@ CONFIG ?= Release
 CC = clang++
 CFLAGS = --std=c++17 -Wall
 ifeq ($(CONFIG),Debug)
-CFLAGS += -O0 -g
+CFLAGS += -O0 -g -D DEBUG
 else
 CFLAGS += -O2 -D NDEBUG
 endif
