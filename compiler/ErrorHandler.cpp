@@ -67,6 +67,8 @@ namespace mana
 			if (phase == DiagnosticPhase::Compile)
 			{
 				diagnostic.mFilename = lexer::GetCurrentFilename();
+				if (diagnostic.mFilename.empty() && CurrentDiagnosticBag)
+					diagnostic.mFilename = CurrentDiagnosticBag->GetTargetFilename();
 				diagnostic.mLineNo = lexer::GetCurrentLineNo();
 			}
 			else if (CurrentDiagnosticBag)
