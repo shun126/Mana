@@ -50,11 +50,11 @@ all:
 
 clean:
 	$(RM) $(TARGET) $(OBJECTS)
-	cd ../test/ && make clean
+	cd ../test/cpp/ && $(MAKE) clean
 
 depend:
 	makedepend -Y -- $(CFLAGS) -- $(SOURCES)
-	cd ../test/ && make depend
+	cd ../test/cpp/ && $(MAKE) depend
 
 cppcheck:
 	cppcheck -D __unix__ --enable=all $(SOURCES)
