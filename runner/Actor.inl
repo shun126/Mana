@@ -1516,9 +1516,10 @@ namespace mana
 		}
 		else
 		{
-			// 戻り値があるなら、スタック操作ができないので強制停止
+			// 戻り値がある未登録の外部関数は処理を継続できないため、
+			// プロセス終了ではなく、VMの例外境界でアクターを停止します。
 			if (self.HasReturnValue(lastPc))
-				std::terminate();
+				RaiseFault(__FILE__, __LINE__, { "native function with return value is not registered: ", functionName });
 		}
 
 		if (self.IsRunning())
