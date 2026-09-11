@@ -28,6 +28,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Parser.hpp" />
+    <ClInclude Include="Compiler.h" />
     <ClInclude Include="Version.h" />
     <ClInclude Include="Lexer.h" />
     <ClInclude Include="CodeBuffer.h" />
@@ -39,6 +40,7 @@
     <ClInclude Include="LocalSemanticAnalyzer.h" />
     <ClInclude Include="Path.h" />
     <ClInclude Include="SemanticAnalyzer.h" />
+    <ClInclude Include="SourceResolver.h" />
     <ClInclude Include="StringPool.h" />
     <ClInclude Include="SymbolFactory.h" />
     <ClInclude Include="SyntaxNode.h" />
@@ -95,7 +97,9 @@
     <ClInclude Include="..\runner\common\FileFormat.h">
       <Filter>runner\common</Filter>
     </ClInclude>
-    <ClInclude Include="Main.h" />
+    <ClInclude Include="..\runner\common\Fault.h">
+      <Filter>runner\common</Filter>
+    </ClInclude>
     <ClInclude Include="NamespaceRegistry.h" />
     <ClInclude Include="ParsingDriver.h" />
     <ClInclude Include="Symbol.h" />
@@ -107,11 +111,9 @@
     <ClInclude Include="..\runner\Event.h">
       <Filter>runner</Filter>
     </ClInclude>
-    <ClInclude Include="..\runner\Log.h">
-      <Filter>runner</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Compiler.cpp" />
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="Lexer.cpp" />
     <ClCompile Include="ErrorHandler.cpp" />
@@ -119,11 +121,11 @@
     <ClCompile Include="LocalSemanticAnalyzer.cpp" />
     <ClCompile Include="Path.cpp" />
     <ClCompile Include="SemanticAnalyzer.cpp" />
+    <ClCompile Include="SourceResolver.cpp" />
     <ClCompile Include="SymbolFactory.cpp" />
     <ClCompile Include="SyntaxNode.cpp" />
     <ClCompile Include="TypeDescriptor.cpp" />
     <ClCompile Include="TypeDescriptorFactory.cpp" />
-    <ClCompile Include="Main.cpp" />
     <ClCompile Include="NamespaceRegistry.cpp" />
     <ClCompile Include="DataBuffer.cpp" />
     <ClCompile Include="CodeBuffer.cpp" />

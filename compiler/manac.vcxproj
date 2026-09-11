@@ -19,31 +19,31 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{B50EF429-D756-4CAC-8B79-9757BDAF66D3}</ProjectGuid>
+    <ProjectGuid>{7C1A9F84-2B65-4E0C-9D3A-1F6E5B0C4A21}</ProjectGuid>
     <RootNamespace>mana</RootNamespace>
     <Keyword>Win32Proj</Keyword>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -401,6 +401,7 @@
     <ClInclude Include="..\runner\Buffer.h" />
     <ClInclude Include="..\runner\common\Assert.h" />
     <ClInclude Include="..\runner\common\FileFormat.h" />
+    <ClInclude Include="..\runner\common\Fault.h" />
     <ClInclude Include="..\runner\common\Math.h" />
     <ClInclude Include="..\runner\common\Memory.h" />
     <ClInclude Include="..\runner\common\Noncopyable.h" />
@@ -412,13 +413,13 @@
     <ClInclude Include="..\runner\common\Type.h" />
     <ClInclude Include="..\runner\Event.h" />
     <ClInclude Include="..\runner\Function.h" />
-    <ClInclude Include="..\runner\Log.h" />
     <ClInclude Include="..\runner\Mana.h" />
     <ClInclude Include="..\runner\Plugin.h" />
     <ClInclude Include="..\runner\Stack.h" />
     <ClInclude Include="..\runner\VM.h" />
     <ClInclude Include="CodeBuffer.h" />
     <ClInclude Include="CodeGenerator.h" />
+    <ClInclude Include="Compiler.h" />
     <ClInclude Include="DataBuffer.h" />
     <ClInclude Include="ErrorHandler.h" />
     <ClInclude Include="GlobalAddressResolver.h" />
@@ -427,12 +428,12 @@
     <ClInclude Include="Lexer.h" />
     <ClInclude Include="LocalAddressResolver.h" />
     <ClInclude Include="LocalSemanticAnalyzer.h" />
-    <ClInclude Include="Main.h" />
     <ClInclude Include="NamespaceRegistry.h" />
     <ClInclude Include="Parser.hpp" />
     <ClInclude Include="ParsingDriver.h" />
     <ClInclude Include="Path.h" />
     <ClInclude Include="SemanticAnalyzer.h" />
+    <ClInclude Include="SourceResolver.h" />
     <ClInclude Include="StringPool.h" />
     <ClInclude Include="Symbol.h" />
     <ClInclude Include="SymbolFactory.h" />
@@ -443,6 +444,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CodeBuffer.cpp" />
+    <ClCompile Include="Compiler.cpp" />
     <ClCompile Include="CodeGenerator.cpp" />
     <ClCompile Include="DataBuffer.cpp" />
     <ClCompile Include="ErrorHandler.cpp" />
@@ -457,12 +459,12 @@
     </ClCompile>
     <ClCompile Include="LocalAddressResolver.cpp" />
     <ClCompile Include="LocalSemanticAnalyzer.cpp" />
-    <ClCompile Include="Main.cpp" />
     <ClCompile Include="NamespaceRegistry.cpp" />
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="ParsingDriver.cpp" />
     <ClCompile Include="Path.cpp" />
     <ClCompile Include="SemanticAnalyzer.cpp" />
+    <ClCompile Include="SourceResolver.cpp" />
     <ClCompile Include="StringPool.cpp" />
     <ClCompile Include="Symbol.cpp" />
     <ClCompile Include="SymbolFactory.cpp" />

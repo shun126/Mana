@@ -123,4 +123,17 @@ namespace mana
 		return ::chdir(path);
 #endif
 	}
+	std::string getcurrentdirectory()
+	{
+		char path[_MAX_PATH];
+#if defined(MANA_TARGET_WINDOWS)
+		if (_getcwd(path, static_cast<int>(sizeof(path))) == nullptr)
+#else
+		if (::getcwd(path, sizeof(path)) == nullptr)
+#endif
+		{
+			return std::string();
+		}
+		return std::string(path);
+	}
 }

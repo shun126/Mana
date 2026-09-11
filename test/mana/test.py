@@ -17,7 +17,7 @@ cwd = os.getcwd()
 print("pwd:" + cwd)
 
 if len(sys.argv) < 2:
-	MANA = '../compiler/mana'
+	MANA = '../../driver/mana'
 else:
 	MANA = sys.argv[1]
 
@@ -71,6 +71,29 @@ def fail(argument, error_message):
 		Result += 1
 
 ################################################################################
+def output(argument, *expected_messages):
+	print('output test: ' + MANA + ' ' + argument, end='')
+	command = [MANA, argument]
+	cp = subprocess.run(command, capture_output=True, text=True, errors="ignore")
+	missing = [m for m in expected_messages if m not in cp.stdout and m not in cp.stderr]
+	if cp.returncode == 0 and not missing:
+		print(" ... Success")
+	else:
+		print(" ... Failed")
+		if cp.returncode < 0:
+			print(f"Process killed by signal {-cp.returncode}")
+		else:
+			print(f"Process exited with code {cp.returncode}")
+		for m in missing:
+			print(f"missing output: {m}")
+		print('stdout :')
+		print(cp.stdout)
+		print('stderr :')
+		print(cp.stderr)
+		global Result
+		Result += 1
+
+################################################################################
 success('--copyright')
 success('--version')
 success('--help')
@@ -111,5 +134,8 @@ success('TestUsingScopeOrder.mn')
 success('TestUsingSymbol.mn')
 success('TestVariable01.mn')
 success('TestVariable02.mn')
+output('TestAddressArithmetic.mn', 'field 11 22 33', 'array 100 200 400', 'copy 11 22 33')
+output('TestRuntimeDivideByZero.mn', 'before 10', 'script error: division by zero')
+output('TestRuntimeSubscriptRange.mn', 'before 1', 'script error: subscript out of range')
 ################################################################################
 exit(Result)

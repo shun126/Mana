@@ -15,6 +15,7 @@ mana (compiler)
 #include "SyntaxNode.h"
 #include "TypeDescriptorFactory.h"
 #include <algorithm>
+#include <ostream>
 #include <string_view>
 #include <vector>
 
@@ -98,7 +99,7 @@ namespace mana
 			}
 		}
 
-		void WriteArraySuffix(std::ofstream& output, const std::vector<address_t>& sizes)
+		void WriteArraySuffix(std::ostream& output, const std::vector<address_t>& sizes)
 		{
 			for (address_t size : sizes)
 			{
@@ -518,7 +519,7 @@ TODO:
 
 
 
-	void SymbolFactory::Dump(std::ofstream& output) const
+	void SymbolFactory::Dump(std::ostream& output) const
 	{
 		for(const std::shared_ptr<Symbol>& symbol : mSymbolEntries)
 		{
@@ -527,7 +528,7 @@ TODO:
 		}
 	}
 
-	void SymbolFactory::DumpFunctionNameFromAddress(std::ofstream& output, const int32_t address) const
+	void SymbolFactory::DumpFunctionNameFromAddress(std::ostream& output, const int32_t address) const
 	{
 		for (const std::shared_ptr<Symbol>& symbol : mSymbolEntries)
 		{
@@ -581,7 +582,7 @@ TODO:
 		}
 	}
 
-	void SymbolFactory::WritePublicTypeDecl(std::ofstream& output) const
+	void SymbolFactory::WritePublicTypeDecl(std::ostream& output) const
 	{
 		std::vector<std::string_view> currentNamespaces;
 		std::vector<std::string_view> nextNamespaces;
@@ -980,8 +981,9 @@ TODO:
 				// TODO: symbol_open_actor_register_member((const std::shared_ptr<Symbol>&)type->component);
 			}
 
-			// instance変数サイズの再計算
-			mActorMemoryAddress = symbol->GetTypeDescriptor() ? symbol->GetTypeDescriptor()->GetMemorySize() : 0;
+			// メンバは同じ宣言から割り当て直されるので、先頭から数え直します。
+			// 型のサイズから数え始めると、構造体のサイズだけ後ろへずれた位置を指します。
+			mActorMemoryAddress = 0;
 
 			// 現在開いている型を記録
 			mBlockTypeDescriptor.push(type);
