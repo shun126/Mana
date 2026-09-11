@@ -189,6 +189,7 @@ namespace mana
 		static void CommandPushChar(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandPushShort(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandPushInteger(const std::shared_ptr<VM>& vm, Actor& self);
+		static void CommandPushSize(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandPushFloat(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandPushString(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandPushPriority(const std::shared_ptr<VM>& vm, Actor& self);
@@ -232,6 +233,8 @@ namespace mana
 		static void CommandReturnFromAction(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandRollback(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandAddInteger(const std::shared_ptr<VM>& vm, Actor& self);
+		static void CommandAddAddress(const std::shared_ptr<VM>& vm, Actor& self);
+		static void CommandCheckArrayIndex(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandAddFloat(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandDivideInteger(const std::shared_ptr<VM>& vm, Actor& self);
 		static void CommandDivideFloat(const std::shared_ptr<VM>& vm, Actor& self);
@@ -288,10 +291,10 @@ namespace mana
 		return;											\
 }
 //! initアクション中ならばreturnします
-#define MANA_ASSERT_ILLIGAL_CALL_IN_INIT_ACTION(P) {	\
-	if(P->GetVirtualMachine()->IsInInitAction()){		\
+#define MANA_ASSERT_CANT_CALL_IN_INIT_ACTION(P)			\
+	if((P)->GetVirtualMachine()->IsInInitAction()){		\
 		return;											\
-}
+	}
 #else
 //! 引数の数を調べ、一致しない場合は警告を表示してreturnします
 #define MANA_ASSERT_PARAMETER(P, I)	\

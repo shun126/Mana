@@ -8,6 +8,7 @@ mana (compiler)
 #pragma once
 #include "../runner/common/Platform.h"
 #include <array>
+#include <iosfwd>
 #include <memory>
 #include <string>
 #include <string_view>
@@ -100,7 +101,7 @@ namespace mana
 		[[nodiscard]] const std::shared_ptr<Symbol>& GetParent() const;
 		void SetParent(const std::shared_ptr<Symbol>& parent);
 
-		void Dump(std::ofstream& output) const;
+		void Dump(std::ostream& output) const;
 
 	private:
 		void SetTypeDescriptor(const std::shared_ptr<TypeDescriptor>& component);

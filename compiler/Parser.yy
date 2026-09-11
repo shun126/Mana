@@ -44,13 +44,11 @@ mana (compiler)
 	#include "../runner/common/Setup.h"
 	#include "ErrorHandler.h"
 	#include "Lexer.h"
-	#include "Main.h"
 	#include "ParsingDriver.h"
 	#include "Symbol.h"
 	#include "SyntaxNode.h"
 	#include "TypeDescriptor.h"
 
-#include "Main.h"
 #include "CodeGenerator.h"
 #include "GlobalAddressResolver.h"
 #include "GlobalSemanticAnalyzer.h"

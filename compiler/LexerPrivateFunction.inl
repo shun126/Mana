@@ -10,8 +10,9 @@ mana (compiler)
 
 namespace mana
 {
-	inline Lexer::Lexer(const std::shared_ptr<mana::ParsingDriver>& parsingDriver)
+	inline Lexer::Lexer(const std::shared_ptr<mana::ParsingDriver>& parsingDriver, const std::shared_ptr<SourceResolver>& sourceResolver)
 		: mParsingDriver(parsingDriver)
+		, mSourceResolver(sourceResolver)
 	{
 	}
 
@@ -24,45 +25,53 @@ namespace mana
 		}
 	}
 
+	/*!
+	改行コードを LF へ揃えます
+
+	字句解析器の規則は CR を扱わないため、読み込んだ時点で取り除きます。
+	*/
+	inline void Lexer::NormalizeNewlines(std::string& text)
+	{
+		size_t write = 0;
+		for (size_t read = 0; read < text.size(); ++read)
+		{
+			if (text[read] == '\r')
+			{
+				// CRLF の CR は捨て、単独の CR は LF に読み替えます
+				if (read + 1 < text.size() && text[read + 1] == '\n')
+					continue;
+				text[write++] = '\n';
+			}
+			else
+			{
+				text[write++] = text[read];
+			}
+		}
+		text.resize(write);
+	}
+
 	inline bool Lexer::Open(const std::string_view& filename, const bool check)
 	{
-		char path[_MAX_PATH];
-		char drive[_MAX_DRIVE];
-		char dir[_MAX_DIR];
-		char fname[_MAX_FNAME];
-		char ext[_MAX_EXT];
-
-		if (mana::fullpath(path, filename.data(), _MAX_PATH) == nullptr)
+		const std::string path = mSourceResolver->Resolve(mCurrentPath, filename);
+		if (path.empty())
 		{
-			if (mCurrentPath.empty())
-				mana::CompileError({ "unable to open \"", path, "\"" });
-			else
-				mana::Trace({ "unable to open \"", path, "\"\n"});
+			mana::CompileError({ "unable to open \"", filename, "\"" });
 			return false;
 		}
 
-		const std::string_view pathPtr = mParsingDriver->GetStringPool()->Set(path);
-
-		if (check == true && LexerInstance->IsOpened(path) == false)
+		if (check == true && IsOpened(path) == false)
+		{
+			// import は同じソースを二度読み込みません
 			return true;
+		}
 
-#if defined(__STDC_WANT_SECURE_LIB__)
-		if (fopen_s(&yyin, path, "rt") != 0)
-#else
-		if ((yyin = fopen(path, "rt")) == NULL)
-#endif
+		std::string text;
+		if (!mSourceResolver->Read(path, text))
 		{
-			const std::string message = Concat({ "unable to open \"", pathPtr, "\"\n" });
-			if (mCurrentPath.empty())
-			{
-				mana::CompileError(message);
-			}
-			else
-			{
-				MANA_PRINT(message.c_str());
-			}
+			mana::CompileError({ "unable to open \"", path, "\"" });
 			return false;
 		}
+		NormalizeNewlines(text);
 
 		// save lineno
 		if (!mContext.empty())
@@ -70,27 +79,26 @@ namespace mana
 			mContext.top()->mLineNo = yylineno;
 		}
 
-		// switch!
-		YY_BUFFER_STATE newBufferState = yy_create_buffer(yyin, YY_BUF_SIZE);
-		yy_switch_to_buffer(newBufferState);
-		mCurrentPath = pathPtr;
+		// switch! yy_scan_bytes は内容を複製して現在のバッファを切り替えます
+		YY_BUFFER_STATE newBufferState = yy_scan_bytes(text.data(), static_cast<int>(text.size()));
+		if (newBufferState == nullptr)
+		{
+			mana::FatalNoMemory();
+			return false;
+		}
+		mCurrentPath = path;
 		yylineno = 1;
 
 		std::unique_ptr<Context> nextContext = std::make_unique<Context>();
 		nextContext->mBufferState = newBufferState;
-		nextContext->mPath = pathPtr;
+		nextContext->mPath = path;
 		nextContext->mLineNo = yylineno;
 		mContext.push(std::move(nextContext));
-
-		// set currect directory
-		mana::splitpath(path, drive, sizeof(drive), dir, sizeof(dir), fname, sizeof(fname), ext, sizeof(ext));
-		mana::makepath(path, sizeof(path), drive, dir, "", "");
-		mana::chdir(path);
 
 		return true;
 	}
 
-	inline bool Lexer::IsOpened(const std::string_view& path)
+	inline bool Lexer::IsOpened(const std::string& path)
 	{
 		if (mPathSet.find(path) == mPathSet.end())
 		{
@@ -105,29 +113,19 @@ namespace mana
 
 	inline bool Lexer::Close()
 	{
-		char path[_MAX_PATH];
-		char drive[_MAX_DRIVE];
-		char dir[_MAX_DIR];
-		char fname[_MAX_FNAME];
-		char ext[_MAX_EXT];
-
 		yy_delete_buffer(YY_CURRENT_BUFFER);
 		mContext.pop();
 
 		if (mContext.empty())
 		{
+			mCurrentPath.clear();
 			return true;
 		}
 		else
 		{
 			yy_switch_to_buffer(mContext.top()->mBufferState);
 			mCurrentPath = mContext.top()->mPath;
-			yylineno = mContext.top()->mLineNo;
-
-			// set currect directory
-			mana::splitpath(mCurrentPath.data(), drive, sizeof(drive), dir, sizeof(dir), fname, sizeof(fname), ext, sizeof(ext));
-			mana::makepath(path, sizeof(path), drive, dir, "", "");
-			mana::chdir(path);
+			yylineno = static_cast<int>(mContext.top()->mLineNo);
 
 			return false;
 		}

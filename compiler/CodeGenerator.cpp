@@ -10,6 +10,7 @@ mana (compiler)
 #include "IntermediateLanguage.h"
 #include "Symbol.h"
 #include "TypeDescriptor.h"
+#include <ostream>
 #include <vector>
 
 namespace mana
@@ -1261,10 +1262,14 @@ DO_RECURSIVE:
 		case SyntaxNode::Id::Array:
 			/* variable[index] */
 			GenerateCode(node->GetRightNode(), true);
+			// 乗算の前に添字を検査します。バイト数へ変換してからでは、
+			// 大きな添字が int_t で桁あふれして検査をすり抜けます。
+			mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::CheckArrayIndex,
+				(node->GetLeftNode()->GetTypeDescriptor())->GetArraySize());
 			mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::PushSize, (node->GetTypeDescriptor())->GetMemorySize());
 			mCodeBuffer->AddOpecode(IntermediateLanguage::MultiInteger);
 			GenerateCode(node->GetLeftNode(), false);
-			mCodeBuffer->AddOpecode(IntermediateLanguage::AddInteger);
+			mCodeBuffer->AddOpecode(IntermediateLanguage::AddAddress);
 			if (enableLoad)
 			{
 				ResolveLoad(node);
@@ -1496,7 +1501,7 @@ DO_RECURSIVE:
 									// variable.member
 									mCodeBuffer->AddOpecodeAndOperand(IntermediateLanguage::PushSize, symbol->GetAddress());
 									GenerateCode(node->GetLeftNode(), loadReference ? true : false);
-									mCodeBuffer->AddOpecode(IntermediateLanguage::AddInteger);
+									mCodeBuffer->AddOpecode(IntermediateLanguage::AddAddress);
 									if (enableLoad)
 										ResolveLoad(node);
 									goto ESCAPE;
@@ -1646,7 +1651,7 @@ DO_RECURSIVE:
 		return mLocalAddressResolver;
 	}
 
-	void CodeGenerator::Dump(std::ofstream& output) const
+	void CodeGenerator::Dump(std::ostream& output) const
 	{
 		const auto codeBuffer = mCodeBuffer->Copy();
 		if (codeBuffer)

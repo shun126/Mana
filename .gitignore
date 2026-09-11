@@ -13,7 +13,7 @@
 *.exe
 *.lib
 *.a
-compiler/mana
+driver/mana
 
 # Visual Studio cache/options directory
 .vs/
@@ -42,6 +42,6 @@ compiler/mana
 *.mx
 /sample/*.h
 /sample/*.md
-/test/*.h
-/test/*.md
+/test/**/*.h
+/test/**/*.md
 
