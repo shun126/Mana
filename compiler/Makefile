@@ -76,6 +76,11 @@ $(LIBRARY): $(SOURCES) $(PARSER) $(LEXER) $(SECOUND) $(OBJECTS)
 .yy.cpp:
 	$(YACC) $(YFLAGS) -o $@ $<
 
+# Bison は Parser.cpp と Parser.hpp を同時に生成します。
+# Parser.hpp を Parser.cpp の生成結果として扱うことで、clean 後の並列ビルドでも
+# ヘッダーだけが先に必要とされて生成規則が見つからない競合を防ぎます。
+Parser.hpp: Parser.cpp
+
 .l.cpp:
 	$(LEX) $(LXFLAGS) -o$@ $<
 
@@ -192,8 +197,7 @@ LocalSemanticAnalyzer.o: LocalSemanticAnalyzer.h SemanticAnalyzer.h
 LocalSemanticAnalyzer.o: ../runner/common/Setup.h ../runner/common/Platform.h
 LocalSemanticAnalyzer.o: ../runner/common/Type.h ../runner/common/Assert.h
 LocalSemanticAnalyzer.o: ../runner/common/String.h
-LocalSemanticAnalyzer.o: ../runner/common/FileFormat.h
-LocalSemanticAnalyzer.o: ../runner/common/Math.h
+LocalSemanticAnalyzer.o: ../runner/common/FileFormat.h ../runner/common/Math.h
 LocalSemanticAnalyzer.o: ../runner/common/Noncopyable.h
 LocalSemanticAnalyzer.o: ../runner/common/Memory.h
 LocalSemanticAnalyzer.o: ../runner/common/OutputStream.h
