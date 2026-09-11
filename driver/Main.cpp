@@ -130,9 +130,12 @@ namespace mana
 			if (!result.mSucceeded)
 			{
 				if (!commandLine.mOutputFilename.empty())
-				{
 					std::remove(commandLine.mOutputFilename.c_str());
-				}
+				if (!commandLine.mPublicTypeDeclFilename.empty())
+					std::remove(commandLine.mPublicTypeDeclFilename.c_str());
+				// 新しいダンプが生成されなかった場合だけ、前回成功時の古いダンプを残さないようにします。
+				if (!commandLine.mDumpFilename.empty() && result.mDump.empty())
+					std::remove(commandLine.mDumpFilename.c_str());
 				return 1;
 			}
 
