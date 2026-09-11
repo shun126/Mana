@@ -257,7 +257,6 @@ namespace mana
 		{
 			Execute([]() {});
 		}
-
 		RequestAll(1, "init", nullptr);
 		RequestAll(0, "main", nullptr);
 	}
@@ -307,6 +306,14 @@ namespace mana
 
 	inline bool VM::RunActor(const std::shared_ptr<Actor>& actor)
 	{
+		// 例外の原因が優先度変更コールバックの場合、Halt() から同じコールバックを
+		// 再度呼び出さないよう、例外停止時は通知を抑止してアクターを停止します。
+		const auto haltAfterFault = [&actor]()
+		{
+			actor->mInterruptPriority = Actor::LowestInterruptPriority;
+			actor->Halt();
+		};
+
 		try
 		{
 			return actor->Run();
@@ -315,14 +322,20 @@ namespace mana
 		{
 			// スクリプトの誤り。停止したアクターは以後実行されません。
 			Trace(TraceLevel::Error, { "mana: actor ", actor->GetName(), " halted: script error: ", e.what(), "\n" });
-			actor->Halt();
+			haltAfterFault();
 			return false;
 		}
 		catch (const std::exception& e)
 		{
-			// manaの不具合。他のアクターは動き続けます。
+			// manaの不具合やホスト側コールバックの例外。他のアクターは動き続けます。
 			Trace(TraceLevel::Error, { "mana: actor ", actor->GetName(), " halted: ", e.what(), "\n" });
-			actor->Halt();
+			haltAfterFault();
+			return false;
+		}
+		catch (...)
+		{
+			Trace(TraceLevel::Error, { "mana: actor ", actor->GetName(), " halted: unknown exception\n" });
+			haltAfterFault();
 			return false;
 		}
 	}
