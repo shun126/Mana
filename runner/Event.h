@@ -7,6 +7,7 @@ mana (library)
 
 #pragma once
 #include "common/Setup.h"
+#include <exception>
 #include <functional>
 #include <map>
 
@@ -46,7 +47,34 @@ namespace mana
 		{
 			for (const auto& function : mFunction)
 			{
-				function.second(arguments...);
+				// Event callbacks belong to the host application. A callback failure must not
+				// escape the mana runtime boundary or be invoked again from fault cleanup.
+				try
+				{
+					function.second(arguments...);
+				}
+				catch (const std::exception& e)
+				{
+					try
+					{
+						Trace(TraceLevel::Error, { "mana: event callback threw and was ignored: ", e.what(), "\n" });
+					}
+					catch (...)
+					{
+						// Trace handlers are host callbacks too; never let a reporting failure escape.
+					}
+				}
+				catch (...)
+				{
+					try
+					{
+						Trace(TraceLevel::Error, "mana: event callback threw and was ignored\n");
+					}
+					catch (...)
+					{
+						// Trace handlers are host callbacks too; never let a reporting failure escape.
+					}
+				}
 			}
 		}
 

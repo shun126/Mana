@@ -3,31 +3,41 @@ on: [push]
 jobs:
   BuildOnUbuntu:
     runs-on: ubuntu-latest
+    # DebugとReleaseの両方を回します。表明はReleaseのNDEBUGで消えるので、
+    # Releaseだけでは不変条件が壊れるバグを取り逃します。
+    strategy:
+      fail-fast: false
+      matrix:
+        configuration: [Debug, Release]
     steps:
-      - run: echo "The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-      - name: Install dependencies
-        run: sudo apt update
       - name: Check out repository code
-        uses: actions/checkout@v3
-      - run: echo "The ${{ github.repository }} repository has been cloned to the runner."
+        uses: actions/checkout@v4
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y bison flex clang make python3
       - name: Generate Mana version infomation
         run: make --directory=${{ github.workspace }}/compiler version
       - name: Build Mana compiler
-        run: make --directory=${{ github.workspace }}/compiler
+        run: make --directory=${{ github.workspace }} CONFIG=${{ matrix.configuration }}
       - name: Test Mana compiler
-        run: make --directory=${{ github.workspace }}/compiler test
+        run: make --directory=${{ github.workspace }} CONFIG=${{ matrix.configuration }} test
+
   BuildOnWindows:
     runs-on: windows-latest
+    # 32ビットと64ビット、デバッグとリリースの4通りを必ず回します。
+    # ポインタ幅に依存する不具合と、表明が有効な構成でしか出ない不具合を
+    # 取り逃がさない為です。
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [x64, Win32]
+        configuration: [Debug, Release]
     steps:
-      - run: echo "The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
       - name: Add MSBuild to PATH
-        uses: microsoft/setup-msbuild@v1.0.2
+        uses: microsoft/setup-msbuild@v2
       - name: Set up Cygwin
-        uses: egor-tensin/setup-cygwin@v3
+        uses: egor-tensin/setup-cygwin@v4
         with:
           platform: x64
           packages: bison flex python3 make clang
@@ -35,30 +45,37 @@ jobs:
         run: |
           echo "GNU_BISON_BIN=C:\tools\cygwin\bin\bison.exe" >> $env:GITHUB_ENV
           echo "GNU_FLEX_BIN=C:\tools\cygwin\bin\flex.exe" >> $env:GITHUB_ENV
-          echo "PYTHON_BIN=C:\tools\cygwin\bin\python3.9.exe" >> $env:GITHUB_ENV
-          echo $env:GNU_BISON_BIN
-          echo $env:GNU_FLEX_BIN
-          echo $env:PYTHON_BIN
+          # cygwinのpython3パッケージが指す既定バージョンは更新され得るので、
+          # python3.9 のように固定せず実際に入っている実行ファイルを探します。
+          $python = Get-ChildItem -Path C:\tools\cygwin\bin -Filter "python3.*.exe" |
+            Where-Object { $_.BaseName -match '^python3\.\d+$' } |
+            Sort-Object Name -Descending |
+            Select-Object -First 1
+          if (-not $python) {
+            throw "python3.x.exe not found under C:\tools\cygwin\bin"
+          }
+          echo "PYTHON_BIN=$($python.FullName)" >> $env:GITHUB_ENV
       - name: Check out repository code
-        uses: actions/checkout@v2
-      - run: echo "The ${{ github.repository }} repository has been cloned to the runner."
+        uses: actions/checkout@v4
       - name: Generate Mana version infomation
         working-directory: ./compiler
         run: ${{env.PYTHON_BIN}} Version.py
-      - name: Build Mana 64bit compiler
-        run: msbuild mana.sln /t:build /p:Configuration=Release /p:Platform=x64
-      - name: Test Mana 64bit compiler
-        working-directory: ./test
-        run: ${{env.PYTHON_BIN}} test.py ../x64/Release/mana.exe
-      - name: Build Mana 32bit compiler
-        run: msbuild mana.sln /t:build /p:Configuration=Release /p:Platform=Win32
-      - name: Test Mana 32bit compiler
-        working-directory: ./test
-        run: ${{env.PYTHON_BIN}} test.py ../Win32/Release/mana.exe
+      - name: Build
+        run: msbuild mana.sln /t:build /p:Configuration=${{ matrix.configuration }} /p:Platform=${{ matrix.platform }}
+      - name: Test the embedding interface
+        run: .\${{ matrix.platform }}\${{ matrix.configuration }}\EmbeddingTest.exe
+      - name: Build a program image for the reader test
+        run: .\${{ matrix.platform }}\${{ matrix.configuration }}\mana.exe test\cpp\ProgramImageTest.mn -o test\cpp\ProgramImageTest.mx
+      - name: Test the program image reader
+        run: .\${{ matrix.platform }}\${{ matrix.configuration }}\ProgramImageTest.exe test\cpp\ProgramImageTest.mx
+      - name: Test the compiler
+        working-directory: ./test/mana
+        run: ${{env.PYTHON_BIN}} test.py ../../${{ matrix.platform }}/${{ matrix.configuration }}/mana.exe
+
   cppcheck:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: cppcheck
         uses: deep5050/cppcheck-action@main
         with:

@@ -8,6 +8,7 @@ mana (compiler)
 #pragma once
 #include "../runner/common/Setup.h"
 #include <memory>
+#include <iosfwd>
 
 namespace mana
 {
@@ -161,7 +162,7 @@ namespace mana
 
 		std::shared_ptr<SyntaxNode> Cast(const std::shared_ptr<TypeDescriptor>& type, const std::shared_ptr<TypeDescriptorFactory>& typeDescriptorFactory);
 
-		void Dump(std::ofstream& output) const;
+		void Dump(std::ostream& output) const;
 
 	private:
 		SyntaxNode() = default;
@@ -169,7 +170,7 @@ namespace mana
 		std::shared_ptr<SyntaxNode> CreateCast(const std::shared_ptr<TypeDescriptor>& type, const std::shared_ptr<TypeDescriptorFactory>& typeDescriptorFactory);
 
 		std::string GetMagic() const;
-		void DumpRecursive(std::ofstream& output) const;
+		void DumpRecursive(std::ostream& output) const;
 
 #if defined(MANA_MEMORY_LEAK_ANALYSIS)
 		char mMagicName[8];

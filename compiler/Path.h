@@ -7,6 +7,7 @@ mana (compiler)
 
 #pragma once
 #include "../runner/common/Setup.h"
+#include <string>
 #if defined(MANA_TARGET_WINDOWS)
 #endif
 
@@ -51,6 +52,12 @@ namespace mana
 	change working directory
 	*/
 	extern int chdir(const char* path);
+
+	/*!
+	return current working directory
+	@return	現在の作業ディレクトリ。取得に失敗した場合は空文字列
+	*/
+	extern std::string getcurrentdirectory();
 
 	/*!
 	return path separator charactor

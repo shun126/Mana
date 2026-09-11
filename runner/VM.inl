@@ -305,6 +305,28 @@ namespace mana
 		mFrameCounter = 0;
 	}
 
+	inline bool VM::RunActor(const std::shared_ptr<Actor>& actor)
+	{
+		try
+		{
+			return actor->Run();
+		}
+		catch (const ScriptError& e)
+		{
+			// スクリプトの誤り。停止したアクターは以後実行されません。
+			Trace(TraceLevel::Error, { "mana: actor ", actor->GetName(), " halted: script error: ", e.what(), "\n" });
+			actor->Halt();
+			return false;
+		}
+		catch (const std::exception& e)
+		{
+			// manaの不具合。他のアクターは動き続けます。
+			Trace(TraceLevel::Error, { "mana: actor ", actor->GetName(), " halted: ", e.what(), "\n" });
+			actor->Halt();
+			return false;
+		}
+	}
+
 	inline bool VM::Run()
 	{
 		bool running = false;
@@ -314,7 +336,7 @@ namespace mana
 
 		for (auto& actor : mActors)
 		{
-			running |= actor.second->Run();
+			running |= RunActor(actor.second);
 		}
 
 		mFlag.reset(Flag::FrameChanged);
@@ -326,7 +348,7 @@ namespace mana
 			{
 				if (actor.second->mFlag[Flag::Requested])
 				{
-					running |= actor.second->Run();
+					running |= RunActor(actor.second);
 				}
 			}
 		}
@@ -547,8 +569,8 @@ namespace mana
 	inline int32_t VM::GetOpecode(const uint32_t address) const
 	{
 		MANA_ASSERT(address != Nil);
-		int32_t opecode = mInstructionPool[address];
 		MANA_ASSERT(address < mFileHeader->mSizeOfInstructionPool);
+		int32_t opecode = mInstructionPool[address];
 		MANA_ASSERT(opecode >= 0 && opecode < IntermediateLanguageSize);
 		return opecode;
 	}

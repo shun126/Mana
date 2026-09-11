@@ -15,11 +15,11 @@ namespace mana
 {
 	namespace lexer
 	{
-		extern bool Initialize(const std::shared_ptr<mana::ParsingDriver>& parsingDriver, const std::string_view& filename)
+		extern bool Initialize(const std::shared_ptr<mana::ParsingDriver>& parsingDriver, const std::shared_ptr<SourceResolver>& sourceResolver, const std::string_view& filename)
 		{
 			if (LexerInstance == nullptr)
 			{
-				LexerInstance = std::make_shared<Lexer>(parsingDriver);
+				LexerInstance = std::make_shared<Lexer>(parsingDriver, sourceResolver);
 				yylineno = 1;
 			}
 			return LexerInstance->Open(filename, true);
@@ -46,7 +46,9 @@ namespace mana
 
 		extern const std::string& GetCurrentFilename()
 		{
-			return LexerInstance->GetCurrentFilename();
+			// 字句解析の開始前・終了後にも診断が報告されるため空文字列を返します
+			static const std::string empty;
+			return LexerInstance ? LexerInstance->GetCurrentFilename() : empty;
 		}
 
 		extern void SetCurrentFilename(const std::string& filename)

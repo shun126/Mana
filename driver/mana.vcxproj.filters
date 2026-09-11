@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="..\compiler\Version.h" />
+    <ClInclude Include="..\compiler\Compiler.h" />
+    <ClInclude Include="..\compiler\ErrorHandler.h" />
+    <ClInclude Include="..\compiler\Path.h" />
+    <ClInclude Include="..\runner\Function.h">
+      <Filter>runner</Filter>
+    </ClInclude>
+    <ClInclude Include="..\runner\Mana.h">
+      <Filter>runner</Filter>
+    </ClInclude>
+    <ClInclude Include="..\runner\Plugin.h">
+      <Filter>runner</Filter>
+    </ClInclude>
+    <ClInclude Include="..\runner\Stack.h">
+      <Filter>runner</Filter>
+    </ClInclude>
+    <ClInclude Include="..\runner\VM.h">
+      <Filter>runner</Filter>
+    </ClInclude>
+    <ClInclude Include="..\runner\Actor.h">
+      <Filter>runner</Filter>
+    </ClInclude>
+    <ClInclude Include="..\runner\Buffer.h">
+      <Filter>runner</Filter>
+    </ClInclude>
+    <ClInclude Include="..\runner\common\Math.h">
+      <Filter>runner\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\runner\common\Memory.h">
+      <Filter>runner\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\runner\common\Noncopyable.h">
+      <Filter>runner\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\runner\common\OutputStream.h">
+      <Filter>runner\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\runner\common\Platform.h">
+      <Filter>runner\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\runner\common\Setup.h">
+      <Filter>runner\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\runner\common\Stopwatch.h">
+      <Filter>runner\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\runner\common\String.h">
+      <Filter>runner\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\runner\common\Assert.h">
+      <Filter>runner\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\runner\common\FileFormat.h">
+      <Filter>runner\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\runner\common\Fault.h">
+      <Filter>runner\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\runner\common\Type.h">
+      <Filter>runner\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\runner\Event.h">
+      <Filter>runner</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="runner">
+      <UniqueIdentifier>{090657a0-57bb-4a4f-ab1f-d9d6ba0552a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="runner\common">
+      <UniqueIdentifier>{20aa3323-a5f3-4e58-a6e4-81a69bde64d1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

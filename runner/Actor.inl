@@ -6,6 +6,7 @@ mana (library)
 */
 
 #pragma once
+#include <limits>
 #include "VM.h"
 #include "common/FileFormat.h"
 
@@ -87,7 +88,7 @@ namespace mana
 			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PushChar, &CommandPushChar),
 			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PushShort, &CommandPushShort),
 			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PushInteger, &CommandPushInteger),
-			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PushSize, &CommandPushInteger),	// TODO:サイズに対応して下さい
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PushSize, &CommandPushSize),
 			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PushFloat, &CommandPushFloat),
 			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PushString, &CommandPushString),
 			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::PushPriority, &CommandPushPriority),
@@ -123,6 +124,8 @@ namespace mana
 
 			// caluclation
 			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::AddInteger, &CommandAddInteger),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::AddAddress, &CommandAddAddress),
+			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::CheckArrayIndex, &CommandCheckArrayIndex),
 			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::DivideInteger, &CommandDivideInteger),
 			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::MinusInteger, &CommandMinusInteger),
 			MANA_ACTOR_SET_COMMAND(IntermediateLanguage::ModInteger, &CommandModInteger),
@@ -281,13 +284,13 @@ namespace mana
 
 		if (mInterrupts.find(priority) != mInterrupts.end())
 		{
-			MANA_TRACE({ "mana:request: priority ", std::to_string(priority), ", ", GetName(), "::", action, " request failed.\n" });
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
+			std::string reason;
 			const auto interruptIterator = mInterrupts.find(priority);
 			if (interruptIterator != mInterrupts.end() && interruptIterator->second.mActionName.empty() == false)
-				MANA_TRACE({ "reason : ", interruptIterator->second.mActionName," running" });
+				reason = Concat({ " reason: ", interruptIterator->second.mActionName, " running" });
+			MANA_TRACE({ "mana:request: priority ", std::to_string(priority), ", ", GetName(), "::", action, " request failed.", reason, "\n" });
 #endif
-			MANA_TRACE("\n");
 			return false;
 		}
 
@@ -307,14 +310,14 @@ namespace mana
 		interrupt.mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Synchronized));
 
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
-		MANA_TRACE({ "mana:request: ", GetName(), " " });
+		std::string previous;
 		if (mInterrupts.empty() == false)
 		{
 			const auto interruptIterator = mInterrupts.find(mInterruptPriority);
 			if (interruptIterator != mInterrupts.end())
-				MANA_TRACE({ "priority ", std::to_string(mInterruptPriority), " ", interruptIterator->second.mActionName, " => " });
+				previous = Concat({ "priority ", std::to_string(mInterruptPriority), " ", interruptIterator->second.mActionName, " => " });
 		}
-		MANA_TRACE({ "priority ", std::to_string(priority), " ",  action , " (address:", std::to_string(address), ")\n" });
+		MANA_TRACE({ "mana:request: ", GetName(), " ", previous, "priority ", std::to_string(priority), " ", action, " (address:", std::to_string(address), ")\n" });
 
 		// 実行するアクション名を記録
 		interrupt.mActionName = action;
@@ -324,16 +327,16 @@ namespace mana
 		{
 			// 現在よりも高い優先度(高いほど優先)の場合、すぐに割り込む
 
-			MANA_TRACE({ "mana:request: ", GetName(), " " });
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
+			std::string interrupted;
 			if (mInterruptPriority)
 			{
 				const auto interruptIterator = mInterrupts.find(mInterruptPriority);
 				if (interruptIterator != mInterrupts.end())
-					MANA_TRACE({ "priority ", std::to_string(mInterruptPriority), " ", interruptIterator->second.mActionName, " => " });
+					interrupted = Concat({ "priority ", std::to_string(mInterruptPriority), " ", interruptIterator->second.mActionName, " => " });
 			}
+			MANA_TRACE({ "mana:request: ", GetName(), " ", interrupted, "priority ", std::to_string(priority), " ", interrupt.mActionName, " succeed\n" });
 #endif
-			MANA_TRACE({ "priority ", std::to_string(priority), " ", interrupt.mActionName, " succeed\n" });
 
 			Again();
 
@@ -856,6 +859,16 @@ namespace mana
 		self.mStack.Push<int_t>(vm->GetInt32FromMemory(self.mPc + 1));
 	}
 
+	/*!
+	サイズやオフセットを積みます
+
+	アドレス計算の項となるため、符号無しとして読み込みます。
+	*/
+	inline void Actor::CommandPushSize(const std::shared_ptr<VM>& vm, Actor& self)
+	{
+		self.mStack.Push<int_t>(static_cast<int_t>(vm->GetUint32FromMemory(self.mPc + 1)));
+	}
+
 	inline void Actor::CommandPushFloat(const std::shared_ptr<VM>& vm, Actor& self)
 	{
 		self.mStack.Push(vm->GetFloatFromMemory(self.mPc + 1));
@@ -1110,6 +1123,39 @@ namespace mana
 		self.mStack.Set(0, left + right);
 	}
 
+	/*!
+	アドレスにバイト数を加えます
+
+	アドレスは int_t を経由させません。int_t がポインタより
+	狭い環境で上位ビットが失われるためです。
+	*/
+	inline void Actor::CommandAddAddress(const std::shared_ptr<VM>&, Actor& self)
+	{
+		uint8_t* address = static_cast<uint8_t*>(self.mStack.Get<void*>(0));
+		const int_t offset = self.mStack.Get<int_t>(1);
+		self.mStack.Remove(1);
+		self.mStack.Set(0, static_cast<void*>(address + offset));
+	}
+
+	/*!
+	配列の添字が範囲内か検査します
+
+	オペランドは配列の要素数です。バイト数へ変換する前の添字を検査するため、
+	変換時の桁あふれで検査をすり抜ける事がありません。検査した添字はそのまま
+	残します。範囲外への読み書きは他の変数を壊すため、Releaseでも検査します。
+	*/
+	inline void Actor::CommandCheckArrayIndex(const std::shared_ptr<VM>& vm, Actor& self)
+	{
+		const int_t count = static_cast<int_t>(vm->GetUint32FromMemory(self.mPc + 1));
+		const int_t index = self.mStack.Get<int_t>(0);
+
+		if (index < 0 || index >= count)
+		{
+			RaiseScriptError({ "subscript out of range: index ", std::to_string(index),
+				" is outside the array of ", std::to_string(count), " element(s)" });
+		}
+	}
+
 	inline void Actor::CommandAddFloat(const std::shared_ptr<VM>&, Actor& self)
 	{
 		const float_t left = self.mStack.Get<float_t>(1);
@@ -1122,6 +1168,10 @@ namespace mana
 	{
 		const int_t left = self.mStack.Get<int_t>(1);
 		const int_t right = self.mStack.Get<int_t>(0);
+		if (right == 0)
+			RaiseScriptError("division by zero");
+		if (left == std::numeric_limits<int_t>::min() && right == -1)
+			RaiseScriptError("division overflow");
 		self.mStack.Remove(1);
 		self.mStack.Set(0, left / right);
 	}
@@ -1148,6 +1198,10 @@ namespace mana
 	{
 		const int_t left = self.mStack.Get<int_t>(1);
 		const int_t right = self.mStack.Get<int_t>(0);
+		if (right == 0)
+			RaiseScriptError("remainder by zero");
+		if (left == std::numeric_limits<int_t>::min() && right == -1)
+			RaiseScriptError("remainder overflow");
 		self.mStack.Remove(1);
 		self.mStack.Set(0, left % right);
 	}
@@ -1462,9 +1516,10 @@ namespace mana
 		}
 		else
 		{
-			// 戻り値があるなら、スタック操作ができないので強制停止
+			// 戻り値がある未登録の外部関数は処理を継続できないため、
+			// プロセス終了ではなく、VMの例外境界でアクターを停止します。
 			if (self.HasReturnValue(lastPc))
-				std::terminate();
+				RaiseFault(__FILE__, __LINE__, { "native function with return value is not registered: ", functionName });
 		}
 
 		if (self.IsRunning())
@@ -1559,7 +1614,8 @@ namespace mana
 			self.mStack.Remove(2);
 			return;
 		}
-		MANA_ASSERT(&self != targetActor);
+		if (&self == targetActor)
+			RaiseScriptError("cannot await an action of the actor itself");
 
 		if (self.IsCommandInitialized() == false && targetActor->Request(priority, action, self.shared_from_this()) == false)
 		{
@@ -1588,7 +1644,8 @@ namespace mana
 			self.mStack.Remove(2);
 			return;
 		}
-		MANA_ASSERT(&self != targetActor);
+		if (&self == targetActor)
+			RaiseScriptError("cannot await an action of the actor itself");
 
 		if (self.IsCommandInitialized() == false && targetActor->Request(priority, action, self.shared_from_this()) == false)
 		{
