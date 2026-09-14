@@ -12,5 +12,7 @@
 4. [条件によって処理を変える](./tutorial-conditions.md)
 5. [処理を繰り返す](./tutorial-loops.md)
 6. [関数で処理をまとめる](./tutorial-functions.md)
+7. [Priority で Action の実行順を制御する](./tutorial-priority.md)
+8. [Action の開始や終了を待つ](./tutorial-wait-and-synchronization.md)
 
-次は Priority、待機と同期、複数ファイル、Namespace へ進む予定です。
+次は複数ファイル、Namespace へ進む予定です。
