@@ -82,4 +82,6 @@ Mana Compiler がソースコードに問題を見つけた場合は、エラー
 
 ここまで理解できれば、Mana の言語機能を学ぶ準備は完了です。
 
-次は Tutorial で Actor と Action から学びます。
+## 次に読む
+
+次は [Actor と Action](../tutorial/tutorial-actor-and-action.md) で、Mana の中心となる実行単位を学びます。

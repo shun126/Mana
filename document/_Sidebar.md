@@ -8,7 +8,8 @@
 - [コンパイルと実行](./getting-started/getting-started-compile-and-run.md)
 
 ## チュートリアル
-準備中
+- [Actor と Action](./tutorial/tutorial-actor-and-action.md)
+- [Request](./tutorial/tutorial-request.md)
 
 ## Mana の考え方
 準備中
