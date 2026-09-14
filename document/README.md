@@ -1,22 +1,38 @@
-Welcome to the Mana script wiki!
+# Mana ドキュメント
 
-# Guide
-## English
-* [An Introduction to Mana](./primer_introduction-en)
-  * [Chapter 1: Getting Started with Mana](./primer_chapter_1-en)
-  * [Chapter 2: Program Structure](./primer_chapter_2-en)
-  * [Chapter 3: Let's learn the basics](./primer_chapter_3-en)
-  * [Chapter 4: Let's try using instructions](./primer_chapter_4-en)
-  * [Chapter 5: Let's use it even more!](./primer_chapter_5-en)
-  * [At the end](./primer_afterwords-en)
-* [Implementation-Based Reference (Undocumented Features)](./undocumented_features-en)
+Mana は、ゲーム内のキャラクターやイベントなど、複数の処理を協調させて記述するための Actor-oriented scripting language です。
 
-## 日本語
-* [はじめてのMana](./primer_introduction-ja)
-  * [第１章 Manaをはじめよう](./primer_chapter_1-ja)
-  * [第２章 プログラムの構造](./primer_chapter_2-ja)
-  * [第３章 基礎を学ぼう](./primer_chapter_3-ja)
-  * [第４章 命令を使ってみよう](./primer_chapter_4-ja)
-  * [第５章 さらに使いこなしてみよう](./primer_chapter_5-ja)
-  * [終わりに](./primer_afterwords-ja)
-* [実装に基づく補足リファレンス（未明文化機能）](./undocumented_features-ja)
+このドキュメントは、Mana に初めて触れる人が「テキストでプログラムを書く」ところから始め、最終的に Actor / Action / Request を使ったゲームイベントを作れるようになることを目標にしています。
+
+## はじめての方へ
+
+次の順番で読むことをおすすめします。
+
+1. [Mana とは](./getting-started/getting-started-what-is-mana.md)
+2. [テキストでプログラムを書く](./getting-started/getting-started-programming-basics.md)
+3. [Mana を使う準備](./getting-started/getting-started-installation.md)
+4. [はじめての Mana プログラム](./getting-started/getting-started-first-program.md)
+5. [コンパイルと実行](./getting-started/getting-started-compile-and-run.md)
+
+## ドキュメントの構成
+
+### Getting Started
+Mana やプログラミングに慣れていない読者向けの入口です。ソースコード、コンパイル、VM といった言葉も初出時に説明します。
+
+### Tutorial
+実際に Mana のコードを書きながら、Actor、Action、Request、変数、条件分岐、同期などを順番に学びます。
+
+### Concepts
+Mana がどのような考え方で動いているかを説明します。Actor の実行モデル、Request と Priority、スケジューリングなどを扱います。
+
+### Language Reference
+構文、型、演算子、文、Actor、Action、Request、namespace、native などを正確に調べるための資料です。
+
+### Integration
+Mana Compiler と Mana VM を C++ アプリケーションやゲームエンジンへ組み込む開発者向けの資料です。
+
+## 現在の状態
+
+ドキュメントは全面改訂中です。まず日本語版を現行実装に合わせて整備し、内容が安定した後に英語版へ展開します。
+
+従来の `primer_*.md` と `undocumented_features-*.md` は、移行が完了するまで資料として残します。
