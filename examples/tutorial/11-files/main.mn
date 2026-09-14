@@ -1,0 +1,11 @@
+import "town.mn";
+
+actor Event
+{
+    action main
+    {
+        awaitCompletion(10, Guide->talk);
+        awaitCompletion(10, Gate->open);
+        print("Event: Finished.\n");
+    }
+}

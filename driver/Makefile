@@ -60,7 +60,7 @@ cppcheck:
 	cppcheck -D __unix__ --enable=all $(SOURCES)
 
 test:
-	./$(TARGET) --debug ../sample/Sample.mn -I ../sample/Function.mh
+	./$(TARGET) --debug ../examples/language-tour/main.mn -I ../examples/language-tour/natives.mh
 	./$(TARGET) ../test/cpp/ProgramImageTest.mn -o ../test/cpp/ProgramImageTest.mx
 	cd ../test/cpp/ && $(MAKE) CONFIG=$(CONFIG)
 	cd ../test/cpp/ && ./ProgramImageTest ProgramImageTest.mx

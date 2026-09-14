@@ -1,0 +1,19 @@
+int gTalkCount = 0;
+
+actor Event
+{
+    action main
+    {
+        awaitCompletion(10, Guide->talk);
+        awaitCompletion(10, Guide->talk);
+    }
+}
+
+actor Guide
+{
+    action talk
+    {
+        gTalkCount = gTalkCount + 1;
+        print("Talk count: %d\n", gTalkCount);
+    }
+}

@@ -1,0 +1,9 @@
+actor Guide
+{
+    action main
+    {
+        print("Guide: Step 1.\n");
+        yield();
+        print("Guide: Step 2.\n");
+    }
+}
