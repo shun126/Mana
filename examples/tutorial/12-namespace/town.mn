@@ -1,0 +1,18 @@
+namespace Town
+{
+    actor Guide
+    {
+        action talk
+        {
+            print("Guide: Welcome!\n");
+        }
+    }
+
+    actor Gate
+    {
+        action open
+        {
+            print("Gate: Open.\n");
+        }
+    }
+}

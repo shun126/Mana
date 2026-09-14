@@ -1,0 +1,26 @@
+const int kNormalPriority = 10;
+const int kEmergencyPriority = 100;
+
+actor Event
+{
+    action main
+    {
+        awaitCompletion(kNormalPriority, Guide->talk);
+        print("Event: Finished.\n");
+    }
+}
+
+actor Guide
+{
+    action talk
+    {
+        print("Guide: Talk begins.\n");
+        request(kEmergencyPriority, self->warn);
+        print("Guide: Talk resumes.\n");
+    }
+
+    action warn
+    {
+        print("Guide: Watch out!\n");
+    }
+}

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="{{ html_lang }}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ page_title }}</title>
+<meta name="description" content="{{ description }}">
+<link rel="icon" href="{{ assets }}/common/logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="{{ stylesheet }}">
+</head>
+<body>
+<header class="masthead">
+  <a class="brand" href="./">
+    <img src="{{ assets }}/common/logo.svg" alt="{{ site_title }}" width="160" height="48">
+  </a>
+  <nav class="masthead-nav">
+    <a href="{{ wiki }}/Getting-Started">Getting Started</a>
+    <a href="{{ wiki }}/Tutorial">Tutorial</a>
+    <a href="{{ wiki }}/Language-Reference">Language Reference</a>
+    <a href="{{ wiki }}/Integration">C++ Integration</a>
+    <a href="{{ repository }}">GitHub</a>
+    {{ language_links }}
+  </nav>
+</header>
+
+<section class="hero">
+  <h1>{{ title }}</h1>
+  <p class="tagline">{{ tagline }}</p>
+  <p class="lead">{{ lead }}</p>
+  <p class="actions">{{ actions }}</p>
+</section>
+
+<main class="content">
+{{ content }}
+</main>
+
+<footer class="colophon">
+  <p><a href="{{ wiki }}">Documentation</a> · <a href="{{ repository }}">GitHub</a> · <a href="{{ repository }}/blob/{{ ref }}/LICENSE.md">License</a></p>
+  <p>このサイトは <code>document/pages/</code> から生成しています。</p>
+</footer>
+</body>
+</html>
