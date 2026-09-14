@@ -16,6 +16,8 @@
 - [関数](./tutorial/tutorial-functions.md)
 - [Priority](./tutorial/tutorial-priority.md)
 - [待機と同期](./tutorial/tutorial-wait-and-synchronization.md)
+- [複数ファイル](./tutorial/tutorial-multiple-files.md)
+- [namespace と using](./tutorial/tutorial-namespace.md)
 
 ## Mana の考え方
 準備中

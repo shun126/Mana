@@ -14,5 +14,7 @@
 6. [関数で処理をまとめる](./tutorial-functions.md)
 7. [Priority で Action の実行順を制御する](./tutorial-priority.md)
 8. [Action の開始や終了を待つ](./tutorial-wait-and-synchronization.md)
+9. [プログラムを複数のファイルに分ける](./tutorial-multiple-files.md)
+10. [namespace で名前を整理する](./tutorial-namespace.md)
 
-次は複数ファイル、Namespace へ進む予定です。
+次は、ここまでに学んだ内容を組み合わせて小さなゲームイベントを完成させます。
