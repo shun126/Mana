@@ -10,6 +10,10 @@
 ## チュートリアル
 - [Actor と Action](./tutorial/tutorial-actor-and-action.md)
 - [Request](./tutorial/tutorial-request.md)
+- [変数](./tutorial/tutorial-variables.md)
+- [条件分岐](./tutorial/tutorial-conditions.md)
+- [繰り返し](./tutorial/tutorial-loops.md)
+- [関数](./tutorial/tutorial-functions.md)
 
 ## Mana の考え方
 準備中
