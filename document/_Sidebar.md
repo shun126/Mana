@@ -32,7 +32,14 @@
 - [Compiler と VM](./concepts/concept-compiler-and-vm.md)
 
 ## 言語リファレンス
-準備中
+- [Language Reference](./reference/README.md)
+- [ソースコードの構造](./reference/reference-source-code.md)
+- [型](./reference/reference-types.md)
+- [変数](./reference/reference-variables.md)
+- [定数](./reference/reference-constants.md)
+- [式](./reference/reference-expressions.md)
+- [演算子](./reference/reference-operators.md)
+- [文](./reference/reference-statements.md)
 
 ## 組み込み
 準備中
