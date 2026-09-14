@@ -1,0 +1,16 @@
+actor Event
+{
+    action main
+    {
+        print("Event: Request.\n");
+        request(10, Guide->talk);
+    }
+}
+
+actor Guide
+{
+    action talk
+    {
+        print("Guide: Welcome!\n");
+    }
+}

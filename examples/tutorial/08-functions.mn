@@ -1,0 +1,17 @@
+int remainingKeys(int required, int owned)
+{
+    if (owned >= required)
+    {
+        return 0;
+    }
+    return required - owned;
+}
+
+actor Event
+{
+    action main
+    {
+        int missing = remainingKeys(3, 1);
+        print("Missing keys: %d\n", missing);
+    }
+}

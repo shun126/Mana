@@ -1,0 +1,4 @@
+# The documentation tools only need PyYAML. Without it they fall back to a
+# built-in reader for the small YAML subset the configuration files use, so a
+# local run works on a bare Python installation as well.
+PyYAML>=6.0
