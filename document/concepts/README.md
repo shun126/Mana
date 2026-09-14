@@ -12,5 +12,11 @@ Tutorial では、Mana のコードを実際に書きながら使い方を学び
 2. [Actor と Action の役割](./concept-actor-and-action.md)
 3. [Request と Priority](./concept-request-and-priority.md)
 4. [Mana の実行モデル](./concept-execution-model.md)
+5. [Module](./concept-module.md)
+6. [Phantom](./concept-phantom.md)
+7. [Namespace](./concept-namespace.md)
+8. [Compiler と VM](./concept-compiler-and-vm.md)
 
-この後、Module、Phantom、Namespace、Compiler / VM について扱います。
+ここまで読むと、Mana の主要な実行概念と、ソースコードから VM 実行までの全体像を把握できます。
+
+次は Language Reference で、各構文と機能を正確に調べられる形へ進みます。

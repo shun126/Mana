@@ -26,6 +26,10 @@
 - [Actor と Action](./concepts/concept-actor-and-action.md)
 - [Request と Priority](./concepts/concept-request-and-priority.md)
 - [実行モデル](./concepts/concept-execution-model.md)
+- [Module](./concepts/concept-module.md)
+- [Phantom](./concepts/concept-phantom.md)
+- [Namespace](./concepts/concept-namespace.md)
+- [Compiler と VM](./concepts/concept-compiler-and-vm.md)
 
 ## 言語リファレンス
 準備中
