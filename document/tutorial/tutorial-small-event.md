@@ -377,3 +377,5 @@ Tutorial の次は **Mana の考え方（Concepts）** へ進みます。
 Tutorial では「どう書くか」を中心に学びました。
 
 Concepts では、Actor、Action、Request、Priority、スケジューリングなどが **なぜそのように動くのか** を、Mana の実行モデルとして整理します。
+
+[Actor-oriented という考え方](../concepts/concept-actor-oriented.md)

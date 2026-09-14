@@ -21,7 +21,11 @@
 - [小さなゲームイベント](./tutorial/tutorial-small-event.md)
 
 ## Mana の考え方
-準備中
+- [Concepts](./concepts/README.md)
+- [Actor-oriented](./concepts/concept-actor-oriented.md)
+- [Actor と Action](./concepts/concept-actor-and-action.md)
+- [Request と Priority](./concepts/concept-request-and-priority.md)
+- [実行モデル](./concepts/concept-execution-model.md)
 
 ## 言語リファレンス
 準備中
