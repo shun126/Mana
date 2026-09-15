@@ -24,9 +24,15 @@ struct Status
 変数として使います。
 
 ```mana
-Status status;
-status.hp = 100;
-status.mp = 20;
+actor StatusExample
+{
+    action main
+    {
+        Status status;
+        status.hp = 100;
+        status.mp = 20;
+    }
+}
 ```
 
 ## メンバー変数
@@ -57,15 +63,19 @@ struct Unit
     Position position;
     int hp;
 }
+
+actor UnitExample
+{
+    action main
+    {
+        Unit unit;
+        unit.position.x = 10.0;
+        unit.hp = 100;
+    }
+}
 ```
 
 メンバー参照には `.` を使います。
-
-```mana
-Unit unit;
-unit.position.x = 10.0;
-unit.hp = 100;
-```
 
 ## メンバー Function
 
@@ -81,13 +91,15 @@ struct Counter
         value = 0;
     }
 }
-```
 
-呼び出し:
-
-```mana
-Counter counter;
-counter.reset();
+actor CounterExample
+{
+    action main
+    {
+        Counter counter;
+        counter.reset();
+    }
+}
 ```
 
 現行コンパイラでは、Struct のメンバー Function からも通常の Mana の処理を記述できます。例えば Actor を引数として受け取り、Request を送ることもできます。
@@ -111,16 +123,20 @@ struct Transform
 {
     native void reset();
 }
+
+actor TransformExample
+{
+    action main
+    {
+        Transform transform;
+        transform.reset();
+    }
+}
 ```
 
 呼び出し側の構文は通常のメンバー Function と同じです。
 
-```mana
-Transform transform;
-transform.reset();
-```
-
-C++ 側との対応方法は Native Function のリファレンスで扱います。
+C++ 側との対応方法は [Native Function](./reference-native.md) と [Native Functions Integration](../integration/integration-native-functions.md) を参照してください。
 
 ## Struct と Actor の違い
 
@@ -137,4 +153,4 @@ Struct は値をまとめるデータ型です。Actor のように独立した 
 
 - [Function](./reference-functions.md)
 - [Actor](./reference-actor.md)
-- Native Function（追加予定）
+- [Native Function](./reference-native.md)

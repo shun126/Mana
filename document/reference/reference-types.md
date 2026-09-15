@@ -68,6 +68,41 @@ void notify(actor target)
 
 `self` や `sender` なども Actor 参照として扱われます。
 
+## 定義済み複合型
+
+現行コンパイラは、よく使う値型として次の型をあらかじめ登録しています。
+
+| 型 | メンバー |
+| --- | --- |
+| `vec2` | `float x`, `float y` |
+| `vec3` | `float x`, `float y`, `float z` |
+| `vec4` | `float x`, `float y`, `float z`, `float w` |
+| `rotator` | `float pitch`, `float yaw`, `float roll` |
+| `color` | `float r`, `float g`, `float b`, `float a` |
+
+これらは Struct と同様にメンバーを `.` で参照できます。
+
+```mana
+actor BuiltInTypeExample
+{
+    action main
+    {
+        vec3 position;
+        position.x = 10.0;
+        position.y = 20.0;
+        position.z = 30.0;
+
+        color tint;
+        tint.r = 1.0;
+        tint.g = 0.5;
+        tint.b = 0.25;
+        tint.a = 1.0;
+    }
+}
+```
+
+`transform` は現行コンパイラでは定義済み型として登録されていません。
+
 ## Struct 型
 
 `struct` でユーザー定義型を作成できます。
@@ -82,13 +117,13 @@ struct Position
 Position p;
 ```
 
-Struct の詳細は Struct リファレンスで扱います。
+Struct の詳細は [Struct](./reference-struct.md) で扱います。
 
 ## `pointer`
 
 `pointer` は主に VM と native Function の境界など、低レベルな用途で使用する型です。
 
-通常のゲームイベント記述では、まず `int`、`float`、`bool`、`string`、`actor`、Struct 型を中心に使用することを推奨します。
+通常のゲームイベント記述では、まず `int`、`float`、`bool`、`string`、`actor`、定義済み複合型、Struct 型を中心に使用することを推奨します。
 
 ## 型チェック
 
@@ -101,3 +136,4 @@ Mana Compiler は、代入、Function 呼び出し、戻り値、演算などで
 - [変数](./reference-variables.md)
 - [定数](./reference-constants.md)
 - [式](./reference-expressions.md)
+- [Struct](./reference-struct.md)

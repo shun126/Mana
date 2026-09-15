@@ -1,38 +1,45 @@
 # 旧ドキュメント移行表
 
-このファイルは、従来の Mana ドキュメントを新しい構成へ移行するための編集者向けメモです。
+このファイルは、従来の Mana ドキュメントから現行ドキュメントへ何を移行したかを記録する編集者向けメモです。
 
-旧ファイルは、新しいドキュメントへの移行が完了するまで削除しません。
+日本語版 v2 の主要セクション完成前QAで、旧ページに残っていた現行機能を再確認し、新しい Tutorial / Concepts / Reference / Integration へ移行しました。
 
-| 旧ドキュメント | 主な移行先 | 方針 |
+| 旧ドキュメント | 主な移行先 | 移行内容 |
 | --- | --- | --- |
-| `primer_introduction-ja.md` | Getting Started / Concepts | Mana の目的と特徴を再構成する |
-| `primer_chapter_1-ja.md` | Getting Started / Tutorial / Concepts | コンパイル説明、Actor / Action / Request、Priority を分離する |
-| `primer_chapter_2-ja.md` | Tutorial / Concepts / Reference | sender、lock、関数などを用途別に分離する |
-| `primer_chapter_3-ja.md` | Tutorial / Reference | 型、変数、演算子、制御文などを入門と仕様に分離する |
-| `primer_chapter_4-ja.md` | Reference | include / import と複数ファイル構成を整理する |
-| `primer_chapter_5-ja.md` | Concepts / Reference | module、phantom などを現行実装に合わせて正式化する |
-| `primer_afterwords-ja.md` | README または廃止 | 現在も必要な内容だけ再利用する |
-| `undocumented_features-ja.md` | Reference / Integration | native、namespace / using、phantom などを正式リファレンスへ昇格する |
+| `primer_introduction-ja.md` | Getting Started / Concepts | Mana の目的、Actor-oriented、Request中心の考え方を再構成 |
+| `primer_chapter_1-ja.md` | Getting Started / Tutorial / Concepts | コンパイル、Actor / Action / Request、Priority を用途別に分離 |
+| `primer_chapter_2-ja.md` | Tutorial / Concepts / Reference | sender、Function、実行モデルを現行実装に合わせて再構成 |
+| `primer_chapter_3-ja.md` | Tutorial / Reference | 型、変数、配列、演算子、制御文、goto などを移行 |
+| `primer_chapter_4-ja.md` | Tutorial / Reference | `import` / `include`、複数ファイル構成を移行 |
+| `primer_chapter_5-ja.md` | Concepts / Reference | Module / `extend`、Phantom を現行実装に合わせて正式化 |
+| `primer_afterwords-ja.md` | Reference / Integration | 現行CLI、Diagnostics、Error Handlingへ必要な内容を再構成。旧エラー一覧等は廃止 |
+| `undocumented_features-ja.md` | Reference / Integration | native、namespace / using、Phantom、SourceResolver等を正式文書へ移行 |
 
-## 移行時にそのままコピーしないもの
+英語版の旧Primerも、日本語版v2の安定後に新構成から翻訳し直す方針とし、旧英語ページは原本として継続利用しません。
 
-旧文書には、現在の実装と異なる説明が含まれています。文章をそのまま移動するのではなく、現行のソースコード、テスト、サンプルを確認してから書き直します。
+## QAで再確認した項目
 
-特に次の項目は再確認します。
-
-- 定数宣言の構文
-- `mana` コマンドのコンパイルと実行方法
-- Action 参照の `->`
+- 定数宣言は `const 型 名前 = 値;`
+- `define` / `undef` はLexerにトークンが残るが現行Parserの宣言構文ではない
+- `mana` CLI の現行オプションと `--execute`
+- Action 参照は `->`、`::` はnamespace修飾
 - `namespace` / `using`
-- `native`
+- `native` とStruct native Function
 - `struct`
 - `module` / `extend`
 - `phantom`
 - `request` / `awaitStart` / `awaitCompletion` / `join`
-- `yield` / `lock` / `rollback` / `refuse`
-- `self` / `sender` / `priority` / `this` / `nil`
+- `yield` / `lock` / `rollback` / `halt` / `refuse` / `comply`
+- `self` / `sender` / `priority` / `this` / `Nil`
+- 固定長配列と実行時添字チェック
+- `static` / `allocate`
+- `goto` / ラベル
+- 定義済み複合型 `vec2` / `vec3` / `vec4` / `rotator` / `color`
 
-## 削除の条件
+## 旧ページの扱い
 
-旧ページは、その内容が新ドキュメントへ移行され、リンク切れや重要な情報の欠落がないことを確認した後に削除します。
+旧ページは現行仕様の原本にはしません。
+
+Git の履歴から参照できるため、移行完了後は `document/` から削除し、`document/` を現行ドキュメントだけの source of truth とします。
+
+今後仕様を変更した場合は、旧Primerではなく現行の Reference と実装・テストを同時に更新します。

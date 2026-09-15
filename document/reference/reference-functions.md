@@ -22,10 +22,17 @@ int add(int a, int b)
 }
 ```
 
-呼び出し:
+Function は Action や別の Function から呼び出せます。
 
 ```mana
-int value = add(2, 3);
+actor FunctionExample
+{
+    action main
+    {
+        int value = add(2, 3);
+        print("%d\n", value);
+    }
+}
 ```
 
 ## 引数
@@ -77,14 +84,18 @@ struct Counter
         value = 0;
     }
 }
+
+actor CounterExample
+{
+    action main
+    {
+        Counter counter;
+        counter.reset();
+    }
+}
 ```
 
 呼び出しには `.` を使います。
-
-```mana
-Counter counter;
-counter.reset();
-```
 
 Struct のメンバー Function については [Struct](./reference-struct.md) を参照してください。
 
@@ -107,10 +118,10 @@ C++ 側へ接続する Function は `native` で宣言します。
 native void playSound(string name);
 ```
 
-Native Function の詳細は別ページで扱います。
+詳細は [Native Function](./reference-native.md) を参照してください。
 
 ## 関連項目
 
 - [Struct](./reference-struct.md)
 - [Action](./reference-action.md)
-- Native Function（追加予定）
+- [Native Function](./reference-native.md)

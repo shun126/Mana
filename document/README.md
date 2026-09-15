@@ -14,6 +14,8 @@ Mana は、ゲーム内のキャラクターやイベントなど、複数の処
 4. [はじめての Mana プログラム](./getting-started/getting-started-first-program.md)
 5. [コンパイルと実行](./getting-started/getting-started-compile-and-run.md)
 
+その後は [Mana チュートリアル](./tutorial/README.md) へ進んでください。
+
 ## ドキュメントの構成
 
 ### Getting Started
@@ -23,7 +25,7 @@ Mana やプログラミングに慣れていない読者向けの入口です。
 実際に Mana のコードを書きながら、Actor、Action、Request、変数、条件分岐、同期などを順番に学びます。
 
 ### Concepts
-Mana がどのような考え方で動いているかを説明します。Actor の実行モデル、Request と Priority、スケジューリングなどを扱います。
+Mana がどのような考え方で動いているかを説明します。Actor の実行モデル、Request と Priority、Module、Phantom、Namespace などを扱います。
 
 ### Language Reference
 構文、型、演算子、文、Actor、Action、Request、namespace、native などを正確に調べるための資料です。
@@ -33,6 +35,8 @@ Mana Compiler と Mana VM を C++ アプリケーションやゲームエンジ�
 
 ## 現在の状態
 
-ドキュメントは全面改訂中です。まず日本語版を現行実装に合わせて整備し、内容が安定した後に英語版へ展開します。
+日本語版の主要セクションは、現行コンパイラ・VM・テストを基準に再構成済みです。
 
-従来の `primer_*.md` と `undocumented_features-*.md` は、移行が完了するまで資料として残します。
+現在は公開前QAと GitHub Wiki への同期準備を進めています。英語版は日本語版の内容が安定した後に改めて作成します。
+
+ドキュメントの編集方針は [`_meta/documentation-policy.md`](./_meta/documentation-policy.md) を参照してください。

@@ -104,7 +104,7 @@ actor NPC
 
 `sender` は Request の送信元を保持するため、どの Actor から実行を依頼されたかを識別する用途に使えます。
 
-定義済み値の詳細は後で追加する「定義済みシンボル」リファレンスにまとめます。
+詳細は [定義済みシンボル](./reference-predefined-symbols.md) を参照してください。
 
 ## Priority と中断
 
@@ -134,3 +134,4 @@ Priority は数値が大きいほど高くなります。
 - [Function](./reference-functions.md)
 - [Request](./reference-request.md)
 - [実行制御](./reference-execution-control.md)
+- [定義済みシンボル](./reference-predefined-symbols.md)

@@ -119,7 +119,7 @@ default:
 
 ## return
 
-Function から戻ります。
+Function では呼び出し元へ戻ります。
 
 ```mana
 int add(int a, int b)
@@ -127,6 +127,45 @@ int add(int a, int b)
     return a + b;
 }
 ```
+
+Action の中でも `return;` を使用できます。この場合は現在の Action を終了し、その Priority を解放します。下位 Priority に中断中の Action があれば、VM はそこへ復帰できます。
+
+```mana
+actor NPC
+{
+    action talk
+    {
+        if (sender == Nil)
+            return;
+
+        print("Hello\n");
+    }
+}
+```
+
+Action は戻り値を持たないため、Action では `return expression;` を使用しません。
+
+## goto とラベル
+
+ラベルは `identifier:`、分岐は `goto identifier;` で記述できます。
+
+```mana
+actor GotoExample
+{
+    action main
+    {
+        goto Done;
+        print("skip\n");
+
+Done:
+        print("done\n");
+    }
+}
+```
+
+存在しないラベルへの `goto` はコンパイル時の名前解決エラーになります。
+
+通常の条件分岐や繰り返しで表現できる場合は `if`、`switch`、`while`、`for` などの構造化された制御文を優先することを推奨します。
 
 ## print
 
@@ -144,17 +183,29 @@ awaitStart(10, Enemy->think);
 awaitCompletion(10, Enemy->think);
 ```
 
-詳細な待機条件や Priority との関係は、Request と実行制御のリファレンスで扱います。
+詳細な待機条件や Priority との関係は [Request](./reference-request.md) と [実行制御](./reference-execution-control.md) を参照してください。
 
-## yield と join
+## Action の実行制御
 
-Action の進行を協調させるための構文として `yield` と `join` があります。
+Action の進行、Priority の巻き戻し、Request の受付状態などを制御する文があります。
 
-詳細は実行制御リファレンスで扱います。
+```text
+yield
+join
+rollback
+halt
+lock
+refuse
+comply
+```
+
+正確な構文と動作は [実行制御](./reference-execution-control.md) にまとめています。
 
 ## 関連項目
 
 - [式](./reference-expressions.md)
 - [演算子](./reference-operators.md)
+- [Request](./reference-request.md)
+- [実行制御](./reference-execution-control.md)
 - [Request と Priority](../concepts/concept-request-and-priority.md)
 - [Mana の実行モデル](../concepts/concept-execution-model.md)

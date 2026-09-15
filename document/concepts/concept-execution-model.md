@@ -111,7 +111,7 @@ request(5, Enemy->damage);
 
 これは対象 Actor に新しい Priority の Action 実行状態を追加する操作です。
 
-現在より高い Priority ならすぐに割り込み、低い Priority なら後で実行するために保持されます。
+現在より高い Priority ならすぐに割り込み、低い Priority なら後で実行するために保持されます。同じ Priority の実行状態がすでに存在する場合、新しい Request は受理されません。
 
 この点が通常の Function 呼び出しとの大きな違いです。
 
@@ -165,13 +165,15 @@ action update
 
 正確な境界条件や構文は Language Reference で扱います。
 
-## `lock` や `refuse` も実行モデルの制御である
+## `refuse` と `lock`
 
-Mana には `lock`、`refuse` など、Request や割り込みの扱いを制御する仕組みもあります。
+`refuse()` は、Actor が新しい Request を受け付けるかどうかを制御します。`comply()` で受付を再開できます。
 
-これらは独立した特殊機能ではなく、Actor の実行状態をどう守るか、外部からの Request をどう扱うかという **同じ実行モデルの上にある機能**です。
+`lock` は少し性質が異なります。現行コンパイラは `lock` ブロックの前後で同期実行状態を切り替える命令を生成し、VM は現在の Priority の `Synchronized` フラグを ON / OFF します。
 
-Tutorial では基本的な Request / Priority / await に絞りましたが、Language Reference ではこれらもまとめて整理します。
+ただし、**現行の `Actor::Request` はこのフラグを Request の受付判定や Priority の割り込み判定には直接使用していません。**
+
+そのため、現在の `lock` を mutex や「絶対に割り込まれない atomic 区間」と同じものとして理解しないでください。正確な現行挙動は [実行制御リファレンス](../reference/reference-execution-control.md) で扱います。
 
 ## 起動時の `init` と `main`
 
@@ -221,9 +223,11 @@ Actor
 - Mana の並行性はOSスレッドによる並列実行ではない
 - Priority ごとに Action の状態を保持できる
 - 高Priorityの Action は低Priorityの Action に割り込める
+- 同じPriorityの新しいRequestは、そのPriorityが既に存在すると受理されない
 - Action 終了後は中断していた Action を再開できる
 - await 系の待機は VM 全体を止めない
-- `yield`、`rollback`、`lock`、`refuse` も同じ実行モデルを制御する機能である
+- `refuse` は新しいRequestの受付を制御する
+- `lock` は現行実装では同期状態フラグを切り替えるが、Requestの割り込み判定を直接抑止するものではない
 
 ## 次に読む
 

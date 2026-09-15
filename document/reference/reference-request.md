@@ -66,10 +66,11 @@ Request を送った Actor は、そのまま後続処理を続けます。
 
 対象 Actor 側では Priority によって処理されます。
 
-- 要求 Priority が現在より高い、または現在の Priority 以上: 現在の処理へ割り込む
+- 要求 Priority が現在より高い: 現在の処理へ割り込む
 - 要求 Priority が現在より低い: 後で実行するため保持する
+- 要求 Priority が現在と同じ: その Priority の実行状態がすでに存在するため、新しい Request は受理されない
 
-ただし、同じ Priority の Request がすでに登録されている場合、現行VMは新しい Request を受理しません。
+同じ Priority に複数の Action をキューとして積む仕組みではありません。
 
 ## Request が受理されない条件
 

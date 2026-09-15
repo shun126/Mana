@@ -41,6 +41,8 @@ const int kDouble = kBase * 2;
 
 実行時にしか値が決まらない Function 呼び出しなどは、定数初期値として使用できません。
 
+`Nil` は専用型であり、現行コンパイラでは定数式として使用できません。
+
 ## Priority に名前を付ける
 
 Priority のような数値に意味のある名前を付ける用途に向いています。
@@ -56,14 +58,31 @@ request(kTalkPriority, NPC->talk);
 
 数値を直接書くより、用途が分かりやすくなります。
 
-## `define` について
+## 配列サイズに使う
 
-現在の Lexer には旧形式の `define` / `undef` も残っていますが、現行ドキュメントでは定数宣言として `const 型 名前 = 値;` を使用します。
+整数定数は固定長配列のサイズにも使用できます。
 
-新しいコードでは `const` を使用してください。
+```mana
+const int kValueCount = 4;
+
+actor ArrayExample
+{
+    action main
+    {
+        int values[kValueCount];
+    }
+}
+```
+
+## `define` / `undef` について
+
+現在の Lexer には旧形式の `define` / `undef` トークンが残っていますが、現行 `Parser.yy` の宣言構文には組み込まれていません。
+
+したがって、新しいドキュメントでは `define` / `undef` を現行の定数宣言構文として扱いません。新しいコードでは `const 型 名前 = 値;` を使用してください。
 
 ## 関連項目
 
 - [型](./reference-types.md)
 - [変数](./reference-variables.md)
 - [式](./reference-expressions.md)
+- [定義済みシンボル](./reference-predefined-symbols.md)
