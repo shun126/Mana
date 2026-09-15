@@ -60,3 +60,7 @@
 - [Compiler](./integration/integration-compiler.md)
 - [VM](./integration/integration-vm.md)
 - [Program Image](./integration/integration-program-image.md)
+- [Native Functions](./integration/integration-native-functions.md)
+- [SourceResolver](./integration/integration-source-resolver.md)
+- [Diagnostics](./integration/integration-diagnostics.md)
+- [Error Handling](./integration/integration-error-handling.md)
