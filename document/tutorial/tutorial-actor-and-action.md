@@ -10,6 +10,8 @@
 - `main` は特別な Action である
 - Action を定義しただけでは、すべての Action が自動的に実行されるわけではない
 
+![Actor と Action の関係](../assets/diagrams/actor-action.svg)
+
 ## Actor は「実行する主体」
 
 Mana では、処理を Actor という単位に分けて記述します。

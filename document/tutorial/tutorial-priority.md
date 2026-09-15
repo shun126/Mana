@@ -19,6 +19,8 @@ request(kTalkPriority, NPC->talk);
 - 同じ Priority がすでに使用中または予約済みなら、その Request は受理されない
 - `priority` で現在実行している Action の Priority を参照できる
 
+![Priority による割り込みと復帰](../assets/diagrams/priority.svg)
+
 ## Priority は「どの Action を優先するか」の値
 
 例えば NPC に、次の3種類の Action があるとします。

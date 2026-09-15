@@ -26,21 +26,7 @@ actor Hello
 
 Mana のソースコードは、そのまま Mana VM が実行するわけではありません。まず Mana Compiler がソースコードを読み取り、Mana VM が実行できる Program Image に変換します。この変換を **コンパイル** と呼びます。
 
-```text
-Mana Source (.mn)
-      |
-      v
-Mana Compiler
-      |
-      v
-Program Image
-      |
-      v
-Mana VM
-      |
-      v
-    実行
-```
+![Mana の全体像](../assets/diagrams/mana-overview.svg)
 
 Mana はスクリプト言語ですが、ソースコードを逐次解釈して実行するだけの言語ではありません。コンパイル段階を持つことで、文法や名前の間違いなどを実行前に検出しやすくしています。
 

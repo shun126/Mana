@@ -39,6 +39,8 @@ Mana には、そのための待機・同期用の命令があります。
 
 `yield` はこの表とは少し異なり、自分自身の実行をいったん中断して他の処理へ実行機会を渡すために使います。
 
+![request / awaitStart / awaitCompletion の違い](../assets/diagrams/request-await.svg)
+
 ## `request` は待たない
 
 まず通常の `request` を確認します。

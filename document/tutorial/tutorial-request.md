@@ -12,6 +12,8 @@
 - Priority の値が大きいほど優先度が高い
 - 通常の `request` は、依頼した Action の終了を待たない
 
+![Request の流れ](../assets/diagrams/request-flow.svg)
+
 ## 別の Actor に Action を依頼する
 
 まず、次のプログラムを見てみましょう。
