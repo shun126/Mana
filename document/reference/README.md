@@ -14,14 +14,20 @@ Tutorial は「順番に学ぶ」ため、Concepts は「なぜそう動くの�
 6. [演算子](./reference-operators.md)
 7. [文](./reference-statements.md)
 
+## Function とデータ型
+
+8. [Function](./reference-functions.md)
+9. [Struct](./reference-struct.md)
+
+## Actor 実行モデル
+
+10. [Actor](./reference-actor.md)
+11. [Action](./reference-action.md)
+12. [Request](./reference-request.md)
+13. [実行制御](./reference-execution-control.md)
+
 ## この後追加する項目
 
-- Function
-- Struct
-- Actor
-- Action
-- Request
-- 実行制御
 - Module
 - Phantom
 - Namespace

@@ -40,6 +40,12 @@
 - [式](./reference/reference-expressions.md)
 - [演算子](./reference/reference-operators.md)
 - [文](./reference/reference-statements.md)
+- [Function](./reference/reference-functions.md)
+- [Struct](./reference/reference-struct.md)
+- [Actor](./reference/reference-actor.md)
+- [Action](./reference/reference-action.md)
+- [Request](./reference/reference-request.md)
+- [実行制御](./reference/reference-execution-control.md)
 
 ## 組み込み
 準備中
