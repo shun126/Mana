@@ -46,6 +46,13 @@
 - [Action](./reference/reference-action.md)
 - [Request](./reference/reference-request.md)
 - [実行制御](./reference/reference-execution-control.md)
+- [Module](./reference/reference-module.md)
+- [Phantom](./reference/reference-phantom.md)
+- [Namespace と using](./reference/reference-namespace.md)
+- [Native Function](./reference/reference-native.md)
+- [ソースファイル](./reference/reference-source-files.md)
+- [定義済みシンボル](./reference/reference-predefined-symbols.md)
+- [CLI](./reference/reference-cli.md)
 
 ## 組み込み
 準備中

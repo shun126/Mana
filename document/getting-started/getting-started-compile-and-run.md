@@ -52,17 +52,13 @@ mana source_file.mn -o program_file
 
 ## コンパイル済みファイルを実行する
 
-保存した Program Image は `--execute` または `-e` を使って実行できます。
+保存した Program Image は `--execute` を使って実行できます。
 
 ```bash
 mana --execute program_file
 ```
 
-または、
-
-```bash
-mana -e program_file
-```
+現行CLIでは `-e` という短縮形は実装されていません。
 
 ## コンパイルエラー
 
@@ -81,6 +77,8 @@ Mana Compiler がソースコードに問題を見つけた場合は、エラー
 - `mana source_file.mn` ではコンパイルと実行を続けて行える
 
 ここまで理解できれば、Mana の言語機能を学ぶ準備は完了です。
+
+CLI の全オプションは [CLI リファレンス](../reference/reference-cli.md) を参照してください。
 
 ## 次に読む
 

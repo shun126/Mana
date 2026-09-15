@@ -26,15 +26,15 @@ Tutorial は「順番に学ぶ」ため、Concepts は「なぜそう動くの�
 12. [Request](./reference-request.md)
 13. [実行制御](./reference-execution-control.md)
 
-## この後追加する項目
+## 構成と連携
 
-- Module
-- Phantom
-- Namespace
-- Native
-- ソースファイルと import / include
-- 定義済みシンボル
-- CLI
+14. [Module](./reference-module.md)
+15. [Phantom](./reference-phantom.md)
+16. [Namespace と using](./reference-namespace.md)
+17. [Native Function](./reference-native.md)
+18. [ソースファイルと import / include](./reference-source-files.md)
+19. [定義済みシンボル](./reference-predefined-symbols.md)
+20. [CLI](./reference-cli.md)
 
 ## 記述方針
 
@@ -47,4 +47,4 @@ Tutorial は「順番に学ぶ」ため、Concepts は「なぜそう動くの�
 5. 例
 6. 関連項目
 
-このリファレンスは現行コンパイラとテストを基準にします。旧 Primer に残っている古い構文より、現在の実装を優先します。
+このリファレンスは現行コンパイラ、VM、テストを基準にします。旧 Primer に残っている古い構文より、現在の実装を優先します。
