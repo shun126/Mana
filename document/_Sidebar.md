@@ -55,4 +55,8 @@
 - [CLI](./reference/reference-cli.md)
 
 ## 組み込み
-準備中
+- [Integration](./integration/README.md)
+- [組み込み概要](./integration/integration-overview.md)
+- [Compiler](./integration/integration-compiler.md)
+- [VM](./integration/integration-vm.md)
+- [Program Image](./integration/integration-program-image.md)
