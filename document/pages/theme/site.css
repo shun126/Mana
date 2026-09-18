@@ -49,8 +49,15 @@ a:hover { color: var(--accent); }
   border-bottom: 1px solid var(--line);
 }
 
-.brand { display: inline-flex; line-height: 0; }
-.brand img { width: 130px; height: auto; }
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ink);
+  text-decoration: none;
+}
+.brand img { width: 40px; height: 40px; }
+.brand-name { font-size: 26px; font-weight: 700; letter-spacing: 0.02em; }
 
 .masthead-nav {
   display: flex;
@@ -62,7 +69,13 @@ a:hover { color: var(--accent); }
 
 .masthead-nav a { text-decoration: none; color: var(--ink-soft); white-space: nowrap; }
 .masthead-nav a:hover { color: var(--accent); text-decoration: underline; }
-.masthead-nav .language-links { color: var(--line); }
+.language-switch {
+  display: inline-flex;
+  gap: 12px;
+  padding-left: 18px;
+  border-left: 1px solid var(--line);
+}
+.language-switch [aria-current] { color: var(--ink); font-weight: 700; }
 
 .hero {
   padding: clamp(48px, 9vw, 104px) max(20px, 5vw) clamp(40px, 7vw, 72px);
@@ -112,9 +125,8 @@ a:hover { color: var(--accent); }
 .button-secondary { color: var(--accent-deep); background: transparent; }
 .button-secondary:hover { background: var(--surface); }
 
+/* The same side margins as the header and footer, so the page reads as one column. */
 .content {
-  max-width: 54em;
-  margin: 0 auto;
   padding: clamp(32px, 6vw, 64px) max(20px, 5vw);
 }
 

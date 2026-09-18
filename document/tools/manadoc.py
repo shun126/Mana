@@ -441,6 +441,21 @@ class WikiConfig:
             return list(self.pages)
         return [page for page in self.pages if self.is_complete(page, language)]
 
+    def page_name_for(self, key: str, code: str) -> str:
+        """The Wiki page to link for `key` from content written in `code`.
+
+        The page in that language when it is published there, otherwise the
+        default language's page, so a link never points at a missing page.
+        """
+        page = next((page for page in self.pages if page.key == key), None)
+        if page is None:
+            known = ", ".join(page.key for page in self.pages)
+            raise ConfigError(f"'{key}' is not a Wiki page; wiki.yml defines {known}")
+        language = self.languages.get(code)
+        if language is not None and self.is_complete(page, language):
+            return page.name(language)
+        return page.name(self.default_language)
+
     def toc_title(self, language: Language) -> str:
         return self.toc_titles.get(language.code) or self.toc_titles.get(
             self.default_language.code, "Contents"

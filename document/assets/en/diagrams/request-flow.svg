@@ -8,7 +8,7 @@
     .arrow{stroke:#3e92e8;stroke-width:6;fill:none;marker-end:url(#m)}
   </style><marker id="m" viewBox="0 0 10 10" markerWidth="5" markerHeight="5" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#3e92e8"/></marker></defs>
   <rect width="1200" height="760" fill="#fff"/>
-  <text x="70" y="88" class="title">Request の流れ</text>
+  <text x="70" y="88" class="title">How a request flows</text>
   <rect x="70" y="104" width="160" height="10" rx="5" fill="#9fd0fa"/>
   <g transform="translate(70,210)">
     <rect class="box" x="0" y="0" width="230" height="220" rx="24"/>
@@ -37,8 +37,8 @@
     <circle cx="0" cy="0" r="24" fill="#3e92e8"/><text x="0" y="8" text-anchor="middle" style="font:700 24px Arial; fill:#fff">1</text>
     <text x="46" y="8" class="label">10 = Priority</text>
     <circle cx="0" cy="76" r="24" fill="#3e92e8"/><text x="0" y="84" text-anchor="middle" style="font:700 24px Arial; fill:#fff">2</text>
-    <text x="46" y="84" class="label">Door-&gt;open = Door Actor の open Action への参照</text>
+    <text x="46" y="84" class="label">Door-&gt;open = a reference to the open Action of the Door Actor</text>
     <circle cx="0" cy="152" r="24" fill="#3e92e8"/><text x="0" y="160" text-anchor="middle" style="font:700 24px Arial; fill:#fff">3</text>
-    <text x="46" y="160" class="label">request は相手に Action の実行を依頼する</text>
+    <text x="46" y="160" class="label">request asks another Actor to run one of its Actions</text>
   </g>
 </svg>
