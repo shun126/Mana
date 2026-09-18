@@ -8,6 +8,11 @@ tagline: Actor-oriented scripting language for game events
 
 default_language: ja
 
+# The site root opens the reader's language when the site has it: the one
+# they picked on the site before, otherwise their browser's first language.
+# Everyone else gets this language.
+fallback_language: en
+
 languages:
   ja:
     label: 日本語
