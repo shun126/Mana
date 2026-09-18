@@ -441,6 +441,16 @@ class PartialTranslationTest(unittest.TestCase):
         )
         self.assertNotIn("English", sidebar)
 
+    def test_site_links_follow_the_published_translation(self):
+        self.assertEqual(
+            self.config.page_name_for("Language-Reference", "en"), "Language-Reference-en"
+        )
+        self.assertEqual(self.config.page_name_for("Tutorial", "en"), "Tutorial")
+        self.assertEqual(self.config.page_name_for("Tutorial", "ja"), "Tutorial")
+        self.assertEqual(self.config.page_name_for("Home", "fr"), "Home")
+        with self.assertRaises(manadoc.ConfigError):
+            self.config.page_name_for("No-Such-Page", "en")
+
     def test_required_language_still_fails_on_a_missing_page(self):
         self.english.optional = False
         with self.assertRaises(manadoc.ConfigError):
