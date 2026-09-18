@@ -1,0 +1,10 @@
+/*
+mana (script)
+Copyright (c) 2003 Shun Moriya
+*/
+
+include "constants.mn";
+include "structs.mn";
+include "variables.mn";
+include "functions.mn";
+include "actors.mn";

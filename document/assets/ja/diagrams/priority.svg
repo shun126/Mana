@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760">
+  <defs><style>
+    .title{font:700 42px Arial,Helvetica,sans-serif; fill:#0f2547}
+    .h2{font:700 20px Arial,Helvetica,sans-serif; fill:#0f2547}
+    .small{font:400 16px Arial,Helvetica,sans-serif; fill:#38506f}
+    .note{fill:#f6fbff;stroke:#7cb6f0;stroke-width:3}
+    .main{fill:#dff0ff;stroke:#0f2547;stroke-width:2}
+    .open{fill:#3e92e8;stroke:#0f2547;stroke-width:2}
+  </style><marker id="m" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#3e92e8"/></marker></defs>
+  <rect width="1200" height="760" fill="#fff"/>
+  <text x="600" y="88" text-anchor="middle" class="title">Priority による割り込みと復帰</text>
+  <text x="80" y="450" style="font:700 24px Arial; fill:#0f2547">Door actor</text>
+  <rect x="220" y="412" width="300" height="56" rx="10" class="main"/>
+  <text x="370" y="448" text-anchor="middle" class="h2">main (priority 1)</text>
+  <rect x="520" y="338" width="280" height="74" rx="10" class="open"/>
+  <text x="660" y="385" text-anchor="middle" style="font:700 20px Arial; fill:#fff">open (priority 10)</text>
+  <rect x="800" y="412" width="320" height="56" rx="10" class="main"/>
+  <text x="960" y="448" text-anchor="middle" class="h2">main (priority 1)</text>
+  <line x1="520" y1="330" x2="520" y2="470" stroke="#666" stroke-dasharray="8 8" stroke-width="2"/>
+  <line x1="800" y1="330" x2="800" y2="470" stroke="#666" stroke-dasharray="8 8" stroke-width="2"/>
+  <g transform="translate(160,170)">
+    <circle cx="0" cy="0" r="24" fill="#3e92e8"/><text x="0" y="8" text-anchor="middle" style="font:700 24px Arial; fill:#fff">1</text>
+    <rect x="0" y="0" width="290" height="112" rx="16" class="note"/>
+    <text x="30" y="44" class="h2">高い Priority は現在の</text>
+    <text x="30" y="78" class="h2">Action に割り込める</text>
+    <path d="M248 108 L288 164" stroke="#3e92e8" stroke-width="4" fill="none" marker-end="url(#m)"/>
+  </g>
+  <g transform="translate(790,170)">
+    <circle cx="0" cy="0" r="24" fill="#3e92e8"/><text x="0" y="8" text-anchor="middle" style="font:700 24px Arial; fill:#fff">2</text>
+    <rect x="0" y="0" width="250" height="112" rx="16" class="note"/>
+    <text x="30" y="44" class="h2">open が終わると</text>
+    <text x="30" y="78" class="h2">元の main へ戻る</text>
+    <path d="M24 108 L-12 164" stroke="#3e92e8" stroke-width="4" fill="none" marker-end="url(#m)"/>
+  </g>
+  <g transform="translate(880,510)">
+    <circle cx="0" cy="0" r="24" fill="#3e92e8"/><text x="0" y="8" text-anchor="middle" style="font:700 24px Arial; fill:#fff">3</text>
+    <rect x="0" y="0" width="236" height="88" rx="16" class="note"/>
+    <text x="24" y="38" class="h2">低い Priority は</text>
+    <text x="24" y="68" class="h2">後で実行される</text>
+    <path d="M40 88 L40 104" stroke="#3e92e8" stroke-width="4" fill="none" marker-end="url(#m)"/>
+    <rect x="16" y="108" width="220" height="50" rx="12" fill="#fff" stroke="#666" stroke-dasharray="8 6" stroke-width="2"/>
+    <text x="126" y="139" text-anchor="middle" class="small">（低い Priority の Action）</text>
+  </g>
+  <line x1="60" y1="710" x2="1140" y2="710" stroke="#666" stroke-width="2" marker-end="url(#m)"/>
+  <text x="1100" y="692" class="small">時間</text>
+</svg>
