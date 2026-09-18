@@ -373,6 +373,9 @@ class Language:
     suffix: str = ""
     default: bool = False
     optional: bool = False
+    # Shown on the Wiki's front page in the default language, so readers of
+    # this language find their edition. `{page}` becomes the page to open.
+    notice: str = ""
 
 
 @dataclass
@@ -487,6 +490,7 @@ def load_wiki_config(path: Path = WIKI_CONFIG) -> WikiConfig:
             suffix=entry.get("suffix") or "",
             default=bool(entry.get("default")),
             optional=bool(entry.get("optional")),
+            notice=entry.get("notice") or "",
         )
 
     pages = data.get("pages") or {}
@@ -669,24 +673,43 @@ class WikiGenerator:
         return Section(relative, anchor_for(relative), title, body)
 
     def language_links(self, page: WikiPage):
-        links = self.counterpart(page)
-        if not links:
+        """A bar naming every language this page exists in, the current one in bold."""
+        others = {language.code: name for language, name in self.counterpart(page)}
+        if not others:
             return ""
-        return " | ".join("[%s](%s)" % (language.label, name) for language, name in links)
+        items = []
+        for language in self.config.languages.values():
+            if language.code == self.language.code:
+                items.append("**%s**" % language.label)
+            elif language.code in others:
+                items.append("[%s](%s)" % (language.label, others[language.code]))
+        return "🌐 " + " · ".join(items)
+
+    def notices(self, page: WikiPage):
+        """On the front page of the default language, point other readers to their edition."""
+        if self.language.code != self.default_code or page is not self.config.pages[0]:
+            return []
+        return [
+            "> " + language.notice.replace("{page}", name)
+            for language, name in self.counterpart(page)
+            if language.notice
+        ]
 
     def build_page(self, page: WikiPage) -> str:
         sections = [self.read_section(relative) for relative in page.files]
-        switch = self.language_links(page)
+        header = "\n\n".join(
+            part for part in [self.language_links(page)] + self.notices(page) if part
+        )
 
         if page.mode == "single":
             body = sections[0].body
-            if switch:
-                body = _insert_after_title(body, switch)
+            if header:
+                body = _insert_after_title(body, header)
             return body.rstrip() + "\n"
 
         lines = ["# " + page.title(self.language, self.default_code), ""]
-        if switch:
-            lines += [switch, ""]
+        if header:
+            lines += [header, ""]
         lines += ["## " + self.config.toc_title(self.language), ""]
         for section in sections:
             lines.append("- [%s](#%s)" % (section.title, section.anchor))
