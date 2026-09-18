@@ -467,6 +467,57 @@ class PartialTranslationTest(unittest.TestCase):
         )
 
 
+class SiteRootTest(unittest.TestCase):
+    """The page at `/` sends readers to a language that was built."""
+
+    def setUp(self):
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        self.tree = DocumentTree(Path(directory.name))
+        self.tree.write("document/pages/theme/base.html", "<html>{{ content }}</html>")
+        self.tree.apply(self)
+        self.site = {
+            "title": "Mana",
+            "default_language": "ja",
+            "fallback_language": "en",
+            "languages": {"ja": {"label": "日本語"}, "en": {"label": "English"}},
+        }
+        self.output = self.tree.root / "build" / "pages"
+        self.output.mkdir(parents=True)
+        self.builder = _load_script("build-pages.py").SiteBuilder(self.site, self.output, "master")
+
+    def root(self, languages):
+        self.builder.build_root(languages)
+        return (self.output / "index.html").read_text(encoding="utf-8")
+
+    def test_single_language_build_opens_that_language(self):
+        page = self.root(["en"])
+        self.assertIn('url=./en/"', page)
+        self.assertNotIn("./ja/", page)
+
+    def test_default_language_only_build(self):
+        page = self.root(["ja"])
+        self.assertIn('url=./ja/"', page)
+        self.assertNotIn("./en/", page)
+
+    def test_readers_of_other_languages_get_the_fallback(self):
+        page = self.root(["ja", "en"])
+        self.assertIn('var available = ["ja", "en"], fallback = "en"', page)
+        self.assertIn('href="./ja/" hreflang="ja"', page)
+        self.assertIn('data-language="en"', page)
+
+    def test_fallback_language_must_have_been_built(self):
+        self.assertEqual(self.builder.fallback_language(["ja", "en"]), "en")
+        self.assertEqual(self.builder.fallback_language(["ja", "fr"]), "ja")
+        self.assertEqual(self.builder.fallback_language(["fr", "de"]), "fr")
+
+    def test_header_lists_every_language_and_marks_the_current_one(self):
+        switch = self.builder.language_links("en", ["ja", "en"])
+        self.assertIn('<a href="../ja/" hreflang="ja" lang="ja" data-language="ja">日本語</a>', switch)
+        self.assertIn('<span aria-current="page" lang="en">English</span>', switch)
+        self.assertEqual(self.builder.language_links("ja", ["ja"]), "")
+
+
 def _load_script(name: str):
     """Import one of the hyphenated command line tools as a module."""
     import importlib.util
