@@ -370,6 +370,28 @@ class SidebarAndTranslationTest(unittest.TestCase):
         self.assertIn("[English](Tutorial-en)", japanese["Tutorial"])
         self.assertIn("[日本語](Tutorial)", english["Tutorial-en"])
 
+    def test_language_bar_names_every_language_and_marks_the_current_one(self):
+        self.add_english()
+        _, japanese = self.generate("ja")
+        _, english = self.generate("en")
+        self.assertIn("🌐 **日本語** · [English](Tutorial-en)", japanese["Tutorial"])
+        self.assertIn("🌐 [日本語](Tutorial) · **English**", english["Tutorial-en"])
+
+    def test_front_page_points_other_readers_to_their_edition(self):
+        self.add_english()
+        self.config.language("en").notice = "Read it in English: [here]({page})"
+        _, japanese = self.generate("ja")
+        _, english = self.generate("en")
+        self.assertIn("> Read it in English: [here](Home-en)", japanese["Home"])
+        # Only the default language's front page carries the notice.
+        self.assertNotIn("Read it in English", japanese["Tutorial"])
+        self.assertNotIn("Read it in English", english["Home-en"])
+
+    def test_no_notice_until_the_translated_front_page_exists(self):
+        self.config.language("en").notice = "Read it in English: [here]({page})"
+        _, japanese = self.generate("ja")
+        self.assertNotIn("Read it in English", japanese["Home"])
+
     def test_english_pages_reuse_the_japanese_anchors(self):
         self.add_english()
         _, english = self.generate("en")

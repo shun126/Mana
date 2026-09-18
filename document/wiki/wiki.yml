@@ -22,6 +22,8 @@ languages:
     source: en
     suffix: "-en"
     optional: true
+    # The Wiki opens on the Japanese Home; this tells English readers where to go.
+    notice: "**English:** This manual is also available in English. [Read the English edition →]({page})"
 
 # Page order in this mapping is the Wiki order, and drives `_Sidebar.md`.
 pages:
