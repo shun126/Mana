@@ -119,9 +119,8 @@ a:hover { color: var(--accent); }
 .button-secondary { color: var(--accent-deep); background: transparent; }
 .button-secondary:hover { background: var(--surface); }
 
+/* The same side margins as the header and footer, so the page reads as one column. */
 .content {
-  max-width: 54em;
-  margin: 0 auto;
   padding: clamp(32px, 6vw, 64px) max(20px, 5vw);
 }
 
