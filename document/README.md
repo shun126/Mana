@@ -57,7 +57,7 @@ document/assets/   ──┘
 | `Language-Reference` | `wiki/ja/reference/` |
 | `Integration` | `wiki/ja/integration/` |
 
-`_Sidebar.md` も自動生成されます。
+`_Sidebar.md` も自動生成されます。全ページ下部のフッター `_Footer.md` は `wiki.yml` の `footer` から生成します。フッターは全言語で共通なので、日本語と英語を併記しています。
 
 生成時には次の処理が行われます。
 

@@ -127,6 +127,16 @@ toc:
   ja: 目次
   en: Contents
 
+# Shown at the bottom of every Wiki page as `_Footer.md`. One footer serves
+# every language, so it is written in both. Publishing replaces the whole
+# Wiki, so edit the footer here rather than on GitHub.
+footer: |
+  このマニュアルは [shun126/Mana](https://github.com/shun126/Mana) の `document/wiki/` から自動生成しています。Wiki を直接編集しても次の公開で上書きされるため、修正はリポジトリへの Pull Request でお願いします。
+
+  This manual is generated from `document/wiki/` in [shun126/Mana](https://github.com/shun126/Mana). Edits made on the Wiki itself are overwritten on the next publish, so please send changes as pull requests to the repository.
+
+  [Website](https://shun126.github.io/Mana/) · [Report an issue](https://github.com/shun126/Mana/issues) · [License](https://github.com/shun126/Mana/blob/master/LICENSE.md)
+
 # Links that leave `document/wiki/<source>/`, such as the runnable examples,
 # become links into the repository.
 repository:
