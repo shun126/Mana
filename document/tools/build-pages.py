@@ -347,7 +347,7 @@ class SiteBuilder:
             '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
             "<title>%s</title>\n"
             '<link rel="stylesheet" href="theme/site.css">\n</head>\n<body>\n'
-            '<div class="chooser">\n  <img src="%s/common/logo.svg" alt="%s" width="200">\n'
+            '<div class="chooser">\n  <img src="%s/common/logo_midium.png" alt="%s" width="160" height="160">\n'
             '  <p class="tagline">%s</p>\n  <p class="actions">\n    %s\n  </p>\n</div>\n'
             "</body>\n</html>\n"
             % (

@@ -73,7 +73,7 @@ class DocumentTree:
         (self.document / "assets" / "ja" / "diagrams").mkdir(parents=True)
         (self.document / "pages").mkdir(parents=True)
         self.write("document/wiki/wiki.yml", WIKI_YML)
-        self.write("document/assets/common/logo.svg", "<svg/>")
+        self.write("document/assets/common/logo_small.png", "png")
         self.write("document/assets/ja/diagrams/request-flow.svg", "<svg/>")
         self.write("examples/tutorial/03-request.mn", "actor Event {}")
 
@@ -478,9 +478,9 @@ class AssetTest(unittest.TestCase):
     def test_common_and_language_assets_are_published(self):
         destination = self.tree.root / "build" / "assets"
         copied = manadoc.copy_assets([manadoc.Language("ja", "日本語", "ja")], destination)
-        self.assertIn("common/logo.svg", copied)
+        self.assertIn("common/logo_small.png", copied)
         self.assertIn("ja/diagrams/request-flow.svg", copied)
-        self.assertTrue((destination / "common" / "logo.svg").is_file())
+        self.assertTrue((destination / "common" / "logo_small.png").is_file())
 
     def test_assets_of_other_languages_are_not_published(self):
         self.tree.write("document/assets/en/diagrams/request-flow.svg", "<svg/>")
