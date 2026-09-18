@@ -6,7 +6,7 @@
     .small{font:400 16px Arial,Helvetica,sans-serif; fill:#38506f}
     .box{fill:#eef7ff;stroke:#3e92e8;stroke-width:4}
     .arrow{stroke:#3e92e8;stroke-width:6;fill:none;marker-end:url(#m)}
-  </style><marker id="m" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#3e92e8"/></marker></defs>
+  </style><marker id="m" viewBox="0 0 10 10" markerWidth="5" markerHeight="5" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#3e92e8"/></marker></defs>
   <rect width="1200" height="760" fill="#fff"/>
   <text x="70" y="88" class="title">Request の流れ</text>
   <rect x="70" y="104" width="160" height="10" rx="5" fill="#9fd0fa"/>
