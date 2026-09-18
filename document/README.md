@@ -28,9 +28,10 @@ document/
 
 ## 運用方針
 
-- **日本語が既定言語**です。`wiki/ja/` と `pages/ja/` が正式版にあたります。
+- **日本語が原本**です。`wiki/ja/` と `pages/ja/` が正式版で、英語版はその翻訳です（`wiki.yml` の `default`）。
+- **Wiki の入口は英語**です。GitHub の Wiki は `Home` から開くため、英語版を接尾辞なしのページ名（`Home`、`Tutorial`）、日本語版を `-ja` 付き（`Home-ja`、`Tutorial-ja`）で公開します（`wiki.yml` の `suffix`）。
 - **`ja/` と `en/` は同じパス構造**にします。英訳を追加するときも、日本語版と同じファイル名を使います（`wiki/ja/tutorial/tutorial-request.md` に対して `wiki/en/tutorial/tutorial-request.md`）。英語版だけ別名にしないでください。
-- **Wiki は章ごとに 1 ページへ結合して公開**します。`wiki/ja/tutorial/` の各ファイルは `Tutorial` という 1 ページになります。
+- **Wiki は章ごとに 1 ページへ結合して公開**します。`wiki/ja/tutorial/` の各ファイルは `Tutorial-ja`、`wiki/en/tutorial/` の各ファイルは `Tutorial` という 1 ページになります。
 - **Wiki の生成物は Git 管理しません。** `build/` は `.gitignore` 済みです。
 - **Pages の生成 HTML も Git 管理しません。** `gh-pages` ブランチは使わず、GitHub Pages の artifact deploy で公開します。
 - **公開先を直接編集しないでください。** GitHub Wiki を直接編集しても、次の公開で上書きされます。原稿はかならずこのディレクトリで直します。
@@ -46,16 +47,16 @@ document/assets/   ──┘
 
 ## Wiki の構成
 
-`wiki/wiki.yml` の `pages` が、公開される Wiki ページと結合順を決めます。日本語版は次の 6 ページです。
+`wiki/wiki.yml` の `pages` が、公開される Wiki ページと結合順を決めます。各言語 6 ページです。
 
-| Wiki ページ | 原稿 |
-| --- | --- |
-| `Home` | `wiki/ja/Home.md` |
-| `Getting-Started` | `wiki/ja/getting-started/` |
-| `Tutorial` | `wiki/ja/tutorial/` |
-| `Concepts` | `wiki/ja/concepts/` |
-| `Language-Reference` | `wiki/ja/reference/` |
-| `Integration` | `wiki/ja/integration/` |
+| 英語ページ | 日本語ページ | 原稿 |
+| --- | --- | --- |
+| `Home` | `Home-ja` | `wiki/<language>/Home.md` |
+| `Getting-Started` | `Getting-Started-ja` | `wiki/<language>/getting-started/` |
+| `Tutorial` | `Tutorial-ja` | `wiki/<language>/tutorial/` |
+| `Concepts` | `Concepts-ja` | `wiki/<language>/concepts/` |
+| `Language-Reference` | `Language-Reference-ja` | `wiki/<language>/reference/` |
+| `Integration` | `Integration-ja` | `wiki/<language>/integration/` |
 
 `_Sidebar.md` も自動生成されます。全ページ下部のフッター `_Footer.md` は `wiki.yml` の `footer` から生成します。フッターは全言語で共通なので、日本語と英語を併記しています。
 
@@ -135,23 +136,21 @@ Wiki と公式サイトには英語版があります（`document/wiki/en/`、`d
 
 **日本語の原稿を変更したら、同じ相対パスの英語の原稿も更新してください。** `check-docs.py` が検出できるのはファイルの欠落だけで、内容が古くなっていることは検出できません。
 
+英語は Wiki の入口なので、`wiki.yml` では optional ではない（必須の）言語にしています。英語の原稿が 1 つでも欠けると `check-docs.py` と `export-wiki.py` はエラーになり、Wiki は公開されません。日本語の原稿を追加したら、同じ変更で英語の原稿も追加してください。
+
 英語の原稿は、次の手順で追加・更新します。ディレクトリ構成は対称なので、再編は必要ありません。
 
 1. `document/wiki/en/` に、`document/wiki/ja/` と**同じ相対パス・同じファイル名**で英訳を置きます。
 2. 日本語を含む図がある場合は `document/assets/en/diagrams/` に、日本語版と同じファイル名で英語版を置きます。文字を含まない素材は `document/assets/common/` のままで構いません。
 3. 公式サイトの英語版は `document/pages/en/index.md` です（作成済み）。サイトの図解は `document/assets/en/diagrams/` の英語版を使います。
-4. `python document/tools/check-docs.py` を実行し、翻訳漏れの警告を確認します。
+4. `python document/tools/check-docs.py` を実行し、翻訳漏れがないことを確認します。
 5. `python document/tools/export-wiki.py --language all --output build/wiki` で確認します。
 
-英語 Wiki は `Home-en`、`Tutorial-en` のように `-en` を付けたページ名で生成されます（`wiki.yml` の `suffix`）。
+- 各ページの見出しの下には、そのページがある言語を並べた言語バー（`🌐 **English** · [日本語](Tutorial-ja)`）が入ります。今読んでいる言語が太字になります。並び順は `wiki.yml` の `languages` の順です。
+- Wiki は英語の `Home` から開くため、英語 `Home` の冒頭に日本語の案内（`wiki.yml` の日本語の `notice`）を入れ、日本語の読者を `Home-ja` へ案内します。
+- Sidebar は English、日本語の順に、各言語のページを並べます。
 
-翻訳は少しずつ公開できます。英語は `optional` な言語なので、**Wiki ページ単位で、そのページの原稿がすべて揃ったものから公開**されます。
-
-- 原稿が揃っていないページは公開されず、`check-docs.py` と `export-wiki.py` が「何ファイル中いくつ翻訳済みか」を警告として表示します。エラーにはならないので、日本語 Wiki の公開は止まりません。
-- 公開済みの英語ページから未公開のページへのリンクは、日本語版の同じ節（`Tutorial#tutorial-request` など）へつながります。アンカーは言語共通なので、英語版が公開されると自動的に英語ページへのリンクに変わります。
-- Sidebar の English 見出しには、公開済みの英語ページだけが並びます。
-- 各ページの見出しの下には、そのページがある言語を並べた言語バー（`🌐 **日本語** · [English](Tutorial-en)`）が入ります。今読んでいる言語が太字になり、両言語が揃ったページにだけ表示されます。
-- GitHub の Wiki は日本語の `Home` から開くため、日本語 `Home` の冒頭に英語の案内（`wiki.yml` の `notice`）を入れ、英語の読者を `Home-en` へ案内します。
+3 つ目以降の言語は、`optional: true` にすると少しずつ公開できます。optional な言語は、原稿がすべて揃った Wiki ページから公開され、未公開のページへのリンクは日本語版（原本）の同じ節へつながります。
 
 公式サイトは日本語 `/ja/` と英語 `/en/` の 2 言語です。ルート `/` は読者の言語のページへ移動します。
 
@@ -163,7 +162,7 @@ Wiki と公式サイトには英語版があります（`document/wiki/en/`、`d
 
 各ページのヘッダーには全言語が並び、今読んでいる言語が強調表示されます。
 
-サイトから Wiki へのリンクは `wiki:Tutorial` のように書きます。表示言語の Wiki ページが公開済みならそのページ（`Tutorial-en`）へ、未公開なら日本語のページ（`Tutorial`）へつながります。英語 Wiki の翻訳が進むと、サイトを作り直すだけでリンクが英語ページに切り替わります。このため `publish-pages.yml` は `document/wiki/` の変更でも実行されます。
+サイトから Wiki へのリンクは `wiki:Tutorial` のように書きます。表示言語の Wiki ページ（英語サイトなら `Tutorial`、日本語サイトなら `Tutorial-ja`）へつながります。その言語のページがまだない場合は、原本である日本語のページへつながります。Wiki の構成が変わるとリンク先も変わるため、`publish-pages.yml` は `document/wiki/` の変更でも実行されます。
 
 ## 原稿を書くときの注意
 
