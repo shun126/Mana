@@ -396,6 +396,7 @@ class WikiConfig:
     languages: dict = field(default_factory=dict)
     pages: list = field(default_factory=list)
     toc_titles: dict = field(default_factory=dict)
+    footer: str = ""
     repository_url: str = ""
     repository_ref: str = "master"
     document_root: str = "document"
@@ -505,6 +506,7 @@ def load_wiki_config(path: Path = WIKI_CONFIG) -> WikiConfig:
         config.pages.append(WikiPage(key=key, titles=titles, files=list(files), mode=mode))
 
     config.toc_titles = data.get("toc") or {}
+    config.footer = (data.get("footer") or "").strip()
     repository = data.get("repository") or {}
     config.repository_url = repository.get("url", "")
     config.repository_ref = repository.get("ref", "master")

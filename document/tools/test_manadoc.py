@@ -5,6 +5,8 @@
 
 from __future__ import annotations
 
+import contextlib
+import io
 import sys
 import tempfile
 import textwrap
@@ -53,6 +55,11 @@ WIKI_YML = textwrap.dedent(
     toc:
       ja: 目次
       en: Contents
+
+    footer: |
+      自動生成です。
+
+      Generated manual.
 
     repository:
       url: https://example.invalid/owner/repo
@@ -465,6 +472,36 @@ class PartialTranslationTest(unittest.TestCase):
         self.assertTrue(
             any("Tutorial-en is not published yet" in message for message in report.warnings)
         )
+
+
+class FooterTest(unittest.TestCase):
+    """wiki.yml's footer is published as `_Footer.md`."""
+
+    def setUp(self):
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        self.tree = DocumentTree(Path(directory.name))
+        for relative, text in JAPANESE_PAGES.items():
+            self.tree.write("document/" + relative, text)
+        self.tree.apply(self)
+        self.output = self.tree.root / "build" / "wiki"
+
+    def export(self):
+        with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
+            status = _load_script("export-wiki.py").main(["--output", str(self.output)])
+        self.assertEqual(status, 0)
+
+    def test_footer_is_written(self):
+        self.export()
+        footer = (self.output / "_Footer.md").read_text(encoding="utf-8")
+        self.assertEqual(footer, "自動生成です。\n\nGenerated manual.\n")
+
+    def test_no_footer_without_configuration(self):
+        path = self.tree.document / "wiki" / "wiki.yml"
+        text = path.read_text(encoding="utf-8")
+        path.write_text(text.replace("footer: |\n  自動生成です。\n\n  Generated manual.\n", ""), encoding="utf-8")
+        self.export()
+        self.assertFalse((self.output / "_Footer.md").exists())
 
 
 class SiteRootTest(unittest.TestCase):

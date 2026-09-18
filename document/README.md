@@ -57,7 +57,7 @@ document/assets/   ──┘
 | `Language-Reference` | `wiki/ja/reference/` |
 | `Integration` | `wiki/ja/integration/` |
 
-`_Sidebar.md` も自動生成されます。
+`_Sidebar.md` も自動生成されます。全ページ下部のフッター `_Footer.md` は `wiki.yml` の `footer` から生成します。フッターは全言語で共通なので、日本語と英語を併記しています。
 
 生成時には次の処理が行われます。
 
@@ -129,11 +129,15 @@ Wiki の同期はミラー方式です。生成結果が Wiki の全内容にな
 
 Wiki への push は、まず GitHub Actions の標準トークンで行います。標準トークンで push できない場合に限り、`Settings` → `Secrets and variables` → `Actions` で `WIKI_TOKEN` に Wiki への書き込み権限を持つトークンを登録してください。secret があればそちらが使われます。
 
-## 英語版を追加するとき
+## 英語版
 
-ディレクトリ構成は対称なので、再編は必要ありません。
+Wiki と公式サイトには英語版があります（`document/wiki/en/`、`document/pages/en/`）。日本語版が原本で、英語版はその翻訳です。
 
-1. `document/wiki/en/` を作り、`document/wiki/ja/` と**同じ相対パス・同じファイル名**で英訳を置きます。
+**日本語の原稿を変更したら、同じ相対パスの英語の原稿も更新してください。** `check-docs.py` が検出できるのはファイルの欠落だけで、内容が古くなっていることは検出できません。
+
+英語の原稿は、次の手順で追加・更新します。ディレクトリ構成は対称なので、再編は必要ありません。
+
+1. `document/wiki/en/` に、`document/wiki/ja/` と**同じ相対パス・同じファイル名**で英訳を置きます。
 2. 日本語を含む図がある場合は `document/assets/en/diagrams/` に、日本語版と同じファイル名で英語版を置きます。文字を含まない素材は `document/assets/common/` のままで構いません。
 3. 公式サイトの英語版は `document/pages/en/index.md` です（作成済み）。サイトの図解は `document/assets/en/diagrams/` の英語版を使います。
 4. `python document/tools/check-docs.py` を実行し、翻訳漏れの警告を確認します。
