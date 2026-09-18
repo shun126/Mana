@@ -139,7 +139,14 @@ Wiki への push は、まず GitHub Actions の標準トークンで行いま�
 4. `python document/tools/check-docs.py` を実行し、翻訳漏れの警告を確認します。
 5. `python document/tools/export-wiki.py --language all --output build/wiki` で確認します。
 
-英語 Wiki は `Home-en`、`Tutorial-en` のように `-en` を付けたページ名で生成されます（`wiki.yml` の `suffix`）。両言語が揃ったページには言語切替リンクが自動で入り、Sidebar も言語ごとの見出しに分かれます。翻訳が揃っていないページには切替リンクは出ません。
+英語 Wiki は `Home-en`、`Tutorial-en` のように `-en` を付けたページ名で生成されます（`wiki.yml` の `suffix`）。
+
+翻訳は少しずつ公開できます。英語は `optional` な言語なので、**Wiki ページ単位で、そのページの原稿がすべて揃ったものから公開**されます。
+
+- 原稿が揃っていないページは公開されず、`check-docs.py` と `export-wiki.py` が「何ファイル中いくつ翻訳済みか」を警告として表示します。エラーにはならないので、日本語 Wiki の公開は止まりません。
+- 公開済みの英語ページから未公開のページへのリンクは、日本語版の同じ節（`Tutorial#tutorial-request` など）へつながります。アンカーは言語共通なので、英語版が公開されると自動的に英語ページへのリンクに変わります。
+- Sidebar の English 見出しには、公開済みの英語ページだけが並びます。
+- 言語切替リンクは、両言語が揃ったページにだけ入ります。
 
 公式サイトも、2 言語目が追加された時点でルート `/` が言語選択ページに変わります。それまでは `/` から `/ja/` へ移動します。
 

@@ -62,7 +62,8 @@ def check_wiki_language(config: manadoc.WikiConfig, language: manadoc.Language, 
                 )
             else:
                 listed[relative] = page.key
-            if not (root / relative).is_file():
+            # A missing translation is reported by check_wiki_translations.
+            if not (root / relative).is_file() and not language.optional:
                 report.error(f"{label}/{relative} is listed in wiki.yml but does not exist")
 
     for path in sorted(root.rglob("*.md")):
@@ -91,6 +92,15 @@ def check_wiki_language(config: manadoc.WikiConfig, language: manadoc.Language, 
                 report.error(f"{label}/{relative}: '{target}' leaves the repository")
                 continue
             resolved = manadoc.REPOSITORY_DIR / repository_path
+            manuscript = generator.language_relative(repository_path)
+            if (
+                not resolved.exists()
+                and language.optional
+                and manuscript in generator.index
+                and (config.source_root(config.default_language) / manuscript).is_file()
+            ):
+                # Not translated yet; the Wiki links the default language instead.
+                continue
             if not resolved.exists():
                 kind = "image" if is_image else "link target"
                 report.error(f"{label}/{relative}: {kind} '{target}' does not exist")
@@ -125,6 +135,14 @@ def check_wiki_translations(config: manadoc.WikiConfig, report: Report):
             (report.warning if language.optional else report.error)(message)
             continue
         present = {path.relative_to(root).as_posix() for path in root.rglob("*.md")}
+        if language.optional:
+            for page in config.pages:
+                done = sum((root / relative).is_file() for relative in page.files)
+                if done < len(page.files):
+                    report.warning(
+                        f"{language.code}: page {page.name(language)} is not published yet "
+                        f"({done} of {len(page.files)} manuscripts translated)"
+                    )
         for relative in sorted(default_files - present):
             message = (
                 f"{language.code}: {relative} is not translated "
