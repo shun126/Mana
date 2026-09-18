@@ -40,8 +40,16 @@ driver/mana
 
 # Mana
 *.mx
-/sample/*.h
-/sample/*.md
+/examples/**/*.h
+/examples/**/*.md
+!/examples/**/README.md
 /test/**/*.h
 /test/**/*.md
+
+# Generated documentation (Wiki pages and website) and Python cache.
+# The manuscripts under document/ are the source of truth; build output
+# is published by the workflows and never committed.
+/build/
+_site/
+__pycache__/
 

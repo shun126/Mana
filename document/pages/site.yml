@@ -1,0 +1,29 @@
+# Mana official website settings.
+#
+# `document/pages/<language>/` holds the manuscripts and `build-pages.py`
+# renders them. The site introduces Mana; the manual itself lives in the Wiki.
+
+title: Mana
+tagline: Actor-oriented scripting language for game events
+
+default_language: ja
+
+languages:
+  ja:
+    label: 日本語
+    html_lang: ja
+  en:
+    label: English
+    html_lang: en
+    optional: true
+
+# `wiki:Tutorial` in a manuscript becomes a link to this Wiki.
+wiki:
+  url: https://github.com/shun126/Mana/wiki
+
+repository:
+  url: https://github.com/shun126/Mana
+
+theme:
+  layout: theme/base.html
+  stylesheet: theme/site.css
