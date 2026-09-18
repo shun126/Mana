@@ -6,6 +6,9 @@
 #
 # Adding a language: add an entry under `languages` and create
 # `document/wiki/<source>/` with the same relative file names as `ja`.
+# An `optional` language is published a page at a time: a page appears once
+# all of its files are translated, and links to the rest go to the default
+# language. A language that is not optional must provide every page.
 
 languages:
   ja:

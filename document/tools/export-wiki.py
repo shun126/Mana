@@ -114,6 +114,18 @@ def main(argv=None) -> int:
                 return 1
             manadoc.write_text(output / (name + ".md"), text)
             written.append(name)
+        # A partly translated optional language publishes its finished pages.
+        for page in config.pages:
+            if page.name(language) not in pages:
+                done = sum(
+                    (config.source_root(language) / relative).is_file()
+                    for relative in page.files
+                )
+                print(
+                    f"note: {page.name(language)} is not published yet "
+                    f"({done} of {len(page.files)} manuscripts translated)",
+                    file=sys.stderr,
+                )
 
     manadoc.write_text(output / "_Sidebar.md", manadoc.build_sidebar(config, languages))
     written.append("_Sidebar")

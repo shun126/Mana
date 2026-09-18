@@ -384,6 +384,90 @@ class SidebarAndTranslationTest(unittest.TestCase):
         return generator, generator.build_all()
 
 
+class PartialTranslationTest(unittest.TestCase):
+    """An optional language is published page by page as it is translated."""
+
+    def setUp(self):
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        self.tree = DocumentTree(Path(directory.name))
+        for relative, text in JAPANESE_PAGES.items():
+            self.tree.write("document/" + relative, text)
+        # Only Home and the reference have been translated.
+        for relative in ("wiki/ja/Home.md", "wiki/ja/reference/reference-request.md"):
+            self.tree.write(
+                "document/" + relative.replace("/ja/", "/en/"), JAPANESE_PAGES[relative]
+            )
+        self.tree.apply(self)
+        self.config = manadoc.load_wiki_config(manadoc.WIKI_CONFIG)
+        self.english = self.config.language("en")
+
+    def generate(self, code):
+        generator = manadoc.WikiGenerator(self.config, self.config.language(code))
+        return generator.build_all()
+
+    def test_only_complete_pages_are_built(self):
+        self.assertEqual(sorted(self.generate("en")), ["Home-en", "Language-Reference-en"])
+
+    def test_links_to_untranslated_pages_use_the_default_language(self):
+        english = self.generate("en")
+        self.assertIn("[チュートリアル](Tutorial)", english["Home-en"])
+        self.assertIn(
+            "[チュートリアル](Tutorial#tutorial-request)", english["Language-Reference-en"]
+        )
+
+    def test_sidebar_lists_only_published_pages(self):
+        sidebar = manadoc.build_sidebar(
+            self.config, [self.config.language("ja"), self.english]
+        )
+        english = sidebar.split("## English", 1)[1]
+        self.assertIn("- [Home](Home-en)", english)
+        self.assertIn("- [Language Reference](Language-Reference-en)", english)
+        self.assertNotIn("Tutorial-en", sidebar)
+
+    def test_language_link_only_on_translated_pages(self):
+        japanese = self.generate("ja")
+        self.assertIn("[English](Language-Reference-en)", japanese["Language-Reference"])
+        self.assertNotIn("[English]", japanese["Tutorial"])
+
+    def test_language_without_finished_pages_is_left_out_of_the_sidebar(self):
+        (self.tree.document / "wiki" / "en" / "Home.md").unlink()
+        (self.tree.document / "wiki" / "en" / "reference" / "reference-request.md").write_text(
+            "# request\n", encoding="utf-8"
+        )
+        self.config.pages = [page for page in self.config.pages if page.key == "Tutorial"]
+        sidebar = manadoc.build_sidebar(
+            self.config, [self.config.language("ja"), self.english]
+        )
+        self.assertNotIn("English", sidebar)
+
+    def test_required_language_still_fails_on_a_missing_page(self):
+        self.english.optional = False
+        with self.assertRaises(manadoc.ConfigError):
+            self.generate("en")
+
+    def test_check_docs_reports_warnings_not_errors(self):
+        check_docs = _load_script("check-docs.py")
+        report = check_docs.Report()
+        check_docs.check_wiki_language(self.config, self.english, report)
+        check_docs.check_wiki_translations(self.config, report)
+        self.assertEqual(report.errors, [])
+        self.assertTrue(
+            any("Tutorial-en is not published yet" in message for message in report.warnings)
+        )
+
+
+def _load_script(name: str):
+    """Import one of the hyphenated command line tools as a module."""
+    import importlib.util
+
+    path = Path(__file__).resolve().parent / name
+    spec = importlib.util.spec_from_file_location(name.replace("-", "_")[:-3], path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
 class AssetTest(unittest.TestCase):
     def setUp(self):
         directory = tempfile.TemporaryDirectory()

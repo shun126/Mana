@@ -425,6 +425,22 @@ class WikiConfig:
                 found.append(language)
         return found
 
+    def is_complete(self, page: "WikiPage", language: Language) -> bool:
+        """True when every manuscript of `page` exists in `language`."""
+        root = self.source_root(language)
+        return all((root / relative).is_file() for relative in page.files)
+
+    def published_pages(self, language: Language):
+        """The pages `language` publishes, in wiki.yml order.
+
+        An optional language is translated a page at a time: a page appears
+        once all its manuscripts exist, and links to the others fall back to
+        the default language. Any other language must provide every page.
+        """
+        if not language.optional:
+            return list(self.pages)
+        return [page for page in self.pages if self.is_complete(page, language)]
+
     def toc_title(self, language: Language) -> str:
         return self.toc_titles.get(language.code) or self.toc_titles.get(
             self.default_language.code, "Contents"
@@ -529,6 +545,7 @@ class WikiGenerator:
         for page in config.pages:
             for relative in page.files:
                 self.index[relative] = (page, anchor_for(relative))
+        self.published = {page.key for page in config.published_pages(language)}
         self.used_assets = set()
 
     # -- helpers ---------------------------------------------------------
@@ -542,10 +559,9 @@ class WikiGenerator:
         for language in self.config.languages.values():
             if language.code == self.language.code:
                 continue
-            root = self.config.source_root(language)
-            if not root.is_dir():
+            if not self.config.source_root(language).is_dir():
                 continue
-            if not all((root / relative).is_file() for relative in page.files):
+            if not self.config.is_complete(page, language):
                 continue
             links.append((language, page.name(language)))
         return links
@@ -605,10 +621,15 @@ class WikiGenerator:
             current = self.index.get(relative_source)
             if current and current[0].key == page.key:
                 return destination
+            # Anchors are the same in every language, so an untranslated page
+            # can be linked in the default language at the same section.
+            language = (
+                self.language if page.key in self.published else self.config.default_language
+            )
             if not fragment and manuscript == page.files[0] and is_overview(manuscript):
                 # The section overview opens its page, so name the page itself.
-                return page.name(self.language)
-            return page.name(self.language) + destination
+                return page.name(language)
+            return page.name(language) + destination
 
         # Anything else in the repository, such as the runnable examples.
         return self.config.blob_url(repository_path) + fragment
@@ -667,7 +688,11 @@ class WikiGenerator:
         return "\n".join(lines).rstrip() + "\n"
 
     def build_all(self):
-        return {page.name(self.language): self.build_page(page) for page in self.config.pages}
+        """Build the pages this language publishes."""
+        return {
+            page.name(self.language): self.build_page(page)
+            for page in self.config.published_pages(self.language)
+        }
 
 
 def _insert_after_title(text: str, extra: str) -> str:
@@ -681,13 +706,18 @@ def _insert_after_title(text: str, extra: str) -> str:
 
 
 def build_sidebar(config: WikiConfig, languages) -> str:
-    """Build `_Sidebar.md` for the languages actually being published."""
+    """Build `_Sidebar.md` listing the pages each language publishes."""
+    entries = [
+        (language, config.published_pages(language))
+        for language in languages
+    ]
+    entries = [(language, pages) for language, pages in entries if pages]
     lines = ["# Mana", ""]
-    show_headings = len(languages) > 1
-    for language in languages:
+    show_headings = len(entries) > 1
+    for language, pages in entries:
         if show_headings:
             lines += ["## " + language.label, ""]
-        for page in config.pages:
+        for page in pages:
             title = page.title(language, config.default_language.code)
             lines.append("- [%s](%s)" % (title, page.name(language)))
         lines.append("")
