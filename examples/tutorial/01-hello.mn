@@ -1,0 +1,7 @@
+actor Hello
+{
+    action main
+    {
+        print("Hello, Mana!\n");
+    }
+}

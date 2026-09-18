@@ -1,0 +1,21 @@
+actor Event
+{
+    action main
+    {
+        int remaining = 3;
+        while (remaining > 0)
+        {
+            print("Remaining: %d\n", remaining);
+            remaining = remaining - 1;
+        }
+        awaitCompletion(10, Gate->open);
+    }
+}
+
+actor Gate
+{
+    action open
+    {
+        print("Gate: Open.\n");
+    }
+}

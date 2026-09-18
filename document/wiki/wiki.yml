@@ -1,0 +1,136 @@
+# Mana Wiki publication settings.
+#
+# `document/wiki/<source>/` holds the editing manuscripts. `export-wiki.py`
+# joins the files of each page below, in the order written here, into one
+# GitHub Wiki page. Nothing in this file is hard coded in the tools.
+#
+# Adding a language: add an entry under `languages` and create
+# `document/wiki/<source>/` with the same relative file names as `ja`.
+# An `optional` language is published a page at a time: a page appears once
+# all of its files are translated, and links to the rest go to the default
+# language. A language that is not optional must provide every page.
+
+languages:
+  ja:
+    default: true
+    label: 日本語
+    source: ja
+    suffix: ""
+
+  en:
+    label: English
+    source: en
+    suffix: "-en"
+    optional: true
+
+# Page order in this mapping is the Wiki order, and drives `_Sidebar.md`.
+pages:
+  Home:
+    title:
+      ja: Home
+      en: Home
+    # The manuscript is already a complete page; publish it unchanged.
+    mode: single
+    files:
+      - Home.md
+
+  Getting-Started:
+    title:
+      ja: Getting Started
+      en: Getting Started
+    files:
+      - getting-started/README.md
+      - getting-started/getting-started-what-is-mana.md
+      - getting-started/getting-started-programming-basics.md
+      - getting-started/getting-started-installation.md
+      - getting-started/getting-started-first-program.md
+      - getting-started/getting-started-compile-and-run.md
+
+  Tutorial:
+    title:
+      ja: Tutorial
+      en: Tutorial
+    files:
+      - tutorial/README.md
+      - tutorial/tutorial-actor-and-action.md
+      - tutorial/tutorial-request.md
+      - tutorial/tutorial-small-event.md
+      - tutorial/tutorial-variables.md
+      - tutorial/tutorial-conditions.md
+      - tutorial/tutorial-loops.md
+      - tutorial/tutorial-functions.md
+      - tutorial/tutorial-priority.md
+      - tutorial/tutorial-wait-and-synchronization.md
+      - tutorial/tutorial-multiple-files.md
+      - tutorial/tutorial-namespace.md
+
+  Concepts:
+    title:
+      ja: Concepts
+      en: Concepts
+    files:
+      - concepts/README.md
+      - concepts/concept-actor-oriented.md
+      - concepts/concept-actor-and-action.md
+      - concepts/concept-request-and-priority.md
+      - concepts/concept-execution-model.md
+      - concepts/concept-module.md
+      - concepts/concept-phantom.md
+      - concepts/concept-namespace.md
+      - concepts/concept-compiler-and-vm.md
+
+  Language-Reference:
+    title:
+      ja: Language Reference
+      en: Language Reference
+    files:
+      - reference/README.md
+      - reference/reference-source-code.md
+      - reference/reference-types.md
+      - reference/reference-variables.md
+      - reference/reference-constants.md
+      - reference/reference-expressions.md
+      - reference/reference-operators.md
+      - reference/reference-statements.md
+      - reference/reference-functions.md
+      - reference/reference-struct.md
+      - reference/reference-actor.md
+      - reference/reference-action.md
+      - reference/reference-request.md
+      - reference/reference-execution-control.md
+      - reference/reference-module.md
+      - reference/reference-phantom.md
+      - reference/reference-namespace.md
+      - reference/reference-native.md
+      - reference/reference-source-files.md
+      - reference/reference-predefined-symbols.md
+      - reference/reference-cli.md
+
+  Integration:
+    title:
+      ja: C++ Integration
+      en: C++ Integration
+    files:
+      - integration/README.md
+      - integration/integration-overview.md
+      - integration/integration-compiler.md
+      - integration/integration-vm.md
+      - integration/integration-program-image.md
+      - integration/integration-native-functions.md
+      - integration/integration-source-resolver.md
+      - integration/integration-diagnostics.md
+      - integration/integration-error-handling.md
+
+# Headings inside a joined page get a table of contents entry, and links
+# between manuscripts become links to these anchors.
+toc:
+  ja: 目次
+  en: Contents
+
+# Links that leave `document/wiki/<source>/`, such as the runnable examples,
+# become links into the repository.
+repository:
+  url: https://github.com/shun126/Mana
+  ref: master
+  # Paths are resolved relative to the repository root.
+  document_root: document

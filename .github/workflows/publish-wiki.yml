@@ -1,0 +1,148 @@
+name: Publish Wiki
+
+# Joins the manuscripts in document/wiki/ into GitHub Wiki pages and mirrors
+# them into Mana.wiki.git. The generated pages are never committed here.
+#
+# One-time setup on GitHub: open the Wiki tab and save any first page, so the
+# Wiki repository exists. A pull request only checks and exports.
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - "document/wiki/**"
+      - "document/assets/**"
+      - "document/tools/**"
+      - ".github/workflows/publish-wiki.yml"
+
+  pull_request:
+    paths:
+      - "document/wiki/**"
+      - "document/assets/**"
+      - "document/tools/**"
+      - ".github/workflows/publish-wiki.yml"
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Never let an older run publish after a newer one.
+concurrency:
+  group: publish-wiki-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    name: Check and export
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Install the documentation dependencies
+        run: python -m pip install --disable-pip-version-check -r document/tools/requirements.txt
+
+      - name: Test the documentation tools
+        run: python -m unittest discover -s document/tools -t document/tools
+
+      - name: Check the manuscripts
+        run: python document/tools/check-docs.py
+
+      - name: Export the Wiki
+        run: python document/tools/export-wiki.py --language all --output build/wiki
+
+      - name: Upload the generated Wiki for review
+        uses: actions/upload-artifact@v7
+        with:
+          name: wiki
+          path: build/wiki/
+          if-no-files-found: error
+          retention-days: 7
+
+  publish:
+    name: Publish to the GitHub Wiki
+    needs: verify
+    # Only master publishes; a pull request stops after the checks above.
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      # Pushing to <repository>.wiki.git needs write access to this repository.
+      contents: write
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Install the documentation dependencies
+        run: python -m pip install --disable-pip-version-check -r document/tools/requirements.txt
+
+      - name: Export the Wiki
+        run: python document/tools/export-wiki.py --language all --output build/wiki
+
+      - name: Mirror the generated pages into the Wiki repository
+        shell: bash
+        env:
+          # WIKI_TOKEN is only needed if the built-in token cannot push to the
+          # Wiki. Leave the secret unset to use the built-in token.
+          WIKI_TOKEN: ${{ secrets.WIKI_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
+          GIT_TERMINAL_PROMPT: "0"
+        run: |
+          set -euo pipefail
+
+          # Git asks for the password through this helper, so no token is
+          # written into a URL, a log line or the Wiki's Git configuration.
+          askpass="$RUNNER_TEMP/wiki-askpass.sh"
+          cat > "$askpass" <<'ASKPASS'
+          #!/bin/sh
+          case "$1" in
+            *Username*) printf '%s\n' 'x-access-token' ;;
+            *Password*) printf '%s\n' "${WIKI_TOKEN:-$GITHUB_TOKEN}" ;;
+            *) exit 1 ;;
+          esac
+          ASKPASS
+          chmod 700 "$askpass"
+          trap 'rm -f "$askpass"' EXIT
+          export GIT_ASKPASS="$askpass"
+
+          wiki="$RUNNER_TEMP/wiki"
+          if ! git -c credential.helper= clone --depth=1 \
+            "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY.wiki.git" "$wiki"; then
+            echo "::error::Repository Wiki is not initialized. Create the first Wiki page manually from GitHub and rerun the workflow. If the Wiki does exist, the token cannot push to it; set the WIKI_TOKEN secret to a token with write access."
+            exit 1
+          fi
+
+          # Mirror: what the export produced is the whole Wiki, so pages that
+          # were removed from wiki.yml disappear instead of lingering.
+          find "$wiki" -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+          cp -a build/wiki/. "$wiki/"
+
+          git -C "$wiki" add --all
+          if git -C "$wiki" diff --cached --quiet; then
+            echo "The Wiki is already up to date." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          git -C "$wiki" \
+            -c user.name='github-actions[bot]' \
+            -c user.email='41898282+github-actions[bot]@users.noreply.github.com' \
+            commit -m "docs: publish wiki from $GITHUB_SHA"
+          git -C "$wiki" -c credential.helper= push origin HEAD
+          echo "Published the Wiki from $GITHUB_SHA." >> "$GITHUB_STEP_SUMMARY"

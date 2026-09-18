@@ -1,0 +1,12 @@
+actor Guide
+{
+    action main
+    {
+        print("Guide: Ready.\n");
+    }
+
+    action talk
+    {
+        print("Guide: Welcome!\n");
+    }
+}

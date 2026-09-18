@@ -1,4 +1,4 @@
-<div align="center">
+﻿<div align="center">
 <h1>Actor-oriented scripting language Mana</h1>
 <p>
 <a href="https://github.com/shun126/Mana/issues">Issues</a>,
@@ -14,6 +14,8 @@
 <a href="https://github.com/shun126/Mana/releases"><img src="https://img.shields.io/github/downloads/shun126/Mana/total"></a>
 </p>
 </div>
+
+**日本語で初めて学ぶ方へ：[Mana 入門](document/wiki/ja/Home.md)から、準備・最初の実行・小さなゲームイベントの作成へ進めます。**
 
 This scripting language was developed with the aim of developing a character's action using actor model.
 You can implement the execution engine easily into your computer game program.
@@ -80,7 +82,7 @@ actor Controller
 | `compiler` | `manac.lib` / `libmana.a` | The compiler itself. Free of command line and file output concerns, so it can be embedded in another application. |
 | `driver` | `mana` | The command line tool that drives the compiler. |
 | `runner` | header only | The virtual machine that executes a compiled program. |
-| `sample` | | Example scripts. |
+| `examples` | | Example scripts: `tutorial` holds the finished code of the Japanese tutorial, `language-tour` exercises most language features in one program. |
 | `test` | | Test scripts and the test runner. |
 
 # Installing
@@ -139,10 +141,13 @@ and release, and nothing is allowed to skip one:
 `EmbeddingTest` prints the pointer and `int_t` widths it was built with, so a
 log makes plain which one ran.
 
-# Running Sample
+# Running the examples
 ````bash
-mana sample/sample.mn
+mana examples/tutorial/01-hello.mn
+mana examples/language-tour/main.mn -I natives.mh
 ````
+
+See [examples/README.md](examples/README.md) for the full list.
 
 # How to Use
 
@@ -162,7 +167,6 @@ If you specify the `--execute` option, it will execute the binary file.
 
 ```bash
 mana --execute binary_file
-mana -e binary_file
 ```
 
 # How to Embed the Virtual Machine

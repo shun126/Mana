@@ -1,0 +1,33 @@
+actor Event
+{
+    action main
+    {
+        bool hasKey = true;
+
+        awaitCompletion(10, Guide->talk);
+        if (hasKey)
+        {
+            awaitCompletion(10, Gate->open);
+        }
+        else
+        {
+            print("Event: Find the key.\n");
+        }
+    }
+}
+
+actor Guide
+{
+    action talk
+    {
+        print("Guide: Welcome!\n");
+    }
+}
+
+actor Gate
+{
+    action open
+    {
+        print("Gate: Open.\n");
+    }
+}
