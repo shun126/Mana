@@ -49,8 +49,15 @@ a:hover { color: var(--accent); }
   border-bottom: 1px solid var(--line);
 }
 
-.brand { display: inline-flex; line-height: 0; }
-.brand img { width: 130px; height: auto; }
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ink);
+  text-decoration: none;
+}
+.brand img { width: 40px; height: 40px; }
+.brand-name { font-size: 26px; font-weight: 700; letter-spacing: 0.02em; }
 
 .masthead-nav {
   display: flex;
