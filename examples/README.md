@@ -9,12 +9,14 @@ Runnable Mana programs. Run them from the repository root.
 
 ```bash
 mana examples/tutorial/01-hello.mn
-mana examples/language-tour/main.mn -I examples/language-tour/natives.mh
+mana examples/language-tour/main.mn -I natives.mh
 ```
 
 `language-tour/main.mn` includes the other files of that directory. `natives.mh`
 declares native functions and is passed with `-I`, the way an application would
-supply its own native function declarations.
+supply its own native function declarations. A path given to `-I` is resolved
+from the directory of the source file, not the current directory, so it is
+written as plain `natives.mh`.
 
 ## Keeping the tutorial code in step with the manual
 

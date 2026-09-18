@@ -144,7 +144,7 @@ log makes plain which one ran.
 # Running the examples
 ````bash
 mana examples/tutorial/01-hello.mn
-mana examples/language-tour/main.mn -I examples/language-tour/natives.mh
+mana examples/language-tour/main.mn -I natives.mh
 ````
 
 See [examples/README.md](examples/README.md) for the full list.
