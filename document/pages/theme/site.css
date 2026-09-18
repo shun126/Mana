@@ -69,7 +69,13 @@ a:hover { color: var(--accent); }
 
 .masthead-nav a { text-decoration: none; color: var(--ink-soft); white-space: nowrap; }
 .masthead-nav a:hover { color: var(--accent); text-decoration: underline; }
-.masthead-nav .language-links { color: var(--line); }
+.language-switch {
+  display: inline-flex;
+  gap: 12px;
+  padding-left: 18px;
+  border-left: 1px solid var(--line);
+}
+.language-switch [aria-current] { color: var(--ink); font-weight: 700; }
 
 .hero {
   padding: clamp(48px, 9vw, 104px) max(20px, 5vw) clamp(40px, 7vw, 72px);
