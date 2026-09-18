@@ -127,7 +127,7 @@ Heavy work such as rendering, physics and sound stays in the game. Mana decides 
 
 ## Documentation
 
-Everything for learning and reference is in the Wiki. The manual is written in Japanese for now, and an English translation is on its way; each page switches to English as soon as its translation is published.
+Everything for learning and reference is in the Wiki, in English and Japanese. The Japanese manual is the reference version, and the English manual is its translation.
 
 - [Getting Started](wiki:Getting-Started) — set up Mana and run it for the first time
 - [Tutorial](wiki:Tutorial) — build an event with Actors and Actions
