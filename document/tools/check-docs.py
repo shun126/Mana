@@ -161,7 +161,7 @@ def check_wiki_translations(config: manadoc.WikiConfig, report: Report):
 # --------------------------------------------------------------------------
 
 
-def check_pages(report: Report):
+def check_pages(config: manadoc.WikiConfig, report: Report):
     config_path = manadoc.PAGES_CONFIG
     if not config_path.is_file():
         report.error(f"{manadoc.repository_relative(manadoc.PAGES_DIR)}/site.yml is missing")
@@ -199,7 +199,10 @@ def check_pages(report: Report):
             text = path.read_text(encoding="utf-8")
             for is_image, _, target in manadoc.iter_links(text):
                 if target.startswith("wiki:"):
-                    linked.add(target[len("wiki:"):].split("#")[0])
+                    name = target[len("wiki:"):].split("#")[0]
+                    linked.add(name)
+                    if name and name not in {page.key for page in config.pages}:
+                        report.error(f"{relative}: '{target}' is not a page in wiki.yml")
                     continue
                 if manadoc.is_external(target):
                     continue
@@ -249,7 +252,7 @@ def main(argv=None) -> int:
         check_wiki_language(config, language, report)
     check_wiki_translations(config, report)
     check_assets(report)
-    check_pages(report)
+    check_pages(config, report)
     return report.print(arguments.strict)
 
 
