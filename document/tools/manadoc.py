@@ -411,6 +411,18 @@ class WikiConfig:
                 return language
         return next(iter(self.languages.values()))
 
+    @property
+    def front_language(self) -> Language:
+        """The language whose pages carry no suffix, so its Home is where the Wiki opens.
+
+        This can differ from the default language, which is the original the
+        others are translated from.
+        """
+        for language in self.languages.values():
+            if not language.suffix:
+                return language
+        return self.default_language
+
     def language(self, code: str) -> Language:
         if code not in self.languages:
             known = ", ".join(sorted(self.languages))
@@ -686,8 +698,8 @@ class WikiGenerator:
         return "🌐 " + " · ".join(items)
 
     def notices(self, page: WikiPage):
-        """On the front page of the default language, point other readers to their edition."""
-        if self.language.code != self.default_code or page is not self.config.pages[0]:
+        """On the page the Wiki opens on, point readers of other languages to their edition."""
+        if self.language.code != self.config.front_language.code or page is not self.config.pages[0]:
             return []
         return [
             "> " + language.notice.replace("{page}", name)

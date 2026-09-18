@@ -387,6 +387,21 @@ class SidebarAndTranslationTest(unittest.TestCase):
         self.assertNotIn("Read it in English", japanese["Tutorial"])
         self.assertNotIn("Read it in English", english["Home-en"])
 
+    def test_wiki_can_open_on_a_translation(self):
+        """The unsuffixed language is where the Wiki opens, even if it is not the original."""
+        self.add_english()
+        self.config.language("en").suffix = ""
+        self.config.language("ja").suffix = "-ja"
+        self.config.language("ja").notice = "日本語版: [こちら]({page})"
+        self.assertEqual(self.config.front_language.code, "en")
+        _, japanese = self.generate("ja")
+        _, english = self.generate("en")
+        self.assertEqual(sorted(english), ["Home", "Language-Reference", "Tutorial"])
+        self.assertEqual(sorted(japanese), ["Home-ja", "Language-Reference-ja", "Tutorial-ja"])
+        self.assertIn("> 日本語版: [こちら](Home-ja)", english["Home"])
+        self.assertNotIn("日本語版:", japanese["Home-ja"])
+        self.assertIn("[構文](Language-Reference-ja#reference-request)", japanese["Tutorial-ja"])
+
     def test_no_notice_until_the_translated_front_page_exists(self):
         self.config.language("en").notice = "Read it in English: [here]({page})"
         _, japanese = self.generate("ja")
