@@ -13,6 +13,8 @@ on:
       - master
     paths:
       - "document/pages/**"
+      # Site links switch to a translated Wiki page once it is published.
+      - "document/wiki/**"
       - "document/assets/**"
       - "document/tools/**"
       - ".github/workflows/publish-pages.yml"
@@ -20,6 +22,8 @@ on:
   pull_request:
     paths:
       - "document/pages/**"
+      # Site links switch to a translated Wiki page once it is published.
+      - "document/wiki/**"
       - "document/assets/**"
       - "document/tools/**"
       - ".github/workflows/publish-pages.yml"

@@ -15,10 +15,10 @@
     <span class="brand-name">{{ site_title }}</span>
   </a>
   <nav class="masthead-nav">
-    <a href="{{ wiki }}/Getting-Started">Getting Started</a>
-    <a href="{{ wiki }}/Tutorial">Tutorial</a>
-    <a href="{{ wiki }}/Language-Reference">Language Reference</a>
-    <a href="{{ wiki }}/Integration">C++ Integration</a>
+    <a href="{{ wiki:Getting-Started }}">Getting Started</a>
+    <a href="{{ wiki:Tutorial }}">Tutorial</a>
+    <a href="{{ wiki:Language-Reference }}">Language Reference</a>
+    <a href="{{ wiki:Integration }}">C++ Integration</a>
     <a href="{{ repository }}">GitHub</a>
     {{ language_links }}
   </nav>
@@ -36,8 +36,7 @@
 </main>
 
 <footer class="colophon">
-  <p><a href="{{ wiki }}">Documentation</a> · <a href="{{ repository }}">GitHub</a> · <a href="{{ repository }}/blob/{{ ref }}/LICENSE.md">License</a></p>
-  <p>このサイトは <code>document/pages/</code> から生成しています。</p>
+  <p><a href="{{ wiki:Home }}">Documentation</a> · <a href="{{ repository }}">GitHub</a> · <a href="{{ repository }}/blob/{{ ref }}/LICENSE.md">License</a></p>
 </footer>
 </body>
 </html>

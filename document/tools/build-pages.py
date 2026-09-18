@@ -208,17 +208,30 @@ class SiteBuilder:
         self.layout_path = manadoc.PAGES_DIR / theme.get("layout", "theme/base.html")
         self.stylesheet_path = manadoc.PAGES_DIR / theme.get("stylesheet", "theme/site.css")
         self.layout = self.layout_path.read_text(encoding="utf-8")
+        # Wiki links follow the reader's language once that Wiki page exists.
+        self.wiki_config = manadoc.load_wiki_config()
         self.problems = []
 
     # -- link resolution -------------------------------------------------
 
-    def resolver(self, source: Path, depth: int):
+    def wiki_url(self, target: str, code: str) -> str:
+        """Turn `Tutorial` or `Tutorial#anchor` into a Wiki URL for `code`."""
+        name, fragment = manadoc.split_fragment(target)
+        if not name:
+            return self.wiki + fragment
+        try:
+            name = self.wiki_config.page_name_for(name, code)
+        except manadoc.ConfigError as error:
+            self.problems.append(str(error))
+        return "%s/%s%s" % (self.wiki, name, fragment)
+
+    def resolver(self, source: Path, depth: int, code: str):
         """Resolve one manuscript's link targets against the output tree."""
         up = "../" * depth
 
         def resolve(is_image, target):
             if target.startswith("wiki:"):
-                return "%s/%s" % (self.wiki, target[len("wiki:"):])
+                return self.wiki_url(target[len("wiki:"):], code)
             if manadoc.is_external(target):
                 return target
             path, fragment = manadoc.split_fragment(target)
@@ -267,15 +280,17 @@ class SiteBuilder:
             )
         return "\n    ".join(rendered)
 
-    def fill(self, values):
+    def fill(self, values, code: str):
         def substitute(match):
             key = match.group(1)
+            if key.startswith("wiki:"):
+                return html.escape(self.wiki_url(key[len("wiki:"):], code), quote=True)
             if key not in values:
                 self.problems.append(f"{self.layout_path}: unknown placeholder '{key}'")
                 return match.group(0)
             return values[key]
 
-        return re.sub(r"\{\{\s*(\w+)\s*\}\}", substitute, self.layout)
+        return re.sub(r"\{\{\s*(wiki:[\w#-]*|\w+)\s*\}\}", substitute, self.layout)
 
     def build_language(self, code: str, languages):
         directory = manadoc.PAGES_DIR / code
@@ -284,7 +299,7 @@ class SiteBuilder:
         for source in sorted(directory.rglob("*.md")):
             relative = source.relative_to(directory)
             depth = len(relative.parts)  # the language directory plus any nesting
-            resolve = self.resolver(source, depth)
+            resolve = self.resolver(source, depth, code)
             front, body = split_front_matter(source.read_text(encoding="utf-8"), source)
             title = front.get("title", self.site.get("title", "Mana"))
             site_title = self.site.get("title", "Mana")
@@ -307,7 +322,7 @@ class SiteBuilder:
                 "ref": self.ref,
             }
             target = self.output / code / relative.with_suffix(".html")
-            manadoc.write_text(target, self.fill(values))
+            manadoc.write_text(target, self.fill(values, code))
             built.append(target)
         return built
 
