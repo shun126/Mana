@@ -21,7 +21,7 @@
   <pattern id="hatch" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="12" height="12" fill="#f3f8fd"/><line x1="0" y1="0" x2="0" y2="12" stroke="#c7d9ec" stroke-width="6"/></pattern>
   </defs>
   <rect width="1200" height="760" fill="#fff"/>
-  <text x="600" y="80" text-anchor="middle" class="title">Priority による割り込みと復帰</text>
+  <text x="600" y="80" text-anchor="middle" class="title">Interrupting and resuming with Priority</text>
   <rect x="40" y="120" width="1120" height="300" rx="18" fill="#f6fbff" stroke="#cfe3f8" stroke-width="2"/>
   <text x="64" y="156" class="actor">Door actor</text>
   <line x1="270" y1="205" x2="1130" y2="205" class="track"/>
@@ -36,24 +36,24 @@
   <rect x="270" y="342" width="160" height="46" rx="8" class="run-main"/>
   <text x="350" y="372" text-anchor="middle" class="bar">main</text>
   <rect x="430" y="342" width="450" height="46" rx="8" class="suspended"/>
-  <text x="655" y="372" text-anchor="middle" class="bar-quiet">中断中</text>
+  <text x="655" y="372" text-anchor="middle" class="bar-quiet">suspended</text>
   <rect x="880" y="342" width="250" height="46" rx="8" class="run-main"/>
-  <text x="1005" y="372" text-anchor="middle" class="bar">main（続きから）</text>
+  <text x="1005" y="372" text-anchor="middle" class="bar">main (resumes)</text>
   <rect x="430" y="182" width="220" height="46" rx="8" class="run-open"/>
   <text x="540" y="212" text-anchor="middle" class="bar-light">open</text>
   <rect x="540" y="262" width="110" height="46" rx="8" class="waiting"/>
-  <text x="595" y="292" text-anchor="middle" class="bar-quiet">待機</text>
+  <text x="595" y="292" text-anchor="middle" class="bar-quiet">waiting</text>
   <rect x="650" y="262" width="230" height="46" rx="8" class="run-close"/>
   <text x="765" y="292" text-anchor="middle" class="bar">close</text>
   <line x1="270" y1="445" x2="1150" y2="445" stroke="#0f2547" stroke-width="3" marker-end="url(#m)"/>
-  <text x="1150" y="475" text-anchor="end" class="small">時間</text>
+  <text x="1150" y="475" text-anchor="end" class="small">Time</text>
   <circle cx="430" cy="172" r="18" fill="#3e92e8"/><text x="430" y="179" text-anchor="middle" class="badge">1</text>
   <circle cx="540" cy="172" r="18" fill="#3e92e8"/><text x="540" y="179" text-anchor="middle" class="badge">2</text>
   <circle cx="880" cy="172" r="18" fill="#3e92e8"/><text x="880" y="179" text-anchor="middle" class="badge">3</text>
   <circle cx="86" cy="540" r="18" fill="#3e92e8"/><text x="86" y="547" text-anchor="middle" class="badge">1</text>
-  <text x="120" y="547" class="note">priority 10 の open が、実行中の main（priority 0）に割り込む</text>
+  <text x="120" y="547" class="note">open, at priority 10, interrupts main, which runs at priority 0</text>
   <circle cx="86" cy="602" r="18" fill="#3e92e8"/><text x="86" y="609" text-anchor="middle" class="badge">2</text>
-  <text x="120" y="609" class="note">open の実行中に来た close（priority 5）は、open より低いので待つ</text>
+  <text x="120" y="609" class="note">close arrives at priority 5 while open runs; it is lower than open, so it waits</text>
   <circle cx="86" cy="664" r="18" fill="#3e92e8"/><text x="86" y="671" text-anchor="middle" class="badge">3</text>
-  <text x="120" y="671" class="note">open と close が終わると、main が中断した場所から再開する</text>
+  <text x="120" y="671" class="note">When open and close have finished, main resumes where it was suspended</text>
 </svg>

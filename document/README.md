@@ -114,7 +114,7 @@ python document/tools/verify-examples.py x64/Release/mana.exe
 | `.github/workflows/publish-wiki.yml` | `https://github.com/shun126/Mana.wiki.git` | `master` への push、`workflow_dispatch` |
 | `.github/workflows/publish-pages.yml` | GitHub Pages | `master` への push、`workflow_dispatch` |
 
-どちらも `document/` 配下と自身の workflow ファイルが変更されたときだけ動きます。Pull Request では検査と生成だけを行い、本番へは公開しません。
+どちらも `document/` 配下の関係するファイルと自身の workflow ファイルが変更されたときだけ動きます。Pull Request では検査と生成だけを行い、本番へは公開しません。
 
 Wiki の同期はミラー方式です。生成結果が Wiki の全内容になるため、`wiki.yml` から外したページは Wiki からも消えます。差分がないときは commit も push も行いません。
 
@@ -135,7 +135,7 @@ Wiki への push は、まず GitHub Actions の標準トークンで行いま�
 
 1. `document/wiki/en/` を作り、`document/wiki/ja/` と**同じ相対パス・同じファイル名**で英訳を置きます。
 2. 日本語を含む図がある場合は `document/assets/en/diagrams/` に、日本語版と同じファイル名で英語版を置きます。文字を含まない素材は `document/assets/common/` のままで構いません。
-3. 公式サイトを訳す場合は `document/pages/en/index.md` を追加します。
+3. 公式サイトの英語版は `document/pages/en/index.md` です（作成済み）。サイトの図解は `document/assets/en/diagrams/` の英語版を使います。
 4. `python document/tools/check-docs.py` を実行し、翻訳漏れの警告を確認します。
 5. `python document/tools/export-wiki.py --language all --output build/wiki` で確認します。
 
@@ -148,7 +148,17 @@ Wiki への push は、まず GitHub Actions の標準トークンで行いま�
 - Sidebar の English 見出しには、公開済みの英語ページだけが並びます。
 - 言語切替リンクは、両言語が揃ったページにだけ入ります。
 
-公式サイトも、2 言語目が追加された時点でルート `/` が言語選択ページに変わります。それまでは `/` から `/ja/` へ移動します。
+公式サイトは日本語 `/ja/` と英語 `/en/` の 2 言語です。ルート `/` は読者の言語のページへ移動します。
+
+- サイトのヘッダーで以前に言語を選んでいれば、その言語を開きます（ブラウザに保存）。
+- そうでなければブラウザの第一言語を見て、サイトにある言語（日本語）ならそのページを開きます。
+- それ以外の言語の読者は `site.yml` の `fallback_language`（英語）を開きます。
+- JavaScript が無効なときは、言語を選ぶページとして表示されます。
+- 1 言語だけをビルドした場合（`--language en` など）は、その言語へ移動します。
+
+各ページのヘッダーには全言語が並び、今読んでいる言語が強調表示されます。
+
+サイトから Wiki へのリンクは `wiki:Tutorial` のように書きます。表示言語の Wiki ページが公開済みならそのページ（`Tutorial-en`）へ、未公開なら日本語のページ（`Tutorial`）へつながります。英語 Wiki の翻訳が進むと、サイトを作り直すだけでリンクが英語ページに切り替わります。このため `publish-pages.yml` は `document/wiki/` の変更でも実行されます。
 
 ## 原稿を書くときの注意
 

@@ -14,7 +14,7 @@
     </marker>
   </defs>
   <rect width="1200" height="760" fill="#ffffff"/>
-  <text x="600" y="86" text-anchor="middle" class="title">Manaの全体像</text>
+  <text x="600" y="86" text-anchor="middle" class="title">How Mana works</text>
   <rect x="520" y="102" width="160" height="10" rx="5" fill="#9fd0fa"/>
   <g transform="translate(20,180)">
     <rect class="box" x="0" y="0" rx="22" ry="22" width="190" height="320"/>
@@ -23,10 +23,10 @@
     <line x1="76" y1="84" x2="122" y2="84" stroke="#3e92e8" stroke-width="4"/>
     <line x1="76" y1="104" x2="122" y2="104" stroke="#3e92e8" stroke-width="4"/>
     <line x1="76" y1="124" x2="112" y2="124" stroke="#3e92e8" stroke-width="4"/>
-    <text x="95" y="192" text-anchor="middle" class="h2">Manaソースコード</text>
+    <text x="95" y="192" text-anchor="middle" class="h2">Mana source</text>
     <text x="95" y="222" text-anchor="middle" class="label">(.mn)</text>
-    <text x="95" y="270" text-anchor="middle" class="small">テキストで書かれた</text>
-    <text x="95" y="292" text-anchor="middle" class="small">プログラム</text>
+    <text x="95" y="270" text-anchor="middle" class="small">A program written</text>
+    <text x="95" y="292" text-anchor="middle" class="small">as text</text>
   </g>
   <path class="arrow" d="M214 340 H256"/>
   <g transform="translate(260,180)">
@@ -46,7 +46,8 @@
       </g>
     </g>
     <text x="95" y="192" text-anchor="middle" class="h2">Compiler</text>
-    <text x="95" y="252" text-anchor="middle" class="small">文法と意味を確認</text>
+    <text x="95" y="252" text-anchor="middle" class="small">Checks syntax</text>
+    <text x="95" y="274" text-anchor="middle" class="small">and meaning</text>
   </g>
   <path class="arrow" d="M454 340 H496"/>
   <g transform="translate(500,180)">
@@ -57,8 +58,8 @@
     <text x="98" y="118" text-anchor="middle" class="label" fill="#3e92e8">1010</text>
     <text x="98" y="144" text-anchor="middle" class="label" fill="#3e92e8">0101</text>
     <text x="95" y="192" text-anchor="middle" class="h2">Program Image</text>
-    <text x="95" y="252" text-anchor="middle" class="small">VMが実行する</text>
-    <text x="95" y="274" text-anchor="middle" class="small">中間形式</text>
+    <text x="95" y="252" text-anchor="middle" class="small">Intermediate form</text>
+    <text x="95" y="274" text-anchor="middle" class="small">run by the VM</text>
   </g>
   <path class="arrow" d="M694 340 H736"/>
   <g transform="translate(740,180)">
@@ -69,8 +70,8 @@
     <line x1="62" y1="164" x2="128" y2="164" stroke="#2a6eb4" stroke-width="6"/>
     <text x="95" y="102" text-anchor="middle" class="h2" fill="#ffffff">VM</text>
     <text x="95" y="192" text-anchor="middle" class="h2">VM</text>
-    <text x="95" y="246" text-anchor="middle" class="small">Program Image を</text>
-    <text x="95" y="268" text-anchor="middle" class="small">読み込んで実行</text>
+    <text x="95" y="246" text-anchor="middle" class="small">Loads and runs</text>
+    <text x="95" y="268" text-anchor="middle" class="small">the Program Image</text>
   </g>
   <path class="arrow" d="M934 340 H976"/>
   <g transform="translate(980,180)">
@@ -84,12 +85,12 @@
     <line x1="128" y1="94" x2="140" y2="82" stroke="#3e92e8" stroke-width="6" stroke-linecap="round"/>
     <line x1="112" y1="84" x2="112" y2="70" stroke="#3e92e8" stroke-width="6" stroke-linecap="round"/>
     <text x="95" y="192" text-anchor="middle" class="h2">Actor / Action</text>
-    <text x="95" y="252" text-anchor="middle" class="small">ゲーム中の処理が動く</text>
+    <text x="95" y="252" text-anchor="middle" class="small">Game logic runs</text>
   </g>
   <g transform="translate(70,620)">
     <rect class="note" x="0" y="0" rx="18" ry="18" width="1060" height="74"/>
     <circle cx="50" cy="37" r="18" fill="#3e92e8"/>
     <text x="50" y="44" text-anchor="middle" class="label" fill="#fff">i</text>
-    <text x="92" y="45" class="label">Mana はソースコードをコンパイルし、Program Image を VM が実行します。</text>
+    <text x="92" y="45" class="label">Mana compiles source code into a Program Image, which the VM runs.</text>
   </g>
 </svg>
