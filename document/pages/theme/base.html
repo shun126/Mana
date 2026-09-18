@@ -5,19 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{ page_title }}</title>
 <meta name="description" content="{{ description }}">
-<link rel="icon" href="{{ assets }}/common/logo.svg" type="image/svg+xml">
+<link rel="icon" href="{{ assets }}/common/logo_small.png" type="image/png">
 <link rel="stylesheet" href="{{ stylesheet }}">
 </head>
 <body>
 <header class="masthead">
   <a class="brand" href="./">
-    <img src="{{ assets }}/common/logo.svg" alt="{{ site_title }}" width="160" height="48">
+    <img src="{{ assets }}/common/logo_small.png" alt="" width="40" height="40">
+    <span class="brand-name">{{ site_title }}</span>
   </a>
   <nav class="masthead-nav">
-    <a href="{{ wiki }}/Getting-Started">Getting Started</a>
-    <a href="{{ wiki }}/Tutorial">Tutorial</a>
-    <a href="{{ wiki }}/Language-Reference">Language Reference</a>
-    <a href="{{ wiki }}/Integration">C++ Integration</a>
+    <a href="{{ wiki:Getting-Started }}">Getting Started</a>
+    <a href="{{ wiki:Tutorial }}">Tutorial</a>
+    <a href="{{ wiki:Language-Reference }}">Language Reference</a>
+    <a href="{{ wiki:Integration }}">C++ Integration</a>
     <a href="{{ repository }}">GitHub</a>
     {{ language_links }}
   </nav>
@@ -35,8 +36,10 @@
 </main>
 
 <footer class="colophon">
-  <p><a href="{{ wiki }}">Documentation</a> · <a href="{{ repository }}">GitHub</a> · <a href="{{ repository }}/blob/{{ ref }}/LICENSE.md">License</a></p>
-  <p>このサイトは <code>document/pages/</code> から生成しています。</p>
+  <p><a href="{{ wiki:Home }}">Documentation</a> · <a href="{{ repository }}">GitHub</a> · <a href="{{ repository }}/blob/{{ ref }}/LICENSE.md">License</a></p>
 </footer>
+<script>
+{{ remember_language }}
+</script>
 </body>
 </html>

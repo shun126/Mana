@@ -73,7 +73,7 @@ class DocumentTree:
         (self.document / "assets" / "ja" / "diagrams").mkdir(parents=True)
         (self.document / "pages").mkdir(parents=True)
         self.write("document/wiki/wiki.yml", WIKI_YML)
-        self.write("document/assets/common/logo.svg", "<svg/>")
+        self.write("document/assets/common/logo_small.png", "png")
         self.write("document/assets/ja/diagrams/request-flow.svg", "<svg/>")
         self.write("examples/tutorial/03-request.mn", "actor Event {}")
 
@@ -441,6 +441,16 @@ class PartialTranslationTest(unittest.TestCase):
         )
         self.assertNotIn("English", sidebar)
 
+    def test_site_links_follow_the_published_translation(self):
+        self.assertEqual(
+            self.config.page_name_for("Language-Reference", "en"), "Language-Reference-en"
+        )
+        self.assertEqual(self.config.page_name_for("Tutorial", "en"), "Tutorial")
+        self.assertEqual(self.config.page_name_for("Tutorial", "ja"), "Tutorial")
+        self.assertEqual(self.config.page_name_for("Home", "fr"), "Home")
+        with self.assertRaises(manadoc.ConfigError):
+            self.config.page_name_for("No-Such-Page", "en")
+
     def test_required_language_still_fails_on_a_missing_page(self):
         self.english.optional = False
         with self.assertRaises(manadoc.ConfigError):
@@ -455,6 +465,57 @@ class PartialTranslationTest(unittest.TestCase):
         self.assertTrue(
             any("Tutorial-en is not published yet" in message for message in report.warnings)
         )
+
+
+class SiteRootTest(unittest.TestCase):
+    """The page at `/` sends readers to a language that was built."""
+
+    def setUp(self):
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        self.tree = DocumentTree(Path(directory.name))
+        self.tree.write("document/pages/theme/base.html", "<html>{{ content }}</html>")
+        self.tree.apply(self)
+        self.site = {
+            "title": "Mana",
+            "default_language": "ja",
+            "fallback_language": "en",
+            "languages": {"ja": {"label": "日本語"}, "en": {"label": "English"}},
+        }
+        self.output = self.tree.root / "build" / "pages"
+        self.output.mkdir(parents=True)
+        self.builder = _load_script("build-pages.py").SiteBuilder(self.site, self.output, "master")
+
+    def root(self, languages):
+        self.builder.build_root(languages)
+        return (self.output / "index.html").read_text(encoding="utf-8")
+
+    def test_single_language_build_opens_that_language(self):
+        page = self.root(["en"])
+        self.assertIn('url=./en/"', page)
+        self.assertNotIn("./ja/", page)
+
+    def test_default_language_only_build(self):
+        page = self.root(["ja"])
+        self.assertIn('url=./ja/"', page)
+        self.assertNotIn("./en/", page)
+
+    def test_readers_of_other_languages_get_the_fallback(self):
+        page = self.root(["ja", "en"])
+        self.assertIn('var available = ["ja", "en"], fallback = "en"', page)
+        self.assertIn('href="./ja/" hreflang="ja"', page)
+        self.assertIn('data-language="en"', page)
+
+    def test_fallback_language_must_have_been_built(self):
+        self.assertEqual(self.builder.fallback_language(["ja", "en"]), "en")
+        self.assertEqual(self.builder.fallback_language(["ja", "fr"]), "ja")
+        self.assertEqual(self.builder.fallback_language(["fr", "de"]), "fr")
+
+    def test_header_lists_every_language_and_marks_the_current_one(self):
+        switch = self.builder.language_links("en", ["ja", "en"])
+        self.assertIn('<a href="../ja/" hreflang="ja" lang="ja" data-language="ja">日本語</a>', switch)
+        self.assertIn('<span aria-current="page" lang="en">English</span>', switch)
+        self.assertEqual(self.builder.language_links("ja", ["ja"]), "")
 
 
 def _load_script(name: str):
@@ -478,9 +539,9 @@ class AssetTest(unittest.TestCase):
     def test_common_and_language_assets_are_published(self):
         destination = self.tree.root / "build" / "assets"
         copied = manadoc.copy_assets([manadoc.Language("ja", "日本語", "ja")], destination)
-        self.assertIn("common/logo.svg", copied)
+        self.assertIn("common/logo_small.png", copied)
         self.assertIn("ja/diagrams/request-flow.svg", copied)
-        self.assertTrue((destination / "common" / "logo.svg").is_file())
+        self.assertTrue((destination / "common" / "logo_small.png").is_file())
 
     def test_assets_of_other_languages_are_not_published(self):
         self.tree.write("document/assets/en/diagrams/request-flow.svg", "<svg/>")

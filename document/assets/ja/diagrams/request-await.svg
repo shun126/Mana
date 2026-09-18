@@ -6,7 +6,7 @@
     .small{font:400 15px Arial,Helvetica,sans-serif; fill:#38506f}
     .card{fill:#fff;stroke:#cfe3f8;stroke-width:2}
     .band{fill:#eef7ff}
-  </style><marker id="m" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#0f2547"/></marker></defs>
+  </style><marker id="m" viewBox="0 0 10 10" markerWidth="5" markerHeight="5" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#0f2547"/></marker></defs>
   <rect width="1320" height="820" fill="#fff"/>
   <text x="70" y="84" class="title">request / awaitStart / awaitCompletion の違い</text>
   <g transform="translate(24,160)">

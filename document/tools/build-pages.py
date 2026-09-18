@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import argparse
 import html
+import json
 import posixpath
 import re
 import shutil
@@ -22,6 +23,17 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import manadoc
+
+# A language the reader picked on the site, kept in their browser so the
+# root page opens it next time.
+LANGUAGE_STORAGE_KEY = "mana-language"
+REMEMBER_LANGUAGE_SCRIPT = (
+    'document.addEventListener("click", function (event) {\n'
+    '  var link = event.target.closest && event.target.closest("a[data-language]");\n'
+    "  if (!link) return;\n"
+    '  try { localStorage.setItem("%s", link.getAttribute("data-language")); } catch (error) {}\n'
+    "});" % LANGUAGE_STORAGE_KEY
+)
 
 # --------------------------------------------------------------------------
 # Markdown
@@ -208,17 +220,30 @@ class SiteBuilder:
         self.layout_path = manadoc.PAGES_DIR / theme.get("layout", "theme/base.html")
         self.stylesheet_path = manadoc.PAGES_DIR / theme.get("stylesheet", "theme/site.css")
         self.layout = self.layout_path.read_text(encoding="utf-8")
+        # Wiki links follow the reader's language once that Wiki page exists.
+        self.wiki_config = manadoc.load_wiki_config()
         self.problems = []
 
     # -- link resolution -------------------------------------------------
 
-    def resolver(self, source: Path, depth: int):
+    def wiki_url(self, target: str, code: str) -> str:
+        """Turn `Tutorial` or `Tutorial#anchor` into a Wiki URL for `code`."""
+        name, fragment = manadoc.split_fragment(target)
+        if not name:
+            return self.wiki + fragment
+        try:
+            name = self.wiki_config.page_name_for(name, code)
+        except manadoc.ConfigError as error:
+            self.problems.append(str(error))
+        return "%s/%s%s" % (self.wiki, name, fragment)
+
+    def resolver(self, source: Path, depth: int, code: str):
         """Resolve one manuscript's link targets against the output tree."""
         up = "../" * depth
 
         def resolve(is_image, target):
             if target.startswith("wiki:"):
-                return "%s/%s" % (self.wiki, target[len("wiki:"):])
+                return self.wiki_url(target[len("wiki:"):], code)
             if manadoc.is_external(target):
                 return target
             path, fragment = manadoc.split_fragment(target)
@@ -244,14 +269,20 @@ class SiteBuilder:
     # -- rendering -------------------------------------------------------
 
     def language_links(self, current: str, languages):
+        """Every language of the site, with the one being read marked."""
         if len(languages) < 2:
             return ""
-        links = [
-            '<a href="../%s/">%s</a>' % (code, html.escape(self.site["languages"][code].get("label", code)))
-            for code in languages
-            if code != current
-        ]
-        return '<span class="language-links">|</span> ' + " ".join(links)
+        items = []
+        for code in languages:
+            label = html.escape(self.site["languages"][code].get("label", code))
+            if code == current:
+                items.append('<span aria-current="page" lang="%s">%s</span>' % (code, label))
+            else:
+                items.append(
+                    '<a href="../%s/" hreflang="%s" lang="%s" data-language="%s">%s</a>'
+                    % (code, code, code, code, label)
+                )
+        return '<span class="language-switch">%s</span>' % "".join(items)
 
     def render_actions(self, actions, resolve):
         rendered = []
@@ -267,15 +298,17 @@ class SiteBuilder:
             )
         return "\n    ".join(rendered)
 
-    def fill(self, values):
+    def fill(self, values, code: str):
         def substitute(match):
             key = match.group(1)
+            if key.startswith("wiki:"):
+                return html.escape(self.wiki_url(key[len("wiki:"):], code), quote=True)
             if key not in values:
                 self.problems.append(f"{self.layout_path}: unknown placeholder '{key}'")
                 return match.group(0)
             return values[key]
 
-        return re.sub(r"\{\{\s*(\w+)\s*\}\}", substitute, self.layout)
+        return re.sub(r"\{\{\s*(wiki:[\w#-]*|\w+)\s*\}\}", substitute, self.layout)
 
     def build_language(self, code: str, languages):
         directory = manadoc.PAGES_DIR / code
@@ -284,7 +317,7 @@ class SiteBuilder:
         for source in sorted(directory.rglob("*.md")):
             relative = source.relative_to(directory)
             depth = len(relative.parts)  # the language directory plus any nesting
-            resolve = self.resolver(source, depth)
+            resolve = self.resolver(source, depth, code)
             front, body = split_front_matter(source.read_text(encoding="utf-8"), source)
             title = front.get("title", self.site.get("title", "Mana"))
             site_title = self.site.get("title", "Mana")
@@ -300,6 +333,7 @@ class SiteBuilder:
                 "actions": self.render_actions(front.get("actions"), resolve),
                 "content": render_markdown(body, resolve),
                 "language_links": self.language_links(code, languages),
+                "remember_language": REMEMBER_LANGUAGE_SCRIPT if len(languages) > 1 else "",
                 "assets": "../" * depth + manadoc.ASSETS_OUTPUT_NAME,
                 "stylesheet": "../" * depth + "theme/site.css",
                 "wiki": self.wiki,
@@ -307,55 +341,84 @@ class SiteBuilder:
                 "ref": self.ref,
             }
             target = self.output / code / relative.with_suffix(".html")
-            manadoc.write_text(target, self.fill(values))
+            manadoc.write_text(target, self.fill(values, code))
             built.append(target)
         return built
 
+    def fallback_language(self, languages):
+        """The language for readers whose own language the site does not have."""
+        for code in (self.site.get("fallback_language"), self.site.get("default_language")):
+            if code in languages:
+                return code
+        return languages[0]
+
     def build_root(self, languages):
-        """The entry page: one language redirects, several offer a choice."""
-        default = self.site["default_language"]
-        if len(languages) < 2:
+        """The entry page at `/`.
+
+        With one language it opens that language. With several it opens the
+        reader's language: one they picked on the site before, otherwise the
+        browser's first language when the site has it, otherwise
+        `fallback_language`. Without JavaScript it is a language chooser.
+        """
+        title = html.escape(self.site.get("title", "Mana"))
+        if len(languages) == 1:
+            # Only the language that was built exists in the output.
+            only = languages[0]
             manadoc.write_text(
                 self.output / "index.html",
                 '<!DOCTYPE html>\n<html lang="%s">\n<head>\n<meta charset="utf-8">\n'
                 '<meta http-equiv="refresh" content="0; url=./%s/">\n'
                 '<link rel="canonical" href="./%s/">\n<title>%s</title>\n</head>\n'
                 '<body><p><a href="./%s/">%s</a></p></body>\n</html>\n'
-                % (
-                    self.site["languages"][default].get("html_lang", default),
-                    default,
-                    default,
-                    html.escape(self.site.get("title", "Mana")),
-                    default,
-                    html.escape(self.site.get("title", "Mana")),
-                ),
+                % (self.site["languages"][only].get("html_lang", only), only, only, title, only, title),
             )
             return
 
+        fallback = self.fallback_language(languages)
+        choose = (
+            "(function () {\n"
+            "  var available = %s, fallback = %s, choice = null;\n"
+            "  try { choice = localStorage.getItem(%s); } catch (error) {}\n"
+            "  if (available.indexOf(choice) < 0) {\n"
+            '    var preferred = (navigator.languages && navigator.languages[0]) || navigator.language || "";\n'
+            '    choice = preferred.toLowerCase().split("-")[0];\n'
+            "  }\n"
+            '  location.replace("./" + (available.indexOf(choice) >= 0 ? choice : fallback) + "/");\n'
+            "})();"
+        ) % (json.dumps(languages), json.dumps(fallback), json.dumps(LANGUAGE_STORAGE_KEY))
+        alternates = "".join(
+            '<link rel="alternate" hreflang="%s" href="./%s/">\n' % (code, code) for code in languages
+        ) + '<link rel="alternate" hreflang="x-default" href="./">\n'
         buttons = "\n    ".join(
-            '<a class="button button-%s" href="./%s/">%s</a>'
+            '<a class="button button-%s" href="./%s/" hreflang="%s" lang="%s" data-language="%s">%s</a>'
             % (
-                "primary" if code == default else "secondary",
-                code,
+                "primary" if code == fallback else "secondary",
+                code, code, code, code,
                 html.escape(self.site["languages"][code].get("label", code)),
             )
             for code in languages
         )
         manadoc.write_text(
             self.output / "index.html",
-            '<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
+            '<!DOCTYPE html>\n<html lang="%s">\n<head>\n<meta charset="utf-8">\n'
             '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
-            "<title>%s</title>\n"
-            '<link rel="stylesheet" href="theme/site.css">\n</head>\n<body>\n'
-            '<div class="chooser">\n  <img src="%s/common/logo.svg" alt="%s" width="200">\n'
+            "<title>%s</title>\n%s"
+            '<link rel="stylesheet" href="theme/site.css">\n'
+            "<script>\n%s\n</script>\n</head>\n<body>\n"
+            '<div class="chooser">\n  <img src="%s/common/logo_midium.png" alt="%s" width="160" height="160">\n'
             '  <p class="tagline">%s</p>\n  <p class="actions">\n    %s\n  </p>\n</div>\n'
+            "<script>\n%s\n</script>\n"
             "</body>\n</html>\n"
             % (
-                html.escape(self.site.get("title", "Mana")),
+                self.site["languages"][fallback].get("html_lang", fallback),
+                title,
+                alternates,
+                choose,
                 manadoc.ASSETS_OUTPUT_NAME,
-                html.escape(self.site.get("title", "Mana")),
+                title,
                 html.escape(self.site.get("tagline", "")),
                 buttons,
+                REMEMBER_LANGUAGE_SCRIPT,
             ),
         )
 
