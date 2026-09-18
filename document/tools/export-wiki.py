@@ -129,6 +129,9 @@ def main(argv=None) -> int:
 
     manadoc.write_text(output / "_Sidebar.md", manadoc.build_sidebar(config, languages))
     written.append("_Sidebar")
+    if config.footer:
+        manadoc.write_text(output / "_Footer.md", config.footer + "\n")
+        written.append("_Footer")
 
     assets = manadoc.copy_assets(languages, output / manadoc.ASSETS_OUTPUT_NAME)
 
