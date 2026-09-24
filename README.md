@@ -1,4 +1,4 @@
-﻿<div align="center">
+<div align="center">
 <h1>Actor-oriented scripting language Mana</h1>
 <p>
 <a href="https://github.com/shun126/Mana/issues">Issues</a>,
@@ -14,8 +14,6 @@
 <a href="https://github.com/shun126/Mana/releases"><img src="https://img.shields.io/github/downloads/shun126/Mana/total"></a>
 </p>
 </div>
-
-**日本語で初めて学ぶ方へ：[Mana 入門](document/wiki/ja/Home.md)から、準備・最初の実行・小さなゲームイベントの作成へ進めます。**
 
 This scripting language was developed with the aim of developing a character's action using actor model.
 You can implement the execution engine easily into your computer game program.
@@ -83,7 +81,7 @@ actor Controller
 | `driver` | `mana` | The command line tool that drives the compiler. |
 | `runner` | header only | The virtual machine that executes a compiled program. |
 | `examples` | | Example scripts: `tutorial` holds the finished code of the Japanese tutorial, `language-tour` exercises most language features in one program. |
-| `test` | | Test scripts and the test runner. |
+| `tests` | | Test scripts and the test runner. |
 
 # Installing
 ## Requirements
@@ -114,12 +112,12 @@ Three suites, and all of them matter:
 
 | Suite | What it covers |
 | --- | --- |
-| `test/mana/test.py` | The language, through the `mana` executable. Checks exit status, diagnostics and, for the cases that run, what the script printed. |
-| `test/cpp/EmbeddingTest` | The library interface: compiling from memory, diagnostics as data, redirected output, faults, script errors and native bindings. None of this is reachable from the command line. |
-| `test/cpp/ProgramImageTest` | Reading a compiled program image back. |
+| `tests/mana/test.py` | The language, through the `mana` executable. Checks exit status, diagnostics and, for the cases that run, what the script printed. |
+| `tests/cpp/EmbeddingTest` | The library interface: compiling from memory, diagnostics as data, redirected output, faults, script errors and native bindings. None of this is reachable from the command line. |
+| `tests/cpp/ProgramImageTest` | Reading a compiled program image back. |
 
-The scripts the language suite feeds to `mana` live in `test/mana/`; the C++
-suites and the program image they read live in `test/cpp/`.
+The scripts the language suite feeds to `mana` live in `tests/mana/`; the C++
+suites and the program image they read live in `tests/cpp/`.
 
 `make test` from the top of the tree runs all three.
 
