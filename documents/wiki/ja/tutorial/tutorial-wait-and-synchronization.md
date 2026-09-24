@@ -44,13 +44,15 @@ awaitCompletion(10, Gate->open);
 
 また、自分自身を対象とする `awaitStart` / `awaitCompletion` は、実行時エラーになります。
 
-## yield で自分の実行をいったん譲る
+## yield で実行を譲り、delay で秒数を待つ
 
 ## 動かして確かめる
 
 次は**ファイル全体**です。Mana フォルダーの `lesson.mn` を置き換えて保存し、`mana lesson.mn` で実行してください。
 
 ```mana
+native void delay(float seconds);
+
 actor Guide
 {
     action main
@@ -58,6 +60,8 @@ actor Guide
         print("Guide: Step 1.\n");
         yield();
         print("Guide: Step 2.\n");
+        delay(0.5);
+        print("Guide: Step 3.\n");
     }
 }
 ```
@@ -67,6 +71,7 @@ actor Guide
 ```text
 Guide: Step 1.
 Guide: Step 2.
+Guide: Step 3.
 ```
 
 [同梱の完成コード](../../../../examples/tutorial/10-yield.mn)は `mana examples/tutorial/10-yield.mn` でも実行できます。
@@ -78,6 +83,12 @@ Guide: Step 2.
 
 長い繰り返しでは、`yield()` を使って他の Actor に実行機会を渡せます。実時間やアニメーションの終了待ちは、ゲーム側の更新・完了条件と組み合わせて設計します。
 
+`delay(0.5)` は、VM の時間で0.5秒待ってから続きを実行します。C++ 側の組み込み関数 `Delay` は、Mana には小文字の `delay` という名前で登録されています。使用するファイルには `native void delay(float seconds);` と宣言します。
+
+CLI と引数なしの `VM::Run()` は単調時計で計測した経過時間を使います。組み込み先では `VM::Run(deltaSeconds)` に経過秒数を渡すことで、ポーズや倍速を制御できます。`Run(0.0)` では時間は進みませんが、実行可能な命令は処理します。再開は期限以降の最初の実行機会になるため、更新間隔による遅れは生じます。割り込み中も VM の時間は進み、待機期限は維持されます。
+
+`delay(0.0)` は待機せず続行します。負数や非有限値は実行時エラーです。以前の整数のフレーム数を受け取る `delay` とは互換性がありません。
+
 ## 選び方を確かめる
 
 次の用途に合うものを考えてください。
@@ -86,6 +97,7 @@ Guide: Step 2.
 - 通知を依頼し、進行役はその完了を待たずに進む：`request`
 - 新しい行動を依頼せず、対象の Priority が指定値以下になるのを待つ：`join`
 - 自分の処理を終了せず、一度実行を譲る：`yield`
+- VM の時間で指定秒数だけ待つ：`delay`
 
 境界条件や関連する制御は [Request](../reference/reference-request.md)と [実行制御](../reference/reference-execution-control.md)で調べられます。
 

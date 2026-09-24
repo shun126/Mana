@@ -8,6 +8,7 @@ mana (library)
 #pragma once
 #include "Buffer.h"
 #include <bitset>
+#include <chrono>
 #include <functional>
 #include <memory>
 #include <unordered_map>
@@ -57,7 +58,10 @@ namespace mana
 		void UnloadProgram();
 				
 		void Restart();
+		// Run() uses steady-clock time; Run(seconds) uses host-controlled time.
 		bool Run();
+		bool Run(double deltaSeconds);
+		[[nodiscard]] double GetElapsedSeconds() const { return mElapsedSeconds; }
 		[[nodiscard]] bool IsRunning() const;
 
 		void Execute(const std::function<void()>& function);
@@ -103,6 +107,16 @@ namespace mana
 		*/
 		bool RunActor(const std::shared_ptr<Actor>& actor);
 
+		/*!
+		アクターを実行せずに VM の時計だけを進めます
+
+		@param[in]	deltaSeconds	進める秒数
+		*/
+		void AdvanceTime(const double deltaSeconds);
+
+		//! 前回時計を進めてからの実時間（秒）
+		[[nodiscard]] double GetSecondsSinceLastRun() const;
+
 		[[nodiscard]] ExternalFunctionType FindFunction(const std::string& functionName) const;
 		[[nodiscard]] Buffer& GetGlobalVariables() noexcept;
 		[[nodiscard]] const Buffer& GetGlobalVariables() const noexcept;
@@ -122,6 +136,9 @@ namespace mana
 		Buffer mGlobalVariables;
 		Buffer mStaticVariables;
 		
+		double mElapsedSeconds = 0;
+		double mDeltaSeconds = 0;
+		std::chrono::steady_clock::time_point mLastRun = std::chrono::steady_clock::now();
 		uint32_t mFrameCounter = 0;
 		enum Flag : uint8_t
 		{

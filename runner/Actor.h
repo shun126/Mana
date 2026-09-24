@@ -25,6 +25,7 @@ namespace mana
 	class Actor : Noncopyable, public std::enable_shared_from_this<Actor>
 	{
 		friend class VM;
+		friend struct ActorTestAccess; // Defined only by the embedding tests.
 
 	public:
 		//! Constructor
@@ -39,8 +40,10 @@ namespace mana
 		std::shared_ptr<Actor> Clone() const;
 		
 		bool Run();
+		//! アクションを要求し、完了するまで VM 全体を実行して待ちます（他のアクターも動きます）
 		bool SyncCall(const int32_t priority, const char* action, const std::shared_ptr<Actor>& sender);
-		bool AsyncCall(const int32_t priority, const char* action, const std::shared_ptr<Actor>& sender);
+		//! アクションを要求し、完了するまでこのアクターだけを実行します（他のアクターは止まります）
+		bool CallExclusive(const int32_t priority, const char* action, const std::shared_ptr<Actor>& sender);
 		
 		bool Request(const int32_t priority, const char* action, const std::shared_ptr<Actor>& sender);
 		void Rollback(const int32_t priority);
@@ -79,6 +82,7 @@ namespace mana
 		[[nodiscard]] bool IsCommandRepeat() const;
 		[[nodiscard]] bool IsRunning() const;
 		void Repeat(const bool initialComplete);
+		void Delay(double seconds);
 		void Again();
 		void Halt();
 		void Stop();
@@ -112,6 +116,7 @@ namespace mana
 			uint32_t mReturnAddress = Nil;			//!< リターンアドレス
 			address_t mFramePointer = Nil;			//!< フレームポインタ
 			address_t mStackPointer = Nil;			//!< スタックポインタ
+			double mDelayDeadline = 0;
 			std::bitset<8> mFlag = 0;
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
 			std::string mActionName;				//!< 実行中のアクション名
