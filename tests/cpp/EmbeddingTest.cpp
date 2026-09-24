@@ -652,6 +652,7 @@ namespace
 		BeginCase("DelaySeconds");
 		auto result = CompileSource({ { "main.mn", R"(
 native void delay(float seconds);
+int gInitialized = 1;
 actor Root {
  action main { print("start\n"); delay(0.5); print("done\n"); delay(0.0); print("zero\n"); }
  action urgent { delay(0.25); print("urgent\n"); }
@@ -698,7 +699,8 @@ actor Root {
 			Check(rejected, "invalid delay is rejected");
 		}
 		vm->LoadProgram(std::shared_ptr<const void>(image, image->data()));
-		Check(vm->GetElapsedSeconds() == 0, "load resets time");
+		Check(vm->GetElapsedSeconds() == 0, "load resets time after global initialization");
+		Check(vm->GetDeltaTime() == 0, "load resets delta after global initialization");
 	}
 
 	void TestReturnEpilogues()
