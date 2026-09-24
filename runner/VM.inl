@@ -258,6 +258,12 @@ namespace mana
 		if (Request(1, "__init_globals", "__init", nullptr))
 		{
 			Execute([]() {});
+
+			// グローバル変数の初期化で進んだ時間を戻し、ロード直後の時間を 0 にします
+			mFrameCounter = 0;
+			mElapsedSeconds = 0;
+			mDeltaSeconds = 0;
+			mLastRun = std::chrono::steady_clock::now();
 		}
 
 		RequestAll(1, "init", nullptr);
