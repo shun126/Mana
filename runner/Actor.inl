@@ -252,8 +252,11 @@ namespace mana
 			if (interruptIterator == mInterrupts.end())
 				return false;
 			interruptIterator->second.mFlag.set(static_cast<uint8_t>(Interrupt::Flag::IsInSyncCall));
+			const std::shared_ptr<VM> vm = mVM.lock();
 			while (true)
 			{
+				// VM::Run() を経由しないため、delay が期限に届くよう実時間で時計を進めます
+				vm->AdvanceTime(vm->GetSecondsSinceLastRun());
 				Run();
 				if (mInterruptPriority < priority)
 					return true;

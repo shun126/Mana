@@ -16,11 +16,15 @@ mana (test)
 #include "../../runner/Mana.h"
 
 #include <cstdint>
+#include <chrono>
 #include <cstdio>
+#include <cstdlib>
+#include <future>
 #include <map>
 #include <memory>
 #include <stdexcept>
 #include <string>
+#include <thread>
 #include <vector>
 
 namespace mana
@@ -703,6 +707,39 @@ actor Root {
 		Check(vm->GetDeltaTime() == 0, "load resets delta after global initialization");
 	}
 
+	void TestAsyncCallDelay()
+	{
+		BeginCase("AsyncCallDelay");
+		auto result = CompileSource({ { "main.mn", R"(
+native void delay(float seconds);
+actor Root {
+ action wait { delay(0.05); print("waited\n"); }
+}
+)" } }, "main.mn");
+		Check(result.mSucceeded, "delay source should compile");
+		if (!result.mSucceeded) return;
+		auto image = std::make_shared<std::vector<uint8_t>>(result.mProgramImage);
+		auto vm = std::make_shared<mana::VM>();
+		mana::FunctionInitialize(*vm);
+		vm->LoadProgram(std::shared_ptr<const void>(image, image->data()));
+		gTrace.clear();
+		mana::SetTraceHandler(&OnTrace);
+		// AsyncCall は完了まで戻らないため、時計が進まない不具合で CI が止まらないよう別スレッドで待ちます
+		std::promise<bool> promise;
+		auto future = promise.get_future();
+		std::thread([vm, &promise]() { promise.set_value(vm->FindActor("Root")->AsyncCall(1, "wait", nullptr)); }).detach();
+		if (future.wait_for(std::chrono::seconds(5)) != std::future_status::ready)
+		{
+			Fail("AsyncCall with delay did not return");
+			std::fflush(stdout);
+			std::_Exit(1);
+		}
+		mana::SetTraceHandler(nullptr);
+		Check(future.get(), "AsyncCall should complete the delayed action");
+		CheckEqual(JoinTrace(mana::TraceLevel::Info), "waited\n", "delayed action ran to completion");
+		Check(vm->GetElapsedSeconds() >= 0.05, "AsyncCall advances VM time");
+	}
+
 	void TestReturnEpilogues()
 	{
 		BeginCase("ReturnEpilogues");
@@ -813,6 +850,7 @@ int main()
 	TestAddressArithmetic();
 	TestNativeFunctionBinding();
 	TestDelaySeconds();
+	TestAsyncCallDelay();
 	TestReturnEpilogues();
 	TestReturnBranchTargets();
 

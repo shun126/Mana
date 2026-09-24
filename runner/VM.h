@@ -107,6 +107,16 @@ namespace mana
 		*/
 		bool RunActor(const std::shared_ptr<Actor>& actor);
 
+		/*!
+		アクターを実行せずに VM の時計だけを進めます
+
+		@param[in]	deltaSeconds	進める秒数
+		*/
+		void AdvanceTime(const double deltaSeconds);
+
+		//! 前回時計を進めてからの実時間（秒）
+		[[nodiscard]] double GetSecondsSinceLastRun() const;
+
 		[[nodiscard]] ExternalFunctionType FindFunction(const std::string& functionName) const;
 		[[nodiscard]] Buffer& GetGlobalVariables() noexcept;
 		[[nodiscard]] const Buffer& GetGlobalVariables() const noexcept;
