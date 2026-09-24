@@ -18,7 +18,7 @@ CASES = {
     "07-loops.mn": ("tutorial/tutorial-loops.md", "Remaining: 3\nRemaining: 2\nRemaining: 1\nGate: Open.\n"),
     "08-functions.mn": ("tutorial/tutorial-functions.md", "Missing keys: 2\n"),
     "09-priority.mn": ("tutorial/tutorial-priority.md", "Guide: Talk begins.\nGuide: Watch out!\nGuide: Talk resumes.\nEvent: Finished.\n"),
-    "10-yield.mn": ("tutorial/tutorial-wait-and-synchronization.md", "Guide: Step 1.\nGuide: Step 2.\n"),
+    "10-yield.mn": ("tutorial/tutorial-wait-and-synchronization.md", "Guide: Step 1.\nGuide: Step 2.\nGuide: Step 3.\n"),
     "11-files/main.mn": ("tutorial/tutorial-multiple-files.md", "Guide: Welcome!\nGate: Open.\nEvent: Finished.\n"),
     "12-namespace/main.mn": ("tutorial/tutorial-namespace.md", "Guide: Welcome!\nGate: Open.\nEvent: Finished.\n"),
 }
@@ -148,6 +148,12 @@ def main():
         run(executable, EXAMPLES / "01-hello.mn", "", options=("-o", str(program_image)))
         assert program_image.is_file()
         run(executable, program_image, "Hello, Mana!\n", options=("--execute",))
+        count += 2
+
+        # Built-in delay must also be registered when executing a saved image.
+        program_image = Path(directory) / "delay.mx"
+        run(executable, EXAMPLES / "10-yield.mn", "", options=("-o", str(program_image)))
+        run(executable, program_image, CASES["10-yield.mn"][1], options=("--execute",))
         count += 2
 
     print(f"PASS: {count} executions; article code and expected output match.")
