@@ -40,8 +40,10 @@ namespace mana
 		std::shared_ptr<Actor> Clone() const;
 		
 		bool Run();
+		//! アクションを要求し、完了するまで VM 全体を実行して待ちます（他のアクターも動きます）
 		bool SyncCall(const int32_t priority, const char* action, const std::shared_ptr<Actor>& sender);
-		bool AsyncCall(const int32_t priority, const char* action, const std::shared_ptr<Actor>& sender);
+		//! アクションを要求し、完了するまでこのアクターだけを実行します（他のアクターは止まります）
+		bool CallExclusive(const int32_t priority, const char* action, const std::shared_ptr<Actor>& sender);
 		
 		bool Request(const int32_t priority, const char* action, const std::shared_ptr<Actor>& sender);
 		void Rollback(const int32_t priority);

@@ -707,9 +707,9 @@ actor Root {
 		Check(vm->GetDeltaTime() == 0, "load resets delta after global initialization");
 	}
 
-	void TestAsyncCallDelay()
+	void TestCallExclusiveDelay()
 	{
-		BeginCase("AsyncCallDelay");
+		BeginCase("CallExclusiveDelay");
 		auto result = CompileSource({ { "main.mn", R"(
 native void delay(float seconds);
 actor Root {
@@ -724,20 +724,20 @@ actor Root {
 		vm->LoadProgram(std::shared_ptr<const void>(image, image->data()));
 		gTrace.clear();
 		mana::SetTraceHandler(&OnTrace);
-		// AsyncCall は完了まで戻らないため、時計が進まない不具合で CI が止まらないよう別スレッドで待ちます
+		// CallExclusive は完了まで戻らないため、時計が進まない不具合で CI が止まらないよう別スレッドで待ちます
 		std::promise<bool> promise;
 		auto future = promise.get_future();
-		std::thread([vm, &promise]() { promise.set_value(vm->FindActor("Root")->AsyncCall(1, "wait", nullptr)); }).detach();
+		std::thread([vm, &promise]() { promise.set_value(vm->FindActor("Root")->CallExclusive(1, "wait", nullptr)); }).detach();
 		if (future.wait_for(std::chrono::seconds(5)) != std::future_status::ready)
 		{
-			Fail("AsyncCall with delay did not return");
+			Fail("CallExclusive with delay did not return");
 			std::fflush(stdout);
 			std::_Exit(1);
 		}
 		mana::SetTraceHandler(nullptr);
-		Check(future.get(), "AsyncCall should complete the delayed action");
+		Check(future.get(), "CallExclusive should complete the delayed action");
 		CheckEqual(JoinTrace(mana::TraceLevel::Info), "waited\n", "delayed action ran to completion");
-		Check(vm->GetElapsedSeconds() >= 0.05, "AsyncCall advances VM time");
+		Check(vm->GetElapsedSeconds() >= 0.05, "CallExclusive advances VM time");
 	}
 
 	void TestReturnEpilogues()
@@ -850,7 +850,7 @@ int main()
 	TestAddressArithmetic();
 	TestNativeFunctionBinding();
 	TestDelaySeconds();
-	TestAsyncCallDelay();
+	TestCallExclusiveDelay();
 	TestReturnEpilogues();
 	TestReturnBranchTargets();
 

@@ -244,7 +244,7 @@ namespace mana
 		return false;
 	}
 
-	inline bool Actor::AsyncCall(const int32_t priority, const char* action, const std::shared_ptr<Actor>& sender)
+	inline bool Actor::CallExclusive(const int32_t priority, const char* action, const std::shared_ptr<Actor>& sender)
 	{
 		if (Request(priority, action, sender))
 		{
