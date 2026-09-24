@@ -39,7 +39,8 @@ namespace mana
 	{
 		Info,		//!< print()の出力や実行トレース
 		Warning,	//!< 警告
-		Error		//!< エラー、アサート、内部矛盾
+		Error,		//!< エラー、アサート、内部矛盾
+		Debug		//!< Debug-only execution traces
 	};
 
 	/*!
@@ -102,13 +103,15 @@ namespace mana
 #if defined(MANA_TARGET_WINDOWS) && (MANA_BUILD_TARGET == MANA_BUILD_DEBUG)
 		OutputDebugStringA(message.c_str());
 #endif
-		std::cout << message;
+		// Keep debug traces separate from program output.
+		auto& output = level == TraceLevel::Debug ? std::cerr : std::cout;
+		output << message;
 
 		// アサートは出力の直後に終了するため、
 		// バッファに溜まったまま失われないよう書き出します
 		if (level != TraceLevel::Info)
 		{
-			std::cout.flush();
+			output.flush();
 		}
 	}
 
@@ -155,7 +158,7 @@ namespace mana
 #define MANA_PRINT(...)		mana::Trace(__VA_ARGS__)
 #if MANA_BUILD_TARGET == MANA_BUILD_DEBUG
 //! コンソールに文字列を出力(デバッグビルドのみ)
-#define MANA_TRACE(...)		mana::Trace(__VA_ARGS__)
+#define MANA_TRACE(...)		mana::Trace(mana::TraceLevel::Debug, __VA_ARGS__)
 #else
 //! コンソールに文字列を出力(デバッグビルドのみ)
 #define MANA_TRACE(...)		((void)0)

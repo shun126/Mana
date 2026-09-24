@@ -25,6 +25,7 @@ namespace mana
 	class Actor : Noncopyable, public std::enable_shared_from_this<Actor>
 	{
 		friend class VM;
+		friend struct ActorTestAccess; // Defined only by the embedding tests.
 
 	public:
 		//! Constructor
@@ -79,6 +80,7 @@ namespace mana
 		[[nodiscard]] bool IsCommandRepeat() const;
 		[[nodiscard]] bool IsRunning() const;
 		void Repeat(const bool initialComplete);
+		void Delay(double seconds);
 		void Again();
 		void Halt();
 		void Stop();
@@ -112,6 +114,7 @@ namespace mana
 			uint32_t mReturnAddress = Nil;			//!< リターンアドレス
 			address_t mFramePointer = Nil;			//!< フレームポインタ
 			address_t mStackPointer = Nil;			//!< スタックポインタ
+			double mDelayDeadline = 0;
 			std::bitset<8> mFlag = 0;
 #if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
 			std::string mActionName;				//!< 実行中のアクション名

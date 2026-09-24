@@ -1,3 +1,5 @@
+native void delay(float seconds);
+
 actor Guide
 {
     action main
@@ -5,5 +7,7 @@ actor Guide
         print("Guide: Step 1.\n");
         yield();
         print("Guide: Step 2.\n");
+        delay(0.5);
+        print("Guide: Step 3.\n");
     }
 }

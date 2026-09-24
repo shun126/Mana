@@ -822,11 +822,7 @@ TODO:
 		// returnのジャンプ先を更新
 		mCodeBuffer->ReplaceAddressAll(mReturnAddressList, mCodeBuffer->GetSize());
 
-		// 直後のジャンプは削除
-		if (mReturnAddressList != InvalidAddress)
-		{
-			mCodeBuffer->Reduce(GetIntermediateLanguageProperty(IntermediateLanguage::Branch).mSize);
-		}
+		// Keep return branches: removing bytes here invalidates resolved targets.
 
 		// アクションならばGetEtcは0以外
 		if (node->GetSymbol()->GetEtc() == 0)
