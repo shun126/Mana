@@ -1,4 +1,4 @@
-﻿# User-specific files
+# User-specific files
 *.suo
 *.user
 **/xcuserdata
@@ -43,11 +43,11 @@ driver/mana
 /examples/**/*.h
 /examples/**/*.md
 !/examples/**/README.md
-/test/**/*.h
-/test/**/*.md
+/tests/**/*.h
+/tests/**/*.md
 
 # Generated documentation (Wiki pages and website) and Python cache.
-# The manuscripts under document/ are the source of truth; build output
+# The manuscripts under documents/ are the source of truth; build output
 # is published by the workflows and never committed.
 /build/
 _site/
