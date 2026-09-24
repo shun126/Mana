@@ -17,6 +17,8 @@ mana (compiler)
 #include "../runner/Mana.h"
 
 #include <cstdio>
+#include <chrono>
+#include <thread>
 #include <cstring>
 #include <fstream>
 #include <iostream>
@@ -84,10 +86,11 @@ namespace mana
 		int Execute(const std::shared_ptr<const void>& program)
 		{
 			std::shared_ptr<VM> vm = std::make_shared<VM>();
+			FunctionInitialize(*vm);
 			vm->LoadPlugins(".");
 			vm->LoadProgram(program);
 			while (vm->Run())
-				;
+				std::this_thread::sleep_for(std::chrono::milliseconds(1));
 			return 0;
 		}
 
@@ -97,10 +100,11 @@ namespace mana
 		int Execute(const std::string& path)
 		{
 			std::shared_ptr<VM> vm = std::make_shared<VM>();
+			FunctionInitialize(*vm);
 			vm->LoadPlugins(".");
 			vm->LoadProgram(path);
 			while (vm->Run())
-				;
+				std::this_thread::sleep_for(std::chrono::milliseconds(1));
 			return 0;
 		}
 

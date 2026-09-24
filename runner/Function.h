@@ -64,17 +64,7 @@ namespace mana
 		{
 			MANA_ASSERT_PARAMETER(actor, 1);
 
-			if (actor->GetVirtualMachine()->IsFrameChanged())
-			{
-				const int32_t frame = actor->GetParameterInteger(0);
-				if (frame > 0)
-					actor->Repeat(true);
-				actor->GetStack().Set<int32_t>(0, frame - 1);
-			}
-			else
-			{
-				actor->Repeat(true);
-			}
+			actor->Delay(actor->GetParameterFloat(0));
 		}
 
 		inline void Sin(const std::shared_ptr<Actor>& actor, void*)

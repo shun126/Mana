@@ -244,7 +244,7 @@ namespace mana
 		return false;
 	}
 
-	inline bool Actor::AsyncCall(const int32_t priority, const char* action, const std::shared_ptr<Actor>& sender)
+	inline bool Actor::CallExclusive(const int32_t priority, const char* action, const std::shared_ptr<Actor>& sender)
 	{
 		if (Request(priority, action, sender))
 		{
@@ -252,8 +252,11 @@ namespace mana
 			if (interruptIterator == mInterrupts.end())
 				return false;
 			interruptIterator->second.mFlag.set(static_cast<uint8_t>(Interrupt::Flag::IsInSyncCall));
+			const std::shared_ptr<VM> vm = mVM.lock();
 			while (true)
 			{
+				// VM::Run() を経由しないため、delay が期限に届くよう実時間で時計を進めます
+				vm->AdvanceTime(vm->GetSecondsSinceLastRun());
 				Run();
 				if (mInterruptPriority < priority)
 					return true;
@@ -707,6 +710,22 @@ namespace mana
 			interrupt.mFlag.reset(static_cast<uint8_t>(Interrupt::Flag::Initialized));
 		interrupt.mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Repeat));
 		interrupt.mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Suspend));
+	}
+
+	inline void Actor::Delay(double seconds)
+	{
+		if (!std::isfinite(seconds) || seconds < 0)
+			throw std::invalid_argument("delay seconds must be finite and nonnegative");
+		auto& interrupt = mInterrupts.at(mInterruptPriority);
+		const double now = mVM.lock()->GetElapsedSeconds();
+		if (!IsCommandInitialized())
+		{
+			interrupt.mDelayDeadline = now + seconds;
+			if (!std::isfinite(interrupt.mDelayDeadline))
+				throw std::invalid_argument("delay deadline overflow");
+		}
+		if (now < interrupt.mDelayDeadline)
+			Repeat(true);
 	}
 
 	inline void Actor::Again()
