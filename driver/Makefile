@@ -50,22 +50,22 @@ all:
 
 clean:
 	$(RM) $(TARGET) $(OBJECTS)
-	cd ../test/cpp/ && $(MAKE) clean
+	cd ../tests/cpp/ && $(MAKE) clean
 
 depend:
 	makedepend -Y -- $(CFLAGS) -- $(SOURCES)
-	cd ../test/cpp/ && $(MAKE) depend
+	cd ../tests/cpp/ && $(MAKE) depend
 
 cppcheck:
 	cppcheck -D __unix__ --enable=all $(SOURCES)
 
 test:
 	./$(TARGET) --debug ../examples/language-tour/main.mn -I natives.mh
-	./$(TARGET) ../test/cpp/ProgramImageTest.mn -o ../test/cpp/ProgramImageTest.mx
-	cd ../test/cpp/ && $(MAKE) CONFIG=$(CONFIG)
-	cd ../test/cpp/ && ./ProgramImageTest ProgramImageTest.mx
-	cd ../test/cpp/ && ./EmbeddingTest
-	cd ../test/mana/ && python3 test.py ../../driver/$(TARGET)
+	./$(TARGET) ../tests/cpp/ProgramImageTest.mn -o ../tests/cpp/ProgramImageTest.mx
+	cd ../tests/cpp/ && $(MAKE) CONFIG=$(CONFIG)
+	cd ../tests/cpp/ && ./ProgramImageTest ProgramImageTest.mx
+	cd ../tests/cpp/ && ./EmbeddingTest
+	cd ../tests/mana/ && python3 test.py ../../driver/$(TARGET)
 
 # DO NOT DELETE
 

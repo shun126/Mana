@@ -1,6 +1,6 @@
 name: Publish Pages
 
-# Builds the Mana official website from document/pages/ and deploys it as a
+# Builds the Mana official website from documents/pages/ and deploys it as a
 # GitHub Pages artifact. No HTML is committed to this repository and no
 # gh-pages branch is used.
 #
@@ -12,20 +12,20 @@ on:
     branches:
       - master
     paths:
-      - "document/pages/**"
+      - "documents/pages/**"
       # Site links switch to a translated Wiki page once it is published.
-      - "document/wiki/**"
-      - "document/assets/**"
-      - "document/tools/**"
+      - "documents/wiki/**"
+      - "documents/assets/**"
+      - "documents/tools/**"
       - ".github/workflows/publish-pages.yml"
 
   pull_request:
     paths:
-      - "document/pages/**"
+      - "documents/pages/**"
       # Site links switch to a translated Wiki page once it is published.
-      - "document/wiki/**"
-      - "document/assets/**"
-      - "document/tools/**"
+      - "documents/wiki/**"
+      - "documents/assets/**"
+      - "documents/tools/**"
       - ".github/workflows/publish-pages.yml"
 
   workflow_dispatch:
@@ -55,13 +55,13 @@ jobs:
           python-version: "3.12"
 
       - name: Install the documentation dependencies
-        run: python -m pip install --disable-pip-version-check -r document/tools/requirements.txt
+        run: python -m pip install --disable-pip-version-check -r documents/tools/requirements.txt
 
       - name: Check the manuscripts
-        run: python document/tools/check-docs.py
+        run: python documents/tools/check-docs.py
 
       - name: Build the site
-        run: python document/tools/build-pages.py --language all --output build/pages
+        run: python documents/tools/build-pages.py --language all --output build/pages
 
       - name: Configure GitHub Pages
         # Only master deploys, so a pull request stops after the build.
