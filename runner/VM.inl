@@ -344,7 +344,21 @@ namespace mana
 
 	inline bool VM::Run()
 	{
-		return Run(std::chrono::duration<double>(std::chrono::steady_clock::now() - mLastRun).count());
+		return Run(GetSecondsSinceLastRun());
+	}
+
+	inline double VM::GetSecondsSinceLastRun() const
+	{
+		return std::chrono::duration<double>(std::chrono::steady_clock::now() - mLastRun).count();
+	}
+
+	inline void VM::AdvanceTime(const double deltaSeconds)
+	{
+		if (!std::isfinite(deltaSeconds) || deltaSeconds < 0 || !std::isfinite(mElapsedSeconds + deltaSeconds))
+			throw std::invalid_argument("VM delta seconds must be finite and nonnegative");
+		mLastRun = std::chrono::steady_clock::now();
+		mDeltaSeconds = deltaSeconds;
+		mElapsedSeconds += deltaSeconds;
 	}
 
 	inline float_t VM::GetDeltaTime() const
@@ -354,11 +368,7 @@ namespace mana
 
 	inline bool VM::Run(double deltaSeconds)
 	{
-		if (!std::isfinite(deltaSeconds) || deltaSeconds < 0 || !std::isfinite(mElapsedSeconds + deltaSeconds))
-			throw std::invalid_argument("VM delta seconds must be finite and nonnegative");
-		mLastRun = std::chrono::steady_clock::now();
-		mDeltaSeconds = deltaSeconds;
-		mElapsedSeconds += deltaSeconds;
+		AdvanceTime(deltaSeconds);
 		bool running = false;
 
 		mFlag.set(Flag::FrameChanged);
