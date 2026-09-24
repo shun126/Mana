@@ -709,6 +709,22 @@ namespace mana
 		interrupt.mFlag.set(static_cast<uint8_t>(Interrupt::Flag::Suspend));
 	}
 
+	inline void Actor::Delay(double seconds)
+	{
+		if (!std::isfinite(seconds) || seconds < 0)
+			throw std::invalid_argument("delay seconds must be finite and nonnegative");
+		auto& interrupt = mInterrupts.at(mInterruptPriority);
+		const double now = mVM.lock()->GetElapsedSeconds();
+		if (!IsCommandInitialized())
+		{
+			interrupt.mDelayDeadline = now + seconds;
+			if (!std::isfinite(interrupt.mDelayDeadline))
+				throw std::invalid_argument("delay deadline overflow");
+		}
+		if (now < interrupt.mDelayDeadline)
+			Repeat(true);
+	}
+
 	inline void Actor::Again()
 	{
 		mFlag.set(static_cast<uint8_t>(Flag::Requested));
