@@ -1,0 +1,17 @@
+/*
+mana (script)
+Copyright (c) 2003 Shun Moriya
+*/
+
+int missing()
+{
+	return;
+}
+
+actor Main
+{
+	action main
+	{
+		missing();
+	}
+}
