@@ -1,0 +1,17 @@
+/*
+mana (script)
+Copyright (c) 2003 Shun Moriya
+*/
+
+void extra()
+{
+	return 1;
+}
+
+actor Main
+{
+	action main
+	{
+		extra();
+	}
+}

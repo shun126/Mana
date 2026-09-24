@@ -16,12 +16,24 @@ mana (test)
 #include "../../runner/Mana.h"
 
 #include <cstdint>
+#include <chrono>
 #include <cstdio>
+#include <cstdlib>
+#include <future>
 #include <map>
 #include <memory>
 #include <stdexcept>
 #include <string>
+#include <thread>
 #include <vector>
+
+namespace mana
+{
+	struct ActorTestAccess
+	{
+		static address_t FrameSize(const Actor& actor) { return actor.mFrame.GetSize(); }
+	};
+}
 
 namespace
 {
@@ -374,9 +386,11 @@ namespace
 		mana::Trace(mana::TraceLevel::Info, "info\n");
 		mana::Trace(mana::TraceLevel::Warning, "warning\n");
 		mana::Trace(mana::TraceLevel::Error, { "err", "or\n" });
+		mana::Trace(mana::TraceLevel::Debug, "debug\n");
 		mana::SetTraceHandler(nullptr);
 
-		Check(gTrace.size() == 3, "three records expected");
+		Check(gTrace.size() == 4, "four records expected");
+		CheckEqual(JoinTrace(mana::TraceLevel::Debug), "debug\n", "debug stream");
 		CheckEqual(JoinTrace(mana::TraceLevel::Info), "info\n", "info stream");
 		CheckEqual(JoinTrace(mana::TraceLevel::Warning), "warning\n", "warning stream");
 		CheckEqual(JoinTrace(mana::TraceLevel::Error), "error\n", "error stream");
@@ -636,6 +650,184 @@ namespace
 
 		CheckEqual(ScriptOutputOnly(JoinTrace()), "sum 7\n", "the native function should have been called");
 	}
+
+	void TestDelaySeconds()
+	{
+		BeginCase("DelaySeconds");
+		auto result = CompileSource({ { "main.mn", R"(
+native void delay(float seconds);
+int gInitialized = 1;
+actor Root {
+ action main { print("start\n"); delay(0.5); print("done\n"); delay(0.0); print("zero\n"); }
+ action urgent { delay(0.25); print("urgent\n"); }
+}
+)" } }, "main.mn");
+		Check(result.mSucceeded, "delay source should compile");
+		if (!result.mSucceeded) return;
+		auto image = std::make_shared<std::vector<uint8_t>>(result.mProgramImage);
+		auto vm = std::make_shared<mana::VM>();
+		mana::FunctionInitialize(*vm);
+		vm->LoadProgram(std::shared_ptr<const void>(image, image->data()));
+		gTrace.clear();
+		mana::SetTraceHandler(&OnTrace);
+		vm->Run(0.0);
+		CheckEqual(JoinTrace(mana::TraceLevel::Info), "start\n", "delay starts without completing");
+		vm->Run(0.25);
+		vm->FindActor("Root")->Again();
+		vm->Run(0.0);
+		CheckEqual(JoinTrace(mana::TraceLevel::Info), "start\n", "zero delta and rescheduling do not advance time");
+		Check(vm->Request(10, "Root", "urgent", nullptr), "interrupt should be accepted");
+		vm->Run(0.0);
+		vm->Run(0.125);
+		CheckEqual(JoinTrace(mana::TraceLevel::Info), "start\n", "both delays still pending");
+		vm->Run(0.125);
+		for (int i = 0; i < 3 && vm->IsRunning(); ++i) vm->Run(0.0);
+		CheckEqual(JoinTrace(mana::TraceLevel::Info), "start\nurgent\ndone\nzero\n", "independent deadlines survive interruption");
+		vm->Restart();
+		Check(vm->GetElapsedSeconds() == 0, "restart resets time");
+		Check(vm->Request(0, "Root", "main", nullptr), "restart allows a fresh main request");
+		gTrace.clear();
+		vm->Run(0.0);
+		vm->Run(0.25);
+		CheckEqual(JoinTrace(mana::TraceLevel::Info), "start\n", "restart clears old deadline");
+		vm->Run(0.25);
+		CheckEqual(JoinTrace(mana::TraceLevel::Info), "start\ndone\nzero\n", "deadline reached after restart");
+		mana::SetTraceHandler(nullptr);
+		for (double invalid : { -1.0, std::numeric_limits<double>::infinity(), std::numeric_limits<double>::quiet_NaN() })
+		{
+			bool rejected = false;
+			try { vm->Run(invalid); } catch (const std::invalid_argument&) { rejected = true; }
+			Check(rejected, "invalid delta is rejected");
+			rejected = false;
+			try { vm->FindActor("Root")->Delay(invalid); } catch (const std::invalid_argument&) { rejected = true; }
+			Check(rejected, "invalid delay is rejected");
+		}
+		vm->LoadProgram(std::shared_ptr<const void>(image, image->data()));
+		Check(vm->GetElapsedSeconds() == 0, "load resets time after global initialization");
+		Check(vm->GetDeltaTime() == 0, "load resets delta after global initialization");
+	}
+
+	void TestCallExclusiveDelay()
+	{
+		BeginCase("CallExclusiveDelay");
+		auto result = CompileSource({ { "main.mn", R"(
+native void delay(float seconds);
+actor Root {
+ action wait { delay(0.05); print("waited\n"); }
+}
+)" } }, "main.mn");
+		Check(result.mSucceeded, "delay source should compile");
+		if (!result.mSucceeded) return;
+		auto image = std::make_shared<std::vector<uint8_t>>(result.mProgramImage);
+		auto vm = std::make_shared<mana::VM>();
+		mana::FunctionInitialize(*vm);
+		vm->LoadProgram(std::shared_ptr<const void>(image, image->data()));
+		gTrace.clear();
+		mana::SetTraceHandler(&OnTrace);
+		// CallExclusive は完了まで戻らないため、時計が進まない不具合で CI が止まらないよう別スレッドで待ちます
+		std::promise<bool> promise;
+		auto future = promise.get_future();
+		std::thread([vm, &promise]() { promise.set_value(vm->FindActor("Root")->CallExclusive(1, "wait", nullptr)); }).detach();
+		if (future.wait_for(std::chrono::seconds(5)) != std::future_status::ready)
+		{
+			Fail("CallExclusive with delay did not return");
+			std::fflush(stdout);
+			std::_Exit(1);
+		}
+		mana::SetTraceHandler(nullptr);
+		Check(future.get(), "CallExclusive should complete the delayed action");
+		CheckEqual(JoinTrace(mana::TraceLevel::Info), "waited\n", "delayed action ran to completion");
+		Check(vm->GetElapsedSeconds() >= 0.05, "CallExclusive advances VM time");
+	}
+
+	void TestReturnEpilogues()
+	{
+		BeginCase("ReturnEpilogues");
+		auto result = CompileSource({ { "main.mn", R"(
+native void observe();
+int remainingKeys(int required, int owned) {
+ if (owned >= required) { return 0; }
+ return required - owned;
+}
+int nested(int x) {
+ if (x > 0) { if (x > 1) { return remainingKeys(3, 1); } return 7; }
+ return remainingKeys(3, 5);
+}
+void early(int x) {
+ if (x > 0) { return; }
+ print("fallthrough\n");
+}
+int trailing() { return 9; print("unreachable\n"); }
+actor Event {
+ action main {
+  print("%d %d %d %d %d %d\n", remainingKeys(3, 5), remainingKeys(3, 1), nested(2), nested(1), nested(0), trailing());
+  early(1); early(0);
+  observe();
+  int i = 0;
+  while (i < 100) {
+   remainingKeys(3, 5); remainingKeys(3, 1); nested(2); trailing(); early(1);
+   observe();
+   i = i + 1;
+  }
+  return;
+  print("unreachable action\n");
+ }
+}
+)" } }, "main.mn");
+		Check(result.mSucceeded, "return regression should compile");
+		if (!result.mSucceeded) { std::printf("%s", DiagnosticsToString(result).c_str()); return; }
+		auto image = std::make_shared<std::vector<uint8_t>>(result.mProgramImage);
+		auto vm = std::make_shared<mana::VM>();
+		int observations = 0;
+		mana::address_t baseline = 0;
+		vm->RegisterFunction("observe", [&](const std::shared_ptr<mana::Actor>& actor, void*) {
+			const auto size = mana::ActorTestAccess::FrameSize(*actor);
+			if (observations++ == 0) baseline = size;
+			Check(size == baseline, "calls must restore the caller frame size");
+		});
+		gTrace.clear();
+		mana::SetTraceHandler(&OnTrace);
+		vm->LoadProgram(std::shared_ptr<const void>(image, image->data()));
+		for (int i = 0; i < 1000 && vm->IsRunning(); ++i) vm->Run(0.0);
+		Check(!vm->IsRunning(), "return regression must terminate");
+		Check(observations == 101, "all repeated calls must complete");
+		CheckEqual(JoinTrace(mana::TraceLevel::Info), "0 2 2 7 0 9\nfallthrough\n", "all return paths");
+		CheckEqual(JoinTrace(mana::TraceLevel::Error), "", "no runtime faults");
+		Check(mana::ActorTestAccess::FrameSize(*vm->FindActor("Event")) == 0, "action releases its frame");
+		mana::SetTraceHandler(nullptr);
+	}
+
+	void TestReturnBranchTargets()
+	{
+		BeginCase("ReturnBranchTargets");
+		auto result = CompileSource({ { "main.mn", "int f() { return 1; } actor A { action main { f(); return; } }" } }, "main.mn");
+		Check(result.mSucceeded, "branch target source should compile");
+		if (!result.mSucceeded) return;
+		const auto* header = reinterpret_cast<const mana::FileHeader*>(result.mProgramImage.data());
+		const auto size = header->mSizeOfInstructionPool;
+		const auto* code = result.mProgramImage.data() + result.mProgramImage.size() - size;
+		std::vector<mana::address_t> boundaries;
+		std::vector<mana::address_t> targets;
+		for (mana::address_t pc = 0; pc < size; ) {
+			boundaries.push_back(pc);
+			if (static_cast<mana::IntermediateLanguage>(code[pc]) == mana::IntermediateLanguage::Branch) {
+				const auto* p = code + pc + 1;
+				targets.push_back((uint32_t(p[0]) << 24) | (uint32_t(p[1]) << 16) | (uint32_t(p[2]) << 8) | p[3]);
+			}
+			const auto length = mana::GetInstructionSize(code, pc);
+			if (length == 0 || length > size - pc) { Fail("invalid instruction boundary"); return; }
+			pc += length;
+		}
+		Check(targets.size() >= 2, "function and action returns retain their branches");
+		for (auto target : targets) {
+			bool boundary = false;
+			for (auto pc : boundaries) boundary |= pc == target;
+			Check(boundary, "return target must be an instruction boundary");
+			if (!boundary) continue;
+			const auto op = static_cast<mana::IntermediateLanguage>(code[target]);
+			Check(op == mana::IntermediateLanguage::LoadReturnAddress || op == mana::IntermediateLanguage::Free, "return must enter the epilogue");
+		}
+	}
 }
 
 int main()
@@ -657,6 +849,10 @@ int main()
 	TestSubscriptOverflowIsCaught();
 	TestAddressArithmetic();
 	TestNativeFunctionBinding();
+	TestDelaySeconds();
+	TestCallExclusiveDelay();
+	TestReturnEpilogues();
+	TestReturnBranchTargets();
 
 	if (gFailures == 0)
 	{
