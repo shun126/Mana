@@ -21,10 +21,10 @@ written as plain `natives.mh`.
 ## Keeping the tutorial code in step with the manual
 
 The code in `tutorial/` also appears in the manuscripts under
-`document/wiki/ja/`. After changing either, check that they still agree and
+`documents/wiki/ja/`. After changing either, check that they still agree and
 that every example prints what the manual says:
 
 ```bash
-python document/tools/verify-examples.py x64/Release/mana.exe   # Windows
-python document/tools/verify-examples.py driver/mana             # Linux / macOS
+python documents/tools/verify-examples.py x64/Release/mana.exe   # Windows
+python documents/tools/verify-examples.py driver/mana             # Linux / macOS
 ```
