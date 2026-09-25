@@ -1,0 +1,33 @@
+/*
+mana (script)
+Copyright (c) 2026 Shun Moriya
+*/
+
+module SharedActions
+{
+    action inherited
+    {
+    }
+}
+
+actor ExtendedActor
+{
+    int mValue;
+
+    action own
+    {
+        mValue = 1;
+    }
+
+    extend SharedActions;
+}
+
+int mValue;
+
+actor FollowingActor
+{
+    action own
+    {
+        mValue = 2;
+    }
+}
