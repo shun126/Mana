@@ -128,7 +128,8 @@ namespace mana
 				IsInSyncCall,	//!< 同期実行フラグ
 				Repeat,			//!< リピートフラグ
 				Suspend,		//!< サスペンドフラグ
-				Synchronized	//!< 同期フラグ
+				Synchronized,	//!< 同期フラグ
+				Initialization	//!< 起動時の init Action を識別するフラグ
 			};
 		};
 
