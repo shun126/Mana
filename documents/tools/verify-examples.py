@@ -106,7 +106,7 @@ def main():
 
         article = (ARTICLES / "tutorial/tutorial-conditions.md").read_text(encoding="utf-8")
         code = (EXAMPLES / "05-variables.mn").read_text(encoding="utf-8")
-        old_body = '        gTalkCount = gTalkCount + 1;\n        print("Talk count: %d\\n", gTalkCount);'
+        old_body = '        mTalkCount = mTalkCount + 1;\n        print("Talk count: %d\\n", mTalkCount);'
         new_body = "\n".join("        " + line for line in blocks(article, "mana")[-1].strip().splitlines())
         assert old_body in code
         target.write_text(code.replace(old_body, new_body), encoding="utf-8")

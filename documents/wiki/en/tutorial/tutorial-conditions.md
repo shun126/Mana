@@ -82,7 +82,7 @@ Here you set whether you have the key yourself, in the code. Nothing is reading 
 
 ## Comparing numbers
 
-With the conversation count from the previous chapter, writing `gTalkCount == 0` checks whether it is 0.
+With the conversation count from the previous chapter, writing `mTalkCount == 0` checks whether it is 0.
 
 | Written as | Meaning |
 | --- | --- |
@@ -113,7 +113,7 @@ if (hasKey && !isOpen)
 Go back to the finished code of the [previous chapter](./tutorial-variables.md) and replace the body of `talk` with the following.
 
 ```mana
-if (gTalkCount == 0)
+if (mTalkCount == 0)
 {
     print("Guide: Welcome!\n");
 }
@@ -121,7 +121,7 @@ else
 {
     print("Guide: Welcome back!\n");
 }
-gTalkCount = gTalkCount + 1;
+mTalkCount = mTalkCount + 1;
 ```
 
 The first time it says `Welcome!`, the second time `Welcome back!`. Notice that it compares first and increases the count afterwards.

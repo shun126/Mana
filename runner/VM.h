@@ -107,6 +107,12 @@ namespace mana
 		*/
 		bool RunActor(const std::shared_ptr<Actor>& actor);
 
+		/**
+		 * Finishes startup after every originally requested init action has ended.
+		 * 起動時に要求した全 init Action の終了後に初期化を完了します。
+		 */
+		bool FinishInitializationIfReady();
+
 		/*!
 		アクターを実行せずに VM の時計だけを進めます
 
