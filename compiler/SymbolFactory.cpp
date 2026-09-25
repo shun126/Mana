@@ -1027,7 +1027,9 @@ TODO:
 			RegisterActorMembers(symbol->GetNext());
 		}
 
-		mBlockTable.top()->mShadowedSymbols.try_emplace(symbol->GetName(), Lookup(symbol->GetName()));
+		const std::shared_ptr<Symbol>& current = Lookup(symbol->GetName());
+		if (current != symbol)
+			mBlockTable.top()->mShadowedSymbols.try_emplace(symbol->GetName(), current);
 		Define(symbol);
 	}
 
@@ -1320,6 +1322,7 @@ TODO:
 			if (const std::shared_ptr<Symbol>& actionSymbol = symbol->GetTypeDescriptor()->GetParent())
 			{
 				//ExtendModule(action_symbol);
+				RegisterActorMembers(actionSymbol);
 
 				std::shared_ptr<Symbol> lastSymbol = actionSymbol;
 				while (lastSymbol->GetNext())
@@ -1330,8 +1333,6 @@ TODO:
 
 				/* symbol_close_blockでsymbol_hash_chain_tableを開放する為 */
 				mBlockTable.top()->mHead.mSymbolEntry = actionSymbol;
-
-				RegisterActorMembers(actionSymbol);
 			}
 		}
 		else
