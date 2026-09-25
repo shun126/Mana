@@ -267,12 +267,14 @@ namespace mana
 
 		mFlag.set(Flag::InitializeActionRunning);
 		RequestAll(1, "init", nullptr);
-		if (!IsRunning())
+		for (const auto& [name, actor] : mActors)
 		{
-			mFlag.set(Flag::InitializeActionFinished);
-			mFlag.reset(Flag::InitializeActionRunning);
-			RequestAll(0, "main", nullptr);
+			MANA_UNUSED_VAR(name);
+			const auto interrupt = actor->mInterrupts.find(1);
+			if (interrupt != actor->mInterrupts.end())
+				interrupt->second.mFlag.set(static_cast<uint8_t>(Actor::Interrupt::Flag::Initialization));
 		}
+		FinishInitializationIfReady();
 	}
 
 	inline void VM::UnloadProgram()
@@ -399,16 +401,33 @@ namespace mana
 		}
 		mFlag.set(Flag::FrameChanged);
 
-		if (mFlag[Flag::InitializeActionRunning] && !running)
-		{
-			mFlag.set(Flag::InitializeActionFinished);
-			mFlag.reset(Flag::InitializeActionRunning);
-			RequestAll(0, "main", nullptr);
-			running = IsRunning();
-		}
+		if (FinishInitializationIfReady())
+			running = true;
 		++mFrameCounter;
 
 		return running;
+	}
+
+	inline bool VM::FinishInitializationIfReady()
+	{
+		if (!mFlag[Flag::InitializeActionRunning])
+			return false;
+
+		for (const auto& [name, actor] : mActors)
+		{
+			MANA_UNUSED_VAR(name);
+			const auto interrupt = actor->mInterrupts.find(1);
+			if (interrupt != actor->mInterrupts.end() &&
+				interrupt->second.mFlag.test(static_cast<uint8_t>(Actor::Interrupt::Flag::Initialization)))
+			{
+				return false;
+			}
+		}
+
+		mFlag.set(Flag::InitializeActionFinished);
+		mFlag.reset(Flag::InitializeActionRunning);
+		RequestAll(0, "main", nullptr);
+		return IsRunning();
 	}
 
 	inline bool VM::IsRunning() const
