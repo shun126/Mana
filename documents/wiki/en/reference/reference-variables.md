@@ -44,9 +44,7 @@ Global variables are initialised before the `init` of ordinary Actors runs.
 
 ## Actor variables
 
-There is syntax for declaring a variable inside an Actor, outside its Actions. However, with the implementation built from the current source on 2026-09-16, we have confirmed that referring to such a variable by name inside an Action, as below, fails to compile with `incomplete type name 'mOpened'`.
-
-The following example shows the current limitation; it is not a finished example you can run as it is.
+Declare an Actor variable inside an Actor and outside its Actions. Every Action belonging to that Actor can read and write the variable, and its value remains part of that Actor's state between Actions.
 
 ```mana
 actor Door
@@ -59,8 +57,6 @@ actor Door
     }
 }
 ```
-
-The design is for this to keep an Actor's state between Actions, but for now the runnable lessons use [an example in which one Actor manages a global variable](../tutorial/tutorial-variables.md).
 
 ## Local variables
 

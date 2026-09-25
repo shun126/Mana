@@ -44,9 +44,7 @@ int gScore = 0;
 
 ## Actor 変数
 
-Actor の中、Action の外側へ変数を宣言する構文があります。ただし、2026-09-16 に現行ソースからビルドした処理系では、以下のように Action 内から変数名を参照すると `incomplete type name 'mOpened'` でコンパイルに失敗することを確認しています。
-
-以下は現行制約を示す例で、そのまま実行できる完成例ではありません。
+Actor 変数は Actor の中、Action の外側へ宣言します。その Actor に属するすべての Action から読み書きでき、値は Action 間で Actor の状態として保持されます。
 
 ```mana
 actor Door
@@ -59,8 +57,6 @@ actor Door
     }
 }
 ```
-
-Actor の状態を Action 間で保持する設計ですが、現時点の実行教材では [グローバル変数を一つの Actor が管理する例](../tutorial/tutorial-variables.md)を使っています。
 
 ## ローカル変数
 

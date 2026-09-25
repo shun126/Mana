@@ -167,12 +167,6 @@ namespace mana
 
 
 
-		void symbol_open_actor_register_member(const std::shared_ptr<Symbol>& symbol);
-		static void symbol_open_actor_register_member(const std::shared_ptr<TypeDescriptor>& typeDescriptor);
-
-
-
-
 		address_t GetReturnAddressList() const
 		{
 			return mReturnAddressList;
@@ -199,6 +193,12 @@ namespace mana
 		std::shared_ptr<Symbol> CreateSymbol(const std::string_view name, const Symbol::ClassTypeId class_type);
 		std::shared_ptr<Symbol> CreateSymbolWithAddress(const std::string_view name, const Symbol::ClassTypeId class_type, const int32_t address);
 		std::shared_ptr<Symbol> CreateSymbolWithLevel(const std::string_view name, Symbol::ClassTypeId class_type, const size_t blockLevel);
+
+		/**
+		 * Makes the saved members of an Actor visible in the current block.
+		 * Actorに保存されたメンバーを現在のブロックから参照可能にします。
+		 */
+		void RegisterActorMembers(const std::shared_ptr<Symbol>& symbol);
 
 
 		bool GenerateActorEntity(OutputStream& stream, const std::shared_ptr<const Symbol>& symbol, const std::shared_ptr<const TypeDescriptor>& type) const;
@@ -238,6 +238,12 @@ namespace mana
 		{
 			BlockEntry mHead;
 			int32_t mAllocp;
+
+			/**
+			 * Symbols hidden by this block, restored when the block closes.
+			 * このブロックが隠した、ブロック終了時に復元するシンボルです。
+			 */
+			std::unordered_map<std::string_view, std::shared_ptr<Symbol>> mShadowedSymbols;
 
 			explicit BlockTable(const int32_t allocp)
 				: mAllocp(allocp)
