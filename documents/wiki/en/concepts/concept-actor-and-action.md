@@ -23,7 +23,7 @@ In this example, `Guard` is the Actor, and `watch` and `move` are Actions.
 
 ## An Actor holds state
 
-An Actor's member variables are designed to represent the state the Actor holds. However, we have confirmed that the current implementation gives a compile error when such a variable is referred to by name inside an Action, as in the example below. Read the code on this page that uses member variables as a conceptual explanation. For runnable examples, see the [variables tutorial](../tutorial/tutorial-variables.md), and for the limitation, the [variables reference](../reference/reference-variables.md).
+An Actor's member variables represent the state the Actor holds. Actions belonging to that Actor can refer to those variables directly.
 
 ```mana
 actor Guide

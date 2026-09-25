@@ -7,8 +7,6 @@ You talk to the guide twice and print how many times you have talked. A **variab
 This is the **whole file**. Replace `lesson.mn` in the Mana folder with it, save, and run it with `mana lesson.mn`.
 
 ```mana
-int gTalkCount = 0;
-
 actor Event
 {
     action main
@@ -20,10 +18,17 @@ actor Event
 
 actor Guide
 {
+    int mTalkCount;
+
+    action init
+    {
+        mTalkCount = 0;
+    }
+
     action talk
     {
-        gTalkCount = gTalkCount + 1;
-        print("Talk count: %d\n", gTalkCount);
+        mTalkCount = mTalkCount + 1;
+        print("Talk count: %d\n", mTalkCount);
     }
 }
 ```
@@ -39,25 +44,25 @@ You can also run the [finished code that comes with Mana](../../../../examples/t
 
 ## Type, name and value
 
-`int gTalkCount = 0;` declares a variable that holds an integer and sets its first value to 0. `int` is the **type**, the kind of value it holds, and `gTalkCount` is the variable's name.
+`int mTalkCount;` declares a variable that holds an integer. `int` is the **type**, the kind of value it holds, and `mTalkCount` is the variable's name. The `init` Action sets its first value to 0.
 
-`gTalkCount = gTalkCount + 1;` is an **assignment** that adds 1 to the current value and stores the result. Unlike an equation in maths, it computes the value on the right and puts it into the left. The first time it goes from 0 to 1, the second time from 1 to 2.
+`mTalkCount = mTalkCount + 1;` is an **assignment** that adds 1 to the current value and stores the result. Unlike an equation in maths, it computes the value on the right and puts it into the left. The first time it goes from 0 to 1, the second time from 1 to 2.
 
 ## Printing a value
 
-In `print("Talk count: %d\n", gTalkCount);`, `%d` marks where the integer passed after it is printed. `\n` is a line break.
+In `print("Talk count: %d\n", mTalkCount);`, `%d` marks where the integer passed after it is printed. `\n` is a line break.
 
 Printing a variable shows how far the work has got and how the value has changed.
 
 ## Keeping a value across Actions
 
-This variable is declared outside any Actor, so it is a **global variable**. Several Actors can refer to it, but in this example only `Guide` changes it. Deciding who is responsible for changing a value makes its changes easier to follow.
+This variable is declared inside `Guide` and outside its Actions, so it is an **Actor variable**. The Actions belonging to `Guide` can refer to it directly, while other Actors cannot modify it directly.
 
-Starting the name with `g` is a convention that makes it easy to tell it is global; the language does not require it.
+Starting the name with `m` is a convention that makes it easy to tell it is an Actor member; the language does not require it.
 
 The variable keeps its value after the conversation's Action ends. But if you quit the program and start it again, it starts from 0 again. Nothing has been saved to a file.
 
-Mana can also declare state variables inside an Actor. However, the implementation checked for these lessons has a problem: such a variable cannot be referred to by name inside an Action. So the runnable lessons use a global variable. For details, see the current limitations in the [variables reference](../reference/reference-variables.md).
+Because the state belongs to `Guide`, it stays encapsulated with the Actions that use it. For more details, see the [variables reference](../reference/reference-variables.md).
 
 ## Local variables used inside one piece of work
 
