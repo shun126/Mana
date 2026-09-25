@@ -247,7 +247,6 @@ namespace mana
 		}
 
 		// プログラムの初期化とシステムリクエストのフラグを設定します
-		mFlag.set(Flag::InitializeActionRunning);
 		mFlag.set(Flag::Initialized);
 		mFlag.set(Flag::EnableSystemRequest);
 
@@ -266,8 +265,14 @@ namespace mana
 			mLastRun = std::chrono::steady_clock::now();
 		}
 
+		mFlag.set(Flag::InitializeActionRunning);
 		RequestAll(1, "init", nullptr);
-		RequestAll(0, "main", nullptr);
+		if (!IsRunning())
+		{
+			mFlag.set(Flag::InitializeActionFinished);
+			mFlag.reset(Flag::InitializeActionRunning);
+			RequestAll(0, "main", nullptr);
+		}
 	}
 
 	inline void VM::UnloadProgram()
@@ -398,6 +403,8 @@ namespace mana
 		{
 			mFlag.set(Flag::InitializeActionFinished);
 			mFlag.reset(Flag::InitializeActionRunning);
+			RequestAll(0, "main", nullptr);
+			running = IsRunning();
 		}
 		++mFrameCounter;
 
