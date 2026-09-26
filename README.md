@@ -101,18 +101,18 @@ tested GitHub Release with two source archives:
 * `mana-runtime-MAJOR.MINOR.PATCH-source.zip` contains the header-only VM in
   `runner/`, its generated `runner/common/Version.h`, the license, and this
   README. Copy `runner/` into a C++17 project to embed the VM.
-* `mana-sdk-MAJOR.MINOR.PATCH-source.zip` contains the compiler, command-line
-  driver, runtime, examples, tests, documentation, CMake files, and generated
-  `Parser.cpp`, `Parser.hpp`, `Lexer.cpp`, and `Version.h`. To build without
-  Bison, Flex, or Python, configure with
-  `cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DMANA_USE_PREGENERATED_SOURCES=ON -DBUILD_TESTING=OFF`,
-  then run `cmake --build build --config Release --parallel`. Python is needed
-  only if `BUILD_TESTING=ON`, for the CTest language and example checks.
+* `mana-compiler-MAJOR.MINOR.PATCH-source.zip` adds the compiler to the VM, for
+  hosts such as game engine editors that compile scripts themselves. It
+  contains the compiler, command-line driver, runtime, the license, this README,
+  and generated `Parser.cpp`, `Parser.hpp`, `Lexer.cpp`, and `Version.h`, so it
+  builds without Bison, Flex, or Python. It has no CMake files, documents,
+  examples, or tests; add the sources to your own build as described in
+  [Embedding without CMake](#embedding-without-cmake). To build Mana itself,
+  use a repository checkout or GitHub's source code archive.
 
-The archives have a single top-level directory. The SDK also keeps
+The archives have a single top-level directory. The compiler archive also keeps
 `compiler/Parser.yy` and `compiler/Lexer.l` for developers who want to change
-the grammar. Omit `MANA_USE_PREGENERATED_SOURCES=ON` in a normal repository
-checkout to regenerate the parser and lexer from those files.
+the grammar; regenerate the parser and lexer from a repository checkout.
 
 To publish a release, update `runner/common/Version.json` in the release commit,
 then push the matching tag (for example, `git tag v1.0.0` followed by
@@ -432,14 +432,15 @@ it found it.
 
 # Embedding without CMake
 
-The repository build regenerates sources with Bison, Flex and Python. The SDK
-release archive includes the generated files and can be built with CMake using
-the option above. To add Mana to a project with its own build system, such as a
-game engine, ship the generated files with the sources and reproduce the
-settings below by hand.
+The repository build regenerates sources with Bison, Flex and Python. To add
+Mana to a project with its own build system, such as a game engine, ship the
+generated files with the sources and reproduce the settings below by hand. The
+compiler release archive already includes the generated files: the parser and
+lexer are in `compiler/` next to the other compiler sources, and `Version.h` is
+in `runner/common/`.
 
-Generate the files once on a machine that has the tools, with a normal CMake
-build as described in [Installing](#installing):
+Otherwise, generate the files once on a machine that has the tools, with a
+normal CMake build as described in [Installing](#installing):
 
 | File | Generated from | Needed by |
 | --- | --- | --- |
@@ -453,8 +454,10 @@ Then configure your build as follows. Every setting here is one that the
 * Add these include directories: the repository root, `compiler/`, `runner/`,
   and the directory holding the generated parser and lexer. Only the
   repository root is needed when embedding just the virtual machine.
-* To embed the compiler, compile every `compiler/*.cpp` together with the
-  generated `Parser.cpp` and `Lexer.cpp`.
+* To embed the compiler, compile every `compiler/*.cpp` and the generated
+  `Parser.cpp` and `Lexer.cpp`. In the compiler release archive those two are
+  already in `compiler/`, so the wildcard covers them; add them separately only
+  when they come from `build/generated/`.
 * In debug builds, define `MANA_DEBUG` (or `DEBUG`) for **every** translation
   unit that includes Mana headers, not only the compiler sources. The headers
   add members in debug builds, so mixing the two settings breaks struct
@@ -463,6 +466,9 @@ Then configure your build as follows. Every setting here is one that the
   without a byte order mark and contain Japanese comments, which MSVC
   misreads in other code pages.
 * On Linux, link `dl` and `m`. The virtual machine loads plugins with `dlopen`.
+* With Cygwin, define `_GNU_SOURCE` (or compile as `gnu++17`). With
+  `-std=c++17`, Cygwin's headers hide `realpath` and `fileno`, which the
+  compiler and the generated lexer use.
 
 # License
 
