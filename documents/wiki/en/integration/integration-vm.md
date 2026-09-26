@@ -70,10 +70,10 @@ Register a name that matches the function name declared `native` on the Mana sid
 
 ## Startup when a program loads
 
-After loading a program, the current VM Requests `init` at Priority 1 and `main` at Priority 0 for the ordinary Actors.
+After loading a program, the current VM Requests `init` at the highest Priority (2147483647) and `main` at Priority 0 for the ordinary Actors.
 
 ```text
-init : Priority 1
+init : Priority 2147483647
 main : Priority 0
 ```
 
@@ -84,8 +84,6 @@ So `init` can run its initialisation at a higher Priority than `main`.
 The main APIs for checking state include:
 
 - `IsRunning()`
-- `IsInInitAction()`
-- `IsFinishInitAction()`
 - `GetFrameCounter()`
 - `GetDeltaTime()`
 - `IsFrameChanged()`

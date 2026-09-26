@@ -74,8 +74,6 @@ namespace mana
 		[[nodiscard]] std::shared_ptr<Actor> CloneActor(const std::shared_ptr<Actor>& actor, const char* newName);
 		[[nodiscard]] std::shared_ptr<Actor> CreateActor(const char* name, const char* newName);
 		[[nodiscard]] std::shared_ptr<Actor> CreateActorFromPhantom(const char* name, const char* newName);
-		[[nodiscard]] bool IsInInitAction() const;
-		[[nodiscard]] bool IsFinishInitAction() const;
 		
 		void SetSystemRequest(const bool enable);
 		[[nodiscard]] bool IsSystemRequestEnabled() const;
@@ -106,12 +104,6 @@ namespace mana
 		@retval	true	実行を継続します
 		*/
 		bool RunActor(const std::shared_ptr<Actor>& actor);
-
-		/**
-		 * Finishes startup after every originally requested init action has ended.
-		 * 起動時に要求した全 init Action の終了後に初期化を完了します。
-		 */
-		bool FinishInitializationIfReady();
 
 		/*!
 		アクターを実行せずに VM の時計だけを進めます
@@ -150,8 +142,6 @@ namespace mana
 		{
 			DebugMode,					//!< デバックモードフラグ
 			FrameChanged,				//!< フレーム変更フラグ
-			InitializeActionRunning,	//!< initアクション実行中フラグ
-			InitializeActionFinished,	//!< initアクション終了フラグ
 			Initialized,				//!< 初期化済みフラグ
 			Requested,					//!< リクエスト発生済みフラグ
 			EnableSystemRequest			//!< システムリクエスト許可フラグ
