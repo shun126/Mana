@@ -65,8 +65,8 @@ After loading the program, the Mana VM requests special Actions from the Actors.
 
 The current VM sends every Actor, in this order:
 
-1. A Request for `init` at Priority 1
-2. A Request for `main` at Priority 0
+1. A Request for `main` at Priority 0
+2. A Request for `init` at the highest Priority (2147483647)
 
 If an Actor does not define that Action, the Request does not run.
 
@@ -86,6 +86,8 @@ actor Example
 ```
 
 `init` can be used to initialise state, and `main` for normal startup work.
+
+Startup does not wait for other Actors to initialize. Actors without `init` start with `main`. An `init` must not wait for a lower-Priority Action on the same Actor: that Action cannot run until `init` finishes.
 
 ## The actor type
 

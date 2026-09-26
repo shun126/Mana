@@ -8,6 +8,7 @@ mana (library)
 #pragma once
 #include "Plugin.h"
 #include <cmath>
+#include <limits>
 #include <stdexcept>
 
 namespace mana
@@ -265,16 +266,9 @@ namespace mana
 			mLastRun = std::chrono::steady_clock::now();
 		}
 
-		mFlag.set(Flag::InitializeActionRunning);
-		RequestAll(1, "init", nullptr);
-		for (const auto& [name, actor] : mActors)
-		{
-			MANA_UNUSED_VAR(name);
-			const auto interrupt = actor->mInterrupts.find(1);
-			if (interrupt != actor->mInterrupts.end())
-				interrupt->second.mFlag.set(static_cast<uint8_t>(Actor::Interrupt::Flag::Initialization));
-		}
-		FinishInitializationIfReady();
+		// Queue main before starting each Actor's init at the highest priority.
+		RequestAll(0, "main", nullptr);
+		RequestAll(std::numeric_limits<int32_t>::max(), "init", nullptr);
 	}
 
 	inline void VM::UnloadProgram()
@@ -290,8 +284,6 @@ namespace mana
 		*/
 
 		// 実行状態と Actor の情報を初期化します
-		mFlag.reset(Flag::InitializeActionRunning);
-		mFlag.reset(Flag::InitializeActionFinished);
 		mFlag.reset(Flag::Initialized);
 		mFlag.reset(Flag::EnableSystemRequest);
 
@@ -319,8 +311,6 @@ namespace mana
 		{
 			actor.second->Restart();
 		}
-		mFlag.reset(Flag::InitializeActionRunning);
-		mFlag.reset(Flag::InitializeActionFinished);
 		mFrameCounter = 0;
 		mElapsedSeconds = 0;
 		mDeltaSeconds = 0;
@@ -401,33 +391,9 @@ namespace mana
 		}
 		mFlag.set(Flag::FrameChanged);
 
-		if (FinishInitializationIfReady())
-			running = true;
 		++mFrameCounter;
 
 		return running;
-	}
-
-	inline bool VM::FinishInitializationIfReady()
-	{
-		if (!mFlag[Flag::InitializeActionRunning])
-			return false;
-
-		for (const auto& [name, actor] : mActors)
-		{
-			MANA_UNUSED_VAR(name);
-			const auto interrupt = actor->mInterrupts.find(1);
-			if (interrupt != actor->mInterrupts.end() &&
-				interrupt->second.mFlag.test(static_cast<uint8_t>(Actor::Interrupt::Flag::Initialization)))
-			{
-				return false;
-			}
-		}
-
-		mFlag.set(Flag::InitializeActionFinished);
-		mFlag.reset(Flag::InitializeActionRunning);
-		RequestAll(0, "main", nullptr);
-		return IsRunning();
 	}
 
 	inline bool VM::IsRunning() const
@@ -639,16 +605,6 @@ namespace mana
 		int32_t opecode = mInstructionPool[address];
 		MANA_ASSERT(opecode >= 0 && opecode < IntermediateLanguageSize);
 		return opecode;
-	}
-
-	inline bool VM::IsInInitAction() const
-	{
-		return mFlag[Flag::InitializeActionRunning];
-	}
-
-	inline bool VM::IsFinishInitAction() const
-	{
-		return mFlag[Flag::InitializeActionFinished];
 	}
 
 	inline void VM::SetSystemRequest(const bool enable)
