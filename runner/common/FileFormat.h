@@ -18,8 +18,8 @@ mana (compiler/library)
 namespace mana
 {
 	static constexpr const char* Signature = "MaNa";		//!< manaファイル署名
-	static constexpr uint8_t MajorVersion = 0;				//!< manaファイルのメジャーバージョン番号
-	static constexpr uint8_t MinorVersion = 15;				//!< manaファイルのマイナーバージョン番号
+	static constexpr uint8_t MajorVersion = 1;				//!< manaファイルのメジャーバージョン番号
+	static constexpr uint8_t MinorVersion = 0;				//!< manaファイルのマイナーバージョン番号
 
 	/*!
 	manaファイルヘッダー

@@ -24,7 +24,7 @@
 Python 3 とビルド済み Mana を用意し、Mana フォルダーから実行します。
 
 ```text
-python documents/tools/verify-examples.py x64/Release/mana.exe
+python documents/tools/verify-examples.py build/Release/mana.exe
 ```
 
-Linux では実行ファイルを `driver/mana` に置き換えてください。完成例の出力と終了コード、教材の変更例、意図的なコンパイルエラー、Markdown の完成コードと同梱ファイルの一致を検証します。
+Linux では実行ファイルを `build/mana` に置き換えてください。完成例の出力と終了コード、教材の変更例、意図的なコンパイルエラー、Markdown の完成コードと同梱ファイルの一致を検証します。

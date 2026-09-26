@@ -5,30 +5,33 @@ jobs:
     runs-on: ubuntu-latest
     # DebugとReleaseの両方を回します。表明はReleaseのNDEBUGで消えるので、
     # Releaseだけでは不変条件が壊れるバグを取り逃します。
+    # READMEは任意のC++17コンパイラを案内しているので、ClangとGCCの両方で確かめます。
     strategy:
       fail-fast: false
       matrix:
         configuration: [Debug, Release]
+        compiler: [clang++, g++]
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install -y bison flex clang make python3
+          sudo apt install -y bison flex clang g++ cmake make python3
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Generate Mana version infomation
-        run: make --directory=${{ github.workspace }}/compiler version
-      - name: Build Mana compiler
-        run: make --directory=${{ github.workspace }} CONFIG=${{ matrix.configuration }}
-      - name: Test Mana compiler
-        run: make --directory=${{ github.workspace }} CONFIG=${{ matrix.configuration }} test
-      - name: Test the tutorial examples
-        working-directory: ${{ github.workspace }}
-        run: python documents/tools/verify-examples.py ./driver/mana
+      - name: Set tool environment variables
+        run: |
+          echo "BISON_EXECUTABLE=$(command -v bison)" >> "$GITHUB_ENV"
+          echo "FLEX_EXECUTABLE=$(command -v flex)" >> "$GITHUB_ENV"
+      - name: Configure
+        run: cmake -S . -B build -DCMAKE_CXX_COMPILER=${{ matrix.compiler }} -DCMAKE_BUILD_TYPE=${{ matrix.configuration }}
+      - name: Build
+        run: cmake --build build --parallel
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
 
   BuildOnWindows:
     runs-on: windows-latest
@@ -47,44 +50,23 @@ jobs:
         uses: egor-tensin/setup-cygwin@v4
         with:
           platform: x64
-          packages: bison flex python3 make clang
+          packages: bison flex
       - name: Add Environment variables
         run: |
-          echo "GNU_BISON_BIN=C:\tools\cygwin\bin\bison.exe" >> $env:GITHUB_ENV
-          echo "GNU_FLEX_BIN=C:\tools\cygwin\bin\flex.exe" >> $env:GITHUB_ENV
-          # cygwinのpython3パッケージが指す既定バージョンは更新され得るので、
-          # python3.9 のように固定せず実際に入っている実行ファイルを探します。
-          $python = Get-ChildItem -Path C:\tools\cygwin\bin -Filter "python3.*.exe" |
-            Where-Object { $_.BaseName -match '^python3\.\d+$' } |
-            Sort-Object Name -Descending |
-            Select-Object -First 1
-          if (-not $python) {
-            throw "python3.x.exe not found under C:\tools\cygwin\bin"
-          }
-          echo "PYTHON_BIN=$($python.FullName)" >> $env:GITHUB_ENV
+          echo "BISON_EXECUTABLE=C:\tools\cygwin\bin\bison.exe" >> $env:GITHUB_ENV
+          echo "FLEX_EXECUTABLE=C:\tools\cygwin\bin\flex.exe" >> $env:GITHUB_ENV
       - name: Check out repository code
         uses: actions/checkout@v4
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Generate Mana version infomation
-        working-directory: ./compiler
-        run: ${{env.PYTHON_BIN}} Version.py
+      - name: Configure
+        run: cmake -S . -B build -A ${{ matrix.platform }}
       - name: Build
-        run: msbuild mana.sln /t:build /p:Configuration=${{ matrix.configuration }} /p:Platform=${{ matrix.platform }}
-      - name: Test the embedding interface
-        run: .\${{ matrix.platform }}\${{ matrix.configuration }}\EmbeddingTest.exe
-      - name: Build a program image for the reader test
-        run: .\${{ matrix.platform }}\${{ matrix.configuration }}\mana.exe tests\cpp\ProgramImageTest.mn -o tests\cpp\ProgramImageTest.mx
-      - name: Test the program image reader
-        run: .\${{ matrix.platform }}\${{ matrix.configuration }}\ProgramImageTest.exe tests\cpp\ProgramImageTest.mx
-      - name: Test the compiler
-        working-directory: ./tests/mana
-        run: ${{env.PYTHON_BIN}} test.py ../../${{ matrix.platform }}/${{ matrix.configuration }}/mana.exe
-      - name: Test the tutorial examples
-        working-directory: ${{ github.workspace }}
-        run: python documents/tools/verify-examples.py ./${{ matrix.platform }}/${{ matrix.configuration }}/mana.exe
+        run: cmake --build build --config ${{ matrix.configuration }} --parallel
+      - name: Test
+        run: ctest --test-dir build -C ${{ matrix.configuration }} --output-on-failure
 
   cppcheck:
     runs-on: ubuntu-latest
