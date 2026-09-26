@@ -141,7 +141,9 @@ namespace mana
 	{
 		auto symbol = std::make_shared<Symbol>(name, classType, level);
 		mSymbolEntries.push_back(symbol);
-		
+
+		if (!mBlockTable.empty())
+			mBlockTable.top()->mShadowedSymbols.try_emplace(name, Lookup(name));
 		Define(name, symbol);
 
 		if (!mBlockTable.empty())
@@ -446,6 +448,14 @@ TODO:
 		for (std::shared_ptr<Symbol> symbol = blockEntry.mSymbolEntry; symbol; symbol = symbol->GetNext())
 		{
 			mHashChainTable.erase(symbol->GetName());
+		}
+
+		for (const auto& [name, symbol] : blockTable->mShadowedSymbols)
+		{
+			if (symbol)
+				mHashChainTable[name] = symbol;
+			else
+				mHashChainTable.erase(name);
 		}
 
 		mLocalMemoryAddress = blockTable->mAllocp;
@@ -1003,18 +1013,24 @@ TODO:
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// actor
-	void SymbolFactory::symbol_open_actor_register_member(const std::shared_ptr<Symbol>& symbol)
+	/**
+	 * Makes Actor members visible while preserving names hidden by the Actor scope.
+	 * Actorスコープが隠す名前を保存しながら、Actorメンバーを参照可能にします。
+	 */
+	void SymbolFactory::RegisterActorMembers(const std::shared_ptr<Symbol>& symbol)
 	{
+		if (!symbol)
+			return;
+
 		if (symbol->GetNext())
 		{
-			symbol_open_actor_register_member(symbol->GetNext());
+			RegisterActorMembers(symbol->GetNext());
 		}
 
+		const std::shared_ptr<Symbol>& current = Lookup(symbol->GetName());
+		if (current != symbol)
+			mBlockTable.top()->mShadowedSymbols.try_emplace(symbol->GetName(), current);
 		Define(symbol);
-	}
-
-	void SymbolFactory::symbol_open_actor_register_member(const std::shared_ptr<TypeDescriptor>&)
-	{
 	}
 
 	void SymbolFactory::BeginRegistrationActor(const std::shared_ptr<Symbol>& symbol)
@@ -1041,11 +1057,7 @@ TODO:
 			}
 			else
 			{
-				// symbol_close_blockでsymbol_hash_chain_tableを開放する
-				Define(type->GetSymbolEntry());
-
-				// TODO:シンボルリストの末端からhashに登録
-				symbol_open_actor_register_member(type->GetSymbolEntry());
+				RegisterActorMembers(type->GetSymbolEntry());
 			}
 
 			// instance変数サイズの再計算
@@ -1145,11 +1157,12 @@ TODO:
 			}
 			else
 			{
-				// symbol_close_blockでsymbol_hash_chain_tableを開放する
-				// TODO:mBlockTable.top().mHead = (const std::shared_ptr<Symbol>&)type->component;
-
-				// シンボルリストの末端からhashに登録
-				// TODO: symbol_open_actor_register_member((const std::shared_ptr<Symbol>&)type->component);
+				const std::shared_ptr<Symbol>& members = type->GetSymbolEntry();
+				if (members)
+				{
+					RegisterActorMembers(members);
+					RegisterToBlock(members);
+				}
 			}
 
 			// instance変数サイズの再計算
@@ -1309,6 +1322,7 @@ TODO:
 			if (const std::shared_ptr<Symbol>& actionSymbol = symbol->GetTypeDescriptor()->GetParent())
 			{
 				//ExtendModule(action_symbol);
+				RegisterActorMembers(actionSymbol);
 
 				std::shared_ptr<Symbol> lastSymbol = actionSymbol;
 				while (lastSymbol->GetNext())
@@ -1319,8 +1333,6 @@ TODO:
 
 				/* symbol_close_blockでsymbol_hash_chain_tableを開放する為 */
 				mBlockTable.top()->mHead.mSymbolEntry = actionSymbol;
-
-				symbol_open_actor_register_member(actionSymbol);
 			}
 		}
 		else

@@ -184,14 +184,14 @@ Create the Actors
     ↓
 Global initialisation
     ↓
-Request each Actor's init at Priority 1
+Queue each Actor's main at Priority 0
     ↓
-Request each Actor's main at Priority 0
+Request each Actor's init at the highest Priority (2147483647)
     ↓
 Normal VM execution
 ```
 
-This lets an Actor describe its startup initialisation and its normal behaviour as Actions. However, there is no collective wait in which all Actors' `init` finish before any Actor's `main` starts. If another Actor's `main` makes a request at a higher Priority, that Action may run before the target's `init`. Where cooperation needs initialisation to have happened, design the order explicitly.
+This lets an Actor describe its startup initialisation and its normal behaviour as Actions. However, there is no collective wait in which all Actors' `init` finish before any Actor's `main` starts. Each Actor runs its queued Actions in Priority order after its own `init` finishes. Where cooperation needs initialisation to have happened, design the order explicitly.
 
 ## Mana's execution model in a nutshell
 
