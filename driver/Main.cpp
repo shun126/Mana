@@ -12,7 +12,6 @@ mana (compiler)
 #include "../runner/common/Setup.h"
 #include "../compiler/Compiler.h"
 #include "../compiler/Path.h"
-#include "../compiler/Version.h"
 
 #include "../runner/Mana.h"
 
@@ -161,14 +160,14 @@ namespace mana
 
 		void PrintTitle()
 		{
-			printf("mana %s.%s (%04d-%02d-%02d)\n",
-				mana::build::MajorVersion, mana::build::MinorVersion,
-				mana::build::Year, mana::build::Month, mana::build::Day);
+			printf("mana %s (%04d-%02d-%02d)\n",
+				mana::version::Number,
+				mana::version::Year, mana::version::Month, mana::version::Day);
 		}
 
 		void PrintCopyright()
 		{
-			printf("mana - Copyright (C) 2002-%04d Shun Moriya\n", mana::build::Year);
+			printf("mana - Copyright (C) 2002-%04d Shun Moriya\n", mana::version::Year);
 		}
 
 		void PrintUsage()

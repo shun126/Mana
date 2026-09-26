@@ -17,9 +17,11 @@ cwd = os.getcwd()
 print("pwd:" + cwd)
 
 if len(sys.argv) < 2:
-	MANA = '../../driver/mana'
-else:
-	MANA = sys.argv[1]
+	print('usage: python test.py <path to mana executable>', file=sys.stderr)
+	print('  e.g. python test.py ../../build/mana', file=sys.stderr)
+	print('  or run every suite with: ctest --test-dir build --output-on-failure', file=sys.stderr)
+	sys.exit(2)
+MANA = sys.argv[1]
 
 Result = 0
 
