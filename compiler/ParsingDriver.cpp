@@ -15,7 +15,7 @@ mana (compiler)
 #include "LocalAddressResolver.h"
 #include "LocalSemanticAnalyzer.h"
 #include "NamespaceRegistry.h"
-#include "Parser.hpp"
+#include <Parser.hpp>
 #include "SymbolFactory.h"
 #include "SyntaxNode.h"
 #include "StringPool.h"

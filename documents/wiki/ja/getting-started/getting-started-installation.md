@@ -13,7 +13,7 @@ git clone https://github.com/shun126/Mana.git
 cd Mana
 ```
 
-`cd` は作業するフォルダーを移動するコマンドです。ここで入った、`mana.sln` や `Makefile` のあるフォルダーを、この教材では **Mana フォルダー**と呼びます。
+`cd` は作業するフォルダーを移動するコマンドです。ここで入った、`CMakeLists.txt` のあるフォルダーを、この教材では **Mana フォルダー**と呼びます。
 
 Git を使わない場合は、リポジトリのソースを ZIP として取得して展開し、そのフォルダーでターミナルを開いてください。
 
@@ -21,47 +21,45 @@ Git を使わない場合は、リポジトリのソースを ZIP として取�
 
 ### Windows / Visual Studio
 
-必要なものは、Visual Studio 2022 の C++ デスクトップ開発環境（MSVC v143 と Windows SDK）、Bison 3.8、Flex 2.6.4 です。Bison と Flex は、Mana の文法を処理する C++ コードの生成に使います。
+必要なものは、Visual Studio 2022 以降の C++ デスクトップ開発環境（MSVC v143 以降と Windows SDK）、CMake 3.20 以降、Python 3、Bison 3.8 以降、Flex 2.6.4 以降です。Bison と Flex は、Mana の文法を処理する C++ コードの生成に使います。
 
 1. Visual Studio Installer で C++ によるデスクトップ開発を用意します。
 2. Windows で動く Bison と Flex の実行ファイルを用意します。
-3. Windows の「環境変数」で、次のユーザー環境変数を設定します。
-4. 設定後に Visual Studio を開き直し、`mana.sln` を開きます。
-5. 構成を `Release`、プラットフォームを `x64` にし、ソリューション エクスプローラーの `mana` プロジェクトをビルドします。依存する `manac` もビルドされます。
+3. Mana フォルダーの PowerShell で、必須の環境変数に Bison と Flex の実行ファイルの絶対パスを設定し、次のコマンドを実行します。パスは実際の配置に合わせてください。
 
-| 環境変数名 | 値の例 |
-| --- | --- |
-| `GNU_BISON_BIN` | `C:\tools\bison\bin\bison.exe` |
-| `GNU_FLEX_BIN` | `C:\tools\flex\bin\flex.exe` |
+```powershell
+$env:BISON_EXECUTABLE = "C:\path\to\bison.exe"
+$env:FLEX_EXECUTABLE = "C:\path\to\flex.exe"
+cmake -S . -B build -A x64
+cmake --build build --config Release --parallel
+ctest --test-dir build -C Release --output-on-failure
+```
 
-値は手元の配置に合わせ、**実行ファイル名まで含めた絶対パス**にしてください。現在の Bison 呼び出しはパスを引用符で囲まないため、Bison は空白を含まないパスに配置してください。
-
-バージョン情報のヘッダーも更新する場合は、Python 3 を用意し、`PYTHON_BIN` に Python の実行ファイルのパスを設定します。この呼び出しも空白を含まないパスを使います。未設定の場合はリポジトリに含まれるヘッダーを使用します。
+Bison と Flex が PATH にある場合も、両方の環境変数が必要です。Visual Studio で CMakeLists.txt を開く場合は、Windows のユーザー環境変数として設定して Visual Studio を再起動するか、ローカルの `CMakeSettings.json` の `environments` に設定してください。32 ビット版を作る場合は `-A Win32` を使用し、別のビルドフォルダーを指定してください。CMake は見つかった最新の Visual Studio を使います。特定のバージョンを使う場合は、`-G "Visual Studio 17 2022"` のようにジェネレーター名を `-G` で指定してください。
 
 ビルド成功後、Mana フォルダーの PowerShell で確認します。
 
 ```powershell
-.\x64\Release\mana.exe --version
+.\build\Release\mana.exe --version
 ```
 
 バージョン情報が表示されたら、同じ PowerShell に次を入力します。
 
 ```powershell
-Set-Alias mana (Resolve-Path .\x64\Release\mana.exe).Path
+Set-Alias mana (Resolve-Path .\build\Release\mana.exe).Path
 mana --version
 ```
 
 これで、この PowerShell を開いている間は `mana` という短い名前で実行できます。PATH の変更は不要です。新しく PowerShell を開いたら、Mana フォルダーで再び `Set-Alias` を実行してください。
 
-### Linux / make
+### Linux / CMake
 
-C++17 を扱える Clang、make、Bison 3.8、Flex 2.6.4 を用意します。必要なパッケージの導入方法は使用する Linux 環境に従ってください。
+C++17 を扱えるコンパイラ、CMake 3.20 以降、Make、Python 3、Bison 3.8 以降、Flex 2.6.4 以降を用意します。必要なパッケージの導入方法は使用する Linux 環境に従ってください。
 
 端末で次を実行し、各ツールが利用できることを確認します。
 
 ```bash
-clang++ --version
-make --version
+cmake --version
 bison --version
 flex --version
 ```
@@ -69,14 +67,18 @@ flex --version
 Mana フォルダーでビルドします。
 
 ```bash
-make
-./driver/mana --version
+export BISON_EXECUTABLE="$(command -v bison)"
+export FLEX_EXECUTABLE="$(command -v flex)"
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build --parallel
+ctest --test-dir build --output-on-failure
+./build/mana --version
 ```
 
 バージョン情報が表示されたら、Bash で次を実行します。
 
 ```bash
-mana_executable="$(pwd)/driver/mana"
+mana_executable="$(pwd)/build/mana"
 mana() { "$mana_executable" "$@"; }
 mana --version
 ```
@@ -91,8 +93,8 @@ mana --version
 
 | 状況 | 確認すること |
 | --- | --- |
-| Bison / Flex を見つけられずビルドに失敗する | 導入場所と環境変数。Windows の値は実行ファイルまで指定したか |
-| 実行ファイルが見つからない | ビルドが成功したか。Windows は `Release / x64` を選んだか |
+| Bison / Flex を見つけられずビルドに失敗する | `BISON_EXECUTABLE` と `FLEX_EXECUTABLE` が実行ファイルを指しているか |
+| 実行ファイルが見つからない | ビルドが成功したか。Windows は `Release / x64` でビルドしたか |
 | フルパスなら動くが `mana` では動かない | このターミナルで短縮名を設定したか |
 | ソースファイルが見つからない | ターミナルの作業場所と、指定したファイルの保存場所が一致するか |
 

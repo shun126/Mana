@@ -15,3 +15,4 @@ mana (library)
 #include "OutputStream.h"
 #include "Stopwatch.h"
 #include "String.h"
+#include "Version.h"
