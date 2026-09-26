@@ -13,7 +13,7 @@ git clone https://github.com/shun126/Mana.git
 cd Mana
 ```
 
-`cd` is the command that changes the folder you are working in. In these lessons, the folder you have just entered, the one containing `mana.sln` and `Makefile`, is called the **Mana folder**.
+`cd` is the command that changes the folder you are working in. In these lessons, the folder you have just entered, the one containing `CMakeLists.txt`, is called the **Mana folder**.
 
 If you do not use Git, download the repository's source as a ZIP, extract it, and open a terminal in that folder.
 
@@ -21,47 +21,45 @@ If you do not use Git, download the repository's source as a ZIP, extract it, an
 
 ### Windows / Visual Studio
 
-You need Visual Studio 2022 with C++ desktop development (MSVC v143 and the Windows SDK), Bison 3.8 and Flex 2.6.4. Bison and Flex generate the C++ code that processes Mana's grammar.
+You need Visual Studio 2022 or newer with C++ desktop development (MSVC v143 or newer and the Windows SDK), CMake 3.20 or newer, Python 3, Bison 3.8 or newer, and Flex 2.6.4 or newer. Bison and Flex generate the C++ code that processes Mana's grammar.
 
 1. In the Visual Studio Installer, set up Desktop development with C++.
 2. Get Bison and Flex executables that run on Windows.
-3. In Windows "Environment Variables", set the following user environment variables.
-4. After setting them, reopen Visual Studio and open `mana.sln`.
-5. Set the configuration to `Release` and the platform to `x64`, then build the `mana` project in Solution Explorer. The `manac` project it depends on is built too.
+3. In PowerShell in the Mana folder, run these commands. Set the required environment variables to the absolute paths of the Bison and Flex executables at their actual locations.
 
-| Environment variable | Example value |
-| --- | --- |
-| `GNU_BISON_BIN` | `C:\tools\bison\bin\bison.exe` |
-| `GNU_FLEX_BIN` | `C:\tools\flex\bin\flex.exe` |
+```powershell
+$env:BISON_EXECUTABLE = "C:\path\to\bison.exe"
+$env:FLEX_EXECUTABLE = "C:\path\to\flex.exe"
+cmake -S . -B build -A x64
+cmake --build build --config Release --parallel
+ctest --test-dir build -C Release --output-on-failure
+```
 
-Match the values to where the tools are on your machine, and give an **absolute path that includes the executable name**. The build currently calls Bison without quoting the path, so place Bison in a path with no spaces.
-
-If you also want to update the version information header, install Python 3 and set `PYTHON_BIN` to the path of the Python executable. This call also needs a path with no spaces. If it is not set, the header included in the repository is used.
+Both environment variables are required even if Bison and Flex are on `PATH`. To configure in the Visual Studio IDE, set them as Windows user environment variables and restart Visual Studio, or supply them in a local `CMakeSettings.json` `environments` entry. For a 32-bit build, use `-A Win32` and a separate build folder. CMake uses the newest Visual Studio it finds; to use a specific version, add `-G` with its generator name, such as `-G "Visual Studio 17 2022"`.
 
 Once the build succeeds, check it in PowerShell in the Mana folder.
 
 ```powershell
-.\x64\Release\mana.exe --version
+.\build\Release\mana.exe --version
 ```
 
 When the version information appears, enter the following in the same PowerShell.
 
 ```powershell
-Set-Alias mana (Resolve-Path .\x64\Release\mana.exe).Path
+Set-Alias mana (Resolve-Path .\build\Release\mana.exe).Path
 mana --version
 ```
 
 Now, as long as this PowerShell stays open, you can run the tool by the short name `mana`. You do not need to change PATH. When you open a new PowerShell, run `Set-Alias` again in the Mana folder.
 
-### Linux / make
+### Linux / CMake
 
-Install Clang with C++17 support, make, Bison 3.8 and Flex 2.6.4. Follow your Linux distribution's instructions for installing the packages.
+Install a C++17 compiler, CMake 3.20 or newer, Make, Python 3, Bison 3.8 or newer, and Flex 2.6.4 or newer. Follow your Linux distribution's instructions for installing the packages.
 
 Run the following in a terminal to check that each tool is available.
 
 ```bash
-clang++ --version
-make --version
+cmake --version
 bison --version
 flex --version
 ```
@@ -69,14 +67,18 @@ flex --version
 Build in the Mana folder.
 
 ```bash
-make
-./driver/mana --version
+export BISON_EXECUTABLE="$(command -v bison)"
+export FLEX_EXECUTABLE="$(command -v flex)"
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build --parallel
+ctest --test-dir build --output-on-failure
+./build/mana --version
 ```
 
 When the version information appears, run the following in Bash.
 
 ```bash
-mana_executable="$(pwd)/driver/mana"
+mana_executable="$(pwd)/build/mana"
 mana() { "$mana_executable" "$@"; }
 mana --version
 ```
@@ -91,8 +93,8 @@ If something goes wrong, check in this order.
 
 | Situation | What to check |
 | --- | --- |
-| The build fails because Bison or Flex cannot be found | Where they are installed and the environment variables. On Windows, whether the value goes all the way to the executable |
-| The executable cannot be found | Whether the build succeeded. On Windows, whether you chose `Release / x64` |
+| The build fails because Bison or Flex cannot be found | Whether `BISON_EXECUTABLE` and `FLEX_EXECUTABLE` point to existing executables |
+| The executable cannot be found | Whether the build succeeded. On Windows, whether you built `Release / x64` |
 | It works with the full path but not as `mana` | Whether you set up the short name in this terminal |
 | The source file cannot be found | Whether the terminal's working folder matches where you saved the file |
 

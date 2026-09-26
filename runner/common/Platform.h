@@ -39,7 +39,9 @@ mana (compiler/library)
 
 #define MANA_BUILD_DEBUG (1)
 #define MANA_BUILD_RELEASE (2)
-#if defined(_DEBUG) || defined(DEBUG)
+// MANA_DEBUG はCMakeのmanacターゲットがDebug構成で利用側にも伝えます。
+// ライブラリと利用側で判定が食い違うと、デバッグ時だけのメンバーで構造体のレイアウトが変わる為です。
+#if defined(MANA_DEBUG) || defined(_DEBUG) || defined(DEBUG)
 #define MANA_BUILD_TARGET MANA_BUILD_DEBUG
 #else
 #define MANA_BUILD_TARGET MANA_BUILD_RELEASE
