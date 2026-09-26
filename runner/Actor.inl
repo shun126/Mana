@@ -971,7 +971,7 @@ namespace mana
 	inline void Actor::CommandLoadSelfAddress(const std::shared_ptr<VM>& vm, Actor& self)
 	{
 		uint32_t offset = vm->GetUint32FromMemory(self.mPc + 1);
-		self.mStack.Push(self.mVariable.GetAddressFromBottom<void>(offset));
+		self.mStack.Push(self.mVariable.GetAddressFromTop<void>(offset));
 	}
 
 	inline void Actor::CommandLoadInt8(const std::shared_ptr<VM>&, Actor& self)

@@ -7,8 +7,6 @@
 次は**ファイル全体**です。Mana フォルダーの `lesson.mn` を置き換えて保存し、`mana lesson.mn` で実行してください。
 
 ```mana
-int gTalkCount = 0;
-
 actor Event
 {
     action main
@@ -20,10 +18,17 @@ actor Event
 
 actor Guide
 {
+    int mTalkCount;
+
+    action init
+    {
+        mTalkCount = 0;
+    }
+
     action talk
     {
-        gTalkCount = gTalkCount + 1;
-        print("Talk count: %d\n", gTalkCount);
+        mTalkCount = mTalkCount + 1;
+        print("Talk count: %d\n", mTalkCount);
     }
 }
 ```
@@ -39,25 +44,25 @@ Talk count: 2
 
 ## 型、名前、値
 
-`int gTalkCount = 0;` は、整数を保存する変数を宣言し、最初の値を0にしています。`int` は扱う値の種類である **型**、`gTalkCount` は変数名です。
+`int mTalkCount;` は、整数を保存する変数を宣言しています。`int` は扱う値の種類である **型**、`mTalkCount` は変数名です。`init` Action で最初の値を0にしています。
 
-`gTalkCount = gTalkCount + 1;` は、現在の値に1を足してから保存する **代入**です。数学の等式とは違い、右側で計算した値を左側へ入れる操作です。1回目は0から1、2回目は1から2になります。
+`mTalkCount = mTalkCount + 1;` は、現在の値に1を足してから保存する **代入**です。数学の等式とは違い、右側で計算した値を左側へ入れる操作です。1回目は0から1、2回目は1から2になります。
 
 ## 値を表示する
 
-`print("Talk count: %d\n", gTalkCount);` の `%d` は、後ろに渡した整数値を表示する位置を表します。`\n` は改行です。
+`print("Talk count: %d\n", mTalkCount);` の `%d` は、後ろに渡した整数値を表示する位置を表します。`\n` は改行です。
 
 変数の値を表示すると、どこまで処理が進み、値がどう変わったかを確認できます。
 
 ## Action をまたいで値を覚える
 
-今回の変数は、Actor の外に宣言した **グローバル変数**です。複数の Actor から参照できますが、この例では `Guide` だけが変更します。変更する担当を決めておくと、値の変化を追いやすくなります。
+今回の変数は `Guide` の中、Action の外に宣言した **Actor 変数**です。`Guide` に属する Action から直接参照でき、他の Actor から直接変更されることはありません。
 
-`g` で始める名前はグローバル変数だと分かりやすくする約束で、言語の必須条件ではありません。
+`m` で始める名前は Actor のメンバーだと分かりやすくする約束で、言語の必須条件ではありません。
 
 この変数は会話の Action が終わっても残ります。ただし、プログラムを終了して起動し直すと、また0から始まります。ファイルにセーブデータを保存したわけではありません。
 
-Mana には Actor 内へ状態変数を宣言する仕組みもあります。ただし、今回確認した処理系には、その変数を Action 内で名前から参照できない問題があるため、実行する教材ではグローバル変数を使っています。詳しくは [変数リファレンス](../reference/reference-variables.md)の現行制約を参照してください。
+状態を `Guide` に持たせることで、その状態を使う Action と一緒にカプセル化できます。詳しくは [変数リファレンス](../reference/reference-variables.md)を参照してください。
 
 ## その処理の中で使うローカル変数
 

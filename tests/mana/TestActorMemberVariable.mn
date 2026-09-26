@@ -1,0 +1,35 @@
+/*
+mana (script)
+Copyright (c) 2026 Shun Moriya
+*/
+
+const int kOpenPriority = 100;
+
+actor Door
+{
+    bool mOpened;
+    int mOpenCount;
+
+    action init
+    {
+        mOpened = false;
+        mOpenCount = 0;
+    }
+
+    action main
+    {
+        request(kOpenPriority, self->open);
+        yield();
+
+        print("door opened: %d count: %d\n", mOpened, mOpenCount);
+    }
+
+    action open
+    {
+        if (mOpened)
+            return;
+
+        mOpened = true;
+        mOpenCount += 1;
+    }
+}
