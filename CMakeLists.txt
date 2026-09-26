@@ -87,6 +87,9 @@ target_include_directories(manac PUBLIC
   "${CMAKE_CURRENT_SOURCE_DIR}/compiler"
   "${CMAKE_CURRENT_SOURCE_DIR}/runner")
 target_include_directories(manac BEFORE PUBLIC "${mana_generated_dir}")
+# The runner headers change struct layouts in debug builds, so every target
+# that links manac must see the same configuration as manac itself.
+target_compile_definitions(manac PUBLIC "$<$<CONFIG:Debug>:MANA_DEBUG>")
 
 add_executable(mana driver/Main.cpp)
 target_link_libraries(mana PRIVATE manac)
@@ -95,10 +98,10 @@ add_executable(EmbeddingTest tests/cpp/EmbeddingTest.cpp)
 target_link_libraries(EmbeddingTest PRIVATE manac)
 
 add_executable(ProgramImageTest tests/cpp/ProgramImageTest.cpp)
+target_compile_definitions(ProgramImageTest PRIVATE "$<$<CONFIG:Debug>:MANA_DEBUG>")
 
 foreach(mana_target IN ITEMS manac mana EmbeddingTest ProgramImageTest)
   add_dependencies(${mana_target} mana_generated_version)
-  target_compile_definitions(${mana_target} PRIVATE "$<$<CONFIG:Debug>:DEBUG>")
   if(MSVC)
     target_compile_options(${mana_target} PRIVATE /W4 /source-charset:utf-8)
   else()
