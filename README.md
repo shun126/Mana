@@ -466,6 +466,9 @@ Then configure your build as follows. Every setting here is one that the
   without a byte order mark and contain Japanese comments, which MSVC
   misreads in other code pages.
 * On Linux, link `dl` and `m`. The virtual machine loads plugins with `dlopen`.
+* With Cygwin, define `_GNU_SOURCE` (or compile as `gnu++17`). With
+  `-std=c++17`, Cygwin's headers hide `realpath` and `fileno`, which the
+  compiler and the generated lexer use.
 
 # License
 
