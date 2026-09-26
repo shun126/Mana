@@ -88,10 +88,37 @@ Runtime-only applications can include `runner/common/Version.h` and read
 version in `runner/common/FileFormat.h` is a separate compatibility number.
 `Version.h` is generated from `runner/common/Version.json` during the build
 and is ignored by Git. Runtime-only source users can run
-`python3 runner/common/Version.py` to generate it. To use Mana from a build
-system other than CMake, see [Embedding without CMake](#embedding-without-cmake).
+`python3 runner/common/Version.py` to generate it from a repository checkout.
+The release source packages already include it. To use Mana from a build system
+other than CMake, see [Embedding without CMake](#embedding-without-cmake).
 
 # Installing
+## Release source packages
+
+Each `vMAJOR.MINOR.PATCH` tag matching `runner/common/Version.json` produces a
+tested GitHub Release with two source archives:
+
+* `mana-runtime-MAJOR.MINOR.PATCH-source.zip` contains the header-only VM in
+  `runner/`, its generated `runner/common/Version.h`, the license, and this
+  README. Copy `runner/` into a C++17 project to embed the VM.
+* `mana-sdk-MAJOR.MINOR.PATCH-source.zip` contains the compiler, command-line
+  driver, runtime, examples, tests, documentation, CMake files, and generated
+  `Parser.cpp`, `Parser.hpp`, `Lexer.cpp`, and `Version.h`. To build without
+  Bison, Flex, or Python, configure with
+  `cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DMANA_USE_PREGENERATED_SOURCES=ON -DBUILD_TESTING=OFF`,
+  then run `cmake --build build --config Release --parallel`. Python is needed
+  only if `BUILD_TESTING=ON`, for the CTest language and example checks.
+
+The archives have a single top-level directory. The SDK also keeps
+`compiler/Parser.yy` and `compiler/Lexer.l` for developers who want to change
+the grammar. Omit `MANA_USE_PREGENERATED_SOURCES=ON` in a normal repository
+checkout to regenerate the parser and lexer from those files.
+
+To publish a release, update `runner/common/Version.json` in the release commit,
+then push the matching tag (for example, `git tag v1.0.0` followed by
+`git push origin v1.0.0`). The release workflow builds and tests that tag
+before publishing the two archives with generated release notes.
+
 ## Requirements
 * CMake 3.20 or newer
 * Python 3
@@ -405,10 +432,11 @@ it found it.
 
 # Embedding without CMake
 
-`CMakeLists.txt` needs Bison, Flex and Python on the building machine. To add
-Mana to a project with its own build system, such as a game engine, ship the
-generated files with the sources and reproduce the settings below by hand.
-Our `CMakeLists.txt` is not meant to build such a distribution; leave it out.
+The repository build regenerates sources with Bison, Flex and Python. The SDK
+release archive includes the generated files and can be built with CMake using
+the option above. To add Mana to a project with its own build system, such as a
+game engine, ship the generated files with the sources and reproduce the
+settings below by hand.
 
 Generate the files once on a machine that has the tools, with a normal CMake
 build as described in [Installing](#installing):
