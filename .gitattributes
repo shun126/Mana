@@ -1,0 +1,7 @@
+# Store every text file with LF line endings in the repository. The working
+# tree uses the platform default (core.autocrlf / core.eol).
+* text=auto
+
+*.png binary
+*.jpg binary
+*.ico binary
