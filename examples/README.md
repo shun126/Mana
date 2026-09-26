@@ -5,7 +5,7 @@ Runnable Mana programs. Run them from the repository root.
 | Directory | Contents |
 | --- | --- |
 | [`tutorial/`](tutorial/) | The finished code of every chapter of the Japanese tutorial, one independent program per file. 日本語チュートリアルの各章の完成コードです。 |
-| [`language-tour/`](language-tour/) | One program that uses most language features together: constants, structs, global and static variables, functions, actors, modules and phantoms. `make test` compiles and runs it on every CI build. 言語機能をひととおり使う総合サンプルで、CI のコンパイル確認にも使っています。 |
+| [`language-tour/`](language-tour/) | One program that uses most language features together: constants, structs, global and static variables, functions, actors, modules and phantoms. `ctest` runs it and compares its output on every CI build. 言語機能をひととおり使う総合サンプルで、CI では出力の確認にも使っています。 |
 
 ```bash
 mana examples/tutorial/01-hello.mn
@@ -25,6 +25,6 @@ The code in `tutorial/` also appears in the manuscripts under
 that every example prints what the manual says:
 
 ```bash
-python documents/tools/verify-examples.py x64/Release/mana.exe   # Windows
-python documents/tools/verify-examples.py driver/mana             # Linux / macOS
+python documents/tools/verify-examples.py build/Release/mana.exe   # Windows
+python documents/tools/verify-examples.py build/mana               # Linux / macOS
 ```
