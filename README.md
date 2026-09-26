@@ -88,10 +88,8 @@ Runtime-only applications can include `runner/common/Version.h` and read
 version in `runner/common/FileFormat.h` is a separate compatibility number.
 `Version.h` is generated from `runner/common/Version.json` during the build
 and is ignored by Git. Runtime-only source users can run
-`python3 runner/common/Version.py` to generate it. A source distribution must
-include the generated header. The generated Bison and Flex sources are in
-`build/generated/` for CMake builds and must also be included when distributing
-sources without those tools.
+`python3 runner/common/Version.py` to generate it. To use Mana from a build
+system other than CMake, see [Embedding without CMake](#embedding-without-cmake).
 
 # Installing
 ## Requirements
@@ -404,6 +402,39 @@ it found it.
 > **Note**
 > The compiler still keeps global state, so `Compile()` must not be called from
 > more than one thread at a time.
+
+# Embedding without CMake
+
+`CMakeLists.txt` needs Bison, Flex and Python on the building machine. To add
+Mana to a project with its own build system, such as a game engine, ship the
+generated files with the sources and reproduce the settings below by hand.
+Our `CMakeLists.txt` is not meant to build such a distribution; leave it out.
+
+Generate the files once on a machine that has the tools, with a normal CMake
+build as described in [Installing](#installing):
+
+| File | Generated from | Needed by |
+| --- | --- | --- |
+| `runner/common/Version.h` | `runner/common/Version.json` | The virtual machine and the compiler |
+| `build/generated/Parser.cpp`, `Parser.hpp`, `Lexer.cpp` | `compiler/Parser.yy`, `compiler/Lexer.l` | The compiler only |
+
+Then configure your build as follows. Every setting here is one that the
+`manac` target otherwise passes on to the projects that link it.
+
+* Compile as C++17.
+* Add these include directories: the repository root, `compiler/`, `runner/`,
+  and the directory holding the generated parser and lexer. Only the
+  repository root is needed when embedding just the virtual machine.
+* To embed the compiler, compile every `compiler/*.cpp` together with the
+  generated `Parser.cpp` and `Lexer.cpp`.
+* In debug builds, define `MANA_DEBUG` (or `DEBUG`) for **every** translation
+  unit that includes Mana headers, not only the compiler sources. The headers
+  add members in debug builds, so mixing the two settings breaks struct
+  layouts. MSVC's debug runtime defines `_DEBUG`, which has the same effect.
+* With MSVC, pass `/source-charset:utf-8` (or `/utf-8`). The headers are UTF-8
+  without a byte order mark and contain Japanese comments, which MSVC
+  misreads in other code pages.
+* On Linux, link `dl` and `m`. The virtual machine loads plugins with `dlopen`.
 
 # License
 
