@@ -83,13 +83,22 @@ if(NOT MSVC)
   set_target_properties(manac PROPERTIES OUTPUT_NAME mana)
 endif()
 add_dependencies(manac mana_generated_parser)
+# The repository root lets consumers use the documented
+# #include "compiler/Compiler.h" and #include "runner/Mana.h".
 target_include_directories(manac PUBLIC
+  "${CMAKE_CURRENT_SOURCE_DIR}"
   "${CMAKE_CURRENT_SOURCE_DIR}/compiler"
   "${CMAKE_CURRENT_SOURCE_DIR}/runner")
 target_include_directories(manac BEFORE PUBLIC "${mana_generated_dir}")
 # The runner headers change struct layouts in debug builds, so every target
 # that links manac must see the same configuration as manac itself.
 target_compile_definitions(manac PUBLIC "$<$<CONFIG:Debug>:MANA_DEBUG>")
+# The headers are UTF-8 without a BOM and have Japanese comments. MSVC reads
+# them in the system code page otherwise, which can swallow the line after a
+# comment on a Japanese system.
+if(MSVC)
+  target_compile_options(manac PUBLIC /source-charset:utf-8)
+endif()
 
 add_executable(mana driver/Main.cpp)
 target_link_libraries(mana PRIVATE manac)
@@ -109,9 +118,10 @@ foreach(mana_target IN ITEMS manac mana EmbeddingTest ProgramImageTest)
   endif()
 endforeach()
 
+# The runner headers call dlopen inline, so consumers of manac need the
+# dynamic loader library as well (a separate libdl before glibc 2.34).
 if(UNIX AND NOT APPLE)
-  target_link_libraries(mana PRIVATE ${CMAKE_DL_LIBS} m)
-  target_link_libraries(EmbeddingTest PRIVATE ${CMAKE_DL_LIBS} m)
+  target_link_libraries(manac PUBLIC ${CMAKE_DL_LIBS} m)
 endif()
 
 enable_testing()
