@@ -435,8 +435,9 @@ it found it.
 The repository build regenerates sources with Bison, Flex and Python. To add
 Mana to a project with its own build system, such as a game engine, ship the
 generated files with the sources and reproduce the settings below by hand. The
-compiler release archive already includes the generated files, with the parser
-and lexer under `generated/`.
+compiler release archive already includes the generated files: the parser and
+lexer are in `compiler/` next to the other compiler sources, and `Version.h` is
+in `runner/common/`.
 
 Otherwise, generate the files once on a machine that has the tools, with a
 normal CMake build as described in [Installing](#installing):
