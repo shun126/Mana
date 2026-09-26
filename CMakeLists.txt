@@ -10,6 +10,13 @@ option(MANA_USE_PREGENERATED_SOURCES
   "Build from the generated sources included in a Mana SDK release" OFF)
 include(CTest)
 
+# With -std=c++17, Cygwin's newlib hides POSIX functions such as realpath and
+# fileno, which the compiler and the generated lexer use. glibc keeps them
+# visible because g++ always defines _GNU_SOURCE there.
+if(CYGWIN)
+  add_compile_definitions(_GNU_SOURCE)
+endif()
+
 if(MSVC)
   set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 endif()
