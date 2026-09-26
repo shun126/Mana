@@ -7,7 +7,7 @@ mana (compiler)
 
 #pragma once
 #include "../runner/common/Noncopyable.h"
-#include "Parser.hpp"
+#include <Parser.hpp>
 #include <memory>
 
 namespace mana

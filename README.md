@@ -83,28 +83,63 @@ actor Controller
 | `examples` | | Example scripts: `tutorial` holds the finished code of the Japanese tutorial, `language-tour` exercises most language features in one program. |
 | `tests` | | Test scripts and the test runner. |
 
+Runtime-only applications can include `runner/common/Version.h` and read
+`mana::version::Number` without linking the compiler. The program image format
+version in `runner/common/FileFormat.h` is a separate compatibility number.
+`Version.h` is generated from `runner/common/Version.json` during the build
+and is ignored by Git. Runtime-only source users can run
+`python3 runner/common/Version.py` to generate it. To use Mana from a build
+system other than CMake, see [Embedding without CMake](#embedding-without-cmake).
+
 # Installing
 ## Requirements
+* CMake 3.20 or newer
+* Python 3
 * [bison 3.8](https://www.gnu.org/software/bison/)
 * [flex 2.6.4](https://github.com/westes/flex)
 * [C++ Compiler](https://en.wikipedia.org/wiki/C%2B%2B)
   * [Visual Studio](https://visualstudio.microsoft.com/)
   * [Clang](https://clang.llvm.org/)
 
-## Any Linux Distribution
-- cd to <download_path>
-- make
+## Building on Linux
 
-## Building with Cygwin
-- Install Cygwin from: http://www.cygwin.com/
-- cd to <download_path>
-- make
+Install CMake 3.20 or newer, Make, Bison 3.8 or newer, Flex 2.6.4 or newer,
+Python 3, and a C++17 compiler. From the repository root:
+
+```sh
+export BISON_EXECUTABLE="$(command -v bison)"
+export FLEX_EXECUTABLE="$(command -v flex)"
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build --parallel
+ctest --test-dir build --output-on-failure
+./build/mana --version
+```
+
+Use a separate build directory for Debug, for example `build-debug` with
+`-DCMAKE_BUILD_TYPE=Debug`.
 
 ## Building with MSVC
-- Set the path to bison in the environment variable GNU_BISON_BIN, and the path to flex in GNU_FLEX_BIN.
-- Install Microsoft Visual C++ 2022 Community (should work with other versions).
-- Run "Vistual Studio 2022 Command Prompt" from the "Visual Studio 2022" start menu.
-- Open mana.sln
+
+Install Visual Studio 2022 or newer with C++ desktop development, CMake 3.20 or newer,
+Python 3, Bison 3.8 or newer, and Flex 2.6.4 or newer. In PowerShell, from the
+repository root, set both required environment variables to the absolute paths
+of the executables:
+
+```powershell
+$env:BISON_EXECUTABLE = "C:\path\to\bison.exe"
+$env:FLEX_EXECUTABLE = "C:\path\to\flex.exe"
+cmake -S . -B build -A x64
+cmake --build build --config Release --parallel
+ctest --test-dir build -C Release --output-on-failure
+.\build\Release\mana.exe --version
+```
+
+CMake uses the newest Visual Studio it finds; pass `-G` to pick another one.
+Replace `x64` with `Win32` for a 32-bit build. Use a separate build directory
+for each platform. Both variables are required even when Bison and Flex are on
+`PATH`. To configure in the Visual Studio IDE, set the variables in the Windows
+user environment and restart Visual Studio, or supply them in a local
+`CMakeSettings.json` `environments` entry.
 
 # Testing
 
@@ -112,18 +147,20 @@ Three suites, and all of them matter:
 
 | Suite | What it covers |
 | --- | --- |
-| `tests/mana/test.py` | The language, through the `mana` executable. Checks exit status, diagnostics and, for the cases that run, what the script printed. |
+| `tests/mana/test.py` | The language, through the `mana` executable. Checks the exit status, the diagnostics of scripts that must not compile, and the complete output of scripts that run. |
 | `tests/cpp/EmbeddingTest` | The library interface: compiling from memory, diagnostics as data, redirected output, faults, script errors and native bindings. None of this is reachable from the command line. |
 | `tests/cpp/ProgramImageTest` | Reading a compiled program image back. |
 
 The scripts the language suite feeds to `mana` live in `tests/mana/`; the C++
 suites and the program image they read live in `tests/cpp/`.
+Every `.mn` file in `tests/mana/` must be listed in `test.py`; an unlisted
+script fails the suite instead of being skipped silently. The language tour's
+output is compared with `examples/language-tour/expected-output.txt`, so update
+that file when a change to the tour is meant to change what it prints.
 
-`make test` from the top of the tree runs all three.
-
-On MSVC, open `mana.sln` and build - it holds `manac`, `mana` and both test
-programs - then run `EmbeddingTest.exe` and `ProgramImageTest.exe` from the
-configuration you built.
+`ctest --test-dir build --output-on-failure` runs the three suites, the
+language tour, and the tutorial example checks. On Visual Studio generators,
+also pass `-C Debug` or `-C Release`.
 
 ### Run every configuration
 
@@ -284,11 +321,12 @@ a value like any other.
 # How to Embed the Compiler
 
 The compiler is built as a static library (`manac.lib` on MSVC, `libmana.a` on
-make) that the `mana` command line tool links against. Applications that need to
+Linux) that the `mana` command line tool links against. Applications that need to
 compile scripts themselves — an editor, an asset pipeline, a test harness — can
 link the same library instead of shelling out to the executable.
 
-1. Build the `manac` project (MSVC) or run `make` in the `compiler` directory.
+1. Build the `manac` CMake target with `cmake --build build --target manac`
+   (add `--config Release` for Visual Studio generators).
 1. Add `#include "compiler/Compiler.h"` to your code.
 1. Fill in `mana::CompileOptions` and call `mana::Compile()`.
 
@@ -364,6 +402,39 @@ it found it.
 > **Note**
 > The compiler still keeps global state, so `Compile()` must not be called from
 > more than one thread at a time.
+
+# Embedding without CMake
+
+`CMakeLists.txt` needs Bison, Flex and Python on the building machine. To add
+Mana to a project with its own build system, such as a game engine, ship the
+generated files with the sources and reproduce the settings below by hand.
+Our `CMakeLists.txt` is not meant to build such a distribution; leave it out.
+
+Generate the files once on a machine that has the tools, with a normal CMake
+build as described in [Installing](#installing):
+
+| File | Generated from | Needed by |
+| --- | --- | --- |
+| `runner/common/Version.h` | `runner/common/Version.json` | The virtual machine and the compiler |
+| `build/generated/Parser.cpp`, `Parser.hpp`, `Lexer.cpp` | `compiler/Parser.yy`, `compiler/Lexer.l` | The compiler only |
+
+Then configure your build as follows. Every setting here is one that the
+`manac` target otherwise passes on to the projects that link it.
+
+* Compile as C++17.
+* Add these include directories: the repository root, `compiler/`, `runner/`,
+  and the directory holding the generated parser and lexer. Only the
+  repository root is needed when embedding just the virtual machine.
+* To embed the compiler, compile every `compiler/*.cpp` together with the
+  generated `Parser.cpp` and `Lexer.cpp`.
+* In debug builds, define `MANA_DEBUG` (or `DEBUG`) for **every** translation
+  unit that includes Mana headers, not only the compiler sources. The headers
+  add members in debug builds, so mixing the two settings breaks struct
+  layouts. MSVC's debug runtime defines `_DEBUG`, which has the same effect.
+* With MSVC, pass `/source-charset:utf-8` (or `/utf-8`). The headers are UTF-8
+  without a byte order mark and contain Japanese comments, which MSVC
+  misreads in other code pages.
+* On Linux, link `dl` and `m`. The virtual machine loads plugins with `dlopen`.
 
 # License
 

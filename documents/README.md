@@ -90,7 +90,8 @@ python documents/tools/build-pages.py --language ja --output build/pages
 python -m unittest discover -s documents/tools -t documents/tools
 
 # 完成コードと教材の一致・実行結果の検証（ビルド済み mana が必要）
-python documents/tools/verify-examples.py x64/Release/mana.exe
+python documents/tools/verify-examples.py build/Release/mana.exe   # Windows
+python documents/tools/verify-examples.py build/mana               # Linux / macOS
 ```
 
 生成した `build/pages/index.html` はブラウザでそのまま開けます。`build/wiki/*.md` は GitHub Wiki へ公開される内容そのものです。

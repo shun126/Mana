@@ -141,7 +141,8 @@ namespace mana
 				float_t mFloatValue;				//!< 実数値
 				const char* mStringValue;			//!< 文字列
 				void* mPointerValue;				//!< 構造体
-				Actor* mActorValue;					//!< アクター
+				// 下の定数 ReturnValue::Actor と同名なので、修飾してクラスを指します
+				mana::Actor* mActorValue;			//!< アクター
 			} mValues;
 			int32_t mSize;							//!< サイズ(mPointerValue)
 
