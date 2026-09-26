@@ -740,6 +740,47 @@ actor Root {
 		Check(vm->GetElapsedSeconds() >= 0.05, "CallExclusive advances VM time");
 	}
 
+	void TestIndependentActorStartup()
+	{
+		BeginCase("IndependentActorStartup");
+		auto result = CompileSource({ { "main.mn", R"(
+native void delay(float seconds);
+actor Slow {
+ action init { delay(10.0); print("slow init\n"); }
+ action main { print("slow main\n"); }
+ action event { print("event\n"); }
+}
+actor Fast {
+ action init { print("fast init\n"); }
+ action main { print("fast main\n"); }
+}
+actor MainOnly { action main { print("main only\n"); } }
+actor InitOnly { action init { print("init only\n"); } }
+)" } }, "main.mn");
+		Check(result.mSucceeded, "startup source should compile");
+		if (!result.mSucceeded) return;
+		auto image = std::make_shared<std::vector<uint8_t>>(result.mProgramImage);
+		auto vm = std::make_shared<mana::VM>();
+		mana::FunctionInitialize(*vm);
+		gTrace.clear();
+		mana::SetTraceHandler(&OnTrace);
+		vm->LoadProgram(std::shared_ptr<const void>(image, image->data()));
+		Check(vm->FindActor("Slow")->GetInterruptPriority() == std::numeric_limits<int32_t>::max(), "init uses maximum priority");
+		Check(vm->Request(100, "Slow", "event", nullptr), "ordinary request is queued during init");
+		for (int i = 0; i < 10; ++i) vm->Run(0.0);
+		const auto early = JoinTrace(mana::TraceLevel::Info);
+		Check(early.find("fast init\nfast main\n") != std::string::npos, "fast Actor starts independently after its init");
+		Check(early.find("main only\n") != std::string::npos, "Actor without init starts immediately");
+		Check(early.find("init only\n") != std::string::npos, "Actor without main initializes");
+		Check(early.find("slow") == std::string::npos && early.find("event") == std::string::npos, "init blocks only its own queued actions");
+		vm->Run(10.0);
+		for (int i = 0; i < 10 && vm->IsRunning(); ++i) vm->Run(0.0);
+		Check(!vm->IsRunning(), "all startup actions finish");
+		CheckEqual(JoinTrace(mana::TraceLevel::Info).substr(early.size()), "slow init\nevent\nslow main\n", "queued actions resume in priority order");
+		CheckEqual(JoinTrace(mana::TraceLevel::Error), "", "startup has no runtime faults");
+		mana::SetTraceHandler(nullptr);
+	}
+
 	void TestReturnEpilogues()
 	{
 		BeginCase("ReturnEpilogues");
@@ -851,6 +892,7 @@ int main()
 	TestNativeFunctionBinding();
 	TestDelaySeconds();
 	TestCallExclusiveDelay();
+	TestIndependentActorStartup();
 	TestReturnEpilogues();
 	TestReturnBranchTargets();
 

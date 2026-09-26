@@ -80,7 +80,7 @@ actor Example
 }
 ```
 
-The current VM Requests `init` at Priority 1 and `main` at Priority 0 for every Actor. It does not wait for every Actor's `init` to finish before starting `main`. If an Actor receives a higher-Priority request from another Actor, that Action may run before `init`.
+The current VM Requests `init` at the highest Priority (2147483647) and `main` at Priority 0 for every Actor. It does not wait for every Actor's `init` to finish before starting `main`. Each Actor runs its queued Actions in Priority order after its own `init` finishes.
 
 ## Predefined values while an Action runs
 

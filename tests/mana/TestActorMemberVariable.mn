@@ -14,7 +14,10 @@ actor Door
     {
         mOpened = false;
         mOpenCount = 0;
+    }
 
+    action main
+    {
         request(kOpenPriority, self->open);
         yield();
 

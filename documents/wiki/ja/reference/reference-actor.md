@@ -65,8 +65,8 @@ Mana VM はプログラムをロードした後、Actor に対して特別な Ac
 
 現行VMでは、
 
-1. `init` を Priority 1 で Request
-2. `main` を Priority 0 で Request
+1. `main` を Priority 0 で予約
+2. `init` を最高優先度（2147483647）で Request
 
 の順で全 Actor に送ります。
 
@@ -87,7 +87,7 @@ actor Example
 }
 ```
 
-`init` は状態の初期化、`main` は通常の開始処理として使えます。
+`init` は状態の初期化、`main` は通常の開始処理として使えます。全 Actor の初期化完了は待ちません。init がない Actor は main から開始します。init 内で自 Actor の低優先度 Action の完了を待つと、その Action を実行できず待機が続きます。
 
 ## Actor 型
 

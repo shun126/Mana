@@ -80,7 +80,7 @@ actor Example
 }
 ```
 
-現行VMは全 Actor に対して、`init` を Priority 1、`main` を Priority 0 で Request します。全 Actor の `init` 完了を待ってから `main` を開始する仕組みではありません。別 Actor から高い Priority の要求を受けると、`init` より先にその Action が実行される場合があります。
+現行VMは全 Actor に対して、`init` を最高優先度（2147483647）、`main` を Priority 0 で Request します。全 Actor の `init` 完了を待ってから `main` を開始する仕組みではありません。各 Actor は自分の `init` が終了すると、予約済みの Action を優先度順に実行します。
 
 ## Action 実行中の定義済み値
 
