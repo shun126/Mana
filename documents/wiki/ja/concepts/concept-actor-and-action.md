@@ -23,7 +23,7 @@ actor Guard
 
 ## Actor は状態を保持する
 
-Actor のメンバー変数は、その Actor が持つ状態を表す設計です。ただし、現行処理系では以下の例のような Action 内からの変数名参照にコンパイルエラーがあることを確認しています。このページのメンバー変数を使うコードは概念説明として読み、実行可能な例は [変数チュートリアル](../tutorial/tutorial-variables.md)、制約は [変数リファレンス](../reference/reference-variables.md)を参照してください。
+Actor のメンバー変数は、その Actor が持つ状態を表します。その Actor に属する Action から変数名を直接参照できます。
 
 ```mana
 actor Guide

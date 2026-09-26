@@ -128,7 +128,7 @@ namespace mana
 				IsInSyncCall,	//!< 同期実行フラグ
 				Repeat,			//!< リピートフラグ
 				Suspend,		//!< サスペンドフラグ
-				Synchronized	//!< 同期フラグ
+				Synchronized,	//!< 同期フラグ
 			};
 		};
 
@@ -296,23 +296,12 @@ namespace mana
 	if(P->GetArgumentCount() != I)						\
 		return;											\
 }
-//! initアクション中ならばreturnします
-#define MANA_ASSERT_CANT_CALL_IN_INIT_ACTION(P)			\
-	if((P)->GetVirtualMachine()->IsInInitAction()){		\
-		return;											\
-	}
 #else
 //! 引数の数を調べ、一致しない場合は警告を表示してreturnします
 #define MANA_ASSERT_PARAMETER(P, I)	\
 	if((P)->GetArgumentCount() != (I)){	\
 		 MANA_PRINT({ "ERROR: ", (P)->GetName(), ": function ", (P)->GetFunctionName(), " number of arguments ", std::to_string((P)->GetArgumentCount()), " correct ", std::to_string(I), "\n" });\
 		 return;					\
-	}
-//! initアクション中ならば警告を表示してreturnします
-#define MANA_ASSERT_CANT_CALL_IN_INIT_ACTION(P)			\
-	if((P)->GetVirtualMachine()->IsInInitAction()){		\
-		MANA_PRINT({ "ERROR: ", (P)->GetName(), ": init action ", (P)->GetFunctionName()," can not call\n" });\
-		return;											\
 	}
 #endif
 

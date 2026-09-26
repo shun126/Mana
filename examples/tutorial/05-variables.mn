@@ -1,5 +1,3 @@
-int gTalkCount = 0;
-
 actor Event
 {
     action main
@@ -11,9 +9,16 @@ actor Event
 
 actor Guide
 {
+    int mTalkCount;
+
+    action init
+    {
+        mTalkCount = 0;
+    }
+
     action talk
     {
-        gTalkCount = gTalkCount + 1;
-        print("Talk count: %d\n", gTalkCount);
+        mTalkCount = mTalkCount + 1;
+        print("Talk count: %d\n", mTalkCount);
     }
 }

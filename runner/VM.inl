@@ -8,6 +8,7 @@ mana (library)
 #pragma once
 #include "Plugin.h"
 #include <cmath>
+#include <limits>
 #include <stdexcept>
 
 namespace mana
@@ -247,7 +248,6 @@ namespace mana
 		}
 
 		// プログラムの初期化とシステムリクエストのフラグを設定します
-		mFlag.set(Flag::InitializeActionRunning);
 		mFlag.set(Flag::Initialized);
 		mFlag.set(Flag::EnableSystemRequest);
 
@@ -266,8 +266,9 @@ namespace mana
 			mLastRun = std::chrono::steady_clock::now();
 		}
 
-		RequestAll(1, "init", nullptr);
+		// Queue main before starting each Actor's init at the highest priority.
 		RequestAll(0, "main", nullptr);
+		RequestAll(std::numeric_limits<int32_t>::max(), "init", nullptr);
 	}
 
 	inline void VM::UnloadProgram()
@@ -283,8 +284,6 @@ namespace mana
 		*/
 
 		// 実行状態と Actor の情報を初期化します
-		mFlag.reset(Flag::InitializeActionRunning);
-		mFlag.reset(Flag::InitializeActionFinished);
 		mFlag.reset(Flag::Initialized);
 		mFlag.reset(Flag::EnableSystemRequest);
 
@@ -312,8 +311,6 @@ namespace mana
 		{
 			actor.second->Restart();
 		}
-		mFlag.reset(Flag::InitializeActionRunning);
-		mFlag.reset(Flag::InitializeActionFinished);
 		mFrameCounter = 0;
 		mElapsedSeconds = 0;
 		mDeltaSeconds = 0;
@@ -394,11 +391,6 @@ namespace mana
 		}
 		mFlag.set(Flag::FrameChanged);
 
-		if (mFlag[Flag::InitializeActionRunning] && !running)
-		{
-			mFlag.set(Flag::InitializeActionFinished);
-			mFlag.reset(Flag::InitializeActionRunning);
-		}
 		++mFrameCounter;
 
 		return running;
@@ -613,16 +605,6 @@ namespace mana
 		int32_t opecode = mInstructionPool[address];
 		MANA_ASSERT(opecode >= 0 && opecode < IntermediateLanguageSize);
 		return opecode;
-	}
-
-	inline bool VM::IsInInitAction() const
-	{
-		return mFlag[Flag::InitializeActionRunning];
-	}
-
-	inline bool VM::IsFinishInitAction() const
-	{
-		return mFlag[Flag::InitializeActionFinished];
 	}
 
 	inline void VM::SetSystemRequest(const bool enable)

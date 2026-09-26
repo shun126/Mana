@@ -70,10 +70,10 @@ Mana側で `native` 宣言した関数名と一致する名前を登録します
 
 ## Programロード時の起動
 
-現行VMはプログラムロード後、通常Actorに対して `init` を Priority 1、`main` を Priority 0 で Request します。
+現行VMはプログラムロード後、通常Actorに対して `init` を最高優先度（2147483647）、`main` を Priority 0 で Request します。
 
 ```text
-init : Priority 1
+init : Priority 2147483647
 main : Priority 0
 ```
 
@@ -94,8 +94,6 @@ main : Priority 0
 主な状態確認APIには次があります。
 
 - `IsRunning()`
-- `IsInInitAction()`
-- `IsFinishInitAction()`
 - `GetFrameCounter()`
 - `GetDeltaTime()`
 - `IsFrameChanged()`

@@ -119,6 +119,7 @@ success('TestActor01.mn',
 	'TestActor1::talk\n'
 	'TestActor2::talk\n'
 	'TestActor2::talk\n')
+success('TestActorMemberVariable.mn', 'door opened: 1 count: 1\n')
 success('TestBool01.mn', 'success\n')
 fail('TestConstDeclInvalidAssign.mn', 'cannot assign to const')
 fail('TestConstDeclInvalidCall.mn', 'constant expression')
@@ -126,6 +127,7 @@ fail('TestConstDeclInvalidDefine.mn', 'syntax error')
 fail('TestConstDeclInvalidType.mn', 'incompatible type')
 success('TestConstDeclOk.mn', '1 3 3 4\n')
 success('TestConstant01.mn')
+success('TestExtendAfterMember.mn')
 success('TestExtendNamespaceResolution.mn')
 success('TestForwardReferenceUsing.mn')
 success('TestForwardUsingActor.mn')

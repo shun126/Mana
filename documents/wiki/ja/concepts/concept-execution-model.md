@@ -188,14 +188,14 @@ Actor を生成
     ↓
 グローバル初期化
     ↓
-各 Actor の init を Priority 1 で Request
+各 Actor の main を Priority 0 で予約
     ↓
-各 Actor の main を Priority 0 で Request
+各 Actor の init を最高優先度（2147483647）で Request
     ↓
 通常の VM 実行
 ```
 
-これにより、Actor は起動時の初期化と通常動作を Action として記述できます。ただし、全 Actor の `init` が完了してから全 Actor の `main` が始まる、という一括の待ち合わせはありません。別 Actor の `main` から高い Priority で要求すると、対象の `init` より先にその Action が動く場合があります。初期化済みであることが必要な連携は、明示的に順序を設計してください。
+これにより、Actor は起動時の初期化と通常動作を Action として記述できます。ただし、全 Actor の `init` が完了してから全 Actor の `main` が始まる、という一括の待ち合わせはありません。各 Actor は自分の `init` が終了すると、予約済みの Action を優先度順に実行します。初期化済みであることが必要な連携は、明示的に順序を設計してください。
 
 ## Mana の実行モデルを一言で表すと
 

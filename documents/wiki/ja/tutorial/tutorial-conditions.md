@@ -82,7 +82,7 @@ Event: Find the key.
 
 ## 数を比べる
 
-前の章の会話回数なら、`gTalkCount == 0` と書くことで、0かどうかを調べられます。
+前の章の会話回数なら、`mTalkCount == 0` と書くことで、0かどうかを調べられます。
 
 | 書き方 | 意味 |
 | --- | --- |
@@ -113,7 +113,7 @@ if (hasKey && !isOpen)
 [前の章](./tutorial-variables.md)の完成コードに戻り、`talk` の中身を次に置き換えてください。
 
 ```mana
-if (gTalkCount == 0)
+if (mTalkCount == 0)
 {
     print("Guide: Welcome!\n");
 }
@@ -121,7 +121,7 @@ else
 {
     print("Guide: Welcome back!\n");
 }
-gTalkCount = gTalkCount + 1;
+mTalkCount = mTalkCount + 1;
 ```
 
 最初は `Welcome!`、2回目は `Welcome back!` になります。比較してから回数を増やしている点に注目してください。
