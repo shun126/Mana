@@ -137,7 +137,10 @@ set_tests_properties(TutorialExamples PROPERTIES
   WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
 
 add_test(NAME LanguageTour
-  COMMAND mana --debug "${CMAKE_CURRENT_SOURCE_DIR}/examples/language-tour/main.mn"
+  COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/check_output.py"
+          "${CMAKE_CURRENT_SOURCE_DIR}/examples/language-tour/expected-output.txt"
+          "$<TARGET_FILE:mana>" --debug
+          "${CMAKE_CURRENT_SOURCE_DIR}/examples/language-tour/main.mn"
           -I natives.mh)
 set_tests_properties(LanguageTour PROPERTIES
   WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")

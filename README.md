@@ -149,12 +149,16 @@ Three suites, and all of them matter:
 
 | Suite | What it covers |
 | --- | --- |
-| `tests/mana/test.py` | The language, through the `mana` executable. Checks exit status, diagnostics and, for the cases that run, what the script printed. |
+| `tests/mana/test.py` | The language, through the `mana` executable. Checks the exit status, the diagnostics of scripts that must not compile, and the complete output of scripts that run. |
 | `tests/cpp/EmbeddingTest` | The library interface: compiling from memory, diagnostics as data, redirected output, faults, script errors and native bindings. None of this is reachable from the command line. |
 | `tests/cpp/ProgramImageTest` | Reading a compiled program image back. |
 
 The scripts the language suite feeds to `mana` live in `tests/mana/`; the C++
 suites and the program image they read live in `tests/cpp/`.
+Every `.mn` file in `tests/mana/` must be listed in `test.py`; an unlisted
+script fails the suite instead of being skipped silently. The language tour's
+output is compared with `examples/language-tour/expected-output.txt`, so update
+that file when a change to the tour is meant to change what it prints.
 
 `ctest --test-dir build --output-on-failure` runs the three suites, the
 language tour, and the tutorial example checks. On Visual Studio generators,
