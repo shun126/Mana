@@ -5,17 +5,19 @@ jobs:
     runs-on: ubuntu-latest
     # DebugとReleaseの両方を回します。表明はReleaseのNDEBUGで消えるので、
     # Releaseだけでは不変条件が壊れるバグを取り逃します。
+    # READMEは任意のC++17コンパイラを案内しているので、ClangとGCCの両方で確かめます。
     strategy:
       fail-fast: false
       matrix:
         configuration: [Debug, Release]
+        compiler: [clang++, g++]
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install -y bison flex clang cmake make python3
+          sudo apt install -y bison flex clang g++ cmake make python3
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -25,7 +27,7 @@ jobs:
           echo "BISON_EXECUTABLE=$(command -v bison)" >> "$GITHUB_ENV"
           echo "FLEX_EXECUTABLE=$(command -v flex)" >> "$GITHUB_ENV"
       - name: Configure
-        run: cmake -S . -B build -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=${{ matrix.configuration }}
+        run: cmake -S . -B build -DCMAKE_CXX_COMPILER=${{ matrix.compiler }} -DCMAKE_BUILD_TYPE=${{ matrix.configuration }}
       - name: Build
         run: cmake --build build --parallel
       - name: Test
