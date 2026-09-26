@@ -52,6 +52,7 @@ driver/mana
 # is published by the workflows and never committed.
 /build/
 /build-*/
+/dist/
 /out/
 _site/
 __pycache__/
