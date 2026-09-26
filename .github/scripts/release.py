@@ -17,6 +17,9 @@ GENERATED_FILES = {
     "compiler/Lexer.cpp": "generated/Lexer.cpp",
     "runner/common/Version.h": "runner/common/Version.h",
 }
+# Repository-only content left out of the compiler archive.
+COMPILER_EXCLUDED_DIRECTORIES = ("documents", "examples", "tests")
+COMPILER_EXCLUDED_FILES = ("CMakeLists.txt", "CodingConvention.md", "CodingConvention-ja.md")
 
 
 def validate(tag):
@@ -77,15 +80,17 @@ def package(number, git, build_dir, output_dir):
             raise FileNotFoundError(f"Build first; generated source is missing: {path}")
 
     files = tracked_files(git)
-    required = {Path(name) for name in ("runner/common/Version.json", "CMakeLists.txt",
+    required = {Path(name) for name in ("runner/common/Version.json",
                                         "LICENSE.md", "README.md", "runner/Mana.h")}
     missing = required.difference(files)
     if missing:
         raise ValueError(f"Required tagged files are missing: {sorted(map(str, missing))}")
-    sdk_files = [p for p in files if not p.as_posix().startswith(".github/")
-                 and p.name not in (".gitignore", ".gitattributes")]
-    sdk_files = [p for p in sdk_files if p.as_posix() not in GENERATED_FILES]
-    sdk_files.sort()
+    compiler_files = [p for p in files if not p.as_posix().startswith(".github/")
+                      and p.name not in (".gitignore", ".gitattributes")
+                      and p.parts[0] not in COMPILER_EXCLUDED_DIRECTORIES
+                      and p.as_posix() not in COMPILER_EXCLUDED_FILES]
+    compiler_files = [p for p in compiler_files if p.as_posix() not in GENERATED_FILES]
+    compiler_files.sort()
 
     runtime_files = [p for p in files if p.as_posix().startswith("runner/")]
     runtime_files += [Path("LICENSE.md"), Path("README.md")]
@@ -95,8 +100,8 @@ def package(number, git, build_dir, output_dir):
     write_package(output_dir / f"mana-runtime-{number}-source.zip",
                   runtime_files, {"runner/common/Version.h": generated["runner/common/Version.h"]},
                   f"mana-runtime-{number}")
-    write_package(output_dir / f"mana-sdk-{number}-source.zip",
-                  sdk_files, generated, f"mana-sdk-{number}")
+    write_package(output_dir / f"mana-compiler-{number}-source.zip",
+                  compiler_files, generated, f"mana-compiler-{number}")
 
 
 def main():
