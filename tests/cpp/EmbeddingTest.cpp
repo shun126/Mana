@@ -332,6 +332,15 @@ namespace
 		}
 		const auto parameterized = CompileSource({ { "main.mn", "int answer(int value) { return value; }" } }, "main.mn");
 		Check(parameterized.mSucceeded, "parameterized function definitions require parentheses");
+		const char* const parameterizedWithoutParentheses[] = {
+			"int answer int value { return value; }",
+			"struct Helper { int answer int value { return value; } }"
+		};
+		for (const char* source : parameterizedWithoutParentheses)
+		{
+			const auto result = CompileSource({ { "main.mn", source } }, "main.mn");
+			Check(!result.mSucceeded, "parameterized function definitions without parentheses should be rejected");
+		}
 		const char* const callsWithoutParentheses[] = {
 			"int answer() { return 42; } actor Root { action main() { answer; } }",
 			"struct Helper { void touch {} } actor Root { action main() { Helper helper; helper.touch; } }"
