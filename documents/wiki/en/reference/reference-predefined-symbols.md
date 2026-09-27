@@ -6,8 +6,8 @@ Mana has predefined symbols for referring to the context of the running Actor an
 
 | Name | Type / kind | Meaning |
 | --- | --- | --- |
-| `self` | `actor` | The Actor currently running |
-| `sender` | `actor` | The Actor that Requested the current Action |
+| `self` | `Actor` | The Actor currently running |
+| `sender` | `Actor` | The Actor that Requested the current Action |
 | `priority` | `int` | The Priority of the Action currently running |
 | `this` | The Struct receiver | A reserved word for referring to the current Struct instance in a Struct member Function |
 | `Nil` | `Nil` | A special value that represents an empty reference |

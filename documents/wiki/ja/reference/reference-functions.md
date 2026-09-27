@@ -13,9 +13,9 @@ return_type functionName(arguments)
 }
 ```
 
-グローバル Function の定義では、引数がなくても `()` が必須です。Struct のメンバー Function は、引数がない場合に限り空の `()` を糖衣構文として省略できます。呼び出し時は `functionName()` や `counter.reset()` のように常に `()` が必要です。
+グローバル Function と Struct のメンバー Function は、引数がない場合に限り空の `()` を糖衣構文として省略できます。引数がある定義には `()` が必要です。呼び出し時は `functionName()` や `counter.reset()` のように常に `()` が必要です。
 
-たとえば `actor current() { ... }` は Actor を返すグローバル Function の定義で、`actor current { ... }` は Actor 宣言です。
+たとえば `Actor current() { ... }` と `Actor current { ... }` は Actor を返すグローバル Function の定義で、`actor current { ... }` は Actor 宣言です。
 
 例:
 
@@ -50,7 +50,7 @@ float distance(float x, float y)
 }
 ```
 
-型には組み込み型、`actor`、ユーザー定義型を使用できます。
+型には `Actor` を含む組み込み型やユーザー定義型を使用できます。
 
 ## 戻り値
 

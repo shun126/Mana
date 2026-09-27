@@ -40,7 +40,7 @@ Game::NPC::Shopkeeper->talk()
 Actor 型の式も使用できます。
 
 ```mana
-actor target;
+Actor target;
 request(1, target->talk());
 ```
 

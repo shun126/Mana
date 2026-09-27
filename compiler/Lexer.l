@@ -92,6 +92,7 @@ other		.
 <INITIAL>"float"	{ yylval->build<std::shared_ptr<mana::TypeDescriptor>>() = mana::lexer::GetFloat32TypeDescriptor(); return mana::Parser::token::tTYPE; }
 <INITIAL>"string"	{ yylval->build<std::shared_ptr<mana::TypeDescriptor>>() = mana::lexer::GetStringTypeDescriptor(); return mana::Parser::token::tTYPE; }
 <INITIAL>"pointer"	{ yylval->build<std::shared_ptr<mana::TypeDescriptor>>() = mana::lexer::GetReferenceTypeDescriptor(); return mana::Parser::token::tTYPE; }
+<INITIAL>"Actor"	{ yylval->build<std::shared_ptr<mana::TypeDescriptor>>() = mana::lexer::GetActorTypeDescriptor(); return mana::Parser::token::tTYPE; }
 
 <INITIAL>"native"	return mana::Parser::token::tNATIVE;
 <INITIAL>"struct"	return mana::Parser::token::tSTRUCT;

@@ -56,12 +56,12 @@ string message = "Hello";
 
 文字列リテラルは `"` で囲みます。
 
-## `actor` 型
+## `Actor` 型
 
-Actor への参照を Function や native Function の引数として扱う場合、`actor` 型を使用できます。
+Actor への参照を Function や native Function の引数として扱う場合、`Actor` 型を使用します。小文字の `actor` は Actor 宣言専用です。
 
 ```mana
-void notify(actor target)
+void notify(Actor target)
 {
 }
 ```
@@ -123,7 +123,7 @@ Struct の詳細は [Struct](./reference-struct.md) で扱います。
 
 `pointer` は主に VM と native Function の境界など、低レベルな用途で使用する型です。
 
-通常のゲームイベント記述では、まず `int`、`float`、`bool`、`string`、`actor`、定義済み複合型、Struct 型を中心に使用することを推奨します。
+通常のゲームイベント記述では、まず `int`、`float`、`bool`、`string`、`Actor`、定義済み複合型、Struct 型を中心に使用することを推奨します。
 
 ## 型チェック
 
