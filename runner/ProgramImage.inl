@@ -14,7 +14,7 @@ mana (library)
 
 namespace mana
 {
-	bool ProgramImage::LoadProgram(const std::shared_ptr<const void> programBytes, const size_t programSizeBytes)
+	inline bool ProgramImage::LoadProgram(const std::shared_ptr<const void> programBytes, const size_t programSizeBytes)
 	{
 		Clear();
 
@@ -40,29 +40,29 @@ namespace mana
 		return true;
 	}
 
-	bool ProgramImage::IsLoaded() const noexcept
+	inline bool ProgramImage::IsLoaded() const noexcept
 	{
 		return mLoaded;
 	}
 
-	const std::string& ProgramImage::GetLastError() const noexcept
+	inline const std::string& ProgramImage::GetLastError() const noexcept
 	{
 		return mLastError;
 	}
 
-	std::vector<std::string_view> ProgramImage::GetActorNames() const
+	inline std::vector<std::string_view> ProgramImage::GetActorNames() const
 	{
 		return mActorNames;
 	}
 
-	bool ProgramImage::HasActor(const std::string_view actorFullName) const
+	inline bool ProgramImage::HasActor(const std::string_view actorFullName) const
 	{
 		if (!mLoaded)
 			return false;
 		return mActors.find(actorFullName) != mActors.end();
 	}
 
-	std::vector<std::string_view> ProgramImage::GetActorActionNames(const std::string_view actorFullName) const
+	inline std::vector<std::string_view> ProgramImage::GetActorActionNames(const std::string_view actorFullName) const
 	{
 		if (!mLoaded)
 			return {};
@@ -72,7 +72,7 @@ namespace mana
 		return found->second.mActionNames;
 	}
 
-	bool ProgramImage::HasActorAction(const std::string_view actorFullName, const std::string_view actionName) const
+	inline bool ProgramImage::HasActorAction(const std::string_view actorFullName, const std::string_view actionName) const
 	{
 		if (!mLoaded)
 			return false;
@@ -83,14 +83,14 @@ namespace mana
 		return std::binary_search(actionNames.begin(), actionNames.end(), actionName);
 	}
 
-	bool ProgramImage::HasPhantom(const std::string_view phantomFullName) const
+	inline bool ProgramImage::HasPhantom(const std::string_view phantomFullName) const
 	{
 		if (!mLoaded)
 			return false;
 		return mPhantoms.find(phantomFullName) != mPhantoms.end();
 	}
 
-	std::vector<std::string_view> ProgramImage::GetPhantomActionNames(const std::string_view phantomFullName) const
+	inline std::vector<std::string_view> ProgramImage::GetPhantomActionNames(const std::string_view phantomFullName) const
 	{
 		if (!mLoaded)
 			return {};
@@ -100,7 +100,7 @@ namespace mana
 		return found->second.mActionNames;
 	}
 
-	bool ProgramImage::HasPhantomAction(const std::string_view phantomFullName, const std::string_view actionName) const
+	inline bool ProgramImage::HasPhantomAction(const std::string_view phantomFullName, const std::string_view actionName) const
 	{
 		if (!mLoaded)
 			return false;
@@ -111,7 +111,7 @@ namespace mana
 		return std::binary_search(actionNames.begin(), actionNames.end(), actionName);
 	}
 
-	void ProgramImage::Clear()
+	inline void ProgramImage::Clear()
 	{
 		mProgram.reset();
 		mProgramSize = 0;
@@ -123,7 +123,7 @@ namespace mana
 		mPhantomNames.clear();
 	}
 
-	bool ProgramImage::ParseAndBuildIndex(const std::byte* data, const size_t size)
+	inline bool ProgramImage::ParseAndBuildIndex(const std::byte* data, const size_t size)
 	{
 		auto setError = [this](const std::string& message) -> bool
 		{

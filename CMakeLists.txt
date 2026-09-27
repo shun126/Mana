@@ -152,7 +152,9 @@ if(BUILD_TESTING)
   add_executable(EmbeddingTest tests/cpp/EmbeddingTest.cpp)
   target_link_libraries(EmbeddingTest PRIVATE manac)
 
-  add_executable(ProgramImageTest tests/cpp/ProgramImageTest.cpp)
+  add_executable(ProgramImageTest
+    tests/cpp/ProgramImageTest.cpp
+    tests/cpp/ProgramImageLinkTest.cpp)
   target_compile_definitions(ProgramImageTest PRIVATE "$<$<CONFIG:Debug>:MANA_DEBUG>")
 
   foreach(mana_target IN ITEMS EmbeddingTest ProgramImageTest)
