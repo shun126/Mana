@@ -7,6 +7,7 @@ mana (library)
 
 #pragma once
 #include "common/Setup.h"
+#include "common/WindowsApi.h"
 #include <string>
 #include <memory>
 #include <vector>
@@ -18,7 +19,7 @@ namespace mana
 	class Plugin : Noncopyable
     {
 #if defined(MANA_TARGET_WINDOWS)
-        using MODULE = HMODULE;
+        using MODULE = windows::ModuleHandle;
 #else
         using MODULE = void*;
 #endif

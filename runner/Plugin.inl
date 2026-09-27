@@ -7,11 +7,13 @@ mana (library)
 
 #pragma once
 #include "common/Platform.h"
+#include "common/WindowsApi.h"
+#include <cstring>
 
 #if defined(MANA_TARGET_WINDOWS)
 
-#define NOMINMAX
-#include <windows.h>
+#include <io.h>
+#include <cstdlib>
 /*! ダイナミックライブラリのハンドル */
 //#define MODULE				HMODULE
 /*! ダイナミックライブラリを読み込む */
@@ -94,26 +96,26 @@ namespace mana
 			strcpy_s(entry, _MAX_PATH, directoryName.c_str());
 			strcat_s(entry, _MAX_PATH, "\\*.ml");
 
-			WIN32_FIND_DATAA fd;
-			const HANDLE handle = FindFirstFileA(entry, &fd);
-			if (handle != INVALID_HANDLE_VALUE)
+			_finddata_t fd;
+			const intptr_t handle = _findfirst(entry, &fd);
+			if (handle != -1)
 			{
 				do {
-					if (strcmp(fd.cFileName, ".") && strcmp(fd.cFileName, ".."))
+					if (strcmp(fd.name, ".") && strcmp(fd.name, ".."))
 					{
-						if (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+						if (fd.attrib & _A_SUBDIR)
 						{
-							Register(fd.cFileName);
+							Register(fd.name);
 						}
 						else
 						{
-							Load(fd.cFileName);
+							Load(fd.name);
 						}
 					}
-				} while (FindNextFileA(handle, &fd));
-			}
+				} while (_findnext(handle, &fd) == 0);
 
-			FindClose(handle);
+				_findclose(handle);
+			}
 		}
 #else
 		{
