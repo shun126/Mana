@@ -340,6 +340,15 @@ namespace
 		}
 	}
 
+	void TestActorReturningGlobalFunctionNeedsParentheses()
+	{
+		BeginCase("ActorReturningGlobalFunctionNeedsParentheses");
+		const auto explicitEmpty = CompileSource({ { "main.mn", "actor current() { return self; } actor Root { action main() { current(); } }" } }, "main.mn");
+		Check(explicitEmpty.mSucceeded, "actor-returning global function with parentheses should compile");
+		const auto omitted = CompileSource({ { "main.mn", "actor current { return self; }" } }, "main.mn");
+		Check(!omitted.mSucceeded, "actor-returning global function cannot omit parentheses");
+	}
+
 	void TestDiagnosticCarriesPosition()
 	{
 		BeginCase("DiagnosticCarriesPosition");
@@ -937,6 +946,7 @@ int main()
 	TestActionParenthesesAreOptional();
 	TestActionReferenceParenthesesAreOptional();
 	TestFunctionDefinitionParenthesesAreOptional();
+	TestActorReturningGlobalFunctionNeedsParentheses();
 	TestDiagnosticCarriesPosition();
 	TestDiagnosticHandlerThrowIsContained();
 	TestLineEndingsAreNormalised();
