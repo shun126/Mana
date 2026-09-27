@@ -43,7 +43,7 @@ Game::NPC::Shopkeeper->talk()
 An expression of Actor type can also be used.
 
 ```mana
-actor target;
+Actor target;
 request(1, target->talk());
 ```
 

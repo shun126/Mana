@@ -106,6 +106,11 @@ namespace mana
 			return LexerInstance->mParsingDriver->GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Reference);
 		}
 
+		inline std::shared_ptr<TypeDescriptor> GetActorTypeDescriptor()
+		{
+			return LexerInstance->mParsingDriver->GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Actor);
+		}
+
 		inline int_t ToInt(const std::string_view text)
 		{
 			return static_cast<mana::int_t>(atoi(text.data()));

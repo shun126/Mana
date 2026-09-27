@@ -45,7 +45,7 @@ struct CharacterData
     string name;
     int level;
     float speed;
-    actor owner;
+    Actor owner;
 }
 ```
 
@@ -107,7 +107,7 @@ In the current compiler, a Struct's member Function can contain ordinary Mana co
 ```mana
 struct Helper
 {
-    void call(actor target)
+    void call(Actor target)
     {
         request(1, target->talk());
     }

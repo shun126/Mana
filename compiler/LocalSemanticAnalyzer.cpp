@@ -232,7 +232,7 @@ namespace mana
 		if (type == GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Actor))
 			return;
 
-		CompileError({ "actor name '", type->GetName(), "' cannot be used as a type. Use 'actor'." });
+		CompileError({ "actor name '", type->GetName(), "' cannot be used as a type. Use 'Actor'." });
 		node->Set(GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Actor));
 	}
 
@@ -490,7 +490,7 @@ namespace mana
 		if (actorType->GetId() == TypeDescriptor::Id::Actor)
 		{
 			const std::string_view typeName = actorType->GetName();
-			if (!typeName.empty() && typeName != "actor")
+			if (!typeName.empty() && typeName != "Actor")
 			{
 				if (const std::shared_ptr<Symbol>& typeSymbol = GetSymbolFactory()->Lookup(typeName))
 				{

@@ -91,10 +91,10 @@ actor Example
 
 ## Actor 型
 
-`actor` は Actor への参照を保持する型としても使用できます。
+Actor への参照を保持する型は `Actor` です。小文字の `actor` は Actor 宣言専用のキーワードです。`Actor` は予約語のため、ユーザー定義名には使用できません。
 
 ```mana
-actor target;
+Actor target;
 ```
 
 Actor 参照に対して Action を指定できます。

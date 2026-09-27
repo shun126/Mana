@@ -61,7 +61,7 @@ mana (compiler)
 	#include <string_view>
 }
 
-%type	<std::shared_ptr<mana::SyntaxNode>> block case cases left_hand constant expression statement statements variable_size variable_sizes variable_type function member_function struct_member struct_members struct action actions actor declarator declaration allocate_declarations declarations primary arg_calls arg_decls variable_decl const_decl line
+%type	<std::shared_ptr<mana::SyntaxNode>> block case cases left_hand constant expression statement statements variable_size variable_sizes variable_type function struct_member struct_members struct action actions actor declarator declaration allocate_declarations declarations primary arg_calls arg_decls variable_decl const_decl line
 %type	<std::string_view> qualified_name
 %type	<mana::ActionReference> action_ref
 %token	<mana::int_t> tDIGIT
@@ -142,8 +142,6 @@ line			: // empty
 declarations	: actor
 				| struct
 				| function
-				| tACTOR tIDENTIFIER '(' arg_decls ')' block
-					{ $$ = mParsingDriver->CreateInternalFunction(mParsingDriver->CreateActorTypeDescription(), $2, $4, $6); }
 				| declaration ';'
 				| tNAMESPACE qualified_name '{' line '}'
 					{ $$ = mParsingDriver->CreateNamespace($2, $4); }
@@ -210,22 +208,17 @@ struct_members	: // empty
 
 struct_member	: variable_decl ';'
 				| function
-				| member_function
 				| tNATIVE variable_type tIDENTIFIER '(' arg_decls ')' ';'
 					{ $$ = mParsingDriver->CreateNativeFunction($2, $3, $5); }
 				;
 
 function		: variable_type tIDENTIFIER '(' arg_decls ')' block
 					{ $$ = mParsingDriver->CreateInternalFunction($1, $2, $4, $6); }
-				;
-
-member_function	: variable_type tIDENTIFIER block
+				| variable_type tIDENTIFIER block
 					{ $$ = mParsingDriver->CreateInternalFunction($1, $2, nullptr, $3); }
 				;
 
-variable_type	: tACTOR
-					{ $$ = mParsingDriver->CreateActorTypeDescription(); }
-				| qualified_name
+variable_type	: qualified_name
 					{ $$ = mParsingDriver->CreateTypeDescription($1); }
 				| tTYPE
 					{ $$ = mParsingDriver->CreateTypeDescription($1); }

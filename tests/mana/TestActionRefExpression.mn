@@ -20,7 +20,7 @@ actor Root
 
     action main()
     {
-        actor target;
+        Actor target;
         request(kRequestPriority, target->ping());
         request(kRequestPriority, self->ping());
         request(kRequestPriority, sender->ping());

@@ -13,13 +13,12 @@ return_type functionName(arguments)
 }
 ```
 
-Global Function definitions always require parentheses, including when they
-have no arguments. A Struct member Function with no arguments may omit empty
-`()` as shorthand. Calls always require `()`, such as `functionName()` or
-`counter.reset()`.
+Global and Struct member Function definitions with no arguments may omit empty
+`()` as shorthand; definitions with arguments require parentheses. Calls always
+require `()`, such as `functionName()` or `counter.reset()`.
 
-For example, `actor current() { ... }` defines a global Function returning an
-Actor, while `actor current { ... }` declares an Actor.
+For example, `Actor current() { ... }` and `Actor current { ... }` define a global
+Function returning an Actor, while `actor current { ... }` declares an Actor.
 
 Example:
 
@@ -54,7 +53,7 @@ float distance(float x, float y)
 }
 ```
 
-The type can be a built-in type, `actor` or a user-defined type.
+The type can be a built-in type, including `Actor`, or a user-defined type.
 
 ## Return values
 

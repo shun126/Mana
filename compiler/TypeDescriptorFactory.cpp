@@ -28,7 +28,7 @@ namespace mana
 		{ std::string_view("reference"), sizeof(void*), sizeof(void*) },
 		{ std::string_view("array"), sizeof(void*), sizeof(void*) },
 		{ std::string_view("struct"), sizeof(void*), sizeof(void*) },
-		{ std::string_view("actor"), sizeof(void*), sizeof(void*) },
+		{ std::string_view("Actor"), sizeof(void*), sizeof(void*) },
 		{ std::string_view("module"), sizeof(void*), sizeof(void*) },
 		{ std::string_view("Nil"), sizeof(void*), sizeof(void*) },
 		{ std::string_view("unknown"), sizeof(void*), sizeof(void*) }

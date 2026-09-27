@@ -6,8 +6,8 @@ Mana には、実行中の Actor や Request の文脈を参照するための�
 
 | 名前 | 型 / 種類 | 意味 |
 | --- | --- | --- |
-| `self` | `actor` | 現在実行している Actor |
-| `sender` | `actor` | 現在の Action を Request した Actor |
+| `self` | `Actor` | 現在実行している Actor |
+| `sender` | `Actor` | 現在の Action を Request した Actor |
 | `priority` | `int` | 現在実行中の Action の Priority |
 | `this` | Struct の受信側 | Struct メンバーFunctionで現在の Struct インスタンスを参照するための予約語 |
 | `Nil` | `Nil` | 空の参照を表す特殊値 |

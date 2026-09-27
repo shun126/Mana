@@ -83,7 +83,6 @@ namespace mana
 		static std::shared_ptr<SyntaxNode> CreateInternalFunction(const std::shared_ptr<SyntaxNode>& returnExpression, const std::string_view& identifier, const std::shared_ptr<SyntaxNode>& argument, const std::shared_ptr<SyntaxNode>& statement);
 
 		// variable_type
-		std::shared_ptr<SyntaxNode> CreateActorTypeDescription();
 		static std::shared_ptr<SyntaxNode> CreateTypeDescription(const std::string_view& identifier);
 		static std::shared_ptr<SyntaxNode> CreateTypeDescription(const std::shared_ptr<TypeDescriptor>& typeDescriptor);
 

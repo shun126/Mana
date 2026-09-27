@@ -322,15 +322,16 @@ namespace
 		BeginCase("FunctionDefinitionParenthesesRules");
 		const char* const sources[] = {
 			"int answer() { return 42; } struct Helper { void touch() {} } actor Root { action main() { Helper helper; helper.touch(); print(\"%d\", answer()); } }",
-			"int answer() { return 42; } struct Helper { void touch {} } actor Root { action main() { Helper helper; helper.touch(); print(\"%d\", answer()); } }"
+			"int answer() { return 42; } struct Helper { void touch {} } actor Root { action main() { Helper helper; helper.touch(); print(\"%d\", answer()); } }",
+			"int answer { return 42; } struct Helper { void touch {} } actor Root { action main() { Helper helper; helper.touch(); print(\"%d\", answer()); } }"
 		};
 		for (const char* source : sources)
 		{
 			const auto result = CompileSource({ { "main.mn", source } }, "main.mn");
-			Check(result.mSucceeded, "member function definitions should compile with or without empty parentheses");
+			Check(result.mSucceeded, "global and member function definitions should compile with or without empty parentheses");
 		}
-		const auto omittedGlobal = CompileSource({ { "main.mn", "int answer { return 42; }" } }, "main.mn");
-		Check(!omittedGlobal.mSucceeded, "global function definitions require parentheses");
+		const auto parameterized = CompileSource({ { "main.mn", "int answer(int value) { return value; }" } }, "main.mn");
+		Check(parameterized.mSucceeded, "parameterized function definitions require parentheses");
 		const char* const callsWithoutParentheses[] = {
 			"int answer() { return 42; } actor Root { action main() { answer; } }",
 			"struct Helper { void touch {} } actor Root { action main() { Helper helper; helper.touch; } }"
@@ -342,15 +343,32 @@ namespace
 		}
 	}
 
-	void TestActorReturningGlobalFunctionNeedsParentheses()
+	void TestActorTypeAndDeclarationAreDistinct()
 	{
-		BeginCase("ActorReturningGlobalFunctionNeedsParentheses");
-		const auto explicitEmpty = CompileSource({ { "main.mn", "actor current() { return self; } actor Root { action main() { current(); } }" } }, "main.mn");
-		if (!explicitEmpty.mSucceeded)
-			std::printf("%s", DiagnosticsToString(explicitEmpty).c_str());
-		Check(explicitEmpty.mSucceeded, "actor-returning global function with parentheses should compile");
-		const auto omitted = CompileSource({ { "main.mn", "actor current { return self; }" } }, "main.mn");
-		Check(!omitted.mSucceeded, "actor-returning global function cannot omit parentheses");
+		BeginCase("ActorTypeAndDeclarationAreDistinct");
+		const char* const validSources[] = {
+			"Actor current() { return self; } actor Root { action main() { Actor target = current(); } }",
+			"Actor current { return self; } Actor identity(Actor value) { return value; } actor Root { action main() { Actor target = identity(current()); } }",
+			"struct Helper { Actor current { return self; } } actor Root { action main() { Helper helper; helper.current(); } }"
+		};
+		for (const char* source : validSources)
+		{
+			const auto result = CompileSource({ { "main.mn", source } }, "main.mn");
+			if (!result.mSucceeded)
+				std::printf("%s", DiagnosticsToString(result).c_str());
+			Check(result.mSucceeded, "Actor type and actor declarations should remain distinct");
+		}
+		const char* const invalidSources[] = {
+			"actor current() { return self; }",
+			"actor Root { action main() { actor target; } }",
+			"Actor Root { action main() {} }",
+			"actor Actor { action main() {} }"
+		};
+		for (const char* source : invalidSources)
+		{
+			const auto result = CompileSource({ { "main.mn", source } }, "main.mn");
+			Check(!result.mSucceeded, "old actor type syntax and Actor as a user-defined name should be rejected");
+		}
 	}
 
 	void TestDiagnosticCarriesPosition()
@@ -950,7 +968,7 @@ int main()
 	TestActionParenthesesAreOptional();
 	TestActionReferenceParenthesesAreOptional();
 	TestFunctionDefinitionParenthesesRules();
-	TestActorReturningGlobalFunctionNeedsParentheses();
+	TestActorTypeAndDeclarationAreDistinct();
 	TestDiagnosticCarriesPosition();
 	TestDiagnosticHandlerThrowIsContained();
 	TestLineEndingsAreNormalised();
