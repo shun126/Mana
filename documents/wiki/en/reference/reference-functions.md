@@ -13,14 +13,13 @@ return_type functionName(arguments)
 }
 ```
 
-The form with `()` is canonical. For a definition with no arguments, empty
-`()` may be omitted as shorthand. This also applies to Struct member Functions.
-Calls still require `()`, such as
-`functionName()` or `counter.reset()`.
+Global Function definitions always require parentheses, including when they
+have no arguments. A Struct member Function with no arguments may omit empty
+`()` as shorthand. Calls always require `()`, such as `functionName()` or
+`counter.reset()`.
 
-A global Function returning the built-in `actor` type must keep `()` even when
-it has no arguments. `actor current { ... }` is an Actor declaration;
-write `actor current() { ... }` for a Function.
+For example, `actor current() { ... }` defines a global Function returning an
+Actor, while `actor current { ... }` declares an Actor.
 
 Example:
 

@@ -13,9 +13,9 @@ return_type functionName(arguments)
 }
 ```
 
-`()` を付けた形が正式な構文です。引数のない Function の定義では、糖衣構文として空の `()` を省略できます。Struct のメンバー Function も同様です。呼び出し時は `functionName()` や `counter.reset()` のように `()` が必要です。
+グローバル Function の定義では、引数がなくても `()` が必須です。Struct のメンバー Function は、引数がない場合に限り空の `()` を糖衣構文として省略できます。呼び出し時は `functionName()` や `counter.reset()` のように常に `()` が必要です。
 
-組み込み型 `actor` を返すグローバル Function は、引数がなくても `()` を省略できません。`actor current { ... }` は Actor 宣言として解釈されるため、Function には `actor current() { ... }` と書いてください。
+たとえば `actor current() { ... }` は Actor を返すグローバル Function の定義で、`actor current { ... }` は Actor 宣言です。
 
 例:
 

@@ -317,20 +317,22 @@ namespace
 		Check(!unsupported.mSucceeded, "action arguments should be rejected until supported");
 	}
 
-	void TestFunctionDefinitionParenthesesAreOptional()
+	void TestFunctionDefinitionParenthesesRules()
 	{
-		BeginCase("FunctionDefinitionParenthesesAreOptional");
+		BeginCase("FunctionDefinitionParenthesesRules");
 		const char* const sources[] = {
 			"int answer() { return 42; } struct Helper { void touch() {} } actor Root { action main() { Helper helper; helper.touch(); print(\"%d\", answer()); } }",
-			"int answer { return 42; } struct Helper { void touch {} } actor Root { action main() { Helper helper; helper.touch(); print(\"%d\", answer()); } }"
+			"int answer() { return 42; } struct Helper { void touch {} } actor Root { action main() { Helper helper; helper.touch(); print(\"%d\", answer()); } }"
 		};
 		for (const char* source : sources)
 		{
 			const auto result = CompileSource({ { "main.mn", source } }, "main.mn");
-			Check(result.mSucceeded, "global and member function definitions should compile with or without empty parentheses");
+			Check(result.mSucceeded, "member function definitions should compile with or without empty parentheses");
 		}
+		const auto omittedGlobal = CompileSource({ { "main.mn", "int answer { return 42; }" } }, "main.mn");
+		Check(!omittedGlobal.mSucceeded, "global function definitions require parentheses");
 		const char* const callsWithoutParentheses[] = {
-			"int answer { return 42; } actor Root { action main() { answer; } }",
+			"int answer() { return 42; } actor Root { action main() { answer; } }",
 			"struct Helper { void touch {} } actor Root { action main() { Helper helper; helper.touch; } }"
 		};
 		for (const char* source : callsWithoutParentheses)
@@ -945,7 +947,7 @@ int main()
 	TestMissingSourceIsReported();
 	TestActionParenthesesAreOptional();
 	TestActionReferenceParenthesesAreOptional();
-	TestFunctionDefinitionParenthesesAreOptional();
+	TestFunctionDefinitionParenthesesRules();
 	TestActorReturningGlobalFunctionNeedsParentheses();
 	TestDiagnosticCarriesPosition();
 	TestDiagnosticHandlerThrowIsContained();
