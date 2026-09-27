@@ -157,7 +157,17 @@ if(BUILD_TESTING)
     tests/cpp/ProgramImageLinkTest.cpp)
   target_compile_definitions(ProgramImageTest PRIVATE "$<$<CONFIG:Debug>:MANA_DEBUG>")
 
-  foreach(mana_target IN ITEMS EmbeddingTest ProgramImageTest)
+  set(mana_cpp_tests EmbeddingTest ProgramImageTest)
+  if(WIN32)
+    add_executable(WindowsHeaderTest
+      tests/cpp/WindowsHeaderTest.cpp
+      tests/cpp/WindowsHeaderOrderTest.cpp)
+    target_compile_definitions(WindowsHeaderTest PRIVATE "$<$<CONFIG:Debug>:MANA_DEBUG>")
+    list(APPEND mana_cpp_tests WindowsHeaderTest)
+    add_test(NAME WindowsHeaderTest COMMAND WindowsHeaderTest)
+  endif()
+
+  foreach(mana_target IN ITEMS ${mana_cpp_tests})
     if(NOT MANA_USE_PREGENERATED_SOURCES)
       add_dependencies(${mana_target} mana_generated_version)
     endif()
