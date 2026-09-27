@@ -11,13 +11,13 @@ actor TestActor1
 {
     int mDigitVariableInActor;
 
-    action init
+    action init()
     {
         print("TestActor1::init\n");
         callTest(1, 2, 3, 4.0);
     }
 
-    action main
+    action main()
     {
         print("TestActor1::main\n");
 
@@ -26,14 +26,14 @@ actor TestActor1
         test_sort(array, 10);
 
         print("TestActor1:section2\n");
-        request(kTalkPriority, OtherTestActor->talk);
+        request(kTalkPriority, OtherTestActor->talk());
 
         print("TestActor1:section3\n");
         join(kJoinPriority, OtherTestActor);
         print("TestActor1:section4\n");
     }
 
-    action talk
+    action talk()
     {
         vec2 test;
         //test.x = 0;
@@ -50,11 +50,11 @@ actor TestActor1
 
 module Battler
 {
-    action init
+    action init()
     {
     }
 
-    action dead
+    action dead()
     {
     }
 }
@@ -63,7 +63,7 @@ actor OtherTestActor
 {
     extend Battler;
 
-    action talk
+    action talk()
     {
         vec2 test;
         float f;
@@ -78,7 +78,7 @@ phantom Phantom
 {
     extend Battler;
 
-    action init
+    action init()
     {
     }
 }

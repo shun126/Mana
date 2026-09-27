@@ -15,7 +15,7 @@ In these lessons, each code box is labelled with what it is for.
 ```mana
 actor Hello
 {
-    action main
+    action main()
     {
         print("Hello, Mana!\n");
     }

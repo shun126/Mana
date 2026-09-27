@@ -9,8 +9,8 @@
 **イベントの main 内の抜粋：**
 
 ```mana
-awaitCompletion(10, Guide->talk);
-awaitCompletion(10, Gate->open);
+awaitCompletion(10, Guide->talk());
+awaitCompletion(10, Gate->open());
 ```
 
 この例は、要求が受理され、他の要求元による競合がない前提で、会話を終えてから門を開きます。
@@ -23,9 +23,9 @@ awaitCompletion(10, Gate->open);
 
 | 命令 | 新しく要求するか | 呼び出し側が先へ進める条件 |
 | --- | --- | --- |
-| `request(p, Actor->action)` | する | 待機しない |
-| `awaitStart(p, Actor->action)` | する | 対象 Actor の現在の Priority が `p` 以下 |
-| `awaitCompletion(p, Actor->action)` | する | 対象 Actor の現在の Priority が `p` 未満 |
+| `request(p, Actor->action())` | する | 待機しない |
+| `awaitStart(p, Actor->action())` | する | 対象 Actor の現在の Priority が `p` 以下 |
+| `awaitCompletion(p, Actor->action())` | する | 対象 Actor の現在の Priority が `p` 未満 |
 | `join(p, Actor)` | しない | 対象 Actor の現在の Priority が `p` 以下 |
 
 `p` は説明のための仮の名前です。実際には10などの整数や定数を指定します。
@@ -55,7 +55,7 @@ native void delay(float seconds);
 
 actor Guide
 {
-    action main
+    action main()
     {
         print("Guide: Step 1.\n");
         yield();

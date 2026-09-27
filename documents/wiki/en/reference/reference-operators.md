@@ -111,11 +111,11 @@ It is not syntax that accepts an arbitrary expression.
 `->` is a Mana-specific operator for referring to an Actor's Action.
 
 ```mana
-Enemy->think
+Enemy->think()
 ```
 
 ```mana
-request(10, Enemy->think);
+request(10, Enemy->think());
 ```
 
 Its meaning differs from pointer member access in C/C++.
@@ -131,7 +131,7 @@ Game::AI::Enemy
 To go as far as an Action, combine the two.
 
 ```mana
-Game::AI::Enemy->think
+Game::AI::Enemy->think()
 ```
 
 ## Main precedence

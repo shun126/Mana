@@ -146,7 +146,7 @@ Game::AI::Enemy
 `->` is used for Action references.
 
 ```mana
-Enemy->think
+Enemy->think()
 ```
 
 The two have different roles.

@@ -9,11 +9,11 @@ actor Guard
 {
     bool mAlert;
 
-    action watch
+    action watch()
     {
     }
 
-    action move
+    action move()
     {
     }
 }
@@ -30,7 +30,7 @@ actor Guide
 {
     int mTalkCount;
 
-    action init
+    action init()
     {
         mTalkCount = 0;
     }
@@ -51,10 +51,10 @@ Action が終わっても Actor 自体は残るため、次に別の Action が�
 Action は Request の対象になります。
 
 ```mana
-request(3, Guard->move);
+request(3, Guard->move());
 ```
 
-ここで `Guard->move` は Action への参照です。
+ここで `Guard->move()` は Action への参照です。
 
 Action を Actor の中へ置くことで、「その行動は誰の責任か」がコード上でも明確になります。
 
@@ -83,7 +83,7 @@ int clampHp(int hp)
 一方 Action は Actor の実行モデルに参加し、Request と Priority の影響を受けます。
 
 ```mana
-request(5, Enemy->damage);
+request(5, Enemy->damage());
 ```
 
 大まかには次のように分けられます。
@@ -125,12 +125,12 @@ actor Door
 {
     bool mOpened;
 
-    action init
+    action init()
     {
         mOpened = false;
     }
 
-    action open
+    action open()
     {
         if (mOpened)
             return;
@@ -154,12 +154,12 @@ actor NPC
 {
     int mState;
 
-    action init
+    action init()
     {
         mState = 0;
     }
 
-    action main
+    action main()
     {
         print("NPC started\n");
     }
@@ -187,9 +187,9 @@ EventController.main
 
 ```text
 EventController
-    ├─ Guide->talk を Request
-    ├─ Gate->open を Request
-    └─ Guard->move を Request
+    ├─ Guide->talk() を Request
+    ├─ Gate->open() を Request
+    └─ Guard->move() を Request
 ```
 
 と責務を分ける方が Mana の設計に合っています。

@@ -9,8 +9,8 @@ In [Talk, then open the gate](./tutorial-small-event.md), you made an order with
 **Excerpt from the event's main:**
 
 ```mana
-awaitCompletion(10, Guide->talk);
-awaitCompletion(10, Gate->open);
+awaitCompletion(10, Guide->talk());
+awaitCompletion(10, Gate->open());
 ```
 
 Provided the requests are accepted and no other requester competes, this opens the gate after the conversation ends.
@@ -23,9 +23,9 @@ For the await instructions, the conditions below apply when the request is accep
 
 | Instruction | Makes a new request? | When the caller can carry on |
 | --- | --- | --- |
-| `request(p, Actor->action)` | Yes | It does not wait |
-| `awaitStart(p, Actor->action)` | Yes | The target Actor's current Priority is `p` or lower |
-| `awaitCompletion(p, Actor->action)` | Yes | The target Actor's current Priority is lower than `p` |
+| `request(p, Actor->action())` | Yes | It does not wait |
+| `awaitStart(p, Actor->action())` | Yes | The target Actor's current Priority is `p` or lower |
+| `awaitCompletion(p, Actor->action())` | Yes | The target Actor's current Priority is lower than `p` |
 | `join(p, Actor)` | No | The target Actor's current Priority is `p` or lower |
 
 `p` is a placeholder name for this explanation. In real code you give an integer such as 10, or a constant.
@@ -53,7 +53,7 @@ This is the **whole file**. Replace `lesson.mn` in the Mana folder with it, save
 ```mana
 actor Guide
 {
-    action main
+    action main()
     {
         print("Guide: Step 1.\n");
         yield();

@@ -124,9 +124,9 @@ lock
 これらは Action の実行要求と待機を組み合わせた命令です。
 
 ```mana
-request(10, NPC->talk);
-awaitStart(10, NPC->talk);
-awaitCompletion(10, NPC->talk);
+request(10, NPC->talk());
+awaitStart(10, NPC->talk());
+awaitCompletion(10, NPC->talk());
 ```
 
 詳細は [Request](./reference-request.md) を参照してください。

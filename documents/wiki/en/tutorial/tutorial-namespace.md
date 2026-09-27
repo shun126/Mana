@@ -13,7 +13,7 @@ namespace Town
 {
     actor Guide
     {
-        action talk
+        action talk()
         {
             print("Guide: Welcome!\n");
         }
@@ -21,7 +21,7 @@ namespace Town
 
     actor Gate
     {
-        action open
+        action open()
         {
             print("Gate: Open.\n");
         }
@@ -42,10 +42,10 @@ using Town;
 
 actor Event
 {
-    action main
+    action main()
     {
-        awaitCompletion(10, Guide->talk);
-        awaitCompletion(10, Gate->open);
+        awaitCompletion(10, Guide->talk());
+        awaitCompletion(10, Gate->open());
         print("Event: Finished.\n");
     }
 }
@@ -80,8 +80,8 @@ mana examples/tutorial/12-namespace/main.mn
 Delete `using Town;` and replace the two requests in main with the following.
 
 ```mana
-awaitCompletion(10, Town::Guide->talk);
-awaitCompletion(10, Town::Gate->open);
+awaitCompletion(10, Town::Guide->talk());
+awaitCompletion(10, Town::Gate->open());
 ```
 
 If you get the same output, you are referring to them by their full names.
@@ -89,7 +89,7 @@ If you get the same output, you are referring to them by their full names.
 | Symbol | What it follows |
 | --- | --- |
 | `::` | A namespace. Example: `Town::Guide` |
-| `->` | An Action of an Actor. Example: `Town::Guide->talk` |
+| `->` | An Action of an Actor. Example: `Town::Guide->talk()` |
 
 If another namespace also has a `Guide` and several `using` declarations make it unclear which one is meant, give the full name.
 

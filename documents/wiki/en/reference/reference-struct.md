@@ -26,7 +26,7 @@ It is used as a variable.
 ```mana
 actor StatusExample
 {
-    action main
+    action main()
     {
         Status status;
         status.hp = 100;
@@ -45,7 +45,7 @@ struct CharacterData
     string name;
     int level;
     float speed;
-    actor owner;
+    Actor owner;
 }
 ```
 
@@ -66,7 +66,7 @@ struct Unit
 
 actor UnitExample
 {
-    action main
+    action main()
     {
         Unit unit;
         unit.position.x = 10.0;
@@ -94,7 +94,7 @@ struct Counter
 
 actor CounterExample
 {
-    action main
+    action main()
     {
         Counter counter;
         counter.reset();
@@ -107,9 +107,9 @@ In the current compiler, a Struct's member Function can contain ordinary Mana co
 ```mana
 struct Helper
 {
-    void call(actor target)
+    void call(Actor target)
     {
-        request(1, target->talk);
+        request(1, target->talk());
     }
 }
 ```
@@ -126,7 +126,7 @@ struct Transform
 
 actor TransformExample
 {
-    action main
+    action main()
     {
         Transform transform;
         transform.reset();

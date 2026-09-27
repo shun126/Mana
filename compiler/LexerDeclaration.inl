@@ -67,6 +67,7 @@ namespace mana
 		static std::shared_ptr<TypeDescriptor> GetFloat32TypeDescriptor();
 		static std::shared_ptr<TypeDescriptor> GetStringTypeDescriptor();
 		static std::shared_ptr<TypeDescriptor> GetReferenceTypeDescriptor();
+		static std::shared_ptr<TypeDescriptor> GetActorTypeDescriptor();
 
 		static int_t ToInt(const std::string_view text);
 		static int_t ToIntHex(const std::string_view text);

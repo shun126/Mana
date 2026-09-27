@@ -157,14 +157,14 @@ bool gIsDebugDrawEnabled;
 
 ## 4.1 First Argument (Fixed Meaning)
 
-> In `request(priority, Target->action)`,
+> In `request(priority, Target->action())`,
 > **the first argument always represents priority**
 
 * It does **not** represent delay, frame count, or time
 
 ```mn
-request(100, Enemy->think);
-request(10,  Enemy->idle);
+request(100, Enemy->think());
+request(10,  Enemy->idle());
 ```
 
 ---
@@ -176,7 +176,7 @@ request(10,  Enemy->idle);
 
 ```mn
 const int kThinkPriority = 50;
-request(kThinkPriority, Enemy->think);
+request(kThinkPriority, Enemy->think());
 ```
 
 ---
@@ -186,7 +186,7 @@ request(kThinkPriority, Enemy->think);
 ```mn
 request(
     kThinkPriority,
-    Enemy->think
+    Enemy->think()
 );
 ```
 

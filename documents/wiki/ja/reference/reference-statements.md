@@ -133,7 +133,7 @@ Action の中でも `return;` を使用できます。この場合は現在の A
 ```mana
 actor NPC
 {
-    action talk
+    action talk()
     {
         if (sender == Nil)
             return;
@@ -152,7 +152,7 @@ Action は戻り値を持たないため、Action では `return expression;` �
 ```mana
 actor GotoExample
 {
-    action main
+    action main()
     {
         goto Done;
         print("skip\n");
@@ -178,9 +178,9 @@ print("Hello\n");
 Actor の Action を依頼する構文です。
 
 ```mana
-request(10, Enemy->think);
-awaitStart(10, Enemy->think);
-awaitCompletion(10, Enemy->think);
+request(10, Enemy->think());
+awaitStart(10, Enemy->think());
+awaitCompletion(10, Enemy->think());
 ```
 
 詳細な待機条件や Priority との関係は [Request](./reference-request.md) と [実行制御](./reference-execution-control.md) を参照してください。

@@ -145,7 +145,7 @@ Game::AI::Enemy
 Action 参照には `->` を使います。
 
 ```mana
-Enemy->think
+Enemy->think()
 ```
 
 この2つは役割が異なります。

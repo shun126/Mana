@@ -1,15 +1,15 @@
 actor Event
 {
-    action main
+    action main()
     {
         print("Event: Request.\n");
-        request(10, Guide->talk);
+        request(10, Guide->talk());
     }
 }
 
 actor Guide
 {
-    action talk
+    action talk()
     {
         print("Guide: Welcome!\n");
     }

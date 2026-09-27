@@ -7,7 +7,7 @@ In Mana, rather than writing similar Actions over and over in each Actor, you ca
 ```mana
 module CommonActions
 {
-    action greet
+    action greet()
     {
         print("Hello\n");
     }
@@ -67,7 +67,7 @@ namespace Game::NPC
 {
     module Talkable
     {
-        action talk
+        action talk()
         {
             print("Hello\n");
         }

@@ -53,7 +53,7 @@ const int kMovePriority = 5;
 ```
 
 ```mana
-request(kTalkPriority, NPC->talk);
+request(kTalkPriority, NPC->talk());
 ```
 
 The purpose is easier to see than with a number written directly.
@@ -67,7 +67,7 @@ const int kValueCount = 4;
 
 actor ArrayExample
 {
-    action main
+    action main()
     {
         int values[kValueCount];
     }

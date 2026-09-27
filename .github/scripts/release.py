@@ -100,7 +100,7 @@ def package(number, git, build_dir, output_dir):
     write_package(output_dir / f"mana-runtime-{number}-source.zip",
                   runtime_files, {"runner/common/Version.h": generated["runner/common/Version.h"]},
                   f"mana-runtime-{number}")
-    write_package(output_dir / f"mana-compiler-{number}-source.zip",
+    write_package(output_dir / f"mana-compiler-{number}-embedding.zip",
                   compiler_files, generated, f"mana-compiler-{number}")
 
 

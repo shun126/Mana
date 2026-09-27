@@ -16,7 +16,7 @@ const int D = C + 1;
 
 actor Test
 {
-    action init
+    action init()
     {
         print("%d %d %d %d\n", A, B, C, D);
     }

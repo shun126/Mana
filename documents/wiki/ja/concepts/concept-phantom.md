@@ -7,7 +7,7 @@
 ```mana
 phantom EnemyTemplate
 {
-    action appear
+    action appear()
     {
         print("Enemy appeared\n");
     }
@@ -23,7 +23,7 @@ phantom EnemyTemplate
 ```mana
 actor Guide
 {
-    action main
+    action main()
     {
     }
 }

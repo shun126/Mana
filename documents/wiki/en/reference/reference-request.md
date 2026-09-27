@@ -9,16 +9,20 @@ In Mana, cooperation between Actors is not expressed with ordinary Function call
 Syntax:
 
 ```mana
-request(priority, actor_expression->actionName);
+request(priority, actor_expression->actionName());
 ```
 
 Example:
 
 ```mana
-request(10, NPC->talk);
+request(10, NPC->talk());
 ```
 
 The first argument is the Priority, and the second is an Action reference.
+The form with `()` is canonical, and the empty `()` may be omitted as shorthand:
+`Actor->action` and `Actor->action()` both refer
+to an Action with no arguments. Neither form runs the Action directly; `request`
+sends the execution request. Action arguments are not supported yet.
 
 The larger the value, the higher the Priority.
 
@@ -27,28 +31,28 @@ The larger the value, the higher the Priority.
 The recommended syntax is `->`.
 
 ```mana
-NPC->talk
+NPC->talk()
 ```
 
 With a namespace:
 
 ```mana
-Game::NPC::Shopkeeper->talk
+Game::NPC::Shopkeeper->talk()
 ```
 
 An expression of Actor type can also be used.
 
 ```mana
-actor target;
-request(1, target->talk);
+Actor target;
+request(1, target->talk());
 ```
 
-The current Parser accepts `expression->actionName` as an Action reference.
+The Parser accepts `expression->actionName()` as an Action reference.
 
 The old form:
 
 ```mana
-NPC::talk
+NPC::talk()
 ```
 
 is also recognised as compatibility syntax, but it gives a deprecated warning. Don't use it in new code.
@@ -58,7 +62,7 @@ is also recognised as compatibility syntax, but it gives a deprecated warning. D
 A plain `request` does not wait for the Action to complete.
 
 ```mana
-request(10, NPC->talk);
+request(10, NPC->talk());
 print("continue\n");
 ```
 
@@ -87,7 +91,7 @@ The `request` statement in a script has no return value that reports success or 
 ## `awaitStart`
 
 ```mana
-awaitStart(priority, actor_expression->actionName);
+awaitStart(priority, actor_expression->actionName());
 ```
 
 Sends a Request and makes the caller wait until the target Actor is in a state where it can start that Priority.
@@ -95,13 +99,13 @@ Sends a Request and makes the caller wait until the target Actor is in a state w
 If the request is accepted, the wait ends when the target Actor's current Priority becomes the requested Priority or lower. It does not guarantee that the first statement of the requested Action has already run.
 
 ```mana
-awaitStart(10, NPC->talk);
+awaitStart(10, NPC->talk());
 ```
 
 ## `awaitCompletion`
 
 ```mana
-awaitCompletion(priority, actor_expression->actionName);
+awaitCompletion(priority, actor_expression->actionName());
 ```
 
 Sends a Request and waits until the work at that Priority completes.
@@ -109,7 +113,7 @@ Sends a Request and waits until the work at that Priority completes.
 If the request is accepted, the wait ends when the target Actor's current Priority becomes lower than the requested Priority. It is not a mechanism that keeps a completion notice per request and waits for it.
 
 ```mana
-awaitCompletion(10, NPC->talk);
+awaitCompletion(10, NPC->talk());
 ```
 
 ## When an await request is not accepted
@@ -121,7 +125,7 @@ If the initial Request is not accepted, `awaitStart` and `awaitCompletion` carry
 If `awaitStart` or `awaitCompletion` targets `self`, the current VM raises a script error.
 
 ```mana
-awaitCompletion(10, self->talk); // error
+awaitCompletion(10, self->talk()); // error
 ```
 
 This is because if an Actor waits on itself, the wait can only finish if the waiting Actor itself makes progress.
@@ -135,7 +139,7 @@ When a Request is accepted, the sending Actor is recorded as the `sender` of the
 ```mana
 actor NPC
 {
-    action talk
+    action talk()
     {
         // sender is the Actor that Requested this Action
     }

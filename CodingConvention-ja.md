@@ -139,13 +139,13 @@ bool gIsDebugDrawEnabled;
 
 ## 4.1 第1引数の意味（確定）
 
-> `request(priority, Target->action)` の第1引数は **常に優先度（priority）**
+> `request(priority, Target->action())` の第1引数は **常に優先度（priority）**
 
 * 遅延時間・フレーム数・秒数ではない
 
 ```mn
-request(100, Enemy->think);
-request(10,  Enemy->idle);
+request(100, Enemy->think());
+request(10,  Enemy->idle());
 ```
 
 ## 4.2 優先度の表現
@@ -154,7 +154,7 @@ request(10,  Enemy->idle);
 
 ```mn
 const int kThinkPriority = 50;
-request(kThinkPriority, Enemy->think);
+request(kThinkPriority, Enemy->think());
 ```
 
 ## 4.3 整形（長い場合）
@@ -162,7 +162,7 @@ request(kThinkPriority, Enemy->think);
 ```mn
 request(
     kThinkPriority,
-    Enemy->think
+    Enemy->think()
 );
 ```
 

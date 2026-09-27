@@ -9,11 +9,11 @@ phantom EnemyTemplate
 {
     int mHp;
 
-    action main
+    action main()
     {
     }
 
-    action damage
+    action damage()
     {
     }
 }

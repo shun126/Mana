@@ -9,11 +9,11 @@ actor Guard
 {
     bool mAlert;
 
-    action watch
+    action watch()
     {
     }
 
-    action move
+    action move()
     {
     }
 }
@@ -30,7 +30,7 @@ actor Guide
 {
     int mTalkCount;
 
-    action init
+    action init()
     {
         mTalkCount = 0;
     }
@@ -51,10 +51,10 @@ This lets you represent, for example:
 An Action is what a Request targets.
 
 ```mana
-request(3, Guard->move);
+request(3, Guard->move());
 ```
 
-Here `Guard->move` is a reference to an Action.
+Here `Guard->move()` is a reference to an Action.
 
 Putting the Action inside the Actor makes it clear in the code whose responsibility that behaviour is.
 
@@ -83,7 +83,7 @@ int clampHp(int hp)
 An Action, on the other hand, takes part in the Actor's execution model and is affected by Request and Priority.
 
 ```mana
-request(5, Enemy->damage);
+request(5, Enemy->damage());
 ```
 
 Roughly, they divide like this:
@@ -125,12 +125,12 @@ actor Door
 {
     bool mOpened;
 
-    action init
+    action init()
     {
         mOpened = false;
     }
 
-    action open
+    action open()
     {
         if (mOpened)
             return;
@@ -154,12 +154,12 @@ actor NPC
 {
     int mState;
 
-    action init
+    action init()
     {
         mState = 0;
     }
 
-    action main
+    action main()
     {
         print("NPC started\n");
     }
@@ -187,9 +187,9 @@ splitting the responsibilities like this suits Mana's design better:
 
 ```text
 EventController
-    ├─ Request Guide->talk
-    ├─ Request Gate->open
-    └─ Request Guard->move
+    ├─ Request Guide->talk()
+    ├─ Request Gate->open()
+    └─ Request Guard->move()
 ```
 
 ## How to think when designing Actors and Actions

@@ -6,9 +6,9 @@ const int kRequestPriority = 1;
 
 struct Helper
 {
-    void CallOther(actor a, int b)
+    void CallOther(Actor a, int b)
     {
-        request(kRequestPriority, a->talk);
+        request(kRequestPriority, a->talk());
         yield();
     }
 }
@@ -16,6 +16,6 @@ struct Helper
 void Main()
 {
     Helper h;
-    actor a;
+    Actor a;
     h.CallOther(a, 1);
 }

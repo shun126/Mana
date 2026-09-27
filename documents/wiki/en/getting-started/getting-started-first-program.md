@@ -9,7 +9,7 @@ Type the following **whole file** into your editor and save it in the Mana folde
 ```mana
 actor Hello
 {
-    action main
+    action main()
     {
         print("Hello, Mana!\n");
     }
@@ -42,7 +42,7 @@ mana examples/tutorial/01-hello.mn
 
 `actor Hello` defines an Actor named `Hello`. `Hello` is a name you chose.
 
-The `action main` inside it defines work the Actor does. `main` is a special Action name that runs at startup. For now, remember that this is where you write the first thing to run.
+The `action main()` inside it defines work the Actor does. `main` is a special Action name that runs at startup. For now, remember that this is where you write the first thing to run.
 
 `print("Hello, Mana!\n");` is a statement that outputs text. In the examples so far, output goes to the terminal.
 
