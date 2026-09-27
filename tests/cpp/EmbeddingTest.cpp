@@ -346,6 +346,8 @@ namespace
 	{
 		BeginCase("ActorReturningGlobalFunctionNeedsParentheses");
 		const auto explicitEmpty = CompileSource({ { "main.mn", "actor current() { return self; } actor Root { action main() { current(); } }" } }, "main.mn");
+		if (!explicitEmpty.mSucceeded)
+			std::printf("%s", DiagnosticsToString(explicitEmpty).c_str());
 		Check(explicitEmpty.mSucceeded, "actor-returning global function with parentheses should compile");
 		const auto omitted = CompileSource({ { "main.mn", "actor current { return self; }" } }, "main.mn");
 		Check(!omitted.mSucceeded, "actor-returning global function cannot omit parentheses");
