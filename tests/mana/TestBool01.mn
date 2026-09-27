@@ -15,7 +15,7 @@ bool gFlagFromInt = 1;
 
 actor BoolActor
 {
-    action main
+    action main()
     {
         bool localFlag = kBoolOn;
         if (localFlag && gFlagInitialized)

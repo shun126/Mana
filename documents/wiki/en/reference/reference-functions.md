@@ -13,6 +13,13 @@ return_type functionName(arguments)
 }
 ```
 
+Global and Struct member Function definitions with no arguments may omit empty
+`()` as shorthand; definitions with arguments require parentheses. Calls always
+require `()`, such as `functionName()` or `counter.reset()`.
+
+For example, `Actor current() { ... }` and `Actor current { ... }` define a global
+Function returning an Actor, while `actor current { ... }` declares an Actor.
+
 Example:
 
 ```mana
@@ -27,7 +34,7 @@ A Function can be called from an Action or from another Function.
 ```mana
 actor FunctionExample
 {
-    action main
+    action main()
     {
         int value = add(2, 3);
         print("%d\n", value);
@@ -46,7 +53,7 @@ float distance(float x, float y)
 }
 ```
 
-The type can be a built-in type, `actor` or a user-defined type.
+The type can be a built-in type, including `Actor`, or a user-defined type.
 
 ## Return values
 
@@ -87,7 +94,7 @@ struct Counter
 
 actor CounterExample
 {
-    action main
+    action main()
     {
         Counter counter;
         counter.reset();

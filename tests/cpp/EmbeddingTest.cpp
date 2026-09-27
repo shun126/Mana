@@ -236,8 +236,8 @@ namespace
 			{ "main.mn",
 			  "actor Root\n"
 			  "{\n"
-			  "    action init { }\n"
-			  "    action main { print(\"hello\\n\"); }\n"
+			  "    action init() { }\n"
+			  "    action main() { print(\"hello\\n\"); }\n"
 			  "}\n" } }, "main.mn");
 
 		Check(result.mSucceeded, "compile should succeed");
@@ -253,8 +253,8 @@ namespace
 			{ "main.mn",
 			  "actor Root\n"
 			  "{\n"
-			  "    action init { }\n"
-			  "    action main { print(\"hello\\n\"); }\n"
+			  "    action init() { }\n"
+			  "    action main() { print(\"hello\\n\"); }\n"
 			  "}\n" } };
 
 		const mana::CompileResult first = CompileSource(files, "main.mn");
@@ -286,6 +286,100 @@ namespace
 		CheckContains(DiagnosticsToString(result), "unable to open", "diagnostic should say what failed");
 	}
 
+	void TestActionParenthesesAreOptional()
+	{
+		BeginCase("ActionParenthesesAreOptional");
+		const auto explicitEmpty = CompileSource({ { "main.mn", "actor A { action main() {} }" } }, "main.mn");
+		Check(explicitEmpty.mSucceeded, "action with empty parentheses should compile");
+		const auto omitted = CompileSource({ { "main.mn", "actor A { action main {} }" } }, "main.mn");
+		Check(omitted.mSucceeded, "action without parentheses should compile");
+	}
+
+	void TestActionReferenceParenthesesAreOptional()
+	{
+		BeginCase("ActionReferenceParenthesesAreOptional");
+		const char* const statements[] = {
+			"request(1, A->ping);",
+			"request(1, A->ping());",
+			"request(1, self->ping);",
+			"awaitStart(1, A->ping);",
+			"awaitStart(1, A->ping());",
+			"awaitCompletion(1, A->ping);",
+			"awaitCompletion(1, A->ping());"
+		};
+		for (const char* statement : statements)
+		{
+			const std::string source = "actor A { action ping {} } actor Root { action ping {} action main() { " + std::string(statement) + " } }";
+			const auto result = CompileSource({ { "main.mn", source } }, "main.mn");
+			Check(result.mSucceeded, "action reference should compile with or without empty parentheses");
+		}
+		const auto unsupported = CompileSource({ { "main.mn", "actor A { action ping {} } actor Root { action main() { request(1, A->ping(1)); } }" } }, "main.mn");
+		Check(!unsupported.mSucceeded, "action arguments should be rejected until supported");
+	}
+
+	void TestFunctionDefinitionParenthesesRules()
+	{
+		BeginCase("FunctionDefinitionParenthesesRules");
+		const char* const sources[] = {
+			"int answer() { return 42; } struct Helper { void touch() {} } actor Root { action main() { Helper helper; helper.touch(); print(\"%d\", answer()); } }",
+			"int answer() { return 42; } struct Helper { void touch {} } actor Root { action main() { Helper helper; helper.touch(); print(\"%d\", answer()); } }",
+			"int answer { return 42; } struct Helper { void touch {} } actor Root { action main() { Helper helper; helper.touch(); print(\"%d\", answer()); } }"
+		};
+		for (const char* source : sources)
+		{
+			const auto result = CompileSource({ { "main.mn", source } }, "main.mn");
+			Check(result.mSucceeded, "global and member function definitions should compile with or without empty parentheses");
+		}
+		const auto parameterized = CompileSource({ { "main.mn", "int answer(int value) { return value; }" } }, "main.mn");
+		Check(parameterized.mSucceeded, "parameterized function definitions require parentheses");
+		const char* const parameterizedWithoutParentheses[] = {
+			"int answer int value { return value; }",
+			"struct Helper { int answer int value { return value; } }"
+		};
+		for (const char* source : parameterizedWithoutParentheses)
+		{
+			const auto result = CompileSource({ { "main.mn", source } }, "main.mn");
+			Check(!result.mSucceeded, "parameterized function definitions without parentheses should be rejected");
+		}
+		const char* const callsWithoutParentheses[] = {
+			"int answer() { return 42; } actor Root { action main() { answer; } }",
+			"struct Helper { void touch {} } actor Root { action main() { Helper helper; helper.touch; } }"
+		};
+		for (const char* source : callsWithoutParentheses)
+		{
+			const auto result = CompileSource({ { "main.mn", source } }, "main.mn");
+			Check(!result.mSucceeded, "function calls without parentheses should be rejected");
+		}
+	}
+
+	void TestActorTypeAndDeclarationAreDistinct()
+	{
+		BeginCase("ActorTypeAndDeclarationAreDistinct");
+		const char* const validSources[] = {
+			"Actor current() { return self; } actor Root { action main() { Actor target = current(); } }",
+			"Actor current { return self; } Actor identity(Actor value) { return value; } actor Root { action main() { Actor target = identity(current()); } }",
+			"struct Helper { Actor current { return self; } } actor Root { action main() { Helper helper; helper.current(); } }"
+		};
+		for (const char* source : validSources)
+		{
+			const auto result = CompileSource({ { "main.mn", source } }, "main.mn");
+			if (!result.mSucceeded)
+				std::printf("%s", DiagnosticsToString(result).c_str());
+			Check(result.mSucceeded, "Actor type and actor declarations should remain distinct");
+		}
+		const char* const invalidSources[] = {
+			"actor current() { return self; }",
+			"actor Root { action main() { actor target; } }",
+			"Actor Root { action main() {} }",
+			"actor Actor { action main() {} }"
+		};
+		for (const char* source : invalidSources)
+		{
+			const auto result = CompileSource({ { "main.mn", source } }, "main.mn");
+			Check(!result.mSucceeded, "old actor type syntax and Actor as a user-defined name should be rejected");
+		}
+	}
+
 	void TestDiagnosticCarriesPosition()
 	{
 		BeginCase("DiagnosticCarriesPosition");
@@ -295,7 +389,7 @@ namespace
 			{ "broken.mn",
 			  "actor Broken\n"
 			  "{\n"
-			  "    action main { this is not mana; }\n"
+			  "    action main() { this is not mana; }\n"
 			  "}\n" } }, "main.mn");
 
 		Check(!result.mSucceeded, "compile should fail");
@@ -326,7 +420,7 @@ namespace
 		resolver->mFiles["main.mn"] =
 			"actor Broken\n"
 			"{\n"
-			"    action main { this is not mana; }\n"
+			"    action main() { this is not mana; }\n"
 			"}\n";
 
 		mana::CompileOptions options;
@@ -364,8 +458,8 @@ namespace
 		const std::string body =
 			"actor Root\r\n"
 			"{\r\n"
-			"    action init { }\r\n"
-			"    action main { print(\"crlf\\n\"); }\n"
+			"    action init() { }\r\n"
+			"    action main() { print(\"crlf\\n\"); }\n"
 			"}\n";
 
 		const mana::CompileResult result = CompileSource({ { "main.mn", body } }, "main.mn");
@@ -454,14 +548,14 @@ namespace
 			{ "main.mn",
 			  "actor Bystander\n"
 			  "{\n"
-			  "    action init { }\n"
-			  "    action main { print(\"bystander ran\\n\"); }\n"
+			  "    action init() { }\n"
+			  "    action main() { print(\"bystander ran\\n\"); }\n"
 			  "}\n"
 			  "\n"
 			  "actor Root\n"
 			  "{\n"
-			  "    action init { }\n"
-			  "    action main\n"
+			  "    action init() { }\n"
+			  "    action main()\n"
 			  "    {\n"
 			  "        int numerator = 1;\n"
 			  "        int denominator = 0;\n"
@@ -492,8 +586,8 @@ namespace
 			{ "main.mn",
 			  "actor Root\n"
 			  "{\n"
-			  "    action init { }\n"
-			  "    action main\n"
+			  "    action init() { }\n"
+			  "    action main()\n"
 			  "    {\n"
 			  "        int values[4];\n"
 			  "        int index = 100;\n"
@@ -527,8 +621,8 @@ namespace
 			{ "main.mn",
 			  "actor Root\n"
 			  "{\n"
-			  "    action init { }\n"
-			  "    action main\n"
+			  "    action init() { }\n"
+			  "    action main()\n"
 			  "    {\n"
 			  "        int values[4];\n"
 			  "        int index = 1073741824;\n"
@@ -572,8 +666,8 @@ namespace
 			  "\n"
 			  "actor Root\n"
 			  "{\n"
-			  "    action init { }\n"
-			  "    action main\n"
+			  "    action init() { }\n"
+			  "    action main()\n"
 			  "    {\n"
 			  "        Point point;\n"
 			  "        point.x = 11;\n"
@@ -625,8 +719,8 @@ namespace
 			  "\n"
 			  "actor Root\n"
 			  "{\n"
-			  "    action init { }\n"
-			  "    action main { print(\"sum %d\\n\", nativeAdd(3, 4)); }\n"
+			  "    action init() { }\n"
+			  "    action main() { print(\"sum %d\\n\", nativeAdd(3, 4)); }\n"
 			  "}\n" } }, "main.mn");
 
 		Check(result.mSucceeded, "compile should succeed");
@@ -658,8 +752,8 @@ namespace
 native void delay(float seconds);
 int gInitialized = 1;
 actor Root {
- action main { print("start\n"); delay(0.5); print("done\n"); delay(0.0); print("zero\n"); }
- action urgent { delay(0.25); print("urgent\n"); }
+ action main() { print("start\n"); delay(0.5); print("done\n"); delay(0.0); print("zero\n"); }
+ action urgent() { delay(0.25); print("urgent\n"); }
 }
 )" } }, "main.mn");
 		Check(result.mSucceeded, "delay source should compile");
@@ -713,7 +807,7 @@ actor Root {
 		auto result = CompileSource({ { "main.mn", R"(
 native void delay(float seconds);
 actor Root {
- action wait { delay(0.05); print("waited\n"); }
+ action wait() { delay(0.05); print("waited\n"); }
 }
 )" } }, "main.mn");
 		Check(result.mSucceeded, "delay source should compile");
@@ -746,16 +840,16 @@ actor Root {
 		auto result = CompileSource({ { "main.mn", R"(
 native void delay(float seconds);
 actor Slow {
- action init { delay(10.0); print("slow init\n"); }
- action main { print("slow main\n"); }
- action event { print("event\n"); }
+ action init() { delay(10.0); print("slow init\n"); }
+ action main() { print("slow main\n"); }
+ action event() { print("event\n"); }
 }
 actor Fast {
- action init { print("fast init\n"); }
- action main { print("fast main\n"); }
+ action init() { print("fast init\n"); }
+ action main() { print("fast main\n"); }
 }
-actor MainOnly { action main { print("main only\n"); } }
-actor InitOnly { action init { print("init only\n"); } }
+actor MainOnly { action main() { print("main only\n"); } }
+actor InitOnly { action init() { print("init only\n"); } }
 )" } }, "main.mn");
 		Check(result.mSucceeded, "startup source should compile");
 		if (!result.mSucceeded) return;
@@ -800,7 +894,7 @@ void early(int x) {
 }
 int trailing() { return 9; print("unreachable\n"); }
 actor Event {
- action main {
+ action main() {
   print("%d %d %d %d %d %d\n", remainingKeys(3, 5), remainingKeys(3, 1), nested(2), nested(1), nested(0), trailing());
   early(1); early(0);
   observe();
@@ -841,7 +935,7 @@ actor Event {
 	void TestReturnBranchTargets()
 	{
 		BeginCase("ReturnBranchTargets");
-		auto result = CompileSource({ { "main.mn", "int f() { return 1; } actor A { action main { f(); return; } }" } }, "main.mn");
+		auto result = CompileSource({ { "main.mn", "int f() { return 1; } actor A { action main() { f(); return; } }" } }, "main.mn");
 		Check(result.mSucceeded, "branch target source should compile");
 		if (!result.mSucceeded) return;
 		const auto* header = reinterpret_cast<const mana::FileHeader*>(result.mProgramImage.data());
@@ -880,6 +974,10 @@ int main()
 	TestCompileFromMemory();
 	TestCompileIsRepeatable();
 	TestMissingSourceIsReported();
+	TestActionParenthesesAreOptional();
+	TestActionReferenceParenthesesAreOptional();
+	TestFunctionDefinitionParenthesesRules();
+	TestActorTypeAndDeclarationAreDistinct();
 	TestDiagnosticCarriesPosition();
 	TestDiagnosticHandlerThrowIsContained();
 	TestLineEndingsAreNormalised();

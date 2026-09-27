@@ -7,7 +7,7 @@ Its syntax is very similar to an Actor's.
 ```mana
 phantom EnemyTemplate
 {
-    action appear
+    action appear()
     {
         print("Enemy appeared\n");
     }
@@ -23,7 +23,7 @@ An ordinary `actor` is instantiated when the Program Image is loaded into the VM
 ```mana
 actor Guide
 {
-    action main
+    action main()
     {
     }
 }

@@ -51,7 +51,7 @@ actor Door
 {
     bool mOpened;
 
-    action init
+    action init()
     {
         mOpened = false;
     }
@@ -65,7 +65,7 @@ Declared inside the block of an Action or Function.
 ```mana
 actor Counter
 {
-    action main
+    action main()
     {
         int count = 0;
         count = count + 1;
@@ -86,7 +86,7 @@ struct Position
 
 actor PositionExample
 {
-    action main
+    action main()
     {
         Position p;
         p.x = 10.0;
@@ -102,7 +102,7 @@ Variable declarations can use fixed-length arrays.
 ```mana
 actor ArrayExample
 {
-    action main
+    action main()
     {
         int values[4];
         values[0] = 10;
@@ -118,7 +118,7 @@ const int kValueCount = 4;
 
 actor ArrayWithConstant
 {
-    action main
+    action main()
     {
         int values[kValueCount];
     }

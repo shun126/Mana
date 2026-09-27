@@ -9,16 +9,17 @@ Mana では、Actor 同士の協調を通常の Function 呼び出しだけで�
 構文:
 
 ```mana
-request(priority, actor_expression->actionName);
+request(priority, actor_expression->actionName());
 ```
 
 例:
 
 ```mana
-request(10, NPC->talk);
+request(10, NPC->talk());
 ```
 
 第1引数は Priority、第2引数は Action 参照です。
+`()` を付けた形が正式な構文で、空の `()` は糖衣構文として省略できます。`Actor->action` と `Actor->action()` はどちらも引数なしの Action を参照します。これ自体が Action を実行するのではなく、`request` が実行を要求します。Action の引数はまだ使用できません。
 
 Priority は値が大きいほど高くなります。
 
@@ -27,28 +28,28 @@ Priority は値が大きいほど高くなります。
 推奨構文は `->` です。
 
 ```mana
-NPC->talk
+NPC->talk()
 ```
 
 namespace を含む場合:
 
 ```mana
-Game::NPC::Shopkeeper->talk
+Game::NPC::Shopkeeper->talk()
 ```
 
 Actor 型の式も使用できます。
 
 ```mana
-actor target;
-request(1, target->talk);
+Actor target;
+request(1, target->talk());
 ```
 
-現行Parserは `expression->actionName` を Action 参照として受け付けます。
+Parser は `expression->actionName()` を Action 参照として受け付けます。
 
 旧形式:
 
 ```mana
-NPC::talk
+NPC::talk()
 ```
 
 も互換構文として認識されますが、deprecated warning が出ます。新しいコードでは使用しないでください。
@@ -58,7 +59,7 @@ NPC::talk
 通常の `request` は Action の完了を待ちません。
 
 ```mana
-request(10, NPC->talk);
+request(10, NPC->talk());
 print("continue\n");
 ```
 
@@ -87,7 +88,7 @@ Request を送った Actor は、そのまま後続処理を続けます。
 ## `awaitStart`
 
 ```mana
-awaitStart(priority, actor_expression->actionName);
+awaitStart(priority, actor_expression->actionName());
 ```
 
 Request を送り、対象 Actor がその Priority を開始できる状態になるまで呼び出し側を待機させます。
@@ -95,13 +96,13 @@ Request を送り、対象 Actor がその Priority を開始できる状態に�
 要求が受理された場合、対象 Actor の現在 Priority が要求 Priority 以下になった時点で待機を解除します。要求した Action の最初の文が実行済みであることまでは保証しません。
 
 ```mana
-awaitStart(10, NPC->talk);
+awaitStart(10, NPC->talk());
 ```
 
 ## `awaitCompletion`
 
 ```mana
-awaitCompletion(priority, actor_expression->actionName);
+awaitCompletion(priority, actor_expression->actionName());
 ```
 
 Request を送り、その Priority の処理が完了するまで待機します。
@@ -109,7 +110,7 @@ Request を送り、その Priority の処理が完了するまで待機しま�
 要求が受理された場合、対象 Actor の現在 Priority が要求 Priority 未満になった時点で待機を解除します。要求ごとの完了通知を保持して待つ仕組みではありません。
 
 ```mana
-awaitCompletion(10, NPC->talk);
+awaitCompletion(10, NPC->talk());
 ```
 
 ## await の要求が受理されない場合
@@ -121,7 +122,7 @@ awaitCompletion(10, NPC->talk);
 `awaitStart` と `awaitCompletion` で `self` を対象にすると、現行VMはスクリプトエラーにします。
 
 ```mana
-awaitCompletion(10, self->talk); // error
+awaitCompletion(10, self->talk()); // error
 ```
 
 自分自身を待機対象にすると、待機中の Actor 自身が進まなければ完了できないためです。
@@ -135,7 +136,7 @@ Request が受理されると、送信元 Actor は対象 Action の `sender` �
 ```mana
 actor NPC
 {
-    action talk
+    action talk()
     {
         // sender はこの Action を Request した Actor
     }

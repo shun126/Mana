@@ -3,7 +3,7 @@
 In Mana, you use a Request when you want an Actor to run an Action.
 
 ```mana
-request(3, Guard->move);
+request(3, Guard->move());
 ```
 
 This expression asks the `Guard` Actor to run its `move` Action at Priority 3.
@@ -17,7 +17,7 @@ A Request is different: it registers the Action in the target Actor's execution 
 ```text
 EventController
       │
-      │ request(3, Guard->move)
+      │ request(3, Guard->move())
       ▼
     Guard
       │
@@ -69,7 +69,7 @@ If a Request at Priority 3 is already registered and you Request a different Act
 Guard
 priority 3 : talk
 
-request(3, Guard->move)
+request(3, Guard->move())
         ↓
 Not accepted, because the same Priority is in use
 ```
@@ -110,7 +110,7 @@ In an Action that received a Request, `sender` refers to who sent that Request.
 ```mana
 actor Guard
 {
-    action talk
+    action talk()
     {
         if (sender == Guide)
         {

@@ -28,7 +28,7 @@ Replace `hello.mn` with the following. This example is **code that fails to comp
 ```mana
 actor Hello
 {
-    action main
+    action main()
     {
         print("Hello, Mana!\n")
     }

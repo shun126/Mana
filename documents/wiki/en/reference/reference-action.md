@@ -7,7 +7,7 @@ Unlike a Function, an Action is a Request target, and it is started, suspended a
 ## Syntax
 
 ```mana
-action actionName
+action actionName()
 {
     statements
 }
@@ -18,7 +18,7 @@ Example:
 ```mana
 actor NPC
 {
-    action talk
+    action talk()
     {
         print("Hello\n");
     }
@@ -27,10 +27,12 @@ actor NPC
 
 ## Arguments and return values
 
-In the current syntax, an Action has no arguments and no return value.
+An Action currently has no arguments and no return value. The form with `()`
+is canonical; omitting it is shorthand. `action talk` and `action talk()`
+define the same Action.
 
 ```mana
-action talk
+action talk()
 {
 }
 ```
@@ -42,26 +44,26 @@ To share values between Actors, use the Actor's state, global data, Structs, Nat
 An Action can be run with `request`, `awaitStart`, `awaitCompletion` and so on.
 
 ```mana
-request(1, NPC->talk);
+request(1, NPC->talk());
 ```
 
-`NPC->talk` is an Action reference.
+`NPC->talk()` is an Action reference.
 
 ## `->` and `::`
 
 Action references use `->`.
 
 ```mana
-NPC->talk
+NPC->talk()
 ```
 
 Namespace qualification uses `::`.
 
 ```mana
-Game::NPC::Shopkeeper->talk
+Game::NPC::Shopkeeper->talk()
 ```
 
-The old form `Actor::action` remains in the compiler as compatibility syntax, but it gives a deprecated warning. In new code, use `->`.
+The old form `Actor::action()` remains in the compiler as compatibility syntax, but it gives a deprecated warning. In new code, use `Actor->action()`.
 
 ## `init` and `main`
 
@@ -70,11 +72,11 @@ The old form `Actor::action` remains in the compiler as compatibility syntax, bu
 ```mana
 actor Example
 {
-    action init
+    action init()
     {
     }
 
-    action main
+    action main()
     {
     }
 }
@@ -95,7 +97,7 @@ Example:
 ```mana
 actor NPC
 {
-    action talk
+    action talk()
     {
         print("priority = %d\n", priority);
     }

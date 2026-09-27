@@ -17,7 +17,7 @@ lesson/
 ```mana
 actor Guide
 {
-    action talk
+    action talk()
     {
         print("Guide: Welcome!\n");
     }
@@ -25,7 +25,7 @@ actor Guide
 
 actor Gate
 {
-    action open
+    action open()
     {
         print("Gate: Open.\n");
     }
@@ -39,10 +39,10 @@ import "town.mn";
 
 actor Event
 {
-    action main
+    action main()
     {
-        awaitCompletion(10, Guide->talk);
-        awaitCompletion(10, Gate->open);
+        awaitCompletion(10, Guide->talk());
+        awaitCompletion(10, Gate->open());
         print("Event: Finished.\n");
     }
 }

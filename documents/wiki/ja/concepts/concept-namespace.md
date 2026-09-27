@@ -52,7 +52,7 @@ Game::Dungeon::Guard
 Mana では `::` を Namespace の修飾に使います。
 
 ```mana
-request(10, Game::Town::Guard->talk);
+request(10, Game::Town::Guard->talk());
 ```
 
 一方、`->` は Actor と Action の関係を表します。
@@ -74,9 +74,9 @@ using Game::Town;
 
 actor EventController
 {
-    action main
+    action main()
     {
-        request(10, Guard->talk);
+        request(10, Guard->talk());
     }
 }
 ```
@@ -102,9 +102,9 @@ using Game::Town;
 
 actor Controller
 {
-    action main
+    action main()
     {
-        request(1, Guard->talk);
+        request(1, Guard->talk());
     }
 }
 
@@ -112,7 +112,7 @@ namespace Game::Town
 {
     actor Guard
     {
-        action talk
+        action talk()
         {
         }
     }
@@ -143,7 +143,7 @@ event.mn      -> Game::Event
 その場合は完全修飾名で意図を明示します。
 
 ```mana
-request(10, Game::Town::Guard->talk);
+request(10, Game::Town::Guard->talk());
 ```
 
 短さよりも、どの Actor を参照しているかが明確であることを優先してください。

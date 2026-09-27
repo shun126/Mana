@@ -371,7 +371,7 @@ namespace mana
 		if (type == GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Actor))
 			return;
 
-		CompileError({ "actor name '", type->GetName(), "' cannot be used as a type. Use 'actor'." });
+		CompileError({ "actor name '", type->GetName(), "' cannot be used as a type. Use 'Actor'." });
 		node->Set(GetTypeDescriptorFactory()->Get(TypeDescriptor::Id::Actor));
 	}
 

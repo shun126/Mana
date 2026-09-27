@@ -9,7 +9,7 @@ A Module is not itself a unit of execution. An `actor` uses the definitions a Mo
 ```mana
 module CommonActions
 {
-    action greet
+    action greet()
     {
         print("Hello\n");
     }
@@ -45,7 +45,7 @@ module Talkable
 
     const int kTalkPriority = 10;
 
-    action talk
+    action talk()
     {
         mTalkCount = mTalkCount + 1;
     }
@@ -61,7 +61,7 @@ namespace Game::NPC
 {
     module Talkable
     {
-        action talk
+        action talk()
         {
         }
     }

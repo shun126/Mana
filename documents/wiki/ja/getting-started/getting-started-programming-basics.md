@@ -15,7 +15,7 @@
 ```mana
 actor Hello
 {
-    action main
+    action main()
     {
         print("Hello, Mana!\n");
     }

@@ -56,12 +56,12 @@ string message = "Hello";
 
 String literals are enclosed in `"`.
 
-## The `actor` type
+## The `Actor` type
 
-To pass a reference to an Actor as an argument of a Function or native Function, you can use the `actor` type.
+To pass a reference to an Actor as an argument of a Function or native Function, use the `Actor` type. Lowercase `actor` is reserved for Actor declarations.
 
 ```mana
-void notify(actor target)
+void notify(Actor target)
 {
 }
 ```
@@ -85,7 +85,7 @@ As with Structs, their members are referred to with `.`.
 ```mana
 actor BuiltInTypeExample
 {
-    action main
+    action main()
     {
         vec3 position;
         position.x = 10.0;
@@ -123,7 +123,7 @@ Structs are covered in detail in [Struct](./reference-struct.md).
 
 `pointer` is a type used mainly for low-level purposes, such as the boundary between the VM and native Functions.
 
-For ordinary game event scripting, we recommend using mainly `int`, `float`, `bool`, `string`, `actor`, the predefined compound types and Struct types.
+For ordinary game event scripting, we recommend using mainly `int`, `float`, `bool`, `string`, `Actor`, the predefined compound types and Struct types.
 
 ## Type checking
 

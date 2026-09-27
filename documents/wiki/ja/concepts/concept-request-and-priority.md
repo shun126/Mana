@@ -3,7 +3,7 @@
 Mana では、Actor に Action を実行してもらうときに Request を使います。
 
 ```mana
-request(3, Guard->move);
+request(3, Guard->move());
 ```
 
 この式は、`Guard` Actor に対して `move` Action を Priority 3 で依頼します。
@@ -17,7 +17,7 @@ Request はそれとは異なり、対象 Actor の実行状態へ Action を登
 ```text
 EventController
       │
-      │ request(3, Guard->move)
+      │ request(3, Guard->move())
       ▼
     Guard
       │
@@ -69,7 +69,7 @@ priority 2 : talk
 Guard
 priority 3 : talk
 
-request(3, Guard->move)
+request(3, Guard->move())
         ↓
 同じPriorityが使用中なので受け付けられない
 ```
@@ -112,7 +112,7 @@ Request を受けた Action では、誰がその Request を送ったかを `se
 ```mana
 actor Guard
 {
-    action talk
+    action talk()
     {
         if (sender == Guide)
         {

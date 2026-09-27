@@ -6,8 +6,8 @@ Mana には、実行中の Actor や Request の文脈を参照するための�
 
 | 名前 | 型 / 種類 | 意味 |
 | --- | --- | --- |
-| `self` | `actor` | 現在実行している Actor |
-| `sender` | `actor` | 現在の Action を Request した Actor |
+| `self` | `Actor` | 現在実行している Actor |
+| `sender` | `Actor` | 現在の Action を Request した Actor |
 | `priority` | `int` | 現在実行中の Action の Priority |
 | `this` | Struct の受信側 | Struct メンバーFunctionで現在の Struct インスタンスを参照するための予約語 |
 | `Nil` | `Nil` | 空の参照を表す特殊値 |
@@ -17,12 +17,12 @@ Mana には、実行中の Actor や Request の文脈を参照するための�
 ```mana
 actor Worker
 {
-    action main
+    action main()
     {
-        request(1, self->update);
+        request(1, self->update());
     }
 
-    action update
+    action update()
     {
     }
 }
@@ -37,9 +37,9 @@ Action や Actor 上で実行される Function から、自分自身へ Request
 ```mana
 actor Receiver
 {
-    action receive
+    action receive()
     {
-        request(1, sender->reply);
+        request(1, sender->reply());
     }
 }
 ```
@@ -53,7 +53,7 @@ actor Receiver
 ```mana
 actor Worker
 {
-    action work
+    action work()
     {
         print("%d\n", priority);
     }

@@ -4,7 +4,7 @@ namespace A
 
     actor B
     {
-        action f
+        action f()
         {
         }
     }
@@ -12,7 +12,7 @@ namespace A
     {
         actor X
         {
-            action f
+            action f()
             {
             }
         }
@@ -23,8 +23,8 @@ using A::B;
 
 actor Root
 {
-    action main
+    action main()
     {
-        request(kRequestPriority, B->f);
+        request(kRequestPriority, B->f());
     }
 }

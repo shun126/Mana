@@ -13,6 +13,10 @@ return_type functionName(arguments)
 }
 ```
 
+グローバル Function と Struct のメンバー Function は、引数がない場合に限り空の `()` を糖衣構文として省略できます。引数がある定義には `()` が必要です。呼び出し時は `functionName()` や `counter.reset()` のように常に `()` が必要です。
+
+たとえば `Actor current() { ... }` と `Actor current { ... }` は Actor を返すグローバル Function の定義で、`actor current { ... }` は Actor 宣言です。
+
 例:
 
 ```mana
@@ -27,7 +31,7 @@ Function は Action や別の Function から呼び出せます。
 ```mana
 actor FunctionExample
 {
-    action main
+    action main()
     {
         int value = add(2, 3);
         print("%d\n", value);
@@ -46,7 +50,7 @@ float distance(float x, float y)
 }
 ```
 
-型には組み込み型、`actor`、ユーザー定義型を使用できます。
+型には `Actor` を含む組み込み型やユーザー定義型を使用できます。
 
 ## 戻り値
 
@@ -87,7 +91,7 @@ struct Counter
 
 actor CounterExample
 {
-    action main
+    action main()
     {
         Counter counter;
         counter.reset();

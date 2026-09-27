@@ -11,17 +11,17 @@ This is the **whole file**. Save it in the Mana folder as `lesson.mn` and run `m
 ```mana
 actor Event
 {
-    action main
+    action main()
     {
-        awaitCompletion(10, Guide->talk);
-        awaitCompletion(10, Gate->open);
+        awaitCompletion(10, Guide->talk());
+        awaitCompletion(10, Gate->open());
         print("Event: Finished.\n");
     }
 }
 
 actor Guide
 {
-    action talk
+    action talk()
     {
         print("Guide: Welcome!\n");
     }
@@ -29,7 +29,7 @@ actor Guide
 
 actor Gate
 {
-    action open
+    action open()
     {
         print("Gate: Open.\n");
     }
@@ -53,7 +53,7 @@ mana examples/tutorial/04-event.mn
 
 ## Making an order with awaitCompletion
 
-`awaitCompletion(10, Guide->talk);` requests the conversation and waits for it to complete before moving on. As with `request`, you give a priority and an Action.
+`awaitCompletion(10, Guide->talk());` requests the conversation and waits for it to complete before moving on. As with `request`, you give a priority and an Action.
 
 In this example nothing else sends requests to the same Actors and the Priority used is free, so the work completes in order.
 
@@ -90,7 +90,7 @@ An Actor cannot use `awaitCompletion` on itself. Putting the work in a different
 
 ## Connecting to a game comes later
 
-What `Gate->open` does is print text, so no real door is drawn or animated yet. When you connect this to a game, you link that part to processing on the C++ side. First, let's add counts and conditions to this event.
+What `Gate->open()` does is print text, so no real door is drawn or animated yet. When you connect this to a game, you link that part to processing on the C++ side. First, let's add counts and conditions to this event.
 ## Read next
 
 Continue with [Remembering state with variables](./tutorial-variables.md).

@@ -15,11 +15,11 @@ struct TestAddressPoint
 
 actor TestAddressRoot
 {
-    action init
+    action init()
     {
     }
 
-    action main
+    action main()
     {
         TestAddressPoint point;
         point.x = 11;

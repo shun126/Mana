@@ -98,14 +98,14 @@ values[index]
 Actor の Action は `->` で参照します。
 
 ```mana
-Enemy->think
-Game::AI::Enemy->think
+Enemy->think()
+Game::AI::Enemy->think()
 ```
 
 Action 参照は `request`、`awaitStart`、`awaitCompletion` などで使用します。
 
 ```mana
-request(10, Enemy->think);
+request(10, Enemy->think());
 ```
 
 `::` は namespace の名前修飾、`->` は Action 参照です。

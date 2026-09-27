@@ -19,7 +19,7 @@ int gRuntimeValue = RuntimeValue();
 
 actor Test
 {
-    action init
+    action init()
     {
         print("constValue: %d\n", gConstValue);
         print("constFloat: %f\n", gConstFloat);
