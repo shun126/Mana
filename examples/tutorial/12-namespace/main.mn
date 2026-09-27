@@ -4,10 +4,10 @@ using Town;
 
 actor Event
 {
-    action main
+    action main()
     {
-        awaitCompletion(10, Guide->talk);
-        awaitCompletion(10, Gate->open);
+        awaitCompletion(10, Guide->talk());
+        awaitCompletion(10, Gate->open());
         print("Event: Finished.\n");
     }
 }

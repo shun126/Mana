@@ -11,17 +11,17 @@
 ```mana
 actor Event
 {
-    action main
+    action main()
     {
-        awaitCompletion(10, Guide->talk);
-        awaitCompletion(10, Gate->open);
+        awaitCompletion(10, Guide->talk());
+        awaitCompletion(10, Gate->open());
         print("Event: Finished.\n");
     }
 }
 
 actor Guide
 {
-    action talk
+    action talk()
     {
         print("Guide: Welcome!\n");
     }
@@ -29,7 +29,7 @@ actor Guide
 
 actor Gate
 {
-    action open
+    action open()
     {
         print("Gate: Open.\n");
     }
@@ -53,7 +53,7 @@ mana examples/tutorial/04-event.mn
 
 ## awaitCompletion で順番を作る
 
-`awaitCompletion(10, Guide->talk);` は会話を依頼し、完了を待ってから次へ進むために使います。書き方は `request` と同じく、優先度と Action を指定します。
+`awaitCompletion(10, Guide->talk());` は会話を依頼し、完了を待ってから次へ進むために使います。書き方は `request` と同じく、優先度と Action を指定します。
 
 この例では、他の処理が同じ Actor へ依頼せず、使う Priority も空いているため、順番に処理を完了できます。
 
@@ -90,7 +90,7 @@ sequenceDiagram
 
 ## ゲームとの接続は次の段階
 
-`Gate->open` の中身は文字の表示なので、現時点では実際の扉の描画やアニメーションは起きません。ゲームへ接続するときは、その部分を C++ 側の処理につなぎます。まずはこのイベントに、回数や条件を加えていきましょう。
+`Gate->open()` の中身は文字の表示なので、現時点では実際の扉の描画やアニメーションは起きません。ゲームへ接続するときは、その部分を C++ 側の処理につなぎます。まずはこのイベントに、回数や条件を加えていきましょう。
 ## 次に読む
 
 [変数で状態を覚える](./tutorial-variables.md)へ進みます。

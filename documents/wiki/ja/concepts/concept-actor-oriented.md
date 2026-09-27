@@ -54,7 +54,7 @@ Actor という名前から、ゲームキャラクターだけを表すよう�
 Actor が別の Actor に何かをしてほしい場合、Mana では Action を直接関数呼び出しするのではなく Request します。
 
 ```mana
-request(3, Guard->move);
+request(3, Guard->move());
 ```
 
 この形にすることで、依頼する側は Guard の内部処理を細かく知る必要がありません。

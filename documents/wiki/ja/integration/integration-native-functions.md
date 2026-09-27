@@ -13,7 +13,7 @@ native int add(int a, int b);
 
 actor Main
 {
-    action main
+    action main()
     {
         int result = add(10, 20);
         print("%d\n", result);

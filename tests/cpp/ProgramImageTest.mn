@@ -5,18 +5,18 @@ Copyright (c) 2024 Shun Moriya
 
 actor TestActor
 {
-    action init
+    action init()
     {
     }
 
-    action main
+    action main()
     {
     }
 }
 
 phantom TestPhantom
 {
-    action init
+    action init()
     {
     }
 }

@@ -26,7 +26,7 @@ struct Status
 ```mana
 actor StatusExample
 {
-    action main
+    action main()
     {
         Status status;
         status.hp = 100;
@@ -66,7 +66,7 @@ struct Unit
 
 actor UnitExample
 {
-    action main
+    action main()
     {
         Unit unit;
         unit.position.x = 10.0;
@@ -94,7 +94,7 @@ struct Counter
 
 actor CounterExample
 {
-    action main
+    action main()
     {
         Counter counter;
         counter.reset();
@@ -109,7 +109,7 @@ struct Helper
 {
     void call(actor target)
     {
-        request(1, target->talk);
+        request(1, target->talk());
     }
 }
 ```
@@ -126,7 +126,7 @@ struct Transform
 
 actor TransformExample
 {
-    action main
+    action main()
     {
         Transform transform;
         transform.reset();

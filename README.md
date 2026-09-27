@@ -23,24 +23,24 @@ You can implement the execution engine easily into your computer game program.
 actor Mother
 {
     int mFlag;
-    action initialize
+    action initialize()
     {
         mFlag = 0;
     }
-    action main
+    action main()
     {
         print("Hi");
-        request(1, Child->talk);
+        request(1, Child->talk());
     }
 }
 
 actor Child
 {
-    action update
+    action update()
     {
         int i;
     }
-    action talk
+    action talk()
     {
         print("Hi");
     }
@@ -56,7 +56,7 @@ namespace Game::AI
 {
     actor Enemy
     {
-        action think
+        action think()
         {
         }
     }
@@ -66,9 +66,9 @@ using Game::AI;
 
 actor Controller
 {
-    action main
+    action main()
     {
-        request(1, Enemy->think);
+        request(1, Enemy->think());
     }
 }
 ````
@@ -101,8 +101,9 @@ tested GitHub Release with two source archives:
 * `mana-runtime-MAJOR.MINOR.PATCH-source.zip` contains the header-only VM in
   `runner/`, its generated `runner/common/Version.h`, the license, and this
   README. Copy `runner/` into a C++17 project to embed the VM.
-* `mana-compiler-MAJOR.MINOR.PATCH-source.zip` adds the compiler to the VM, for
-  hosts such as game engine editors that compile scripts themselves. It
+* `mana-compiler-MAJOR.MINOR.PATCH-embedding.zip` is the package for embedding
+  the compiler together with the VM in hosts such as game engine editors that
+  compile scripts themselves. It
   contains the compiler, command-line driver, runtime, the license, this README,
   and generated `Parser.cpp`, `Parser.hpp`, `Lexer.cpp`, and `Version.h`, so it
   builds without Bison, Flex, or Python. It has no CMake files, documents,

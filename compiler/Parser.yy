@@ -189,8 +189,8 @@ actions			: // empty
 					{ $$ = mParsingDriver->Bind($1, $2); }
 				;
 
-action			: tACTION tIDENTIFIER block
-					{ $$ = mParsingDriver->CreateAction($2, $3); }
+action			: tACTION tIDENTIFIER optional_empty_parens block
+					{ $$ = mParsingDriver->CreateAction($2, $4); }
 				| tEXTEND qualified_name ';'
 					{ $$ = mParsingDriver->CreateExtend($2); }
 				| declaration ';'
@@ -214,6 +214,8 @@ struct_member	: variable_decl ';'
 
 function		: variable_type tIDENTIFIER '(' arg_decls ')' block
 					{ $$ = mParsingDriver->CreateInternalFunction($1, $2, $4, $6); }
+				| variable_type tIDENTIFIER block
+					{ $$ = mParsingDriver->CreateInternalFunction($1, $2, nullptr, $3); }
 				;
 
 variable_type	: tACTOR
@@ -423,17 +425,17 @@ qualified_name	: tIDENTIFIER
 					{ $$ = mParsingDriver->CreateQualifiedName($1, $3); }
 				;
 
-action_ref		: expression tARROW tIDENTIFIER
+action_ref		: expression tARROW tIDENTIFIER optional_empty_parens
 					{
 						$$.actor = $1;
 						$$.action = $3;
 					}
-				| qualified_name tARROW tIDENTIFIER
+				| qualified_name tARROW tIDENTIFIER optional_empty_parens
 					{
 						$$.actor = mParsingDriver->CreateIdentifier($1);
 						$$.action = $3;
 					}
-				| qualified_name tDC tIDENTIFIER
+				| qualified_name tDC tIDENTIFIER optional_empty_parens
 					{
 						if ($1.find("::") != std::string_view::npos)
 						{
@@ -447,6 +449,11 @@ action_ref		: expression tARROW tIDENTIFIER
 						$$.action = $3;
 						$$.legacy = true;
 					}
+				;
+
+optional_empty_parens
+				: // empty
+				| '(' ')'
 				;
 
 cases			: case

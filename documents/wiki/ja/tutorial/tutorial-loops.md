@@ -9,7 +9,7 @@
 ```mana
 actor Event
 {
-    action main
+    action main()
     {
         int remaining = 3;
         while (remaining > 0)
@@ -17,13 +17,13 @@ actor Event
             print("Remaining: %d\n", remaining);
             remaining = remaining - 1;
         }
-        awaitCompletion(10, Gate->open);
+        awaitCompletion(10, Gate->open());
     }
 }
 
 actor Gate
 {
-    action open
+    action open()
     {
         print("Gate: Open.\n");
     }
@@ -72,7 +72,7 @@ for (int i = 0; i < 3; i++)
 {
     print("Step: %d\n", i);
 }
-awaitCompletion(10, Gate->open);
+awaitCompletion(10, Gate->open());
 ```
 
 `for` の括弧内は「最初に行う処理; 続ける条件; 1回終わるたびに行う処理」です。`i++` は値を1増やします。ここでは0、1、2を表示し、門を開きます。

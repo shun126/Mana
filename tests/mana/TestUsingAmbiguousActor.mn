@@ -4,7 +4,7 @@ const int kRequestPriority = 1;
 
 actor X
 {
-    action f
+    action f()
     {
     }
 }
@@ -14,7 +14,7 @@ namespace B
 {
 actor X
 {
-    action f
+    action f()
     {
     }
 }
@@ -25,8 +25,8 @@ using B;
 
 actor Root
 {
-    action main
+    action main()
     {
-        request(kRequestPriority, X->f);
+        request(kRequestPriority, X->f());
     }
 }

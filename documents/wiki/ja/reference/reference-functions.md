@@ -13,6 +13,8 @@ return_type functionName(arguments)
 }
 ```
 
+`()` を付けた形が正式な構文です。引数のない Function の定義では、糖衣構文として空の `()` を省略できます。Struct のメンバー Function も同様です。呼び出し時は `functionName()` や `counter.reset()` のように `()` が必要です。
+
 例:
 
 ```mana
@@ -27,7 +29,7 @@ Function は Action や別の Function から呼び出せます。
 ```mana
 actor FunctionExample
 {
-    action main
+    action main()
     {
         int value = add(2, 3);
         print("%d\n", value);
@@ -87,7 +89,7 @@ struct Counter
 
 actor CounterExample
 {
-    action main
+    action main()
     {
         Counter counter;
         counter.reset();

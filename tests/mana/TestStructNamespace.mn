@@ -32,7 +32,7 @@ A::NsStruct gNamespacedValue;
 // local variables (using namespace)
 actor Root
 {
-    action main
+    action main()
     {
         GlobalStruct localGlobal;
         NsStruct localNamespaced;

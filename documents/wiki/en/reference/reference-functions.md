@@ -13,6 +13,11 @@ return_type functionName(arguments)
 }
 ```
 
+The form with `()` is canonical. For a definition with no arguments, empty
+`()` may be omitted as shorthand. This also applies to Struct member Functions.
+Calls still require `()`, such as
+`functionName()` or `counter.reset()`.
+
 Example:
 
 ```mana
@@ -27,7 +32,7 @@ A Function can be called from an Action or from another Function.
 ```mana
 actor FunctionExample
 {
-    action main
+    action main()
     {
         int value = add(2, 3);
         print("%d\n", value);
@@ -87,7 +92,7 @@ struct Counter
 
 actor CounterExample
 {
-    action main
+    action main()
     {
         Counter counter;
         counter.reset();

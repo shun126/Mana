@@ -124,9 +124,9 @@ So don't treat `lock` in the current implementation as meaning the same as a C++
 These instructions combine asking for an Action to run with waiting.
 
 ```mana
-request(10, NPC->talk);
-awaitStart(10, NPC->talk);
-awaitCompletion(10, NPC->talk);
+request(10, NPC->talk());
+awaitStart(10, NPC->talk());
+awaitCompletion(10, NPC->talk());
 ```
 
 For details, see [Request](./reference-request.md).

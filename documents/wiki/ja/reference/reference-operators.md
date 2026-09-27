@@ -111,11 +111,11 @@ sizeof(Position)
 `->` は Actor の Action を参照するための Mana 固有の演算子です。
 
 ```mana
-Enemy->think
+Enemy->think()
 ```
 
 ```mana
-request(10, Enemy->think);
+request(10, Enemy->think());
 ```
 
 C/C++ のポインタメンバーアクセスとは意味が異なります。
@@ -131,7 +131,7 @@ Game::AI::Enemy
 Action まで指定する場合は組み合わせます。
 
 ```mana
-Game::AI::Enemy->think
+Game::AI::Enemy->think()
 ```
 
 ## 主な優先順位

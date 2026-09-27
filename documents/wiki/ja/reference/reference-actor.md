@@ -20,7 +20,7 @@ actor NPC
 {
     int mTalkCount;
 
-    action talk
+    action talk()
     {
         mTalkCount++;
         print("Hello\n");
@@ -45,7 +45,7 @@ actor Guard
     int mAlertLevel;
     const int kMaxAlert = 3;
 
-    action patrol
+    action patrol()
     {
     }
 }
@@ -75,12 +75,12 @@ Actor がその Action を定義していない場合、その Request は実行
 ```mana
 actor Example
 {
-    action init
+    action init()
     {
         print("init\n");
     }
 
-    action main
+    action main()
     {
         print("main\n");
     }
@@ -100,7 +100,7 @@ actor target;
 Actor 参照に対して Action を指定できます。
 
 ```mana
-request(1, target->talk);
+request(1, target->talk());
 ```
 
 Action 参照の詳細は [Request](./reference-request.md) を参照してください。
@@ -114,7 +114,7 @@ namespace Game::NPC
 {
     actor Shopkeeper
     {
-        action talk
+        action talk()
         {
         }
     }

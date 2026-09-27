@@ -9,14 +9,14 @@
 ```mana
 actor Event
 {
-    action main
+    action main()
     {
         bool hasKey = true;
 
-        awaitCompletion(10, Guide->talk);
+        awaitCompletion(10, Guide->talk());
         if (hasKey)
         {
-            awaitCompletion(10, Gate->open);
+            awaitCompletion(10, Gate->open());
         }
         else
         {
@@ -27,7 +27,7 @@ actor Event
 
 actor Guide
 {
-    action talk
+    action talk()
     {
         print("Guide: Welcome!\n");
     }
@@ -35,7 +35,7 @@ actor Guide
 
 actor Gate
 {
-    action open
+    action open()
     {
         print("Gate: Open.\n");
     }

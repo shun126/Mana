@@ -7,11 +7,11 @@ Copyright (c) 2016 Shun Moriya
 // 0除算はプロセスを落とさず、アクターだけを停止します。
 actor TestDivideByZeroRoot
 {
-    action init
+    action init()
     {
     }
 
-    action main
+    action main()
     {
         int numerator = 10;
         int denominator = 0;

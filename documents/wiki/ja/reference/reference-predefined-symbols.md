@@ -17,12 +17,12 @@ Mana には、実行中の Actor や Request の文脈を参照するための�
 ```mana
 actor Worker
 {
-    action main
+    action main()
     {
-        request(1, self->update);
+        request(1, self->update());
     }
 
-    action update
+    action update()
     {
     }
 }
@@ -37,9 +37,9 @@ Action や Actor 上で実行される Function から、自分自身へ Request
 ```mana
 actor Receiver
 {
-    action receive
+    action receive()
     {
-        request(1, sender->reply);
+        request(1, sender->reply());
     }
 }
 ```
@@ -53,7 +53,7 @@ actor Receiver
 ```mana
 actor Worker
 {
-    action work
+    action work()
     {
         print("%d\n", priority);
     }

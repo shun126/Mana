@@ -9,7 +9,7 @@
 ```mana
 actor Hello
 {
-    action main
+    action main()
     {
         print("Hello, Mana!\n");
     }
@@ -42,7 +42,7 @@ mana examples/tutorial/01-hello.mn
 
 `actor Hello` は、`Hello` という名前の Actor を定義します。`Hello` は自分で付けた名前です。
 
-その中の `action main` は、Actor が行う処理を定義します。`main` は起動時に実行される特別な Action 名です。今は、この中へ最初に動かす処理を書くと覚えてください。
+その中の `action main()` は、Actor が行う処理を定義します。`main` は起動時に実行される特別な Action 名です。今は、この中へ最初に動かす処理を書くと覚えてください。
 
 `print("Hello, Mana!\n");` は文字を出力する文です。ここまでの例では、画面への出力はターミナルに表示されます。
 

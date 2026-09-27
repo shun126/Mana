@@ -65,9 +65,9 @@ import "enemy.mn";
 
 actor Controller
 {
-    action main
+    action main()
     {
-        request(1, Enemy->think);
+        request(1, Enemy->think());
     }
 }
 ```
@@ -76,7 +76,7 @@ actor Controller
 // enemy.mn
 actor Enemy
 {
-    action think
+    action think()
     {
     }
 }

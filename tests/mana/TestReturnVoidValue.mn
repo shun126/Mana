@@ -10,7 +10,7 @@ void extra()
 
 actor Main
 {
-	action main
+	action main()
 	{
 		extra();
 	}

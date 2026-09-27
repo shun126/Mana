@@ -13,7 +13,7 @@ native int nativeAdd(int a, int b);
 ```mana
 actor Main
 {
-    action main
+    action main()
     {
         int value = nativeAdd(10, 20);
         print("%d\n", value);

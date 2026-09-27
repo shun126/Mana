@@ -7,23 +7,23 @@ const int kRequestPriority = 1;
 
 actor Target
 {
-    action ping
+    action ping()
     {
     }
 }
 
 actor Root
 {
-    action ping
+    action ping()
     {
     }
 
-    action main
+    action main()
     {
         actor target;
-        request(kRequestPriority, target->ping);
-        request(kRequestPriority, self->ping);
-        request(kRequestPriority, sender->ping);
-        request(kRequestPriority, Target->ping);
+        request(kRequestPriority, target->ping());
+        request(kRequestPriority, self->ping());
+        request(kRequestPriority, sender->ping());
+        request(kRequestPriority, Target->ping());
     }
 }

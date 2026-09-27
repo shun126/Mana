@@ -53,7 +53,7 @@ const int kMovePriority = 5;
 ```
 
 ```mana
-request(kTalkPriority, NPC->talk);
+request(kTalkPriority, NPC->talk());
 ```
 
 数値を直接書くより、用途が分かりやすくなります。
@@ -67,7 +67,7 @@ const int kValueCount = 4;
 
 actor ArrayExample
 {
-    action main
+    action main()
     {
         int values[kValueCount];
     }

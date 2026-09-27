@@ -19,7 +19,7 @@ using B;
 
 actor Root
 {
-    action main
+    action main()
     {
         S value;
     }

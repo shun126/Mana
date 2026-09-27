@@ -11,16 +11,16 @@ This is the **whole file**. Save it in the Mana folder as `lesson.mn` and run `m
 ```mana
 actor Event
 {
-    action main
+    action main()
     {
         print("Event: Request.\n");
-        request(10, Guide->talk);
+        request(10, Guide->talk());
     }
 }
 
 actor Guide
 {
-    action talk
+    action talk()
     {
         print("Guide: Welcome!\n");
     }
@@ -46,7 +46,7 @@ mana examples/tutorial/03-request.mn
 **Excerpt from the code above:**
 
 ```mana
-request(10, Guide->talk);
+request(10, Guide->talk());
 ```
 
 The values passed to an instruction inside the brackets are called **arguments**. Several arguments are separated by `,`.
@@ -54,7 +54,7 @@ The values passed to an instruction inside the brackets are called **arguments**
 | Part | Meaning |
 | --- | --- |
 | `10` | The Priority. A larger number is higher |
-| `Guide->talk` | The Action `talk` of `Guide` |
+| `Guide->talk()` | The Action `talk` of `Guide` |
 | `->` | Points from the Actor on the left to its Action on the right |
 
 `10` is neither a number of seconds nor a repeat count. These lessons use `10` to begin with, and interrupting by priority comes in a later chapter.
@@ -71,7 +71,7 @@ To open the gate after the conversation ends, you need an instruction that waits
 
 ## Change one thing
 
-Rename `talk` to `greet`. If you change both the definition `action talk` and the target `Guide->talk`, you get the same output.
+Rename `talk` to `greet`. If you change both the definition `action talk()` and the target `Guide->talk()`, you get the same output.
 
 If you change only one of them, the code refers to a name that does not exist. Read the compiler's diagnostics and make the names match.
 ## Read next

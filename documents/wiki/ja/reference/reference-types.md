@@ -85,7 +85,7 @@ void notify(actor target)
 ```mana
 actor BuiltInTypeExample
 {
-    action main
+    action main()
     {
         vec3 position;
         position.x = 10.0;

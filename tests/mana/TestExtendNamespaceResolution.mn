@@ -5,7 +5,7 @@ mana (script)
 // global module
 module BaseModule
 {
-    action init
+    action init()
     {
     }
 }
@@ -15,7 +15,7 @@ namespace B
 {
     module ExtraModule
     {
-        action init
+        action init()
         {
         }
     }

@@ -133,7 +133,7 @@ int add(int a, int b)
 ```mana
 actor NPC
 {
-    action talk
+    action talk()
     {
         if (sender == Nil)
             return;
@@ -152,7 +152,7 @@ A label is written `identifier:`, and a jump `goto identifier;`.
 ```mana
 actor GotoExample
 {
-    action main
+    action main()
     {
         goto Done;
         print("skip\n");
@@ -178,9 +178,9 @@ print("Hello\n");
 Syntax for asking an Actor to run an Action.
 
 ```mana
-request(10, Enemy->think);
-awaitStart(10, Enemy->think);
-awaitCompletion(10, Enemy->think);
+request(10, Enemy->think());
+awaitStart(10, Enemy->think());
+awaitCompletion(10, Enemy->think());
 ```
 
 For the detailed waiting conditions and how they relate to Priority, see [Request](./reference-request.md) and [Execution control](./reference-execution-control.md).

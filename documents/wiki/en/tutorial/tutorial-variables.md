@@ -9,10 +9,10 @@ This is the **whole file**. Replace `lesson.mn` in the Mana folder with it, save
 ```mana
 actor Event
 {
-    action main
+    action main()
     {
-        awaitCompletion(10, Guide->talk);
-        awaitCompletion(10, Guide->talk);
+        awaitCompletion(10, Guide->talk());
+        awaitCompletion(10, Guide->talk());
     }
 }
 
@@ -20,12 +20,12 @@ actor Guide
 {
     int mTalkCount;
 
-    action init
+    action init()
     {
         mTalkCount = 0;
     }
 
-    action talk
+    action talk()
     {
         mTalkCount = mTalkCount + 1;
         print("Talk count: %d\n", mTalkCount);

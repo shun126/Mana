@@ -24,7 +24,7 @@ struct TestStruct1
 
 module TestModule
 {
-    action init
+    action init()
     {
         print("TestActor1::init\n");
     }
@@ -47,7 +47,7 @@ actor TestActor1
     int mIntValue;
     float mFloatValue;
 
-    action init
+    action init()
     {
         print("TestActor1::init\n");
         functionTest(self, 1, 2.0);
@@ -58,20 +58,20 @@ actor TestActor1
         float d;
     }
 
-    action main
+    action main()
     {
         print("TestActor1::main\n");
-        awaitStart(kStartPriority, TestActor2->talk);
-        request(kTalkPriority, TestActor1->talk);
-        awaitCompletion(kCompletionPriority, TestActor2->talk);
+        awaitStart(kStartPriority, TestActor2->talk());
+        request(kTalkPriority, TestActor1->talk());
+        awaitCompletion(kCompletionPriority, TestActor2->talk());
     }
 
-    action talk
+    action talk()
     {
         print("TestActor1::talk\n");
     }
 
-    action sleep
+    action sleep()
     {
         print("TestActor1::sleep\n");
     }
@@ -79,7 +79,7 @@ actor TestActor1
 
 actor TestActor2
 {
-    action talk
+    action talk()
     {
         print("TestActor2::talk\n");
     }
