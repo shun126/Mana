@@ -18,6 +18,10 @@ The form with `()` is canonical. For a definition with no arguments, empty
 Calls still require `()`, such as
 `functionName()` or `counter.reset()`.
 
+A global Function returning the built-in `actor` type must keep `()` even when
+it has no arguments. `actor current { ... }` is an Actor declaration;
+write `actor current() { ... }` for a Function.
+
 Example:
 
 ```mana

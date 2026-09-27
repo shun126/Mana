@@ -214,6 +214,8 @@ struct_member	: variable_decl ';'
 
 function		: variable_type tIDENTIFIER '(' arg_decls ')' block
 					{ $$ = mParsingDriver->CreateInternalFunction($1, $2, $4, $6); }
+				/* At global scope, tACTOR tIDENTIFIER '{' starts an Actor declaration.
+				   An actor-returning global Function therefore requires '()'. */
 				| variable_type tIDENTIFIER block
 					{ $$ = mParsingDriver->CreateInternalFunction($1, $2, nullptr, $3); }
 				;
