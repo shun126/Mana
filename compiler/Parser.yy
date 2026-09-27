@@ -142,6 +142,8 @@ line			: // empty
 declarations	: actor
 				| struct
 				| function
+				| tACTOR tIDENTIFIER '(' arg_decls ')' block
+					{ $$ = mParsingDriver->CreateInternalFunction(mParsingDriver->CreateActorTypeDescription(), $2, $4, $6); }
 				| declaration ';'
 				| tNAMESPACE qualified_name '{' line '}'
 					{ $$ = mParsingDriver->CreateNamespace($2, $4); }
