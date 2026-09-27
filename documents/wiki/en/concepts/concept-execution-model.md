@@ -104,7 +104,7 @@ If, on the other hand, no Action is left to return to, that Actor has nothing to
 `request` is not just a jump instruction.
 
 ```mana
-request(5, Enemy->damage);
+request(5, Enemy->damage());
 ```
 
 This is an operation that adds an execution state for an Action at a new Priority to the target Actor.
@@ -136,7 +136,7 @@ This property suits event flow and synchronising several characters.
 Use it when you don't want to push a long piece of work through all at once, and want to pass it on to the VM's next step.
 
 ```mana
-action update
+action update()
 {
     // Some work
     yield();

@@ -11,16 +11,16 @@
 ```mana
 actor Event
 {
-    action main
+    action main()
     {
         print("Event: Request.\n");
-        request(10, Guide->talk);
+        request(10, Guide->talk());
     }
 }
 
 actor Guide
 {
-    action talk
+    action talk()
     {
         print("Guide: Welcome!\n");
     }
@@ -46,7 +46,7 @@ mana examples/tutorial/03-request.mn
 **上のコードからの抜粋：**
 
 ```mana
-request(10, Guide->talk);
+request(10, Guide->talk());
 ```
 
 括弧の中で命令へ渡す値を **引数**と呼びます。複数の引数は `,` で区切ります。
@@ -54,7 +54,7 @@ request(10, Guide->talk);
 | 部分 | 意味 |
 | --- | --- |
 | `10` | Priority（優先度）。数が大きい方が高い |
-| `Guide->talk` | `Guide` の `talk` という Action |
+| `Guide->talk()` | `Guide` の `talk` という Action |
 | `->` | 左の Actor が持つ、右の Action を指し示す記号 |
 
 `10` は秒数でも繰り返し回数でもありません。この教材ではまず `10` を使い、優先度による割り込みは後の章で学びます。
@@ -71,7 +71,7 @@ request(10, Guide->talk);
 
 ## 一つ変えてみる
 
-`talk` の名前を `greet` に変更してください。定義の `action talk` と、依頼先の `Guide->talk` の両方を変更すると、同じ出力になります。
+`talk` の名前を `greet` に変更してください。定義の `action talk()` と、依頼先の `Guide->talk()` の両方を変更すると、同じ出力になります。
 
 片方だけ変更すると、存在しない名前を参照することになります。コンパイラの診断を読み、名前をそろえて直してみてください。
 ## 次に読む

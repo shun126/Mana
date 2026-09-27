@@ -10,21 +10,21 @@ actor Door
     bool mOpened;
     int mOpenCount;
 
-    action init
+    action init()
     {
         mOpened = false;
         mOpenCount = 0;
     }
 
-    action main
+    action main()
     {
-        request(kOpenPriority, self->open);
+        request(kOpenPriority, self->open());
         yield();
 
         print("door opened: %d count: %d\n", mOpened, mOpenCount);
     }
 
-    action open
+    action open()
     {
         if (mOpened)
             return;

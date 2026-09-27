@@ -9,7 +9,7 @@ Module 自体は実行主体ではありません。`actor` から `extend` す�
 ```mana
 module CommonActions
 {
-    action greet
+    action greet()
     {
         print("Hello\n");
     }
@@ -45,7 +45,7 @@ module Talkable
 
     const int kTalkPriority = 10;
 
-    action talk
+    action talk()
     {
         mTalkCount = mTalkCount + 1;
     }
@@ -61,7 +61,7 @@ namespace Game::NPC
 {
     module Talkable
     {
-        action talk
+        action talk()
         {
         }
     }

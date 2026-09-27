@@ -102,7 +102,7 @@ auto resolver = std::make_shared<MemorySourceResolver>();
 resolver->files["main.mn"] = R"(
 actor Main
 {
-    action main
+    action main()
     {
         print("Hello\n");
     }

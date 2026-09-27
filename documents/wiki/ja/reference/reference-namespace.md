@@ -9,7 +9,7 @@ namespace Game::AI
 {
     actor Enemy
     {
-        action think
+        action think()
         {
         }
     }
@@ -25,7 +25,7 @@ Game::AI::Enemy
 `::` は namespace の名前を修飾する演算子です。Action 参照で使う `->` とは役割が異なります。
 
 ```mana
-request(1, Game::AI::Enemy->think);
+request(1, Game::AI::Enemy->think());
 ```
 
 ## using で namespace を探索対象へ追加する
@@ -35,9 +35,9 @@ using Game::AI;
 
 actor Controller
 {
-    action main
+    action main()
     {
-        request(1, Enemy->think);
+        request(1, Enemy->think());
     }
 }
 ```
@@ -53,7 +53,7 @@ namespace Game::AI
 {
     actor Enemy
     {
-        action think
+        action think()
         {
         }
     }
@@ -81,9 +81,9 @@ using Game::AI;
 
 actor Controller
 {
-    action main
+    action main()
     {
-        request(1, Enemy->think);
+        request(1, Enemy->think());
     }
 }
 
@@ -91,7 +91,7 @@ namespace Game::AI
 {
     actor Enemy
     {
-        action think
+        action think()
         {
         }
     }

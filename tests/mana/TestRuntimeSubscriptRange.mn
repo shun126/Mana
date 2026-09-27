@@ -7,11 +7,11 @@ Copyright (c) 2003 Shun Moriya
 // 実行時に決まる添字の範囲外は、他の変数を壊す前に停止します。
 actor TestSubscriptRangeRoot
 {
-    action init
+    action init()
     {
     }
 
-    action main
+    action main()
     {
         int values[4];
         int index = 100;

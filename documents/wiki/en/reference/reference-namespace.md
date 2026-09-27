@@ -9,7 +9,7 @@ namespace Game::AI
 {
     actor Enemy
     {
-        action think
+        action think()
         {
         }
     }
@@ -25,7 +25,7 @@ Game::AI::Enemy
 `::` is the operator that qualifies a name with a namespace. Its role differs from `->`, used in Action references.
 
 ```mana
-request(1, Game::AI::Enemy->think);
+request(1, Game::AI::Enemy->think());
 ```
 
 ## Adding a namespace to the search with using
@@ -35,9 +35,9 @@ using Game::AI;
 
 actor Controller
 {
-    action main
+    action main()
     {
-        request(1, Enemy->think);
+        request(1, Enemy->think());
     }
 }
 ```
@@ -53,7 +53,7 @@ namespace Game::AI
 {
     actor Enemy
     {
-        action think
+        action think()
         {
         }
     }
@@ -81,9 +81,9 @@ using Game::AI;
 
 actor Controller
 {
-    action main
+    action main()
     {
-        request(1, Enemy->think);
+        request(1, Enemy->think());
     }
 }
 
@@ -91,7 +91,7 @@ namespace Game::AI
 {
     actor Enemy
     {
-        action think
+        action think()
         {
         }
     }

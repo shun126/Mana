@@ -10,7 +10,7 @@ int missing()
 
 actor Main
 {
-	action main
+	action main()
 	{
 		missing();
 	}

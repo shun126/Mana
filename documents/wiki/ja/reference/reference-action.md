@@ -7,7 +7,7 @@ Function と異なり、Action は Request の対象になり、Priority に従�
 ## 構文
 
 ```mana
-action actionName
+action actionName()
 {
     statements
 }
@@ -18,7 +18,7 @@ action actionName
 ```mana
 actor NPC
 {
-    action talk
+    action talk()
     {
         print("Hello\n");
     }
@@ -27,10 +27,10 @@ actor NPC
 
 ## 引数と戻り値
 
-現行構文では Action は引数を持たず、戻り値も持ちません。
+現在、Action は引数も戻り値も持ちません。`()` を付けた形が正式な構文で、省略形は糖衣構文です。`action talk` と `action talk()` は同じ Action を定義します。
 
 ```mana
-action talk
+action talk()
 {
 }
 ```
@@ -42,26 +42,26 @@ Actor 間で値を共有したい場合は、Actor の状態、グローバル�
 Action は `request`、`awaitStart`、`awaitCompletion` などから実行できます。
 
 ```mana
-request(1, NPC->talk);
+request(1, NPC->talk());
 ```
 
-`NPC->talk` は Action 参照です。
+`NPC->talk()` は Action 参照です。
 
 ## `->` と `::`
 
 Action 参照には `->` を使います。
 
 ```mana
-NPC->talk
+NPC->talk()
 ```
 
 namespace の修飾には `::` を使います。
 
 ```mana
-Game::NPC::Shopkeeper->talk
+Game::NPC::Shopkeeper->talk()
 ```
 
-旧形式の `Actor::action` はコンパイラに互換構文として残っていますが、deprecated warning が出ます。新しいコードでは `->` を使用してください。
+旧形式の `Actor::action()` はコンパイラに互換構文として残っていますが、deprecated warning が出ます。新しいコードでは `Actor->action()` を使用してください。
 
 ## `init` と `main`
 
@@ -70,11 +70,11 @@ Game::NPC::Shopkeeper->talk
 ```mana
 actor Example
 {
-    action init
+    action init()
     {
     }
 
-    action main
+    action main()
     {
     }
 }
@@ -95,7 +95,7 @@ Action では、現在の実行状態を表す定義済み値を利用できま�
 ```mana
 actor NPC
 {
-    action talk
+    action talk()
     {
         print("priority = %d\n", priority);
     }

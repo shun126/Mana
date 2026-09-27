@@ -52,7 +52,7 @@ What matters is not whether it is a visible object, but **whether you want to gi
 When an Actor wants another Actor to do something, in Mana it does not call the Action directly like a function; it Requests it.
 
 ```mana
-request(3, Guard->move);
+request(3, Guard->move());
 ```
 
 This way, the side that asks does not need to know the details of how Guard works inside.

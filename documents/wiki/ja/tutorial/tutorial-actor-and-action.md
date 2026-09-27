@@ -11,12 +11,12 @@
 ```mana
 actor Guide
 {
-    action main
+    action main()
     {
         print("Guide: Ready.\n");
     }
 
-    action talk
+    action talk()
     {
         print("Guide: Welcome!\n");
     }

@@ -98,14 +98,14 @@ values[index]
 An Actor's Action is referred to with `->`.
 
 ```mana
-Enemy->think
-Game::AI::Enemy->think
+Enemy->think()
+Game::AI::Enemy->think()
 ```
 
 Action references are used with `request`, `awaitStart`, `awaitCompletion` and so on.
 
 ```mana
-request(10, Enemy->think);
+request(10, Enemy->think());
 ```
 
 `::` qualifies a name with a namespace, and `->` is an Action reference.

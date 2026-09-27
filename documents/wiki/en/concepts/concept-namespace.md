@@ -52,7 +52,7 @@ This way, you can safely use the same role name in different contexts.
 Mana uses `::` to qualify with a namespace.
 
 ```mana
-request(10, Game::Town::Guard->talk);
+request(10, Game::Town::Guard->talk());
 ```
 
 `->`, on the other hand, expresses the relationship between an Actor and an Action.
@@ -74,9 +74,9 @@ using Game::Town;
 
 actor EventController
 {
-    action main
+    action main()
     {
-        request(10, Guard->talk);
+        request(10, Guard->talk());
     }
 }
 ```
@@ -102,9 +102,9 @@ using Game::Town;
 
 actor Controller
 {
-    action main
+    action main()
     {
-        request(1, Guard->talk);
+        request(1, Guard->talk());
     }
 }
 
@@ -112,7 +112,7 @@ namespace Game::Town
 {
     actor Guard
     {
-        action talk
+        action talk()
         {
         }
     }
@@ -143,7 +143,7 @@ Making the file layout resemble the namespace layout can make things easier to f
 In that case, make your intent explicit with the fully qualified name.
 
 ```mana
-request(10, Game::Town::Guard->talk);
+request(10, Game::Town::Guard->talk());
 ```
 
 Prefer making it clear which Actor you refer to over keeping it short.

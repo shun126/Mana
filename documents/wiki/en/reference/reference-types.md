@@ -85,7 +85,7 @@ As with Structs, their members are referred to with `.`.
 ```mana
 actor BuiltInTypeExample
 {
-    action main
+    action main()
     {
         vec3 position;
         position.x = 10.0;

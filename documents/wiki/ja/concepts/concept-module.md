@@ -7,7 +7,7 @@ Mana では、Actor ごとに似た Action を何度も書くより、共通部�
 ```mana
 module CommonActions
 {
-    action greet
+    action greet()
     {
         print("Hello\n");
     }
@@ -69,7 +69,7 @@ namespace Game::NPC
 {
     module Talkable
     {
-        action talk
+        action talk()
         {
             print("Hello\n");
         }

@@ -6,7 +6,7 @@ const int A = 1;
 
 actor Test
 {
-    action init
+    action init()
     {
         A = 2;
     }

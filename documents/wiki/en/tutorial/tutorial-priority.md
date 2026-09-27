@@ -14,23 +14,23 @@ const int kEmergencyPriority = 100;
 
 actor Event
 {
-    action main
+    action main()
     {
-        awaitCompletion(kNormalPriority, Guide->talk);
+        awaitCompletion(kNormalPriority, Guide->talk());
         print("Event: Finished.\n");
     }
 }
 
 actor Guide
 {
-    action talk
+    action talk()
     {
         print("Guide: Talk begins.\n");
-        request(kEmergencyPriority, self->warn);
+        request(kEmergencyPriority, self->warn());
         print("Guide: Talk resumes.\n");
     }
 
-    action warn
+    action warn()
     {
         print("Guide: Watch out!\n");
     }

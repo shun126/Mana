@@ -9,7 +9,7 @@ This is the **whole file**. Save it in the Mana folder as `lesson.mn` and run `m
 ```mana
 actor Event
 {
-    action main
+    action main()
     {
         int remaining = 3;
         while (remaining > 0)
@@ -17,13 +17,13 @@ actor Event
             print("Remaining: %d\n", remaining);
             remaining = remaining - 1;
         }
-        awaitCompletion(10, Gate->open);
+        awaitCompletion(10, Gate->open());
     }
 }
 
 actor Gate
 {
-    action open
+    action open()
     {
         print("Gate: Open.\n");
     }
@@ -72,7 +72,7 @@ for (int i = 0; i < 3; i++)
 {
     print("Step: %d\n", i);
 }
-awaitCompletion(10, Gate->open);
+awaitCompletion(10, Gate->open());
 ```
 
 Inside the brackets of `for` come "what to do first; the condition for continuing; what to do after each round". `i++` increases the value by 1. Here it prints 0, 1 and 2, then opens the gate.

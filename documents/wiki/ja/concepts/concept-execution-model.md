@@ -106,7 +106,7 @@ flowchart TD
 `request` は単なるジャンプ命令ではありません。
 
 ```mana
-request(5, Enemy->damage);
+request(5, Enemy->damage());
 ```
 
 これは対象 Actor に新しい Priority の Action 実行状態を追加する操作です。
@@ -138,7 +138,7 @@ Guide           : 別のActionを進行可能
 長い処理を一度に進め切らず、次の VM の進行へ処理を渡したい場合に使います。
 
 ```mana
-action update
+action update()
 {
     // 何らかの処理
     yield();

@@ -13,7 +13,7 @@ A `native` function has only a declaration; you don't write a body on the Mana s
 ```mana
 actor Main
 {
-    action main
+    action main()
     {
         int value = nativeAdd(10, 20);
         print("%d\n", value);

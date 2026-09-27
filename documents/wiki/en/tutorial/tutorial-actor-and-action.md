@@ -11,12 +11,12 @@ This is the **whole file**. Save it in the Mana folder as `lesson.mn` and run `m
 ```mana
 actor Guide
 {
-    action main
+    action main()
     {
         print("Guide: Ready.\n");
     }
 
-    action talk
+    action talk()
     {
         print("Guide: Welcome!\n");
     }

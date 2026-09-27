@@ -18,7 +18,7 @@ int remainingKeys(int required, int owned)
 
 actor Event
 {
-    action main
+    action main()
     {
         int missing = remainingKeys(3, 1);
         print("Missing keys: %d\n", missing);
@@ -67,7 +67,7 @@ mana examples/tutorial/08-functions.mn
 | 目的 | この教材での書き方 |
 | --- | --- |
 | 必要な鍵の数を計算する | `remainingKeys(3, 1)` |
-| 門に開く行動を依頼する | `awaitCompletion(10, Gate->open)` |
+| 門に開く行動を依頼する | `awaitCompletion(10, Gate->open())` |
 
 ## 値を返さない関数
 

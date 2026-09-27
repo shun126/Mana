@@ -2,7 +2,7 @@ namespace Town
 {
     actor Guide
     {
-        action talk
+        action talk()
         {
             print("Guide: Welcome!\n");
         }
@@ -10,7 +10,7 @@ namespace Town
 
     actor Gate
     {
-        action open
+        action open()
         {
             print("Gate: Open.\n");
         }

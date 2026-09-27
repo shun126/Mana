@@ -17,12 +17,12 @@ Mana has predefined symbols for referring to the context of the running Actor an
 ```mana
 actor Worker
 {
-    action main
+    action main()
     {
-        request(1, self->update);
+        request(1, self->update());
     }
 
-    action update
+    action update()
     {
     }
 }
@@ -37,9 +37,9 @@ It can be used, for example, to send a Request to yourself from an Action or fro
 ```mana
 actor Receiver
 {
-    action receive
+    action receive()
     {
-        request(1, sender->reply);
+        request(1, sender->reply());
     }
 }
 ```
@@ -53,7 +53,7 @@ However, for system Requests the VM itself sends at startup, such as `init` / `m
 ```mana
 actor Worker
 {
-    action work
+    action work()
     {
         print("%d\n", priority);
     }

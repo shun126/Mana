@@ -20,7 +20,7 @@ actor NPC
 {
     int mTalkCount;
 
-    action talk
+    action talk()
     {
         mTalkCount++;
         print("Hello\n");
@@ -45,7 +45,7 @@ actor Guard
     int mAlertLevel;
     const int kMaxAlert = 3;
 
-    action patrol
+    action patrol()
     {
     }
 }
@@ -73,12 +73,12 @@ If an Actor does not define that Action, the Request does not run.
 ```mana
 actor Example
 {
-    action init
+    action init()
     {
         print("init\n");
     }
 
-    action main
+    action main()
     {
         print("main\n");
     }
@@ -100,7 +100,7 @@ actor target;
 You can name an Action on an Actor reference.
 
 ```mana
-request(1, target->talk);
+request(1, target->talk());
 ```
 
 For details on Action references, see [Request](./reference-request.md).
@@ -114,7 +114,7 @@ namespace Game::NPC
 {
     actor Shopkeeper
     {
-        action talk
+        action talk()
         {
         }
     }

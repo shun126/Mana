@@ -8,7 +8,7 @@ struct Helper
 {
     void CallOther(actor a, int b)
     {
-        request(kRequestPriority, a->talk);
+        request(kRequestPriority, a->talk());
         yield();
     }
 }

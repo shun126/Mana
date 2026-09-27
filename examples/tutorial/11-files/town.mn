@@ -1,6 +1,6 @@
 actor Guide
 {
-    action talk
+    action talk()
     {
         print("Guide: Welcome!\n");
     }
@@ -8,7 +8,7 @@ actor Guide
 
 actor Gate
 {
-    action open
+    action open()
     {
         print("Gate: Open.\n");
     }

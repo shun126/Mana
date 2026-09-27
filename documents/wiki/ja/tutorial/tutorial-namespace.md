@@ -13,7 +13,7 @@ namespace Town
 {
     actor Guide
     {
-        action talk
+        action talk()
         {
             print("Guide: Welcome!\n");
         }
@@ -21,7 +21,7 @@ namespace Town
 
     actor Gate
     {
-        action open
+        action open()
         {
             print("Gate: Open.\n");
         }
@@ -42,10 +42,10 @@ using Town;
 
 actor Event
 {
-    action main
+    action main()
     {
-        awaitCompletion(10, Guide->talk);
-        awaitCompletion(10, Gate->open);
+        awaitCompletion(10, Guide->talk());
+        awaitCompletion(10, Gate->open());
         print("Event: Finished.\n");
     }
 }
@@ -80,8 +80,8 @@ mana examples/tutorial/12-namespace/main.mn
 `using Town;` を削除し、main の二つの依頼を次に置き換えてください。
 
 ```mana
-awaitCompletion(10, Town::Guide->talk);
-awaitCompletion(10, Town::Gate->open);
+awaitCompletion(10, Town::Guide->talk());
+awaitCompletion(10, Town::Gate->open());
 ```
 
 同じ出力になれば、完全な名前で参照できています。
@@ -89,7 +89,7 @@ awaitCompletion(10, Town::Gate->open);
 | 記号 | たどるもの |
 | --- | --- |
 | `::` | 名前空間。例：`Town::Guide` |
-| `->` | Actor が持つ Action。例：`Town::Guide->talk` |
+| `->` | Actor が持つ Action。例：`Town::Guide->talk()` |
 
 別の名前空間にも `Guide` があり、複数の `using` によってどちらか分からなくなる場合は、完全な名前で指定します。
 

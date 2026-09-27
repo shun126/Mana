@@ -4,15 +4,15 @@ const int kRequestPriority = 1;
 
 actor A
 {
-    action talk
+    action talk()
     {
     }
 }
 
 actor C
 {
-    action main
+    action main()
     {
-        request(kRequestPriority, A->talk);
+        request(kRequestPriority, A->talk());
     }
 }
