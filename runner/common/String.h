@@ -7,18 +7,13 @@ mana (compiler/library)
 
 #pragma once
 #include "Platform.h"
+#include "WindowsApi.h"
 #include <cstddef>
 #include <cstdint>
+#include <cstring>
 #include <iostream>
 #include <string>
 #include <string_view>
-
-#if defined(MANA_TARGET_WINDOWS)
-#define NOMINMAX
-#include <windows.h>
-#else
-#include <cstring>
-#endif
 
 namespace mana
 {
