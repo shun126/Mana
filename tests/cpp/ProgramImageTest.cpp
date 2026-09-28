@@ -15,6 +15,9 @@ mana (test)
 #include <string>
 #include <vector>
 
+// Defined in ProgramImageLinkTest.cpp.
+bool IsProgramImageLoadedInAnotherTranslationUnit(const mana::ProgramImage& image);
+
 namespace
 {
 	bool Contains(const std::vector<std::string_view>& values, const std::string_view target)
@@ -65,6 +68,12 @@ int main(int argc, char* argv[])
 	}
 
 	int result = 0;
+	if (!IsProgramImageLoadedInAnotherTranslationUnit(image))
+	{
+		std::cerr << "program should be loaded in another translation unit" << std::endl;
+		result = 1;
+	}
+
 	const auto actorNames = image.GetActorNames();
 	if (!Contains(actorNames, "TestActor"))
 	{
