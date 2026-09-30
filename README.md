@@ -99,11 +99,23 @@ The release source packages already include it. To use Mana from a build system
 other than CMake, see [Embedding without CMake](#embedding-without-cmake).
 
 # Installing
-## Release source packages
+## Release packages
 
 Each `vMAJOR.MINOR.PATCH` tag matching `runner/common/Version.json` produces a
-tested draft GitHub Release with two source archives and a Windows x64 command
-line package:
+tested draft GitHub Release with five executable archives and two source archives:
+
+* `mana-MAJOR.MINOR.PATCH-windows-x86.zip` contains the 32-bit Windows `mana.exe`.
+* `mana-MAJOR.MINOR.PATCH-windows-x64.zip` contains the 64-bit Windows `mana.exe`.
+* `mana-MAJOR.MINOR.PATCH-ubuntu-x64.tar.gz` contains the 64-bit Ubuntu `mana` executable.
+* `mana-MAJOR.MINOR.PATCH-macos-x64.tar.gz` contains the Intel macOS `mana` executable.
+* `mana-MAJOR.MINOR.PATCH-macos-arm64.tar.gz` contains the Apple Silicon macOS `mana` executable.
+
+Each executable archive also includes `QUICKSTART.md`, `examples/03-request.mn`,
+the license, and this README. Follow the quick start to run the bundled sample.
+Ubuntu builds target the Ubuntu version used by the release workflow; other
+Linux distributions may need a local build.
+
+The source archives are:
 
 * `mana-runtime-MAJOR.MINOR.PATCH-source.zip` contains the header-only VM in
   `runner/`, its generated `runner/common/Version.h`, the license, and this
@@ -117,9 +129,6 @@ line package:
   examples, or tests; add the sources to your own build as described in
   [Embedding without CMake](#embedding-without-cmake). To build Mana itself,
   use a repository checkout or GitHub's source code archive.
-* `mana-windows-x64-MAJOR.MINOR.PATCH.zip` contains `mana.exe`, the license,
-  this README, and a request example. Extract the archive and run
-  `mana.exe examples/tutorial/03-request.mn` from its top-level directory.
 
 The archives have a single top-level directory. The compiler archive also keeps
 `compiler/Parser.yy` and `compiler/Lexer.l` for developers who want to change
@@ -128,7 +137,7 @@ the grammar; regenerate the parser and lexer from a repository checkout.
 To prepare a release, update `runner/common/Version.json` in the release commit,
 then push the matching tag (for example, `git tag v1.0.0` followed by
 `git push origin v1.0.0`). The release workflow builds and tests that tag and
-creates a draft with all three archives. Review the assets and release notes,
+creates a draft with all seven archives. Review the assets and release notes,
 add the video links, and publish the draft when the videos are public.
 
 ## Requirements
@@ -156,6 +165,24 @@ ctest --test-dir build --output-on-failure
 
 Use a separate build directory for Debug, for example `build-debug` with
 `-DCMAKE_BUILD_TYPE=Debug`.
+
+## Building on macOS
+
+Install Xcode Command Line Tools, then CMake, Bison, Flex, and Python with
+Homebrew. From the repository root:
+
+```sh
+brew install cmake bison flex python
+export BISON_EXECUTABLE="$(brew --prefix bison)/bin/bison"
+export FLEX_EXECUTABLE="$(brew --prefix flex)/bin/flex"
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build --parallel
+ctest --test-dir build --output-on-failure
+./build/mana --version
+```
+
+Both Intel and Apple Silicon builds use the same commands. Use a separate build
+directory for Debug, as on Linux.
 
 ## Building with MSVC
 
