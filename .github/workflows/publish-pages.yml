@@ -28,20 +28,6 @@ on:
       - "CMakeLists.txt"
       - ".github/workflows/publish-pages.yml"
 
-  pull_request:
-    paths:
-      - "documents/pages/**"
-      # Site links switch to a translated Wiki page once it is published.
-      - "documents/wiki/**"
-      - "documents/assets/**"
-      - "documents/tools/**"
-      # The Playground runs the compiler and VM of this commit.
-      - "compiler/**"
-      - "runner/**"
-      - "web/**"
-      - "CMakeLists.txt"
-      - ".github/workflows/publish-pages.yml"
-
   workflow_dispatch:
 
 permissions:

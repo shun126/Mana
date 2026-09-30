@@ -1,4 +1,4 @@
-name: release
+name: Release
 
 on:
   push:
@@ -51,58 +51,107 @@ jobs:
           path: generated-for-windows/
           if-no-files-found: error
 
-  windows-x64:
+  binaries:
     needs: source
-    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            platform: ubuntu-x64
+            binary: build/mana
+          - os: macos-15-intel
+            platform: macos-x64
+            binary: build/mana
+          - os: macos-15
+            platform: macos-arm64
+            binary: build/mana
+          - os: windows-2022
+            platform: windows-x86
+            architecture: Win32
+            binary: build/Release/mana.exe
+          - os: windows-2022
+            platform: windows-x64
+            architecture: x64
+            binary: build/Release/mana.exe
+    runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
+      - name: Check out the pushed tag
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.ref }}
-      - uses: actions/download-artifact@v4
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate tag and version
+        shell: bash
+        run: python .github/scripts/release.py validate "$GITHUB_REF_NAME"
+      - name: Install Ubuntu build dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y bison flex cmake g++ make
+          echo "BISON_EXECUTABLE=$(command -v bison)" >> "$GITHUB_ENV"
+          echo "FLEX_EXECUTABLE=$(command -v flex)" >> "$GITHUB_ENV"
+      - name: Install macOS build dependencies
+        if: runner.os == 'macOS'
+        run: |
+          brew install bison flex
+          echo "BISON_EXECUTABLE=$(brew --prefix bison)/bin/bison" >> "$GITHUB_ENV"
+          echo "FLEX_EXECUTABLE=$(brew --prefix flex)/bin/flex" >> "$GITHUB_ENV"
+      - name: Add MSBuild to PATH
+        if: runner.os == 'Windows'
+        uses: microsoft/setup-msbuild@v2
+      - name: Download generated sources for Windows
+        if: runner.os == 'Windows'
+        uses: actions/download-artifact@v4
         with:
           name: generated-for-windows
           path: .
-      - name: Build and test Windows x64
-        shell: pwsh
-        run: |
-          cmake -S . -B build-win64 -A x64 -DMANA_USE_PREGENERATED_SOURCES=ON
-          cmake --build build-win64 --config Release --parallel
-          ctest --test-dir build-win64 -C Release --output-on-failure
-          .\build-win64\Release\mana.exe --version
-          .\build-win64\Release\mana.exe examples\tutorial\03-request.mn
-      - name: Package Windows x64 command line tool
-        shell: pwsh
-        run: |
-          $number = $env:GITHUB_REF_NAME.Substring(1)
-          $folder = "mana-windows-x64-$number"
-          New-Item -ItemType Directory -Path "dist/$folder/examples/tutorial" -Force | Out-Null
-          Copy-Item build-win64/Release/mana.exe,README.md,LICENSE.md "dist/$folder/"
-          Copy-Item examples/tutorial/03-request.mn "dist/$folder/examples/tutorial/"
-          Compress-Archive -Path "dist/$folder" -DestinationPath "dist/$folder.zip"
-      - uses: actions/upload-artifact@v4
+      - name: Configure Unix build
+        if: runner.os != 'Windows'
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+      - name: Configure Windows build
+        if: runner.os == 'Windows'
+        run: cmake -S . -B build -A ${{ matrix.architecture }} -DMANA_USE_PREGENERATED_SOURCES=ON
+      - name: Build
+        run: cmake --build build --config Release --parallel
+      - name: Test
+        run: ctest --test-dir build -C Release --output-on-failure
+      - name: Create executable archive
+        shell: bash
+        run: python .github/scripts/release.py binary "$GITHUB_REF_NAME" --platform "${{ matrix.platform }}" --binary-path "${{ matrix.binary }}"
+      - name: Upload executable archive
+        uses: actions/upload-artifact@v4
         with:
-          name: release-windows-x64
-          path: dist/*.zip
+          name: release-binary-${{ matrix.platform }}
+          path: dist/*
           if-no-files-found: error
 
   draft:
-    needs: [source, windows-x64]
+    needs: [source, binaries]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.ref }}
+          fetch-depth: 0
       - uses: actions/download-artifact@v4
         with:
           name: release-source
           path: dist
       - uses: actions/download-artifact@v4
         with:
-          name: release-windows-x64
+          pattern: release-binary-*
           path: dist
+          merge-multiple: true
+      - name: Verify release archives
+        run: python3 .github/scripts/release.py verify-assets "$GITHUB_REF_NAME"
       - name: Create draft release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "$GITHUB_REF_NAME" dist/*.zip \
+          gh release create "$GITHUB_REF_NAME" dist/* \
             --draft --verify-tag --generate-notes --title "Mana $GITHUB_REF_NAME"

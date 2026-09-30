@@ -7,7 +7,7 @@ mana (compiler)
 
 #pragma once
 
-#if defined(MANA_TARGET_UNIX)
+#if !defined(MANA_TARGET_WINDOWS)
 #include <alloca.h>
 #endif
 

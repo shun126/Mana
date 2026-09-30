@@ -16,13 +16,6 @@ on:
       - "documents/tools/**"
       - ".github/workflows/publish-wiki.yml"
 
-  pull_request:
-    paths:
-      - "documents/wiki/**"
-      - "documents/assets/**"
-      - "documents/tools/**"
-      - ".github/workflows/publish-wiki.yml"
-
   workflow_dispatch:
 
 permissions:
