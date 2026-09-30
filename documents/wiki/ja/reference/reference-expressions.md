@@ -102,7 +102,7 @@ Enemy->think()
 Game::AI::Enemy->think()
 ```
 
-Action 参照は `request`、`awaitStart`、`awaitCompletion` などで使用します。
+Action 参照は `request`、`awaitStart`、`await` などで使用します。
 
 ```mana
 request(10, Enemy->think());

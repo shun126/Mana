@@ -115,7 +115,7 @@ This is the big difference from an ordinary Function call.
 
 ## The side that waits is also an Actor
 
-With `awaitStart`, `awaitCompletion` and `join`, the calling Actor waits by re-evaluating the same instruction until its condition is met.
+With `awaitStart`, `await` and `join`, the calling Actor waits by re-evaluating the same instruction until its condition is met.
 
 In other words, it does not "stop the whole VM and wait".
 

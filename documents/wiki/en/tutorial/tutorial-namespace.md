@@ -44,8 +44,8 @@ actor Event
 {
     action main()
     {
-        awaitCompletion(10, Guide->talk());
-        awaitCompletion(10, Gate->open());
+        await(10, Guide->talk());
+        await(10, Gate->open());
         print("Event: Finished.\n");
     }
 }
@@ -80,8 +80,8 @@ mana examples/tutorial/12-namespace/main.mn
 Delete `using Town;` and replace the two requests in main with the following.
 
 ```mana
-awaitCompletion(10, Town::Guide->talk());
-awaitCompletion(10, Town::Gate->open());
+await(10, Town::Guide->talk());
+await(10, Town::Gate->open());
 ```
 
 If you get the same output, you are referring to them by their full names.

@@ -67,7 +67,7 @@ A function does a calculation or similar inside the work that called it, and ret
 | Purpose | How these lessons write it |
 | --- | --- |
 | Calculate how many keys are needed | `remainingKeys(3, 1)` |
-| Ask the gate to open | `awaitCompletion(10, Gate->open())` |
+| Ask the gate to open | `await(10, Gate->open())` |
 
 ## Functions that return nothing
 

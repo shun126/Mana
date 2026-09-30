@@ -1137,7 +1137,7 @@ DO_RECURSIVE:
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			break;
 
-		case SyntaxNode::Id::AwaitCompletion:
+		case SyntaxNode::Id::Await:
 			mSymbolFactory->AddRequest(shared_from_this(), IntermediateLanguage::RequestWaitEnded, node->GetLeftNode(), node->GetRightNode(), node->GetString());
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			break;

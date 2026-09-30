@@ -648,9 +648,9 @@ namespace mana
 		return node;
 	}
 
-std::shared_ptr<SyntaxNode> ParsingDriver::CreateAwaitCompletion(const std::shared_ptr<SyntaxNode>& priority, const std::shared_ptr<SyntaxNode>& expression, const std::string_view& actionName)
+std::shared_ptr<SyntaxNode> ParsingDriver::CreateAwait(const std::shared_ptr<SyntaxNode>& priority, const std::shared_ptr<SyntaxNode>& expression, const std::string_view& actionName)
 	{
-		auto node = std::make_shared<SyntaxNode>(SyntaxNode::Id::AwaitCompletion);
+		auto node = std::make_shared<SyntaxNode>(SyntaxNode::Id::Await);
 		node->SetLeftNode(priority);
 		node->SetRightNode(expression);
 		node->Set(actionName);

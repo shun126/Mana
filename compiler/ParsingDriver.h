@@ -111,7 +111,7 @@ namespace mana
 		static std::shared_ptr<SyntaxNode> CreatePrint(const std::shared_ptr<SyntaxNode>& argument);
 		static std::shared_ptr<SyntaxNode> CreateRequest(const std::shared_ptr<SyntaxNode>& priority, const std::shared_ptr<SyntaxNode>& expression, const std::string_view& actionName);
 		static std::shared_ptr<SyntaxNode> CreateAwaitStart(const std::shared_ptr<SyntaxNode>& priority, const std::shared_ptr<SyntaxNode>& expression, const std::string_view& actionName);
-		static std::shared_ptr<SyntaxNode> CreateAwaitCompletion(const std::shared_ptr<SyntaxNode>& priority, const std::shared_ptr<SyntaxNode>& expression, const std::string_view& actionName);
+		static std::shared_ptr<SyntaxNode> CreateAwait(const std::shared_ptr<SyntaxNode>& priority, const std::shared_ptr<SyntaxNode>& expression, const std::string_view& actionName);
 		static std::shared_ptr<SyntaxNode> CreateJoin(const std::shared_ptr<SyntaxNode>& leftHand, const std::shared_ptr<SyntaxNode>& rightHand);
 
 		// expression

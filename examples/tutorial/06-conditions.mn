@@ -4,10 +4,10 @@ actor Event
     {
         bool hasKey = true;
 
-        awaitCompletion(10, Guide->talk());
+        await(10, Guide->talk());
         if (hasKey)
         {
-            awaitCompletion(10, Gate->open());
+            await(10, Gate->open());
         }
         else
         {

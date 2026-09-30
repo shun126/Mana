@@ -5,7 +5,7 @@ actor Event
 {
     action main()
     {
-        awaitCompletion(kNormalPriority, Guide->talk());
+        await(kNormalPriority, Guide->talk());
         print("Event: Finished.\n");
     }
 }

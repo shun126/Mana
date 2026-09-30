@@ -889,7 +889,7 @@ DO_RECURSIVE:
 			break;
 
 		case SyntaxNode::Id::AwaitStart:
-		case SyntaxNode::Id::AwaitCompletion:
+		case SyntaxNode::Id::Await:
 			PostResolverResolve(node->GetLeftNode());
 			ResolveActionReference(node, node->GetString());
 			MANA_ASSERT(node->GetBodyNode() == nullptr);

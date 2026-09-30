@@ -355,7 +355,7 @@ namespace mana
 			"Yield",
 			"Request",
 			"AwaitStart",
-			"AwaitCompletion",
+			"Await",
 			"Accept",
 			"Reject",
 			"Join",

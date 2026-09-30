@@ -63,7 +63,7 @@ actor TestActor1
         print("TestActor1::main\n");
         awaitStart(kStartPriority, TestActor2->talk());
         request(kTalkPriority, TestActor1->talk());
-        awaitCompletion(kCompletionPriority, TestActor2->talk());
+        await(kCompletionPriority, TestActor2->talk());
     }
 
     action talk()

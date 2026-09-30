@@ -41,8 +41,8 @@ actor Event
 {
     action main()
     {
-        awaitCompletion(10, Guide->talk());
-        awaitCompletion(10, Gate->open());
+        await(10, Guide->talk());
+        await(10, Gate->open());
         print("Event: Finished.\n");
     }
 }

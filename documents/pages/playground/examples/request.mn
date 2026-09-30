@@ -1,6 +1,6 @@
 // request(priority, Actor->action()) asks an actor to run one of its actions.
 //
-// - awaitCompletion() sends the request and waits until the action ends.
+// - await() sends the request and waits until the action ends.
 // - request() only sends it; the sender goes on without waiting.
 // - A request with a higher priority interrupts the action that is
 //   running. The interrupted action resumes once it is done.
@@ -13,8 +13,8 @@ actor Event
     action main()
     {
         print("Event: A traveler reaches the gate.\n");
-        awaitCompletion(kTalk, Guard->talk());
-        awaitCompletion(kTalk, Gate->open());
+        await(kTalk, Guard->talk());
+        await(kTalk, Gate->open());
         request(kTalk, Traveler->enter());
         print("Event: Finished.\n");
     }

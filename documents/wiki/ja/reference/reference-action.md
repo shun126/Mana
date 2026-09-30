@@ -39,7 +39,7 @@ Actor 間で値を共有したい場合は、Actor の状態、グローバル�
 
 ## Action を実行する
 
-Action は `request`、`awaitStart`、`awaitCompletion` などから実行できます。
+Action は `request`、`awaitStart`、`await` などから実行できます。
 
 ```mana
 request(1, NPC->talk());

@@ -13,8 +13,8 @@ actor Event
 {
     action main()
     {
-        awaitCompletion(10, Guide->talk());
-        awaitCompletion(10, Gate->open());
+        await(10, Guide->talk());
+        await(10, Gate->open());
         print("Event: Finished.\n");
     }
 }
@@ -51,9 +51,9 @@ mana examples/tutorial/04-event.mn
 ```
 
 
-## Making an order with awaitCompletion
+## Making an order with await
 
-`awaitCompletion(10, Guide->talk());` requests the conversation and waits for it to complete before moving on. As with `request`, you give a priority and an Action.
+`await(10, Guide->talk());` requests the conversation and waits for it to complete before moving on. As with `request`, you give a priority and an Action.
 
 In this example nothing else sends requests to the same Actors and the Priority used is free, so the work completes in order.
 
@@ -76,17 +76,17 @@ It is `Event` that waits. The whole Mana VM does not stop, so `Guide` and `Gate`
 | What you want | Instruction to start with |
 | --- | --- |
 | Ask, and carry on without waiting for the other side to finish | `request` |
-| Carry on after the requested work has finished | `awaitCompletion` |
+| Carry on after the requested work has finished | `await` |
 
-In fact, `awaitCompletion` waits on a condition about the target Actor's Priority. If the request is not accepted, it carries on without waiting. When you bring in several requesters or interrupts, also check the conditions in [Waiting and synchronisation](./tutorial-wait-and-synchronization.md).
+In fact, `await` waits on a condition about the target Actor's Priority. If the request is not accepted, it carries on without waiting. When you bring in several requesters or interrupts, also check the conditions in [Waiting and synchronisation](./tutorial-wait-and-synchronization.md).
 
 ## Change one thing
 
-Swap the two `awaitCompletion` lines in `Event`. Save and run, and the gate opens first, then the guide talks.
+Swap the two `await` lines in `Event`. Save and run, and the gate opens first, then the guide talks.
 
 Once you have put them back, add another request for the conversation after the gate. The output becomes "talk → gate → talk → finished". The second request is made after the first conversation has finished, so the same Priority can be used again.
 
-An Actor cannot use `awaitCompletion` on itself. Putting the work in a different Action does not make it a different Actor, and it fails with an error at run time.
+An Actor cannot use `await` on itself. Putting the work in a different Action does not make it a different Actor, and it fails with an error at run time.
 
 ## Connecting to a game comes later
 
