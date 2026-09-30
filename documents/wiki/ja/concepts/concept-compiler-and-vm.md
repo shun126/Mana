@@ -77,7 +77,7 @@ Mana VM は Program Image をロードし、Actor と Action を実行します�
 - VM 命令の実行
 - C++ 側との連携
 
-Tutorial で使った `request` や `awaitCompletion` も、この VM の実行モデルによって動作します。
+Tutorial で使った `request` や `await` も、この VM の実行モデルによって動作します。
 
 ## Program Image をロードしたとき
 

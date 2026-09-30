@@ -117,7 +117,7 @@ request(5, Enemy->damage());
 
 ## 待機する側も Actor である
 
-`awaitStart`、`awaitCompletion`、`join` では、呼び出し側 Actor が条件を満たすまで同じ命令を再評価する形で待機します。
+`awaitStart`、`await`、`join` では、呼び出し側 Actor が条件を満たすまで同じ命令を再評価する形で待機します。
 
 つまり「VM 全体を止めて待つ」のではありません。
 

@@ -99,10 +99,10 @@ Request を送り、対象 Actor がその Priority を開始できる状態に�
 awaitStart(10, NPC->talk());
 ```
 
-## `awaitCompletion`
+## `await`
 
 ```mana
-awaitCompletion(priority, actor_expression->actionName());
+await(priority, actor_expression->actionName());
 ```
 
 Request を送り、その Priority の処理が完了するまで待機します。
@@ -110,19 +110,19 @@ Request を送り、その Priority の処理が完了するまで待機しま�
 要求が受理された場合、対象 Actor の現在 Priority が要求 Priority 未満になった時点で待機を解除します。要求ごとの完了通知を保持して待つ仕組みではありません。
 
 ```mana
-awaitCompletion(10, NPC->talk());
+await(10, NPC->talk());
 ```
 
 ## await の要求が受理されない場合
 
-`awaitStart` と `awaitCompletion` は、最初の Request が受理されなければ待たずに次へ進みます。同じ Priority が空くまで再要求する命令ではありません。待機から戻ったことだけでは、要求した Action が実行されたことや、その行動が成功したことを保証しません。
+`awaitStart` と `await` は、最初の Request が受理されなければ待たずに次へ進みます。同じ Priority が空くまで再要求する命令ではありません。待機から戻ったことだけでは、要求した Action が実行されたことや、その行動が成功したことを保証しません。
 
 ## 自分自身への await
 
-`awaitStart` と `awaitCompletion` で `self` を対象にすると、現行VMはスクリプトエラーにします。
+`awaitStart` と `await` で `self` を対象にすると、現行VMはスクリプトエラーにします。
 
 ```mana
-awaitCompletion(10, self->talk()); // error
+await(10, self->talk()); // error
 ```
 
 自分自身を待機対象にすると、待機中の Actor 自身が進まなければ完了できないためです。
@@ -159,7 +159,7 @@ join(0, NPC);
 | --- | --- | --- |
 | `request` | 送る | しない |
 | `awaitStart` | 送る | 開始可能になるまで |
-| `awaitCompletion` | 送る | 完了まで |
+| `await` | 送る | 完了まで |
 | `join` | 送らない | 既存 Priority が指定値以下になるまで |
 
 ## 関連項目

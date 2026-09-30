@@ -304,8 +304,8 @@ namespace
 			"request(1, self->ping);",
 			"awaitStart(1, A->ping);",
 			"awaitStart(1, A->ping());",
-			"awaitCompletion(1, A->ping);",
-			"awaitCompletion(1, A->ping());"
+			"await(1, A->ping);",
+			"await(1, A->ping());"
 		};
 		for (const char* statement : statements)
 		{

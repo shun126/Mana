@@ -180,7 +180,7 @@ Actor の Action を依頼する構文です。
 ```mana
 request(10, Enemy->think());
 awaitStart(10, Enemy->think());
-awaitCompletion(10, Enemy->think());
+await(10, Enemy->think());
 ```
 
 詳細な待機条件や Priority との関係は [Request](./reference-request.md) と [実行制御](./reference-execution-control.md) を参照してください。

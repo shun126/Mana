@@ -77,7 +77,7 @@ Its main jobs are:
 - Executing VM instructions
 - Working with the C++ side
 
-The `request` and `awaitCompletion` you used in the Tutorial also work through this VM's execution model.
+The `request` and `await` you used in the Tutorial also work through this VM's execution model.
 
 ## When a Program Image is loaded
 

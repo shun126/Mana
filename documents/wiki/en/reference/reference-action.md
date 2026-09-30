@@ -41,7 +41,7 @@ To share values between Actors, use the Actor's state, global data, Structs, Nat
 
 ## Running an Action
 
-An Action can be run with `request`, `awaitStart`, `awaitCompletion` and so on.
+An Action can be run with `request`, `awaitStart`, `await` and so on.
 
 ```mana
 request(1, NPC->talk());

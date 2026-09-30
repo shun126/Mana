@@ -23,8 +23,8 @@ actor Player
 {
     action main()
     {
-        awaitCompletion(1, Lamp->brighten());
-        awaitCompletion(1, Lamp->brighten());
+        await(1, Lamp->brighten());
+        await(1, Lamp->brighten());
         print("Player: That's bright enough.\n");
     }
 }

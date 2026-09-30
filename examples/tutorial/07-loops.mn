@@ -8,7 +8,7 @@ actor Event
             print("Remaining: %d\n", remaining);
             remaining = remaining - 1;
         }
-        awaitCompletion(10, Gate->open());
+        await(10, Gate->open());
     }
 }
 

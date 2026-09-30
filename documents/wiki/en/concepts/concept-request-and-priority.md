@@ -26,7 +26,7 @@ EventController
 
 With a plain `request`, the side that issued the Request does not wait for the target Action to finish.
 
-When you need to wait for the target Action to start or finish, use `awaitStart` or `awaitCompletion`.
+When you need to wait for the target Action to start or finish, use `awaitStart` or `await`.
 
 ## Priority expresses how important an Action is
 
@@ -130,10 +130,10 @@ Choose among the Request instructions according to the purpose.
 | --- | --- |
 | `request` | Carries on after asking |
 | `awaitStart` | Waits until the Action at the given Priority has reached the point where it can run |
-| `awaitCompletion` | Waits until the Action at the given Priority completes |
+| `await` | Waits until the Action at the given Priority completes |
 | `join` | Waits until the target Actor's Priority is the given value or lower |
 
-`request` suits loosely coupling Actors, and `awaitCompletion` suits making the order of an event explicit. However, the await instructions carry on without waiting if the request is not accepted. Even after it is accepted, they wait on a condition about the target Actor's Priority, so check the exact release conditions in the [Request reference](../reference/reference-request.md).
+`request` suits loosely coupling Actors, and `await` suits making the order of an event explicit. However, the await instructions carry on without waiting if the request is not accepted. Even after it is accepted, they wait on a condition about the target Actor's Priority, so check the exact release conditions in the [Request reference](../reference/reference-request.md).
 
 ## Priority is managed per Actor
 

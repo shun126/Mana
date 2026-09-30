@@ -60,7 +60,7 @@ namespace mana
 			Yield,								//!< yield
 			Request,							//!< req
 			AwaitStart,							//!< reqsw
-			AwaitCompletion,					//!< reqew
+			Await,					//!< reqew
 			Accept,								//!< comply (req許可)
 			Reject,								//!< refuse (req拒否)
 			Join,								//!< join
