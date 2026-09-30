@@ -136,7 +136,7 @@ other		.
 <INITIAL>"print"	return mana::Parser::token::tPRINT;
 <INITIAL>"request"	return mana::Parser::token::tREQUEST;
 <INITIAL>"awaitStart"		return mana::Parser::token::tAwaitStart;
-<INITIAL>"awaitCompletion"	return mana::Parser::token::tAwaitCompletion;
+<INITIAL>"await"	return mana::Parser::token::tAwait;
 <INITIAL>"yield"	return mana::Parser::token::tYIELD;
 
 <INITIAL>"sizeof"	return mana::Parser::token::tSIZEOF;

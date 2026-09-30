@@ -73,7 +73,7 @@ mana (compiler)
 %token	tNATIVE tSTRUCT tACTOR tPHANTOM tACTION tMODULE tEXTEND
 %token	tNAMESPACE tUSING
 %token	tFALSE tTRUE tPRIORITY tSELF tSENDER tTHIS tNIL
-%token	tREQUEST tAwaitStart tAwaitCompletion tJOIN
+%token	tREQUEST tAwaitStart tAwait tJOIN
 %token	tBREAK
 %token	tCONTINUE
 %token	tCASE
@@ -279,8 +279,8 @@ statement		: tIF '(' expression ')' statement
 					{ $$ = mParsingDriver->CreateRequest($3, $5.actor, $5.action); }
 				| tAwaitStart '(' expression ',' action_ref ')' ';'
 					{ $$ = mParsingDriver->CreateAwaitStart($3, $5.actor, $5.action); }
-				| tAwaitCompletion '(' expression ',' action_ref ')' ';'
-					{ $$ = mParsingDriver->CreateAwaitCompletion($3, $5.actor, $5.action); }
+				| tAwait '(' expression ',' action_ref ')' ';'
+					{ $$ = mParsingDriver->CreateAwait($3, $5.actor, $5.action); }
 				| tJOIN '(' expression ','  expression ')' ';'
 					{ $$ = mParsingDriver->CreateJoin($3, $5); }
 				| block

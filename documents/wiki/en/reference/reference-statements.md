@@ -180,7 +180,7 @@ Syntax for asking an Actor to run an Action.
 ```mana
 request(10, Enemy->think());
 awaitStart(10, Enemy->think());
-awaitCompletion(10, Enemy->think());
+await(10, Enemy->think());
 ```
 
 For the detailed waiting conditions and how they relate to Priority, see [Request](./reference-request.md) and [Execution control](./reference-execution-control.md).

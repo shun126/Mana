@@ -16,7 +16,7 @@ actor Event
 {
     action main()
     {
-        awaitCompletion(kNormalPriority, Guide->talk());
+        await(kNormalPriority, Guide->talk());
         print("Event: Finished.\n");
     }
 }
@@ -67,7 +67,7 @@ flowchart TD
     D --> E["talk の続きへ復帰"]
 ```
 
-ここでは `request` を使います。自分自身を `awaitStart` や `awaitCompletion` で待つと、実行時エラーになります。
+ここでは `request` を使います。自分自身を `awaitStart` や `await` で待つと、実行時エラーになります。
 
 この例は同じ Actor 内の割り込みを観察するものです。別 Actor への Request が、OS の割り込みのように任意の瞬間に走ることを意味しません。Actor を進める仕組みは [実行モデル](../concepts/concept-execution-model.md)で説明します。
 

@@ -1,21 +1,21 @@
 # 待機と同期を使い分ける
 
-[会話して門を開ける](./tutorial-small-event.md)では、`awaitCompletion` で順番を作りました。ここでは、開始可能になるのを待つ、すでに動いている Actor を待つ、自分の処理を一度譲る、という使い方を追加します。
+[会話して門を開ける](./tutorial-small-event.md)では、`await` で順番を作りました。ここでは、開始可能になるのを待つ、すでに動いている Actor を待つ、自分の処理を一度譲る、という使い方を追加します。
 
-![request / awaitStart / awaitCompletion の違い](../../../assets/ja/diagrams/request-await.svg)
+![request / awaitStart / await の違い](../../../assets/ja/diagrams/request-await.svg)
 
 ## まずは完了待ちを振り返る
 
 **イベントの main 内の抜粋：**
 
 ```mana
-awaitCompletion(10, Guide->talk());
-awaitCompletion(10, Gate->open());
+await(10, Guide->talk());
+await(10, Gate->open());
 ```
 
 この例は、要求が受理され、他の要求元による競合がない前提で、会話を終えてから門を開きます。
 
-`awaitCompletion` が直接調べるのは、**対象 Actor の現在の Priority が指定値より低くなったか**です。要求一件ごとの完了通知を記録して待っているわけではありません。
+`await` が直接調べるのは、**対象 Actor の現在の Priority が指定値より低くなったか**です。要求一件ごとの完了通知を記録して待っているわけではありません。
 
 ## 三つの待機を区別する
 
@@ -25,7 +25,7 @@ awaitCompletion(10, Gate->open());
 | --- | --- | --- |
 | `request(p, Actor->action())` | する | 待機しない |
 | `awaitStart(p, Actor->action())` | する | 対象 Actor の現在の Priority が `p` 以下 |
-| `awaitCompletion(p, Actor->action())` | する | 対象 Actor の現在の Priority が `p` 未満 |
+| `await(p, Actor->action())` | する | 対象 Actor の現在の Priority が `p` 未満 |
 | `join(p, Actor)` | しない | 対象 Actor の現在の Priority が `p` 以下 |
 
 `p` は説明のための仮の名前です。実際には10などの整数や定数を指定します。
@@ -36,13 +36,13 @@ awaitCompletion(10, Gate->open());
 
 ## 要求が受理されない場合
 
-`awaitStart` と `awaitCompletion` は、最初の要求が受理されなければ待たずに次へ進みます。空くまで要求を繰り返す命令ではありません。
+`awaitStart` と `await` は、最初の要求が受理されなければ待たずに次へ進みます。空くまで要求を繰り返す命令ではありません。
 
 例えば、対象 Actor の Priority 10 がすでに使用中なら、別の Action を10で依頼しても、その Action の実行は保証されません。待機から戻ったことだけを、その行動が成功した証拠として扱わないでください。
 
 入門のイベントでは、一つの進行役が一つずつ要求し、終了を待ってから次を依頼することで、この競合を避けています。複数の Actor から同じ相手へ要求する設計では、依頼元と Priority の分担も決めます。
 
-また、自分自身を対象とする `awaitStart` / `awaitCompletion` は、実行時エラーになります。
+また、自分自身を対象とする `awaitStart` / `await` は、実行時エラーになります。
 
 ## yield で実行を譲り、delay で秒数を待つ
 
@@ -93,7 +93,7 @@ CLI と引数なしの `VM::Run()` は単調時計で計測した経過時間を
 
 次の用途に合うものを考えてください。
 
-- 会話の終了後に門を開く：`awaitCompletion`
+- 会話の終了後に門を開く：`await`
 - 通知を依頼し、進行役はその完了を待たずに進む：`request`
 - 新しい行動を依頼せず、対象の Priority が指定値以下になるのを待つ：`join`
 - 自分の処理を終了せず、一度実行を譲る：`yield`

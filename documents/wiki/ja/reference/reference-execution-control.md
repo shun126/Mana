@@ -34,7 +34,7 @@ join(0, NPC);
 
 現行VMでは、対象 Actor の現在 Priority が指定 Priority 以下になるまで待機します。
 
-`awaitCompletion` が「Request を送ってその完了を待つ」のに対し、`join` は「既存の実行状態を待つ」ための命令です。
+`await` が「Request を送ってその完了を待つ」のに対し、`join` は「既存の実行状態を待つ」ための命令です。
 
 ## `rollback`
 
@@ -119,14 +119,14 @@ lock
 
 そのため、現行実装の `lock` を C++ の mutex や「必ず割り込まれない atomic 区間」と同じ意味として扱わないでください。リファレンス上は、**現在の実装では同期実行フラグを切り替える構文**として扱います。
 
-## `request` / `awaitStart` / `awaitCompletion`
+## `request` / `awaitStart` / `await`
 
 これらは Action の実行要求と待機を組み合わせた命令です。
 
 ```mana
 request(10, NPC->talk());
 awaitStart(10, NPC->talk());
-awaitCompletion(10, NPC->talk());
+await(10, NPC->talk());
 ```
 
 詳細は [Request](./reference-request.md) を参照してください。

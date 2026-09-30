@@ -39,7 +39,7 @@ Mana は、この問題を言語の側から整理します。
 - 役割ごとに Actor を分け、それぞれが自分の状態と Action を持つ
 - Actor 同士は Request で依頼し合い、直接相手の内部を触らない
 - 「今どの行動を優先するか」を Priority で表す
-- 待ち合わせを `awaitStart` と `awaitCompletion` で明示する
+- 待ち合わせを `awaitStart` と `await` で明示する
 
 イベントの進行そのものを言語の語彙で書けるため、ゲーム本体の C++ コードに進行管理を持ち込まずに済みます。
 
@@ -53,7 +53,7 @@ Mana は、この問題を言語の側から整理します。
 
 ![Request の流れ](../../assets/ja/diagrams/request-flow.svg)
 
-依頼するだけでなく、相手が始めるまで待つ `awaitStart`、相手が終えるまで待つ `awaitCompletion` も使えます。
+依頼するだけでなく、相手が始めるまで待つ `awaitStart`、相手が終えるまで待つ `await` も使えます。
 
 ## Priority
 
@@ -74,8 +74,8 @@ actor Event
 {
     action main()
     {
-        awaitCompletion(10, Guide->talk());
-        awaitCompletion(10, Gate->open());
+        await(10, Guide->talk());
+        await(10, Gate->open());
         print("Event: Finished.\n");
     }
 }

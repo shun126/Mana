@@ -1,21 +1,21 @@
 # Choosing between waiting and synchronisation
 
-In [Talk, then open the gate](./tutorial-small-event.md), you made an order with `awaitCompletion`. This chapter adds more ways to wait: until the work can start, for an Actor that is already running, and handing over your own turn for a moment.
+In [Talk, then open the gate](./tutorial-small-event.md), you made an order with `await`. This chapter adds more ways to wait: until the work can start, for an Actor that is already running, and handing over your own turn for a moment.
 
-![The difference between request, awaitStart and awaitCompletion](../../../assets/en/diagrams/request-await.svg)
+![The difference between request, awaitStart and await](../../../assets/en/diagrams/request-await.svg)
 
 ## First, a look back at waiting for completion
 
 **Excerpt from the event's main:**
 
 ```mana
-awaitCompletion(10, Guide->talk());
-awaitCompletion(10, Gate->open());
+await(10, Guide->talk());
+await(10, Gate->open());
 ```
 
 Provided the requests are accepted and no other requester competes, this opens the gate after the conversation ends.
 
-What `awaitCompletion` actually checks is **whether the target Actor's current Priority has fallen below the given value**. It does not record a completion notice for each request and wait for it.
+What `await` actually checks is **whether the target Actor's current Priority has fallen below the given value**. It does not record a completion notice for each request and wait for it.
 
 ## Three kinds of waiting
 
@@ -25,7 +25,7 @@ For the await instructions, the conditions below apply when the request is accep
 | --- | --- | --- |
 | `request(p, Actor->action())` | Yes | It does not wait |
 | `awaitStart(p, Actor->action())` | Yes | The target Actor's current Priority is `p` or lower |
-| `awaitCompletion(p, Actor->action())` | Yes | The target Actor's current Priority is lower than `p` |
+| `await(p, Actor->action())` | Yes | The target Actor's current Priority is lower than `p` |
 | `join(p, Actor)` | No | The target Actor's current Priority is `p` or lower |
 
 `p` is a placeholder name for this explanation. In real code you give an integer such as 10, or a constant.
@@ -36,13 +36,13 @@ For the await instructions, the conditions below apply when the request is accep
 
 ## When a request is not accepted
 
-If the initial request is not accepted, `awaitStart` and `awaitCompletion` carry on without waiting. They do not keep requesting until the Priority is free.
+If the initial request is not accepted, `awaitStart` and `await` carry on without waiting. They do not keep requesting until the Priority is free.
 
 For example, if Priority 10 is already in use on the target Actor, requesting a different Action at 10 does not guarantee that the Action runs. Don't treat returning from a wait on its own as proof that the behaviour succeeded.
 
 The beginner's event avoids this conflict by having one controller make one request at a time, waiting for each to finish before asking for the next. In a design where several Actors send requests to the same Actor, also decide which requester uses which Priority.
 
-Also, `awaitStart` / `awaitCompletion` targeting your own Actor causes a runtime error.
+Also, `awaitStart` / `await` targeting your own Actor causes a runtime error.
 
 ## Handing over your turn with yield
 
@@ -82,7 +82,7 @@ In a long loop, you can use `yield()` to give other Actors a chance to run. Wait
 
 Think about which fits each purpose.
 
-- Open the gate after the conversation ends: `awaitCompletion`
+- Open the gate after the conversation ends: `await`
 - Ask for a notification, and have the controller carry on without waiting for it: `request`
 - Wait for the target's Priority to drop to a given value or lower, without asking for anything new: `join`
 - Hand over your turn once without ending your own work: `yield`

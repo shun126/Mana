@@ -72,8 +72,8 @@ def main():
 
     variants = [
         ("05-variables.mn",
-         "        awaitCompletion(10, Guide->talk());\n    }",
-         "        awaitCompletion(10, Guide->talk());\n        awaitCompletion(10, Guide->talk());\n    }",
+         "        await(10, Guide->talk());\n    }",
+         "        await(10, Guide->talk());\n        await(10, Guide->talk());\n    }",
          "Talk count: 1\nTalk count: 2\nTalk count: 3\n"),
         ("06-conditions.mn", "hasKey = true", "hasKey = false",
          "Guide: Welcome!\nEvent: Find the key.\n"),
@@ -86,8 +86,8 @@ def main():
         ("02-actor.mn", "Guide: Ready.", "Guide: Waiting.", "Guide: Waiting.\n"),
         ("03-request.mn", "talk", "greet", "Event: Request.\nGuide: Welcome!\n"),
         ("04-event.mn",
-         "        awaitCompletion(10, Guide->talk());\n        awaitCompletion(10, Gate->open());",
-         "        awaitCompletion(10, Gate->open());\n        awaitCompletion(10, Guide->talk());",
+         "        await(10, Guide->talk());\n        await(10, Gate->open());",
+         "        await(10, Gate->open());\n        await(10, Guide->talk());",
          "Gate: Open.\nGuide: Welcome!\nEvent: Finished.\n"),
     ]
     with tempfile.TemporaryDirectory(prefix="mana-doc-") as directory:
