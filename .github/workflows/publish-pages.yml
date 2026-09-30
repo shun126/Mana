@@ -6,7 +6,8 @@ name: Publish Pages
 #
 # The site includes the Web Playground at /playground/. Its mana.wasm is the
 # compiler and VM of this commit built with Emscripten, and it is tested
-# before anything is published.
+# before anything is published. Feature branches validate the same site build
+# in build_and_analysis.yml, while this workflow is reserved for publishing.
 #
 # One-time setup on GitHub: Settings > Pages > Build and deployment > Source,
 # then choose "GitHub Actions".
@@ -91,12 +92,12 @@ jobs:
         run: python documents/tools/build-pages.py --language all --output build/pages --playground-wasm build-web/web
 
       - name: Configure GitHub Pages
-        # Only master deploys, so a pull request stops after the build.
-        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
+        # workflow_dispatch can run on another branch, but only master deploys.
+        if: github.ref == 'refs/heads/master'
         uses: actions/configure-pages@v6
 
       - name: Upload the site as a Pages artifact
-        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master'
         uses: actions/upload-pages-artifact@v5
         with:
           path: build/pages
@@ -106,7 +107,7 @@ jobs:
   deploy:
     name: Deploy to GitHub Pages
     needs: build
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
