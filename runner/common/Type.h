@@ -10,6 +10,9 @@ mana (compiler/library)
 #include <limits>
 #include <stdexcept>
 #include <type_traits>
+#if !defined(MANA_TARGET_WINDOWS)
+#include <sys/types.h>
+#endif
 
 namespace mana
 {

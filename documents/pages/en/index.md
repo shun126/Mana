@@ -9,6 +9,9 @@ actions:
   - label: Get Started
     href: wiki:Getting-Started
     style: primary
+  - label: Try it online
+    href: ../playground/
+    style: secondary
   - label: Documentation
     href: wiki:Home
     style: secondary

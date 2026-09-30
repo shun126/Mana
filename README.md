@@ -1,6 +1,9 @@
 <div align="center">
 <h1>Actor-oriented scripting language Mana</h1>
 <p>
+<a href="https://shun126.github.io/Mana/playground/"><b>▶ Try Mana online</b></a>
+</p>
+<p>
 <a href="https://github.com/shun126/Mana/issues">Issues</a>,
 <a href="https://github.com/shun126/Mana/discussions">Discussions</a>,
 <a href="https://github.com/shun126/Mana/wiki">Wiki</a>,
@@ -17,6 +20,8 @@
 
 This scripting language was developed with the aim of developing a character's action using actor model.
 You can implement the execution engine easily into your computer game program.
+
+**[Try Mana online](https://shun126.github.io/Mana/playground/)**: edit and run Mana in your browser, with nothing to install.
 
 # What Mana code looks like
 ````mana:talk.mn
@@ -82,6 +87,7 @@ actor Controller
 | `runner` | header only | The virtual machine that executes a compiled program. |
 | `examples` | | Example scripts: `tutorial` holds the finished code of the Japanese tutorial, `language-tour` exercises most language features in one program. |
 | `tests` | | Test scripts and the test runner. |
+| `web` | `mana.js` / `mana.wasm` | The [Web Playground](web/README.md): the same compiler and VM built with Emscripten, and its tests. The page itself is in `documents/pages/playground`. |
 
 Runtime-only applications can include `runner/common/Version.h` and read
 `mana::version::Number` without linking the compiler. The program image format
@@ -96,7 +102,8 @@ other than CMake, see [Embedding without CMake](#embedding-without-cmake).
 ## Release source packages
 
 Each `vMAJOR.MINOR.PATCH` tag matching `runner/common/Version.json` produces a
-tested GitHub Release with two source archives:
+tested draft GitHub Release with two source archives and a Windows x64 command
+line package:
 
 * `mana-runtime-MAJOR.MINOR.PATCH-source.zip` contains the header-only VM in
   `runner/`, its generated `runner/common/Version.h`, the license, and this
@@ -110,15 +117,19 @@ tested GitHub Release with two source archives:
   examples, or tests; add the sources to your own build as described in
   [Embedding without CMake](#embedding-without-cmake). To build Mana itself,
   use a repository checkout or GitHub's source code archive.
+* `mana-windows-x64-MAJOR.MINOR.PATCH.zip` contains `mana.exe`, the license,
+  this README, and a request example. Extract the archive and run
+  `mana.exe examples/tutorial/03-request.mn` from its top-level directory.
 
 The archives have a single top-level directory. The compiler archive also keeps
 `compiler/Parser.yy` and `compiler/Lexer.l` for developers who want to change
 the grammar; regenerate the parser and lexer from a repository checkout.
 
-To publish a release, update `runner/common/Version.json` in the release commit,
+To prepare a release, update `runner/common/Version.json` in the release commit,
 then push the matching tag (for example, `git tag v1.0.0` followed by
-`git push origin v1.0.0`). The release workflow builds and tests that tag
-before publishing the two archives with generated release notes.
+`git push origin v1.0.0`). The release workflow builds and tests that tag and
+creates a draft with all three archives. Review the assets and release notes,
+add the video links, and publish the draft when the videos are public.
 
 ## Requirements
 * CMake 3.20 or newer
@@ -168,6 +179,12 @@ for each platform. Both variables are required even when Bison and Flex are on
 `PATH`. To configure in the Visual Studio IDE, set the variables in the Windows
 user environment and restart Visual Studio, or supply them in a local
 `CMakeSettings.json` `environments` entry.
+
+## Building the Web Playground
+
+The Playground builds the same compiler and VM with Emscripten. See
+[web/README.md](web/README.md) for the build, a local preview at
+`http://localhost:8000/playground/`, and its tests.
 
 # Testing
 

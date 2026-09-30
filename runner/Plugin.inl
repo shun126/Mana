@@ -23,6 +23,13 @@ mana (library)
 /*! ダイナミックライブラリ内の関数を取得 */
 #define GET_PROC_ADR(M, N)	GetProcAddress(M, N)
 
+#elif defined(MANA_TARGET_WEB)
+
+// WebAssemblyはOSのダイナミックライブラリを読み込めないので、プラグインは常に読み込まれません
+#define LOAD_LIBRARY(N)		(static_cast<void>(N), static_cast<void*>(nullptr))
+#define FREE_LIBRARY(M)		(static_cast<void>(M))
+#define GET_PROC_ADR(M, N)	(static_cast<void>(M), static_cast<void>(N), static_cast<void*>(nullptr))
+
 #else
 
 #include <sys/types.h>
@@ -89,7 +96,9 @@ namespace mana
 
 	inline void Plugin::Register(const std::string& directoryName)
 	{
-#if defined(MANA_TARGET_WINDOWS)
+#if defined(MANA_TARGET_WEB)
+		static_cast<void>(directoryName);
+#elif defined(MANA_TARGET_WINDOWS)
 		{
 			char entry[_MAX_PATH];
 

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mana Playground</title>
+<meta name="description" content="Write and run Mana scripts in your browser. The real Mana compiler and VM run locally as WebAssembly.">
+<link rel="icon" href="../assets/common/logo_small.png" type="image/png">
+<link rel="stylesheet" href="../theme/site.css">
+<link rel="stylesheet" href="playground.css">
+<script src="mana-runtime.js" defer></script>
+<script src="playground.js" defer></script>
+</head>
+<body>
+<header class="masthead">
+  <a class="brand" href="../">
+    <img src="../assets/common/logo_small.png" alt="" width="40" height="40">
+    <span class="brand-name">Mana</span>
+  </a>
+  <nav class="masthead-nav">
+    <a href="https://github.com/shun126/Mana/wiki/Getting-Started">Getting Started</a>
+    <a href="https://github.com/shun126/Mana/wiki/Tutorial">Tutorial</a>
+    <a href="https://github.com/shun126/Mana/wiki/Language-Reference">Language Reference</a>
+    <a href="https://github.com/shun126/Mana">GitHub</a>
+  </nav>
+</header>
+
+<main class="playground">
+  <div class="playground-intro">
+    <h1>Playground</h1>
+    <p>Edit the script and press <strong>Run</strong>. The Mana compiler and VM run in your browser as WebAssembly. Your code is never sent to a server.</p>
+  </div>
+
+  <div class="toolbar">
+    <div class="toolbar-group">
+      <button type="button" id="run" class="button button-primary" disabled>Run</button>
+      <button type="button" id="stop" class="button button-secondary" disabled>Stop</button>
+      <button type="button" id="reset" class="button button-secondary">Reset</button>
+    </div>
+    <div class="toolbar-group" role="group" aria-labelledby="example-label">
+      <span class="toolbar-label" id="example-label">Example</span>
+      <button type="button" class="chip" data-example="hello" aria-pressed="false">Hello</button>
+      <button type="button" class="chip" data-example="actor" aria-pressed="false">Actor</button>
+      <button type="button" class="chip" data-example="request" aria-pressed="false">Request</button>
+    </div>
+  </div>
+
+  <div class="workspace">
+    <section class="panel" aria-labelledby="editor-title">
+      <div class="panel-header">
+        <h2 id="editor-title">main.mn</h2>
+        <span class="panel-hint"><kbd>Ctrl</kbd>+<kbd>Enter</kbd> to run</span>
+      </div>
+      <div class="editor">
+        <pre class="gutter" id="gutter" aria-hidden="true">1</pre>
+        <textarea id="source" spellcheck="false" autocapitalize="off" autocomplete="off" wrap="off" aria-label="Mana source code"></textarea>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="output-title">
+      <div class="panel-header">
+        <h2 id="output-title">Output</h2>
+        <span class="status" id="status" role="status">Loading Mana…</span>
+      </div>
+      <ul class="diagnostics" id="diagnostics" aria-label="Compiler errors" hidden></ul>
+      <pre class="output" id="output" aria-live="polite"></pre>
+    </section>
+  </div>
+
+  <noscript><p class="notice">The Playground needs JavaScript to run Mana in your browser.</p></noscript>
+</main>
+
+<footer class="colophon">
+  <p><a href="../">Mana</a> · <a href="https://github.com/shun126/Mana/wiki">Documentation</a> · <a href="https://github.com/shun126/Mana">GitHub</a> · <a href="https://github.com/shun126/Mana/blob/master/LICENSE.md">License</a></p>
+</footer>
+</body>
+</html>

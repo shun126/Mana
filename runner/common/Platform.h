@@ -29,7 +29,8 @@ mana (compiler/library)
 		#endif
 	#elif defined(__unix__)
 		#define MANA_TARGET_UNIX (1)
-		#if defined(__GNUC__)
+		#if defined(__EMSCRIPTEN__)
+			#define MANA_TARGET_WEB (1)
 		#endif
 	#else
 		#error Platform Not Supported.

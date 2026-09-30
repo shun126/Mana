@@ -1,0 +1,8 @@
+// Every actor's main() starts when the program starts.
+actor Hello
+{
+    action main()
+    {
+        print("Hello, Mana!\n");
+    }
+}

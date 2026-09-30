@@ -13,44 +13,96 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  release:
+  source:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out the pushed tag
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           ref: ${{ github.ref }}
           fetch-depth: 0
-
       - name: Validate tag and version
         run: python3 .github/scripts/release.py validate "$GITHUB_REF_NAME"
-
       - name: Install build dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y bison flex cmake g++ make python3
-
-      - name: Configure release build
+      - name: Build and test
         run: |
           export BISON_EXECUTABLE="$(command -v bison)"
           export FLEX_EXECUTABLE="$(command -v flex)"
           cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
           cmake --build build --config Release --parallel
-
-      - name: Run release tests
-        run: ctest --test-dir build -C Release --output-on-failure
-
+          ctest --test-dir build -C Release --output-on-failure
       - name: Create source packages
         run: python3 .github/scripts/release.py package "$GITHUB_REF_NAME"
+      - name: Stage generated sources for Windows
+        run: |
+          mkdir -p generated-for-windows/compiler generated-for-windows/runner/common
+          cp build/generated/Parser.cpp build/generated/Parser.hpp build/generated/Lexer.cpp generated-for-windows/compiler/
+          cp runner/common/Version.h generated-for-windows/runner/common/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-source
+          path: dist/*.zip
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: generated-for-windows
+          path: generated-for-windows/
+          if-no-files-found: error
 
-      - name: Create draft release with assets and notes
+  windows-x64:
+    needs: source
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: generated-for-windows
+          path: .
+      - name: Build and test Windows x64
+        shell: pwsh
+        run: |
+          cmake -S . -B build-win64 -A x64 -DMANA_USE_PREGENERATED_SOURCES=ON
+          cmake --build build-win64 --config Release --parallel
+          ctest --test-dir build-win64 -C Release --output-on-failure
+          .\build-win64\Release\mana.exe --version
+          .\build-win64\Release\mana.exe examples\tutorial\03-request.mn
+      - name: Package Windows x64 command line tool
+        shell: pwsh
+        run: |
+          $number = $env:GITHUB_REF_NAME.Substring(1)
+          $folder = "mana-windows-x64-$number"
+          New-Item -ItemType Directory -Path "dist/$folder/examples/tutorial" -Force | Out-Null
+          Copy-Item build-win64/Release/mana.exe,README.md,LICENSE.md "dist/$folder/"
+          Copy-Item examples/tutorial/03-request.mn "dist/$folder/examples/tutorial/"
+          Compress-Archive -Path "dist/$folder" -DestinationPath "dist/$folder.zip"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-windows-x64
+          path: dist/*.zip
+          if-no-files-found: error
+
+  draft:
+    needs: [source, windows-x64]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-source
+          path: dist
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-windows-x64
+          path: dist
+      - name: Create draft release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release create "$GITHUB_REF_NAME" dist/*.zip \
-            --draft --verify-tag --generate-notes --title "$GITHUB_REF_NAME"
-
-      - name: Publish release
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh release edit "$GITHUB_REF_NAME" --draft=false
+            --draft --verify-tag --generate-notes --title "Mana $GITHUB_REF_NAME"

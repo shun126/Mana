@@ -4,6 +4,10 @@ name: Publish Pages
 # GitHub Pages artifact. No HTML is committed to this repository and no
 # gh-pages branch is used.
 #
+# The site includes the Web Playground at /playground/. Its mana.wasm is the
+# compiler and VM of this commit built with Emscripten, and it is tested
+# before anything is published.
+#
 # One-time setup on GitHub: Settings > Pages > Build and deployment > Source,
 # then choose "GitHub Actions".
 
@@ -17,6 +21,11 @@ on:
       - "documents/wiki/**"
       - "documents/assets/**"
       - "documents/tools/**"
+      # The Playground runs the compiler and VM of this commit.
+      - "compiler/**"
+      - "runner/**"
+      - "web/**"
+      - "CMakeLists.txt"
       - ".github/workflows/publish-pages.yml"
 
   pull_request:
@@ -26,6 +35,11 @@ on:
       - "documents/wiki/**"
       - "documents/assets/**"
       - "documents/tools/**"
+      # The Playground runs the compiler and VM of this commit.
+      - "compiler/**"
+      - "runner/**"
+      - "web/**"
+      - "CMakeLists.txt"
       - ".github/workflows/publish-pages.yml"
 
   workflow_dispatch:
@@ -42,7 +56,7 @@ jobs:
   build:
     name: Build the website
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 30
     steps:
       - name: Check out the repository
         uses: actions/checkout@v7
@@ -60,8 +74,35 @@ jobs:
       - name: Check the manuscripts
         run: python documents/tools/check-docs.py
 
+      - name: Install the Playground build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y bison flex ninja-build
+
+      # The version is pinned in web/emscripten-version.txt so every build of
+      # the Playground uses the same toolchain.
+      - name: Install Emscripten
+        run: |
+          version="$(tr -d '[:space:]' < web/emscripten-version.txt)"
+          git clone --depth 1 --branch "$version" https://github.com/emscripten-core/emsdk.git "$RUNNER_TEMP/emsdk"
+          "$RUNNER_TEMP/emsdk/emsdk" install "$version"
+          "$RUNNER_TEMP/emsdk/emsdk" activate "$version"
+
+      - name: Build the Playground WebAssembly module
+        run: |
+          source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+          export BISON_EXECUTABLE="$(command -v bison)"
+          export FLEX_EXECUTABLE="$(command -v flex)"
+          emcmake cmake -S . -B build-web -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF
+          cmake --build build-web --target mana_web
+
+      - name: Test the Playground
+        run: |
+          source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+          node web/tests/run-tests.js build-web/web
+
       - name: Build the site
-        run: python documents/tools/build-pages.py --language all --output build/pages
+        run: python documents/tools/build-pages.py --language all --output build/pages --playground-wasm build-web/web
 
       - name: Configure GitHub Pages
         # Only master deploys, so a pull request stops after the build.
