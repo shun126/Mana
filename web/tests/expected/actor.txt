@@ -1,0 +1,4 @@
+Lamp: Installed.
+Lamp: Brightness 50.
+Lamp: Brightness 100.
+Player: That's bright enough.

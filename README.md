@@ -1,6 +1,9 @@
 <div align="center">
 <h1>Actor-oriented scripting language Mana</h1>
 <p>
+<a href="https://shun126.github.io/Mana/playground/"><b>▶ Try Mana online</b></a>
+</p>
+<p>
 <a href="https://github.com/shun126/Mana/issues">Issues</a>,
 <a href="https://github.com/shun126/Mana/discussions">Discussions</a>,
 <a href="https://github.com/shun126/Mana/wiki">Wiki</a>,
@@ -17,6 +20,8 @@
 
 This scripting language was developed with the aim of developing a character's action using actor model.
 You can implement the execution engine easily into your computer game program.
+
+**[Try Mana online](https://shun126.github.io/Mana/playground/)**: edit and run Mana in your browser, with nothing to install.
 
 # What Mana code looks like
 ````mana:talk.mn
@@ -82,6 +87,7 @@ actor Controller
 | `runner` | header only | The virtual machine that executes a compiled program. |
 | `examples` | | Example scripts: `tutorial` holds the finished code of the Japanese tutorial, `language-tour` exercises most language features in one program. |
 | `tests` | | Test scripts and the test runner. |
+| `web` | `mana.js` / `mana.wasm` | The [Web Playground](web/README.md): the same compiler and VM built with Emscripten, and its tests. The page itself is in `documents/pages/playground`. |
 
 Runtime-only applications can include `runner/common/Version.h` and read
 `mana::version::Number` without linking the compiler. The program image format
@@ -168,6 +174,12 @@ for each platform. Both variables are required even when Bison and Flex are on
 `PATH`. To configure in the Visual Studio IDE, set the variables in the Windows
 user environment and restart Visual Studio, or supply them in a local
 `CMakeSettings.json` `environments` entry.
+
+## Building the Web Playground
+
+The Playground builds the same compiler and VM with Emscripten. See
+[web/README.md](web/README.md) for the build, a local preview at
+`http://localhost:8000/playground/`, and its tests.
 
 # Testing
 
