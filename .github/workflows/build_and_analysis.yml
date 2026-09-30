@@ -68,6 +68,36 @@ jobs:
       - name: Test
         run: ctest --test-dir build -C ${{ matrix.configuration }} --output-on-failure
 
+  # Web Playground用に、同じコンパイラとVMをWebAssemblyでビルドします。
+  # テストはPlaygroundの例をコンパイル・実行し、Web Workerの停止と再起動も確かめます。
+  # Emscriptenのバージョンは再現性の為に web/emscripten-version.txt で固定しています。
+  BuildWebAssembly:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y bison flex cmake ninja-build python3
+      - name: Install Emscripten
+        run: |
+          version="$(tr -d '[:space:]' < web/emscripten-version.txt)"
+          git clone --depth 1 --branch "$version" https://github.com/emscripten-core/emsdk.git "$RUNNER_TEMP/emsdk"
+          "$RUNNER_TEMP/emsdk/emsdk" install "$version"
+          "$RUNNER_TEMP/emsdk/emsdk" activate "$version"
+      - name: Build
+        run: |
+          source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+          export BISON_EXECUTABLE="$(command -v bison)"
+          export FLEX_EXECUTABLE="$(command -v flex)"
+          emcmake cmake -S . -B build-web -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF
+          cmake --build build-web --target mana_web
+      - name: Test
+        run: |
+          source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+          node web/tests/run-tests.js build-web/web
+
   cppcheck:
     runs-on: ubuntu-latest
     steps:

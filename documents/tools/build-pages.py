@@ -3,10 +3,15 @@
 
     python documents/tools/build-pages.py --output build/pages
     python documents/tools/build-pages.py --language ja --output build/pages
+    python documents/tools/build-pages.py --output build/pages --playground-wasm build-web/web
 
 The site introduces Mana and sends readers to the Wiki for the manual. The
 output directory is generated material and is never committed; the GitHub
 Pages workflow uploads it as a deployment artifact.
+
+`documents/pages/playground/` is copied to `<output>/playground/` as it is.
+The Playground also needs `mana.js` and `mana.wasm`, the WebAssembly build in
+`web/`; `--playground-wasm` names the directory that holds them.
 """
 
 from __future__ import annotations
@@ -27,6 +32,12 @@ import manadoc
 # A language the reader picked on the site, kept in their browser so the
 # root page opens it next time.
 LANGUAGE_STORAGE_KEY = "mana-language"
+
+# The Web Playground: static files copied as they are, plus the WebAssembly
+# module built from web/.
+PLAYGROUND_DIR = manadoc.PAGES_DIR / "playground"
+PLAYGROUND_OUTPUT_NAME = "playground"
+PLAYGROUND_MODULE_FILES = ("mana.js", "mana.wasm")
 REMEMBER_LANGUAGE_SCRIPT = (
     'document.addEventListener("click", function (event) {\n'
     '  var link = event.target.closest && event.target.closest("a[data-language]");\n'
@@ -255,9 +266,22 @@ class SiteBuilder:
             asset = self.asset_relative(resolved)
             if asset is not None:
                 return up + manadoc.ASSETS_OUTPUT_NAME + "/" + asset + fragment
+            playground = self.playground_relative(resolved)
+            if playground is not None:
+                return up + playground + fragment
             return "%s/blob/%s/%s%s" % (self.repository, self.ref, resolved, fragment)
 
         return resolve
+
+    @staticmethod
+    def playground_relative(repository_path: str):
+        """`documents/pages/playground/...` as a path in the output tree."""
+        root = manadoc.repository_relative(PLAYGROUND_DIR)
+        if repository_path == root:
+            return PLAYGROUND_OUTPUT_NAME + "/"
+        if repository_path.startswith(root + "/"):
+            return PLAYGROUND_OUTPUT_NAME + repository_path[len(root):]
+        return None
 
     @staticmethod
     def asset_relative(repository_path: str):
@@ -336,6 +360,7 @@ class SiteBuilder:
                 "remember_language": REMEMBER_LANGUAGE_SCRIPT if len(languages) > 1 else "",
                 "assets": "../" * depth + manadoc.ASSETS_OUTPUT_NAME,
                 "stylesheet": "../" * depth + "theme/site.css",
+                "playground": "../" * depth + PLAYGROUND_OUTPUT_NAME + "/",
                 "wiki": self.wiki,
                 "repository": self.repository,
                 "ref": self.ref,
@@ -449,12 +474,30 @@ def available_languages(site, request: str):
     return [wanted]
 
 
+def copy_playground(output: Path, module_directory):
+    """Copy the Playground, and its WebAssembly module when one is given."""
+    destination = output / PLAYGROUND_OUTPUT_NAME
+    shutil.copytree(PLAYGROUND_DIR, destination)
+    if module_directory is None:
+        return False
+    for name in PLAYGROUND_MODULE_FILES:
+        source = Path(module_directory) / name
+        if not source.is_file():
+            raise manadoc.ConfigError(f"{source} does not exist; build the WebAssembly module first")
+        shutil.copy2(source, destination / name)
+    return True
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--language", default="all", help="language code, 'default', or 'all'")
     parser.add_argument("--output", default="build/pages", type=Path)
     parser.add_argument("--config", default=manadoc.PAGES_CONFIG, type=Path)
     parser.add_argument("--ref", default="master", help="repository ref used for source links")
+    parser.add_argument(
+        "--playground-wasm", type=Path,
+        help="directory holding mana.js and mana.wasm for the Playground",
+    )
     manadoc.configure_output()
     arguments = parser.parse_args(argv)
 
@@ -480,6 +523,15 @@ def main(argv=None) -> int:
         [manadoc.Language(code=code, label=code, source=code) for code in languages],
         output / manadoc.ASSETS_OUTPUT_NAME,
     )
+    try:
+        with_module = copy_playground(output, arguments.playground_wasm)
+    except manadoc.ConfigError as error:
+        print(f"error: {error}", file=sys.stderr)
+        return 1
+    if not with_module:
+        builder.problems.append(
+            "the Playground has no WebAssembly module; pass --playground-wasm to include it"
+        )
     # GitHub Pages must serve the generated files as they are.
     manadoc.write_text(output / ".nojekyll", "")
 

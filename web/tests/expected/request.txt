@@ -1,0 +1,7 @@
+Event: A traveler reaches the gate.
+Guard: Halt! Who goes there?
+Guard: (The bell rings!)
+Guard: False alarm. You may pass.
+Gate: *creak* The gate opens.
+Event: Finished.
+Traveler: Thank you!

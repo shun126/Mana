@@ -1,0 +1,250 @@
+/* Mana Playground. Builds on ../theme/site.css and its colour tokens. */
+
+:root {
+  --error: #c62828;
+  --warning: #9a6700;
+  --output-ground: var(--code-ground);
+  --output-ink: var(--code-ink);
+  --mono: "Cascadia Mono", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --error: #ff8a80;
+    --warning: #f2cc60;
+  }
+}
+
+.playground {
+  padding: clamp(24px, 4vw, 40px) max(16px, 5vw) clamp(32px, 5vw, 56px);
+}
+
+.playground-intro h1 {
+  margin: 0;
+  font-size: clamp(30px, 5vw, 44px);
+  line-height: 1.15;
+}
+
+.playground-intro p {
+  margin: 8px 0 0;
+  max-width: 48em;
+  color: var(--ink-soft);
+  font-size: 16px;
+}
+
+/* Toolbar */
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 28px;
+  margin: 24px 0 16px;
+}
+
+.toolbar-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.toolbar-label {
+  color: var(--ink-soft);
+  font-size: 14px;
+  font-weight: 700;
+  margin-right: 4px;
+}
+
+.toolbar .button {
+  padding: 8px 22px;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.toolbar .button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.toolbar .button-primary:disabled:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.toolbar .button-secondary:disabled:hover { background: transparent; }
+
+.chip {
+  padding: 6px 16px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.chip:hover { border-color: var(--accent); }
+
+.chip[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #ffffff;
+}
+
+.button:focus-visible,
+.chip:focus-visible,
+.diagnostics button:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Editor and output */
+
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+}
+
+@media (min-width: 960px) {
+  .workspace { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); }
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.panel-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.panel-header h2 {
+  margin: 0;
+  font-size: 14px;
+  font-family: var(--mono);
+  font-weight: 700;
+}
+
+.panel-hint,
+.status {
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+
+kbd {
+  font-family: var(--mono);
+  font-size: 12px;
+  padding: 1px 5px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+}
+
+.status[data-state="error"] { color: var(--error); }
+
+.editor {
+  display: flex;
+  height: clamp(320px, 60vh, 640px);
+  font-family: var(--mono);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.gutter {
+  flex: none;
+  margin: 0;
+  padding: 12px 10px 12px 14px;
+  min-width: 3.2em;
+  overflow: hidden;
+  border-radius: 0;
+  background: var(--ground);
+  color: var(--ink-soft);
+  text-align: right;
+  font: inherit;
+  user-select: none;
+}
+
+.editor textarea {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  padding: 12px 14px;
+  border: 0;
+  resize: none;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  tab-size: 4;
+  white-space: pre;
+  overflow: auto;
+}
+
+.editor textarea:focus { outline: none; }
+.editor:focus-within { box-shadow: inset 0 0 0 2px var(--accent); }
+
+.output {
+  flex: 1;
+  min-height: 12em;
+  max-height: clamp(320px, 60vh, 640px);
+  margin: 0;
+  padding: 12px 14px;
+  overflow: auto;
+  border-radius: 0;
+  background: var(--output-ground);
+  color: var(--output-ink);
+  font-family: var(--mono);
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.output .trace-warning { color: #f2cc60; }
+.output .trace-error { color: #ff8a80; }
+.output .trace-debug { opacity: 0.7; }
+.output .note { color: #9fb3c8; font-style: italic; }
+
+.diagnostics {
+  margin: 0;
+  padding: 8px 0;
+  list-style: none;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 13px;
+}
+
+.diagnostics button {
+  display: block;
+  width: 100%;
+  padding: 4px 14px;
+  border: 0;
+  background: none;
+  color: var(--error);
+  font: inherit;
+  text-align: left;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+
+.diagnostics button:hover { background: var(--ground); }
+.diagnostics .severity-warning button { color: var(--warning); }
+
+.notice {
+  margin: 16px 0 0;
+  color: var(--error);
+}

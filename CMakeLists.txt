@@ -17,6 +17,13 @@ if(CYGWIN)
   add_compile_definitions(_GNU_SOURCE)
 endif()
 
+# The compiler and the VM throw and catch C++ exceptions, which Emscripten
+# only supports when every object is built for it.
+if(EMSCRIPTEN)
+  add_compile_options(-fwasm-exceptions)
+  add_link_options(-fwasm-exceptions)
+endif()
+
 if(MSVC)
   set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 endif()
@@ -209,4 +216,20 @@ if(BUILD_TESTING)
             -I natives.mh)
   set_tests_properties(LanguageTour PROPERTIES
     WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
+
+  # The Playground examples must print the same on the desktop as in the
+  # browser; web/tests/run-tests.js checks the WebAssembly build against the
+  # same expected output.
+  foreach(mana_example IN ITEMS hello actor request)
+    add_test(NAME PlaygroundExample.${mana_example}
+      COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/check_output.py"
+              "${CMAKE_CURRENT_SOURCE_DIR}/web/tests/expected/${mana_example}.txt"
+              "$<TARGET_FILE:mana>"
+              "${CMAKE_CURRENT_SOURCE_DIR}/documents/pages/playground/examples/${mana_example}.mn")
+  endforeach()
+endif()
+
+# The Web Playground: the same compiler and VM built as WebAssembly.
+if(EMSCRIPTEN)
+  add_subdirectory(web)
 endif()
