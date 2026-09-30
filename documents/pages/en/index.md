@@ -39,7 +39,7 @@ Mana sorts this out in the language itself.
 - Each role is its own Actor, with its own state and Actions
 - Actors ask each other for work through Requests, and never reach into each other's internals
 - Priority says which Action matters most right now
-- Waiting is explicit, with `awaitStart` and `awaitCompletion`
+- Waiting is explicit, with `awaitStart` and `await`
 
 Because the flow of an event is written in the language's own terms, the game's C++ code doesn't have to manage it.
 
@@ -53,7 +53,7 @@ A **Request** asks another Actor to run one of its Actions. The Actor that asked
 
 ![How a request flows](../../assets/en/diagrams/request-flow.svg)
 
-Besides simply asking, you can wait until the other Actor starts with `awaitStart`, or until it finishes with `awaitCompletion`.
+Besides simply asking, you can wait until the other Actor starts with `awaitStart`, or until it finishes with `await`.
 
 ## Priority
 
@@ -74,8 +74,8 @@ actor Event
 {
     action main()
     {
-        awaitCompletion(10, Guide->talk());
-        awaitCompletion(10, Gate->open());
+        await(10, Guide->talk());
+        await(10, Gate->open());
         print("Event: Finished.\n");
     }
 }

@@ -16,7 +16,7 @@ actor Event
 {
     action main()
     {
-        awaitCompletion(kNormalPriority, Guide->talk());
+        await(kNormalPriority, Guide->talk());
         print("Event: Finished.\n");
     }
 }
@@ -67,7 +67,7 @@ flowchart TD
     D --> E["talk carries on where it stopped"]
 ```
 
-This uses `request`. Waiting on your own Actor with `awaitStart` or `awaitCompletion` causes a runtime error.
+This uses `request`. Waiting on your own Actor with `awaitStart` or `await` causes a runtime error.
 
 This example is for watching an interrupt within one Actor. It does not mean that a Request to another Actor runs at an arbitrary moment, like an operating-system interrupt. How Actors are advanced is explained in the [execution model](../concepts/concept-execution-model.md).
 

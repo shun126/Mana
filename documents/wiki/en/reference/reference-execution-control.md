@@ -34,7 +34,7 @@ join(0, NPC);
 
 In the current VM, it waits until the target Actor's current Priority is the given Priority or lower.
 
-Whereas `awaitCompletion` "sends a Request and waits for it to complete", `join` is an instruction for "waiting on an existing execution state".
+Whereas `await` "sends a Request and waits for it to complete", `join` is an instruction for "waiting on an existing execution state".
 
 ## `rollback`
 
@@ -119,14 +119,14 @@ Importantly, the current `Actor::Request` implementation does not refer to this 
 
 So don't treat `lock` in the current implementation as meaning the same as a C++ mutex or "an atomic section that is never interrupted". In this reference, it is treated as **syntax that, in the current implementation, switches a synchronised execution flag**.
 
-## `request` / `awaitStart` / `awaitCompletion`
+## `request` / `awaitStart` / `await`
 
 These instructions combine asking for an Action to run with waiting.
 
 ```mana
 request(10, NPC->talk());
 awaitStart(10, NPC->talk());
-awaitCompletion(10, NPC->talk());
+await(10, NPC->talk());
 ```
 
 For details, see [Request](./reference-request.md).

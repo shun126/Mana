@@ -26,7 +26,7 @@ EventController
 
 通常の `request` は、Request を発行した側が対象 Action の終了を待ちません。
 
-対象 Action の開始や終了を待つ必要がある場合は `awaitStart` や `awaitCompletion` を使います。
+対象 Action の開始や終了を待つ必要がある場合は `awaitStart` や `await` を使います。
 
 ## Priority は Action の重要度を表す
 
@@ -132,10 +132,10 @@ actor Guard
 | --- | --- |
 | `request` | 依頼したら先へ進む |
 | `awaitStart` | 指定PriorityのActionが実行可能な段階まで待つ |
-| `awaitCompletion` | 指定PriorityのActionが完了するまで待つ |
+| `await` | 指定PriorityのActionが完了するまで待つ |
 | `join` | 対象ActorのPriorityが指定値以下になるまで待つ |
 
-`request` は Actor 同士を疎結合に連携させたい場合、`awaitCompletion` はイベントの順番を明確にしたい場合に向いています。ただし、await 系は要求が受理されなければ待たずに進みます。受理後も対象 Actor の Priority を条件に待つため、正確な解除条件は [Request リファレンス](../reference/reference-request.md)で確認してください。
+`request` は Actor 同士を疎結合に連携させたい場合、`await` はイベントの順番を明確にしたい場合に向いています。ただし、await 系は要求が受理されなければ待たずに進みます。受理後も対象 Actor の Priority を条件に待つため、正確な解除条件は [Request リファレンス](../reference/reference-request.md)で確認してください。
 
 ## Priority は Actor ごとに管理される
 

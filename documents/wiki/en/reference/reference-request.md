@@ -102,10 +102,10 @@ If the request is accepted, the wait ends when the target Actor's current Priori
 awaitStart(10, NPC->talk());
 ```
 
-## `awaitCompletion`
+## `await`
 
 ```mana
-awaitCompletion(priority, actor_expression->actionName());
+await(priority, actor_expression->actionName());
 ```
 
 Sends a Request and waits until the work at that Priority completes.
@@ -113,19 +113,19 @@ Sends a Request and waits until the work at that Priority completes.
 If the request is accepted, the wait ends when the target Actor's current Priority becomes lower than the requested Priority. It is not a mechanism that keeps a completion notice per request and waits for it.
 
 ```mana
-awaitCompletion(10, NPC->talk());
+await(10, NPC->talk());
 ```
 
 ## When an await request is not accepted
 
-If the initial Request is not accepted, `awaitStart` and `awaitCompletion` carry on without waiting. They do not keep requesting until the same Priority is free. Returning from the wait does not by itself guarantee that the requested Action ran, or that its behaviour succeeded.
+If the initial Request is not accepted, `awaitStart` and `await` carry on without waiting. They do not keep requesting until the same Priority is free. Returning from the wait does not by itself guarantee that the requested Action ran, or that its behaviour succeeded.
 
 ## Awaiting yourself
 
-If `awaitStart` or `awaitCompletion` targets `self`, the current VM raises a script error.
+If `awaitStart` or `await` targets `self`, the current VM raises a script error.
 
 ```mana
-awaitCompletion(10, self->talk()); // error
+await(10, self->talk()); // error
 ```
 
 This is because if an Actor waits on itself, the wait can only finish if the waiting Actor itself makes progress.
@@ -162,7 +162,7 @@ It watches the Priority of the work the target Actor is already running, and wai
 | --- | --- | --- |
 | `request` | Sends one | No |
 | `awaitStart` | Sends one | Until it can start |
-| `awaitCompletion` | Sends one | Until it completes |
+| `await` | Sends one | Until it completes |
 | `join` | Doesn't send one | Until the existing Priority is the given value or lower |
 
 ## Related topics

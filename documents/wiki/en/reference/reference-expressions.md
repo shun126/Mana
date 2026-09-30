@@ -102,7 +102,7 @@ Enemy->think()
 Game::AI::Enemy->think()
 ```
 
-Action references are used with `request`, `awaitStart`, `awaitCompletion` and so on.
+Action references are used with `request`, `awaitStart`, `await` and so on.
 
 ```mana
 request(10, Enemy->think());

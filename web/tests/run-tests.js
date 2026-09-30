@@ -156,7 +156,7 @@ test("sources can include other in-memory files", async () => {
       "{",
       "    action main()",
       "    {",
-      "        awaitCompletion(1, Guide->talk());",
+      "        await(1, Guide->talk());",
       "    }",
       "}",
       "",

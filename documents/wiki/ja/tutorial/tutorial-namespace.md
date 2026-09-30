@@ -44,8 +44,8 @@ actor Event
 {
     action main()
     {
-        awaitCompletion(10, Guide->talk());
-        awaitCompletion(10, Gate->open());
+        await(10, Guide->talk());
+        await(10, Gate->open());
         print("Event: Finished.\n");
     }
 }
@@ -80,8 +80,8 @@ mana examples/tutorial/12-namespace/main.mn
 `using Town;` を削除し、main の二つの依頼を次に置き換えてください。
 
 ```mana
-awaitCompletion(10, Town::Guide->talk());
-awaitCompletion(10, Town::Gate->open());
+await(10, Town::Guide->talk());
+await(10, Town::Gate->open());
 ```
 
 同じ出力になれば、完全な名前で参照できています。

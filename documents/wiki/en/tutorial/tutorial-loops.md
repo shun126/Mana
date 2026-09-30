@@ -17,7 +17,7 @@ actor Event
             print("Remaining: %d\n", remaining);
             remaining = remaining - 1;
         }
-        awaitCompletion(10, Gate->open());
+        await(10, Gate->open());
     }
 }
 
@@ -72,7 +72,7 @@ for (int i = 0; i < 3; i++)
 {
     print("Step: %d\n", i);
 }
-awaitCompletion(10, Gate->open());
+await(10, Gate->open());
 ```
 
 Inside the brackets of `for` come "what to do first; the condition for continuing; what to do after each round". `i++` increases the value by 1. Here it prints 0, 1 and 2, then opens the gate.
