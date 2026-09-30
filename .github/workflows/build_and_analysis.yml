@@ -76,10 +76,14 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install -y bison flex cmake ninja-build python3
+          sudo apt install -y bison flex cmake ninja-build
       - name: Install Emscripten
         run: |
           version="$(tr -d '[:space:]' < web/emscripten-version.txt)"
@@ -97,6 +101,14 @@ jobs:
         run: |
           source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
           node web/tests/run-tests.js build-web/web
+      - name: Install documentation dependencies
+        run: python -m pip install --disable-pip-version-check -r documents/tools/requirements.txt
+      - name: Check the manuscripts
+        run: python documents/tools/check-docs.py
+      # Pull requests do not run the publishing workflow. Build the complete
+      # site here so broken Pages generation is still caught on feature branches.
+      - name: Build the site
+        run: python documents/tools/build-pages.py --language all --output build/pages --playground-wasm build-web/web
 
   BuildOnMacOS:
     strategy:
