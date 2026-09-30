@@ -76,10 +76,14 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install -y bison flex cmake ninja-build python3
+          sudo apt install -y bison flex cmake ninja-build
       - name: Install Emscripten
         run: |
           version="$(tr -d '[:space:]' < web/emscripten-version.txt)"
@@ -97,6 +101,40 @@ jobs:
         run: |
           source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
           node web/tests/run-tests.js build-web/web
+      - name: Install documentation dependencies
+        run: python -m pip install --disable-pip-version-check -r documents/tools/requirements.txt
+      - name: Check the manuscripts
+        run: python documents/tools/check-docs.py
+      # Pull requests do not run the publishing workflow. Build the complete
+      # site here so broken Pages generation is still caught on feature branches.
+      - name: Build the site
+        run: python documents/tools/build-pages.py --language all --output build/pages --playground-wasm build-web/web
+
+  BuildOnMacOS:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-15-intel, macos-15]
+        configuration: [Debug, Release]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: Install dependencies
+        run: |
+          brew install bison flex
+          echo "BISON_EXECUTABLE=$(brew --prefix bison)/bin/bison" >> "$GITHUB_ENV"
+          echo "FLEX_EXECUTABLE=$(brew --prefix flex)/bin/flex" >> "$GITHUB_ENV"
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Configure
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=${{ matrix.configuration }}
+      - name: Build
+        run: cmake --build build --parallel
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
 
   cppcheck:
     runs-on: ubuntu-latest
