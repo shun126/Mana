@@ -1,10 +1,11 @@
-"""Validate a Mana release tag and assemble source distributions."""
+"""Validate a Mana release tag and assemble source and executable archives."""
 
 import argparse
 import json
 import re
 import subprocess
 import sys
+from tarfile import open as tar_open
 from pathlib import Path
 from zipfile import ZIP_DEFLATED, ZipFile
 
@@ -104,16 +105,90 @@ def package(number, git, build_dir, output_dir):
                   compiler_files, generated, f"mana-compiler-{number}")
 
 
+def package_binary(number, platform, binary_path, output_dir):
+    if platform not in ("windows-x86", "windows-x64", "ubuntu-x64",
+                        "macos-x64", "macos-arm64"):
+        raise ValueError(f"Unsupported binary platform: {platform}")
+    binary = binary_path.resolve()
+    if not binary.is_file():
+        raise FileNotFoundError(f"Build first; executable is missing: {binary}")
+    expected_name = "mana.exe" if platform.startswith("windows-") else "mana"
+    if binary.name != expected_name:
+        raise ValueError(f"Expected executable named {expected_name}: {binary}")
+
+    prefix = f"mana-{number}-{platform}"
+    output_dir.mkdir(parents=True, exist_ok=True)
+    files = {
+        expected_name: binary,
+        "LICENSE.md": ROOT / "LICENSE.md",
+        "README.md": ROOT / "README.md",
+        "QUICKSTART.md": ROOT / ".github/assets/QUICKSTART.md",
+        "examples/03-request.mn": ROOT / "examples/tutorial/03-request.mn",
+    }
+    if not platform.startswith("windows-"):
+        path = output_dir / f"{prefix}.tar.gz"
+        with tar_open(path, "w:gz") as archive:
+            for name, source in files.items():
+                info = archive.gettarinfo(source, arcname=f"{prefix}/{name}")
+                if name == expected_name:
+                    info.mode = 0o755
+                with source.open("rb") as stream:
+                    archive.addfile(info, stream)
+    else:
+        path = output_dir / f"{prefix}.zip"
+        with ZipFile(path, "w", compression=ZIP_DEFLATED, compresslevel=9) as archive:
+            for name, source in files.items():
+                archive.write(source, f"{prefix}/{name}")
+    print(f"Created {path}")
+
+
+def verify_assets(number, output_dir):
+    expected = {
+        f"mana-runtime-{number}-source.zip",
+        f"mana-compiler-{number}-embedding.zip",
+        f"mana-{number}-windows-x86.zip",
+        f"mana-{number}-windows-x64.zip",
+        f"mana-{number}-ubuntu-x64.tar.gz",
+        f"mana-{number}-macos-x64.tar.gz",
+        f"mana-{number}-macos-arm64.tar.gz",
+    }
+    actual = {path.name for path in output_dir.iterdir() if path.is_file()}
+    if actual != expected:
+        raise ValueError(f"Release assets differ: missing={sorted(expected - actual)}, "
+                         f"unexpected={sorted(actual - expected)}")
+    for name in sorted(name for name in expected if name.endswith(".zip")):
+        with ZipFile(output_dir / name) as archive:
+            bad_file = archive.testzip()
+            if bad_file:
+                raise ValueError(f"Corrupt release archive {name}: {bad_file}")
+    for name in sorted(name for name in expected if name.endswith(".tar.gz")):
+        with tar_open(output_dir / name, "r:gz") as archive:
+            for member in archive:
+                if member.isfile():
+                    with archive.extractfile(member) as stream:
+                        while stream.read(1024 * 1024):
+                            pass
+    print("Validated all seven release archives")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("command", choices=("validate", "package"))
+    parser.add_argument("command", choices=("validate", "package", "binary", "verify-assets"))
     parser.add_argument("tag")
     parser.add_argument("--build-dir", type=Path, default=ROOT / "build")
     parser.add_argument("--output-dir", type=Path, default=ROOT / "dist")
+    parser.add_argument("--platform")
+    parser.add_argument("--binary-path", type=Path)
     args = parser.parse_args()
     number, git = validate(args.tag)
     if args.command == "package":
         package(number, git, args.build_dir.resolve(), args.output_dir.resolve())
+    elif args.command == "binary":
+        if not args.platform or not args.binary_path:
+            parser.error("binary requires --platform and --binary-path")
+        package_binary(number, args.platform, args.binary_path, args.output_dir.resolve())
+    elif args.command == "verify-assets":
+        verify_assets(number, args.output_dir.resolve())
 
 
 if __name__ == "__main__":
