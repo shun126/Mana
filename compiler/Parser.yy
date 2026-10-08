@@ -5,19 +5,15 @@ mana (compiler)
 @author	Shun Moriya
 @date	2016-
 */
-
-#if MANA_BUILD_TARGET < MANA_BUILD_RELEASE
-#define YYERROR_VERBOSE
-#endif
-
 %}
 
-%require "3.2"
+%require "3.8"
 %language "c++"
 
 %define api.parser.class {Parser}
 %define api.namespace {mana}
 %define api.value.type variant
+%define parse.error detailed
 
 %parse-param { mana::ParsingDriver* mParsingDriver }
 
@@ -64,36 +60,91 @@ mana (compiler)
 %type	<std::shared_ptr<mana::SyntaxNode>> block case cases left_hand constant expression statement statements variable_size variable_sizes variable_type function struct_member struct_members struct action actions actor declarator declaration allocate_declarations declarations primary arg_calls arg_decls variable_decl const_decl line
 %type	<std::string_view> qualified_name
 %type	<mana::ActionReference> action_ref
-%token	<mana::int_t> tDIGIT
-%token	<mana::float_t> tREAL
-%token	<std::string_view> tSTRING tIDENTIFIER
-%token	<std::shared_ptr<mana::TypeDescriptor>> tTYPE
 
-%token	tDEFINE tUNDEF tINCLUDE tIMPORT tCONST
-%token	tNATIVE tSTRUCT tACTOR tPHANTOM tACTION tMODULE tEXTEND
-%token	tNAMESPACE tUSING
-%token	tFALSE tTRUE tPRIORITY tSELF tSENDER tTHIS tNIL
-%token	tREQUEST tAwaitStart tAwait tJOIN
-%token	tBREAK
-%token	tCONTINUE
-%token	tCASE
-%token	tDEFAULT
-%token	GOTO
-%token	tHALT
-%token	tLOCK
-%token	tDC
-%token	tARROW
-%token	tDO
-%token	tELSE
-%token	tFOR
-%token	tIF
-%token	tLOOP
-%token	tYIELD
-%token	tRETURN
-%token	tROLLBACK
-%token	tSWITCH
-%token	tWHILE
-%token	tPRINT tSTATIC tALLOCATE tCOMPLY tREFUSE
+/*
+NOTE: Keep tokens in sync with Lexer.l.
+Each alias string must match the keyword or operator that Lexer.l returns the token for,
+and every token except the precedence-only ones (tUPLUS, tUMINUS, tUINC, tUDEC) must be returned by Lexer.l.
+The compiler cannot detect a mismatched alias or an unused token.
+*/
+%token	<mana::int_t> tDIGIT "integer literal"
+%token	<mana::float_t> tREAL "real literal"
+%token	<std::string_view> tSTRING "string literal"
+%token	<std::string_view> tIDENTIFIER "identifier"
+%token	<std::shared_ptr<mana::TypeDescriptor>> tTYPE "type name"
+
+%token	tDEFINE "define"
+%token	tUNDEF "undef"
+%token	tINCLUDE "include"
+%token	tIMPORT "import"
+%token	tCONST "const"
+%token	tNATIVE "native"
+%token	tSTRUCT "struct"
+%token	tACTOR "actor"
+%token	tPHANTOM "phantom"
+%token	tACTION "action"
+%token	tMODULE "module"
+%token	tEXTEND "extend"
+%token	tNAMESPACE "namespace"
+%token	tUSING "using"
+%token	tFALSE "false"
+%token	tTRUE "true"
+%token	tPRIORITY "priority"
+%token	tSELF "self"
+%token	tSENDER "sender"
+%token	tTHIS "this"
+%token	tNIL "Nil"
+%token	tREQUEST "request"
+%token	tAwaitStart "awaitStart"
+%token	tAwait "await"
+%token	tJOIN "join"
+%token	tBREAK "break"
+%token	tCONTINUE "continue"
+%token	tCASE "case"
+%token	tDEFAULT "default"
+%token	GOTO "goto"
+%token	tHALT "halt"
+%token	tLOCK "lock"
+%token	tDC "::"
+%token	tARROW "->"
+%token	tDO "do"
+%token	tELSE "else"
+%token	tFOR "for"
+%token	tIF "if"
+%token	tLOOP "loop"
+%token	tYIELD "yield"
+%token	tRETURN "return"
+%token	tROLLBACK "rollback"
+%token	tSWITCH "switch"
+%token	tWHILE "while"
+%token	tPRINT "print"
+%token	tSTATIC "static"
+%token	tALLOCATE "allocate"
+%token	tCOMPLY "comply"
+%token	tREFUSE "refuse"
+
+%token	tAMUL "*="
+%token	tADIV "/="
+%token	tAMOD "%="
+%token	tAADD "+="
+%token	tASUB "-="
+%token	tALSHFT "<<="
+%token	tARSHFT ">>="
+%token	tAAND "&="
+%token	tAOR "|="
+%token	tAXOR "^="
+%token	tAND "&&"
+%token	tOR "||"
+%token	tEQ "=="
+%token	tNE "!="
+%token	tGE ">="
+%token	tLE "<="
+%token	tLSHFT "<<"
+%token	tRSHFT ">>"
+%token	tPOW "**"
+%token	tSIZEOF "sizeof"
+%token	tINC "++"
+%token	tDEC "--"
 
 %nonassoc	tAMUL tADIV tAMOD;
 %nonassoc	tAADD tASUB;

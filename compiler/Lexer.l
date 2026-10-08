@@ -30,6 +30,13 @@ mana (compiler)
 
 #define YY_DECL int yylex(mana::Parser::value_type* yylval)
 
+/*
+NOTE: Keep tokens in sync with Parser.yy.
+When adding, removing or renaming a keyword or operator here,
+also update the matching %token declaration and its alias string in Parser.yy.
+The compiler cannot detect a mismatched alias or an unused token.
+*/
+
 %}
 
 ws			[ \t]
@@ -102,7 +109,7 @@ other		.
 <INITIAL>"module"	return mana::Parser::token::tMODULE;
 <INITIAL>"extend"	return mana::Parser::token::tEXTEND;
 <INITIAL>"namespace"	return mana::Parser::token::tNAMESPACE;
-<INITIAL>"using"		return mana::Parser::token::tUSING;
+<INITIAL>"using"	return mana::Parser::token::tUSING;
 <INITIAL>"static"	return mana::Parser::token::tSTATIC;
 <INITIAL>"allocate"	return mana::Parser::token::tALLOCATE;
 
@@ -135,7 +142,7 @@ other		.
 <INITIAL>"while"	return mana::Parser::token::tWHILE;
 <INITIAL>"print"	return mana::Parser::token::tPRINT;
 <INITIAL>"request"	return mana::Parser::token::tREQUEST;
-<INITIAL>"awaitStart"		return mana::Parser::token::tAwaitStart;
+<INITIAL>"awaitStart"	return mana::Parser::token::tAwaitStart;
 <INITIAL>"await"	return mana::Parser::token::tAwait;
 <INITIAL>"yield"	return mana::Parser::token::tYIELD;
 
