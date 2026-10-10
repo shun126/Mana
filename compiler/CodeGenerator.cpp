@@ -1,9 +1,9 @@
 /*!
-mana (compiler)
-
-@author	Shun Moriya
-@date	2017-
-*/
+ * mana (compiler)
+ *
+ * @author	Shun Moriya
+ * @date	2017-
+ */
 
 #include "CodeGenerator.h"
 #include "ErrorHandler.h"
@@ -37,8 +37,8 @@ namespace mana
 	// 以下は シンボルを解決しつつコードを出力する 関数郡
 	////////////////////////////////////////////////////////////////////////////////
 	/*!
-	スタックにあるアドレスからデータを読み込む命令を出力する
-	*/
+	 * スタックにあるアドレスからデータを読み込む命令を出力する
+	 */
 	void CodeGenerator::ResolveLoad(const std::shared_ptr<SyntaxNode>& node) const
 	{
 		//	register_entity* register_entity;
@@ -105,8 +105,8 @@ namespace mana
 	}
 
 	/*!
-	スタックにあるアドレスへデータを書き込む命令を出力する
-	*/
+	 * スタックにあるアドレスへデータを書き込む命令を出力する
+	 */
 	void CodeGenerator::ResolveStore(const std::shared_ptr<SyntaxNode>& node) const
 	{
 		MANA_ASSERT(node);
@@ -156,10 +156,10 @@ namespace mana
 	}
 
 	/*!
-	returnの処理
-	@param	function	returnが所属する関数のSymbol
-	@param	tree		return文のSyntaxNode
-	*/
+	 * returnの処理
+	 * @param	function	returnが所属する関数のSymbol
+	 * @param	tree		return文のSyntaxNode
+	 */
 	void CodeGenerator::Return(const std::shared_ptr<Symbol>& function, const std::shared_ptr<SyntaxNode>& tree)
 	{
 		// return 文のノードは常に渡されるため、戻り値の有無は左ノードで判定します
@@ -207,9 +207,9 @@ namespace mana
 	}
 
 	/*!
-	rollbackの処理
-	@param	tree	rollback文のSyntaxNode
-	*/
+	 * rollbackの処理
+	 * @param	tree	rollback文のSyntaxNode
+	 */
 	void CodeGenerator::Rollback(const std::shared_ptr<SyntaxNode>& tree)
 	{
 		if (tree)
@@ -226,12 +226,12 @@ namespace mana
 	}
 
 	/*!
-	関数呼び出し時の引数を出力（再帰呼び出し）
-	@param	count	引数の番号
-	@param	param	引数のSymbol
-	@param	arg		引数のSyntaxNode
-	@return	引数の数
-	*/
+	 * 関数呼び出し時の引数を出力（再帰呼び出し）
+	 * @param	count	引数の番号
+	 * @param	param	引数のSymbol
+	 * @param	arg		引数のSyntaxNode
+	 * @return	引数の数
+	 */
 	int32_t CodeGenerator::Argument(int32_t count, const std::shared_ptr<Symbol>& param, std::shared_ptr<SyntaxNode> arg)
 	{
 		if (param && arg)
@@ -286,12 +286,12 @@ ARGUMENT_COMPLETE:
 	}
 
 	/*!
-	* 関数の引数のサイズを調べます
-	* @param	address	アドレス
-	* @param	param	引数のSymbol
-	* @param	arg		引数のSyntaxNode
-	* @return	引数のサイズ
-	*/
+	 * 関数の引数のサイズを調べます
+	 * @param	address	アドレス
+	 * @param	param	引数のSymbol
+	 * @param	arg		引数のSyntaxNode
+	 * @return	引数のサイズ
+	 */
 	int32_t CodeGenerator::CallArgumentSize(int32_t address, const std::shared_ptr<Symbol>& param, std::shared_ptr<SyntaxNode> arg)
 	{
 		if (param && arg)
@@ -309,12 +309,12 @@ ARGUMENT_COMPLETE:
 	}
 
 	/*!
-	* 関数の引数を評価します
-	* @param	address	引数のアドレス
-	* @param	param	引数のSymbol
-	* @param	arg		引数のSyntaxNode
-	* @return	引数のアドレス
-	*/
+	 * 関数の引数を評価します
+	 * @param	address	引数のアドレス
+	 * @param	param	引数のSymbol
+	 * @param	arg		引数のSyntaxNode
+	 * @return	引数のアドレス
+	 */
 	int32_t CodeGenerator::CallArgument(int32_t address, const std::shared_ptr<Symbol>& param, std::shared_ptr<SyntaxNode> arg)
 	{
 		if (param && arg)
@@ -334,9 +334,9 @@ ARGUMENT_COMPLETE:
 	}
 
 	/*!
-	* 関数呼び出しのノードを評価します
-	* @param	node	関数呼び出しのSyntaxNode
-	*/
+	 * 関数呼び出しのノードを評価します
+	 * @param	node	関数呼び出しのSyntaxNode
+	 */
 	void CodeGenerator::Call(const std::shared_ptr<SyntaxNode>& node)
 	{
 		const auto& argument = node->GetRightNode();
@@ -425,9 +425,9 @@ ARGUMENT_COMPLETE:
 	}
 
 	/*!
-	* print文の処理
-	* @param[in]	node	print文のSyntaxNode
-	*/
+	 * print文の処理
+	 * @param[in]	node	print文のSyntaxNode
+	 */
 	void CodeGenerator::CallPrint(const std::shared_ptr<SyntaxNode>& node)
 	{
 		mCodeBuffer->AddOpecodeAndOperand(
@@ -437,9 +437,9 @@ ARGUMENT_COMPLETE:
 	}
 
 	/*!
-	* 判別式内に代入文があるか調べます
-	* @param	tree	評価式のSyntaxNode
-	*/
+	 * 判別式内に代入文があるか調べます
+	 * @param	tree	評価式のSyntaxNode
+	 */
 	void CodeGenerator::ConditionCheck(const std::shared_ptr<SyntaxNode>& tree)
 	{
 		if (tree)
@@ -456,10 +456,10 @@ ARGUMENT_COMPLETE:
 	}
 
 	/*!
-	* 判別式の評価
-	* @param	tree	評価式のSyntaxNode
-	* @return	現在のプログラムアドレス
-	*/
+	 * 判別式の評価
+	 * @param	tree	評価式のSyntaxNode
+	 * @return	現在のプログラムアドレス
+	 */
 	address_t CodeGenerator::ConditionCore(const std::shared_ptr<SyntaxNode>& tree)
 	{
 		// 判別式内に代入式があるか調べます
@@ -479,11 +479,11 @@ ARGUMENT_COMPLETE:
 	}
 
 	/*!
-	判別式の評価
-	@param	tree	評価式のSyntaxNode
-	@param	match	trueなら一致、falseなら不一致を判定
-	@return	現在のプログラムアドレス
-	*/
+	 * 判別式の評価
+	 * @param	tree	評価式のSyntaxNode
+	 * @param	match	trueなら一致、falseなら不一致を判定
+	 * @return	現在のプログラムアドレス
+	 */
 	address_t CodeGenerator::Condition(const std::shared_ptr<SyntaxNode>& tree, const bool match)
 	{
 		//generator_resolve_symbol(tree);
@@ -579,10 +579,10 @@ ARGUMENT_COMPLETE:
 
 	////////////////////////////////////////////////////////////////////////////////
 	/*!
-	式の評価
-	@param	tree			式のSyntaxNode
-	@param	enableAssign	trueならば代入式、falseならばそれ以外
-	*/
+	 * 式の評価
+	 * @param	tree			式のSyntaxNode
+	 * @param	enableAssign	trueならば代入式、falseならばそれ以外
+	 */
 	void CodeGenerator::Expression(const std::shared_ptr<SyntaxNode>& tree, const int32_t enableAssign)
 	{
 		if (tree == nullptr)
@@ -884,11 +884,11 @@ DO_RECURSIVE:
 			}
 			//resolver_resolve_variable_description(node, Normal);
 			/*
-			GenerateCode(node->GetLeftNode(), enableLoad); // SyntaxNode::Id::TypeDescription
-			GenerateCode(node->GetRightNode(), enableLoad);// SyntaxNode::Id::Declarator
-			if(node->GetRightNode()->GetSymbol()->class_type == LocalVariable)
-			symbol_allocate_memory(node->GetRightNode()->GetSymbol(), node->GetLeftNode()->GetTypeDescriptor(), Normal);
-			*/
+			 * GenerateCode(node->GetLeftNode(), enableLoad); // SyntaxNode::Id::TypeDescription
+			 * GenerateCode(node->GetRightNode(), enableLoad);// SyntaxNode::Id::Declarator
+			 * if(node->GetRightNode()->GetSymbol()->class_type == LocalVariable)
+			 * symbol_allocate_memory(node->GetRightNode()->GetSymbol(), node->GetLeftNode()->GetTypeDescriptor(), Normal);
+			 */
 			break;
 
 		case SyntaxNode::Id::TypeDescription:

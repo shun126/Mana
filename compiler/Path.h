@@ -1,9 +1,9 @@
 /*!
-mana (compiler)
-
-@author	Shun Moriya
-@date	2016-
-*/
+ * mana (compiler)
+ *
+ * @author	Shun Moriya
+ * @date	2016-
+ */
 
 #pragma once
 #include "../runner/common/Setup.h"
@@ -34,34 +34,34 @@ mana (compiler)
 namespace mana
 {
 	/*!
-	Creates a path name from components.
-	*/
+	 * Creates a path name from components.
+	 */
 	extern void makepath(char* path, const size_t pathCount, const char* drive, const char* dir, const char* file, const char* ext);
 
 	/*!
-	Break a path name into components. 
-	*/
+	 * Break a path name into components.
+	 */
 	extern void splitpath(const char* sptr, char* drive, const size_t driveCount, char* dir, const size_t dirCount, char* file, const size_t fileCount, char* ext, const size_t extCount);
 
 	/*!
-	return the canonicalized absolute pathname
-	*/
+	 * return the canonicalized absolute pathname
+	 */
 	extern char* fullpath(char* out, const char* in, const size_t size);
 
 	/*!
-	change working directory
-	*/
+	 * change working directory
+	 */
 	extern int chdir(const char* path);
 
 	/*!
-	return current working directory
-	@return	現在の作業ディレクトリ。取得に失敗した場合は空文字列
-	*/
+	 * return current working directory
+	 * @return	現在の作業ディレクトリ。取得に失敗した場合は空文字列
+	 */
 	extern std::string getcurrentdirectory();
 
 	/*!
-	return path separator charactor
-	*/
+	 * return path separator charactor
+	 */
 #if defined(MANA_TARGET_WINDOWS)
 	constexpr char PathSeparator() { return '\\'; }
 #else

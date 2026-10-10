@@ -1,7 +1,7 @@
 /*
-mana (script)
-Copyright (c) 2016 Shun Moriya
-*/
+ * mana (script)
+ * Copyright (c) 2016 Shun Moriya
+ */
 
 void extra()
 {

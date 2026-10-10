@@ -1,9 +1,9 @@
 /*!
-mana (compiler)
-
-@author	Shun Moriya
-@date	2017-
-*/
+ * mana (compiler)
+ *
+ * @author	Shun Moriya
+ * @date	2017-
+ */
 
 #pragma once
 #include "ParsingDriver.h"
@@ -26,10 +26,10 @@ namespace mana
 	}
 
 	/*!
-	改行コードを LF へ揃えます
-
-	字句解析器の規則は CR を扱わないため、読み込んだ時点で取り除きます。
-	*/
+	 * 改行コードを LF へ揃えます
+	 *
+	 * 字句解析器の規則は CR を扱わないため、読み込んだ時点で取り除きます。
+	 */
 	inline void Lexer::NormalizeNewlines(std::string& text)
 	{
 		size_t write = 0;

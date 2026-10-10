@@ -1,7 +1,7 @@
 /*
-mana (script)
-Copyright (c) 2026 Shun Moriya
-*/
+ * mana (script)
+ * Copyright (c) 2026 Shun Moriya
+ */
 
 module SharedActions
 {

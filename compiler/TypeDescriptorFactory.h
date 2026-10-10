@@ -1,9 +1,9 @@
 /*!
-mana (compiler)
-
-@author	Shun Moriya
-@date	2016-
-*/
+ * mana (compiler)
+ *
+ * @author	Shun Moriya
+ * @date	2016-
+ */
 
 #pragma once
 #include "../runner/common/Platform.h"
@@ -15,8 +15,8 @@ mana (compiler)
 namespace mana
 {
 	/*
-	型の識別子を生成します
-	*/
+	 * 型の識別子を生成します
+	 */
 	class TypeDescriptorFactory final : Noncopyable
 	{
 	public:

@@ -1,9 +1,9 @@
 /*!
-mana (compiler)
-
-@author	Shun Moriya
-@date	2022-
-*/
+ * mana (compiler)
+ *
+ * @author	Shun Moriya
+ * @date	2022-
+ */
 
 #include "../runner/common/Setup.h"
 #include "ParsingDriver.h"
@@ -510,20 +510,20 @@ namespace mana
 	| tFOR '(' variable_decl '=' expression ';' expression ';' expression ')' statement
 
 		/*
-		MANA_ASSERT($3->right);
-		MANA_ASSERT($3->right->mString);
-		MANA_ASSERT($3->next == nullptr);
-
-		node_entry* mNode = node_create_node(Identifier, nullptr, nullptr, nullptr);
-		mNode->mString = $3->right->mString;
-		$3->next = mNode;
-
-		$$ = node_create_node(Block,
-		node_create_node(Assign, $3, $5, nullptr),
-		node_create_node(For, $7, $9, $11),
-		nullptr
-		);
-		*/
+		 * MANA_ASSERT($3->right);
+		 * MANA_ASSERT($3->right->mString);
+		 * MANA_ASSERT($3->next == nullptr);
+		 *
+		 * node_entry* mNode = node_create_node(Identifier, nullptr, nullptr, nullptr);
+		 * mNode->mString = $3->right->mString;
+		 * $3->next = mNode;
+		 *
+		 * $$ = node_create_node(Block,
+		 * node_create_node(Assign, $3, $5, nullptr),
+		 * node_create_node(For, $7, $9, $11),
+		 * nullptr
+		 * );
+		 */
 }
 #endif
 	std::shared_ptr<SyntaxNode> ParsingDriver::CreateFor(const std::shared_ptr<SyntaxNode>& declareVariable, const std::shared_ptr<SyntaxNode>& initializeStatement, const std::shared_ptr<SyntaxNode>& condition, const std::shared_ptr<SyntaxNode>& iterationExpression, const std::shared_ptr<SyntaxNode>& statement)

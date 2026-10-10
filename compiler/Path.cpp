@@ -1,9 +1,9 @@
 /*!
-mana (compiler)
-
-@author	Shun Moriya
-@date	2016-
-*/
+ * mana (compiler)
+ *
+ * @author	Shun Moriya
+ * @date	2016-
+ */
 
 #include "Path.h"
 #if defined(MANA_TARGET_WINDOWS)

@@ -1,9 +1,9 @@
 /*!
-mana (compiler)
-
-@author	Shun Moriya
-@date	2016-
-*/
+ * mana (compiler)
+ *
+ * @author	Shun Moriya
+ * @date	2016-
+ */
 
 #pragma once
 #include "../runner/common/Platform.h"
@@ -18,9 +18,9 @@ namespace mana
 	class OutputStream;
 
 	/*
-	Data Section
-	データセクション
-	*/
+	 * Data Section
+	 * データセクション
+	 */
 	class DataBuffer final : Noncopyable
 	{
 	public:

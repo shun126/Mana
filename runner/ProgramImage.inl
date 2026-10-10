@@ -1,9 +1,9 @@
 /*!
-mana (library)
-
-@author	Shun Moriya
-@date	2016-
-*/
+ * mana (library)
+ *
+ * @author	Shun Moriya
+ * @date	2016-
+ */
 
 #pragma once
 #include "ProgramImage.h"

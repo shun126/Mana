@@ -1,12 +1,12 @@
 /*!
-mana (compiler)
-
-@file	ErrorHandler.h
-@brief	エラーや警告に関係するヘッダーファイル
-@detail	このファイルはエラーや警告に関係するヘッダーファイルです。
-@author	Shun Moriya
-@date	2017-
-*/
+ * mana (compiler)
+ *
+ * @file	ErrorHandler.h
+ * @brief	エラーや警告に関係するヘッダーファイル
+ * @detail	このファイルはエラーや警告に関係するヘッダーファイルです。
+ * @author	Shun Moriya
+ * @date	2017-
+ */
 
 #pragma once
 #include <cstdint>
@@ -55,11 +55,11 @@ namespace mana
 	};
 
 	/*!
-	コンパイラが報告する診断1件
-
-	文字列に整形される前の状態で保持するため、埋め込み先のアプリケーションは
-	ファイル名や行番号を利用した独自の表示を行う事ができます。
-	*/
+	 * コンパイラが報告する診断1件
+	 *
+	 * 文字列に整形される前の状態で保持するため、埋め込み先のアプリケーションは
+	 * ファイル名や行番号を利用した独自の表示を行う事ができます。
+	 */
 	struct Diagnostic final
 	{
 		//! 重大度
@@ -78,12 +78,12 @@ namespace mana
 		std::string mMessage;
 
 		/*!
-		コンパイラの標準的な書式に整形します
-
-		行情報がある場合はWindowsでは "file(line): error: message"、
-		それ以外では "file:line error: message" になります。
-		@return	整形された文字列（末尾に改行を含みません）
-		*/
+		 * コンパイラの標準的な書式に整形します
+		 *
+		 * 行情報がある場合はWindowsでは "file(line): error: message"、
+		 * それ以外では "file:line error: message" になります。
+		 * @return	整形された文字列（末尾に改行を含みません）
+		 */
 		[[nodiscard]] std::string ToString() const;
 	};
 
@@ -91,14 +91,14 @@ namespace mana
 	using DiagnosticHandler = std::function<void(const Diagnostic&)>;
 
 	/*!
-	診断の収集先
-
-	このオブジェクトが生存している間、CompileError等の呼び出しは全てここへ
-	集約されます。生存していない間に報告された診断は標準出力へ出力されます。
-
-	@attention	現在のコンパイラはグローバルな状態を持つため、同時に生存できる
-				インスタンスは1つだけです。スレッド安全ではありません。
-	*/
+	 * 診断の収集先
+	 *
+	 * このオブジェクトが生存している間、CompileError等の呼び出しは全てここへ
+	 * 集約されます。生存していない間に報告された診断は標準出力へ出力されます。
+	 *
+	 * @attention	現在のコンパイラはグローバルな状態を持つため、同時に生存できる
+	 * 			インスタンスは1つだけです。スレッド安全ではありません。
+	 */
 	class DiagnosticBag final
 	{
 	public:
@@ -109,9 +109,9 @@ namespace mana
 		DiagnosticBag& operator=(DiagnosticBag&& other) noexcept = delete;
 
 		/*!
-		@param[in]	targetFilename	行情報を持たない診断に付与するファイル名
-		@param[in]	handler			診断が追加される度に呼ばれるコールバック（省略可）
-		*/
+		 * @param[in]	targetFilename	行情報を持たない診断に付与するファイル名
+		 * @param[in]	handler			診断が追加される度に呼ばれるコールバック（省略可）
+		 */
 		explicit DiagnosticBag(const std::string_view targetFilename, DiagnosticHandler handler = nullptr);
 		~DiagnosticBag();
 

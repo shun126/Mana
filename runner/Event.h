@@ -1,9 +1,9 @@
 /*!
-mana (library)
-
-@author	Shun Moriya
-@date	2024-
-*/
+ * mana (library)
+ *
+ * @author	Shun Moriya
+ * @date	2024-
+ */
 
 #pragma once
 #include "common/Setup.h"

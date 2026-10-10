@@ -1,9 +1,9 @@
 /*!
-mana (compiler)
-
-@author	Shun Moriya
-@date	2016-
-*/
+ * mana (compiler)
+ *
+ * @author	Shun Moriya
+ * @date	2016-
+ */
 
 #pragma once
 #include "../runner/common/Platform.h"
@@ -13,7 +13,7 @@ mana (compiler)
 
 namespace mana
 {
-	/**
+	/*!
 	 * Pool strings while removing duplicate strings
 	 * 重複文字列を削除しながら文字列をプールします
 	 */
@@ -27,14 +27,14 @@ namespace mana
 		StringPool& operator=(StringPool&& other) noexcept = delete;
 		~StringPool() = default;
 
-		/**
+		/*!
 		 * Searches for pooled strings
 		 * @param[in]	text	String to search
 		 * @return				Registered string. Note that the address is not the same as the searched string.
 		 */
 		[[nodiscard]] std::string_view Get(const std::string_view& text) const;
 
-		/**
+		/*!
 		 * Register strings in the string pool.
 		 * @param[in]	text String to be registered.
 		 * @return		Registered string. Note that the address is different from the string to be registered.

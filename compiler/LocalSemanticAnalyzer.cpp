@@ -1,9 +1,9 @@
 /*!
-mana (compiler)
-
-@author	Shun Moriya
-@date	2017-
-*/
+ * mana (compiler)
+ *
+ * @author	Shun Moriya
+ * @date	2017-
+ */
 
 #include "LocalSemanticAnalyzer.h"
 #include "ErrorHandler.h"
@@ -552,9 +552,9 @@ namespace mana
 	}
 
 	/*!
-	自動型変換ノードを挿入します
-	@param[in]	node	ノードオブジェクト
-	*/
+	 * 自動型変換ノードを挿入します
+	 * @param[in]	node	ノードオブジェクト
+	 */
 	void LocalSemanticAnalyzer::AutoCast(const std::shared_ptr<SyntaxNode>& node)
 	{
 		if (node == nullptr)
@@ -646,11 +646,11 @@ DO_RECURSIVE:
 
 		case SyntaxNode::Id::Struct:
 			/*
-			TODO:ローカルスコープ内で宣言された時のみ有効にして下さい
-			symbol_open_structure();
-			PostResolverResolve(node->GetLeftNode());
-			symbol_close_structure(node->GetString());
-			*/
+			 * TODO:ローカルスコープ内で宣言された時のみ有効にして下さい
+			 * symbol_open_structure();
+			 * PostResolverResolve(node->GetLeftNode());
+			 * symbol_close_structure(node->GetString());
+			 */
 			MANA_ASSERT(node->GetRightNode() == nullptr);
 			MANA_ASSERT(node->GetBodyNode() == nullptr);
 			break;

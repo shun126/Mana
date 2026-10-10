@@ -1,13 +1,13 @@
 /*!
-mana (compiler)
-
-@file	Main.cpp
-@brief	コマンドラインインターフェース
-@detail	このファイルはコンパイラのコマンドラインインターフェースです。
-		コンパイル処理そのものは Compiler.h の Compile() が行います。
-@author	Shun Moriya
-@date	2016-
-*/
+ * mana (compiler)
+ *
+ * @file	Main.cpp
+ * @brief	コマンドラインインターフェース
+ * @detail	このファイルはコンパイラのコマンドラインインターフェースです。
+ * 		コンパイル処理そのものは Compiler.h の Compile() が行います。
+ * @author	Shun Moriya
+ * @date	2016-
+ */
 
 #include "../runner/common/Setup.h"
 #include "../compiler/Compiler.h"
@@ -50,8 +50,8 @@ namespace mana
 	namespace
 	{
 		/*!
-		バッファをファイルへ保存します
-		*/
+		 * バッファをファイルへ保存します
+		 */
 		[[nodiscard]] bool SaveFile(const std::string& filename, const std::string& content)
 		{
 			std::ofstream file(filename, std::ios::out);
@@ -65,8 +65,8 @@ namespace mana
 		}
 
 		/*!
-		プログラムイメージをファイルへ保存します
-		*/
+		 * プログラムイメージをファイルへ保存します
+		 */
 		[[nodiscard]] bool SaveProgramImage(const std::string& filename, const std::vector<uint8_t>& programImage)
 		{
 			std::ofstream file(filename, std::ios::out | std::ios::binary);
@@ -80,8 +80,8 @@ namespace mana
 		}
 
 		/*!
-		プログラムイメージを実行します
-		*/
+		 * プログラムイメージを実行します
+		 */
 		int Execute(const std::shared_ptr<const void>& program)
 		{
 			std::shared_ptr<VM> vm = std::make_shared<VM>();
@@ -94,8 +94,8 @@ namespace mana
 		}
 
 		/*!
-		プログラムイメージファイルを実行します
-		*/
+		 * プログラムイメージファイルを実行します
+		 */
 		int Execute(const std::string& path)
 		{
 			std::shared_ptr<VM> vm = std::make_shared<VM>();
@@ -108,8 +108,8 @@ namespace mana
 		}
 
 		/*!
-		コンパイルして結果をファイルへ出力します
-		*/
+		 * コンパイルして結果をファイルへ出力します
+		 */
 		int Generate(const CommandLine& commandLine)
 		{
 			CompileOptions options = commandLine.mOptions;
@@ -185,8 +185,8 @@ namespace mana
 		}
 
 		/*!
-		入力ファイル名の拡張子を差し替えたファイル名を作ります
-		*/
+		 * 入力ファイル名の拡張子を差し替えたファイル名を作ります
+		 */
 		[[nodiscard]] std::string ReplaceExtension(const std::string& sourceFilename, const char* extension)
 		{
 			char drive[_MAX_DRIVE];

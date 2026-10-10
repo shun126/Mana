@@ -1,9 +1,9 @@
 /*!
-mana (compiler)
-
-@author	Shun Moriya
-@date	2017-
-*/
+ * mana (compiler)
+ *
+ * @author	Shun Moriya
+ * @date	2017-
+ */
 
 #pragma once
 #include "SemanticAnalyzer.h"
@@ -18,8 +18,8 @@ namespace mana
 	class NamespaceRegistry;
 
 	/*
-	アクションや関数などローカルな範囲の文法を解析します
-	*/
+	 * アクションや関数などローカルな範囲の文法を解析します
+	 */
 	class LocalSemanticAnalyzer final : public SemanticAnalyzer
 	{
 	public:

@@ -1,16 +1,16 @@
 /*!
-mana (test)
-
-@file	EmbeddingTest.cpp
-@brief	組み込み用インターフェースの試験
-@detail	コンパイラと仮想マシンをライブラリとして利用する経路を試験します。
-		コマンドラインからは通らない経路（メモリからのコンパイル、出力の
-		差し替え、障害時の振る舞い）を扱います。
-		ポインタ幅に依存する不具合を取り逃がさないよう、32ビットと64ビットの
-		両方で実行して下さい。
-@author	Shun Moriya
-@date	2026-
-*/
+ * mana (test)
+ *
+ * @file	EmbeddingTest.cpp
+ * @brief	組み込み用インターフェースの試験
+ * @detail	コンパイラと仮想マシンをライブラリとして利用する経路を試験します。
+ * 		コマンドラインからは通らない経路（メモリからのコンパイル、出力の
+ * 		差し替え、障害時の振る舞い）を扱います。
+ * 		ポインタ幅に依存する不具合を取り逃がさないよう、32ビットと64ビットの
+ * 		両方で実行して下さい。
+ * @author	Shun Moriya
+ * @date	2026-
+ */
 
 #include "../../compiler/Compiler.h"
 #include "../../runner/Mana.h"
@@ -131,11 +131,11 @@ namespace
 	}
 
 	/*!
-	仮想マシン自身の実行トレースを取り除きます
-
-	実行トレースはデバッグビルドでのみ出るため、残したままだと構成によって
-	結果が変わってしまいます。スクリプトが出力した分だけを比べます。
-	*/
+	 * 仮想マシン自身の実行トレースを取り除きます
+	 *
+	 * 実行トレースはデバッグビルドでのみ出るため、残したままだと構成によって
+	 * 結果が変わってしまいます。スクリプトが出力した分だけを比べます。
+	 */
 	[[nodiscard]] std::string ScriptOutputOnly(const std::string& text)
 	{
 		std::string filtered;
@@ -206,11 +206,11 @@ namespace
 	// 型の幅
 
 	/*!
-	ファイル形式が想定する幅を確かめます
-
-	プログラムイメージは32ビットの値で書かれています。ポインタ幅に引きずられて
-	widenされると、生成物の互換性が静かに壊れます。
-	*/
+	 * ファイル形式が想定する幅を確かめます
+	 *
+	 * プログラムイメージは32ビットの値で書かれています。ポインタ幅に引きずられて
+	 * widenされると、生成物の互換性が静かに壊れます。
+	 */
 	void TestTypeWidths()
 	{
 		BeginCase("TypeWidths");
@@ -404,14 +404,14 @@ namespace
 	}
 
 	/*!
-		診断ハンドラが例外を投げても Compile() の外へは出ない事を確かめます
-
-		Compile() は例外が境界を越えない事を約束しています。ハンドラの例外を
-		無視せず catch(const std::exception&) で捕まえてしまうと、その通知が
-		Fatal diagnostic に化けて DiagnosticBag::Add() から同じハンドラをもう
-		一度呼び、そこでまた投げられてホストまで抜けてしまう経路があったので、
-		それを塞いだ側の回帰試験です。
-	*/
+	 * 	診断ハンドラが例外を投げても Compile() の外へは出ない事を確かめます
+	 *
+	 * 	Compile() は例外が境界を越えない事を約束しています。ハンドラの例外を
+	 * 	無視せず catch(const std::exception&) で捕まえてしまうと、その通知が
+	 * 	Fatal diagnostic に化けて DiagnosticBag::Add() から同じハンドラをもう
+	 * 	一度呼び、そこでまた投げられてホストまで抜けてしまう経路があったので、
+	 * 	それを塞いだ側の回帰試験です。
+	 */
 	void TestDiagnosticHandlerThrowIsContained()
 	{
 		BeginCase("DiagnosticHandlerThrowIsContained");
@@ -506,8 +506,8 @@ namespace
 	}
 
 	/*!
-	不変条件が壊れてもプロセスが終了しない事を確かめます
-	*/
+	 * 不変条件が壊れてもプロセスが終了しない事を確かめます
+	 */
 	void TestFaultDoesNotEndProcess()
 	{
 		BeginCase("FaultDoesNotEndProcess");
@@ -538,8 +538,8 @@ namespace
 	}
 
 	/*!
-	スクリプトの誤りは、そのアクターだけを止めます
-	*/
+	 * スクリプトの誤りは、そのアクターだけを止めます
+	 */
 	void TestScriptErrorHaltsOnlyThatActor()
 	{
 		BeginCase("ScriptErrorHaltsOnlyThatActor");
@@ -608,11 +608,11 @@ namespace
 	}
 
 	/*!
-	バイトオフセットへ変換すると桁あふれする添字を確かめます
-
-	添字を要素サイズで乗じてから検査すると、1073741824 * 4 が 0 へ折り返って
-	検査を通り抜け、静かに要素0へ触れてしまいます。
-	*/
+	 * バイトオフセットへ変換すると桁あふれする添字を確かめます
+	 *
+	 * 添字を要素サイズで乗じてから検査すると、1073741824 * 4 が 0 へ折り返って
+	 * 検査を通り抜け、静かに要素0へ触れてしまいます。
+	 */
 	void TestSubscriptOverflowIsCaught()
 	{
 		BeginCase("SubscriptOverflowIsCaught");
@@ -647,10 +647,10 @@ namespace
 	// アドレス計算
 
 	/*!
-	構造体と配列のアドレス計算を実行して確かめます
-
-	ポインタ幅とint_tの幅が異なる環境で壊れた事があるため、値まで確認します。
-	*/
+	 * 構造体と配列のアドレス計算を実行して確かめます
+	 *
+	 * ポインタ幅とint_tの幅が異なる環境で壊れた事があるため、値まで確認します。
+	 */
 	void TestAddressArithmetic()
 	{
 		BeginCase("AddressArithmetic");

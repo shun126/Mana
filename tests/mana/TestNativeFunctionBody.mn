@@ -1,6 +1,6 @@
 /*
- mana (script)
-*/
+ *  mana (script)
+ */
 
 native void f()
 {

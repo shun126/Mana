@@ -1,9 +1,9 @@
 /*!
-mana (library)
-
-@author	Shun Moriya
-@date	2016-
-*/
+ * mana (library)
+ *
+ * @author	Shun Moriya
+ * @date	2016-
+ */
 
 #pragma once
 #include <limits>
@@ -879,10 +879,10 @@ namespace mana
 	}
 
 	/*!
-	サイズやオフセットを積みます
-
-	アドレス計算の項となるため、符号無しとして読み込みます。
-	*/
+	 * サイズやオフセットを積みます
+	 *
+	 * アドレス計算の項となるため、符号無しとして読み込みます。
+	 */
 	inline void Actor::CommandPushSize(const std::shared_ptr<VM>& vm, Actor& self)
 	{
 		self.mStack.Push<int_t>(static_cast<int_t>(vm->GetUint32FromMemory(self.mPc + 1)));
@@ -1143,11 +1143,11 @@ namespace mana
 	}
 
 	/*!
-	アドレスにバイト数を加えます
-
-	アドレスは int_t を経由させません。int_t がポインタより
-	狭い環境で上位ビットが失われるためです。
-	*/
+	 * アドレスにバイト数を加えます
+	 *
+	 * アドレスは int_t を経由させません。int_t がポインタより
+	 * 狭い環境で上位ビットが失われるためです。
+	 */
 	inline void Actor::CommandAddAddress(const std::shared_ptr<VM>&, Actor& self)
 	{
 		uint8_t* address = static_cast<uint8_t*>(self.mStack.Get<void*>(0));
@@ -1157,12 +1157,12 @@ namespace mana
 	}
 
 	/*!
-	配列の添字が範囲内か検査します
-
-	オペランドは配列の要素数です。バイト数へ変換する前の添字を検査するため、
-	変換時の桁あふれで検査をすり抜ける事がありません。検査した添字はそのまま
-	残します。範囲外への読み書きは他の変数を壊すため、Releaseでも検査します。
-	*/
+	 * 配列の添字が範囲内か検査します
+	 *
+	 * オペランドは配列の要素数です。バイト数へ変換する前の添字を検査するため、
+	 * 変換時の桁あふれで検査をすり抜ける事がありません。検査した添字はそのまま
+	 * 残します。範囲外への読み書きは他の変数を壊すため、Releaseでも検査します。
+	 */
 	inline void Actor::CommandCheckArrayIndex(const std::shared_ptr<VM>& vm, Actor& self)
 	{
 		const int_t count = static_cast<int_t>(vm->GetUint32FromMemory(self.mPc + 1));
@@ -1686,86 +1686,86 @@ namespace mana
 	{
 		MANA_NOT_IMPLEMENTED();
 		/*
-		CManaStack& Stack = actor->self.mStack;
-		const char* pszTarget, = Stack.PopString();
-		const int32_t priority = Stack.PopInteger();
-		const char* action = actor->GetStringFromMemory(1);
-
-		actor->self.mInterrupts[actor->GetInterruptPriority()].repeat = true;
-		actor->self.mPc += sizeof(int32_t) + 1;
-
-		Actor* targetActor = actor->GetParent().FindActor(pszTarget,);
-		if(targetActor)
-		targetActor->Request(priority, action, actor);
-		*/
+		 * CManaStack& Stack = actor->self.mStack;
+		 * const char* pszTarget, = Stack.PopString();
+		 * const int32_t priority = Stack.PopInteger();
+		 * const char* action = actor->GetStringFromMemory(1);
+		 *
+		 * actor->self.mInterrupts[actor->GetInterruptPriority()].repeat = true;
+		 * actor->self.mPc += sizeof(int32_t) + 1;
+		 *
+		 * Actor* targetActor = actor->GetParent().FindActor(pszTarget,);
+		 * if(targetActor)
+		 * targetActor->Request(priority, action, actor);
+		 */
 	}
 
 	inline void Actor::CommandDynamicRequestWaitStarting(const std::shared_ptr<VM>&, Actor&)
 	{
 		MANA_NOT_IMPLEMENTED();
 		/*
-		CManaStack& Stack = actor->self.mStack;
-		const char* pszTarget, = Stack.GetString(0);
-		int32_t priority = Stack.Get<int_t>(1);
-		const char* action = actor->GetStringFromMemory(1);
-
-		Actor* targetActor = actor->GetParent().FindActor(pszTarget,);
-		if(targetActor == 0)
-		{
-		actor->self.mStack.Remove(2);
-		return;
-		}
-		if(actor == targetActor)
-		{
-		actor->self.mStack.Remove(2);
-		return;
-		}
-		if(actor->IsInit() && !targetActor->Request(priority, action, actor))
-		{
-		actor->self.mStack.Remove(2);
-		return;
-		}
-		if(targetActor->GetInterruptPriority() <= priority)
-		{
-		actor->self.mStack.Remove(2);
-		}else{
-		actor->Repeat();
-		}
-		*/
+		 * CManaStack& Stack = actor->self.mStack;
+		 * const char* pszTarget, = Stack.GetString(0);
+		 * int32_t priority = Stack.Get<int_t>(1);
+		 * const char* action = actor->GetStringFromMemory(1);
+		 *
+		 * Actor* targetActor = actor->GetParent().FindActor(pszTarget,);
+		 * if(targetActor == 0)
+		 * {
+		 * actor->self.mStack.Remove(2);
+		 * return;
+		 * }
+		 * if(actor == targetActor)
+		 * {
+		 * actor->self.mStack.Remove(2);
+		 * return;
+		 * }
+		 * if(actor->IsInit() && !targetActor->Request(priority, action, actor))
+		 * {
+		 * actor->self.mStack.Remove(2);
+		 * return;
+		 * }
+		 * if(targetActor->GetInterruptPriority() <= priority)
+		 * {
+		 * actor->self.mStack.Remove(2);
+		 * }else{
+		 * actor->Repeat();
+		 * }
+		 */
 	}
 
 	inline void Actor::CommandDynamicRequestWaitEnded(const std::shared_ptr<VM>&, Actor&)
 	{
 		MANA_NOT_IMPLEMENTED();
 		/*
-		CManaStack& Stack = actor->self.mStack;
-		const char* pszTarget, = Stack.GetString(0);
-		int32_t priority = Stack.Get<int_t>(1);
-		const char* action = actor->GetStringFromMemory(1);
-
-		Actor* targetActor = actor->GetParent().FindActor(pszTarget,);
-		if(targetActor == 0)
-		{
-		actor->self.mStack.Remove(2);
-		return;
-		}
-		if(actor == targetActor)
-		{
-		actor->self.mStack.Remove(2);
-		return;
-		}
-		if(actor->IsInit() && !targetActor->Request(priority, action, actor))
-		{
-		actor->self.mStack.Remove(2);
-		return;
-		}
-		if(targetActor->self.mInterruptPriority < priority)
-		{
-		actor->self.mStack.Remove(2);
-		}else{
-		actor->Repeat();
-		}
-		*/
+		 * CManaStack& Stack = actor->self.mStack;
+		 * const char* pszTarget, = Stack.GetString(0);
+		 * int32_t priority = Stack.Get<int_t>(1);
+		 * const char* action = actor->GetStringFromMemory(1);
+		 *
+		 * Actor* targetActor = actor->GetParent().FindActor(pszTarget,);
+		 * if(targetActor == 0)
+		 * {
+		 * actor->self.mStack.Remove(2);
+		 * return;
+		 * }
+		 * if(actor == targetActor)
+		 * {
+		 * actor->self.mStack.Remove(2);
+		 * return;
+		 * }
+		 * if(actor->IsInit() && !targetActor->Request(priority, action, actor))
+		 * {
+		 * actor->self.mStack.Remove(2);
+		 * return;
+		 * }
+		 * if(targetActor->self.mInterruptPriority < priority)
+		 * {
+		 * actor->self.mStack.Remove(2);
+		 * }else{
+		 * actor->Repeat();
+		 * }
+		 */
 	}
 
 	inline void Actor::CommandJoin(const std::shared_ptr<VM>&, Actor& self)

@@ -1,9 +1,9 @@
 /*!
-mana (library)
-
-\author	Shun Moriya
-\date	2016-
-*/
+ * mana (library)
+ *
+ * \author	Shun Moriya
+ * \date	2016-
+ */
 
 #pragma once
 #include "Plugin.h"
@@ -275,13 +275,13 @@ namespace mana
 	{
 		/* スクリプトで確保したリソースの解放 */
 		/*
-		GetResource().Clear();
-		*/
+		 * GetResource().Clear();
+		 */
 
 		/* イベントボックスの解放 */
 		/*
-		DestroyIntersections();
-		*/
+		 * DestroyIntersections();
+		 */
 
 		// 実行状態と Actor の情報を初期化します
 		mFlag.reset(Flag::Initialized);

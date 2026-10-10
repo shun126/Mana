@@ -1,7 +1,7 @@
 /*
-mana (script)
-Copyright (c) 2016 Shun Moriya
-*/
+ * mana (script)
+ * Copyright (c) 2016 Shun Moriya
+ */
 
 const int kTalkPriority = 1;
 const int kJoinPriority = 0;
@@ -39,12 +39,12 @@ actor TestActor1
         //test.x = 0;
         print("Nin hao!\n");
         /*
-        pointer p;
-        pointer q;
-        p = getUserPointer();
-        q = p;
-        setUserPointer(p);
-        */
+         * pointer p;
+         * pointer q;
+         * p = getUserPointer();
+         * q = p;
+         * setUserPointer(p);
+         */
     }
 }
 

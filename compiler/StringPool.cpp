@@ -1,9 +1,9 @@
 /*!
-mana (compiler)
-
-@author	Shun Moriya
-@date	2016-
-*/
+ * mana (compiler)
+ *
+ * @author	Shun Moriya
+ * @date	2016-
+ */
 
 #include "StringPool.h"
 #include <cstring>
@@ -17,7 +17,7 @@ namespace mana
 	{
 	}
 
-	/**
+	/*!
 	 * Searches for a string and returns a registered address. Returns InvalidAddress when searching for an unregistered string.
 	 * @param[in]	text	String to search for
 	 * @return				Registered address
@@ -35,7 +35,7 @@ namespace mana
 		return InvalidAddress;
 	}
 
-	/**
+	/*!
 	 * Get the string pointed to by the address. If an out-of-range address is specified, a range_error exception is thrown.
 	 * @param[in]	address	Registered address
 	 * @return		String pointed to by address

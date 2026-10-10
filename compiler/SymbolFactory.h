@@ -1,9 +1,9 @@
 /*!
-mana (compiler)
-
-@author	Shun Moriya
-@date	2016-
-*/
+ * mana (compiler)
+ *
+ * @author	Shun Moriya
+ * @date	2016-
+ */
 
 #pragma once
 #include "../runner/common/Setup.h"
@@ -28,8 +28,8 @@ namespace mana
 	class TypeDescriptorFactory;
 
 	/*
-	シンボルを生成します
-	*/
+	 * シンボルを生成します
+	 */
 	class SymbolFactory final : Noncopyable
 	{
 	public:
@@ -194,7 +194,7 @@ namespace mana
 		std::shared_ptr<Symbol> CreateSymbolWithAddress(const std::string_view name, const Symbol::ClassTypeId class_type, const int32_t address);
 		std::shared_ptr<Symbol> CreateSymbolWithLevel(const std::string_view name, Symbol::ClassTypeId class_type, const size_t blockLevel);
 
-		/**
+		/*!
 		 * Makes the saved members of an Actor visible in the current block.
 		 * Actorに保存されたメンバーを現在のブロックから参照可能にします。
 		 */
@@ -239,7 +239,7 @@ namespace mana
 			BlockEntry mHead;
 			int32_t mAllocp;
 
-			/**
+			/*!
 			 * Symbols hidden by this block, restored when the block closes.
 			 * このブロックが隠した、ブロック終了時に復元するシンボルです。
 			 */

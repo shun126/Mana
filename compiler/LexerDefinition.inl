@@ -1,9 +1,9 @@
 /*!
-mana (compiler)
-
-@author	Shun Moriya
-@date	2017-
-*/
+ * mana (compiler)
+ *
+ * @author	Shun Moriya
+ * @date	2017-
+ */
 
 #pragma once
 

@@ -1,13 +1,13 @@
 /*!
-mana (web)
-
-@file	MemorySourceResolver.h
-@brief	メモリ上のソースを供給するソース供給元
-@detail	Web Playground のエディタの内容をコンパイラへ渡す為のソース供給元です。
-		ファイルシステムには一切触れず、ファイル名とソースの対応表から読み込みます。
-@author	Shun Moriya
-@date	2026-
-*/
+ * mana (web)
+ *
+ * @file	MemorySourceResolver.h
+ * @brief	メモリ上のソースを供給するソース供給元
+ * @detail	Web Playground のエディタの内容をコンパイラへ渡す為のソース供給元です。
+ * 		ファイルシステムには一切触れず、ファイル名とソースの対応表から読み込みます。
+ * @author	Shun Moriya
+ * @date	2026-
+ */
 
 #pragma once
 #include "../../compiler/SourceResolver.h"
@@ -19,12 +19,12 @@ mana (web)
 namespace mana::web
 {
 	/*!
-	ファイル名とソースの対応表から読み込むソース供給元
-
-	位置は "/" 区切りの相対位置として扱います。include や import に書かれた
-	位置は読み込んでいる側のディレクトリを基準に解決するので、
-	FileSourceResolver と同じ書き方で複数ファイルを扱えます。
-	*/
+	 * ファイル名とソースの対応表から読み込むソース供給元
+	 *
+	 * 位置は "/" 区切りの相対位置として扱います。include や import に書かれた
+	 * 位置は読み込んでいる側のディレクトリを基準に解決するので、
+	 * FileSourceResolver と同じ書き方で複数ファイルを扱えます。
+	 */
 	class MemorySourceResolver final : public SourceResolver
 	{
 	public:
@@ -68,10 +68,10 @@ namespace mana::web
 
 	private:
 		/*!
-		"./" と "../" を取り除き、"\\" を "/" に揃えます
-
-		対応表の外を指す "../" は捨てます。メモリ上には外側が存在しない為です。
-		*/
+		 * "./" と "../" を取り除き、"\\" を "/" に揃えます
+		 *
+		 * 対応表の外を指す "../" は捨てます。メモリ上には外側が存在しない為です。
+		 */
 		[[nodiscard]] static std::string Normalize(const std::string_view path)
 		{
 			std::vector<std::string> parts;

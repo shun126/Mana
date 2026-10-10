@@ -1,6 +1,6 @@
 /*
- mana (script)
-*/
+ *  mana (script)
+ */
 
 const int kRequestPriority = 1;
 

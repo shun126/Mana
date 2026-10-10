@@ -1,9 +1,9 @@
 /*!
-mana (compiler/library)
-
-@author	Shun Moriya
-@date	2016-
-*/
+ * mana (compiler/library)
+ *
+ * @author	Shun Moriya
+ * @date	2016-
+ */
 
 #pragma once
 #include "Platform.h"
@@ -22,8 +22,8 @@ namespace mana
 	static constexpr uint8_t MinorVersion = 0;				//!< manaファイルのマイナーバージョン番号
 
 	/*!
-	manaファイルヘッダー
-	*/
+	 * manaファイルヘッダー
+	 */
 	struct FileHeader
 	{
 		char mHeader[4];
@@ -47,8 +47,8 @@ namespace mana
 	};
 
 	/*!
-	manaファイル内のアクター情報ヘッダー
-	*/
+	 * manaファイル内のアクター情報ヘッダー
+	 */
 	struct ActorInfoHeader
 	{
 		enum Flag : uint8_t
@@ -64,8 +64,8 @@ namespace mana
 	};
 
 	/*!
-	manaファイル内のアクション情報ヘッダー
-	*/
+	 * manaファイル内のアクション情報ヘッダー
+	 */
 	struct ActionInfoHeader
 	{
 		uint32_t mName;
@@ -73,8 +73,8 @@ namespace mana
 	};
 
 	/*!
-	byte code for virtual machine
-	*/
+	 * byte code for virtual machine
+	 */
 	enum class IntermediateLanguage : uint8_t
 	{
 		/* thread */

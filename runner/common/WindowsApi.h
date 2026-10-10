@@ -1,9 +1,9 @@
 /*!
-mana (compiler/library)
-
-@author	Shun Moriya
-@date	2026-
-*/
+ * mana (compiler/library)
+ *
+ * @author	Shun Moriya
+ * @date	2026-
+ */
 
 #pragma once
 #include "Platform.h"

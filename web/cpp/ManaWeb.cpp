@@ -1,22 +1,22 @@
 /*!
-mana (web)
-
-@file	ManaWeb.cpp
-@brief	Web Playground から Mana を利用する為の WebAssembly ブリッジ
-@detail	デスクトップ版と同じコンパイラと VM を、JavaScript から呼べる小さな C の
-		関数群として公開します。Web 専用の処理はこのファイルに閉じ込め、
-		compiler/ と runner/ へは持ち込みません。
-
-		基本的な流れ:
-			mana_web_set_file("main.mn", source)
-			mana_web_compile("main.mn")   -> 診断の JSON
-			mana_web_start()              -> プログラムイメージを VM へ読み込み
-			mana_web_step(ms) を 0 が返るまで繰り返す
-
-		print() と VM の Trace は Module.onOutput(level, text) へ届きます。
-@author	Shun Moriya
-@date	2026-
-*/
+ * mana (web)
+ *
+ * @file	ManaWeb.cpp
+ * @brief	Web Playground から Mana を利用する為の WebAssembly ブリッジ
+ * @detail	デスクトップ版と同じコンパイラと VM を、JavaScript から呼べる小さな C の
+ * 		関数群として公開します。Web 専用の処理はこのファイルに閉じ込め、
+ * 		compiler/ と runner/ へは持ち込みません。
+ *
+ * 		基本的な流れ:
+ * 			mana_web_set_file("main.mn", source)
+ * 			mana_web_compile("main.mn")   -> 診断の JSON
+ * 			mana_web_start()              -> プログラムイメージを VM へ読み込み
+ * 			mana_web_step(ms) を 0 が返るまで繰り返す
+ *
+ * 		print() と VM の Trace は Module.onOutput(level, text) へ届きます。
+ * @author	Shun Moriya
+ * @date	2026-
+ */
 
 #include "../../runner/common/Setup.h"
 #include "../../compiler/Compiler.h"
@@ -159,13 +159,13 @@ extern "C"
 	}
 
 	/*!
-	登録したソースをコンパイルします
-
-	成功したプログラムイメージは mana_web_start() の為に保持されます。
-
-	@param[in]	entry	最初に読み込むファイル名
-	@return		結果の JSON。次に mana_web_compile() を呼ぶまで有効です
-	*/
+	 * 登録したソースをコンパイルします
+	 *
+	 * 成功したプログラムイメージは mana_web_start() の為に保持されます。
+	 *
+	 * @param[in]	entry	最初に読み込むファイル名
+	 * @return		結果の JSON。次に mana_web_compile() を呼ぶまで有効です
+	 */
 	EMSCRIPTEN_KEEPALIVE const char* mana_web_compile(const char* entry)
 	{
 		State& state = GetState();
@@ -184,11 +184,11 @@ extern "C"
 	}
 
 	/*!
-	コンパイルしたプログラムイメージを新しい VM へ読み込みます
-
-	@retval	1	成功。mana_web_step() で実行できます
-	@retval	0	コンパイル済みのプログラムが無いか、読み込みに失敗しました
-	*/
+	 * コンパイルしたプログラムイメージを新しい VM へ読み込みます
+	 *
+	 * @retval	1	成功。mana_web_step() で実行できます
+	 * @retval	0	コンパイル済みのプログラムが無いか、読み込みに失敗しました
+	 */
 	EMSCRIPTEN_KEEPALIVE int mana_web_start()
 	{
 		State& state = GetState();
@@ -215,15 +215,15 @@ extern "C"
 	}
 
 	/*!
-	VM を実行します
-
-	全てのアクターが停止するか、budgetMilliseconds を使い切るまで
-	VM::Run() を繰り返します。呼び出し側はこの合間に出力を表示できます。
-
-	@param[in]	budgetMilliseconds	今回の呼び出しで実行を続ける時間
-	@retval	1	まだ実行中です。もう一度呼んで下さい
-	@retval	0	実行が終わりました
-	*/
+	 * VM を実行します
+	 *
+	 * 全てのアクターが停止するか、budgetMilliseconds を使い切るまで
+	 * VM::Run() を繰り返します。呼び出し側はこの合間に出力を表示できます。
+	 *
+	 * @param[in]	budgetMilliseconds	今回の呼び出しで実行を続ける時間
+	 * @retval	1	まだ実行中です。もう一度呼んで下さい
+	 * @retval	0	実行が終わりました
+	 */
 	EMSCRIPTEN_KEEPALIVE int mana_web_step(const double budgetMilliseconds)
 	{
 		State& state = GetState();

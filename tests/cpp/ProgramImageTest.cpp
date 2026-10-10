@@ -1,9 +1,9 @@
 /*!
-mana (test)
-
-@author	Shun Moriya
-@date	2024-
-*/
+ * mana (test)
+ *
+ * @author	Shun Moriya
+ * @date	2024-
+ */
 
 #include "../../runner/ProgramImage.h"
 

@@ -1,6 +1,6 @@
 /*
-mana (script)
-*/
+ * mana (script)
+ */
 
 // global module
 module BaseModule

@@ -1,9 +1,9 @@
 /*!
-mana (compiler)
-
-@author	Shun Moriya
-@date	2016-
-*/
+ * mana (compiler)
+ *
+ * @author	Shun Moriya
+ * @date	2016-
+ */
 
 #pragma once
 #include "../runner/common/Setup.h"
@@ -17,8 +17,8 @@ namespace mana
 	class CodeGenerator;
 
 	/*
-	ローカルアドレスを解決します
-	*/
+	 * ローカルアドレスを解決します
+	 */
 	class LocalAddressResolver final : Noncopyable
 	{
 	public:

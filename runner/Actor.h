@@ -1,9 +1,9 @@
 /*!
-mana (library)
-
-@author	Shun Moriya
-@date	2016-
-*/
+ * mana (library)
+ *
+ * @author	Shun Moriya
+ * @date	2016-
+ */
 
 #pragma once
 #include "Buffer.h"
@@ -20,8 +20,8 @@ namespace mana
 	class VM;
 
 	/*!
-	Actor class
-	*/
+	 * Actor class
+	 */
 	class Actor : Noncopyable, public std::enable_shared_from_this<Actor>
 	{
 		friend class VM;

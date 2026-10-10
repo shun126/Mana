@@ -1,9 +1,9 @@
 /*!
-mana (library)
-
-\author	Shun Moriya
-\date	2016-
-*/
+ * mana (library)
+ *
+ * \author	Shun Moriya
+ * \date	2016-
+ */
 
 #pragma once
 
@@ -128,7 +128,7 @@ namespace mana
 		return (byteSize + SlotSize - 1) / SlotSize;
 	}
 
-	/**
+	/*!
 	 * Get the size to match the memory alignment size.
 	 * @param[in]	slotCount	Number of slots.
 	 * @return		Number of slots to fit memory alignment.
@@ -140,7 +140,7 @@ namespace mana
 		return (slotCount + (PageSize - 1)) / PageSize * PageSize;
 	}
 
-	/**
+	/*!
 	 * Start of memory allocation
 	 * @param[in]	gainSize	Size to increase memory
 	 */
@@ -160,7 +160,7 @@ namespace mana
 		}
 	}
 
-	/**
+	/*!
 	 * End of memory allocation
 	 * @param[in]	gainSize	Size to increase memory
 	 */
@@ -170,7 +170,7 @@ namespace mana
 		MANA_ASSERT(mUsedSize <= mAllocatedSize);
 	}
 
-	/**
+	/*!
 	 * Release memory
 	 * @param[in]	releaseSize		Size to release
 	 */

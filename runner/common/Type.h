@@ -1,9 +1,9 @@
 /*!
-mana (compiler/library)
-
-@author	Shun Moriya
-@date	2022-
-*/
+ * mana (compiler/library)
+ *
+ * @author	Shun Moriya
+ * @date	2022-
+ */
 
 #pragma once
 #include <cstdint>
@@ -21,12 +21,12 @@ namespace mana
 	using ssize_t = intptr_t;
 #endif
 /*
-#if UINTPTR_MAX == UINT64_MAX
-#elif UINTPTR_MAX == UINT32_MAX
-#else
-#error "unsupport pointer size"
-#endif
-*/
+ * #if UINTPTR_MAX == UINT64_MAX
+ * #elif UINTPTR_MAX == UINT32_MAX
+ * #else
+ * #error "unsupport pointer size"
+ * #endif
+ */
 	using float_t = float;
 	using int_t = std::int32_t;
 
@@ -36,16 +36,16 @@ namespace mana
 	using offset_t = std::int32_t;
 
 	/*!
-	Determine if the address is invalid.
-	*/
+	 * Determine if the address is invalid.
+	 */
 	[[nodiscard]] inline bool IsValid(const address_t address)
 	{
 		return address != InvalidAddress;
 	}
 
 	/*!
-	Check the value range and cast to address_t
-	*/
+	 * Check the value range and cast to address_t
+	 */
 	template<typename T>
 	[[nodiscard]] inline address_t ToAddress(const T size)
 	{
@@ -71,8 +71,8 @@ namespace mana
 	}
 
 	/*!
-	Check the value range and cast to offset_t
-	*/
+	 * Check the value range and cast to offset_t
+	 */
 	template<typename T>
 	[[nodiscard]] inline offset_t ToOffset(const T size)
 	{

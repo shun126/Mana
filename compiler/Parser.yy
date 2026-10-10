@@ -1,10 +1,10 @@
 %{
 /*!
-mana (compiler)
-
-@author	Shun Moriya
-@date	2016-
-*/
+ * mana (compiler)
+ *
+ * @author	Shun Moriya
+ * @date	2016-
+ */
 %}
 
 %require "3.8"
@@ -62,11 +62,11 @@ mana (compiler)
 %type	<mana::ActionReference> action_ref
 
 /*
-NOTE: Keep tokens in sync with Lexer.l.
-Each alias string must match the keyword or operator that Lexer.l returns the token for,
-and every token except the precedence-only ones (tUPLUS, tUMINUS, tUINC, tUDEC) must be returned by Lexer.l.
-The compiler cannot detect a mismatched alias or an unused token.
-*/
+ * NOTE: Keep tokens in sync with Lexer.l.
+ * Each alias string must match the keyword or operator that Lexer.l returns the token for,
+ * and every token except the precedence-only ones (tUPLUS, tUMINUS, tUINC, tUDEC) must be returned by Lexer.l.
+ * The compiler cannot detect a mismatched alias or an unused token.
+ */
 %token	<mana::int_t> tDIGIT "integer literal"
 %token	<mana::float_t> tREAL "real literal"
 %token	<std::string_view> tSTRING "string literal"

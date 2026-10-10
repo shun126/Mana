@@ -1,10 +1,10 @@
 %{
 /*!
-mana (compiler)
-
-@author	Shun Moriya
-@date	2016-
-*/
+ * mana (compiler)
+ *
+ * @author	Shun Moriya
+ * @date	2016-
+ */
 
 #include "../runner/common/Setup.h"
 #include "Lexer.h"
@@ -31,11 +31,11 @@ mana (compiler)
 #define YY_DECL int yylex(mana::Parser::value_type* yylval)
 
 /*
-NOTE: Keep tokens in sync with Parser.yy.
-When adding, removing or renaming a keyword or operator here,
-also update the matching %token declaration and its alias string in Parser.yy.
-The compiler cannot detect a mismatched alias or an unused token.
-*/
+ * NOTE: Keep tokens in sync with Parser.yy.
+ * When adding, removing or renaming a keyword or operator here,
+ * also update the matching %token declaration and its alias string in Parser.yy.
+ * The compiler cannot detect a mismatched alias or an unused token.
+ */
 
 %}
 

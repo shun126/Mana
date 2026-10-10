@@ -1,9 +1,9 @@
 /*!
-mana (compiler)
-
-@author	Shun Moriya
-@date	2016-
-*/
+ * mana (compiler)
+ *
+ * @author	Shun Moriya
+ * @date	2016-
+ */
 
 #pragma once
 #include "../runner/common/Setup.h"
@@ -15,8 +15,8 @@ namespace mana
 	class SymbolFactory;
 
 	/*
-	シンボル
-	*/
+	 * シンボル
+	 */
 	class Symbol final
 	{
 		friend class SymbolFactory;

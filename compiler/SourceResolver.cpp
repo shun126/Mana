@@ -1,12 +1,12 @@
 /*!
-mana (compiler)
-
-@file	SourceResolver.cpp
-@brief	ソースの供給元に関係するソースファイル
-@detail	このファイルはコンパイラへソースを供給する仕組みのソースファイルです。
-@author	Shun Moriya
-@date	2026-
-*/
+ * mana (compiler)
+ *
+ * @file	SourceResolver.cpp
+ * @brief	ソースの供給元に関係するソースファイル
+ * @detail	このファイルはコンパイラへソースを供給する仕組みのソースファイルです。
+ * @author	Shun Moriya
+ * @date	2026-
+ */
 
 #include "SourceResolver.h"
 #include "Path.h"
@@ -18,8 +18,8 @@ namespace mana
 	namespace
 	{
 		/*!
-		絶対位置かどうかを判定します
-		*/
+		 * 絶対位置かどうかを判定します
+		 */
 		[[nodiscard]] bool IsAbsolute(const std::string_view path)
 		{
 			if (path.empty())
@@ -37,8 +37,8 @@ namespace mana
 		}
 
 		/*!
-		ファイルの位置から、それが置かれているディレクトリを取り出します
-		*/
+		 * ファイルの位置から、それが置かれているディレクトリを取り出します
+		 */
 		[[nodiscard]] std::string DirectoryOf(const std::string_view path)
 		{
 			if (path.empty())

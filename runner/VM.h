@@ -1,9 +1,9 @@
 /*!
-mana (library)
-
-\author	Shun Moriya
-\date	2016-
-*/
+ * mana (library)
+ *
+ * \author	Shun Moriya
+ * \date	2016-
+ */
 
 #pragma once
 #include "Buffer.h"
@@ -95,21 +95,21 @@ namespace mana
 
 	private:
 		/*!
-		アクターを1体実行します
-
-		内部の不変条件が壊れても呼び出し元へは伝えず、そのアクターだけを
-		停止します。1体の不具合でVM全体と組み込み先を巻き込まない為です。
-
-		@param[in]	actor	実行するアクター
-		@retval	true	実行を継続します
-		*/
+		 * アクターを1体実行します
+		 *
+		 * 内部の不変条件が壊れても呼び出し元へは伝えず、そのアクターだけを
+		 * 停止します。1体の不具合でVM全体と組み込み先を巻き込まない為です。
+		 *
+		 * @param[in]	actor	実行するアクター
+		 * @retval	true	実行を継続します
+		 */
 		bool RunActor(const std::shared_ptr<Actor>& actor);
 
 		/*!
-		アクターを実行せずに VM の時計だけを進めます
-
-		@param[in]	deltaSeconds	進める秒数
-		*/
+		 * アクターを実行せずに VM の時計だけを進めます
+		 *
+		 * @param[in]	deltaSeconds	進める秒数
+		 */
 		void AdvanceTime(const double deltaSeconds);
 
 		//! 前回時計を進めてからの実時間（秒）

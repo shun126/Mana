@@ -1,16 +1,16 @@
 /*!
-mana (test)
-
-@file	WindowsHeaderTest.cpp
-@brief	windows.h との共存の試験
-@detail	Mana のヘッダーが windows.h のマクロ（GetObject、min、max など）を
-		持ち込まないこと、そしてホストが windows.h を Mana の後に読み込んでも
-		宣言が衝突しないことを試験します。
-		Mana より先に windows.h を読み込む場合は WindowsHeaderOrderTest.cpp で
-		試験します。
-@author	Shun Moriya
-@date	2026-
-*/
+ * mana (test)
+ *
+ * @file	WindowsHeaderTest.cpp
+ * @brief	windows.h との共存の試験
+ * @detail	Mana のヘッダーが windows.h のマクロ（GetObject、min、max など）を
+ * 		持ち込まないこと、そしてホストが windows.h を Mana の後に読み込んでも
+ * 		宣言が衝突しないことを試験します。
+ * 		Mana より先に windows.h を読み込む場合は WindowsHeaderOrderTest.cpp で
+ * 		試験します。
+ * @author	Shun Moriya
+ * @date	2026-
+ */
 
 #include "../../runner/Mana.h"
 

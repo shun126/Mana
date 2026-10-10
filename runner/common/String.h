@@ -1,9 +1,9 @@
 /*!
-mana (compiler/library)
-
-@author	Shun Moriya
-@date	2017-
-*/
+ * mana (compiler/library)
+ *
+ * @author	Shun Moriya
+ * @date	2017-
+ */
 
 #pragma once
 #include "Platform.h"
@@ -39,13 +39,13 @@ namespace mana
 	};
 
 	/*!
-	Traceの出力先
-
-	@param[in]	userData	SetTraceHandlerに渡した値
-	@param[in]	level		重大度
-	@param[in]	message		UTF-8のNUL終端文字列
-	@param[in]	length		NUL終端を含まない長さ
-	*/
+	 * Traceの出力先
+	 *
+	 * @param[in]	userData	SetTraceHandlerに渡した値
+	 * @param[in]	level		重大度
+	 * @param[in]	message		UTF-8のNUL終端文字列
+	 * @param[in]	length		NUL終端を含まない長さ
+	 */
 	using TraceHandler = void(*)(void* userData, const TraceLevel level, const char* message, const std::size_t length);
 
 	struct TraceSink final
@@ -62,23 +62,23 @@ namespace mana
 	}
 
 	/*!
-	Traceの出力先を差し替えます
-
-	既定では標準出力へ出力します。
-	Unreal Engineなど、標準出力が届かない
-	環境へ組み込む場合に差し替えて下さい。
-
-	@attention	利用を開始する前に一度だけ設定して下さい。
-					出力中の差し替えは安全ではありません。
-	@attention	MANA_BUG等は出力の直後に終了するため、
-					handlerは例外を送出しないで下さい。
-	@attention	handlerは行単位で呼ばれるとは限りません。実行トレースの様に
-					1行を複数回に分けて出力する箇所があるため、行単位で扱いたい
-					場合はhandler側で改行まで蓄えて下さい。
-
-	@param[in]	handler		出力先。nullptrで既定に戻ります
-	@param[in]	userData	handlerへそのまま渡される値
-	*/
+	 * Traceの出力先を差し替えます
+	 *
+	 * 既定では標準出力へ出力します。
+	 * Unreal Engineなど、標準出力が届かない
+	 * 環境へ組み込む場合に差し替えて下さい。
+	 *
+	 * @attention	利用を開始する前に一度だけ設定して下さい。
+	 * 				出力中の差し替えは安全ではありません。
+	 * @attention	MANA_BUG等は出力の直後に終了するため、
+	 * 				handlerは例外を送出しないで下さい。
+	 * @attention	handlerは行単位で呼ばれるとは限りません。実行トレースの様に
+	 * 				1行を複数回に分けて出力する箇所があるため、行単位で扱いたい
+	 * 				場合はhandler側で改行まで蓄えて下さい。
+	 *
+	 * @param[in]	handler		出力先。nullptrで既定に戻ります
+	 * @param[in]	userData	handlerへそのまま渡される値
+	 */
 	inline void SetTraceHandler(const TraceHandler handler, void* userData = nullptr) noexcept
 	{
 		TraceSink& sink = GetTraceSink();

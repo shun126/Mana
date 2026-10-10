@@ -1,9 +1,9 @@
 /*!
-mana (library)
-
-@author	Shun Moriya
-@date	2016-
-*/
+ * mana (library)
+ *
+ * @author	Shun Moriya
+ * @date	2016-
+ */
 
 #pragma once
 #include "common/Setup.h"
@@ -140,9 +140,9 @@ namespace mana
 		}
 	}
 
-	/**
-	* 組み込み関数(debug,wait,irand,frand,sin,cos,atan2,tan,angleMod,sqrt,find,)を登録します
-	*/
+	/*!
+	 * 組み込み関数(debug,wait,irand,frand,sin,cos,atan2,tan,angleMod,sqrt,find,)を登録します
+	 */
 	inline void FunctionInitialize(VM& vm)
 	{
 		vm.RegisterFunction("debug", builtInFunction::IsDebug);

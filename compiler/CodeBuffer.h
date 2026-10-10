@@ -1,9 +1,9 @@
 /*!
-mana (compiler)
-
-@author	Shun Moriya
-@date	2016-
-*/
+ * mana (compiler)
+ *
+ * @author	Shun Moriya
+ * @date	2016-
+ */
 
 #pragma once
 #include "../runner/common/Platform.h"
@@ -18,9 +18,9 @@ namespace mana
 	class OutputStream;
 
 	/*
-	Code Section
-	コードセクション
-	*/
+	 * Code Section
+	 * コードセクション
+	 */
 	class CodeBuffer final : Noncopyable
 	{
 	public:
@@ -130,8 +130,8 @@ namespace mana
 	}
 
 	/*
-	runner\common\FileFormat.h getと重複
-	*/
+	 * runner\common\FileFormat.h getと重複
+	 */
 	template <typename T>
 	T CodeBuffer::Get(const address_t address) const
 	{

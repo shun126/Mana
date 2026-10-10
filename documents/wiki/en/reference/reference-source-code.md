@@ -19,10 +19,10 @@ A multi-line comment is enclosed in `/*` and `*/`.
 
 ```mana
 /*
-A comment
-over several
-lines
-*/
+ * A comment
+ * over several
+ * lines
+ */
 ```
 
 In the current Lexer, nesting block comments is an error.

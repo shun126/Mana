@@ -1,7 +1,7 @@
 /*
-mana (script)
-Copyright (c) 2016 Shun Moriya
-*/
+ * mana (script)
+ * Copyright (c) 2016 Shun Moriya
+ */
 
 native int nativeFunction(int a0, float a1);
 
@@ -205,16 +205,16 @@ int test_sort(short array[10], int size)
 }
 
 /*
-void test()
-{
-    // Forward declaration
-    short array[10];
-    //print("test_sort: %d\n", test_sort(array, 10));
-
-    test_if();
-
-    // Forward declaration
-    test_switch_while();
-}
-
-*/
+ * void test()
+ * {
+ *     // Forward declaration
+ *     short array[10];
+ *     //print("test_sort: %d\n", test_sort(array, 10));
+ *
+ *     test_if();
+ *
+ *     // Forward declaration
+ *     test_switch_while();
+ * }
+ *
+ */

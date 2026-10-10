@@ -1,19 +1,19 @@
 /*!
-mana (compiler/library)
-
-@author	Shun Moriya
-@date	2017-
-*/
+ * mana (compiler/library)
+ *
+ * @author	Shun Moriya
+ * @date	2017-
+ */
 
 #pragma once
 
 namespace mana
 {
 	/*!
-	non-copyable class.
-
-	class Foo : private Noncopyable {};
-	*/
+	 * non-copyable class.
+	 *
+	 * class Foo : private Noncopyable {};
+	 */
     struct Noncopyable
     {
         Noncopyable() = default;

@@ -1,9 +1,9 @@
 /*!
-mana (library)
-
-@author	Shun Moriya
-@date	2016-
-*/
+ * mana (library)
+ *
+ * @author	Shun Moriya
+ * @date	2016-
+ */
 
 #pragma once
 #include <cstdint>
@@ -11,8 +11,8 @@ mana (library)
 namespace mana
 {
 	/*
-	std::endian is available from C++20
-	*/
+	 * std::endian is available from C++20
+	 */
 
 	inline bool IsBigEndian()
 	{

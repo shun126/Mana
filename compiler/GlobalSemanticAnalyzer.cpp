@@ -1,9 +1,9 @@
 /*!
-mana (compiler)
-
-@author	Shun Moriya
-@date	2017-
-*/
+ * mana (compiler)
+ *
+ * @author	Shun Moriya
+ * @date	2017-
+ */
 
 #include "GlobalSemanticAnalyzer.h"
 #include "ErrorHandler.h"
@@ -916,9 +916,9 @@ namespace mana
 		if (node->GetNextNode())
 		{
 			/*
-			Since it is tail recursion, it is handled by goto
-			Equivalent to Resolve(node->GetNextNode())
-			*/
+			 * Since it is tail recursion, it is handled by goto
+			 * Equivalent to Resolve(node->GetNextNode())
+			 */
 			node = node->GetNextNode();
 			goto DO_RECURSIVE;
 		}

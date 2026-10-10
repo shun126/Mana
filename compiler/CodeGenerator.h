@@ -1,9 +1,9 @@
 /*!
-mana (compiler)
-
-@author	Shun Moriya
-@date	2017-
-*/
+ * mana (compiler)
+ *
+ * @author	Shun Moriya
+ * @date	2017-
+ */
 
 #pragma once
 #include "../runner/common/Setup.h"
@@ -22,8 +22,8 @@ mana (compiler)
 namespace mana
 {
 	/*!
-	コード生成クラス
-	*/
+	 * コード生成クラス
+	 */
 	class CodeGenerator final : Noncopyable, public std::enable_shared_from_this<CodeGenerator>
 	{
 	public:
@@ -37,25 +37,25 @@ namespace mana
 			const std::shared_ptr<TypeDescriptorFactory>& typeDescriptorFactory);
 
 		/*!
-		ノードを辿りながら中間言語に翻訳します
-		@param	node			ノード
-		@param	enableLoad		trueならばload命令は有効、falseならばload命令は無効
-		*/
+		 * ノードを辿りながら中間言語に翻訳します
+		 * @param	node			ノード
+		 * @param	enableLoad		trueならばload命令は有効、falseならばload命令は無効
+		 */
 		void GenerateCode(std::shared_ptr<SyntaxNode> node, const int32_t enableLoad);
 
 		/*!
-		ノードを巡りながら指揮を中間言語に翻訳します
-		*/
+		 * ノードを巡りながら指揮を中間言語に翻訳します
+		 */
 		void Expression(const std::shared_ptr<SyntaxNode>& tree, const int32_t enableAssign);
 
 		/*!
-		グローバルアドレスを解決する
-		*/
+		 * グローバルアドレスを解決する
+		 */
 		const std::shared_ptr<GlobalAddressResolver>& GetGlobalAddressResolver();
 
 		/*!
-		ローカルアドレスを解決する
-		*/
+		 * ローカルアドレスを解決する
+		 */
 		const std::shared_ptr<LocalAddressResolver>& GetLocalAddressResolver();
 
 		void Dump(std::ostream& output) const;

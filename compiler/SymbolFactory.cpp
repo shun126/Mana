@@ -1,9 +1,9 @@
 /*!
-mana (compiler)
-
-@author	Shun Moriya
-@date	2016-
-*/
+ * mana (compiler)
+ *
+ * @author	Shun Moriya
+ * @date	2016-
+ */
 
 #include "SymbolFactory.h"
 #include "CodeBuffer.h"
@@ -119,10 +119,10 @@ namespace mana
 		, mTypeDescriptorFactory(typeDescriptorFactory)
 	{
 		/*
-		TODO
-		symbol->next = symbol_block_table[level].head;
-		symbol_block_table[level].head = symbol;
-		*/		
+		 * TODO
+		 * symbol->next = symbol_block_table[level].head;
+		 * symbol_block_table[level].head = symbol;
+		 */
 	}
 
 	std::shared_ptr<Symbol> SymbolFactory::CreateSymbol(const std::string_view name, const Symbol::ClassTypeId classType)
@@ -698,16 +698,16 @@ TODO:
 		if (!isAction)
 		{
 			/*
-			function(p1, p2);
-
-			+- stack ------------+
-			|  4 return address  |
-			|  8 p1              |
-			| 12 p2              |
-			| 16 local variables |
-			|          :         |
-			+--------------------+
-			*/
+			 * function(p1, p2);
+			 *
+			 * +- stack ------------+
+			 * |  4 return address  |
+			 * |  8 p1              |
+			 * | 12 p2              |
+			 * | 16 local variables |
+			 * |          :         |
+			 * +--------------------+
+			 */
 			mLocalMemoryAddress += sizeof(void*);
 		}
 
@@ -761,9 +761,9 @@ TODO:
 	}
 
 	/*
-	関数の引数をフレームバッファ領域へコピーするコードを出力する
-	@param[in]	function	関数を表すSymbol
-	*/
+	 * 関数の引数をフレームバッファ領域へコピーするコードを出力する
+	 * @param[in]	function	関数を表すSymbol
+	 */
 	void SymbolFactory::OpenFunction2(const std::shared_ptr<const Symbol>& function) const
 	{
 		for (std::shared_ptr<const Symbol> symbol = function->GetParameterList(); symbol; symbol = symbol->GetNext())
@@ -861,12 +861,12 @@ TODO:
 		}
 
 		/*
-		frame bufferのサイズを更新
-
-		symbol_open_blockがsymbol_create_functionで呼ばれるので
-		symbol_begin_function_registrationにsymbol_open_blockを呼んでいなくても
-		ここでsymbol_close_blockを呼び出す必要がある。
-		*/
+		 * frame bufferのサイズを更新
+		 *
+		 * symbol_open_blockがsymbol_create_functionで呼ばれるので
+		 * symbol_begin_function_registrationにsymbol_open_blockを呼んでいなくても
+		 * ここでsymbol_close_blockを呼び出す必要がある。
+		 */
 		CloseBlock();
 		mIsFunctionOpened = false;
 		mCodeBuffer->ReplaceAddressAll(mFrameSizeList, AlignSize(mMaxLocalMemoryAddress, sizeof(uint32_t)));
@@ -875,16 +875,16 @@ TODO:
 	void SymbolFactory::BeginNativeFunction()
 	{
 		/*
-		function(p1, p2);
-
-		+- stack ------------+
-		|  4 return address  |
-		|  8 p1              |
-		| 12 p2              |
-		| 16 local variables |
-		|          :         |
-		+--------------------+
-		*/
+		 * function(p1, p2);
+		 *
+		 * +- stack ------------+
+		 * |  4 return address  |
+		 * |  8 p1              |
+		 * | 12 p2              |
+		 * | 16 local variables |
+		 * |          :         |
+		 * +--------------------+
+		 */
 		OpenBlock(false);
 		mIsFunctionOpened = true;
 		mLocalMemoryAddress += sizeof(void*);
@@ -1013,7 +1013,7 @@ TODO:
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// actor
-	/**
+	/*!
 	 * Makes Actor members visible while preserving names hidden by the Actor scope.
 	 * Actorスコープが隠す名前を保存しながら、Actorメンバーを参照可能にします。
 	 */
@@ -1092,16 +1092,16 @@ TODO:
 
 		mDataBuffer->Set(name);
 		/*
-		if (!parent.empty())
-		{
-			const std::shared_ptr<Symbol>& parent_symbol = Lookup(parent);
-			parent_type = parent_symbol ? parent_symbol->GetTypeDescriptor() : nullptr;
-		}
-		else
-		{
-			parent_type = nullptr;
-		}
-		*/
+		 * if (!parent.empty())
+		 * {
+		 * 	const std::shared_ptr<Symbol>& parent_symbol = Lookup(parent);
+		 * 	parent_type = parent_symbol ? parent_symbol->GetTypeDescriptor() : nullptr;
+		 * }
+		 * else
+		 * {
+		 * 	parent_type = nullptr;
+		 * }
+		 */
 		type = mTypeDescriptorFactory->Create(TypeDescriptor::Id::Actor);
 		type->SetSymbolEntry(GetLastSymbolEntryInBlock());
 		//TODO:  parent_type;
@@ -1187,21 +1187,21 @@ TODO:
 		mBlockTypeDescriptor.pop();
 
 		/*
-		type->memory_size = AlignSize(mActorMemoryAddress, IBSZ);
-
-		if (td)
-		{
-			const std::shared_ptr<TypeDescriptor>& nested_type;
-			for (nested_type = td; nested_type->component; nested_type = nested_type->component)
-				;
-			nested_type->component = type;
-			return td;
-		}
-		else
-		{
-			return type;
-		}
-		*/
+		 * type->memory_size = AlignSize(mActorMemoryAddress, IBSZ);
+		 *
+		 * if (td)
+		 * {
+		 * 	const std::shared_ptr<TypeDescriptor>& nested_type;
+		 * 	for (nested_type = td; nested_type->component; nested_type = nested_type->component)
+		 * 		;
+		 * 	nested_type->component = type;
+		 * 	return td;
+		 * }
+		 * else
+		 * {
+		 * 	return type;
+		 * }
+		 */
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////

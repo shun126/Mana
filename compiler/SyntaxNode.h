@@ -1,9 +1,9 @@
 /*!
-mana (compiler)
-
-@author	Shun Moriya
-@date	2016-
-*/
+ * mana (compiler)
+ *
+ * @author	Shun Moriya
+ * @date	2016-
+ */
 
 #pragma once
 #include "../runner/common/Setup.h"
@@ -17,8 +17,8 @@ namespace mana
 	class TypeDescriptorFactory;
 
 	/*!
-	構文木クラス
-	*/
+	 * 構文木クラス
+	 */
 	class SyntaxNode final : public std::enable_shared_from_this<SyntaxNode>
 	{
 	public:

@@ -1,12 +1,12 @@
 /*!
-mana (compiler)
-
-@file	Compiler.cpp
-@brief	コンパイラの組み込み用インターフェース
-@detail	このファイルはコンパイラをライブラリとして利用する為のソースファイルです。
-@author	Shun Moriya
-@date	2026-
-*/
+ * mana (compiler)
+ *
+ * @file	Compiler.cpp
+ * @brief	コンパイラの組み込み用インターフェース
+ * @detail	このファイルはコンパイラをライブラリとして利用する為のソースファイルです。
+ * @author	Shun Moriya
+ * @date	2026-
+ */
 
 #include "../runner/common/Setup.h"
 #include "Compiler.h"
@@ -30,8 +30,8 @@ namespace mana
 	namespace
 	{
 		/*!
-		字句解析器を確実に終了させます
-		*/
+		 * 字句解析器を確実に終了させます
+		 */
 		class ScopedLexer final
 		{
 		public:
@@ -49,8 +49,8 @@ namespace mana
 		};
 
 		/*!
-		シンボル表・構文木・中間コードをマークダウンへ出力します
-		*/
+		 * シンボル表・構文木・中間コードをマークダウンへ出力します
+		 */
 		[[nodiscard]] std::string GenerateDump(const std::shared_ptr<ParsingDriver>& parser)
 		{
 			std::ostringstream output;
@@ -78,8 +78,8 @@ namespace mana
 		}
 
 		/*!
-		C++の型宣言ヘッダーを出力します
-		*/
+		 * C++の型宣言ヘッダーを出力します
+		 */
 		[[nodiscard]] std::string GeneratePublicTypeDecl(const std::shared_ptr<ParsingDriver>& parser, const std::string& sourceFilename)
 		{
 			std::ostringstream output;
@@ -98,8 +98,8 @@ namespace mana
 		}
 
 		/*!
-		プログラムイメージを生成します
-		*/
+		 * プログラムイメージを生成します
+		 */
 		[[nodiscard]] bool GenerateProgramImage(OutputStream& stream, const std::shared_ptr<ParsingDriver>& parser)
 		{
 			FileHeader header = {};
@@ -136,11 +136,11 @@ namespace mana
 		}
 
 		/*!
-		コンパイルの本体
-
-		診断は呼び出し元が用意した DiagnosticBag へ集約されるため、
-		この関数は成否を返しません。
-		*/
+		 * コンパイルの本体
+		 *
+		 * 診断は呼び出し元が用意した DiagnosticBag へ集約されるため、
+		 * この関数は成否を返しません。
+		 */
 		void CompileCore(const CompileOptions& options, CompileResult& result)
 		{
 			auto parser = std::make_shared<ParsingDriver>();

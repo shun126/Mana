@@ -1,9 +1,9 @@
 /*!
-mana (compiler/library)
-
-@author	Shun Moriya
-@date	2016-
-*/
+ * mana (compiler/library)
+ *
+ * @author	Shun Moriya
+ * @date	2016-
+ */
 
 #pragma once
 #include <chrono>

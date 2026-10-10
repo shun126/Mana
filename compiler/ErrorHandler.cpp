@@ -1,12 +1,12 @@
 /*!
-mana (compiler)
-
-@file	ErrorHandler.cpp
-@brief	エラーや警告に関係するソースファイル
-@detail	このファイルはエラーや警告に関係するソースファイルです。
-@author	Shun Moriya
-@date	2016-
-*/
+ * mana (compiler)
+ *
+ * @file	ErrorHandler.cpp
+ * @brief	エラーや警告に関係するソースファイル
+ * @detail	このファイルはエラーや警告に関係するソースファイルです。
+ * @author	Shun Moriya
+ * @date	2016-
+ */
 
 #include "../runner/common/Setup.h"
 #include "ErrorHandler.h"
@@ -39,8 +39,8 @@ namespace mana
 		}
 
 		/*!
-		診断の重大度を Trace の重大度へ対応付けます
-		*/
+		 * 診断の重大度を Trace の重大度へ対応付けます
+		 */
 		[[nodiscard]] TraceLevel ToTraceLevel(const DiagnosticSeverity severity)
 		{
 			switch (severity)
@@ -53,10 +53,10 @@ namespace mana
 		}
 
 		/*!
-		診断を収集先へ送ります
-
-		収集先が無い場合は従来通り標準出力へ出力します。
-		*/
+		 * 診断を収集先へ送ります
+		 *
+		 * 収集先が無い場合は従来通り標準出力へ出力します。
+		 */
 		void Report(const DiagnosticSeverity severity, const DiagnosticPhase phase, const std::string& message)
 		{
 			Diagnostic diagnostic;

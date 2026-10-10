@@ -1,9 +1,9 @@
 /*!
-mana (compiler)
-
-@author	Shun Moriya
-@date	2016-
-*/
+ * mana (compiler)
+ *
+ * @author	Shun Moriya
+ * @date	2016-
+ */
 
 #pragma once
 #include "../runner/common/Setup.h"
@@ -16,8 +16,8 @@ namespace mana
 	class Symbol;
 
 	/*
-	グローバルアドレスを解決します
-	*/
+	 * グローバルアドレスを解決します
+	 */
 	class GlobalAddressResolver final : Noncopyable
 	{
 	public:

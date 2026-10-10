@@ -1,9 +1,9 @@
 /*!
-mana (compiler)
-
-\author	Shun Moriya
-\date	2016-
-*/
+ * mana (compiler)
+ *
+ * \author	Shun Moriya
+ * \date	2016-
+ */
 
 #pragma once
 #include "../runner/common/Platform.h"
@@ -18,8 +18,8 @@ namespace mana
 	class Symbol;
 
 	/*
-	型の識別子
-	*/
+	 * 型の識別子
+	 */
 	class TypeDescriptor final
 	{
 		friend class SemanticAnalyzer;

@@ -1,9 +1,9 @@
 /*!
-mana (compiler)
-
-@author	Shun Moriya
-@date	2022-
-*/
+ * mana (compiler)
+ *
+ * @author	Shun Moriya
+ * @date	2022-
+ */
 
 #pragma once
 #include "../runner/common/Noncopyable.h"
@@ -22,7 +22,7 @@ namespace mana
 	class StringPool;
 	class TypeDescriptorFactory;
 
-	/**
+	/*!
 	 * Drive the Bison parser.
 	 */
 	class ParsingDriver final : Noncopyable, public std::enable_shared_from_this<ParsingDriver>
