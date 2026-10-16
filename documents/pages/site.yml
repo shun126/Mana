@@ -32,3 +32,13 @@ repository:
 theme:
   layout: theme/base.html
   stylesheet: theme/site.css
+
+# Google Analytics (GA4). Every generated page, the Playground included,
+# loads the Google tag for this measurement ID, and every page footer tells
+# readers so in the page's language (inline Markdown). Leave the ID empty to
+# build the site without the tag or the notice.
+analytics:
+  measurement_id: G-SNQZ20NY5W
+  notice:
+    ja: このサイトは、利用状況を把握するために Cookie を使う Google Analytics を利用しています（[Google によるデータの使用](https://policies.google.com/technologies/partner-sites?hl=ja)）。
+    en: This site uses Google Analytics, which sets cookies, to understand how it is used ([how Google uses this data](https://policies.google.com/technologies/partner-sites)).

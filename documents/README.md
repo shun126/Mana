@@ -163,6 +163,8 @@ Wiki と公式サイトには英語版があります（`documents/wiki/en/`、`
 
 各ページのヘッダーには全言語が並び、今読んでいる言語が強調表示されます。
 
+`site.yml` の `analytics.measurement_id` に Google Analytics（GA4）の測定 ID を書くと、`build-pages.py` は生成したすべてのページ（ルート、各言語、Playground）の `<head>` に Google タグ（gtag.js）を入れます。あわせて、フッターのあるページには `analytics.notice` の告知文を、そのページの言語（`<html lang>`）で入れます。告知文は言語ごとに 1 行のインライン Markdown で書きます。測定 ID を空にすると、タグも告知文もなしで生成します。
+
 サイトから Wiki へのリンクは `wiki:Tutorial` のように書きます。表示言語の Wiki ページ（英語サイトなら `Tutorial`、日本語サイトなら `Tutorial-ja`）へつながります。その言語のページがまだない場合は、原本である日本語のページへつながります。Wiki の構成が変わるとリンク先も変わるため、`publish-pages.yml` は `documents/wiki/` の変更でも実行されます。
 
 ## 原稿を書くときの注意

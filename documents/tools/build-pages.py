@@ -46,6 +46,22 @@ REMEMBER_LANGUAGE_SCRIPT = (
     "});" % LANGUAGE_STORAGE_KEY
 )
 
+# The Google tag (gtag.js), added to the head of every generated page when
+# `analytics.measurement_id` is set in site.yml.
+ANALYTICS_ID_RE = re.compile(r"G-[A-Z0-9]+")
+_HTML_LANG_RE = re.compile(r'<html lang="([^"]*)"')
+ANALYTICS_TAG = (
+    "<!-- Google tag (gtag.js) -->\n"
+    '<script async src="https://www.googletagmanager.com/gtag/js?id={id}"></script>\n'
+    "<script>\n"
+    "  window.dataLayer = window.dataLayer || [];\n"
+    "  function gtag(){{dataLayer.push(arguments);}}\n"
+    "  gtag('js', new Date());\n"
+    "\n"
+    "  gtag('config', '{id}');\n"
+    "</script>\n"
+)
+
 # --------------------------------------------------------------------------
 # Markdown
 # --------------------------------------------------------------------------
@@ -474,6 +490,56 @@ def available_languages(site, request: str):
     return [wanted]
 
 
+def analytics_tag(site) -> str:
+    """The Google tag for `analytics.measurement_id`, or "" without one."""
+    measurement_id = str((site.get("analytics") or {}).get("measurement_id") or "").strip()
+    if not measurement_id:
+        return ""
+    if not ANALYTICS_ID_RE.fullmatch(measurement_id):
+        raise manadoc.ConfigError(
+            f"site.yml: '{measurement_id}' is not a Google Analytics measurement ID (G-XXXXXXXXXX)"
+        )
+    return ANALYTICS_TAG.format(id=measurement_id)
+
+
+def analytics_notices(site):
+    """The footer notice of each language, keyed by its `html_lang`."""
+    configured = (site.get("analytics") or {}).get("notice") or {}
+    notices = {}
+    for code, settings in (site.get("languages") or {}).items():
+        text = str(configured.get(code) or "").strip()
+        if text:
+            notice = render_inline(text, lambda is_image, target: target)
+            notices[(settings or {}).get("html_lang", code)] = (
+                '  <p class="analytics-notice">%s</p>\n' % notice
+            )
+    return notices
+
+
+def add_analytics(output: Path, tag: str, notices):
+    """Add `tag` to the head of every page in `output`, and a notice to its footer.
+
+    The notice is the one for the page's `<html lang>`. Returns what could
+    not be added, one message per page.
+    """
+    problems = []
+    for page in sorted(output.rglob("*.html")):
+        text = page.read_text(encoding="utf-8")
+        if "</head>" not in text:
+            problems.append(f"{page}: no </head>, so the Google tag was not added")
+            continue
+        text = text.replace("</head>", tag + "</head>", 1)
+        if "</footer>" in text:
+            language = _HTML_LANG_RE.search(text)
+            notice = notices.get(language.group(1) if language else "")
+            if notice:
+                text = text.replace("</footer>", notice + "</footer>", 1)
+            else:
+                problems.append(f"{page}: site.yml has no analytics notice for the page's language")
+        manadoc.write_text(page, text)
+    return problems
+
+
 def copy_playground(output: Path, module_directory):
     """Copy the Playground, and its WebAssembly module when one is given."""
     destination = output / PLAYGROUND_OUTPUT_NAME
@@ -504,6 +570,7 @@ def main(argv=None) -> int:
     try:
         site = manadoc.load_yaml(arguments.config) or {}
         languages = available_languages(site, arguments.language)
+        analytics = analytics_tag(site)
     except manadoc.ConfigError as error:
         print(f"error: {error}", file=sys.stderr)
         return 1
@@ -532,6 +599,8 @@ def main(argv=None) -> int:
         builder.problems.append(
             "the Playground has no WebAssembly module; pass --playground-wasm to include it"
         )
+    if analytics:
+        builder.problems += add_analytics(output, analytics, analytics_notices(site))
     # GitHub Pages must serve the generated files as they are.
     manadoc.write_text(output / ".nojekyll", "")
 
