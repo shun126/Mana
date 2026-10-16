@@ -592,6 +592,69 @@ class SiteRootTest(unittest.TestCase):
         self.assertEqual(self.builder.language_links("ja", ["ja"]), "")
 
 
+class AnalyticsTest(unittest.TestCase):
+    """Every generated page loads the Google tag when site.yml names one."""
+
+    def setUp(self):
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        self.output = Path(directory.name)
+        self.build_pages = _load_script("build-pages.py")
+
+    def test_no_tag_without_a_measurement_id(self):
+        self.assertEqual(self.build_pages.analytics_tag({}), "")
+        self.assertEqual(self.build_pages.analytics_tag({"analytics": {"measurement_id": ""}}), "")
+
+    def test_tag_names_the_measurement_id(self):
+        tag = self.build_pages.analytics_tag({"analytics": {"measurement_id": "G-ABC123"}})
+        self.assertIn('src="https://www.googletagmanager.com/gtag/js?id=G-ABC123"', tag)
+        self.assertIn("gtag('config', 'G-ABC123');", tag)
+        self.assertIn("function gtag(){dataLayer.push(arguments);}", tag)
+
+    def test_malformed_measurement_id_fails(self):
+        with self.assertRaises(manadoc.ConfigError):
+            self.build_pages.analytics_tag({"analytics": {"measurement_id": "G-1');alert(1)//"}})
+
+    def test_tag_goes_into_the_head_of_every_page(self):
+        for name in ("index.html", "ja/index.html", "playground/index.html"):
+            manadoc.write_text(self.output / name, "<html><head><title>t</title></head><body></body></html>")
+        manadoc.write_text(self.output / "fragment.html", "<p>no head</p>")
+        problems = self.build_pages.add_analytics(self.output, "<script>tag</script>\n", {})
+        self.assertEqual(len(problems), 1)
+        self.assertIn("fragment.html", problems[0])
+        for name in ("index.html", "ja/index.html", "playground/index.html"):
+            page = (self.output / name).read_text(encoding="utf-8")
+            self.assertIn("<title>t</title><script>tag</script>\n</head>", page)
+
+    def test_notice_is_rendered_for_each_language(self):
+        notices = self.build_pages.analytics_notices({
+            "languages": {"ja": {"html_lang": "ja"}, "en": {}, "fr": {}},
+            "analytics": {"notice": {"ja": "解析 [詳細](https://example.com/)", "en": "Analytics"}},
+        })
+        self.assertEqual(
+            notices,
+            {
+                "ja": '  <p class="analytics-notice">解析 <a href="https://example.com/">詳細</a></p>\n',
+                "en": '  <p class="analytics-notice">Analytics</p>\n',
+            },
+        )
+
+    def test_notice_goes_into_the_footer_in_the_page_language(self):
+        page = '<html lang="%s"><head></head><body><footer><p>links</p>\n</footer></body></html>'
+        manadoc.write_text(self.output / "ja/index.html", page % "ja")
+        manadoc.write_text(self.output / "en/index.html", page % "en")
+        manadoc.write_text(self.output / "fr/index.html", page % "fr")
+        manadoc.write_text(self.output / "index.html", '<html lang="ja"><head></head><body></body></html>')
+        problems = self.build_pages.add_analytics(
+            self.output, "", {"ja": "<p>日本語</p>\n", "en": "<p>English</p>\n"}
+        )
+        self.assertIn("<p>links</p>\n<p>日本語</p>\n</footer>", (self.output / "ja/index.html").read_text(encoding="utf-8"))
+        self.assertIn("<p>links</p>\n<p>English</p>\n</footer>", (self.output / "en/index.html").read_text(encoding="utf-8"))
+        self.assertNotIn("<p>", (self.output / "index.html").read_text(encoding="utf-8"))
+        self.assertEqual(len(problems), 1)
+        self.assertIn("fr", problems[0])
+
+
 def _load_script(name: str):
     """Import one of the hyphenated command line tools as a module."""
     import importlib.util
